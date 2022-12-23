@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/actionAbout.png</file>
+        <file>res/actionBinary.png</file>
+        <file>res/actionConnect.png</file>
+        <file>res/actionDblFloat.png</file>
+        <file>res/actionDefineData.png</file>
+        <file>res/actionDisconnect.png</file>
+        <file>res/actionFloatingPt.png</file>
+        <file>res/actionHex.png</file>
+        <file>res/actionInteger.png</file>
+        <file>res/actionNew.png</file>
+        <file>res/actionOpen.png</file>
+        <file>res/actionPrint.png</file>
+        <file>res/actionSaveAs.png</file>
+        <file>res/actionShowData.png</file>
+        <file>res/actionShowTraffic.png</file>
+        <file>res/actionSwappedDbl.png</file>
+        <file>res/actionSwappedFP.png</file>
+        <file>res/actionUnsignedDecimal.png</file>
+        <file>res/modscan64.png</file>
+    </qresource>
+</RCC>

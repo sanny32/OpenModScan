@@ -9,7 +9,7 @@ NumberLineEdit::NumberLineEdit(QWidget* parent)
     : QLineEdit(parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
-    ,_allowLeadingZeroFormatter(false)
+    ,_enablePaddingZero(false)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
@@ -26,19 +26,19 @@ NumberLineEdit::NumberLineEdit(const QString& s, QWidget* parent)
     : QLineEdit(s, parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
-    ,_allowLeadingZeroFormatter(false)
+    ,_enablePaddingZero(false)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
 }
 
 ///
-/// \brief NumberLineEdit::allowPaddingZeroFormatter
+/// \brief NumberLineEdit::enablePaddingZero
 /// \param on
 ///
-void NumberLineEdit::allowPaddingZeroFormatter(bool on)
+void NumberLineEdit::enablePaddingZero(bool on)
 {
-    _allowLeadingZeroFormatter = on;
+    _enablePaddingZero = on;
 }
 
 ///
@@ -73,7 +73,7 @@ void NumberLineEdit::setValue(int value)
 
     if(value < validator->bottom()) value = validator->bottom();
     if(value > validator->top()) value = validator->top();
-    if(_allowLeadingZeroFormatter)
+    if(_enablePaddingZero)
     {
         const auto text = QStringLiteral("%1").arg(value, _paddingZeroWidth, 10, QLatin1Char('0'));
         setText(text);

@@ -2,19 +2,32 @@
 #define FORMMODSCA_H
 
 #include <QWidget>
-#include <QStandardItemModel>
+#include "enums.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class FormModSca;
 }
 
+///
+/// \brief The FormModSca class
+///
 class FormModSca : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit FormModSca(QWidget *parent = nullptr);
+    explicit FormModSca(int num, QWidget *parent = nullptr);
     ~FormModSca();
+
+    DisplayDefinition displayDefinition() const;
+    void setDisplayDefinition(const DisplayDefinition& dd);
+
+    DisplayMode displayMode() const;
+    void setDisplayMode(DisplayMode mode);
+
+    DataDisplayMode dataDisplayMode() const;
+    void setDataDisplayMode(DataDisplayMode mode);
 
 private slots:
     void updateListWidget();
@@ -24,7 +37,9 @@ private:
     Ui::FormModSca *ui;
 
 private:
-    QStandardItemModel _model;
+    uint _scanRate = 1000;
+    DisplayMode _displayMode;
+    DataDisplayMode _dataDisplayMode;
 };
 
 #endif // FORMMODSCA_H

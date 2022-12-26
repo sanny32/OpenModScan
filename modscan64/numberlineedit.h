@@ -13,7 +13,7 @@ public:
     int value();
     void setValue(int value);
 
-    void allowPaddingZeroFormatter(bool on);
+    void enablePaddingZero(bool on);
     void setInputRange(int bottom, int top);
 
 protected:
@@ -25,7 +25,7 @@ private slots:
 private:
     int _value;
     int _paddingZeroWidth;
-    bool _allowLeadingZeroFormatter;
+    bool _enablePaddingZero;
 };
 
 #endif // NUMBERLINEEDIT_H

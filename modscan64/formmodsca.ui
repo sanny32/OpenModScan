@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>668</width>
-    <height>391</height>
+    <width>800</width>
+    <height>400</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -74,7 +74,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="NumberLineEdit" name="lineEditLegth">
+             <widget class="NumberLineEdit" name="lineEditLength">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -92,6 +92,12 @@
                 <width>80</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::NoContextMenu</enum>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
               </property>
               <property name="styleSheet">
                <string notr="true">border: 1px solid black;</string>
@@ -123,6 +129,12 @@
                 <width>80</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::NoContextMenu</enum>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
               </property>
               <property name="styleSheet">
                <string notr="true">border: 1px solid black;</string>
@@ -188,6 +200,12 @@
                   <height>16777215</height>
                  </size>
                 </property>
+                <property name="contextMenuPolicy">
+                 <enum>Qt::NoContextMenu</enum>
+                </property>
+                <property name="acceptDrops">
+                 <bool>false</bool>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">border: 1px solid black;</string>
                 </property>
@@ -228,7 +246,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBoxModbusPointType">
+             <widget class="PointTypeComboBox" name="comboBoxModbusPointType">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -241,29 +259,12 @@
                 <height>26</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
               <property name="frame">
                <bool>true</bool>
               </property>
-              <item>
-               <property name="text">
-                <string>01: COIL STATUS</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>02: INPUT STATUS</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>03: HOLDING REGISTER</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>04: INPUT REGISTER</string>
-               </property>
-              </item>
              </widget>
             </item>
             <item>
@@ -412,6 +413,9 @@
        <enum>QFrame::Sunken</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>2</number>
+       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -430,12 +434,18 @@
           <string notr="true">color: red;</string>
          </property>
          <property name="text">
-          <string>** STATUS **</string>
+          <string>** Data Uninitialized **</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QListWidget" name="listWidget">
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::NoContextMenu</enum>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -450,6 +460,12 @@
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="showDropIndicator" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::DragOnly</enum>
          </property>
          <property name="selectionMode">
           <enum>QAbstractItemView::NoSelection</enum>
@@ -480,7 +496,19 @@
    <extends>QLineEdit</extends>
    <header>numberlineedit.h</header>
   </customwidget>
+  <customwidget>
+   <class>PointTypeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pointtypecombobox.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>lineEditAddress</tabstop>
+  <tabstop>lineEditLength</tabstop>
+  <tabstop>lineEditDeviceId</tabstop>
+  <tabstop>comboBoxModbusPointType</tabstop>
+  <tabstop>pushButtonResetCtrls</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

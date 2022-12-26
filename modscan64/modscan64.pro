@@ -6,17 +6,26 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    appsettings.cpp \
+    dialogdisplaydefinition.cpp \
     formmodsca.cpp \
     main.cpp \
     mainwindow.cpp \
-    numberlineedit.cpp
+    numberlineedit.cpp \
+    pointtypecombobox.cpp
 
 HEADERS += \
+    appsettings.h \
+    dialogdisplaydefinition.h \
+    displaydefinition.h \
+    enums.h \
     formmodsca.h \
     mainwindow.h \
-    numberlineedit.h
+    numberlineedit.h \
+    pointtypecombobox.h
 
 FORMS += \
+    dialogdisplaydefinition.ui \
     formmodsca.ui \
     mainwindow.ui
 

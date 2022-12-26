@@ -22,6 +22,9 @@ protected:
 
 private slots:
     void on_actionNew_triggered();
+    void on_actionConnect_triggered();
+    void on_actionDisconnect_triggered();
+    void on_actionQuickConnect_triggered();
     void on_actionDataDefinition_triggered();
     void on_actionShowData_triggered();
     void on_actionShowTraffic_triggered();

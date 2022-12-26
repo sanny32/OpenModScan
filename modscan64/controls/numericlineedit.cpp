@@ -1,11 +1,11 @@
 #include <QIntValidator>
-#include "numberlineedit.h"
+#include "numericlineedit.h"
 
 ///
 /// \brief NumberLineEdit::NumberLineEdit
 /// \param parent
 ///
-NumberLineEdit::NumberLineEdit(QWidget* parent)
+NumericLineEdit::NumericLineEdit(QWidget* parent)
     : QLineEdit(parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
@@ -14,7 +14,7 @@ NumberLineEdit::NumberLineEdit(QWidget* parent)
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
 
-    connect(this, &QLineEdit::textChanged, this, &NumberLineEdit::on_textChanged);
+    connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
 }
 
 ///
@@ -22,7 +22,7 @@ NumberLineEdit::NumberLineEdit(QWidget* parent)
 /// \param s
 /// \param parent
 ///
-NumberLineEdit::NumberLineEdit(const QString& s, QWidget* parent)
+NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
     : QLineEdit(s, parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
@@ -36,7 +36,7 @@ NumberLineEdit::NumberLineEdit(const QString& s, QWidget* parent)
 /// \brief NumberLineEdit::enablePaddingZero
 /// \param on
 ///
-void NumberLineEdit::enablePaddingZero(bool on)
+void NumericLineEdit::enablePaddingZero(bool on)
 {
     _enablePaddingZero = on;
 }
@@ -46,7 +46,7 @@ void NumberLineEdit::enablePaddingZero(bool on)
 /// \param bottom
 /// \param top
 ///
-void NumberLineEdit::setInputRange(int bottom, int top)
+void NumericLineEdit::setInputRange(int bottom, int top)
 {
     setValidator(nullptr);
     setValidator(new QIntValidator(bottom, top, this));
@@ -57,7 +57,7 @@ void NumberLineEdit::setInputRange(int bottom, int top)
 /// \brief NumberLineEdit::value
 /// \return
 ///
-int NumberLineEdit::value()
+int NumericLineEdit::value()
 {
     return _value;
 }
@@ -66,7 +66,7 @@ int NumberLineEdit::value()
 /// \brief NumberLineEdit::setValue
 /// \param value
 ///
-void NumberLineEdit::setValue(int value)
+void NumericLineEdit::setValue(int value)
 {
     _value = value;
     const auto validator = (QIntValidator*)this->validator();
@@ -88,7 +88,7 @@ void NumberLineEdit::setValue(int value)
 /// \brief NumberLineEdit::focusOutEvent
 /// \param event
 ///
-void NumberLineEdit::focusOutEvent(QFocusEvent* event)
+void NumericLineEdit::focusOutEvent(QFocusEvent* event)
 {
     bool ok;
     auto value = text().toInt(&ok);
@@ -101,7 +101,7 @@ void NumberLineEdit::focusOutEvent(QFocusEvent* event)
 /// \brief NumberLineEdit::on_textChanged
 /// \param s
 ///
-void NumberLineEdit::on_textChanged(const QString& s)
+void NumericLineEdit::on_textChanged(const QString& s)
 {
     bool ok;
     auto value = s.toInt(&ok);

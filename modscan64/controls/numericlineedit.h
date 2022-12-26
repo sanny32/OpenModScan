@@ -1,14 +1,14 @@
-#ifndef NUMBERLINEEDIT_H
-#define NUMBERLINEEDIT_H
+#ifndef NUMERICLINEEDIT_H
+#define NUMERICLINEEDIT_H
 
 #include <QLineEdit>
 
-class NumberLineEdit : public QLineEdit
+class NumericLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    explicit NumberLineEdit(QWidget *parent = nullptr);
-    explicit NumberLineEdit(const QString &, QWidget *parent = nullptr);
+    explicit NumericLineEdit(QWidget *parent = nullptr);
+    explicit NumericLineEdit(const QString &, QWidget *parent = nullptr);
 
     int value();
     void setValue(int value);
@@ -28,4 +28,4 @@ private:
     bool _enablePaddingZero;
 };
 
-#endif // NUMBERLINEEDIT_H
+#endif // NUMERICLINEEDIT_H

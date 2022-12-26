@@ -5,32 +5,42 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += controls \
+
 SOURCES += \
     appsettings.cpp \
+    controls/connectioncombobox.cpp \
+    controls/numericlineedit.cpp \
+    dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
     formmodsca.cpp \
     main.cpp \
     mainwindow.cpp \
-    numberlineedit.cpp \
-    outputwidget.cpp \
-    pointtypecombobox.cpp
+    controls/numericcombobox.cpp \
+    controls/outputwidget.cpp \
+    controls/pointtypecombobox.cpp
 
 HEADERS += \
     appsettings.h \
+    connectiondetails.h \
+    controls/connectioncombobox.h \
+    controls/numericlineedit.h \
+    dialogconnectiondetails.h \
     dialogdisplaydefinition.h \
     displaydefinition.h \
     enums.h \
     formmodsca.h \
     mainwindow.h \
-    numberlineedit.h \
-    outputwidget.h \
-    pointtypecombobox.h
+    controls/numericcombobox.h \
+    controls/outputwidget.h \
+    controls/pointtypecombobox.h
 
 FORMS += \
+    dialogconnectiondetails.ui \
     dialogdisplaydefinition.ui \
     formmodsca.ui \
     mainwindow.ui \
-    outputwidget.ui
+    controls/outputwidget.ui
 
 RESOURCES += \
     resources.qrc

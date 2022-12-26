@@ -8,6 +8,9 @@ namespace Ui {
 class DialogDisplayDefinition;
 }
 
+///
+/// \brief The DialogDisplayDefinition class
+///
 class DialogDisplayDefinition : public QDialog
 {
     Q_OBJECT

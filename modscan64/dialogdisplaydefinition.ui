@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>237</height>
+    <height>238</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@
       </widget>
      </item>
      <item>
-      <widget class="NumberLineEdit" name="lineEditScanRate">
+      <widget class="NumericLineEdit" name="lineEditScanRate">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -100,7 +100,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="NumberLineEdit" name="lineEditSlaveAddress">
+       <widget class="NumericLineEdit" name="lineEditSlaveAddress">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -146,7 +146,7 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="NumberLineEdit" name="lineEditPointAddress">
+       <widget class="NumericLineEdit" name="lineEditPointAddress">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -169,7 +169,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="NumberLineEdit" name="lineEditLength">
+       <widget class="NumericLineEdit" name="lineEditLength">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -204,14 +204,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NumberLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>numberlineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>PointTypeComboBox</class>
    <extends>QComboBox</extends>
    <header>pointtypecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumericLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>numericlineedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

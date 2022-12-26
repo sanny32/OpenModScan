@@ -1,5 +1,6 @@
 #include <QtWidgets>
 #include "dialogdisplaydefinition.h"
+#include "dialogconnectiondetails.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -92,6 +93,34 @@ void MainWindow::on_actionNew_triggered()
     auto frm = createMdiChild();
     //frm->setDataDisplayMode(_settings.DataDisplayMode);
     frm->show();
+}
+
+///
+/// \brief MainWindow::on_actionConnect_triggered
+///
+void MainWindow::on_actionConnect_triggered()
+{
+    DialogConnectionDetails dlg;
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        ui->actionConnect->trigger();
+    }
+}
+
+///
+/// \brief MainWindow::on_actionDisconnect_triggered
+///
+void MainWindow::on_actionDisconnect_triggered()
+{
+
+}
+
+///
+/// \brief MainWindow::on_actionQuickConnect_triggered
+///
+void MainWindow::on_actionQuickConnect_triggered()
+{
+
 }
 
 ///

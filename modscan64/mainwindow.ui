@@ -186,7 +186,7 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSaveAs"/>
    <addaction name="separator"/>
-   <addaction name="actionConnect"/>
+   <addaction name="actionQuickConnect"/>
    <addaction name="actionDisconnect"/>
    <addaction name="separator"/>
    <addaction name="actionDataDefinition"/>
@@ -279,10 +279,6 @@
    </property>
   </action>
   <action name="actionConnect">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionConnect.png</normaloff>:/res/actionConnect.png</iconset>
-   </property>
    <property name="text">
     <string>Connect</string>
    </property>
@@ -317,6 +313,10 @@
    </property>
   </action>
   <action name="actionQuickConnect">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionConnect.png</normaloff>:/res/actionConnect.png</iconset>
+   </property>
    <property name="text">
     <string>Quick Connect</string>
    </property>

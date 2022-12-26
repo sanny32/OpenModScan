@@ -10,8 +10,6 @@
 FormModSca::FormModSca(int num, QWidget *parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
-    ,_displayMode(DisplayMode::Data)
-    ,_dataDisplayMode(DataDisplayMode::Binary)
 {
     ui->setupUi(this);
     ui->lineEditAddress->setInputRange(1, 65534);
@@ -20,7 +18,7 @@ FormModSca::FormModSca(int num, QWidget *parent) :
     ui->lineEditDeviceId->setInputRange(1, 255);
 
     setWindowTitle(QString("ModSca%1").arg(num));
-    updateListWidget();
+    ui->outputWidget->update(displayDefinition());
 }
 
 ///
@@ -59,7 +57,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    updateListWidget();
+    ui->outputWidget->update(dd);
 }
 
 ///
@@ -68,7 +66,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
 ///
 DisplayMode FormModSca::displayMode() const
 {
-    return _displayMode;
+    return ui->outputWidget->displayMode();
 }
 
 ///
@@ -77,7 +75,7 @@ DisplayMode FormModSca::displayMode() const
 ///
 void FormModSca::setDisplayMode(DisplayMode mode)
 {
-    _displayMode = mode;
+    ui->outputWidget->setDisplayMode(mode);
 }
 
 ///
@@ -86,7 +84,7 @@ void FormModSca::setDisplayMode(DisplayMode mode)
 ///
 DataDisplayMode FormModSca::dataDisplayMode() const
 {
-    return _dataDisplayMode;
+    return ui->outputWidget->dataDisplayMode();
 }
 
 ///
@@ -95,8 +93,7 @@ DataDisplayMode FormModSca::dataDisplayMode() const
 ///
 void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 {
-    _dataDisplayMode = mode;
-    updateListWidget();
+    ui->outputWidget->setDataDisplayMode(mode);
 }
 
 ///
@@ -104,72 +101,5 @@ void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 ///
 void FormModSca::on_comboBoxModbusPointType_currentTextChanged(const QString&)
 {
-    updateListWidget();
-}
-
-///
-/// \brief FormModSca::updateListWidget
-///
-void FormModSca::updateListWidget()
-{
-    QString prefix;
-    const auto modbusPointType = ui->comboBoxModbusPointType->currentPointType();
-    switch(modbusPointType)
-    {
-        case 1:
-            prefix = "0";
-        break;
-        case 2:
-            prefix = "1";
-        break;
-        case 3:
-            prefix = "4";
-        break;
-        case 4:
-            prefix = "3";
-        break;
-    }
-
-    ui->listWidget->clear();
-    const auto startAddr = ui->lineEditAddress->value();
-    for(int i = 0; i < ui->lineEditLength->value(); i++)
-    {
-        const auto addr = QStringLiteral("%1").arg(i + startAddr, 4, 10, QLatin1Char('0'));
-
-        short value = 0;
-        QString valstr;
-        switch(_dataDisplayMode)
-        {
-            case DataDisplayMode::Binary:
-                valstr = QStringLiteral("%1").arg(value, 16, 2, QLatin1Char('0'));
-            break;
-
-            case DataDisplayMode::Decimal:
-                valstr = QStringLiteral("%1").arg(value, 5, 10, QLatin1Char('0'));
-            break;
-
-            case DataDisplayMode::Integer:
-                valstr = QStringLiteral("%1").arg(value, 5, 10, QLatin1Char(' '));
-            break;
-
-            case DataDisplayMode::Hex:
-                valstr = QStringLiteral("%1H").arg(value, 4, 16, QLatin1Char('0'));
-            break;
-
-            case DataDisplayMode::FloatingPt:
-            break;
-
-            case DataDisplayMode::SwappedFP:
-            break;
-
-            case DataDisplayMode::DblFloat:
-            break;
-
-            case DataDisplayMode::SwappedDbl:
-            break;
-        }
-
-        const auto label = QString("%1%2: <%3>                ").arg(prefix, addr, valstr);
-        ui->listWidget->addItem(label);
-    }
+    ui->outputWidget->update(displayDefinition());
 }

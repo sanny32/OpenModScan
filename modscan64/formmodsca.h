@@ -30,7 +30,6 @@ public:
     void setDataDisplayMode(DataDisplayMode mode);
 
 private slots:
-    void updateListWidget();
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 
 private:
@@ -38,8 +37,6 @@ private:
 
 private:
     uint _scanRate = 1000;
-    DisplayMode _displayMode;
-    DataDisplayMode _dataDisplayMode;
 };
 
 #endif // FORMMODSCA_H

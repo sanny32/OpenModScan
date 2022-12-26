@@ -429,60 +429,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="labelStatus">
-         <property name="styleSheet">
-          <string notr="true">color: red;</string>
-         </property>
-         <property name="text">
-          <string>** Data Uninitialized **</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QListWidget" name="listWidget">
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="contextMenuPolicy">
-          <enum>Qt::NoContextMenu</enum>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="horizontalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="autoScroll">
-          <bool>false</bool>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="showDropIndicator" stdset="0">
-          <bool>false</bool>
-         </property>
-         <property name="dragDropMode">
-          <enum>QAbstractItemView::DragOnly</enum>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::NoSelection</enum>
-         </property>
-         <property name="movement">
-          <enum>QListView::Free</enum>
-         </property>
-         <property name="isWrapping" stdset="0">
-          <bool>true</bool>
-         </property>
-         <property name="resizeMode">
-          <enum>QListView::Adjust</enum>
-         </property>
-         <property name="modelColumn">
-          <number>0</number>
-         </property>
-        </widget>
+        <widget class="OutputWidget" name="outputWidget" native="true"/>
        </item>
       </layout>
      </widget>
@@ -500,6 +447,12 @@
    <class>PointTypeComboBox</class>
    <extends>QComboBox</extends>
    <header>pointtypecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>OutputWidget</class>
+   <extends>QWidget</extends>
+   <header>outputwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -1,4 +1,4 @@
-QT       += core gui widgets
+QT += core gui widgets network serialbus serialport
 CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -12,6 +12,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     numberlineedit.cpp \
+    outputwidget.cpp \
     pointtypecombobox.cpp
 
 HEADERS += \
@@ -22,17 +23,14 @@ HEADERS += \
     formmodsca.h \
     mainwindow.h \
     numberlineedit.h \
+    outputwidget.h \
     pointtypecombobox.h
 
 FORMS += \
     dialogdisplaydefinition.ui \
     formmodsca.ui \
-    mainwindow.ui
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+    mainwindow.ui \
+    outputwidget.ui
 
 RESOURCES += \
     resources.qrc

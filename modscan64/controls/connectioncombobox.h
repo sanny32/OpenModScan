@@ -14,6 +14,8 @@ public:
     ConnectionComboBox(QWidget* parent = nullptr);
 
     ConnectionType currentConnectionType() const;
+    void setCurrentConnectionType(ConnectionType type, const QString& portName);
+
     QString currentPortName() const;
 
 private:

@@ -23,13 +23,9 @@ ConnectionComboBox::ConnectionComboBox(QWidget* parent)
 
     QStringList ports;
     for(auto&& port: QSerialPortInfo::availablePorts())
-        ports.push_back(port.portName());
-
-    std::sort(ports.begin(), ports.end());
-    for(auto&& port: ports)
     {
-        const auto text = QString("Direct Connection to %1").arg(port);
-        addItem(text, ConnectionType::Serial, port);
+        const auto text = QString("Direct Connection to %1").arg(port.portName());
+        addItem(text, ConnectionType::Serial, port.portName());
     }
 }
 
@@ -40,6 +36,20 @@ ConnectionComboBox::ConnectionComboBox(QWidget* parent)
 ConnectionType ConnectionComboBox::currentConnectionType() const
 {
     return currentData().value<ConnectionPort>().Type;
+}
+
+///
+/// \brief ConnectionComboBox::setCurrentConnectionType
+/// \param type
+/// \param portName
+///
+void ConnectionComboBox::setCurrentConnectionType(ConnectionType type, const QString& portName)
+{
+    ConnectionPort cp;
+    cp.Type = type;
+    cp.PortName = portName;
+    const auto idx = findData(QVariant::fromValue(cp));
+    setCurrentIndex(idx);
 }
 
 ///

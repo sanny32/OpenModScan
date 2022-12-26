@@ -3,17 +3,22 @@
 
 ///
 /// \brief DialogConnectionDetails::DialogConnectionDetails
+/// \param _cd
 /// \param parent
 ///
-DialogConnectionDetails::DialogConnectionDetails(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogConnectionDetails)
+DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget *parent) :
+    QDialog(parent)
+    , ui(new Ui::DialogConnectionDetails)
+    ,_connectionDetails(cd)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
     setFixedSize(size());
+    ui->lineEditServicePort->setInputRange(0, 65535);
+    ui->lineEditDelatDSR->setInputRange(0, 10);
+    ui->lineEditDelayCTS->setInputRange(0, 10);
     on_comboBoxConnectUsing_currentIndexChanged(0);
 }
 
@@ -23,6 +28,25 @@ DialogConnectionDetails::DialogConnectionDetails(QWidget *parent) :
 DialogConnectionDetails::~DialogConnectionDetails()
 {
     delete ui;
+}
+
+///
+/// \brief DialogConnectionDetails::accept
+///
+void DialogConnectionDetails::accept()
+{
+    _connectionDetails.Type = ui->comboBoxConnectUsing->currentConnectionType();
+    if(_connectionDetails.Type == ConnectionType::Tcp)
+    {
+        _connectionDetails.IPAddress = QHostAddress(ui->labelIPAddress->text());
+        _connectionDetails.ServicePort = ui->lineEditServicePort->value();
+    }
+    else
+    {
+
+    }
+
+    QDialog::accept();
 }
 
 ///

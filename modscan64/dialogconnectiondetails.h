@@ -2,6 +2,7 @@
 #define DIALOGCONNECTIONDETAILS_H
 
 #include <QDialog>
+#include "connectiondetails.h"
 
 namespace Ui {
 class DialogConnectionDetails;
@@ -15,14 +16,19 @@ class DialogConnectionDetails : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogConnectionDetails(QWidget *parent = nullptr);
+    explicit DialogConnectionDetails(ConnectionDetails& cd, QWidget *parent = nullptr);
     ~DialogConnectionDetails();
+
+    void accept() override;
 
 private slots:
     void on_comboBoxConnectUsing_currentIndexChanged(int);
 
 private:
     Ui::DialogConnectionDetails *ui;
+
+private:
+    ConnectionDetails& _connectionDetails;
 };
 
 #endif // DIALOGCONNECTIONDETAILS_H

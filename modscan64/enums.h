@@ -39,4 +39,14 @@ enum class ConnectionType
 };
 Q_DECLARE_METATYPE(ConnectionType);
 
+///
+/// \brief The TransmissionMode enum
+///
+enum class TransmissionMode
+{
+    ASCII = 0,
+    RTU
+};
+Q_DECLARE_METATYPE(TransmissionMode);
+
 #endif // ENUMS_H

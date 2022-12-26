@@ -103,7 +103,7 @@ void MainWindow::on_actionConnect_triggered()
     DialogConnectionDetails dlg;
     if(dlg.exec() == QDialog::Accepted)
     {
-        ui->actionConnect->trigger();
+        ui->actionQuickConnect->trigger();
     }
 }
 

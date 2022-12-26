@@ -192,23 +192,8 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>6</number>
+           <number>3</number>
           </property>
-          <item>
-           <property name="text">
-            <string>110</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>300</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>600</string>
-           </property>
-          </item>
           <item>
            <property name="text">
             <string>1200</string>
@@ -231,11 +216,6 @@
           </item>
           <item>
            <property name="text">
-            <string>14400</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
             <string>19200</string>
            </property>
           </item>
@@ -246,27 +226,12 @@
           </item>
           <item>
            <property name="text">
-            <string>56000</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
             <string>57600</string>
            </property>
           </item>
           <item>
            <property name="text">
             <string>115200</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>128000</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>256000</string>
            </property>
           </item>
          </widget>

@@ -38,8 +38,8 @@ void DialogConnectionDetails::accept()
     _connectionDetails.Type = ui->comboBoxConnectUsing->currentConnectionType();
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
-        _connectionDetails.IPAddress = QHostAddress(ui->labelIPAddress->text());
-        _connectionDetails.ServicePort = ui->lineEditServicePort->value();
+        _connectionDetails.TcpDetails.IPAddress = QHostAddress(ui->labelIPAddress->text());
+        _connectionDetails.TcpDetails.ServicePort = ui->lineEditServicePort->value();
     }
     else
     {

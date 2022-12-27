@@ -1,3 +1,4 @@
+#include "dialogprotocolselections.h"
 #include "dialogconnectiondetails.h"
 #include "ui_dialogconnectiondetails.h"
 
@@ -47,6 +48,15 @@ void DialogConnectionDetails::accept()
     }
 
     QDialog::accept();
+}
+
+///
+/// \brief DialogConnectionDetails::on_pushButtonProtocolSelections_clicked
+///
+void DialogConnectionDetails::on_pushButtonProtocolSelections_clicked()
+{
+    DialogProtocolSelections dlg(_connectionDetails.ProtocolSelections, this);
+    dlg.exec();
 }
 
 ///

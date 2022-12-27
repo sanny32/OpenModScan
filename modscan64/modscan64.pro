@@ -13,6 +13,7 @@ SOURCES += \
     controls/numericlineedit.cpp \
     dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
+    dialogprotocolselections.cpp \
     formmodsca.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     controls/numericlineedit.h \
     dialogconnectiondetails.h \
     dialogdisplaydefinition.h \
+    dialogprotocolselections.h \
     displaydefinition.h \
     enums.h \
     formmodsca.h \
@@ -38,6 +40,7 @@ HEADERS += \
 FORMS += \
     dialogconnectiondetails.ui \
     dialogdisplaydefinition.ui \
+    dialogprotocolselections.ui \
     formmodsca.ui \
     mainwindow.ui \
     controls/outputwidget.ui

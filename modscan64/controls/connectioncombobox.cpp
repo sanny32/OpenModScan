@@ -45,11 +45,15 @@ ConnectionType ConnectionComboBox::currentConnectionType() const
 ///
 void ConnectionComboBox::setCurrentConnectionType(ConnectionType type, const QString& portName)
 {
-    ConnectionPort cp;
-    cp.Type = type;
-    cp.PortName = portName;
-    const auto idx = findData(QVariant::fromValue(cp));
-    setCurrentIndex(idx);
+    for(int  i = 0; i < count(); i++)
+    {
+        const auto cp = itemData(i).value<ConnectionPort>();
+        if(cp.Type == type && cp.PortName == portName)
+        {
+            setCurrentIndex(i);
+            break;
+        }
+    }
 }
 
 ///

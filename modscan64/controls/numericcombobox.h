@@ -3,6 +3,9 @@
 
 #include <QComboBox>
 
+///
+/// \brief The NumericComboBox class
+///
 class NumericComboBox : public QComboBox
 {
     Q_OBJECT
@@ -11,6 +14,7 @@ public:
 
     void addValue(int value);
     int currentValue() const;
+    void setCurrentValue(int value);
 };
 
 #endif // NUMERICCOMBOBOX_H

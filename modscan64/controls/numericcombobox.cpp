@@ -26,3 +26,13 @@ int NumericComboBox::currentValue() const
 {
     return currentText().toInt();
 }
+
+///
+/// \brief NumericComboBox::setCurrentValue
+/// \param value
+///
+void NumericComboBox::setCurrentValue(int value)
+{
+    const auto idx = findText(QString::number(value));
+    setCurrentIndex(idx);
+}

@@ -7,18 +7,18 @@
 #include "enums.h"
 
 ///
-/// \brief The TcpConnectionDetails class
+/// \brief The TcpConnectionParams class
 ///
-struct TcpConnectionDetails
+struct TcpConnectionParams
 {
     ushort ServicePort = 502;
-    QHostAddress IPAddress = QHostAddress("127.0.0.1");
+    QString IPAddress = "127.0.0.1";
 };
 
 ///
-/// \brief The SerialConnectionDetails class
+/// \brief The SerialConnectionParams class
 ///
-struct SerialConnectionDetails
+struct SerialConnectionParams
 {
     QString PortName;
     QSerialPort::BaudRate BaudRate = QSerialPort::Baud9600;
@@ -48,9 +48,9 @@ struct ModbusProtocolSelections
 struct ConnectionDetails
 {
     ConnectionType Type = ConnectionType::Tcp;
-    TcpConnectionDetails TcpDetails;
-    SerialConnectionDetails SerialDetails;
-    ModbusProtocolSelections ProtocolSelections;
+    TcpConnectionParams TcpParams;
+    SerialConnectionParams SerialParams;
+    ModbusProtocolSelections ModbusParams;
 };
 
 #endif // CONNECTIONDETAILS_H

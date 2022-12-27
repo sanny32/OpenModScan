@@ -1,4 +1,6 @@
 #include <QtWidgets>
+#include <QModbusTcpClient>
+#include <QModbusRtuSerialSlave>
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
 #include "mainwindow.h"
@@ -11,6 +13,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,_modbusClient(nullptr)
 {
     ui->setupUi(this);
     setUnifiedTitleAndToolBarOnMac(true);
@@ -51,9 +54,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::on_awake()
 {
     auto frm = currentMdiChild();
+    const auto state = _modbusClient ? _modbusClient->state() : QModbusDevice::UnconnectedState;
 
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
+    ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
+    ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionQuickConnect->setEnabled(state == QModbusDevice::UnconnectedState);
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
     ui->actionShowTraffic->setEnabled(frm != nullptr);
@@ -103,6 +110,7 @@ void MainWindow::on_actionConnect_triggered()
     DialogConnectionDetails dlg(_settings.ConnectionDetails, this);
     if(dlg.exec() == QDialog::Accepted)
     {
+        setupModbusClient(_settings.ConnectionDetails);
         ui->actionQuickConnect->trigger();
     }
 }
@@ -112,7 +120,10 @@ void MainWindow::on_actionConnect_triggered()
 ///
 void MainWindow::on_actionDisconnect_triggered()
 {
-
+    if(_modbusClient != nullptr)
+    {
+        _modbusClient->disconnectDevice();
+    }
 }
 
 ///
@@ -120,7 +131,14 @@ void MainWindow::on_actionDisconnect_triggered()
 ///
 void MainWindow::on_actionQuickConnect_triggered()
 {
+    if(_modbusClient == nullptr)
+        setupModbusClient(_settings.ConnectionDetails);
 
+    _modbusClient->connectDevice();
+    /*{
+        ui->actionDisconnect->trigger();
+        QMessageBox::warning(this, windowTitle(), "modbus/TCP Connection Failed");
+    }*/
 }
 
 ///
@@ -223,6 +241,33 @@ void MainWindow::on_actionSwappedDbl_triggered()
 ///
 void MainWindow::updateMenus()
 {
+}
+
+///
+/// \brief MainWindow::setupModbusClient
+/// \param cd
+///
+void MainWindow::setupModbusClient(const ConnectionDetails& cd)
+{
+    if(_modbusClient != nullptr)
+    {
+        delete _modbusClient;
+        _modbusClient = nullptr;
+    }
+
+    switch(cd.Type)
+    {
+        case ConnectionType::Tcp:
+        {
+            _modbusClient = new QModbusTcpClient(this);
+            _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
+            _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
+        }
+        break;
+
+        case ConnectionType::Serial:
+        break;
+    }
 }
 
 ///

@@ -2,6 +2,7 @@
 #define FORMMODSCA_H
 
 #include <QWidget>
+#include <QTimer>
 #include "enums.h"
 #include "displaydefinition.h"
 
@@ -30,13 +31,12 @@ public:
     void setDataDisplayMode(DataDisplayMode mode);
 
 private slots:
+    void on_timeout();
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 
 private:
     Ui::FormModSca *ui;
-
-private:
-    uint _scanRate = 1000;
+    QTimer _timer;
 };
 
 #endif // FORMMODSCA_H

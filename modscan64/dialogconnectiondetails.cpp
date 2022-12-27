@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "dialogprotocolselections.h"
 #include "dialogconnectiondetails.h"
 #include "ui_dialogconnectiondetails.h"
@@ -18,6 +19,7 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
                    Qt::WindowTitleHint);
     setFixedSize(size());
 
+    ui->comboBoxConnectUsing->setCurrentIndex(-1);
     ui->comboBoxParity->setItemData(0, QSerialPort::Parity::OddParity);
     ui->comboBoxParity->setItemData(1, QSerialPort::Parity::EvenParity);
     ui->comboBoxParity->setItemData(2, QSerialPort::Parity::NoParity);
@@ -26,24 +28,24 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     ui->lineEditDelatDSR->setInputRange(0, 10);
     ui->lineEditDelayCTS->setInputRange(0, 10);
 
-    ui->lineEditIPAddress->setText(cd.TcpDetails.IPAddress.toString());
-    ui->lineEditServicePort->setValue(cd.TcpDetails.ServicePort);
+    ui->lineEditIPAddress->setText(cd.TcpParams.IPAddress);
+    ui->lineEditServicePort->setValue(cd.TcpParams.ServicePort);
 
     if(cd.Type == ConnectionType::Tcp)
     {
-        on_comboBoxConnectUsing_currentIndexChanged(0);
+        ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, QString());
     }
     else
     {
-        ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, cd.SerialDetails.PortName);
-        ui->comboBoxBaudRate->setCurrentValue(cd.SerialDetails.BaudRate);
-        ui->comboBoxWordLength->setCurrentValue(cd.SerialDetails.WordLength);
-        ui->comboBoxParity->setCurrentIndex(ui->comboBoxParity->findData(cd.SerialDetails.Parity));
-        ui->comboBoxStopBits->setCurrentValue(cd.SerialDetails.StopBits);
-        ui->checkBoxDSR->setChecked(cd.SerialDetails.WaitDSR);
-        ui->lineEditDelatDSR->setValue(cd.SerialDetails.DelayDSR);
-        ui->checkBoxCTS->setChecked(cd.SerialDetails.WaitCTS);
-        ui->lineEditDelayCTS->setValue(cd.SerialDetails.DelayCTS);
+        ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, cd.SerialParams.PortName);
+        ui->comboBoxBaudRate->setCurrentValue(cd.SerialParams.BaudRate);
+        ui->comboBoxWordLength->setCurrentValue(cd.SerialParams.WordLength);
+        ui->comboBoxParity->setCurrentIndex(ui->comboBoxParity->findData(cd.SerialParams.Parity));
+        ui->comboBoxStopBits->setCurrentValue(cd.SerialParams.StopBits);
+        ui->checkBoxDSR->setChecked(cd.SerialParams.WaitDSR);
+        ui->lineEditDelatDSR->setValue(cd.SerialParams.DelayDSR);
+        ui->checkBoxCTS->setChecked(cd.SerialParams.WaitCTS);
+        ui->lineEditDelayCTS->setValue(cd.SerialParams.DelayCTS);
     }
 }
 
@@ -63,20 +65,27 @@ void DialogConnectionDetails::accept()
     _connectionDetails.Type = ui->comboBoxConnectUsing->currentConnectionType();
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
-        _connectionDetails.TcpDetails.IPAddress = QHostAddress(ui->labelIPAddress->text());
-        _connectionDetails.TcpDetails.ServicePort = ui->lineEditServicePort->value();
+        const auto ipAddr = QHostAddress(ui->lineEditIPAddress->text());
+        if(ipAddr.isNull())
+        {
+            QMessageBox::warning(this, parentWidget()->windowTitle(), "Invalid IP Address");
+            return;
+        }
+
+        _connectionDetails.TcpParams.IPAddress = ipAddr.toString();
+        _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value();
     }
     else
     {
-        _connectionDetails.SerialDetails.PortName = ui->comboBoxConnectUsing->currentPortName();
-        _connectionDetails.SerialDetails.BaudRate = (QSerialPort::BaudRate)ui->comboBoxBaudRate->currentValue();
-        _connectionDetails.SerialDetails.WordLength = (QSerialPort::DataBits)ui->comboBoxWordLength->currentValue();
-        _connectionDetails.SerialDetails.Parity = ui->comboBoxParity->currentData().value<QSerialPort::Parity>();
-        _connectionDetails.SerialDetails.StopBits = (QSerialPort::StopBits)ui->comboBoxStopBits->currentValue();
-        _connectionDetails.SerialDetails.DelayDSR = ui->lineEditDelatDSR->value();
-        _connectionDetails.SerialDetails.WaitDSR = ui->checkBoxDSR->isChecked();
-        _connectionDetails.SerialDetails.WaitCTS = ui->checkBoxCTS->isChecked();
-        _connectionDetails.SerialDetails.DelayCTS = ui->lineEditDelayCTS->value();
+        _connectionDetails.SerialParams.PortName = ui->comboBoxConnectUsing->currentPortName();
+        _connectionDetails.SerialParams.BaudRate = (QSerialPort::BaudRate)ui->comboBoxBaudRate->currentValue();
+        _connectionDetails.SerialParams.WordLength = (QSerialPort::DataBits)ui->comboBoxWordLength->currentValue();
+        _connectionDetails.SerialParams.Parity = ui->comboBoxParity->currentData().value<QSerialPort::Parity>();
+        _connectionDetails.SerialParams.StopBits = (QSerialPort::StopBits)ui->comboBoxStopBits->currentValue();
+        _connectionDetails.SerialParams.DelayDSR = ui->lineEditDelatDSR->value();
+        _connectionDetails.SerialParams.WaitDSR = ui->checkBoxDSR->isChecked();
+        _connectionDetails.SerialParams.WaitCTS = ui->checkBoxCTS->isChecked();
+        _connectionDetails.SerialParams.DelayCTS = ui->lineEditDelayCTS->value();
     }
 
     QDialog::accept();
@@ -87,7 +96,7 @@ void DialogConnectionDetails::accept()
 ///
 void DialogConnectionDetails::on_pushButtonProtocolSelections_clicked()
 {
-    DialogProtocolSelections dlg(_connectionDetails.ProtocolSelections, this);
+    DialogProtocolSelections dlg(_connectionDetails.ModbusParams, this);
     dlg.exec();
 }
 

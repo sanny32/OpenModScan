@@ -19,6 +19,10 @@ FormModSca::FormModSca(int num, QWidget *parent) :
 
     setWindowTitle(QString("ModSca%1").arg(num));
     ui->outputWidget->update(displayDefinition());
+
+    connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
+    _timer.setInterval(1000);
+    _timer.start();
 }
 
 ///
@@ -36,7 +40,7 @@ FormModSca::~FormModSca()
 DisplayDefinition FormModSca::displayDefinition() const
 {
     DisplayDefinition dd;
-    dd.ScanRate = _scanRate;
+    dd.ScanRate = _timer.interval();
     dd.DeviceId = ui->lineEditDeviceId->value();
     dd.PointAddress = ui->lineEditAddress->value();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
@@ -51,7 +55,7 @@ DisplayDefinition FormModSca::displayDefinition() const
 ///
 void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
 {
-    _scanRate = dd.ScanRate;
+    _timer.setInterval(dd.ScanRate);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditLength->setValue(dd.Length);
@@ -94,6 +98,14 @@ DataDisplayMode FormModSca::dataDisplayMode() const
 void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 {
     ui->outputWidget->setDataDisplayMode(mode);
+}
+
+///
+/// \brief FormModSca::on_timeout
+///
+void FormModSca::on_timeout()
+{
+
 }
 
 ///

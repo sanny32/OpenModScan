@@ -2,6 +2,7 @@
 #define POINTTYPECOMBOBOX_H
 
 #include <QComboBox>
+#include <QModbusDataUnit>
 
 ///
 /// \brief The PointTypeComboBox class
@@ -12,8 +13,8 @@ class PointTypeComboBox : public QComboBox
 public:
     PointTypeComboBox(QWidget *parent = nullptr);
 
-    uint currentPointType() const;
-    void setCurrentPointType(uint pointType);
+    QModbusDataUnit::RegisterType currentPointType() const;
+    void setCurrentPointType(QModbusDataUnit::RegisterType pointType);
 };
 
 #endif // POINTTYPECOMBOBOX_H

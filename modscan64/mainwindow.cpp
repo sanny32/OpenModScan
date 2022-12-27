@@ -262,6 +262,8 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
             _modbusClient = new QModbusTcpClient(this);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
+
+            emit modbusClientChanged(_modbusClient);
         }
         break;
 

@@ -18,6 +18,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void modbusClientChanged(QModbusClient* cli);
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 

@@ -1,4 +1,4 @@
-#include <QtDebug>
+#include "mainwindow.h"
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
@@ -7,18 +7,25 @@
 /// \param num
 /// \param parent
 ///
-FormModSca::FormModSca(int num, QWidget *parent) :
+FormModSca::FormModSca(int num, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
+    ,_modbusClient(nullptr)
 {
     ui->setupUi(this);
+    setWindowTitle(QString("ModSca%1").arg(num));
+
     ui->lineEditAddress->setInputRange(1, 65534);
     ui->lineEditAddress->enablePaddingZero(true);
     ui->lineEditLength->setInputRange(1, 128);
     ui->lineEditDeviceId->setInputRange(1, 255);
 
-    setWindowTitle(QString("ModSca%1").arg(num));
-    ui->outputWidget->update(displayDefinition());
+    ui->outputWidget->update(displayDefinition(), QModbusDataUnit());
+
+    connect(parent, &MainWindow::modbusClientChanged, [&](QModbusClient* cli)
+    {
+        _modbusClient = cli;
+    });
 
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
     _timer.setInterval(1000);
@@ -61,7 +68,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    ui->outputWidget->update(dd);
+    ui->outputWidget->update(dd, QModbusDataUnit());
 }
 
 ///
@@ -101,11 +108,71 @@ void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief FormModSca::readReady
+///
+void FormModSca::readReady()
+{
+    auto reply = qobject_cast<QModbusReply*>(sender());
+    if (!reply) return;
+
+    if (reply->error() == QModbusDevice::NoError)
+    {
+       const auto result = reply->result();
+       ui->outputWidget->update(displayDefinition(), result);
+
+    }
+    else if (reply->error() == QModbusDevice::ProtocolError)
+    {
+        const auto error = QString("Mobus exception: %1").arg(reply->errorString());
+        ui->outputWidget->setStatus(error);
+    }
+    else
+    {
+        ui->outputWidget->setStatus(reply->errorString());
+    }
+
+    reply->deleteLater();
+}
+
+///
 /// \brief FormModSca::on_timeout
 ///
 void FormModSca::on_timeout()
 {
+    if(_modbusClient == nullptr) return;
+    if(_modbusClient->state() != QModbusDevice::ConnectedState)
+    {
+        ui->outputWidget->setStatus("Device NOT CONNECTED!");
+        return;
+    }
 
+    const auto dd = displayDefinition();
+    QModbusDataUnit dataUnit;
+    dataUnit.setRegisterType(dd.PointType);
+    dataUnit.setStartAddress(dd.PointAddress);
+    dataUnit.setValueCount(dd.Length);
+
+    auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
+    if(reply->error() != QModbusDevice::NoError)
+    {
+        ui->outputWidget->setStatus(reply->errorString());
+        return;
+    }
+    else
+    {
+        ui->outputWidget->setStatus(QString());
+    }
+
+    if (!reply->isFinished())
+    {
+        connect(reply, &QModbusReply::finished, this, &FormModSca::readReady);
+    }
+    else
+    {
+        const auto result = reply->result();
+        ui->outputWidget->update(displayDefinition(), result);
+        delete reply;
+    }
 }
 
 ///
@@ -113,5 +180,5 @@ void FormModSca::on_timeout()
 ///
 void FormModSca::on_comboBoxModbusPointType_currentTextChanged(const QString&)
 {
-    ui->outputWidget->update(displayDefinition());
+    ui->outputWidget->update(displayDefinition(), QModbusDataUnit());
 }

@@ -1,5 +1,6 @@
 #include "pointtypecombobox.h"
 
+
 ///
 /// \brief PointTypeComboBox::PointTypeComboBox
 /// \param parent
@@ -7,26 +8,26 @@
 PointTypeComboBox::PointTypeComboBox(QWidget *parent)
     :QComboBox(parent)
 {
-    addItem("01: COIL STATUS", 1);
-    addItem("02: INPUT STATUS", 2);
-    addItem("03: HOLDING REGISTER", 3);
-    addItem("04: INPUT REGISTER", 4);
+    addItem("01: COIL STATUS", QModbusDataUnit::Coils);
+    addItem("02: INPUT STATUS", QModbusDataUnit::DiscreteInputs);
+    addItem("03: HOLDING REGISTER", QModbusDataUnit::HoldingRegisters);
+    addItem("04: INPUT REGISTER", QModbusDataUnit::InputRegisters);
 }
 
 ///
 /// \brief PointTypeComboBox::currentPointType
 /// \return
 ///
-uint PointTypeComboBox::currentPointType() const
+QModbusDataUnit::RegisterType PointTypeComboBox::currentPointType() const
 {
-    return currentData().toUInt();
+    return currentData().value<QModbusDataUnit::RegisterType>();
 }
 
 ///
 /// \brief PointTypeComboBox::setCurrentPointType
 /// \param pointType
 ///
-void PointTypeComboBox::setCurrentPointType(uint pointType)
+void PointTypeComboBox::setCurrentPointType(QModbusDataUnit::RegisterType pointType)
 {
     const auto idx = findData(pointType);
     setCurrentIndex(idx);

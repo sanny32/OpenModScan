@@ -26,7 +26,8 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
-    void update(const DisplayDefinition& dd);
+    void setStatus(const QString& status);
+    void update(const DisplayDefinition& dd, const QModbusDataUnit& data);
 
 private:
     void updateDataWidget();
@@ -39,6 +40,7 @@ private:
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     DisplayDefinition _displayDefinition;
+    QModbusDataUnit _displayData;
 };
 
 #endif // OUTPUTWIDGET_H

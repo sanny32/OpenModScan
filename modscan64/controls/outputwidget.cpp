@@ -1,4 +1,3 @@
-#include "formmodsca.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -25,10 +24,23 @@ OutputWidget::~OutputWidget()
 }
 
 ///
+/// \brief OutputWidget::setStatus
+/// \param status
+///
+void OutputWidget::setStatus(const QString& status)
+{
+    if(status.isEmpty())
+        ui->labelStatus->setText(QString());
+    else
+        ui->labelStatus->setText(QString("** %1 **").arg(status));
+}
+
+///
 /// \brief OutputWidget::update
 ///
-void OutputWidget::update(const DisplayDefinition& dd)
+void OutputWidget::update(const DisplayDefinition& dd, const QModbusDataUnit& data)
 {
+    _displayData = data;
     _displayDefinition = dd;
     switch(displayMode())
     {
@@ -97,16 +109,18 @@ void OutputWidget::updateDataWidget()
     QString prefix;
     switch(_displayDefinition.PointType)
     {
-        case 1:
+        case QModbusDataUnit::Invalid:
+        break;
+        case QModbusDataUnit::Coils:
             prefix = "0";
         break;
-        case 2:
+        case QModbusDataUnit::DiscreteInputs:
             prefix = "1";
         break;
-        case 3:
+        case QModbusDataUnit::HoldingRegisters:
             prefix = "4";
         break;
-        case 4:
+        case QModbusDataUnit::InputRegisters:
             prefix = "3";
         break;
     }
@@ -115,8 +129,8 @@ void OutputWidget::updateDataWidget()
     for(int i = 0; i < _displayDefinition.Length; i++)
     {
         const auto addr = QStringLiteral("%1").arg(i + _displayDefinition.PointAddress, 4, 10, QLatin1Char('0'));
+        const short value = _displayData.isValid() ? _displayData.value(i) : 0;
 
-        short value = 0;
         QString valstr;
         switch(_dataDisplayMode)
         {

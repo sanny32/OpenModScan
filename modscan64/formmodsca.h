@@ -3,8 +3,11 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QModbusClient>
 #include "enums.h"
 #include "displaydefinition.h"
+
+class MainWindow;
 
 namespace Ui {
 class FormModSca;
@@ -18,7 +21,7 @@ class FormModSca : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormModSca(int num, QWidget *parent = nullptr);
+    explicit FormModSca(int num, MainWindow* parent = nullptr);
     ~FormModSca();
 
     DisplayDefinition displayDefinition() const;
@@ -31,11 +34,13 @@ public:
     void setDataDisplayMode(DataDisplayMode mode);
 
 private slots:
+    void readReady();
     void on_timeout();
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 
 private:
     Ui::FormModSca *ui;
+    QModbusClient* _modbusClient;
     QTimer _timer;
 };
 

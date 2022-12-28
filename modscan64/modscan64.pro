@@ -13,6 +13,7 @@ SOURCES += \
     appsettings.cpp \
     controls/connectioncombobox.cpp \
     controls/numericlineedit.cpp \
+    controls/statisticwidget.cpp \
     dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
     dialogprotocolselections.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     connectiondetails.h \
     controls/connectioncombobox.h \
     controls/numericlineedit.h \
+    controls/statisticwidget.h \
     dialogconnectiondetails.h \
     dialogdisplaydefinition.h \
     dialogprotocolselections.h \
@@ -40,6 +42,7 @@ HEADERS += \
     controls/pointtypecombobox.h
 
 FORMS += \
+    controls/statisticwidget.ui \
     dialogconnectiondetails.ui \
     dialogdisplaydefinition.ui \
     dialogprotocolselections.ui \

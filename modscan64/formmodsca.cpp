@@ -119,6 +119,11 @@ void FormModSca::readyReadData()
     auto reply = qobject_cast<QModbusReply*>(sender());
     if (!reply) return;
 
+    if (reply->error() == QModbusDevice::NoError)
+    {
+        ui->statisticWidget->increaseValidSlaveResponses();
+    }
+
     updateOutput(reply);
     reply->deleteLater();
 }
@@ -138,6 +143,9 @@ void FormModSca::on_timeout()
     const auto dd = displayDefinition();
     QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress - 1, dd.Length);
     auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
+
+    ui->statisticWidget->increaseNumberOfPolls();
+
     if (!reply->isFinished())
         connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
     else

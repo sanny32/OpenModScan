@@ -256,6 +256,16 @@ QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1
     return result;
 }
 
+///
+/// \brief formatDoubleValue
+/// \param pointType
+/// \param value1
+/// \param value2
+/// \param value3
+/// \param value4
+/// \param flag
+/// \return
+///
 QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, quint16 value3, quint16 value4, bool flag)
 {
     QString result;

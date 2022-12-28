@@ -32,7 +32,6 @@ public:
 private:
     void updateDataWidget();
     void updateTrafficWidget();
-    QString formatDataValue(QModbusDataUnit::RegisterType pointType, DataDisplayMode mode, quint16 value1, quint16 value2);
 
 private:
     Ui::OutputWidget *ui;

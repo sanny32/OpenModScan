@@ -146,7 +146,7 @@ void FormModSca::on_timeout()
     }
 
     const auto dd = displayDefinition();
-    QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress, dd.Length);
+    QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress - 1, dd.Length);
     auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
     if (!reply->isFinished())
         connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);

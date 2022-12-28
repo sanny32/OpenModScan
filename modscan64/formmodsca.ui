@@ -36,7 +36,8 @@
      </property>
      <widget class="QFrame" name="frame_3">
       <property name="styleSheet">
-       <string notr="true">background-color: white;</string>
+       <string notr="true">color: black;
+background-color: white;</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::WinPanel</enum>

@@ -19,13 +19,17 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     ui->lineEditAddress->enablePaddingZero(true);
     ui->lineEditLength->setInputRange(1, 128);
     ui->lineEditDeviceId->setInputRange(1, 255);
+    ui->lineEditAddress->setValue(1);
+    ui->lineEditLength->setValue(100);
+    ui->lineEditDeviceId->setValue(1);
 
     updateOutput();
 
-    connect(parent, &MainWindow::modbusClientChanged, [&](QModbusClient* cli)
-    {
-        _modbusClient = cli;
-    });
+    connect(parent, &MainWindow::modbusClientChanged,
+            [&](QModbusClient* cli)
+            {
+                _modbusClient = cli;
+            });
 
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
     _timer.setInterval(1000);
@@ -115,21 +119,7 @@ void FormModSca::readyReadData()
     auto reply = qobject_cast<QModbusReply*>(sender());
     if (!reply) return;
 
-    if (reply->error() == QModbusDevice::NoError)
-    {
-        ui->outputWidget->setStatus(QString());
-        updateOutput(reply->result());
-    }
-    else if (reply->error() == QModbusDevice::ProtocolError)
-    {
-        const auto error = QString("Mobus exception: %1").arg(reply->errorString());
-        ui->outputWidget->setStatus(error);
-    }
-    else
-    {
-        ui->outputWidget->setStatus(reply->errorString());
-    }
-
+    updateOutput(reply);
     reply->deleteLater();
 }
 
@@ -167,7 +157,7 @@ void FormModSca::on_comboBoxModbusPointType_currentTextChanged(const QString&)
 /// \brief FormModSca::updateOutput
 /// \param data
 ///
-void FormModSca::updateOutput(const QModbusDataUnit& data)
+void FormModSca::updateOutput(QModbusReply* reply)
 {
-    ui->outputWidget->update(displayDefinition(), data);
+    ui->outputWidget->update(displayDefinition(), reply);
 }

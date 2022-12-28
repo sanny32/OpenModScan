@@ -2,6 +2,7 @@
 #define OUTPUTWIDGET_H
 
 #include <QWidget>
+#include <QModbusReply>
 #include "enums.h"
 #include "displaydefinition.h"
 
@@ -27,7 +28,7 @@ public:
     void setDataDisplayMode(DataDisplayMode mode);
 
     void setStatus(const QString& status);
-    void update(const DisplayDefinition& dd, const QModbusDataUnit& data);
+    void update(const DisplayDefinition& dd, QModbusReply* reply = nullptr);
 
 private:
     void updateDataWidget();

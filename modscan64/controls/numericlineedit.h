@@ -16,11 +16,16 @@ public:
     void enablePaddingZero(bool on);
     void setInputRange(int bottom, int top);
 
+    void setText(const QString& text);
+
 protected:
     void focusOutEvent(QFocusEvent*) override;
 
 private slots:
-    void on_textChanged(const QString& s);
+    void on_editingFinished();
+
+private:
+    void updateValue();
 
 private:
     int _value;

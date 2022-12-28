@@ -39,10 +39,27 @@ void OutputWidget::setStatus(const QString& status)
 ///
 /// \brief OutputWidget::update
 ///
-void OutputWidget::update(const DisplayDefinition& dd, const QModbusDataUnit& data)
+void OutputWidget::update(const DisplayDefinition& dd, QModbusReply* reply)
 {
-    _displayData = data;
     _displayDefinition = dd;
+    if(reply)
+    {
+        _displayData = reply->result();
+
+        if (reply->error() == QModbusDevice::NoError)
+        {
+            setStatus(QString());
+        }
+        else if (reply->error() == QModbusDevice::ProtocolError)
+        {
+            setStatus(QString("Mobus exception: %1").arg(reply->errorString()));
+        }
+        else
+        {
+            setStatus(reply->errorString());
+        }
+    }
+
     switch(displayMode())
     {
         case DisplayMode::Data:

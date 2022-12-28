@@ -14,7 +14,7 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
 
-    connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
+    connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
 }
 
 ///
@@ -30,6 +30,8 @@ NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
+
+    connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
 }
 
 ///
@@ -48,9 +50,23 @@ void NumericLineEdit::enablePaddingZero(bool on)
 ///
 void NumericLineEdit::setInputRange(int bottom, int top)
 {
+    const int nums = QString::number(top).length();
+    _paddingZeroWidth = qMax(1, nums - 1);
+
     setValidator(nullptr);
     setValidator(new QIntValidator(bottom, top, this));
-    _paddingZeroWidth = qMax(1, QString::number(top).length() - 1);
+    setMaxLength(qMax(1, nums));
+
+}
+
+///
+/// \brief NumericLineEdit::setText
+/// \param text
+///
+void NumericLineEdit::setText(const QString& text)
+{
+    QLineEdit::setText(text);
+    updateValue();
 }
 
 ///
@@ -76,12 +92,22 @@ void NumericLineEdit::setValue(int value)
     if(_enablePaddingZero)
     {
         const auto text = QStringLiteral("%1").arg(value, _paddingZeroWidth, 10, QLatin1Char('0'));
-        setText(text);
+        QLineEdit::setText(text);
     }
     else
     {
-        setText(QString::number(value));
+        QLineEdit::setText(QString::number(value));
     }
+}
+
+///
+/// \brief NumericLineEdit::updateValue
+///
+void NumericLineEdit::updateValue()
+{
+    bool ok;
+    const auto value = text().toInt(&ok);
+    if(ok) setValue(value);
 }
 
 ///
@@ -90,20 +116,14 @@ void NumericLineEdit::setValue(int value)
 ///
 void NumericLineEdit::focusOutEvent(QFocusEvent* event)
 {
-    bool ok;
-    auto value = text().toInt(&ok);
-    if(ok) setValue(value);
-    else setValue(_value);
+    updateValue();
     QLineEdit::focusOutEvent(event);
 }
 
 ///
-/// \brief NumberLineEdit::on_textChanged
-/// \param s
+/// \brief NumericLineEdit::on_editingFinished
 ///
-void NumericLineEdit::on_textChanged(const QString& s)
+void NumericLineEdit::on_editingFinished()
 {
-    bool ok;
-    auto value = s.toInt(&ok);
-    if(ok) _value = value;
+    updateValue();
 }

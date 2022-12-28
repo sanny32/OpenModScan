@@ -39,7 +39,7 @@ private slots:
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 
 private:
-    void updateOutput(const QModbusDataUnit& data = QModbusDataUnit());
+    void updateOutput(QModbusReply* reply = nullptr);
 
 private:
     Ui::FormModSca *ui;

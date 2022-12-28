@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -109,8 +110,6 @@ void OutputWidget::updateDataWidget()
     QString prefix;
     switch(_displayDefinition.PointType)
     {
-        case QModbusDataUnit::Invalid:
-        break;
         case QModbusDataUnit::Coils:
             prefix = "0";
         break;
@@ -123,46 +122,17 @@ void OutputWidget::updateDataWidget()
         case QModbusDataUnit::InputRegisters:
             prefix = "3";
         break;
+        default:
+        break;
     }
 
     ui->listWidget->clear();
     for(int i = 0; i < _displayDefinition.Length; i++)
     {
         const auto addr = QStringLiteral("%1").arg(i + _displayDefinition.PointAddress, 4, 10, QLatin1Char('0'));
-        const qint16 value = _displayData.isValid() ? _displayData.value(i) : 0;
-
-        QString valstr;
-        switch(_dataDisplayMode)
-        {
-            case DataDisplayMode::Binary:
-                valstr = QStringLiteral("%1").arg(value, 16, 2, QLatin1Char('0'));
-            break;
-
-            case DataDisplayMode::Decimal:
-                valstr = QStringLiteral("%1").arg((quint16)value, 5, 10, QLatin1Char('0'));
-            break;
-
-            case DataDisplayMode::Integer:
-                valstr = QStringLiteral("%1").arg(value, 5, 10, QLatin1Char(' '));
-            break;
-
-            case DataDisplayMode::Hex:
-                valstr = QStringLiteral("%1H").arg(value, 4, 16, QLatin1Char('0'));
-            break;
-
-            case DataDisplayMode::FloatingPt:
-            break;
-
-            case DataDisplayMode::SwappedFP:
-            break;
-
-            case DataDisplayMode::DblFloat:
-            break;
-
-            case DataDisplayMode::SwappedDbl:
-            break;
-        }
-
+        const auto value1 = _displayData.isValid() ? _displayData.value(i) : 0;
+        const auto value2 = _displayData.isValid() ? _displayData.value(i + 1) : 0;
+        const auto valstr = formatDataValue(_displayDefinition.PointType, _dataDisplayMode, value1, value2);
         const auto label = QString("%1%2: <%3>                ").arg(prefix, addr, valstr);
         ui->listWidget->addItem(label);
     }
@@ -174,4 +144,149 @@ void OutputWidget::updateDataWidget()
 void OutputWidget::updateTrafficWidget()
 {
 
+}
+
+///
+/// \brief formatBinatyValue
+/// \param pointType
+/// \param value
+/// \return
+///
+QString formatBinatyValue(QModbusDataUnit::RegisterType pointType, quint16 value)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QStringLiteral("%1").arg(value, 1, 2, QLatin1Char('0'));
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QStringLiteral("%1").arg(value, 16, 2, QLatin1Char('0'));
+        break;
+        default:
+        break;
+    }
+    return result;
+}
+
+///
+/// \brief formatDecimalValue
+/// \param pointType
+/// \param value
+/// \return
+///
+QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QStringLiteral("%1").arg(value, 1, 10, QLatin1Char('0'));
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QStringLiteral("%1").arg(value, 5, 10, QLatin1Char('0'));
+        break;
+        default:
+        break;
+    }
+    return result;
+}
+
+///
+/// \brief formatIntegerValue
+/// \param pointType
+/// \param value
+/// \return
+///
+QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString::number(value);
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QStringLiteral("%1").arg(value, 5, 10, QLatin1Char(' '));
+        break;
+        default:
+        break;
+    }
+    return result;
+}
+
+///
+/// \brief formatHexValue
+/// \param pointType
+/// \param value
+/// \return
+///
+QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QStringLiteral("%1").arg(value, 1, 16, QLatin1Char('0'));
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QStringLiteral("%1H").arg(value, 4, 16, QLatin1Char('0'));
+        break;
+        default:
+        break;
+    }
+    return result.toUpper();
+}
+
+///
+/// \brief OutputWidget::formatDataValue
+/// \param pointType
+/// \param mode
+/// \param value1
+/// \param value2
+/// \return
+///
+QString OutputWidget::formatDataValue(QModbusDataUnit::RegisterType pointType, DataDisplayMode mode, quint16 value1, quint16 value2)
+{
+    QString result;
+    switch(mode)
+    {
+        case DataDisplayMode::Binary:
+            result = formatBinatyValue(pointType, value1);
+        break;
+
+        case DataDisplayMode::Decimal:
+            result = formatDecimalValue(pointType, value1);
+        break;
+
+        case DataDisplayMode::Integer:
+            result = formatIntegerValue(pointType, value1);
+        break;
+
+        case DataDisplayMode::Hex:
+            result = formatHexValue(pointType, value1);
+        break;
+
+        case DataDisplayMode::FloatingPt:
+        break;
+
+        case DataDisplayMode::SwappedFP:
+        break;
+
+        case DataDisplayMode::DblFloat:
+        break;
+
+        case DataDisplayMode::SwappedDbl:
+        break;
+    }
+
+    return result;
 }

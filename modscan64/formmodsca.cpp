@@ -20,7 +20,7 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     ui->lineEditLength->setInputRange(1, 128);
     ui->lineEditDeviceId->setInputRange(1, 255);
 
-    ui->outputWidget->update(displayDefinition(), QModbusDataUnit());
+    updateOutput();
 
     connect(parent, &MainWindow::modbusClientChanged, [&](QModbusClient* cli)
     {
@@ -68,7 +68,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    ui->outputWidget->update(dd, QModbusDataUnit());
+    updateOutput();
 }
 
 ///
@@ -117,9 +117,8 @@ void FormModSca::readyReadData()
 
     if (reply->error() == QModbusDevice::NoError)
     {
-       const auto result = reply->result();
-       ui->outputWidget->update(displayDefinition(), result);
-
+        ui->outputWidget->setStatus(QString());
+        updateOutput(reply->result());
     }
     else if (reply->error() == QModbusDevice::ProtocolError)
     {
@@ -147,33 +146,13 @@ void FormModSca::on_timeout()
     }
 
     const auto dd = displayDefinition();
-    QModbusDataUnit dataUnit;
-    dataUnit.setRegisterType(dd.PointType);
-    dataUnit.setStartAddress(dd.PointAddress);
-    dataUnit.setValueCount(dd.Length);
-
+    QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress, dd.Length);
     auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
-    if(reply->error() != QModbusDevice::NoError)
-    {
-        ui->outputWidget->setStatus(reply->errorString());
-        return;
-    }
-    else
-    {
-        ui->outputWidget->setStatus(QString());
-    }
-
     if (!reply->isFinished())
-    {
         connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
-    }
     else
-    {
-        /*const auto result = reply->result();
-        ui->outputWidget->update(displayDefinition(), result);
-        delete reply;*/
-        readyReadData();
-    }
+        delete reply; // broadcast replies return immediately
+
 }
 
 ///
@@ -181,5 +160,14 @@ void FormModSca::on_timeout()
 ///
 void FormModSca::on_comboBoxModbusPointType_currentTextChanged(const QString&)
 {
-    ui->outputWidget->update(displayDefinition(), QModbusDataUnit());
+    updateOutput();
+}
+
+///
+/// \brief FormModSca::updateOutput
+/// \param data
+///
+void FormModSca::updateOutput(const QModbusDataUnit& data)
+{
+    ui->outputWidget->update(displayDefinition(), data);
 }

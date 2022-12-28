@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
-    <height>410</height>
+    <width>539</width>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,14 @@
         </spacer>
        </item>
        <item>
-        <widget class="ConnectionComboBox" name="comboBoxConnectUsing"/>
+        <widget class="ConnectionComboBox" name="comboBoxConnectUsing">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_7">
@@ -94,6 +101,12 @@
          </item>
          <item row="0" column="1">
           <widget class="QLineEdit" name="lineEditIPAddress">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
            <property name="inputMask">
             <string/>
            </property>
@@ -116,6 +129,12 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
            </property>
            <property name="maximumSize">
             <size>
@@ -173,6 +192,9 @@
         <property name="formAlignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
+        <property name="horizontalSpacing">
+         <number>3</number>
+        </property>
         <property name="verticalSpacing">
          <number>16</number>
         </property>
@@ -188,7 +210,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>0</height>
+            <height>25</height>
            </size>
           </property>
           <property name="currentIndex">
@@ -248,7 +270,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>0</height>
+            <height>25</height>
            </size>
           </property>
           <property name="currentIndex">
@@ -278,7 +300,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>0</height>
+            <height>25</height>
            </size>
           </property>
           <property name="currentIndex">
@@ -306,7 +328,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>0</height>
+            <height>25</height>
            </size>
           </property>
           <item>
@@ -334,7 +356,7 @@
        <widget class="QGroupBox" name="groupBox_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
+          <horstretch>1</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
@@ -382,6 +404,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>40</width>
@@ -392,6 +420,12 @@
            </item>
            <item>
             <widget class="QLabel" name="label_3">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>34</height>
+              </size>
+             </property>
              <property name="text">
               <string>ms after RTS before
 transmitting first character</string>
@@ -453,6 +487,12 @@ transmitting first character</string>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>40</width>
@@ -463,6 +503,12 @@ transmitting first character</string>
            </item>
            <item>
             <widget class="QLabel" name="label_5">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>34</height>
+              </size>
+             </property>
              <property name="text">
               <string>ms after last character
 before releasing RTS</string>
@@ -566,14 +612,14 @@ before releasing RTS</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NumericComboBox</class>
-   <extends>QComboBox</extends>
-   <header>numericcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
    <header>numericlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumericComboBox</class>
+   <extends>QComboBox</extends>
+   <header>numericcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>ConnectionComboBox</class>

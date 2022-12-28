@@ -153,10 +153,7 @@
          <item>
           <widget class="QFrame" name="frame_4">
            <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
+            <enum>QFrame::NoFrame</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <property name="leftMargin">

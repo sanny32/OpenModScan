@@ -107,10 +107,10 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionConnect_triggered()
 {
-    DialogConnectionDetails dlg(_settings.ConnectionDetails, this);
+    DialogConnectionDetails dlg(_settings.ConnectionParams, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        setupModbusClient(_settings.ConnectionDetails);
+        setupModbusClient(_settings.ConnectionParams);
         ui->actionQuickConnect->trigger();
     }
 }
@@ -132,7 +132,7 @@ void MainWindow::on_actionDisconnect_triggered()
 void MainWindow::on_actionQuickConnect_triggered()
 {
     if(_modbusClient == nullptr)
-        setupModbusClient(_settings.ConnectionDetails);
+        setupModbusClient(_settings.ConnectionParams);
 
     _modbusClient->connectDevice();
     /*{

@@ -9,8 +9,8 @@ class AppSettings
 public:
     AppSettings();
 
-    DataDisplayMode DataDisplayMode;
-    ConnectionDetails ConnectionDetails;
+    //DataDisplayMode DataDisplayMode;
+    ConnectionDetails ConnectionParams;
 };
 
 #endif // APPSETTINGS_H

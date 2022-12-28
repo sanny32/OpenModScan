@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>238</height>
+    <height>262</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,6 +43,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>25</height>
+        </size>
        </property>
        <property name="maximumSize">
         <size>
@@ -107,6 +113,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>60</width>
@@ -133,7 +145,7 @@
         <property name="minimumSize">
          <size>
           <width>150</width>
-          <height>0</height>
+          <height>25</height>
          </size>
         </property>
        </widget>
@@ -152,6 +164,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
         </property>
         <property name="maximumSize">
          <size>
@@ -175,6 +193,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
         </property>
         <property name="maximumSize">
          <size>

@@ -7,10 +7,10 @@
 /// \param num
 /// \param parent
 ///
-FormModSca::FormModSca(int num, MainWindow* parent) :
+FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
-    ,_modbusClient(nullptr)
+    ,_modbusClient(client)
 {
     ui->setupUi(this);
     setWindowTitle(QString("ModSca%1").arg(num));
@@ -108,9 +108,9 @@ void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
-/// \brief FormModSca::readReady
+/// \brief FormModSca::readyReadData
 ///
-void FormModSca::readReady()
+void FormModSca::readyReadData()
 {
     auto reply = qobject_cast<QModbusReply*>(sender());
     if (!reply) return;
@@ -165,13 +165,14 @@ void FormModSca::on_timeout()
 
     if (!reply->isFinished())
     {
-        connect(reply, &QModbusReply::finished, this, &FormModSca::readReady);
+        connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
     }
     else
     {
-        const auto result = reply->result();
+        /*const auto result = reply->result();
         ui->outputWidget->update(displayDefinition(), result);
-        delete reply;
+        delete reply;*/
+        readyReadData();
     }
 }
 

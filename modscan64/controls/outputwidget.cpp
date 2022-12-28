@@ -129,7 +129,7 @@ void OutputWidget::updateDataWidget()
     for(int i = 0; i < _displayDefinition.Length; i++)
     {
         const auto addr = QStringLiteral("%1").arg(i + _displayDefinition.PointAddress, 4, 10, QLatin1Char('0'));
-        const short value = _displayData.isValid() ? _displayData.value(i) : 0;
+        const qint16 value = _displayData.isValid() ? _displayData.value(i) : 0;
 
         QString valstr;
         switch(_dataDisplayMode)
@@ -139,7 +139,7 @@ void OutputWidget::updateDataWidget()
             break;
 
             case DataDisplayMode::Decimal:
-                valstr = QStringLiteral("%1").arg(value, 5, 10, QLatin1Char('0'));
+                valstr = QStringLiteral("%1").arg((quint16)value, 5, 10, QLatin1Char('0'));
             break;
 
             case DataDisplayMode::Integer:

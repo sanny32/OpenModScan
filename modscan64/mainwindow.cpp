@@ -290,7 +290,7 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 FormModSca* MainWindow::createMdiChild()
 {
     const auto num = ui->mdiArea->subWindowList().count() + 1;
-    auto frm = new FormModSca(num, this);
+    auto frm = new FormModSca(num, _modbusClient, this);
     ui->mdiArea->addSubWindow(frm);
     return frm;
 }

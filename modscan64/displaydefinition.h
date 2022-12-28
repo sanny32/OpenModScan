@@ -1,7 +1,6 @@
 #ifndef DISPLAYDEFINITION_H
 #define DISPLAYDEFINITION_H
 
-#include <QtGlobal>
 #include <QModbusDataUnit>
 
 ///
@@ -9,11 +8,11 @@
 ///
 struct DisplayDefinition
 {
-    uint ScanRate = 1000;
-    uchar DeviceId = 1;
-    ushort PointAddress = 1;
+    quint32 ScanRate = 1000;
+    quint8 DeviceId = 1;
+    quint16 PointAddress = 1;
     QModbusDataUnit::RegisterType PointType = QModbusDataUnit::Coils;
-    uchar Length = 100;
+    quint8 Length = 100;
 };
 
 #endif // DISPLAYDEFINITION_H

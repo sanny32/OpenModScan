@@ -21,7 +21,7 @@ class FormModSca : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormModSca(int num, MainWindow* parent = nullptr);
+    explicit FormModSca(int num, QModbusClient* client, MainWindow* parent = nullptr);
     ~FormModSca();
 
     DisplayDefinition displayDefinition() const;
@@ -34,7 +34,7 @@ public:
     void setDataDisplayMode(DataDisplayMode mode);
 
 private slots:
-    void readReady();
+    void readyReadData();
     void on_timeout();
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 

@@ -11,7 +11,7 @@
 ///
 struct TcpConnectionParams
 {
-    ushort ServicePort = 502;
+    quint16 ServicePort = 502;
     QString IPAddress = "127.0.0.1";
 };
 
@@ -27,8 +27,8 @@ struct SerialConnectionParams
     QSerialPort::StopBits StopBits = QSerialPort::OneStop;
     bool WaitDSR = false;
     bool WaitCTS = false;
-    uint DelayDSR = 0;
-    uint DelayCTS = 0;
+    quint32 DelayDSR = 0;
+    quint32 DelayCTS = 0;
 };
 
 ///
@@ -37,8 +37,8 @@ struct SerialConnectionParams
 struct ModbusProtocolSelections
 {
     TransmissionMode Mode = TransmissionMode::RTU;
-    uint SlaveResponseTimeOut = 250;
-    uint DelayBetweenPolls = 0;
+    quint32 SlaveResponseTimeOut = 250;
+    quint32 DelayBetweenPolls = 0;
     bool ForceModbus15And16Func = false;
 };
 

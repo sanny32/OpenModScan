@@ -140,6 +140,7 @@ void FormModSca::on_timeout()
     }
 
     const auto dd = displayDefinition();
+
     QModbusRequest request;
     switch (dd.PointType)
     {
@@ -159,6 +160,11 @@ void FormModSca::on_timeout()
         break;
     }
 
+    // update data
+    ui->outputWidget->update(request);
+    ui->statisticWidget->increaseNumberOfPolls();
+
+    // modbus request
     QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress - 1, dd.Length);
     auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
     if(!reply)
@@ -167,14 +173,34 @@ void FormModSca::on_timeout()
         return;
     }
 
-    // update data
-    ui->statisticWidget->increaseNumberOfPolls();
-    ui->outputWidget->update(request);
-
     if (!reply->isFinished())
         connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
     else
         delete reply; // broadcast replies return immediately
+}
+
+///
+/// \brief FormModSca::on_lineEditAddress_editingFinished
+///
+void FormModSca::on_lineEditAddress_editingFinished()
+{
+    ui->outputWidget->setup(displayDefinition());
+}
+
+///
+/// \brief FormModSca::on_lineEditLength_editingFinished
+///
+void FormModSca::on_lineEditLength_editingFinished()
+{
+    ui->outputWidget->setup(displayDefinition());
+}
+
+///
+/// \brief FormModSca::on_lineEditDeviceId_editingFinished
+///
+void FormModSca::on_lineEditDeviceId_editingFinished()
+{
+    ui->outputWidget->setup(displayDefinition());
 }
 
 ///

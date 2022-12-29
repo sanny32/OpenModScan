@@ -146,6 +146,12 @@
          <property name="horizontalScrollBarPolicy">
           <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
+         <property name="textInteractionFlags">
+          <set>Qt::NoTextInteraction</set>
+         </property>
+         <property name="maximumBlockCount">
+          <number>3</number>
+         </property>
         </widget>
        </item>
       </layout>

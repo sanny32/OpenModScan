@@ -36,6 +36,9 @@ public:
 private slots:
     void readyReadData();
     void on_timeout();
+    void on_lineEditAddress_editingFinished();
+    void on_lineEditLength_editingFinished();
+    void on_lineEditDeviceId_editingFinished();
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 
 private:

@@ -434,6 +434,9 @@ void OutputWidget::updateTrafficWidget(bool request, const QModbusPdu& pdu)
     fmt.setBackground(request? Qt::transparent : Qt::black);
     ui->plainTextEdit->mergeCurrentCharFormat(fmt);
 
+    if(request && ui->plainTextEdit->toPlainText().length() > 22000)
+        ui->plainTextEdit->clear();
+
     ui->plainTextEdit->insertPlainText(text);
     ui->plainTextEdit->moveCursor(QTextCursor::End);
 }

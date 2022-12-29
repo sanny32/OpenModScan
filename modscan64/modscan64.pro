@@ -42,13 +42,14 @@ HEADERS += \
     controls/pointtypecombobox.h
 
 FORMS += \
+    controls/outputwidget.ui \
     controls/statisticwidget.ui \
     dialogconnectiondetails.ui \
     dialogdisplaydefinition.ui \
     dialogprotocolselections.ui \
     formmodsca.ui \
-    mainwindow.ui \
-    controls/outputwidget.ui
+    mainwindow.ui
+
 
 RESOURCES += \
     resources.qrc

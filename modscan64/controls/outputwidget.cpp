@@ -1,4 +1,3 @@
-#include <QDebug>
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -25,6 +24,16 @@ OutputWidget::~OutputWidget()
 }
 
 ///
+/// \brief OutputWidget::setup
+/// \param dd
+///
+void OutputWidget::setup(const DisplayDefinition& dd)
+{
+    _displayDefinition = dd;
+    updateDataWidget();
+}
+
+///
 /// \brief OutputWidget::setStatus
 /// \param status
 ///
@@ -38,38 +47,38 @@ void OutputWidget::setStatus(const QString& status)
 
 ///
 /// \brief OutputWidget::update
+/// \param request
 ///
-void OutputWidget::update(const DisplayDefinition& dd, QModbusReply* reply)
+void OutputWidget::update(const QModbusRequest& request)
 {
-    _displayDefinition = dd;
-    if(reply)
-    {
-        _displayData = reply->result();
+    updateTrafficWidget(true, request);
+}
 
-        if (reply->error() == QModbusDevice::NoError)
-        {
-            setStatus(QString());
-        }
-        else if (reply->error() == QModbusDevice::ProtocolError)
-        {
-            setStatus(QString("Mobus exception: %1").arg(reply->errorString()));
-        }
-        else
-        {
-            setStatus(reply->errorString());
-        }
+///
+/// \brief OutputWidget::update
+///
+void OutputWidget::update(QModbusReply* reply)
+{
+    if(!reply)
+    {
+        return;
     }
 
-    switch(displayMode())
+    if (reply->error() == QModbusDevice::NoError)
     {
-        case DisplayMode::Data:
-            updateDataWidget();
-        break;
-
-        case DisplayMode::Traffic:
-            updateTrafficWidget();
-        break;
+        setStatus(QString());
     }
+    else if (reply->error() == QModbusDevice::ProtocolError)
+    {
+        setStatus(QString("Mobus exception:  0x%1").arg(reply->rawResult().exceptionCode(), -1, 16));
+    }
+    else
+    {
+        setStatus(reply->errorString());
+    }
+
+    updateDataWidget(reply->result());
+    updateTrafficWidget(false, reply->rawResult());
 }
 
 ///
@@ -299,8 +308,9 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
 
 ///
 /// \brief OutputWidget::updateDataWidget
+/// \param data
 ///
-void OutputWidget::updateDataWidget()
+void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 {
     ui->listWidget->clear();
 
@@ -326,7 +336,7 @@ void OutputWidget::updateDataWidget()
     for(int i = 0; i < _displayDefinition.Length; i++)
     {
         const auto addr = QStringLiteral("%1").arg(i + _displayDefinition.PointAddress, 4, 10, QLatin1Char('0'));
-        const auto value1 = _displayData.value(i);
+        const auto value1 = data.value(i);
         const auto format = "%1%2: %3                  ";
 
         QString valstr;
@@ -351,32 +361,32 @@ void OutputWidget::updateDataWidget()
 
             case DataDisplayMode::FloatingPt:
             {
-                const auto value2 = _displayData.value(i + 1);
+                const auto value2 = data.value(i + 1);
                 valstr = formatFloatValue(_displayDefinition.PointType, value1, value2, i%2);
             }
             break;
 
             case DataDisplayMode::SwappedFP:
             {
-                const auto value2 = _displayData.value(i + 1);
+                const auto value2 = data.value(i + 1);
                 valstr = formatFloatValue(_displayDefinition.PointType, value2, value1, i%2);
             }
             break;
 
             case DataDisplayMode::DblFloat:
             {
-                const auto value2 = _displayData.value(i + 1);
-                const auto value3 = _displayData.value(i + 2);
-                const auto value4 = _displayData.value(i + 3);
+                const auto value2 = data.value(i + 1);
+                const auto value3 = data.value(i + 2);
+                const auto value4 = data.value(i + 3);
                 valstr = formatDoubleValue(_displayDefinition.PointType, value1, value2, value3, value4, i%4);
             }
             break;
 
             case DataDisplayMode::SwappedDbl:
             {
-                const auto value2 = _displayData.value(i + 1);
-                const auto value3 = _displayData.value(i + 2);
-                const auto value4 = _displayData.value(i + 3);
+                const auto value2 = data.value(i + 1);
+                const auto value3 = data.value(i + 2);
+                const auto value4 = data.value(i + 3);
                 valstr = formatDoubleValue(_displayDefinition.PointType, value4, value3, value2, value1, i%4);
             }
             break;
@@ -389,8 +399,41 @@ void OutputWidget::updateDataWidget()
 
 ///
 /// \brief OutputWidget::updateTrafficWidget
+/// \param request
+/// \param pdu
 ///
-void OutputWidget::updateTrafficWidget()
+void OutputWidget::updateTrafficWidget(bool request, const QModbusPdu& pdu)
 {
+    if(!pdu.isValid()) return;
 
+    QByteArray rawData;
+    rawData.push_back(pdu.functionCode());
+    rawData.push_back(pdu.data());
+
+    QString text;
+    for(auto&& c : rawData)
+    {
+        switch(_dataDisplayMode)
+        {
+            case DataDisplayMode::Decimal:
+            case DataDisplayMode::Integer:
+                text+= QString("[%1]").arg(QString::number((uchar)c), 3, '0');
+            break;
+
+            default:
+                text+= QString("[%1]").arg(QString::number((uchar)c, 16), 2, '0');
+            break;
+        }
+    }
+    if(text.isEmpty()) return;
+
+    ui->plainTextEdit->moveCursor(QTextCursor::End);
+
+    QTextCharFormat fmt;
+    fmt.setForeground(request? Qt::black : Qt::white);
+    fmt.setBackground(request? Qt::transparent : Qt::black);
+    ui->plainTextEdit->mergeCurrentCharFormat(fmt);
+
+    ui->plainTextEdit->insertPlainText(text);
+    ui->plainTextEdit->moveCursor(QTextCursor::End);
 }

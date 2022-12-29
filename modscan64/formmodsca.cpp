@@ -22,8 +22,7 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     ui->lineEditAddress->setValue(1);
     ui->lineEditLength->setValue(100);
     ui->lineEditDeviceId->setValue(1);
-
-    updateOutput();
+    ui->outputWidget->setup(displayDefinition());
 
     connect(parent, &MainWindow::modbusClientChanged,
             [&](QModbusClient* cli)
@@ -72,7 +71,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    updateOutput();
+    ui->outputWidget->setup(dd);
 }
 
 ///
@@ -124,7 +123,7 @@ void FormModSca::readyReadData()
         ui->statisticWidget->increaseValidSlaveResponses();
     }
 
-    updateOutput(reply);
+    ui->outputWidget->update(reply);
     reply->deleteLater();
 }
 
@@ -141,16 +140,41 @@ void FormModSca::on_timeout()
     }
 
     const auto dd = displayDefinition();
+    QModbusRequest request;
+    switch (dd.PointType)
+    {
+        case QModbusDataUnit::Coils:
+            request = QModbusRequest(QModbusRequest::ReadCoils, quint16(dd.PointAddress - 1), dd.Length);
+        break;
+        case QModbusDataUnit::DiscreteInputs:
+            request = QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(dd.PointAddress - 1), dd.Length);
+        break;
+        case QModbusDataUnit::InputRegisters:
+            request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(dd.PointAddress - 1), dd.Length);
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+            request = QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(dd.PointAddress - 1), dd.Length);
+        break;
+        default:
+        break;
+    }
+
     QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress - 1, dd.Length);
     auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
+    if(!reply)
+    {
+        ui->outputWidget->setStatus(_modbusClient->errorString());
+        return;
+    }
 
+    // update data
     ui->statisticWidget->increaseNumberOfPolls();
+    ui->outputWidget->update(request);
 
     if (!reply->isFinished())
         connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
     else
         delete reply; // broadcast replies return immediately
-
 }
 
 ///
@@ -158,14 +182,5 @@ void FormModSca::on_timeout()
 ///
 void FormModSca::on_comboBoxModbusPointType_currentTextChanged(const QString&)
 {
-    updateOutput();
-}
-
-///
-/// \brief FormModSca::updateOutput
-/// \param data
-///
-void FormModSca::updateOutput(QModbusReply* reply)
-{
-    ui->outputWidget->update(displayDefinition(), reply);
+    ui->outputWidget->setup(displayDefinition());
 }

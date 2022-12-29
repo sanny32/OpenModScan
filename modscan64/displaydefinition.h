@@ -12,7 +12,7 @@ struct DisplayDefinition
     quint8 DeviceId = 1;
     quint16 PointAddress = 1;
     QModbusDataUnit::RegisterType PointType = QModbusDataUnit::Coils;
-    quint8 Length = 100;
+    quint16 Length = 100;
 };
 
 #endif // DISPLAYDEFINITION_H

@@ -21,6 +21,8 @@ public:
     explicit OutputWidget(QWidget *parent = nullptr);
     ~OutputWidget();
 
+    void setup(const DisplayDefinition& dd);
+
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
 
@@ -28,11 +30,12 @@ public:
     void setDataDisplayMode(DataDisplayMode mode);
 
     void setStatus(const QString& status);
-    void update(const DisplayDefinition& dd, QModbusReply* reply = nullptr);
+    void update(const QModbusRequest& request);
+    void update(QModbusReply* reply);
 
 private:
-    void updateDataWidget();
-    void updateTrafficWidget();
+    void updateDataWidget(const QModbusDataUnit& data = QModbusDataUnit());
+    void updateTrafficWidget(bool request, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;
@@ -41,7 +44,6 @@ private:
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     DisplayDefinition _displayDefinition;
-    QModbusDataUnit _displayData;
 };
 
 #endif // OUTPUTWIDGET_H

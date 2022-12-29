@@ -237,14 +237,14 @@ background-color: white;</string>
             <item>
              <widget class="PointTypeComboBox" name="comboBoxModbusPointType">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
               <property name="minimumSize">
                <size>
-                <width>155</width>
+                <width>160</width>
                 <height>26</height>
                </size>
               </property>

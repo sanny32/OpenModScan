@@ -1,6 +1,6 @@
 #include <QtWidgets>
 #include <QModbusTcpClient>
-#include <QModbusRtuSerialSlave>
+#include <QModbusRtuSerialMaster>
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
 #include "mainwindow.h"
@@ -268,6 +268,14 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
         break;
 
         case ConnectionType::Serial:
+            _modbusClient = new QModbusRtuSerialMaster(this);
+            _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
+            _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
+            _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
+            _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
+            _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
+
+            emit modbusClientChanged(_modbusClient);
         break;
     }
 }

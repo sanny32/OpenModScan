@@ -135,10 +135,6 @@ void MainWindow::on_actionQuickConnect_triggered()
         setupModbusClient(_settings.ConnectionParams);
 
     _modbusClient->connectDevice();
-    /*{
-        ui->actionDisconnect->trigger();
-        QMessageBox::warning(this, windowTitle(), "modbus/TCP Connection Failed");
-    }*/
 }
 
 ///
@@ -278,6 +274,14 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
             emit modbusClientChanged(_modbusClient);
         break;
     }
+
+    connect(_modbusClient, &QModbusDevice::errorOccurred, this,
+            [&](QModbusDevice::Error)
+            {
+                const auto errorString = QString("Connection error. %1").arg(_modbusClient->errorString());
+                QMessageBox::warning(this, windowTitle(), errorString);
+
+            });
 }
 
 ///

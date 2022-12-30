@@ -25,10 +25,9 @@ struct SerialConnectionParams
     QSerialPort::DataBits WordLength = QSerialPort::Data8;
     QSerialPort::Parity Parity = QSerialPort::NoParity;
     QSerialPort::StopBits StopBits = QSerialPort::OneStop;
-    bool WaitDSR = false;
-    bool WaitCTS = false;
-    quint32 DelayDSR = 0;
-    quint32 DelayCTS = 0;
+    QSerialPort::FlowControl FlowControl = QSerialPort::NoFlowControl;
+    bool SetDTR = true;
+    bool SetRTS = true;
 };
 
 ///

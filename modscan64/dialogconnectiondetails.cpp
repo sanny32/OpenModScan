@@ -19,17 +19,28 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
                    Qt::WindowTitleHint);
     setFixedSize(size());
 
-    ui->comboBoxConnectUsing->setCurrentIndex(-1);
-    ui->comboBoxParity->setItemData(0, QSerialPort::Parity::OddParity);
-    ui->comboBoxParity->setItemData(1, QSerialPort::Parity::EvenParity);
-    ui->comboBoxParity->setItemData(2, QSerialPort::Parity::NoParity);
-
     ui->lineEditServicePort->setInputRange(0, 65535);
-    ui->lineEditDelatDSR->setInputRange(0, 10);
-    ui->lineEditDelayCTS->setInputRange(0, 10);
+
+    ui->comboBoxConnectUsing->setCurrentIndex(-1);
+    ui->comboBoxParity->setItemData(0, QSerialPort::OddParity);
+    ui->comboBoxParity->setItemData(1, QSerialPort::EvenParity);
+    ui->comboBoxParity->setItemData(2, QSerialPort::NoParity);
+
+    ui->comboBoxFlowControl->setCurrentIndex(-1);
+    ui->comboBoxFlowControl->setItemData(0, QSerialPort::NoFlowControl);
+    ui->comboBoxFlowControl->setItemData(1, QSerialPort::HardwareControl);
+    ui->comboBoxFlowControl->setItemData(2, QSerialPort::SoftwareControl);
 
     ui->lineEditIPAddress->setText(cd.TcpParams.IPAddress);
     ui->lineEditServicePort->setValue(cd.TcpParams.ServicePort);
+
+    ui->comboBoxBaudRate->setCurrentValue(cd.SerialParams.BaudRate);
+    ui->comboBoxWordLength->setCurrentValue(cd.SerialParams.WordLength);
+    ui->comboBoxParity->setCurrentIndex(ui->comboBoxParity->findData(cd.SerialParams.Parity));
+    ui->comboBoxStopBits->setCurrentValue(cd.SerialParams.StopBits);
+    ui->comboBoxFlowControl->setCurrentIndex(ui->comboBoxFlowControl->findData(cd.SerialParams.FlowControl));
+    ui->checkBoxDTR->setChecked(cd.SerialParams.SetDTR);
+    ui->checkBoxRTS->setChecked(cd.SerialParams.SetRTS);
 
     if(cd.Type == ConnectionType::Tcp)
     {
@@ -38,14 +49,6 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     else
     {
         ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, cd.SerialParams.PortName);
-        ui->comboBoxBaudRate->setCurrentValue(cd.SerialParams.BaudRate);
-        ui->comboBoxWordLength->setCurrentValue(cd.SerialParams.WordLength);
-        ui->comboBoxParity->setCurrentIndex(ui->comboBoxParity->findData(cd.SerialParams.Parity));
-        ui->comboBoxStopBits->setCurrentValue(cd.SerialParams.StopBits);
-        ui->checkBoxDSR->setChecked(cd.SerialParams.WaitDSR);
-        ui->lineEditDelatDSR->setValue(cd.SerialParams.DelayDSR);
-        ui->checkBoxCTS->setChecked(cd.SerialParams.WaitCTS);
-        ui->lineEditDelayCTS->setValue(cd.SerialParams.DelayCTS);
     }
 }
 
@@ -82,10 +85,9 @@ void DialogConnectionDetails::accept()
         _connectionDetails.SerialParams.WordLength = (QSerialPort::DataBits)ui->comboBoxWordLength->currentValue();
         _connectionDetails.SerialParams.Parity = ui->comboBoxParity->currentData().value<QSerialPort::Parity>();
         _connectionDetails.SerialParams.StopBits = (QSerialPort::StopBits)ui->comboBoxStopBits->currentValue();
-        _connectionDetails.SerialParams.DelayDSR = ui->lineEditDelatDSR->value();
-        _connectionDetails.SerialParams.WaitDSR = ui->checkBoxDSR->isChecked();
-        _connectionDetails.SerialParams.WaitCTS = ui->checkBoxCTS->isChecked();
-        _connectionDetails.SerialParams.DelayCTS = ui->lineEditDelayCTS->value();
+        _connectionDetails.SerialParams.FlowControl = ui->comboBoxFlowControl->currentData().value<QSerialPort::FlowControl>();
+        _connectionDetails.SerialParams.SetDTR = ui->checkBoxDTR->isChecked();
+        _connectionDetails.SerialParams.SetRTS = ui->checkBoxRTS->isChecked();
     }
 
     QDialog::accept();
@@ -112,8 +114,18 @@ void DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged(int)
     ui->comboBoxParity->setEnabled(ct == ConnectionType::Serial);
     ui->comboBoxStopBits->setEnabled(ct == ConnectionType::Serial);
     ui->comboBoxWordLength->setEnabled(ct == ConnectionType::Serial);
-    ui->checkBoxDSR->setEnabled(ct == ConnectionType::Serial);
-    ui->checkBoxCTS->setEnabled(ct == ConnectionType::Serial);
-    ui->lineEditDelatDSR->setEnabled(ct == ConnectionType::Serial);
-    ui->lineEditDelayCTS->setEnabled(ct == ConnectionType::Serial);
+    ui->comboBoxFlowControl->setEnabled(ct == ConnectionType::Serial);
+    ui->checkBoxDTR->setEnabled(ct == ConnectionType::Serial);
+    ui->checkBoxRTS->setEnabled(ct == ConnectionType::Serial);
+}
+
+///
+/// \brief DialogConnectionDetails::on_comboBoxFlowControl_currentIndexChanged
+///
+void DialogConnectionDetails::on_comboBoxFlowControl_currentIndexChanged(int)
+{
+    /*const auto ct = ui->comboBoxConnectUsing->currentConnectionType();
+    const auto flowCtrl = ui->comboBoxFlowControl->currentData().value<QSerialPort::FlowControl>();
+    ui->checkBoxDTR->setEnabled(ct == ConnectionType::Serial && flowCtrl == QSerialPort::HardwareControl);
+    ui->checkBoxRTS->setEnabled(ct == ConnectionType::Serial && flowCtrl == QSerialPort::HardwareControl);*/
 }

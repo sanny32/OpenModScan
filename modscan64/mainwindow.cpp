@@ -283,10 +283,24 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
+            ((QSerialPort*)_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
 
             emit modbusClientChanged(_modbusClient);
         break;
     }
+
+    connect(_modbusClient, &QModbusDevice::stateChanged, this,
+            [&](QModbusDevice::State state)
+            {
+                if(cd.Type == ConnectionType::Serial &&
+                   state == QModbusDevice::ConnectedState)
+                {
+                    auto port = (QSerialPort*)_modbusClient->device();
+                    port->clear();
+                    port->setDataTerminalReady(cd.SerialParams.SetDTR);
+                    port->setRequestToSend(cd.SerialParams.SetRTS);
+                }
+            });
 
     connect(_modbusClient, &QModbusDevice::errorOccurred, this,
             [&](QModbusDevice::Error error)

@@ -256,6 +256,7 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
         case ConnectionType::Tcp:
         {
             _modbusClient = new QModbusTcpClient(this);
+            _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
 
@@ -265,6 +266,7 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
 
         case ConnectionType::Serial:
             _modbusClient = new QModbusRtuSerialMaster(this);
+            _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);

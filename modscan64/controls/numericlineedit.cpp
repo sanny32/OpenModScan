@@ -96,19 +96,27 @@ int NumericLineEdit::value()
 ///
 void NumericLineEdit::setValue(int value)
 {
-    const auto validator = (QIntValidator*)this->validator();
-    if(value < validator->bottom()) value = validator->bottom();
-    if(value > validator->top()) value = validator->top();
-
+    internalSetValue(value);
     if(_paddingZeroes)
     {
-        const auto text = QStringLiteral("%1").arg(value, _paddingZeroWidth, 10, QLatin1Char('0'));
+        const auto text = QStringLiteral("%1").arg(_value, _paddingZeroWidth, 10, QLatin1Char('0'));
         QLineEdit::setText(text);
     }
     else
     {
-        QLineEdit::setText(QString::number(value));
+        QLineEdit::setText(QString::number(_value));
     }
+}
+
+///
+/// \brief NumericLineEdit::internalSetValue
+/// \param value
+///
+void NumericLineEdit::internalSetValue(int value)
+{
+    const auto validator = (QIntValidator*)this->validator();
+    if(value < validator->bottom()) value = validator->bottom();
+    if(value > validator->top()) value = validator->top();
 
     _value = value;
     emit valueChanged(_value);
@@ -147,5 +155,7 @@ void NumericLineEdit::on_editingFinished()
 ///
 void NumericLineEdit::on_textChanged(const QString&)
 {
-    updateValue();
+    bool ok;
+    const auto value = text().toInt(&ok);
+    if(ok) internalSetValue(value);
 }

@@ -12,6 +12,7 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
     ,_modbusClient(client)
+    ,_delayBetweenPolls(0)
 {
     ui->setupUi(this);
     setWindowTitle(QString("ModSca%1").arg(num));
@@ -32,6 +33,8 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
             [&](QModbusClient* cli)
             {
                 _modbusClient = cli;
+                if(_modbusClient)
+                    _delayBetweenPolls = _modbusClient->property("DelayBetweenPolls").toUInt();
             });
 
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
@@ -115,6 +118,14 @@ void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief FormModSca::resetCtrls
+///
+void FormModSca::resetCtrls()
+{
+    ui->statisticWidget->resetCtrls();
+}
+
+///
 /// \brief FormModSca::readyReadData
 ///
 void FormModSca::readyReadData()
@@ -132,9 +143,9 @@ void FormModSca::readyReadData()
 }
 
 ///
-/// \brief FormModSca::on_timeout
+/// \brief FormModSca::sendReadRequest
 ///
-void FormModSca::on_timeout()
+void FormModSca::sendReadRequest()
 {
     if(_modbusClient == nullptr) return;
     if(_modbusClient->state() != QModbusDevice::ConnectedState)
@@ -160,7 +171,7 @@ void FormModSca::on_timeout()
             request = QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(dd.PointAddress - 1), dd.Length);
         break;
         case QModbusDataUnit::InputRegisters:
-            request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(dd.PointAddress - 1), dd.Length);
+             request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(dd.PointAddress - 1), dd.Length);
         break;
         case QModbusDataUnit::HoldingRegisters:
             request = QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(dd.PointAddress - 1), dd.Length);
@@ -186,6 +197,15 @@ void FormModSca::on_timeout()
         connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
     else
         delete reply; // broadcast replies return immediately
+}
+
+///
+/// \brief FormModSca::on_timeout
+///
+void FormModSca::on_timeout()
+{
+    if(_modbusClient == nullptr) return;
+    QTimer::singleShot(_delayBetweenPolls, [&]{ sendReadRequest(); });
 }
 
 ///

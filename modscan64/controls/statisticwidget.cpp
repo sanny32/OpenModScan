@@ -41,14 +41,22 @@ void StatisticWidget::increaseValidSlaveResponses()
 }
 
 ///
-/// \brief StatisticWidget::on_pushButtonResetCtrls_clicked
+/// \brief StatisticWidget::resetCtrls
 ///
-void StatisticWidget::on_pushButtonResetCtrls_clicked()
+void StatisticWidget::resetCtrls()
 {
     _numberOfPolls = 0;
     _validSlaveResponses = 0;
 
     updateStatistic();
+}
+
+///
+/// \brief StatisticWidget::on_pushButtonResetCtrls_clicked
+///
+void StatisticWidget::on_pushButtonResetCtrls_clicked()
+{
+    resetCtrls();
 }
 
 ///

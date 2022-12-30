@@ -33,6 +33,8 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    void resetCtrls();
+
 private slots:
     void readyReadData();
     void on_timeout();
@@ -42,8 +44,12 @@ private slots:
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 
 private:
+    void sendReadRequest();
+
+private:
     Ui::FormModSca *ui;
     QModbusClient* _modbusClient;
+    uint _delayBetweenPolls;
     QTimer _timer;
 };
 

@@ -72,6 +72,7 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
+    ui->actionResetCtrs->setEnabled(frm != nullptr);
     ui->actionPrint->setEnabled(frm != nullptr);
 
     if(frm != nullptr)
@@ -233,6 +234,15 @@ void MainWindow::on_actionSwappedDbl_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionResetCtrs_triggered
+///
+void MainWindow::on_actionResetCtrs_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->resetCtrls();
+}
+
+///
 /// \brief MainWindow::updateMenus
 ///
 void MainWindow::updateMenus()
@@ -257,6 +267,7 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
         {
             _modbusClient = new QModbusTcpClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
+            _modbusClient->setProperty("DelayBetweenPolls", cd.ModbusParams.DelayBetweenPolls);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
 
@@ -267,6 +278,7 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
         case ConnectionType::Serial:
             _modbusClient = new QModbusRtuSerialMaster(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
+            _modbusClient->setProperty("DelayBetweenPolls", cd.ModbusParams.DelayBetweenPolls);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
@@ -278,11 +290,13 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
     }
 
     connect(_modbusClient, &QModbusDevice::errorOccurred, this,
-            [&](QModbusDevice::Error)
+            [&](QModbusDevice::Error error)
             {
-                const auto errorString = QString("Connection error. %1").arg(_modbusClient->errorString());
-                QMessageBox::warning(this, windowTitle(), errorString);
-
+                if(error == QModbusDevice::ConnectionError)
+                {
+                    const auto errorString = QString("Connection error. %1").arg(_modbusClient->errorString());
+                    QMessageBox::warning(this, windowTitle(), errorString);
+                }
             });
 }
 

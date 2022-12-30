@@ -56,6 +56,25 @@ void NumericLineEdit::setPaddingZeroes(bool on)
 }
 
 ///
+/// \brief NumericLineEdit::range
+/// \return
+///
+QRange<int> NumericLineEdit::range() const
+{
+    const auto validator = (QIntValidator*)this->validator();
+    return QRange<int>(validator->bottom(), validator->top());
+}
+
+///
+/// \brief NumericLineEdit::setInputRange
+/// \param range
+///
+void NumericLineEdit::setInputRange(QRange<int> range)
+{
+    setInputRange(range.from(), range.to());
+}
+
+///
 /// \brief NumberLineEdit::setInputRange
 /// \param bottom
 /// \param top

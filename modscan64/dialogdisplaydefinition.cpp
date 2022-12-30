@@ -1,3 +1,4 @@
+#include "modbuslimits.h"
 #include "displaydefinition.h"
 #include "dialogdisplaydefinition.h"
 #include "ui_dialogdisplaydefinition.h"
@@ -16,10 +17,10 @@ DialogDisplayDefinition::DialogDisplayDefinition(FormModSca* parent) :
                    Qt::WindowTitleHint);
     setFixedSize(size());
 
-    ui->lineEditScanRate->setInputRange(5, 10000);
-    ui->lineEditPointAddress->setInputRange(1, 65534);
-    ui->lineEditLength->setInputRange(1, 128);
-    ui->lineEditSlaveAddress->setInputRange(1, 255);
+    ui->lineEditScanRate->setInputRange(20, 10000);
+    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange());
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
+    ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
 
     const auto dd = parent->displayDefinition();
     ui->lineEditScanRate->setValue(dd.ScanRate);

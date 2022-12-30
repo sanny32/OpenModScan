@@ -2,6 +2,7 @@
 #define NUMERICLINEEDIT_H
 
 #include <QLineEdit>
+#include "qrange.h"
 
 class NumericLineEdit : public QLineEdit
 {
@@ -19,7 +20,10 @@ public:
     bool paddingZeroes() const;
     void setPaddingZeroes(bool on);
 
+    QRange<int> range() const;
+    void setInputRange(QRange<int> range);
     void setInputRange(int bottom, int top);
+
     void setText(const QString& text);
 
 signals:

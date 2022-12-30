@@ -40,7 +40,9 @@ HEADERS += \
     controls/numericcombobox.h \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
-    modbusexception.h
+    modbusexception.h \
+    modbuslimits.h \
+    qrange.h
 
 FORMS += \
     controls/outputwidget.ui \

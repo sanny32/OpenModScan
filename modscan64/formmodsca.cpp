@@ -1,3 +1,4 @@
+#include "modbuslimits.h"
 #include "mainwindow.h"
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
@@ -16,12 +17,15 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     setWindowTitle(QString("ModSca%1").arg(num));
 
     ui->lineEditAddress->setPaddingZeroes(true);
-    ui->lineEditAddress->setInputRange(1, 65534);
-    ui->lineEditLength->setInputRange(1, 128);
-    ui->lineEditDeviceId->setInputRange(1, 255);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditAddress->setValue(1);
+
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(100);
+
+    ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
+
     ui->outputWidget->setup(displayDefinition());
 
     connect(parent, &MainWindow::modbusClientChanged, this,
@@ -140,6 +144,11 @@ void FormModSca::on_timeout()
     }
 
     const auto dd = displayDefinition();
+    if(dd.PointAddress + dd.Length - 1 > ModbusLimits::addressRange().to())
+    {
+        ui->outputWidget->setStatus("Invalid Data Length Specified");
+        return;
+    }
 
     QModbusRequest request;
     switch (dd.PointType)

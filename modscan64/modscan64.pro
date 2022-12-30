@@ -39,7 +39,8 @@ HEADERS += \
     mainwindow.h \
     controls/numericcombobox.h \
     controls/outputwidget.h \
-    controls/pointtypecombobox.h
+    controls/pointtypecombobox.h \
+    modbusexception.h
 
 FORMS += \
     controls/outputwidget.ui \

@@ -1,3 +1,4 @@
+#include "modbusexception.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -70,7 +71,8 @@ void OutputWidget::update(QModbusReply* reply)
     }
     else if (reply->error() == QModbusDevice::ProtocolError)
     {
-        setStatus(QString("Mobus exception:  0x%1").arg(reply->rawResult().exceptionCode(), -1, 16));
+        const QString exception = ModbusException(reply->rawResult().exceptionCode());
+        setStatus(exception);
     }
     else
     {

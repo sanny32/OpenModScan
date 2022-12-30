@@ -37,7 +37,6 @@ public:
 
 private slots:
     void readyReadData();
-    void on_timeout();
     void on_lineEditAddress_valueChanged(int);
     void on_lineEditLength_valueChanged(int);
     void on_lineEditDeviceId_valueChanged(int);
@@ -49,7 +48,7 @@ private:
 private:
     Ui::FormModSca *ui;
     QModbusClient* _modbusClient;
-    QTimer _timer;
+    uint _scanRate;
 };
 
 #endif // FORMMODSCA_H

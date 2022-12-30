@@ -12,6 +12,7 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
     ,_modbusClient(client)
+    ,_scanRate(1000)
 {
     ui->setupUi(this);
     setWindowTitle(QString("ModSca%1").arg(num));
@@ -21,7 +22,7 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     ui->lineEditAddress->setValue(1);
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
-    ui->lineEditLength->setValue(100);
+    ui->lineEditLength->setValue(50);
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
@@ -34,9 +35,7 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
                 _modbusClient = cli;
             });
 
-    connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
-    _timer.setInterval(1000);
-    _timer.start();
+    QTimer::singleShot(_scanRate, this, [&] { sendReadRequest(); });
 }
 
 ///
@@ -54,7 +53,7 @@ FormModSca::~FormModSca()
 DisplayDefinition FormModSca::displayDefinition() const
 {
     DisplayDefinition dd;
-    dd.ScanRate = _timer.interval();
+    dd.ScanRate = _scanRate;
     dd.DeviceId = ui->lineEditDeviceId->value();
     dd.PointAddress = ui->lineEditAddress->value();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
@@ -69,7 +68,7 @@ DisplayDefinition FormModSca::displayDefinition() const
 ///
 void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
 {
-    _timer.setInterval(dd.ScanRate);
+    _scanRate = dd.ScanRate;
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditLength->setValue(dd.Length);
@@ -137,8 +136,12 @@ void FormModSca::readyReadData()
     {
         ui->statisticWidget->increaseValidSlaveResponses();
 
-        //const uint delay = _modbusClient->property("DelayBetweenPolls").toUInt();
-        //QTimer::singleShot(delay + _timer.interval(), this, [&] { sendReadRequest(); });
+        const uint delay = _modbusClient->property("DelayBetweenPolls").toUInt();
+        QTimer::singleShot(delay + _scanRate, this, [&] { sendReadRequest(); });
+    }
+    else
+    {
+        QTimer::singleShot(_scanRate, this, [&] { sendReadRequest(); });
     }
 
     reply->deleteLater();
@@ -149,68 +152,71 @@ void FormModSca::readyReadData()
 ///
 void FormModSca::sendReadRequest()
 {
-    if(_modbusClient == nullptr)
+    try
     {
-        return;
-    }
+        if(_modbusClient == nullptr)
+        {
+            QTimer::singleShot(_scanRate, this, [&] { sendReadRequest(); });
+            return;
+        }
 
-    if(_modbusClient->state() != QModbusDevice::ConnectedState)
+        if(_modbusClient->state() != QModbusDevice::ConnectedState)
+        {
+            throw QString("Device NOT CONNECTED!");
+        }
+
+        const auto dd = displayDefinition();
+        if(dd.PointAddress + dd.Length - 1 > ModbusLimits::addressRange().to())
+        {
+            throw QString("Invalid Data Length Specified");
+        }
+
+        QModbusRequest request;
+        switch (dd.PointType)
+        {
+            case QModbusDataUnit::Coils:
+                request = QModbusRequest(QModbusRequest::ReadCoils, quint16(dd.PointAddress - 1), dd.Length);
+            break;
+            case QModbusDataUnit::DiscreteInputs:
+                request = QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(dd.PointAddress - 1), dd.Length);
+            break;
+            case QModbusDataUnit::InputRegisters:
+                 request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(dd.PointAddress - 1), dd.Length);
+            break;
+            case QModbusDataUnit::HoldingRegisters:
+                request = QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(dd.PointAddress - 1), dd.Length);
+            break;
+            default:
+            break;
+        }
+
+        // update data
+        ui->outputWidget->update(request);
+        ui->statisticWidget->increaseNumberOfPolls();
+
+        // modbus request
+        QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress - 1, dd.Length);
+        auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
+        if(!reply)
+        {
+            throw _modbusClient->errorString();
+        }
+
+        if (!reply->isFinished())
+        {
+            connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
+        }
+        else
+        {
+            delete reply; // broadcast replies return immediately
+            QTimer::singleShot(_scanRate, this, [&] { sendReadRequest(); });
+        }
+    }
+    catch(const QString& err)
     {
-        ui->outputWidget->setStatus("Device NOT CONNECTED!");
-        return;
+        ui->outputWidget->setStatus(err);
+        QTimer::singleShot(_scanRate, this, [&] { sendReadRequest(); });
     }
-
-    const auto dd = displayDefinition();
-    if(dd.PointAddress + dd.Length - 1 > ModbusLimits::addressRange().to())
-    {
-        ui->outputWidget->setStatus("Invalid Data Length Specified");
-        return;
-    }
-
-    QModbusRequest request;
-    switch (dd.PointType)
-    {
-        case QModbusDataUnit::Coils:
-            request = QModbusRequest(QModbusRequest::ReadCoils, quint16(dd.PointAddress - 1), dd.Length);
-        break;
-        case QModbusDataUnit::DiscreteInputs:
-            request = QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(dd.PointAddress - 1), dd.Length);
-        break;
-        case QModbusDataUnit::InputRegisters:
-             request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(dd.PointAddress - 1), dd.Length);
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-            request = QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(dd.PointAddress - 1), dd.Length);
-        break;
-        default:
-        break;
-    }
-
-    // update data
-    ui->outputWidget->update(request);
-    ui->statisticWidget->increaseNumberOfPolls();
-
-    // modbus request
-    QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress - 1, dd.Length);
-    auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId);
-    if(!reply)
-    {
-        ui->outputWidget->setStatus(_modbusClient->errorString());
-        return;
-    }
-
-    if (!reply->isFinished())
-        connect(reply, &QModbusReply::finished, this, &FormModSca::readyReadData);
-    else
-        delete reply; // broadcast replies return immediately
-}
-
-///
-/// \brief FormModSca::on_timeout
-///
-void FormModSca::on_timeout()
-{
-     sendReadRequest();
 }
 
 ///

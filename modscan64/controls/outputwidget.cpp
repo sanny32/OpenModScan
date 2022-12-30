@@ -14,6 +14,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
+    setStatus("Data Uninitialized");
 }
 
 ///
@@ -65,9 +66,21 @@ void OutputWidget::update(QModbusReply* reply)
         return;
     }
 
+    updateTrafficWidget(false, reply->rawResult());
+
+    const auto data = reply->result();
     if (reply->error() == QModbusDevice::NoError)
     {
-        setStatus(QString());
+        if(data.valueCount() != _displayDefinition.Length ||
+           data.startAddress() != _displayDefinition.PointAddress - 1)
+        {
+            setStatus("Received Invalid Response MODBUS Query");
+        }
+        else
+        {
+            setStatus(QString());
+            updateDataWidget(data);
+        }
     }
     else if (reply->error() == QModbusDevice::ProtocolError)
     {
@@ -78,9 +91,6 @@ void OutputWidget::update(QModbusReply* reply)
     {
         setStatus(reply->errorString());
     }
-
-    updateDataWidget(reply->result());
-    updateTrafficWidget(false, reply->rawResult());
 }
 
 ///

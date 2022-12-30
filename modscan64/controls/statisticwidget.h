@@ -20,10 +20,10 @@ public:
 
     void increaseNumberOfPolls();
     void increaseValidSlaveResponses();
-    void resetCtrls();
+    void resetCtrs();
 
 private slots:
-    void on_pushButtonResetCtrls_clicked();
+    void on_pushButtonResetCtrs_clicked();
 
 private:
     void updateStatistic();

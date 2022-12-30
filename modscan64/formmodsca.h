@@ -33,7 +33,7 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
-    void resetCtrls();
+    void resetCtrs();
 
 private slots:
     void readyReadData();
@@ -49,7 +49,6 @@ private:
 private:
     Ui::FormModSca *ui;
     QModbusClient* _modbusClient;
-    uint _delayBetweenPolls;
     QTimer _timer;
 };
 

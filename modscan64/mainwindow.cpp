@@ -239,7 +239,7 @@ void MainWindow::on_actionSwappedDbl_triggered()
 void MainWindow::on_actionResetCtrs_triggered()
 {
     auto frm = currentMdiChild();
-    if(frm) frm->resetCtrls();
+    if(frm) frm->resetCtrs();
 }
 
 ///
@@ -267,7 +267,6 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
         {
             _modbusClient = new QModbusTcpClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
-            _modbusClient->setProperty("DelayBetweenPolls", cd.ModbusParams.DelayBetweenPolls);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
 

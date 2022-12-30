@@ -12,7 +12,6 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
     ,_modbusClient(client)
-    ,_delayBetweenPolls(0)
 {
     ui->setupUi(this);
     setWindowTitle(QString("ModSca%1").arg(num));
@@ -33,8 +32,6 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
             [&](QModbusClient* cli)
             {
                 _modbusClient = cli;
-                if(_modbusClient)
-                    _delayBetweenPolls = _modbusClient->property("DelayBetweenPolls").toUInt();
             });
 
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
@@ -78,6 +75,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
+    ui->outputWidget->setStatus("Data Uninitialized");
     ui->outputWidget->setup(dd);
 }
 
@@ -120,9 +118,9 @@ void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 ///
 /// \brief FormModSca::resetCtrls
 ///
-void FormModSca::resetCtrls()
+void FormModSca::resetCtrs()
 {
-    ui->statisticWidget->resetCtrls();
+    ui->statisticWidget->resetCtrs();
 }
 
 ///
@@ -133,12 +131,16 @@ void FormModSca::readyReadData()
     auto reply = qobject_cast<QModbusReply*>(sender());
     if (!reply) return;
 
+    ui->outputWidget->update(reply);
+
     if (reply->error() == QModbusDevice::NoError)
     {
         ui->statisticWidget->increaseValidSlaveResponses();
+
+        //const uint delay = _modbusClient->property("DelayBetweenPolls").toUInt();
+        //QTimer::singleShot(delay + _timer.interval(), this, [&] { sendReadRequest(); });
     }
 
-    ui->outputWidget->update(reply);
     reply->deleteLater();
 }
 
@@ -147,7 +149,11 @@ void FormModSca::readyReadData()
 ///
 void FormModSca::sendReadRequest()
 {
-    if(_modbusClient == nullptr) return;
+    if(_modbusClient == nullptr)
+    {
+        return;
+    }
+
     if(_modbusClient->state() != QModbusDevice::ConnectedState)
     {
         ui->outputWidget->setStatus("Device NOT CONNECTED!");
@@ -204,8 +210,7 @@ void FormModSca::sendReadRequest()
 ///
 void FormModSca::on_timeout()
 {
-    if(_modbusClient == nullptr) return;
-    QTimer::singleShot(_delayBetweenPolls, [&]{ sendReadRequest(); });
+     sendReadRequest();
 }
 
 ///

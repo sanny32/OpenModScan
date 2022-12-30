@@ -43,7 +43,7 @@ void StatisticWidget::increaseValidSlaveResponses()
 ///
 /// \brief StatisticWidget::resetCtrls
 ///
-void StatisticWidget::resetCtrls()
+void StatisticWidget::resetCtrs()
 {
     _numberOfPolls = 0;
     _validSlaveResponses = 0;
@@ -52,11 +52,11 @@ void StatisticWidget::resetCtrls()
 }
 
 ///
-/// \brief StatisticWidget::on_pushButtonResetCtrls_clicked
+/// \brief StatisticWidget::on_pushButtonResetCtrs_clicked
 ///
-void StatisticWidget::on_pushButtonResetCtrls_clicked()
+void StatisticWidget::on_pushButtonResetCtrs_clicked()
 {
-    resetCtrls();
+    resetCtrs();
 }
 
 ///

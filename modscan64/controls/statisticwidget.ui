@@ -62,7 +62,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButtonResetCtrls">
+    <widget class="QPushButton" name="pushButtonResetCtrs">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -79,7 +79,7 @@
       <string notr="true">background-color: #F0F0F0;</string>
      </property>
      <property name="text">
-      <string>Reset Ctrls</string>
+      <string>Reset Ctrs</string>
      </property>
      <property name="default">
       <bool>true</bool>

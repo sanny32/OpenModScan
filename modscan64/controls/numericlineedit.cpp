@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <QIntValidator>
 #include "numericlineedit.h"
 
@@ -9,12 +10,13 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
     : QLineEdit(parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
-    ,_enablePaddingZero(false)
+    ,_paddingZeroes(false)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
+    connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
 }
 
 ///
@@ -26,21 +28,31 @@ NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
     : QLineEdit(s, parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
-    ,_enablePaddingZero(false)
+    ,_paddingZeroes(false)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
+    connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
+}
+
+///
+/// \brief NumericLineEdit::paddingZeroes
+/// \return
+///
+bool NumericLineEdit::paddingZeroes() const
+{
+    return _paddingZeroes;
 }
 
 ///
 /// \brief NumberLineEdit::enablePaddingZero
 /// \param on
 ///
-void NumericLineEdit::enablePaddingZero(bool on)
+void NumericLineEdit::setPaddingZeroes(bool on)
 {
-    _enablePaddingZero = on;
+    _paddingZeroes = on;
 }
 
 ///
@@ -84,12 +96,11 @@ int NumericLineEdit::value()
 ///
 void NumericLineEdit::setValue(int value)
 {
-    _value = value;
     const auto validator = (QIntValidator*)this->validator();
-
     if(value < validator->bottom()) value = validator->bottom();
     if(value > validator->top()) value = validator->top();
-    if(_enablePaddingZero)
+
+    if(_paddingZeroes)
     {
         const auto text = QStringLiteral("%1").arg(value, _paddingZeroWidth, 10, QLatin1Char('0'));
         QLineEdit::setText(text);
@@ -98,6 +109,9 @@ void NumericLineEdit::setValue(int value)
     {
         QLineEdit::setText(QString::number(value));
     }
+
+    _value = value;
+    emit valueChanged(_value);
 }
 
 ///
@@ -124,6 +138,14 @@ void NumericLineEdit::focusOutEvent(QFocusEvent* event)
 /// \brief NumericLineEdit::on_editingFinished
 ///
 void NumericLineEdit::on_editingFinished()
+{
+    updateValue();
+}
+
+///
+/// \brief NumericLineEdit::on_textChanged
+///
+void NumericLineEdit::on_textChanged(const QString&)
 {
     updateValue();
 }

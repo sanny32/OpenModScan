@@ -15,8 +15,8 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     ui->setupUi(this);
     setWindowTitle(QString("ModSca%1").arg(num));
 
+    ui->lineEditAddress->setPaddingZeroes(true);
     ui->lineEditAddress->setInputRange(1, 65534);
-    ui->lineEditAddress->enablePaddingZero(true);
     ui->lineEditLength->setInputRange(1, 128);
     ui->lineEditDeviceId->setInputRange(1, 255);
     ui->lineEditAddress->setValue(1);
@@ -24,7 +24,7 @@ FormModSca::FormModSca(int num, QModbusClient* client, MainWindow* parent) :
     ui->lineEditDeviceId->setValue(1);
     ui->outputWidget->setup(displayDefinition());
 
-    connect(parent, &MainWindow::modbusClientChanged,
+    connect(parent, &MainWindow::modbusClientChanged, this,
             [&](QModbusClient* cli)
             {
                 _modbusClient = cli;
@@ -180,27 +180,26 @@ void FormModSca::on_timeout()
 }
 
 ///
-/// \brief FormModSca::on_lineEditAddress_editingFinished
+/// \brief FormModSca::on_lineEditAddress_valueChanged
 ///
-void FormModSca::on_lineEditAddress_editingFinished()
+void FormModSca::on_lineEditAddress_valueChanged(int)
 {
     ui->outputWidget->setup(displayDefinition());
 }
 
 ///
-/// \brief FormModSca::on_lineEditLength_editingFinished
+/// \brief FormModSca::on_lineEditLength_valueChanged
 ///
-void FormModSca::on_lineEditLength_editingFinished()
+void FormModSca::on_lineEditLength_valueChanged(int)
 {
     ui->outputWidget->setup(displayDefinition());
 }
 
 ///
-/// \brief FormModSca::on_lineEditDeviceId_editingFinished
+/// \brief FormModSca::on_lineEditDeviceId_valueChanged
 ///
-void FormModSca::on_lineEditDeviceId_editingFinished()
+void FormModSca::on_lineEditDeviceId_valueChanged(int)
 {
-    ui->outputWidget->setup(displayDefinition());
 }
 
 ///

@@ -11,8 +11,11 @@ INCLUDEPATH += controls \
 
 SOURCES += \
     appsettings.cpp \
+    controls/booleancombobox.cpp \
     controls/connectioncombobox.cpp \
+    controls/flowcontroltypecombobox.cpp \
     controls/numericlineedit.cpp \
+    controls/paritytypecombobox.cpp \
     controls/statisticwidget.cpp \
     dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
@@ -27,8 +30,11 @@ SOURCES += \
 HEADERS += \
     appsettings.h \
     connectiondetails.h \
+    controls/booleancombobox.h \
     controls/connectioncombobox.h \
+    controls/flowcontroltypecombobox.h \
     controls/numericlineedit.h \
+    controls/paritytypecombobox.h \
     controls/statisticwidget.h \
     dialogconnectiondetails.h \
     dialogdisplaydefinition.h \

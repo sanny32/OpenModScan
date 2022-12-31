@@ -293,7 +293,7 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QComboBox" name="comboBoxParity">
+         <widget class="ParityTypeComboBox" name="comboBoxParity">
           <property name="minimumSize">
            <size>
             <width>90</width>
@@ -301,23 +301,8 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>-1</number>
           </property>
-          <item>
-           <property name="text">
-            <string>ODD</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>EVEN</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>NONE</string>
-           </property>
-          </item>
          </widget>
         </item>
         <item row="3" column="0">
@@ -360,58 +345,54 @@
         <property name="title">
          <string>Hardware Flow Control</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="spacing">
-          <number>16</number>
-         </property>
-         <item>
-          <layout class="QFormLayout" name="formLayout_3">
-           <item row="0" column="1">
-            <widget class="QComboBox" name="comboBoxFlowControl">
-             <property name="currentIndex">
-              <number>0</number>
-             </property>
-             <item>
-              <property name="text">
-               <string>NO CONTROL</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>HARDWARE (RTS/CTS)</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>SOFTWARE (XON/XOFF)</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelFlowControl">
-             <property name="text">
-              <string>Flow Control Mode: </string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBoxDTR">
+        <layout class="QFormLayout" name="formLayout_3">
+         <item row="3" column="0">
+          <widget class="QLabel" name="labelDTRControl">
            <property name="text">
-            <string>Set DTR signal after serial port open</string>
+            <string>DTR Control: </string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QCheckBox" name="checkBoxRTS">
-           <property name="text">
-            <string>Set RTS signal after serial port open</string>
+         <item row="3" column="1">
+          <widget class="BooleanComboBox" name="comboBoxDTRControl">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>25</height>
+            </size>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="labelRTSControl">
+           <property name="text">
+            <string>RTS Control: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="BooleanComboBox" name="comboBoxRTSControl">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>25</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0" colspan="2">
           <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -423,6 +404,26 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelFlowControl">
+           <property name="text">
+            <string>Flow Control Mode: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="FlowControlTypeComboBox" name="comboBoxFlowControl">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -519,6 +520,21 @@
    <class>ConnectionComboBox</class>
    <extends>QComboBox</extends>
    <header>connectioncombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ParityTypeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>paritytypecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FlowControlTypeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>flowcontroltypecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>BooleanComboBox</class>
+   <extends>QComboBox</extends>
+   <header>booleancombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -298,7 +298,8 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
                     auto port = (QSerialPort*)_modbusClient->device();
                     port->clear();
                     port->setDataTerminalReady(cd.SerialParams.SetDTR);
-                    port->setRequestToSend(cd.SerialParams.SetRTS);
+                    if(cd.SerialParams.FlowControl != QSerialPort::HardwareControl)
+                        port->setRequestToSend(cd.SerialParams.SetRTS);
                 }
             });
 

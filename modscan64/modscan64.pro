@@ -7,6 +7,8 @@ CONFIG += debug_and_release_target
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+win32:RC_ICONS += res/modscan64.ico
+
 INCLUDEPATH += controls \
 
 SOURCES += \
@@ -17,15 +19,15 @@ SOURCES += \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
     controls/statisticwidget.cpp \
+    controls/numericcombobox.cpp \
+    controls/outputwidget.cpp \
+    controls/pointtypecombobox.cpp \
     dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
     dialogprotocolselections.cpp \
     formmodsca.cpp \
     main.cpp \
-    mainwindow.cpp \
-    controls/numericcombobox.cpp \
-    controls/outputwidget.cpp \
-    controls/pointtypecombobox.cpp
+    mainwindow.cpp
 
 HEADERS += \
     appsettings.h \
@@ -36,6 +38,9 @@ HEADERS += \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \
     controls/statisticwidget.h \
+    controls/numericcombobox.h \
+    controls/outputwidget.h \
+    controls/pointtypecombobox.h \
     dialogconnectiondetails.h \
     dialogdisplaydefinition.h \
     dialogprotocolselections.h \
@@ -43,9 +48,6 @@ HEADERS += \
     enums.h \
     formmodsca.h \
     mainwindow.h \
-    controls/numericcombobox.h \
-    controls/outputwidget.h \
-    controls/pointtypecombobox.h \
     modbusexception.h \
     modbuslimits.h \
     qrange.h

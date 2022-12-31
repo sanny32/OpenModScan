@@ -22,8 +22,6 @@ DialogProtocolSelections::DialogProtocolSelections(ModbusProtocolSelections& mps
 
     ui->lineEditTimeout->setValue(mps.SlaveResponseTimeOut);
     ui->lineEditDelay->setValue(mps.DelayBetweenPolls);
-    ui->radioButtonASCII->setChecked(mps.Mode == TransmissionMode::ASCII);
-    ui->radioButtonRTU->setChecked(mps.Mode == TransmissionMode::RTU);
     ui->checkBoxForce->setChecked(mps.ForceModbus15And16Func);
 }
 
@@ -40,7 +38,6 @@ DialogProtocolSelections::~DialogProtocolSelections()
 ///
 void DialogProtocolSelections::accept()
 {
-    _protocolSelections.Mode = ui->radioButtonASCII->isChecked() ? TransmissionMode::ASCII : TransmissionMode::RTU;
     _protocolSelections.SlaveResponseTimeOut = ui->lineEditTimeout->value();
     _protocolSelections.DelayBetweenPolls = ui->lineEditDelay->value();
     _protocolSelections.ForceModbus15And16Func = ui->checkBoxForce->isChecked();

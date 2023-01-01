@@ -263,9 +263,9 @@ void FormModSca::on_lineEditDeviceId_valueChanged(int)
 }
 
 ///
-/// \brief FormModSca::on_comboBoxModbusPointType_currentTextChanged
+/// \brief FormModSca::on_comboBoxModbusPointType_pointTypeChanged
 ///
-void FormModSca::on_comboBoxModbusPointType_currentTextChanged(const QString&)
+void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
 {
     ui->outputWidget->setup(displayDefinition());
 }

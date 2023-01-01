@@ -41,7 +41,7 @@ private slots:
     void on_lineEditAddress_valueChanged(int);
     void on_lineEditLength_valueChanged(int);
     void on_lineEditDeviceId_valueChanged(int);
-    void on_comboBoxModbusPointType_currentTextChanged(const QString&);
+    void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
 
 private:
     QModbusRequest createReadRequest();

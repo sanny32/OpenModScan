@@ -12,6 +12,8 @@ PointTypeComboBox::PointTypeComboBox(QWidget *parent)
     addItem("02: INPUT STATUS", QModbusDataUnit::DiscreteInputs);
     addItem("03: HOLDING REGISTER", QModbusDataUnit::HoldingRegisters);
     addItem("04: INPUT REGISTER", QModbusDataUnit::InputRegisters);
+
+    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
 }
 
 ///
@@ -31,4 +33,13 @@ void PointTypeComboBox::setCurrentPointType(QModbusDataUnit::RegisterType pointT
 {
     const auto idx = findData(pointType);
     setCurrentIndex(idx);
+}
+
+///
+/// \brief PointTypeComboBox::on_currentIndexChanged
+/// \param index
+///
+void PointTypeComboBox::on_currentIndexChanged(int index)
+{
+    emit pointTypeChanged(itemData(index).value<QModbusDataUnit::RegisterType>());
 }

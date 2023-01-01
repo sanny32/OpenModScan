@@ -15,6 +15,12 @@ public:
 
     QModbusDataUnit::RegisterType currentPointType() const;
     void setCurrentPointType(QModbusDataUnit::RegisterType pointType);
+
+signals:
+    void pointTypeChanged(QModbusDataUnit::RegisterType pointType);
+
+private slots:
+    void on_currentIndexChanged(int);
 };
 
 #endif // POINTTYPECOMBOBOX_H

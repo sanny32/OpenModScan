@@ -137,8 +137,11 @@ void NumericLineEdit::internalSetValue(int value)
     if(value < validator->bottom()) value = validator->bottom();
     if(value > validator->top()) value = validator->top();
 
-    _value = value;
-    emit valueChanged(_value);
+    if(value != _value)
+    {
+        _value = value;
+        emit valueChanged(_value);
+    }
 }
 
 ///

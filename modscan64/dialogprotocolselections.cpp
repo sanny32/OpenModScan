@@ -21,7 +21,8 @@ DialogProtocolSelections::DialogProtocolSelections(ModbusProtocolSelections& mps
     ui->lineEditTimeout->setInputRange(0, 300000);
 
     ui->lineEditTimeout->setValue(mps.SlaveResponseTimeOut);
-    ui->lineEditDelay->setValue(mps.DelayBetweenPolls);
+    ui->spinBoxRetries->setValue(mps.NumberOfRetries);
+    ui->lineEditDelay->setValue(mps.InterFrameDelay);
     ui->checkBoxForce->setChecked(mps.ForceModbus15And16Func);
 }
 
@@ -39,7 +40,8 @@ DialogProtocolSelections::~DialogProtocolSelections()
 void DialogProtocolSelections::accept()
 {
     _protocolSelections.SlaveResponseTimeOut = ui->lineEditTimeout->value();
-    _protocolSelections.DelayBetweenPolls = ui->lineEditDelay->value();
+    _protocolSelections.NumberOfRetries = ui->spinBoxRetries->value();
+    _protocolSelections.InterFrameDelay = ui->lineEditDelay->value();
     _protocolSelections.ForceModbus15And16Func = ui->checkBoxForce->isChecked();
 
     QDialog::accept();

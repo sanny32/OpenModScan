@@ -37,7 +37,8 @@ struct ModbusProtocolSelections
 {
     TransmissionMode Mode = TransmissionMode::RTU;
     quint32 SlaveResponseTimeOut = 250;
-    quint32 DelayBetweenPolls = 0;
+    quint32 NumberOfRetries = 3;
+    quint32 InterFrameDelay = 0;
     bool ForceModbus15And16Func = false;
 };
 

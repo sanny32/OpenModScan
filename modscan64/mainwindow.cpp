@@ -267,6 +267,7 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
         {
             _modbusClient = new QModbusTcpClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
+            _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
 
@@ -277,7 +278,8 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
         case ConnectionType::Serial:
             _modbusClient = new QModbusRtuSerialMaster(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
-            _modbusClient->setProperty("DelayBetweenPolls", cd.ModbusParams.DelayBetweenPolls);
+            _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
+            ((QModbusRtuSerialMaster*)_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
@@ -296,7 +298,6 @@ void MainWindow::setupModbusClient(const ConnectionDetails& cd)
                    state == QModbusDevice::ConnectedState)
                 {
                     auto port = (QSerialPort*)_modbusClient->device();
-                    port->clear();
                     port->setDataTerminalReady(cd.SerialParams.SetDTR);
                     if(cd.SerialParams.FlowControl != QSerialPort::HardwareControl)
                         port->setRequestToSend(cd.SerialParams.SetRTS);

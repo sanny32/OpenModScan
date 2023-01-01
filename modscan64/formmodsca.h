@@ -21,7 +21,7 @@ class FormModSca : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormModSca(int num, QModbusClient* client, MainWindow* parent = nullptr);
+    explicit FormModSca(int num, QModbusClient* client, MainWindow* parent);
     ~FormModSca();
 
     DisplayDefinition displayDefinition() const;
@@ -36,19 +36,21 @@ public:
     void resetCtrs();
 
 private slots:
-    void readyReadData();
+    void on_timeout();
+    void on_readReply();
     void on_lineEditAddress_valueChanged(int);
     void on_lineEditLength_valueChanged(int);
     void on_lineEditDeviceId_valueChanged(int);
     void on_comboBoxModbusPointType_currentTextChanged(const QString&);
 
 private:
-    void sendReadRequest();
+    QModbusRequest createReadRequest();
+    void sendReadRequest(const QModbusRequest& request, uint id);
 
 private:
     Ui::FormModSca *ui;
+    QTimer _timer;
     QModbusClient* _modbusClient;
-    uint _scanRate;
 };
 
 #endif // FORMMODSCA_H

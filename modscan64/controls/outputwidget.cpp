@@ -319,6 +319,18 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
 }
 
 ///
+/// \brief OutputWidget::on_listWidget_itemDoubleClicked
+/// \param item
+///
+void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    if(item == nullptr) return;
+    const auto addr = item->data(Qt::UserRole).toUInt();
+    const auto valuestr = item->text().split(":")[1].remove('<').remove('>');
+    emit itemDoubleClicked(addr, valuestr.toUInt());
+}
+
+///
 /// \brief OutputWidget::updateDataWidget
 /// \param data
 ///
@@ -405,7 +417,10 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         }
 
         const auto label = QString(format).arg(prefix, addr, valstr);
-        ui->listWidget->addItem(label);
+        auto item = new QListWidgetItem(label, ui->listWidget);
+        item->setData(Qt::UserRole, addr);
+
+        ui->listWidget->addItem(item);
     }
 }
 

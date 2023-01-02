@@ -2,6 +2,7 @@
 #define OUTPUTWIDGET_H
 
 #include <QWidget>
+#include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
 #include "displaydefinition.h"
@@ -32,6 +33,12 @@ public:
     void setStatus(const QString& status);
     void update(const QModbusRequest& request);
     void update(QModbusReply* reply);
+
+signals:
+    void itemDoubleClicked(quint32 address, const QVariant& value);
+
+private slots:
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
     void updateDataWidget(const QModbusDataUnit& data = QModbusDataUnit());

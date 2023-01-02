@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
+#include "dialogwriteholdingregister.h"
 
 ///
 /// \brief FormModSca::FormModSca
@@ -268,4 +269,31 @@ void FormModSca::on_lineEditDeviceId_valueChanged(int)
 void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
 {
     ui->outputWidget->setup(displayDefinition());
+}
+
+///
+/// \brief FormModSca::on_outputWidget_itemDoubleClicked
+/// \param addr
+/// \param value
+///
+void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value)
+{
+    const quint32 node = ui->lineEditDeviceId->value();
+    const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        break;
+
+        case QModbusDataUnit::HoldingRegisters:
+        {
+            WriteRegisterParams params = { node, addr, value, displayMode() };
+            DialogWriteHoldingRegister dlg(params, _modbusClient, this);
+            dlg.exec();
+        }
+        break;
+
+        default:
+        break;
+    }
 }

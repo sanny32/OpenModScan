@@ -42,6 +42,7 @@ private slots:
     void on_lineEditLength_valueChanged(int);
     void on_lineEditDeviceId_valueChanged(int);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
+    void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
 
 private:
     QModbusRequest createReadRequest();

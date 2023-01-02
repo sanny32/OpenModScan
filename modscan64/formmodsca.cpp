@@ -229,8 +229,76 @@ void FormModSca::writeRegister(QModbusDataUnit::RegisterType pointType, const Mo
 
         case QModbusDataUnit::HoldingRegisters:
             errorDesc = "Register Write Failure";
-            data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 1);
-            data.setValue(0, params.Value.toUInt());
+            switch(ui->outputWidget->dataDisplayMode())
+            {
+                case DataDisplayMode::Binary:
+                case DataDisplayMode::Decimal:
+                case DataDisplayMode::Hex:
+                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 1);
+                    data.setValue(0, params.Value.toUInt());
+                break;
+
+                case DataDisplayMode::Integer:
+                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 1);
+                    data.setValue(0, params.Value.toInt());
+                break;
+
+                case DataDisplayMode::FloatingPt:
+                {
+                    union {
+                       quint16 asUint16[2];
+                       float asFloat;
+                    } v;
+                    v.asFloat = params.Value.toFloat();
+                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 2);
+                    data.setValue(0, v.asUint16[0]);
+                    data.setValue(1, v.asUint16[1]);
+                }
+                break;
+
+                case DataDisplayMode::SwappedFP:
+                {
+                    union {
+                       quint16 asUint16[2];
+                       float asFloat;
+                    } v;
+                    v.asFloat = params.Value.toFloat();
+                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 2);
+                    data.setValue(0, v.asUint16[1]);
+                    data.setValue(1, v.asUint16[0]);
+                }
+                break;
+
+                case DataDisplayMode::DblFloat:
+                {
+                    union {
+                       quint16 asUint16[4];
+                       double asDouble;
+                    } v;
+                    v.asDouble = params.Value.toDouble();
+                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 4);
+                    data.setValue(0, v.asUint16[0]);
+                    data.setValue(1, v.asUint16[1]);
+                    data.setValue(2, v.asUint16[2]);
+                    data.setValue(3, v.asUint16[3]);
+                }
+                break;
+
+                case DataDisplayMode::SwappedDbl:
+                {
+                    union {
+                       quint16 asUint16[4];
+                       double asDouble;
+                    } v;
+                    v.asDouble = params.Value.toDouble();
+                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 4);
+                    data.setValue(0, v.asUint16[3]);
+                    data.setValue(1, v.asUint16[2]);
+                    data.setValue(2, v.asUint16[1]);
+                    data.setValue(3, v.asUint16[0]);
+                }
+                break;
+            }
         break;
 
         default:

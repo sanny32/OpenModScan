@@ -17,26 +17,10 @@ QHexValidator::QHexValidator(int bottom, int top, QObject* parent)
 ///
 /// \brief QHexValidator::validate
 /// \param input
-/// \param pos
 /// \return
 ///
-QHexValidator::State QHexValidator::validate(QString& input, int& pos) const
+QHexValidator::State QHexValidator::validate(QString& input, int&) const
 {
-    // remove trailing comma
-    if (input.endsWith(','))
-    {
-        input.chop(1);
-    }
-
-    // insert comma when third hex in a row was entered
-    /*QRegExp rxThreeHexAtTheEnd("(?:[0-9a-fA-F]{2})*[0-9a-fA-F]{3}");
-    if (rxThreeHexAtTheEnd.exactMatch(input))
-    {
-        input.insert(input.length()-1, ',');
-        pos = input.length();
-    }*/
-
-    // match against needed regexp
     QRegExp rx("(?:[0-9a-fA-F]{2})*[0-9a-fA-F]{0,3}");
     if (rx.exactMatch(input))
     {

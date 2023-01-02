@@ -41,8 +41,10 @@ private slots:
     void on_textChanged(const QString& text);
 
 private:
+    int inputBase() const;
     void updateValue();
     void internalSetValue(int value);
+
 
 private:
     int _value;

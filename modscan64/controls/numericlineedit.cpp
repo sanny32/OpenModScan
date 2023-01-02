@@ -84,7 +84,7 @@ void NumericLineEdit::setInputRange(QRange<int> range)
 ///
 void NumericLineEdit::setInputRange(int bottom, int top)
 {
-    const int nums = QString::number(top, _hexInput ? 16 : 10).length();
+    const int nums = QString::number(top, inputBase()).length();
     _paddingZeroWidth = qMax(1, nums);
     setMaxLength(qMax(1, nums));
 
@@ -140,12 +140,12 @@ void NumericLineEdit::setValue(int value)
     internalSetValue(value);
     if(_paddingZeroes)
     {
-        const auto text = QStringLiteral("%1").arg(_value, _paddingZeroWidth, _hexInput ? 16 : 10, QLatin1Char('0'));
+        const auto text = QStringLiteral("%1").arg(_value, _paddingZeroWidth, inputBase(), QLatin1Char('0'));
         QLineEdit::setText(text.toUpper());
     }
     else
     {
-        const auto text = QString::number(_value, _hexInput ? 16 : 10);
+        const auto text = QString::number(_value, inputBase());
         QLineEdit::setText(text.toUpper());
     }
 }
@@ -168,12 +168,21 @@ void NumericLineEdit::internalSetValue(int value)
 }
 
 ///
+/// \brief NumericLineEdit::inputBase
+/// \return
+///
+int NumericLineEdit::inputBase() const
+{
+    return _hexInput ? 16 : 10;
+}
+
+///
 /// \brief NumericLineEdit::updateValue
 ///
 void NumericLineEdit::updateValue()
 {
     bool ok;
-    const auto value = text().toInt(&ok, _hexInput ? 16 : 10);
+    const auto value = text().toInt(&ok, inputBase());
     if(ok) setValue(value);
 }
 
@@ -201,6 +210,6 @@ void NumericLineEdit::on_editingFinished()
 void NumericLineEdit::on_textChanged(const QString&)
 {
     bool ok;
-    const auto value = text().toInt(&ok, _hexInput ? 16 : 10);
+    const auto value = text().toInt(&ok, inputBase());
     if(ok) internalSetValue(value);
 }

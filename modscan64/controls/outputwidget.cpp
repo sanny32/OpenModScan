@@ -2,6 +2,14 @@
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
+struct ListItemData
+{
+    int Row;
+    quint32 Address;
+    QVariant Value;
+};
+Q_DECLARE_METATYPE(ListItemData)
+
 ///
 /// \brief OutputWidget::OutputWidget
 /// \param parent
@@ -144,9 +152,10 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 /// \brief formatBinatyValue
 /// \param pointType
 /// \param value
+/// \param outValue
 /// \return
 ///
-QString formatBinatyValue(QModbusDataUnit::RegisterType pointType, quint16 value)
+QString formatBinatyValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -162,6 +171,7 @@ QString formatBinatyValue(QModbusDataUnit::RegisterType pointType, quint16 value
         default:
         break;
     }
+    outValue = value;
     return result;
 }
 
@@ -169,9 +179,10 @@ QString formatBinatyValue(QModbusDataUnit::RegisterType pointType, quint16 value
 /// \brief formatDecimalValue
 /// \param pointType
 /// \param value
+/// \param outValue
 /// \return
 ///
-QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value)
+QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -187,6 +198,7 @@ QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 valu
         default:
         break;
     }
+    outValue = value;
     return result;
 }
 
@@ -194,9 +206,10 @@ QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 valu
 /// \brief formatIntegerValue
 /// \param pointType
 /// \param value
+/// \param outValue
 /// \return
 ///
-QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value)
+QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -212,6 +225,7 @@ QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value
         default:
         break;
     }
+    outValue = value;
     return result;
 }
 
@@ -219,9 +233,10 @@ QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value
 /// \brief formatHexValue
 /// \param pointType
 /// \param value
+/// \param outValue
 /// \return
 ///
-QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value)
+QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -237,6 +252,7 @@ QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value)
         default:
         break;
     }
+    outValue = value;
     return result.toUpper();
 }
 
@@ -246,9 +262,10 @@ QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value)
 /// \param value1
 /// \param value2
 /// \param flag
+/// \param outValue
 /// \return
 ///
-QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, bool flag)
+QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, bool flag, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -268,6 +285,8 @@ QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1
             } v;
             v.asUint16[0] = value1;
             v.asUint16[1] = value2;
+
+            outValue = v.asFloat;
             result = QString::number(v.asFloat);
         }
         break;
@@ -285,9 +304,10 @@ QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1
 /// \param value3
 /// \param value4
 /// \param flag
+/// \param outValue
 /// \return
 ///
-QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, quint16 value3, quint16 value4, bool flag)
+QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, quint16 value3, quint16 value4, bool flag, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -309,6 +329,8 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
             v.asUint16[1] = value2;
             v.asUint16[2] = value3;
             v.asUint16[3] = value4;
+
+            outValue = v.asDouble;
             result = QString::number(v.asDouble);
         }
         break;
@@ -325,43 +347,32 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
 void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     if(item == nullptr) return;
-    const auto addr = item->data(Qt::UserRole).toUInt();
-    const auto valuestr = item->text().split(":")[1].remove('<').remove('>').remove('H');
+    auto itemData = item->data(Qt::UserRole).value<ListItemData>();
 
-    QVariant value;
     switch(_dataDisplayMode)
     {
-        case DataDisplayMode::Binary:
-        {
-            bool ok;
-            value = valuestr.toUInt(&ok, 2);
-        }
-        break;
-
-        case DataDisplayMode::Decimal:
-            value = valuestr.toUInt();
-        break;
-
-        case DataDisplayMode::Integer:
-            value = valuestr.toInt();
-        break;
-
-        case DataDisplayMode::Hex:
-        {
-            bool ok;
-            value = valuestr.toUInt(&ok, 16);
-        }
-        break;
-
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
+            if(itemData.Row % 2)
+            {
+                auto item = ui->listWidget->item(itemData.Row - 1);
+                if(item) itemData = item->data(Qt::UserRole).value<ListItemData>();
+            }
         break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
+            if(itemData.Row % 4)
+            {
+                auto item = ui->listWidget->item(itemData.Row - itemData.Row % 4);
+                if(item) itemData = item->data(Qt::UserRole).value<ListItemData>();
+            }
+        break;
+
+        default:
         break;
     }
-    emit itemDoubleClicked(addr, value);
+    emit itemDoubleClicked(itemData.Address, itemData.Value);
 }
 
 ///
@@ -393,7 +404,11 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 
     for(int i = 0; i < _displayDefinition.Length; i++)
     {
-        const auto addr = QStringLiteral("%1").arg(i + _displayDefinition.PointAddress, 4, 10, QLatin1Char('0'));
+        ListItemData itemData;
+        itemData.Row = i;
+        itemData.Address = i + _displayDefinition.PointAddress;
+
+        const auto addr = QStringLiteral("%1").arg(itemData.Address, 4, 10, QLatin1Char('0'));
         const auto value1 = data.value(i);
         const auto format = "%1%2: %3                  ";
 
@@ -401,59 +416,69 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         switch(_dataDisplayMode)
         {
             case DataDisplayMode::Binary:
-                valstr = formatBinatyValue(_displayDefinition.PointType, value1);
+                valstr = formatBinatyValue(_displayDefinition.PointType, value1, itemData.Value);
             break;
 
             case DataDisplayMode::Decimal:
-                valstr = formatDecimalValue(_displayDefinition.PointType, value1);
+                valstr = formatDecimalValue(_displayDefinition.PointType, value1, itemData.Value);
             break;
 
             case DataDisplayMode::Integer:
-                valstr = formatIntegerValue(_displayDefinition.PointType, value1);
-
+                valstr = formatIntegerValue(_displayDefinition.PointType, value1, itemData.Value);
             break;
 
             case DataDisplayMode::Hex:
-                valstr = formatHexValue(_displayDefinition.PointType, value1);
+                valstr = formatHexValue(_displayDefinition.PointType, value1, itemData.Value);
             break;
 
             case DataDisplayMode::FloatingPt:
             {
-                const auto value2 = data.value(i + 1);
-                valstr = formatFloatValue(_displayDefinition.PointType, value1, value2, i%2);
+                if( i + 1 < _displayDefinition.Length)
+                {
+                    const auto value2 = data.value(i + 1);
+                    valstr = formatFloatValue(_displayDefinition.PointType, value1, value2, i%2, itemData.Value);
+                }
             }
             break;
 
             case DataDisplayMode::SwappedFP:
             {
-                const auto value2 = data.value(i + 1);
-                valstr = formatFloatValue(_displayDefinition.PointType, value2, value1, i%2);
+                if( i + 1 < _displayDefinition.Length)
+                {
+                    const auto value2 = data.value(i + 1);
+                    valstr = formatFloatValue(_displayDefinition.PointType, value2, value1, i%2, itemData.Value);
+                }
             }
             break;
 
             case DataDisplayMode::DblFloat:
             {
-                const auto value2 = data.value(i + 1);
-                const auto value3 = data.value(i + 2);
-                const auto value4 = data.value(i + 3);
-                valstr = formatDoubleValue(_displayDefinition.PointType, value1, value2, value3, value4, i%4);
+                if( i + 3 < _displayDefinition.Length)
+                {
+                    const auto value2 = data.value(i + 1);
+                    const auto value3 = data.value(i + 2);
+                    const auto value4 = data.value(i + 3);
+                    valstr = formatDoubleValue(_displayDefinition.PointType, value1, value2, value3, value4, i%4, itemData.Value);
+                }
             }
             break;
 
             case DataDisplayMode::SwappedDbl:
             {
-                const auto value2 = data.value(i + 1);
-                const auto value3 = data.value(i + 2);
-                const auto value4 = data.value(i + 3);
-                valstr = formatDoubleValue(_displayDefinition.PointType, value4, value3, value2, value1, i%4);
+                if( i + 3 < _displayDefinition.Length)
+                {
+                    const auto value2 = data.value(i + 1);
+                    const auto value3 = data.value(i + 2);
+                    const auto value4 = data.value(i + 3);
+                    valstr = formatDoubleValue(_displayDefinition.PointType, value4, value3, value2, value1, i%4, itemData.Value);
+                }
             }
             break;
         }
 
         const auto label = QString(format).arg(prefix, addr, valstr);
         auto item = new QListWidgetItem(label, ui->listWidget);
-        item->setData(Qt::UserRole, addr);
-
+        item->setData(Qt::UserRole, QVariant::fromValue(itemData));
         ui->listWidget->addItem(item);
     }
 }

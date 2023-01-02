@@ -52,6 +52,7 @@ HEADERS += \
     mainwindow.h \
     modbusexception.h \
     modbuslimits.h \
+    modbuswriteparams.h \
     qrange.h
 
 FORMS += \

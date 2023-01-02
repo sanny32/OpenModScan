@@ -6,6 +6,7 @@
 #include <QModbusClient>
 #include "enums.h"
 #include "displaydefinition.h"
+#include "modbuswriteparams.h"
 
 class MainWindow;
 
@@ -47,6 +48,7 @@ private slots:
 private:
     QModbusRequest createReadRequest();
     void sendReadRequest(const QModbusRequest& request, uint id);
+    void writeRegister(const ModbusWriteParams& params);
 
 private:
     Ui::FormModSca *ui;

@@ -5,18 +5,11 @@
 #include <QVariant>
 #include <QModbusClient>
 #include "enums.h"
+#include "modbuswriteparams.h"
 
 namespace Ui {
 class DialogWriteHoldingRegister;
 }
-
-struct WriteRegisterParams
-{
-    quint32 Node;
-    quint32 Address;
-    QVariant Value;
-    DisplayMode Mode;
-};
 
 ///
 /// \brief The DialogWriteHoldingRegister class
@@ -26,8 +19,10 @@ class DialogWriteHoldingRegister : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteHoldingRegister(const WriteRegisterParams& params, QModbusClient* client, QWidget *parent = nullptr);
+    explicit DialogWriteHoldingRegister(const ModbusWriteParams& params, DisplayMode mode, QWidget *parent = nullptr);
     ~DialogWriteHoldingRegister();
+
+    ModbusWriteParams writeParams() const;
 
 private:
     Ui::DialogWriteHoldingRegister *ui;

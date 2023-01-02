@@ -1,17 +1,19 @@
+#include <QDebug>
+#include <QMessageBox>
 #include "modbuslimits.h"
+#include "modbusexception.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
 
 ///
 /// \brief DialogWriteHoldingRegister::DialogWriteHoldingRegister
-/// \param node
-/// \param addr
+/// \param params
+/// \param mode
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(const WriteRegisterParams& params, QModbusClient* client, QWidget* parent) :
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(const ModbusWriteParams& params, DisplayMode mode, QWidget* parent) :
       QDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
-    ,_modbusClient(client)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
@@ -33,4 +35,16 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(const WriteRegisterParams
 DialogWriteHoldingRegister::~DialogWriteHoldingRegister()
 {
     delete ui;
+}
+
+///
+/// \brief DialogWriteHoldingRegister::writeParams
+/// \return
+///
+ModbusWriteParams DialogWriteHoldingRegister::writeParams() const
+{
+    const quint32 node = ui->lineEditNode->value();
+    const quint32 addr = ui->lineEditAddress->value();
+    const auto value = ui->lineEditValue->value();
+    return {node, addr, value };
 }

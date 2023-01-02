@@ -1,4 +1,6 @@
+#include <QMessageBox>
 #include "modbuslimits.h"
+#include "modbusexception.h"
 #include "mainwindow.h"
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
@@ -208,6 +210,61 @@ void FormModSca::sendReadRequest(const QModbusRequest& request, uint id)
 }
 
 ///
+/// \brief FormModSca::writeRegister
+/// \param params
+///
+void FormModSca::writeRegister(const ModbusWriteParams& params)
+{
+    if(_modbusClient == nullptr ||
+       _modbusClient->state() != QModbusDevice::ConnectedState)
+    {
+        QMessageBox::warning(this, windowTitle(), "Register Write Failure");
+    }
+
+    QModbusDataUnit data;
+    const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+    switch (pointType)
+    {
+        case QModbusDataUnit::Coils:
+        break;
+
+        case QModbusDataUnit::HoldingRegisters:
+            data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 1);
+            data.setValue(0, params.Value.toUInt());
+        break;
+
+        default:
+        break;
+    }
+
+    if(auto reply = _modbusClient->sendWriteRequest(data, params.Node))
+    {
+        if (!reply->isFinished())
+        {
+            connect(reply, &QModbusReply::finished, this, [this, reply]()
+            {
+                if (reply->error() == QModbusDevice::ProtocolError)
+                {
+                    const QString exception = ModbusException(reply->rawResult().exceptionCode());
+                    const QString error = QString("Register Write Failure. %1").arg(exception);
+                    QMessageBox::warning(this, windowTitle(), error);
+                }
+                else if (reply->error() != QModbusDevice::NoError)
+                {
+                    QMessageBox::warning(this, windowTitle(), QString("Register Write Failure. %1").arg(reply->errorString()));
+                }
+                reply->deleteLater();
+            });
+        }
+        else
+        {
+            // broadcast replies return immediately
+            reply->deleteLater();
+        }
+    }
+}
+
+///
 /// \brief FormModSca::on_timeout
 ///
 void FormModSca::on_timeout()
@@ -287,9 +344,11 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
 
         case QModbusDataUnit::HoldingRegisters:
         {
-            WriteRegisterParams params = { node, addr, value, displayMode() };
-            DialogWriteHoldingRegister dlg(params, _modbusClient, this);
-            dlg.exec();
+            DialogWriteHoldingRegister dlg({ node, addr, value }, displayMode(), this);
+            if(dlg.exec() == QDialog::Accepted)
+            {
+                writeRegister(dlg.writeParams());
+            }
         }
         break;
 

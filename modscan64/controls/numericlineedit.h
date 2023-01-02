@@ -15,7 +15,7 @@ public:
     explicit NumericLineEdit(QWidget* parent = nullptr);
     explicit NumericLineEdit(const QString&, QWidget *parent = nullptr);
 
-    int value();
+    int value() const;
     void setValue(int value);
 
     bool paddingZeroes() const;
@@ -44,7 +44,6 @@ private:
     int inputBase() const;
     void updateValue();
     void internalSetValue(int value);
-
 
 private:
     int _value;

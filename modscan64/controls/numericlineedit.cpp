@@ -126,7 +126,7 @@ void NumericLineEdit::setText(const QString& text)
 /// \brief NumberLineEdit::value
 /// \return
 ///
-int NumericLineEdit::value()
+int NumericLineEdit::value() const
 {
     return _value;
 }

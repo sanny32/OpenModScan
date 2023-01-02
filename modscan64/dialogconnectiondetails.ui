@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>539</width>
-    <height>405</height>
+    <height>394</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -189,6 +189,9 @@
       </property>
       <item>
        <layout class="QFormLayout" name="formLayout_2">
+        <property name="formAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
         <property name="horizontalSpacing">
          <number>3</number>
         </property>
@@ -337,7 +340,7 @@
       <item>
        <widget class="QGroupBox" name="groupBox_2">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>1</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -346,6 +349,26 @@
          <string>Hardware Flow Control</string>
         </property>
         <layout class="QFormLayout" name="formLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelFlowControl">
+           <property name="text">
+            <string>Flow Control Mode: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="FlowControlTypeComboBox" name="comboBoxFlowControl">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="currentIndex">
+            <number>-1</number>
+           </property>
+          </widget>
+         </item>
          <item row="3" column="0">
           <widget class="QLabel" name="labelDTRControl">
            <property name="text">
@@ -389,39 +412,6 @@
              <width>90</width>
              <height>25</height>
             </size>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0" colspan="2">
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelFlowControl">
-           <property name="text">
-            <string>Flow Control Mode: </string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="FlowControlTypeComboBox" name="comboBoxFlowControl">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="currentIndex">
-            <number>-1</number>
            </property>
           </widget>
          </item>
@@ -480,7 +470,7 @@
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

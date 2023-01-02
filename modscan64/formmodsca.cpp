@@ -211,6 +211,70 @@ void FormModSca::sendReadRequest(const QModbusRequest& request, uint id)
 }
 
 ///
+/// \brief createFloatDataUint
+/// \param newStartAddress
+/// \param value
+/// \param inv
+/// \return
+///
+QModbusDataUnit createFloatDataUint(int newStartAddress, float value, bool inv)
+{
+    union {
+       quint16 asUint16[2];
+       float asFloat;
+    } v;
+    v.asFloat = value;
+
+    auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
+    if(inv)
+    {
+        data.setValue(0, v.asUint16[1]);
+        data.setValue(1, v.asUint16[0]);
+    }
+    else
+    {
+        data.setValue(0, v.asUint16[0]);
+        data.setValue(1, v.asUint16[1]);
+    }
+
+    return data;
+}
+
+///
+/// \brief createDoubleDataUint
+/// \param newStartAddress
+/// \param value
+/// \param inv
+/// \return
+///
+QModbusDataUnit createDoubleDataUint(int newStartAddress, double value, bool inv)
+{
+    union {
+       quint16 asUint16[4];
+       double asDouble;
+    } v;
+    v.asDouble = value;
+
+    auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 4);
+    if(inv)
+    {
+        data.setValue(0, v.asUint16[3]);
+        data.setValue(1, v.asUint16[2]);
+        data.setValue(2, v.asUint16[1]);
+        data.setValue(3, v.asUint16[0]);
+    }
+    else
+    {
+        data.setValue(0, v.asUint16[0]);
+        data.setValue(1, v.asUint16[1]);
+        data.setValue(2, v.asUint16[2]);
+        data.setValue(3, v.asUint16[3]);
+    }
+
+    return data;
+}
+
+///
 /// \brief FormModSca::writeRegister
 /// \param pointType
 /// \param params
@@ -244,59 +308,19 @@ void FormModSca::writeRegister(QModbusDataUnit::RegisterType pointType, const Mo
                 break;
 
                 case DataDisplayMode::FloatingPt:
-                {
-                    union {
-                       quint16 asUint16[2];
-                       float asFloat;
-                    } v;
-                    v.asFloat = params.Value.toFloat();
-                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 2);
-                    data.setValue(0, v.asUint16[0]);
-                    data.setValue(1, v.asUint16[1]);
-                }
+                    data = createFloatDataUint(params.Address - 1, params.Value.toFloat(), false);
                 break;
 
                 case DataDisplayMode::SwappedFP:
-                {
-                    union {
-                       quint16 asUint16[2];
-                       float asFloat;
-                    } v;
-                    v.asFloat = params.Value.toFloat();
-                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 2);
-                    data.setValue(0, v.asUint16[1]);
-                    data.setValue(1, v.asUint16[0]);
-                }
+                    data = createFloatDataUint(params.Address - 1, params.Value.toFloat(), true);
                 break;
 
                 case DataDisplayMode::DblFloat:
-                {
-                    union {
-                       quint16 asUint16[4];
-                       double asDouble;
-                    } v;
-                    v.asDouble = params.Value.toDouble();
-                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 4);
-                    data.setValue(0, v.asUint16[0]);
-                    data.setValue(1, v.asUint16[1]);
-                    data.setValue(2, v.asUint16[2]);
-                    data.setValue(3, v.asUint16[3]);
-                }
+                    data = createDoubleDataUint(params.Address - 1, params.Value.toDouble(), false);
                 break;
 
                 case DataDisplayMode::SwappedDbl:
-                {
-                    union {
-                       quint16 asUint16[4];
-                       double asDouble;
-                    } v;
-                    v.asDouble = params.Value.toDouble();
-                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 4);
-                    data.setValue(0, v.asUint16[3]);
-                    data.setValue(1, v.asUint16[2]);
-                    data.setValue(2, v.asUint16[1]);
-                    data.setValue(3, v.asUint16[0]);
-                }
+                    data = createDoubleDataUint(params.Address - 1, params.Value.toDouble(), true);
                 break;
             }
         break;

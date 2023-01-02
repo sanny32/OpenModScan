@@ -48,7 +48,7 @@ private slots:
 private:
     QModbusRequest createReadRequest();
     void sendReadRequest(const QModbusRequest& request, uint id);
-    void writeRegister(const ModbusWriteParams& params);
+    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 
 private:
     Ui::FormModSca *ui;

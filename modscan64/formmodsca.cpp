@@ -4,6 +4,7 @@
 #include "mainwindow.h"
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
+#include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
 
 ///
@@ -211,24 +212,23 @@ void FormModSca::sendReadRequest(const QModbusRequest& request, uint id)
 
 ///
 /// \brief FormModSca::writeRegister
+/// \param pointType
 /// \param params
 ///
-void FormModSca::writeRegister(const ModbusWriteParams& params)
+void FormModSca::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
 {
-    if(_modbusClient == nullptr ||
-       _modbusClient->state() != QModbusDevice::ConnectedState)
-    {
-        QMessageBox::warning(this, windowTitle(), "Register Write Failure");
-    }
-
+    QString errorDesc;
     QModbusDataUnit data;
-    const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     switch (pointType)
     {
         case QModbusDataUnit::Coils:
+            errorDesc = "Coil Write Failure";
+            data = QModbusDataUnit(QModbusDataUnit::Coils, params.Address - 1, 1);
+            data.setValue(0, params.Value.toBool());
         break;
 
         case QModbusDataUnit::HoldingRegisters:
+            errorDesc = "Register Write Failure";
             data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 1);
             data.setValue(0, params.Value.toUInt());
         break;
@@ -237,21 +237,28 @@ void FormModSca::writeRegister(const ModbusWriteParams& params)
         break;
     }
 
+    if(_modbusClient == nullptr ||
+       _modbusClient->state() != QModbusDevice::ConnectedState)
+    {
+        QMessageBox::warning(this, windowTitle(), errorDesc);
+        return;
+    }
+
     if(auto reply = _modbusClient->sendWriteRequest(data, params.Node))
     {
         if (!reply->isFinished())
         {
-            connect(reply, &QModbusReply::finished, this, [this, reply]()
+            connect(reply, &QModbusReply::finished, this, [this, errorDesc, reply]()
             {
                 if (reply->error() == QModbusDevice::ProtocolError)
                 {
                     const QString exception = ModbusException(reply->rawResult().exceptionCode());
-                    const QString error = QString("Register Write Failure. %1").arg(exception);
+                    const QString error = QString("%1. %2").arg(errorDesc, exception);
                     QMessageBox::warning(this, windowTitle(), error);
                 }
                 else if (reply->error() != QModbusDevice::NoError)
                 {
-                    QMessageBox::warning(this, windowTitle(), QString("Register Write Failure. %1").arg(reply->errorString()));
+                    QMessageBox::warning(this, windowTitle(), QString("%1. %2").arg(errorDesc, reply->errorString()));
                 }
                 reply->deleteLater();
             });
@@ -340,6 +347,13 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
+        {
+            DialogWriteCoilRegister dlg({ node, addr, value }, this);
+            if(dlg.exec() == QDialog::Accepted)
+            {
+                writeRegister(pointType, dlg.writeParams());
+            }
+        }
         break;
 
         case QModbusDataUnit::HoldingRegisters:
@@ -347,7 +361,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             DialogWriteHoldingRegister dlg({ node, addr, value }, displayMode(), this);
             if(dlg.exec() == QDialog::Accepted)
             {
-                writeRegister(dlg.writeParams());
+                writeRegister(pointType, dlg.writeParams());
             }
         }
         break;

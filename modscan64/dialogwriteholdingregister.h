@@ -2,8 +2,6 @@
 #define DIALOGWRITEHOLDINGREGISTER_H
 
 #include <QDialog>
-#include <QVariant>
-#include <QModbusClient>
 #include "enums.h"
 #include "modbuswriteparams.h"
 
@@ -26,9 +24,6 @@ public:
 
 private:
     Ui::DialogWriteHoldingRegister *ui;
-
-private:
-    QModbusClient* _modbusClient;
 };
 
 #endif // DIALOGWRITEHOLDINGREGISTER_H

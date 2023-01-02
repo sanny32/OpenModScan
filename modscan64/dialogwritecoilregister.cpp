@@ -39,8 +39,8 @@ DialogWriteCoilRegister::~DialogWriteCoilRegister()
 ///
 ModbusWriteParams DialogWriteCoilRegister::writeParams() const
 {
-    const quint32 node = ui->lineEditNode->value();
-    const quint32 addr = ui->lineEditAddress->value();
+    const quint32 node = ui->lineEditNode->value<int>();
+    const quint32 addr = ui->lineEditAddress->value<int>();
     const bool value = ui->radioButtonOn->isChecked();
     return {node, addr, value };
 }

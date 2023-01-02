@@ -42,7 +42,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(const ModbusWriteParams& 
         case DataDisplayMode::Hex:
             ui->labelValue->setText("Value, (HEX): ");
             ui->lineEditValue->setPaddingZeroes(true);
-            ui->lineEditValue->setHexInput(true);
+            ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
@@ -50,20 +50,8 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(const ModbusWriteParams& 
         case DataDisplayMode::SwappedFP:
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
-        {
-            delete ui->lineEditValue;
-
-            auto lineEditValue = new NumericLineEdit(ui->groupBox);
-            lineEditValue->setObjectName(QString::fromUtf8("lineEditValue"));
-            QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            sizePolicy.setHeightForWidth(lineEditValue->sizePolicy().hasHeightForWidth());
-            lineEditValue->setSizePolicy(sizePolicy);
-            lineEditValue->setMaximumSize(QSize(60, 16777215));
-
-            ui->formLayout->setWidget(1, QFormLayout::FieldRole, lineEditValue);
-            lineEditValue->setText(params.Value.toString());
-            //ui->lineEditValue->setValue(params.Value.toFloat());
-        }
+            ui->lineEditValue->setInputMode(NumericLineEdit::RealMode);
+            ui->lineEditValue->setValue(params.Value.toDouble());
         break;
     }
 }
@@ -82,8 +70,8 @@ DialogWriteHoldingRegister::~DialogWriteHoldingRegister()
 ///
 ModbusWriteParams DialogWriteHoldingRegister::writeParams() const
 {
-    const quint32 node = ui->lineEditNode->value();
-    const quint32 addr = ui->lineEditAddress->value();
-    const auto value = ui->lineEditValue->value();
-    return {node, addr, value };
+    const quint32 node = ui->lineEditNode->value<int>();
+    const quint32 addr = ui->lineEditAddress->value<int>();
+    const auto value = ui->lineEditValue->value<QVariant>();
+    return { node, addr, value };
 }

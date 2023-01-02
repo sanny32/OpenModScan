@@ -7,31 +7,54 @@
 class NumericLineEdit : public QLineEdit
 {
     Q_OBJECT
-    Q_PROPERTY(int value READ value WRITE setValue)
-    Q_PROPERTY(bool hexInput READ hexInput WRITE setHexInput)
+    Q_PROPERTY(InputMode inputMode READ inputMode WRITE setInputMode)
     Q_PROPERTY(bool paddingZeroes READ paddingZeroes WRITE setPaddingZeroes)
 
 public:
+    enum InputMode
+    {
+        IntMode = 0,
+        HexMode,
+        RealMode
+    };
+
     explicit NumericLineEdit(QWidget* parent = nullptr);
     explicit NumericLineEdit(const QString&, QWidget *parent = nullptr);
 
-    int value() const;
-    void setValue(int value);
+    template<typename T>
+    T value() const { return _value.value<T>(); }
+
+    template<typename T>
+    void setValue(T value)
+    { internalSetValue(value); }
 
     bool paddingZeroes() const;
     void setPaddingZeroes(bool on);
 
-    QRange<int> range() const;
-    void setInputRange(QRange<int> range);
-    void setInputRange(int bottom, int top);
+    template<typename T>
+    QRange<T> range() const
+    { return { _minValue.value<T>(), _maxValue.value<T>() }; }
 
-    bool hexInput() const;
-    void setHexInput(bool on);
+    template<typename T>
+    void setInputRange(QRange<T> range)
+    { setInputRange(range.from(), range.to()); }
+
+    template<typename T>
+    void setInputRange(T bottom, T top)
+    {
+        _minValue = QVariant::fromValue<T>(bottom);
+        _maxValue = QVariant::fromValue<T>(top);
+        emit rangeChanged(_minValue, _maxValue);
+    }
+
+    InputMode inputMode() const;
+    void setInputMode(InputMode mode);
 
     void setText(const QString& text);
 
 signals:
-    void valueChanged(int value);
+    void valueChanged(const QVariant& value);
+    void rangeChanged(const QVariant& bottom, const QVariant& top);
 
 protected:
     void focusOutEvent(QFocusEvent*) override;
@@ -39,17 +62,19 @@ protected:
 private slots:
     void on_editingFinished();
     void on_textChanged(const QString& text);
+    void on_rangeChanged(const QVariant& bottom, const QVariant& top);
 
 private:
-    int inputBase() const;
     void updateValue();
-    void internalSetValue(int value);
+    void internalSetValue(QVariant value);
 
 private:
-    int _value;
-    int _paddingZeroWidth;
+    QVariant _value;
+    QVariant _minValue;
+    QVariant _maxValue;
+    InputMode _inputMode;
     bool _paddingZeroes;
-    bool _hexInput;
+    int _paddingZeroWidth;
 };
 
 #endif // NUMERICLINEEDIT_H

@@ -44,11 +44,11 @@ DialogDisplayDefinition::~DialogDisplayDefinition()
 void DialogDisplayDefinition::accept()
 {
     DisplayDefinition dd;
-    dd.DeviceId = ui->lineEditSlaveAddress->value();
-    dd.PointAddress = ui->lineEditPointAddress->value();
+    dd.DeviceId = ui->lineEditSlaveAddress->value<int>();
+    dd.PointAddress = ui->lineEditPointAddress->value<int>();
     dd.PointType = ui->comboBoxPointType->currentPointType();
-    dd.Length = ui->lineEditLength->value();
-    dd.ScanRate = ui->lineEditScanRate->value();
+    dd.Length = ui->lineEditLength->value<int>();
+    dd.ScanRate = ui->lineEditScanRate->value<int>();
     ((FormModSca*)parentWidget())->setDisplayDefinition(dd);
 
     QDialog::accept();

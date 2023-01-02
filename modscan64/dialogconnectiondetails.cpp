@@ -69,7 +69,7 @@ void DialogConnectionDetails::accept()
         }
 
         _connectionDetails.TcpParams.IPAddress = ipAddr.toString();
-        _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value();
+        _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value<int>();
     }
     else
     {

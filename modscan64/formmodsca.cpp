@@ -61,10 +61,10 @@ DisplayDefinition FormModSca::displayDefinition() const
 {
     DisplayDefinition dd;
     dd.ScanRate = _timer.interval();
-    dd.DeviceId = ui->lineEditDeviceId->value();
-    dd.PointAddress = ui->lineEditAddress->value();
+    dd.DeviceId = ui->lineEditDeviceId->value<int>();
+    dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
-    dd.Length = ui->lineEditLength->value();
+    dd.Length = ui->lineEditLength->value<int>();
 
     return dd;
 }
@@ -307,7 +307,7 @@ void FormModSca::on_timeout()
 ///
 /// \brief FormModSca::on_lineEditAddress_valueChanged
 ///
-void FormModSca::on_lineEditAddress_valueChanged(int)
+void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 {
     ui->outputWidget->setup(displayDefinition());
 }
@@ -315,7 +315,7 @@ void FormModSca::on_lineEditAddress_valueChanged(int)
 ///
 /// \brief FormModSca::on_lineEditLength_valueChanged
 ///
-void FormModSca::on_lineEditLength_valueChanged(int)
+void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
 {
     ui->outputWidget->setup(displayDefinition());
 }
@@ -323,7 +323,7 @@ void FormModSca::on_lineEditLength_valueChanged(int)
 ///
 /// \brief FormModSca::on_lineEditDeviceId_valueChanged
 ///
-void FormModSca::on_lineEditDeviceId_valueChanged(int)
+void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
 {
 }
 
@@ -342,7 +342,7 @@ void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 ///
 void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value)
 {
-    const quint32 node = ui->lineEditDeviceId->value();
+    const quint32 node = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     switch(pointType)
     {

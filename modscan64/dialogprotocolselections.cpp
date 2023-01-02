@@ -39,9 +39,9 @@ DialogProtocolSelections::~DialogProtocolSelections()
 ///
 void DialogProtocolSelections::accept()
 {
-    _protocolSelections.SlaveResponseTimeOut = ui->lineEditTimeout->value();
+    _protocolSelections.SlaveResponseTimeOut = ui->lineEditTimeout->value<int>();
     _protocolSelections.NumberOfRetries = ui->spinBoxRetries->value();
-    _protocolSelections.InterFrameDelay = ui->lineEditDelay->value();
+    _protocolSelections.InterFrameDelay = ui->lineEditDelay->value<int>();
     _protocolSelections.ForceModbus15And16Func = ui->checkBoxForce->isChecked();
 
     QDialog::accept();

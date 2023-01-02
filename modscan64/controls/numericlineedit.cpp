@@ -9,16 +9,16 @@
 ///
 NumericLineEdit::NumericLineEdit(QWidget* parent)
     : QLineEdit(parent)
-    ,_value(0)
-    ,_paddingZeroWidth(0)
+    ,_inputMode(InputMode::IntMode)
     ,_paddingZeroes(false)
-    ,_hexInput(false)
+    ,_paddingZeroWidth(0)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
     connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
+    connect(this, &NumericLineEdit::rangeChanged, this, &NumericLineEdit::on_rangeChanged);
 }
 
 ///
@@ -28,16 +28,16 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
 ///
 NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
     : QLineEdit(s, parent)
-    ,_value(0)
-    ,_paddingZeroWidth(0)
+    ,_inputMode(InputMode::IntMode)
     ,_paddingZeroes(false)
-    ,_hexInput(false)
+    ,_paddingZeroWidth(0)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
     connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
+    connect(this, &NumericLineEdit::rangeChanged, this, &NumericLineEdit::on_rangeChanged);
 }
 
 ///
@@ -59,57 +59,22 @@ void NumericLineEdit::setPaddingZeroes(bool on)
 }
 
 ///
-/// \brief NumericLineEdit::range
+/// \brief NumericLineEdit::inputMode
 /// \return
 ///
-QRange<int> NumericLineEdit::range() const
+NumericLineEdit::InputMode NumericLineEdit::inputMode() const
 {
-    const auto validator = (QIntValidator*)this->validator();
-    return QRange<int>(validator->bottom(), validator->top());
-}
-
-///
-/// \brief NumericLineEdit::setInputRange
-/// \param range
-///
-void NumericLineEdit::setInputRange(QRange<int> range)
-{
-    setInputRange(range.from(), range.to());
-}
-
-///
-/// \brief NumberLineEdit::setInputRange
-/// \param bottom
-/// \param top
-///
-void NumericLineEdit::setInputRange(int bottom, int top)
-{
-    const int nums = QString::number(top, inputBase()).length();
-    _paddingZeroWidth = qMax(1, nums);
-    setMaxLength(qMax(1, nums));
-
-    setValidator(nullptr);
-    setValidator(_hexInput ? new QHexValidator(bottom, top, this) :
-                             new QIntValidator(bottom, top, this));
-}
-
-///
-/// \brief NumericLineEdit::hexInput
-/// \return
-///
-bool NumericLineEdit::hexInput() const
-{
-    return _hexInput;
+    return _inputMode;
 }
 
 ///
 /// \brief NumericLineEdit::setHexInput
 /// \param on
 ///
-void NumericLineEdit::setHexInput(bool on)
+void NumericLineEdit::setInputMode(InputMode mode)
 {
-    _hexInput = on;
-    setInputRange(range());
+    _inputMode = mode;
+    emit rangeChanged(_minValue, _maxValue);
 }
 
 ///
@@ -123,42 +88,46 @@ void NumericLineEdit::setText(const QString& text)
 }
 
 ///
-/// \brief NumberLineEdit::value
-/// \return
-///
-int NumericLineEdit::value() const
-{
-    return _value;
-}
-
-///
-/// \brief NumberLineEdit::setValue
-/// \param value
-///
-void NumericLineEdit::setValue(int value)
-{
-    internalSetValue(value);
-    if(_paddingZeroes)
-    {
-        const auto text = QStringLiteral("%1").arg(_value, _paddingZeroWidth, inputBase(), QLatin1Char('0'));
-        QLineEdit::setText(text.toUpper());
-    }
-    else
-    {
-        const auto text = QString::number(_value, inputBase());
-        QLineEdit::setText(text.toUpper());
-    }
-}
-
-///
 /// \brief NumericLineEdit::internalSetValue
 /// \param value
 ///
-void NumericLineEdit::internalSetValue(int value)
+void NumericLineEdit::internalSetValue(QVariant value)
 {
-    const auto validator = (QIntValidator*)this->validator();
-    if(value < validator->bottom()) value = validator->bottom();
-    if(value > validator->top()) value = validator->top();
+    switch(_inputMode)
+    {
+        case IntMode:
+            value = qBound(_minValue.toInt(), value.toInt(), _maxValue.toInt());
+            if(_paddingZeroes)
+            {
+                const auto text = QStringLiteral("%1").arg(value.toInt(), _paddingZeroWidth, 10, QLatin1Char('0'));
+                QLineEdit::setText(text);
+            }
+            else
+            {
+                const auto text = QString::number(value.toInt());
+                QLineEdit::setText(text);
+            }
+        break;
+
+        case HexMode:
+            value = qBound(_minValue.toUInt(), value.toUInt(), _maxValue.toUInt());
+            if(_paddingZeroes)
+            {
+                const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 16, QLatin1Char('0'));
+                QLineEdit::setText(text.toUpper());
+            }
+            else
+            {
+                const auto text = QString::number(value.toUInt(), 16);
+                QLineEdit::setText(text.toUpper());
+            }
+        break;
+
+        case RealMode:
+            value = qBound(_minValue.toDouble(), value.toDouble(), _maxValue.toDouble());
+            QLineEdit::setText(QString::number(value.toDouble()));
+        break;
+    }
 
     if(value != _value)
     {
@@ -168,22 +137,36 @@ void NumericLineEdit::internalSetValue(int value)
 }
 
 ///
-/// \brief NumericLineEdit::inputBase
-/// \return
-///
-int NumericLineEdit::inputBase() const
-{
-    return _hexInput ? 16 : 10;
-}
-
-///
 /// \brief NumericLineEdit::updateValue
 ///
 void NumericLineEdit::updateValue()
 {
-    bool ok;
-    const auto value = text().toInt(&ok, inputBase());
-    if(ok) setValue(value);
+    switch(_inputMode)
+    {
+        case IntMode:
+        {
+            bool ok;
+            const auto value = text().toInt(&ok);
+            if(ok) internalSetValue(value);
+        }
+        break;
+
+        case HexMode:
+        {
+            bool ok;
+            const auto value = text().toUInt(&ok, 16);
+            if(ok) internalSetValue(value);
+        }
+        break;
+
+        case RealMode:
+        {
+            bool ok;
+            const auto value = text().toDouble(&ok);
+            if(ok) internalSetValue(value);
+        }
+        break;
+    }
 }
 
 ///
@@ -207,9 +190,76 @@ void NumericLineEdit::on_editingFinished()
 ///
 /// \brief NumericLineEdit::on_textChanged
 ///
-void NumericLineEdit::on_textChanged(const QString&)
+void NumericLineEdit::on_textChanged(const QString& text)
 {
-    bool ok;
-    const auto value = text().toInt(&ok, inputBase());
-    if(ok) internalSetValue(value);
+    QVariant value;
+    switch(_inputMode)
+    {
+        case IntMode:
+        {
+            bool ok;
+            const auto valueInt = text.toInt(&ok);
+            if(ok) value = qBound(_minValue.toInt(), valueInt, _maxValue.toInt());
+        }
+        break;
+
+        case HexMode:
+        {
+            bool ok;
+            const auto valueUInt = text.toUInt(&ok, 16);
+            if(ok) value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
+        }
+        break;
+
+        case RealMode:
+        {
+            bool ok;
+            const auto valueDouble = text.toDouble(&ok);
+            if(ok) value = qBound(_minValue.toDouble(), valueDouble, _maxValue.toDouble());
+        }
+        break;
+    }
+
+    if(value.isValid() && value != _value)
+    {
+        _value = value;
+        emit valueChanged(_value);
+    }
+}
+
+///
+/// \brief NumericLineEdit::on_rangeChanged
+/// \param bottom
+/// \param top
+///
+void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& top)
+{
+    setValidator(nullptr);
+    switch(_inputMode)
+    {
+        case IntMode:
+        {
+            const int nums = QString::number(top.toInt()).length();
+            _paddingZeroWidth = qMax(1, nums);
+            setMaxLength(qMax(1, nums));
+            setValidator(new QIntValidator(bottom.toInt(), top.toInt(), this));
+        }
+        break;
+
+        case HexMode:
+        {
+            const int nums = QString::number(top.toUInt(), 16).length();
+            _paddingZeroWidth = qMax(1, nums);
+            setMaxLength(qMax(1, nums));
+            setValidator(new QHexValidator(bottom.toUInt(), top.toUInt(), this));
+        }
+        break;
+
+        case RealMode:
+        {
+            setMaxLength(INT16_MAX);
+            setValidator(new QDoubleValidator(bottom.toDouble(), top.toDouble(), 6, this));
+        }
+        break;
+    }
 }

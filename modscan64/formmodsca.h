@@ -39,9 +39,9 @@ public:
 private slots:
     void on_timeout();
     void on_readReply();
-    void on_lineEditAddress_valueChanged(int);
-    void on_lineEditLength_valueChanged(int);
-    void on_lineEditDeviceId_valueChanged(int);
+    void on_lineEditAddress_valueChanged(const QVariant&);
+    void on_lineEditLength_valueChanged(const QVariant&);
+    void on_lineEditDeviceId_valueChanged(const QVariant&);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
 

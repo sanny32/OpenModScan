@@ -41,7 +41,7 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
-    void updateDataWidget(const QModbusDataUnit& data = QModbusDataUnit());
+    void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, const QModbusPdu& pdu);
 
 private:
@@ -51,6 +51,7 @@ private:
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     DisplayDefinition _displayDefinition;
+    QModbusDataUnit _lastDataResult;
 };
 
 #endif // OUTPUTWIDGET_H

@@ -40,7 +40,7 @@ OutputWidget::~OutputWidget()
 void OutputWidget::setup(const DisplayDefinition& dd)
 {
     _displayDefinition = dd;
-    updateDataWidget();
+    updateDataWidget(QModbusDataUnit());
 }
 
 ///
@@ -88,6 +88,7 @@ void OutputWidget::update(QModbusReply* reply)
         {
             setStatus(QString());
             updateDataWidget(data);
+            _lastDataResult = data;
         }
     }
     else if (reply->error() == QModbusDevice::ProtocolError)
@@ -145,7 +146,7 @@ DataDisplayMode OutputWidget::dataDisplayMode() const
 void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
-    updateDataWidget();
+    updateDataWidget(_lastDataResult);
 }
 
 ///

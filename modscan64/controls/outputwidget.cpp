@@ -326,8 +326,42 @@ void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     if(item == nullptr) return;
     const auto addr = item->data(Qt::UserRole).toUInt();
-    const auto valuestr = item->text().split(":")[1].remove('<').remove('>');
-    emit itemDoubleClicked(addr, valuestr.toUInt());
+    const auto valuestr = item->text().split(":")[1].remove('<').remove('>').remove('H');
+
+    QVariant value;
+    switch(_dataDisplayMode)
+    {
+        case DataDisplayMode::Binary:
+        {
+            bool ok;
+            value = valuestr.toUInt(&ok, 2);
+        }
+        break;
+
+        case DataDisplayMode::Decimal:
+            value = valuestr.toUInt();
+        break;
+
+        case DataDisplayMode::Integer:
+            value = valuestr.toInt();
+        break;
+
+        case DataDisplayMode::Hex:
+        {
+            bool ok;
+            value = valuestr.toUInt(&ok, 16);
+        }
+        break;
+
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+        break;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+        break;
+    }
+    emit itemDoubleClicked(addr, value);
 }
 
 ///

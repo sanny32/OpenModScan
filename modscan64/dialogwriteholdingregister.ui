@@ -30,7 +30,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="labelNode">
        <property name="text">
         <string>Node: </string>
        </property>
@@ -74,7 +74,7 @@
        <number>25</number>
       </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="labelAddress">
         <property name="text">
          <string>Address: </string>
         </property>
@@ -100,7 +100,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="labelValue">
         <property name="text">
          <string>Value: </string>
         </property>

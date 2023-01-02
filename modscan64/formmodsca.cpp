@@ -358,7 +358,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
 
         case QModbusDataUnit::HoldingRegisters:
         {
-            DialogWriteHoldingRegister dlg({ node, addr, value }, displayMode(), this);
+            DialogWriteHoldingRegister dlg({ node, addr, value }, dataDisplayMode(), this);
             if(dlg.exec() == QDialog::Accepted)
             {
                 writeRegister(pointType, dlg.writeParams());

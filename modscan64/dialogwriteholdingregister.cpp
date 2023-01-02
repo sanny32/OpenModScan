@@ -11,7 +11,7 @@
 /// \param mode
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(const ModbusWriteParams& params, DisplayMode mode, QWidget* parent) :
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(const ModbusWriteParams& params, DataDisplayMode mode, QWidget* parent) :
       QDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
 {
@@ -26,7 +26,37 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(const ModbusWriteParams& 
     ui->lineEditValue->setInputRange(0, 65535);
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
-    ui->lineEditValue->setValue(params.Value.toInt());
+
+    switch(mode)
+    {
+        case DataDisplayMode::Binary:
+        break;
+
+        case DataDisplayMode::Decimal:
+            ui->lineEditValue->setValue(params.Value.toUInt());
+        break;
+
+        case DataDisplayMode::Integer:
+            ui->lineEditValue->setValue(params.Value.toInt());
+        break;
+
+        case DataDisplayMode::Hex:
+            ui->labelValue->setText("Value, (HEX): ");
+            ui->lineEditValue->setPaddingZeroes(true);
+            ui->lineEditValue->setHexInput(true);
+            ui->lineEditValue->setValue(params.Value.toUInt());
+        break;
+
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+            ui->lineEditValue->setValue(params.Value.toFloat());
+        break;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+            ui->lineEditValue->setValue(params.Value.toDouble());
+        break;
+    }
 }
 
 ///

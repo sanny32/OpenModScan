@@ -33,7 +33,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="labelNode">
        <property name="text">
         <string>Node: </string>
        </property>
@@ -89,7 +89,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="labelAddress">
        <property name="text">
         <string>Address: </string>
        </property>

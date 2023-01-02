@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QIntValidator>
+#include "qhexvalidator.h"
 #include "numericlineedit.h"
 
 ///
@@ -11,6 +12,7 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
     ,_paddingZeroes(false)
+    ,_hexInput(false)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
@@ -29,6 +31,7 @@ NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
     ,_value(0)
     ,_paddingZeroWidth(0)
     ,_paddingZeroes(false)
+    ,_hexInput(false)
 {
     setInputRange(INT_MIN, INT_MAX);
     setValue(0);
@@ -81,13 +84,32 @@ void NumericLineEdit::setInputRange(QRange<int> range)
 ///
 void NumericLineEdit::setInputRange(int bottom, int top)
 {
-    const int nums = QString::number(top).length();
-    _paddingZeroWidth = qMax(1, nums - 1);
-
-    setValidator(nullptr);
-    setValidator(new QIntValidator(bottom, top, this));
+    const int nums = QString::number(top, _hexInput ? 16 : 10).length();
+    _paddingZeroWidth = qMax(1, nums);
     setMaxLength(qMax(1, nums));
 
+    setValidator(nullptr);
+    setValidator(_hexInput ? new QHexValidator(bottom, top, this) :
+                             new QIntValidator(bottom, top, this));
+}
+
+///
+/// \brief NumericLineEdit::hexInput
+/// \return
+///
+bool NumericLineEdit::hexInput() const
+{
+    return _hexInput;
+}
+
+///
+/// \brief NumericLineEdit::setHexInput
+/// \param on
+///
+void NumericLineEdit::setHexInput(bool on)
+{
+    _hexInput = on;
+    setInputRange(range());
 }
 
 ///
@@ -118,12 +140,13 @@ void NumericLineEdit::setValue(int value)
     internalSetValue(value);
     if(_paddingZeroes)
     {
-        const auto text = QStringLiteral("%1").arg(_value, _paddingZeroWidth, 10, QLatin1Char('0'));
-        QLineEdit::setText(text);
+        const auto text = QStringLiteral("%1").arg(_value, _paddingZeroWidth, _hexInput ? 16 : 10, QLatin1Char('0'));
+        QLineEdit::setText(text.toUpper());
     }
     else
     {
-        QLineEdit::setText(QString::number(_value));
+        const auto text = QString::number(_value, _hexInput ? 16 : 10);
+        QLineEdit::setText(text.toUpper());
     }
 }
 
@@ -150,7 +173,7 @@ void NumericLineEdit::internalSetValue(int value)
 void NumericLineEdit::updateValue()
 {
     bool ok;
-    const auto value = text().toInt(&ok);
+    const auto value = text().toInt(&ok, _hexInput ? 16 : 10);
     if(ok) setValue(value);
 }
 
@@ -178,6 +201,6 @@ void NumericLineEdit::on_editingFinished()
 void NumericLineEdit::on_textChanged(const QString&)
 {
     bool ok;
-    const auto value = text().toInt(&ok);
+    const auto value = text().toInt(&ok, _hexInput ? 16 : 10);
     if(ok) internalSetValue(value);
 }

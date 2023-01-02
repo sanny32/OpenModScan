@@ -17,7 +17,7 @@ class DialogWriteHoldingRegister : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteHoldingRegister(const ModbusWriteParams& params, DisplayMode mode, QWidget *parent = nullptr);
+    explicit DialogWriteHoldingRegister(const ModbusWriteParams& params, DataDisplayMode mode, QWidget *parent = nullptr);
     ~DialogWriteHoldingRegister();
 
     ModbusWriteParams writeParams() const;

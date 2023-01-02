@@ -8,6 +8,7 @@ class NumericLineEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(int value READ value WRITE setValue)
+    Q_PROPERTY(bool hexInput READ hexInput WRITE setHexInput)
     Q_PROPERTY(bool paddingZeroes READ paddingZeroes WRITE setPaddingZeroes)
 
 public:
@@ -23,6 +24,9 @@ public:
     QRange<int> range() const;
     void setInputRange(QRange<int> range);
     void setInputRange(int bottom, int top);
+
+    bool hexInput() const;
+    void setHexInput(bool on);
 
     void setText(const QString& text);
 
@@ -44,6 +48,7 @@ private:
     int _value;
     int _paddingZeroWidth;
     bool _paddingZeroes;
+    bool _hexInput;
 };
 
 #endif // NUMERICLINEEDIT_H

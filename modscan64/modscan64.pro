@@ -29,7 +29,8 @@ SOURCES += \
     dialogwriteholdingregister.cpp \
     formmodsca.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    qhexvalidator.cpp
 
 HEADERS += \
     appsettings.h \
@@ -55,6 +56,7 @@ HEADERS += \
     modbusexception.h \
     modbuslimits.h \
     modbuswriteparams.h \
+    qhexvalidator.h \
     qrange.h
 
 FORMS += \

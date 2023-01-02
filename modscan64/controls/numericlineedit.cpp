@@ -125,7 +125,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
 
         case RealMode:
             value = qBound(_minValue.toDouble(), value.toDouble(), _maxValue.toDouble());
-            QLineEdit::setText(QString::number(value.toDouble()));
+            QLineEdit::setText(QLocale().toString(value.toDouble()));
         break;
     }
 
@@ -162,7 +162,7 @@ void NumericLineEdit::updateValue()
         case RealMode:
         {
             bool ok;
-            const auto value = text().toDouble(&ok);
+            const auto value = QLocale().toDouble(text(), &ok);
             if(ok) internalSetValue(value);
         }
         break;
@@ -214,7 +214,7 @@ void NumericLineEdit::on_textChanged(const QString& text)
         case RealMode:
         {
             bool ok;
-            const auto valueDouble = text.toDouble(&ok);
+            const auto valueDouble = QLocale().toDouble(text, &ok);
             if(ok) value = qBound(_minValue.toDouble(), valueDouble, _maxValue.toDouble());
         }
         break;

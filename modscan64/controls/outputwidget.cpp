@@ -287,7 +287,7 @@ QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1
             v.asUint16[1] = value2;
 
             outValue = v.asFloat;
-            result = QString::number(v.asFloat);
+            result = QLocale().toString(v.asFloat);
         }
         break;
         default:
@@ -331,7 +331,7 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
             v.asUint16[3] = value4;
 
             outValue = v.asDouble;
-            result = QString::number(v.asDouble);
+            result = QLocale().toString(v.asDouble);
         }
         break;
         default:

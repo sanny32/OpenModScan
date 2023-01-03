@@ -21,6 +21,9 @@ public:
 
     ModbusWriteParams writeParams() const;
 
+protected:
+    void showEvent(QShowEvent* e) override;
+
 private:
     Ui::DialogWriteCoilRegister *ui;
 };

@@ -1,4 +1,4 @@
-#include <QDebug>
+#include <float.h>
 #include <QMessageBox>
 #include "modbuslimits.h"
 #include "dialogwriteholdingregister.h"

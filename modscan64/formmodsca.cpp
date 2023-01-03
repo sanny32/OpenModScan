@@ -523,20 +523,22 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
     {
         case QModbusDataUnit::Coils:
         {
-            DialogWriteCoilRegister dlg({ node, addr, value }, this);
+            ModbusWriteParams params = { node, addr, value };
+            DialogWriteCoilRegister dlg(params, this);
             if(dlg.exec() == QDialog::Accepted)
             {
-                writeRegister(pointType, dlg.writeParams());
+                writeRegister(pointType, params);
             }
         }
         break;
 
         case QModbusDataUnit::HoldingRegisters:
         {
-            DialogWriteHoldingRegister dlg({ node, addr, value }, dataDisplayMode(), this);
+            ModbusWriteParams params = { node, addr, value };
+            DialogWriteHoldingRegister dlg(params, dataDisplayMode(), this);
             if(dlg.exec() == QDialog::Accepted)
             {
-                writeRegister(pointType, dlg.writeParams());
+                writeRegister(pointType, params);
             }
         }
         break;

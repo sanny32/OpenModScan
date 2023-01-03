@@ -1,9 +1,9 @@
 #ifndef DIALOGWRITEHOLDINGREGISTER_H
 #define DIALOGWRITEHOLDINGREGISTER_H
 
-#include <QDialog>
 #include "enums.h"
 #include "modbuswriteparams.h"
+#include "qfixedsizedialog.h"
 
 namespace Ui {
 class DialogWriteHoldingRegister;
@@ -12,21 +12,19 @@ class DialogWriteHoldingRegister;
 ///
 /// \brief The DialogWriteHoldingRegister class
 ///
-class DialogWriteHoldingRegister : public QDialog
+class DialogWriteHoldingRegister : public QFixedSizeDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogWriteHoldingRegister(const ModbusWriteParams& params, DataDisplayMode mode, QWidget *parent = nullptr);
+    explicit DialogWriteHoldingRegister(ModbusWriteParams& params, DataDisplayMode mode, QWidget *parent = nullptr);
     ~DialogWriteHoldingRegister();
 
-    ModbusWriteParams writeParams() const;
-
-protected:
-    void showEvent(QShowEvent* e) override;
+    void accept() override;
 
 private:
     Ui::DialogWriteHoldingRegister *ui;
+    ModbusWriteParams& _writeParams;
 };
 
 #endif // DIALOGWRITEHOLDINGREGISTER_H

@@ -30,6 +30,7 @@ SOURCES += \
     formmodsca.cpp \
     main.cpp \
     mainwindow.cpp \
+    qfixedsizedialog.cpp \
     qhexvalidator.cpp
 
 HEADERS += \
@@ -56,6 +57,7 @@ HEADERS += \
     modbusexception.h \
     modbuslimits.h \
     modbuswriteparams.h \
+    qfixedsizedialog.h \
     qhexvalidator.h \
     qrange.h
 

@@ -1,7 +1,7 @@
 #ifndef DIALOGWRITECOILREGISTER_H
 #define DIALOGWRITECOILREGISTER_H
 
-#include <QDialog>
+#include "qfixedsizedialog.h"
 #include "modbuswriteparams.h"
 
 namespace Ui {
@@ -11,21 +11,19 @@ class DialogWriteCoilRegister;
 ///
 /// \brief The DialogWriteCoilRegister class
 ///
-class DialogWriteCoilRegister : public QDialog
+class DialogWriteCoilRegister : public QFixedSizeDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogWriteCoilRegister(const ModbusWriteParams& params, QWidget *parent = nullptr);
+    explicit DialogWriteCoilRegister(ModbusWriteParams& params, QWidget *parent = nullptr);
     ~DialogWriteCoilRegister();
 
-    ModbusWriteParams writeParams() const;
-
-protected:
-    void showEvent(QShowEvent* e) override;
+    void accept() override;
 
 private:
     Ui::DialogWriteCoilRegister *ui;
+    ModbusWriteParams& _writeParams;
 };
 
 #endif // DIALOGWRITECOILREGISTER_H

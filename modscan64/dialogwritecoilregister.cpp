@@ -7,15 +7,12 @@
 /// \param params
 /// \param parent
 ///
-DialogWriteCoilRegister::DialogWriteCoilRegister(const ModbusWriteParams& params, QWidget *parent) :
-    QDialog(parent),
+DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, QWidget *parent) :
+    QFixedSizeDialog(parent),
     ui(new Ui::DialogWriteCoilRegister)
+    ,_writeParams(params)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
-
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditNode->setValue(params.Node);
@@ -33,23 +30,13 @@ DialogWriteCoilRegister::~DialogWriteCoilRegister()
 }
 
 ///
-/// \brief DialogWriteCoilRegister::showEvent
-/// \param e
+/// \brief DialogWriteCoilRegister::accept
 ///
-void DialogWriteCoilRegister::showEvent(QShowEvent* e)
+void DialogWriteCoilRegister::accept()
 {
-    QDialog::showEvent(e);
-    setFixedSize(sizeHint());
-}
+    _writeParams.Address = ui->lineEditAddress->value<int>();
+    _writeParams.Value = ui->radioButtonOn->isChecked();
+    _writeParams.Node = ui->lineEditNode->value<int>();
 
-///
-/// \brief DialogWriteCoilRegister::writeParams
-/// \return
-///
-ModbusWriteParams DialogWriteCoilRegister::writeParams() const
-{
-    const quint32 node = ui->lineEditNode->value<int>();
-    const quint32 addr = ui->lineEditAddress->value<int>();
-    const bool value = ui->radioButtonOn->isChecked();
-    return {node, addr, value };
+    QFixedSizeDialog::accept();
 }

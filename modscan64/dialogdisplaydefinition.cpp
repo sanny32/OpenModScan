@@ -8,14 +8,10 @@
 /// \param parent
 ///
 DialogDisplayDefinition::DialogDisplayDefinition(FormModSca* parent) :
-    QDialog(parent),
+    QFixedSizeDialog(parent),
     ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
-
     ui->lineEditScanRate->setInputRange(20, 10000);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
@@ -38,16 +34,6 @@ DialogDisplayDefinition::~DialogDisplayDefinition()
 }
 
 ///
-/// \brief DialogDisplayDefinition::showEvent
-/// \param e
-///
-void DialogDisplayDefinition::showEvent(QShowEvent* e)
-{
-    QDialog::showEvent(e);
-    setFixedSize(sizeHint());
-}
-
-///
 /// \brief DialogDisplayDefinition::accept
 ///
 void DialogDisplayDefinition::accept()
@@ -60,5 +46,5 @@ void DialogDisplayDefinition::accept()
     dd.ScanRate = ui->lineEditScanRate->value<int>();
     ((FormModSca*)parentWidget())->setDisplayDefinition(dd);
 
-    QDialog::accept();
+    QFixedSizeDialog::accept();
 }

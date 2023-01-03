@@ -1,7 +1,7 @@
 #ifndef DIALOGCONNECTIONDETAILS_H
 #define DIALOGCONNECTIONDETAILS_H
 
-#include <QDialog>
+#include "qfixedsizedialog.h"
 #include "connectiondetails.h"
 
 namespace Ui {
@@ -11,7 +11,7 @@ class DialogConnectionDetails;
 ///
 /// \brief The DialogConnectionDetails class
 ///
-class DialogConnectionDetails : public QDialog
+class DialogConnectionDetails : public QFixedSizeDialog
 {
     Q_OBJECT
 
@@ -20,9 +20,6 @@ public:
     ~DialogConnectionDetails();
 
     void accept() override;
-
-protected:
-    void showEvent(QShowEvent* e) override;
 
 private slots:
     void on_pushButtonProtocolSelections_clicked();

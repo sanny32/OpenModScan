@@ -1,7 +1,7 @@
 #ifndef DIALOGDISPLAYDEFINITION_H
 #define DIALOGDISPLAYDEFINITION_H
 
-#include <QDialog>
+#include "qfixedsizedialog.h"
 #include "formmodsca.h"
 
 namespace Ui {
@@ -11,7 +11,7 @@ class DialogDisplayDefinition;
 ///
 /// \brief The DialogDisplayDefinition class
 ///
-class DialogDisplayDefinition : public QDialog
+class DialogDisplayDefinition : public QFixedSizeDialog
 {
     Q_OBJECT
 
@@ -20,9 +20,6 @@ public:
     ~DialogDisplayDefinition();
 
     void accept() override;
-
-protected:
-    void showEvent(QShowEvent* e) override;
 
 private:
     Ui::DialogDisplayDefinition *ui;

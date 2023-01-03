@@ -1,7 +1,7 @@
 #ifndef DIALOGPROTOCOLSELECTIONS_H
 #define DIALOGPROTOCOLSELECTIONS_H
 
-#include <QDialog>
+#include "qfixedsizedialog.h"
 #include "connectiondetails.h"
 
 namespace Ui {
@@ -11,7 +11,7 @@ class DialogProtocolSelections;
 ///
 /// \brief The DialogProtocolSelections class
 ///
-class DialogProtocolSelections : public QDialog
+class DialogProtocolSelections : public QFixedSizeDialog
 {
     Q_OBJECT
 
@@ -20,9 +20,6 @@ public:
     ~DialogProtocolSelections();
 
     void accept() override;
-
-protected:
-    void showEvent(QShowEvent* e) override;
 
 private:
     Ui::DialogProtocolSelections *ui;

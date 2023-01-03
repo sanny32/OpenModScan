@@ -9,23 +9,16 @@
 /// \param parent
 ///
 DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget *parent) :
-    QDialog(parent)
+    QFixedSizeDialog(parent)
     , ui(new Ui::DialogConnectionDetails)
     ,_connectionDetails(cd)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
-
     ui->lineEditServicePort->setInputRange(0, 65535);
-
     ui->comboBoxConnectUsing->setCurrentIndex(-1);
     ui->comboBoxFlowControl->setCurrentIndex(-1);
-
     ui->lineEditIPAddress->setText(cd.TcpParams.IPAddress);
     ui->lineEditServicePort->setValue(cd.TcpParams.ServicePort);
-
     ui->comboBoxBaudRate->setCurrentValue(cd.SerialParams.BaudRate);
     ui->comboBoxWordLength->setCurrentValue(cd.SerialParams.WordLength);
     ui->comboBoxParity->setCurrentParity(cd.SerialParams.Parity);
@@ -50,16 +43,6 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
 DialogConnectionDetails::~DialogConnectionDetails()
 {
     delete ui;
-}
-
-///
-/// \brief DialogConnectionDetails::showEvent
-/// \param e
-///
-void DialogConnectionDetails::showEvent(QShowEvent* e)
-{
-    QDialog::showEvent(e);
-    setFixedSize(sizeHint());
 }
 
 ///
@@ -92,7 +75,7 @@ void DialogConnectionDetails::accept()
         _connectionDetails.SerialParams.SetRTS = ui->comboBoxRTSControl->currentValue();
     }
 
-    QDialog::accept();
+    QFixedSizeDialog::accept();
 }
 
 ///

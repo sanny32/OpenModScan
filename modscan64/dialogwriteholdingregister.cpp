@@ -1,5 +1,4 @@
 #include <float.h>
-#include <QMessageBox>
 #include "modbuslimits.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
@@ -10,16 +9,12 @@
 /// \param mode
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(const ModbusWriteParams& params, DataDisplayMode mode, QWidget* parent) :
-      QDialog(parent)
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, DataDisplayMode mode, QWidget* parent) :
+      QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
+    ,_writeParams(params)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
-    setFixedSize(size());
-
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditValue->setInputRange(0, 65535);
@@ -71,23 +66,13 @@ DialogWriteHoldingRegister::~DialogWriteHoldingRegister()
 }
 
 ///
-/// \brief DialogWriteHoldingRegister::showEvent
-/// \param e
+/// \brief DialogWriteHoldingRegister::accept
 ///
-void DialogWriteHoldingRegister::showEvent(QShowEvent* e)
+void DialogWriteHoldingRegister::accept()
 {
-    QDialog::showEvent(e);
-    setFixedSize(sizeHint());
-}
+    _writeParams.Address = ui->lineEditAddress->value<int>();
+    _writeParams.Value = ui->lineEditValue->value<QVariant>();
+    _writeParams.Node = ui->lineEditNode->value<int>();
 
-///
-/// \brief DialogWriteHoldingRegister::writeParams
-/// \return
-///
-ModbusWriteParams DialogWriteHoldingRegister::writeParams() const
-{
-    const quint32 node = ui->lineEditNode->value<int>();
-    const quint32 addr = ui->lineEditAddress->value<int>();
-    const auto value = ui->lineEditValue->value<QVariant>();
-    return { node, addr, value };
+    QFixedSizeDialog::accept();
 }

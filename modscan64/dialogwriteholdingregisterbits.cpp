@@ -46,9 +46,8 @@ void DialogWriteHoldingRegisterBits::accept()
         auto ctrl = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
         if(ctrl) value |= ctrl->isChecked() << i;
     }
-
-    _writeParams.Address = ui->lineEditAddress->value<int>();
     _writeParams.Value = value;
+    _writeParams.Address = ui->lineEditAddress->value<int>();
     _writeParams.Node = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();

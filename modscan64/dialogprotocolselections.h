@@ -21,6 +21,9 @@ public:
 
     void accept() override;
 
+protected:
+    void showEvent(QShowEvent* e) override;
+
 private:
     Ui::DialogProtocolSelections *ui;
 

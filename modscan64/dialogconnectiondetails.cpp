@@ -17,7 +17,6 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
-    setFixedSize(size());
 
     ui->lineEditServicePort->setInputRange(0, 65535);
 
@@ -51,6 +50,16 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
 DialogConnectionDetails::~DialogConnectionDetails()
 {
     delete ui;
+}
+
+///
+/// \brief DialogConnectionDetails::showEvent
+/// \param e
+///
+void DialogConnectionDetails::showEvent(QShowEvent* e)
+{
+    QDialog::showEvent(e);
+    setFixedSize(sizeHint());
 }
 
 ///

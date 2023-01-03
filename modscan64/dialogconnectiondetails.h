@@ -21,6 +21,9 @@ public:
 
     void accept() override;
 
+protected:
+    void showEvent(QShowEvent* e) override;
+
 private slots:
     void on_pushButtonProtocolSelections_clicked();
     void on_comboBoxConnectUsing_currentIndexChanged(int);

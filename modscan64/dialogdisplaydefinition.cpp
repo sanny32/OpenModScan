@@ -15,7 +15,6 @@ DialogDisplayDefinition::DialogDisplayDefinition(FormModSca* parent) :
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
-    setFixedSize(size());
 
     ui->lineEditScanRate->setInputRange(20, 10000);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange());
@@ -36,6 +35,16 @@ DialogDisplayDefinition::DialogDisplayDefinition(FormModSca* parent) :
 DialogDisplayDefinition::~DialogDisplayDefinition()
 {
     delete ui;
+}
+
+///
+/// \brief DialogDisplayDefinition::showEvent
+/// \param e
+///
+void DialogDisplayDefinition::showEvent(QShowEvent* e)
+{
+    QDialog::showEvent(e);
+    setFixedSize(sizeHint());
 }
 
 ///

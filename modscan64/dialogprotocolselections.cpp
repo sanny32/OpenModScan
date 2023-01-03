@@ -15,7 +15,6 @@ DialogProtocolSelections::DialogProtocolSelections(ModbusProtocolSelections& mps
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
-    setFixedSize(size());
 
     ui->lineEditTimeout->setInputRange(10, 300000);
     ui->lineEditTimeout->setInputRange(0, 300000);
@@ -32,6 +31,16 @@ DialogProtocolSelections::DialogProtocolSelections(ModbusProtocolSelections& mps
 DialogProtocolSelections::~DialogProtocolSelections()
 {
     delete ui;
+}
+
+///
+/// \brief DialogProtocolSelections::showEvent
+/// \param e
+///
+void DialogProtocolSelections::showEvent(QShowEvent* e)
+{
+    QDialog::showEvent(e);
+    setFixedSize(sizeHint());
 }
 
 ///

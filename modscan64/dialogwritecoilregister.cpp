@@ -15,7 +15,6 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(const ModbusWriteParams& params
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
-    //setFixedSize(size());
 
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());

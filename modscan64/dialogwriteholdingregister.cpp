@@ -71,6 +71,16 @@ DialogWriteHoldingRegister::~DialogWriteHoldingRegister()
 }
 
 ///
+/// \brief DialogWriteHoldingRegister::showEvent
+/// \param e
+///
+void DialogWriteHoldingRegister::showEvent(QShowEvent* e)
+{
+    QDialog::showEvent(e);
+    setFixedSize(sizeHint());
+}
+
+///
 /// \brief DialogWriteHoldingRegister::writeParams
 /// \return
 ///

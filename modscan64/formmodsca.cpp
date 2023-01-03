@@ -114,6 +114,24 @@ DataDisplayMode FormModSca::dataDisplayMode() const
 }
 
 ///
+/// \brief FormModSca::displayHexAddreses
+/// \return
+///
+bool FormModSca::displayHexAddreses() const
+{
+    return ui->outputWidget->displayHexAddreses();
+}
+
+///
+/// \brief FormModSca::setDisplayHexAddreses
+/// \param on
+///
+void FormModSca::setDisplayHexAddreses(bool on)
+{
+    ui->outputWidget->setDisplayHexAddreses(on);
+}
+
+///
 /// \brief FormModSca::setDataDisplayMode
 /// \param mode
 ///

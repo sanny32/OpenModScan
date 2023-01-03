@@ -30,6 +30,9 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    bool displayHexAddreses() const;
+    void setDisplayHexAddreses(bool on);
+
     void setStatus(const QString& status);
     void update(const QModbusRequest& request);
     void update(QModbusReply* reply);
@@ -48,6 +51,7 @@ private:
     Ui::OutputWidget *ui;
 
 private:
+    bool _displayHexAddreses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     DisplayDefinition _displayDefinition;

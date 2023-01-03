@@ -40,6 +40,7 @@ private slots:
     void on_actionSwappedFP_triggered();
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
+    void on_actionHexAddresses_triggered();
     void on_actionResetCtrs_triggered();
     void on_awake();
 

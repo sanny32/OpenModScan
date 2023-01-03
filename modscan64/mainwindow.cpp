@@ -87,6 +87,8 @@ void MainWindow::on_awake()
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
+        ui->actionHexAddresses->setChecked(frm->displayHexAddreses());
+
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
@@ -231,6 +233,15 @@ void MainWindow::on_actionDblFloat_triggered()
 void MainWindow::on_actionSwappedDbl_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::SwappedDbl);
+}
+
+///
+/// \brief MainWindow::on_actionHexAddresses_triggered
+///
+void MainWindow::on_actionHexAddresses_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setDisplayHexAddreses(!frm->displayHexAddreses());
 }
 
 ///

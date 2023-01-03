@@ -17,6 +17,7 @@ Q_DECLARE_METATYPE(ListItemData)
 OutputWidget::OutputWidget(QWidget *parent) :
      QWidget(parent)
    , ui(new Ui::OutputWidget)
+   ,_displayHexAddreses(false)
    ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Binary)
 {
@@ -41,6 +42,25 @@ void OutputWidget::setup(const DisplayDefinition& dd)
 {
     _displayDefinition = dd;
     updateDataWidget(QModbusDataUnit());
+}
+
+///
+/// \brief OutputWidget::displayHexAddreses
+/// \return
+///
+bool OutputWidget::displayHexAddreses() const
+{
+    return _displayHexAddreses;
+}
+
+///
+/// \brief OutputWidget::setDisplayHexAddreses
+/// \param on
+///
+void OutputWidget::setDisplayHexAddreses(bool on)
+{
+    _displayHexAddreses = on;
+    updateDataWidget(_lastDataResult);
 }
 
 ///
@@ -393,22 +413,25 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
     ui->listWidget->clear();
 
     QString prefix;
-    switch(_displayDefinition.PointType)
+    if(!_displayHexAddreses)
     {
-        case QModbusDataUnit::Coils:
-            prefix = "0";
-        break;
-        case QModbusDataUnit::DiscreteInputs:
-            prefix = "1";
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-            prefix = "4";
-        break;
-        case QModbusDataUnit::InputRegisters:
-            prefix = "3";
-        break;
-        default:
-        break;
+        switch(_displayDefinition.PointType)
+        {
+            case QModbusDataUnit::Coils:
+                prefix = "0";
+            break;
+            case QModbusDataUnit::DiscreteInputs:
+                prefix = "1";
+            break;
+            case QModbusDataUnit::HoldingRegisters:
+                prefix = "4";
+            break;
+            case QModbusDataUnit::InputRegisters:
+                prefix = "3";
+            break;
+            default:
+            break;
+        }
     }
 
     for(int i = 0; i < _displayDefinition.Length; i++)
@@ -417,7 +440,9 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         itemData.Row = i;
         itemData.Address = i + _displayDefinition.PointAddress;
 
-        const auto addr = QStringLiteral("%1").arg(itemData.Address, 4, 10, QLatin1Char('0'));
+        const auto addr = _displayHexAddreses ?
+                    QStringLiteral("%1H").arg(itemData.Address, 4, 16, QLatin1Char('0')) :
+                    QStringLiteral("%1").arg(itemData.Address, 4, 10, QLatin1Char('0'));
         const auto value1 = data.value(i);
         const auto format = "%1%2: %3                  ";
 

@@ -34,6 +34,9 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    bool displayHexAddreses() const;
+    void setDisplayHexAddreses(bool on);
+
     void resetCtrs();
 
 private slots:

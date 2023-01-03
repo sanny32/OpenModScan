@@ -39,6 +39,7 @@ public:
 private slots:
     void on_timeout();
     void on_readReply();
+    void on_writeReply();
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -46,8 +47,7 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
 
 private:
-    QModbusRequest createReadRequest();
-    void sendReadRequest(const QModbusRequest& request, uint id);
+    void sendReadRequest();
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 
 private:

@@ -148,27 +148,66 @@ void FormModSca::on_readReply()
 }
 
 ///
-/// \brief FormModSca::createReadRequest
+/// \brief FormModSca::on_writeReply
+///
+void FormModSca::on_writeReply()
+{
+    auto reply = qobject_cast<QModbusReply*>(sender());
+    if (!reply) return;
+
+    if(reply->error() != QModbusDevice::NoError)
+    {
+        QString errorDesc;
+        switch(reply->result().registerType())
+        {
+            case QModbusDataUnit::Coils:
+                errorDesc = "Coil Write Failure";
+            break;
+
+            case QModbusDataUnit::HoldingRegisters:
+                errorDesc = "Register Write Failure";
+            break;
+
+            default:
+            break;
+        }
+
+        if (reply->error() == QModbusDevice::ProtocolError)
+        {
+            const QString exception = ModbusException(reply->rawResult().exceptionCode());
+            const QString error = QString("%1. %2").arg(errorDesc, exception);
+            QMessageBox::warning(this, windowTitle(), error);
+        }
+        else
+        {
+            QMessageBox::warning(this, windowTitle(), QString("%1. %2").arg(errorDesc, reply->errorString()));
+        }
+    }
+
+    reply->deleteLater();
+}
+
+///
+/// \brief createReadRequest
+/// \param data
 /// \return
 ///
-QModbusRequest FormModSca::createReadRequest()
+QModbusRequest createReadRequest(const QModbusDataUnit& data)
 {
     QModbusRequest request;
-    const auto dd = displayDefinition();
-
-    switch (dd.PointType)
+    switch (data.registerType())
     {
         case QModbusDataUnit::Coils:
-            request = QModbusRequest(QModbusRequest::ReadCoils, quint16(dd.PointAddress - 1), dd.Length);
+            request = QModbusRequest(QModbusRequest::ReadCoils, quint16(data.startAddress()), quint16(data.valueCount()));
         break;
         case QModbusDataUnit::DiscreteInputs:
-            request = QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(dd.PointAddress - 1), dd.Length);
+            request = QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(data.startAddress()), quint16(data.valueCount()));
         break;
         case QModbusDataUnit::InputRegisters:
-             request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(dd.PointAddress - 1), dd.Length);
+             request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(data.startAddress()), quint16(data.valueCount()));
         break;
         case QModbusDataUnit::HoldingRegisters:
-            request = QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(dd.PointAddress - 1), dd.Length);
+            request = QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(data.startAddress()), quint16(data.valueCount()));
         break;
         default:
         break;
@@ -179,16 +218,9 @@ QModbusRequest FormModSca::createReadRequest()
 
 ///
 /// \brief FormModSca::sendReadRequest
-/// \param request
-/// \param id
 ///
-void FormModSca::sendReadRequest(const QModbusRequest& request, uint id)
+void FormModSca::sendReadRequest()
 {
-    if(!request.isValid())
-    {
-        return;
-    }
-
     if(_modbusClient == nullptr ||
        _modbusClient->state() != QModbusDevice::ConnectedState)
     {
@@ -197,17 +229,76 @@ void FormModSca::sendReadRequest(const QModbusRequest& request, uint id)
 
     const auto dd = displayDefinition();
     const QModbusDataUnit dataUnit(dd.PointType, dd.PointAddress - 1, dd.Length);
-    auto reply = _modbusClient->sendReadRequest(dataUnit, id);
-    if(!reply) return;
 
-    if (!reply->isFinished())
+    const auto request = createReadRequest(dataUnit);
+    if(!request.isValid()) return;
+
+    // update data
+    ui->outputWidget->update(request);
+    ui->statisticWidget->increaseNumberOfPolls();
+
+    if(auto reply = _modbusClient->sendReadRequest(dataUnit, dd.DeviceId))
     {
-        connect(reply, &QModbusReply::finished, this, &FormModSca::on_readReply);
+        if (!reply->isFinished())
+        {
+            connect(reply, &QModbusReply::finished, this, &FormModSca::on_readReply);
+        }
+        else
+        {
+            delete reply; // broadcast replies return immediately
+        }
     }
-    else
+}
+
+///
+/// \brief createWriteRequest
+/// \param data
+/// \return
+///
+QModbusRequest createWriteRequest(const QModbusDataUnit& data)
+{
+    QModbusRequest request;
+    switch (data.registerType())
     {
-        delete reply; // broadcast replies return immediately
+        case QModbusDataUnit::Coils:
+            request = QModbusRequest(QModbusRequest::WriteSingleCoil, quint16(data.startAddress()), quint16(data.valueCount()));
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+            request = QModbusRequest(QModbusRequest::WriteSingleRegister, quint16(data.startAddress()), quint16(data.valueCount()));
+        break;
+        default:
+        break;
     }
+
+    return request;
+}
+
+///
+/// \brief createBoolDataUnit
+/// \param newStartAddress
+/// \param value
+/// \return
+///
+QModbusDataUnit createBoolDataUnit(int newStartAddress, bool value)
+{
+    auto data = QModbusDataUnit(QModbusDataUnit::Coils, newStartAddress, 1);
+    data.setValue(0, value);
+
+    return data;
+}
+
+///
+/// \brief createUIntDataUnit
+/// \param newStartAddress
+/// \param value
+/// \return
+///
+QModbusDataUnit createUIntDataUnit(int newStartAddress, quint16 value)
+{
+    auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 1);
+    data.setValue(0, value);
+
+    return data;
 }
 
 ///
@@ -281,30 +372,21 @@ QModbusDataUnit createDoubleDataUint(int newStartAddress, double value, bool inv
 ///
 void FormModSca::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
 {
-    QString errorDesc;
     QModbusDataUnit data;
     switch (pointType)
     {
         case QModbusDataUnit::Coils:
-            errorDesc = "Coil Write Failure";
-            data = QModbusDataUnit(QModbusDataUnit::Coils, params.Address - 1, 1);
-            data.setValue(0, params.Value.toBool());
+            data = createBoolDataUnit(params.Address - 1, params.Value.toBool());
         break;
 
         case QModbusDataUnit::HoldingRegisters:
-            errorDesc = "Register Write Failure";
             switch(ui->outputWidget->dataDisplayMode())
             {
                 case DataDisplayMode::Binary:
                 case DataDisplayMode::Decimal:
-                case DataDisplayMode::Hex:
-                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 1);
-                    data.setValue(0, params.Value.toUInt());
-                break;
-
                 case DataDisplayMode::Integer:
-                    data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, params.Address - 1, 1);
-                    data.setValue(0, params.Value.toInt());
+                case DataDisplayMode::Hex:
+                    data = createUIntDataUnit(params.Address - 1, params.Value.toUInt());
                 break;
 
                 case DataDisplayMode::FloatingPt:
@@ -332,28 +414,36 @@ void FormModSca::writeRegister(QModbusDataUnit::RegisterType pointType, const Mo
     if(_modbusClient == nullptr ||
        _modbusClient->state() != QModbusDevice::ConnectedState)
     {
+        QString errorDesc;
+        switch(pointType)
+        {
+            case QModbusDataUnit::Coils:
+                errorDesc = "Coil Write Failure";
+            break;
+
+            case QModbusDataUnit::HoldingRegisters:
+                errorDesc = "Register Write Failure";
+            break;
+
+            default:
+            break;
+        }
+
         QMessageBox::warning(this, windowTitle(), errorDesc);
         return;
     }
+
+    const auto request = createWriteRequest(data);
+    if(!request.isValid()) return;
+
+    // update data
+    ui->outputWidget->update(request);
 
     if(auto reply = _modbusClient->sendWriteRequest(data, params.Node))
     {
         if (!reply->isFinished())
         {
-            connect(reply, &QModbusReply::finished, this, [this, errorDesc, reply]()
-            {
-                if (reply->error() == QModbusDevice::ProtocolError)
-                {
-                    const QString exception = ModbusException(reply->rawResult().exceptionCode());
-                    const QString error = QString("%1. %2").arg(errorDesc, exception);
-                    QMessageBox::warning(this, windowTitle(), error);
-                }
-                else if (reply->error() != QModbusDevice::NoError)
-                {
-                    QMessageBox::warning(this, windowTitle(), QString("%1. %2").arg(errorDesc, reply->errorString()));
-                }
-                reply->deleteLater();
-            });
+            connect(reply, &QModbusReply::finished, this, &FormModSca::on_writeReply);
         }
         else
         {
@@ -386,14 +476,7 @@ void FormModSca::on_timeout()
         return;
     }
 
-    const auto request = createReadRequest();
-    if(!request.isValid()) return;
-
-    // update data
-    ui->outputWidget->update(request);
-    ui->statisticWidget->increaseNumberOfPolls();
-
-    sendReadRequest(request, dd.DeviceId);
+    sendReadRequest();
 }
 
 ///

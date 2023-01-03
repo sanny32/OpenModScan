@@ -6,6 +6,7 @@
 #include "ui_formmodsca.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
+#include "dialogwriteholdingregisterbits.h"
 
 ///
 /// \brief FormModSca::FormModSca
@@ -526,19 +527,25 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             ModbusWriteParams params = { node, addr, value };
             DialogWriteCoilRegister dlg(params, this);
             if(dlg.exec() == QDialog::Accepted)
-            {
                 writeRegister(pointType, params);
-            }
         }
         break;
 
         case QModbusDataUnit::HoldingRegisters:
         {
+            const auto mode = dataDisplayMode();
             ModbusWriteParams params = { node, addr, value };
-            DialogWriteHoldingRegister dlg(params, dataDisplayMode(), this);
-            if(dlg.exec() == QDialog::Accepted)
+            if(mode == DataDisplayMode::Binary)
             {
-                writeRegister(pointType, params);
+                DialogWriteHoldingRegisterBits dlg(params, this);
+                if(dlg.exec() == QDialog::Accepted)
+                    writeRegister(pointType, params);
+            }
+            else
+            {
+                DialogWriteHoldingRegister dlg(params, mode, this);
+                if(dlg.exec() == QDialog::Accepted)
+                    writeRegister(pointType, params);
             }
         }
         break;

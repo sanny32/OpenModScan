@@ -27,6 +27,7 @@ SOURCES += \
     dialogprotocolselections.cpp \
     dialogwritecoilregister.cpp \
     dialogwriteholdingregister.cpp \
+    dialogwriteholdingregisterbits.cpp \
     formmodsca.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     dialogprotocolselections.h \
     dialogwritecoilregister.h \
     dialogwriteholdingregister.h \
+    dialogwriteholdingregisterbits.h \
     displaydefinition.h \
     enums.h \
     formmodsca.h \
@@ -69,6 +71,7 @@ FORMS += \
     dialogprotocolselections.ui \
     dialogwritecoilregister.ui \
     dialogwriteholdingregister.ui \
+    dialogwriteholdingregisterbits.ui \
     formmodsca.ui \
     mainwindow.ui
 

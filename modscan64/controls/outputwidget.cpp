@@ -74,31 +74,39 @@ void OutputWidget::update(QModbusReply* reply)
         return;
     }
 
-    updateTrafficWidget(false, reply->rawResult());
+    const auto raw = reply->rawResult();
+    updateTrafficWidget(false, raw);
 
-    const auto data = reply->result();
-    if (reply->error() == QModbusDevice::NoError)
+    const auto fc = raw.functionCode();
+    if(fc == QModbusRequest::ReadCoils ||
+       fc == QModbusRequest::ReadDiscreteInputs ||
+       fc == QModbusRequest::ReadInputRegisters ||
+       fc == QModbusRequest::ReadHoldingRegisters)
     {
-        if(data.valueCount() != _displayDefinition.Length ||
-           data.startAddress() != _displayDefinition.PointAddress - 1)
+        const auto data = reply->result();
+        if (reply->error() == QModbusDevice::NoError)
         {
-            setStatus("Received Invalid Response MODBUS Query");
+            if(data.valueCount() != _displayDefinition.Length ||
+               data.startAddress() != _displayDefinition.PointAddress - 1)
+            {
+                setStatus("Received Invalid Response MODBUS Query");
+            }
+            else
+            {
+                setStatus(QString());
+                updateDataWidget(data);
+                _lastDataResult = data;
+            }
+        }
+        else if (reply->error() == QModbusDevice::ProtocolError)
+        {
+            const QString exception = ModbusException(raw.exceptionCode());
+            setStatus(exception);
         }
         else
         {
-            setStatus(QString());
-            updateDataWidget(data);
-            _lastDataResult = data;
+            setStatus(reply->errorString());
         }
-    }
-    else if (reply->error() == QModbusDevice::ProtocolError)
-    {
-        const QString exception = ModbusException(reply->rawResult().exceptionCode());
-        setStatus(exception);
-    }
-    else
-    {
-        setStatus(reply->errorString());
     }
 }
 

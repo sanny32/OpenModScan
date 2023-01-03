@@ -156,16 +156,20 @@ void FormModSca::on_writeReply()
     auto reply = qobject_cast<QModbusReply*>(sender());
     if (!reply) return;
 
+    ui->outputWidget->update(reply);
+
     if(reply->error() != QModbusDevice::NoError)
     {
         QString errorDesc;
-        switch(reply->result().registerType())
+        switch(reply->rawResult().functionCode())
         {
-            case QModbusDataUnit::Coils:
+            case QModbusRequest::WriteSingleCoil:
+            case QModbusRequest::WriteMultipleCoils:
                 errorDesc = "Coil Write Failure";
             break;
 
-            case QModbusDataUnit::HoldingRegisters:
+            case QModbusRequest::WriteSingleRegister:
+            case QModbusRequest::WriteMultipleRegisters:
                 errorDesc = "Register Write Failure";
             break;
 
@@ -195,26 +199,22 @@ void FormModSca::on_writeReply()
 ///
 QModbusRequest createReadRequest(const QModbusDataUnit& data)
 {
-    QModbusRequest request;
     switch (data.registerType())
     {
         case QModbusDataUnit::Coils:
-            request = QModbusRequest(QModbusRequest::ReadCoils, quint16(data.startAddress()), quint16(data.valueCount()));
-        break;
+            return QModbusRequest(QModbusRequest::ReadCoils, quint16(data.startAddress()), quint16(data.valueCount()));
         case QModbusDataUnit::DiscreteInputs:
-            request = QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(data.startAddress()), quint16(data.valueCount()));
+            return QModbusRequest(QModbusRequest::ReadDiscreteInputs, quint16(data.startAddress()), quint16(data.valueCount()));
         break;
         case QModbusDataUnit::InputRegisters:
-             request = QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(data.startAddress()), quint16(data.valueCount()));
-        break;
+            return QModbusRequest(QModbusRequest::ReadInputRegisters, quint16(data.startAddress()), quint16(data.valueCount()));
         case QModbusDataUnit::HoldingRegisters:
-            request = QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(data.startAddress()), quint16(data.valueCount()));
-        break;
+            return QModbusRequest(QModbusRequest::ReadHoldingRegisters, quint16(data.startAddress()), quint16(data.valueCount()));
         default:
         break;
     }
 
-    return request;
+    return QModbusRequest();
 }
 
 ///
@@ -254,24 +254,58 @@ void FormModSca::sendReadRequest()
 ///
 /// \brief createWriteRequest
 /// \param data
+/// \param useMultipleWriteFunc
 /// \return
 ///
-QModbusRequest createWriteRequest(const QModbusDataUnit& data)
+QModbusRequest createWriteRequest(const QModbusDataUnit& data, bool useMultipleWriteFunc)
 {
-    QModbusRequest request;
     switch (data.registerType())
     {
         case QModbusDataUnit::Coils:
-            request = QModbusRequest(QModbusRequest::WriteSingleCoil, quint16(data.startAddress()), quint16(data.valueCount()));
+        {
+            if (data.valueCount() == 1 && !useMultipleWriteFunc)
+            {
+                return QModbusRequest(QModbusRequest::WriteSingleCoil, quint16(data.startAddress()),
+                                      quint16((data.value(0) == 0u) ? 0x0000 : 0xFF00));
+            }
+
+            quint8 byteCount = data.valueCount() / 8;
+            if ((data.valueCount() % 8) != 0)
+                byteCount += 1;
+
+            quint8 address = 0;
+            QVector<quint8> bytes;
+            for (quint8 i = 0; i < byteCount; ++i)
+            {
+                quint8 byte = 0;
+                for (int currentBit = 0; currentBit < 8; ++currentBit)
+                    if (data.value(address++))
+                        byte |= (1U << currentBit);
+                bytes.append(byte);
+            }
+
+            return QModbusRequest(QModbusRequest::WriteMultipleCoils, quint16(data.startAddress()),
+                                  quint16(data.valueCount()), byteCount, bytes);
+        }
         break;
         case QModbusDataUnit::HoldingRegisters:
-            request = QModbusRequest(QModbusRequest::WriteSingleRegister, quint16(data.startAddress()), quint16(data.valueCount()));
+        {
+            if (data.valueCount() == 1 && !useMultipleWriteFunc)
+            {
+                return QModbusRequest(QModbusRequest::WriteSingleRegister, quint16(data.startAddress()),
+                                        data.value(0));
+            }
+
+            const quint8 byteCount = data.valueCount() * 2;
+            return QModbusRequest(QModbusRequest::WriteMultipleRegisters, quint16(data.startAddress()),
+                                     quint16(data.valueCount()), byteCount, data.values());
+        }
         break;
         default:
         break;
     }
 
-    return request;
+    return QModbusRequest();
 }
 
 ///
@@ -434,13 +468,14 @@ void FormModSca::writeRegister(QModbusDataUnit::RegisterType pointType, const Mo
         return;
     }
 
-    const auto request = createWriteRequest(data);
+    const bool useMultipleWriteFunc = _modbusClient->property("ForceModbus15And16Func").toBool();
+    const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
     // update data
     ui->outputWidget->update(request);
 
-    if(auto reply = _modbusClient->sendWriteRequest(data, params.Node))
+    if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
         if (!reply->isFinished())
         {

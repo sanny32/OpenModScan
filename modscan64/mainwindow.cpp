@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
+#include "dialogmaskwriteregiter.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -72,6 +73,10 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
+    ui->actionForceCoils->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionUserMsg->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
     ui->actionPrint->setEnabled(frm != nullptr);
 
@@ -253,6 +258,43 @@ void MainWindow::on_actionHexAddresses_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDisplayHexAddreses(!frm->displayHexAddreses());
+}
+
+///
+/// \brief MainWindow::on_actionForceCoils_triggered
+///
+void MainWindow::on_actionForceCoils_triggered()
+{
+
+}
+
+///
+/// \brief MainWindow::on_actionPresetRegs_triggered
+///
+void MainWindow::on_actionPresetRegs_triggered()
+{
+
+}
+
+///
+/// \brief MainWindow::on_actionMaskWrite_triggered
+///
+void MainWindow::on_actionMaskWrite_triggered()
+{
+    ModbusMaskWriteParams params = { 1, 1, 0xFFFF, 0};
+    DialogMaskWriteRegiter dlg(params, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _modbusClient.maskWriteRegister(params, 0);
+    }
+}
+
+///
+/// \brief MainWindow::on_actionUserMsg_triggered
+///
+void MainWindow::on_actionUserMsg_triggered()
+{
+
 }
 
 ///

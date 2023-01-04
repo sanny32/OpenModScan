@@ -23,6 +23,7 @@ public:
 
     void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId);
+    void maskWriteRegister(const ModbusMaskWriteParams& params, int requestId);
 
 signals:
     void modbusRequest(int requestId, const QModbusRequest& request);

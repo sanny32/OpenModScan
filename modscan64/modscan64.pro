@@ -24,6 +24,7 @@ SOURCES += \
     controls/pointtypecombobox.cpp \
     dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
+    dialogmaskwriteregiter.cpp \
     dialogprotocolselections.cpp \
     dialogwritecoilregister.cpp \
     dialogwriteholdingregister.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     controls/pointtypecombobox.h \
     dialogconnectiondetails.h \
     dialogdisplaydefinition.h \
+    dialogmaskwriteregiter.h \
     dialogprotocolselections.h \
     dialogwritecoilregister.h \
     dialogwriteholdingregister.h \
@@ -70,6 +72,7 @@ FORMS += \
     controls/statisticwidget.ui \
     dialogconnectiondetails.ui \
     dialogdisplaydefinition.ui \
+    dialogmaskwriteregiter.ui \
     dialogprotocolselections.ui \
     dialogwritecoilregister.ui \
     dialogwriteholdingregister.ui \

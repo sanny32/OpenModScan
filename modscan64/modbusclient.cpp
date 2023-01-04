@@ -373,6 +373,38 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
 }
 
 ///
+/// \brief ModbusClient::maskWriteRegister
+/// \param params
+/// \param requestId
+///
+void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int requestId)
+{
+    if(_modbusClient == nullptr ||
+       _modbusClient->state() != QModbusDevice::ConnectedState)
+    {
+        emit modbusWriteError("Mask Write Register Failure");
+        return;
+    }
+
+    QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(params.Address - 1), params.AndMask, params.OrMask);
+    emit modbusRequest(requestId, request);
+
+    if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
+    {
+        reply->setProperty("RequestId", requestId);
+        if (!reply->isFinished())
+        {
+            connect(reply, &QModbusReply::finished, this, &ModbusClient::on_writeReply);
+        }
+        else
+        {
+            // broadcast replies return immediately
+            reply->deleteLater();
+        }
+    }
+}
+
+///
 /// \brief ModbusClient::isValid
 /// \return
 ///
@@ -420,7 +452,6 @@ void ModbusClient::on_writeReply()
     {
         case QModbusRequest::WriteSingleCoil:
         case QModbusRequest::WriteMultipleCoils:
-        {
             if (reply->error() == QModbusDevice::ProtocolError)
             {
                 const QString exception = ModbusException(raw.exceptionCode());
@@ -430,12 +461,10 @@ void ModbusClient::on_writeReply()
             {
                 emit modbusWriteError(QString("Coil Write Failure. %1").arg(reply->errorString()));
             }
-        }
         break;
 
         case QModbusRequest::WriteSingleRegister:
         case QModbusRequest::WriteMultipleRegisters:
-        {
             if (reply->error() == QModbusDevice::ProtocolError)
             {
                 const QString exception = ModbusException(raw.exceptionCode());
@@ -445,7 +474,18 @@ void ModbusClient::on_writeReply()
             {
                 emit modbusWriteError(QString("Register Write Failure. %1").arg(reply->errorString()));
             }
-        }
+        break;
+
+        case QModbusRequest::MaskWriteRegister:
+            if (reply->error() == QModbusDevice::ProtocolError)
+            {
+                const QString exception = ModbusException(raw.exceptionCode());
+                emit modbusWriteError(QString("Mask Register Write Failure. %1").arg(exception));
+            }
+            else if(reply->error() != QModbusDevice::NoError)
+            {
+                emit modbusWriteError(QString("Mask Register Write Failure. %1").arg(reply->errorString()));
+            }
         break;
 
     default:

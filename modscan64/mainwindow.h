@@ -41,6 +41,10 @@ private slots:
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
     void on_actionHexAddresses_triggered();
+    void on_actionForceCoils_triggered();
+    void on_actionPresetRegs_triggered();
+    void on_actionMaskWrite_triggered();
+    void on_actionUserMsg_triggered();
     void on_actionResetCtrs_triggered();
     void on_awake();
 

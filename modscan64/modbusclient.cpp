@@ -191,12 +191,12 @@ QModbusRequest createWriteRequest(const QModbusDataUnit& data, bool useMultipleW
 }
 
 ///
-/// \brief createBoolDataUnit
+/// \brief createCoilsDataUnit
 /// \param newStartAddress
 /// \param value
 /// \return
 ///
-QModbusDataUnit createBoolDataUnit(int newStartAddress, bool value)
+QModbusDataUnit createCoilsDataUnit(int newStartAddress, bool value)
 {
     auto data = QModbusDataUnit(QModbusDataUnit::Coils, newStartAddress, 1);
     data.setValue(0, value);
@@ -205,12 +205,26 @@ QModbusDataUnit createBoolDataUnit(int newStartAddress, bool value)
 }
 
 ///
-/// \brief createUIntDataUnit
+/// \brief createCoilsDataUnit
+/// \param newStartAddress
+/// \param values
+/// \return
+///
+QModbusDataUnit createCoilsDataUnit(int newStartAddress, const QVector<quint16>& values)
+{
+    auto data = QModbusDataUnit(QModbusDataUnit::Coils, newStartAddress, values.count());
+    data.setValues(values);
+
+    return data;
+}
+
+///
+/// \brief createHoldingRegistersDataUint
 /// \param newStartAddress
 /// \param value
 /// \return
 ///
-QModbusDataUnit createUIntDataUnit(int newStartAddress, quint16 value)
+QModbusDataUnit createHoldingRegistersDataUint(int newStartAddress, quint16 value)
 {
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 1);
     data.setValue(0, value);
@@ -219,13 +233,13 @@ QModbusDataUnit createUIntDataUnit(int newStartAddress, quint16 value)
 }
 
 ///
-/// \brief createFloatDataUint
+/// \brief createHoldingRegistersDataUint
 /// \param newStartAddress
 /// \param value
 /// \param inv
 /// \return
 ///
-QModbusDataUnit createFloatDataUint(int newStartAddress, float value, bool inv)
+QModbusDataUnit createHoldingRegistersDataUint(int newStartAddress, float value, bool inv)
 {
     union {
        quint16 asUint16[2];
@@ -249,13 +263,13 @@ QModbusDataUnit createFloatDataUint(int newStartAddress, float value, bool inv)
 }
 
 ///
-/// \brief createDoubleDataUint
+/// \brief createHoldingRegistersDataUint
 /// \param newStartAddress
 /// \param value
 /// \param inv
 /// \return
 ///
-QModbusDataUnit createDoubleDataUint(int newStartAddress, double value, bool inv)
+QModbusDataUnit createHoldingRegistersDataUint(int newStartAddress, double value, bool inv)
 {
     union {
        quint16 asUint16[4];
@@ -294,7 +308,10 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     switch (pointType)
     {
         case QModbusDataUnit::Coils:
-            data = createBoolDataUnit(params.Address - 1, params.Value.toBool());
+            if(params.Value.userType() == qMetaTypeId<QVector<quint16>>())
+                data = createCoilsDataUnit(params.Address - 1, params.Value.value<QVector<quint16>>());
+            else
+                data = createCoilsDataUnit(params.Address - 1, params.Value.toBool());
         break;
 
         case QModbusDataUnit::HoldingRegisters:
@@ -304,23 +321,23 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                 case DataDisplayMode::Decimal:
                 case DataDisplayMode::Integer:
                 case DataDisplayMode::Hex:
-                    data = createUIntDataUnit(params.Address - 1, params.Value.toUInt());
+                    data = createHoldingRegistersDataUint(params.Address - 1, params.Value.toUInt());
                 break;
 
                 case DataDisplayMode::FloatingPt:
-                    data = createFloatDataUint(params.Address - 1, params.Value.toFloat(), false);
+                    data = createHoldingRegistersDataUint(params.Address - 1, params.Value.toFloat(), false);
                 break;
 
                 case DataDisplayMode::SwappedFP:
-                    data = createFloatDataUint(params.Address - 1, params.Value.toFloat(), true);
+                    data = createHoldingRegistersDataUint(params.Address - 1, params.Value.toFloat(), true);
                 break;
 
                 case DataDisplayMode::DblFloat:
-                    data = createDoubleDataUint(params.Address - 1, params.Value.toDouble(), false);
+                    data = createHoldingRegistersDataUint(params.Address - 1, params.Value.toDouble(), false);
                 break;
 
                 case DataDisplayMode::SwappedDbl:
-                    data = createDoubleDataUint(params.Address - 1, params.Value.toDouble(), true);
+                    data = createHoldingRegistersDataUint(params.Address - 1, params.Value.toDouble(), true);
                 break;
             }
         break;

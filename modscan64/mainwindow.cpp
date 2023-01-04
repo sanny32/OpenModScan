@@ -286,7 +286,7 @@ void MainWindow::on_actionForceCoils_triggered()
     DialogForceMultipleCoils dlg(params, dd.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-
+        _modbusClient.writeRegister(QModbusDataUnit::Coils, params, 0);
     }
 }
 

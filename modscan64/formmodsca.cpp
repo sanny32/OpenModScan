@@ -33,6 +33,7 @@ FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
     ui->lineEditDeviceId->setValue(1);
 
     ui->outputWidget->setup(displayDefinition());
+    ui->outputWidget->setFocus();
 
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);

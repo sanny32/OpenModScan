@@ -18,6 +18,7 @@ DialogProtocolSelections::DialogProtocolSelections(ModbusProtocolSelections& mps
     ui->spinBoxRetries->setValue(mps.NumberOfRetries);
     ui->lineEditDelay->setValue(mps.InterFrameDelay);
     ui->checkBoxForce->setChecked(mps.ForceModbus15And16Func);
+    ui->buttonBox->setFocus();
 }
 
 ///

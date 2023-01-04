@@ -23,6 +23,8 @@ DialogDisplayDefinition::DialogDisplayDefinition(FormModSca* parent) :
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
+
+    ui->buttonBox->setFocus();
 }
 
 ///

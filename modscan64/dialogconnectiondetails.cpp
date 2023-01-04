@@ -35,6 +35,8 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     {
         ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, cd.SerialParams.PortName);
     }
+
+    ui->buttonBox->setFocus();
 }
 
 ///

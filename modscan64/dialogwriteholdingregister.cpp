@@ -55,6 +55,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setValue(params.Value.toDouble());
         break;
     }
+    ui->buttonBox->setFocus();
 }
 
 ///

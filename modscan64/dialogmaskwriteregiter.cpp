@@ -25,6 +25,7 @@ DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, QW
         auto ctrlOr = findChild<QCheckBox*>(QString("checkBoxOr%1").arg(i));
         if(ctrlOr) ctrlOr->setChecked(params.OrMask >> i & 1);
     }
+    ui->buttonBox->setFocus();
 }
 
 ///

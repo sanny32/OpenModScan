@@ -19,6 +19,7 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, QWid
     ui->lineEditAddress->setValue(params.Address);
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
+    ui->buttonBox->setFocus();
 }
 
 ///

@@ -25,6 +25,7 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
         auto ctrl = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
         if(ctrl) ctrl->setChecked(value >> i & 1);
     }
+    ui->buttonBox->setFocus();
 }
 
 ///

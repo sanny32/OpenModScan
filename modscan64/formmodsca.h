@@ -42,7 +42,7 @@ public:
 private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(const QModbusRequest& request);
+    void on_modbusRequest(int requestId, const QModbusRequest& request);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -52,6 +52,7 @@ private slots:
 private:
     Ui::FormModSca *ui;
     QTimer _timer;
+    int _formId;
     ModbusClient& _modbusClient;
 };
 

@@ -105,8 +105,9 @@ QModbusRequest createReadRequest(const QModbusDataUnit& data)
 /// \param startAddress
 /// \param valueCount
 /// \param server
+/// \param requestId
 ///
-void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server)
+void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId)
 {
     if(_modbusClient == nullptr || state() != QModbusDevice::ConnectedState)
     {
@@ -117,9 +118,10 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
     const auto request = createReadRequest(dataUnit);
     if(!request.isValid()) return;
 
-    emit modbusRequest(request);
+    emit modbusRequest(requestId, request);
     if(auto reply = _modbusClient->sendReadRequest(dataUnit, server))
     {
+        reply->setProperty("RequestId", requestId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_readReply);
@@ -284,8 +286,9 @@ QModbusDataUnit createDoubleDataUint(int newStartAddress, double value, bool inv
 /// \brief ModbusClient::writeRegister
 /// \param pointType
 /// \param params
+/// \param requestId
 ///
-void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
+void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId)
 {
     QModbusDataUnit data;
     switch (pointType)
@@ -352,10 +355,11 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
-    emit modbusRequest(request);
+    emit modbusRequest(requestId, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
+        reply->setProperty("RequestId", requestId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_writeReply);

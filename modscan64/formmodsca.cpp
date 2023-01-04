@@ -14,12 +14,13 @@
 FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
+    ,_formId(num)
     ,_modbusClient(client)
 {
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
-    setWindowTitle(QString("ModSca%1").arg(num));
+    setWindowTitle(QString("ModSca%1").arg(_formId));
 
     ui->lineEditAddress->setPaddingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
@@ -161,7 +162,7 @@ void FormModSca::on_timeout()
         return;
     }
 
-    _modbusClient.sendReadRequest(dd.PointType, dd.PointAddress - 1, dd.Length, dd.DeviceId);
+    _modbusClient.sendReadRequest(dd.PointType, dd.PointAddress - 1, dd.Length, dd.DeviceId, _formId);
 }
 
 ///
@@ -171,6 +172,12 @@ void FormModSca::on_timeout()
 void FormModSca::on_modbusReply(QModbusReply* reply)
 {
     if(!reply) return;
+
+    if(_formId != reply->property("RequestId").toInt())
+    {
+        return;
+    }
+
     ui->outputWidget->update(reply);
 
     if(reply->error() == QModbusDevice::NoError)
@@ -181,11 +188,16 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
 
 ///
 /// \brief FormModSca::on_modbusRequest
+/// \param requestId
 /// \param request
 ///
-void FormModSca::on_modbusRequest(const QModbusRequest& request)
+void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
 {
-    // update data
+    if(requestId != _formId)
+    {
+        return;
+    }
+
     ui->outputWidget->update(request);
     ui->statisticWidget->increaseNumberOfPolls();
 }
@@ -238,7 +250,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             ModbusWriteParams params = { node, addr, value, mode };
             DialogWriteCoilRegister dlg(params, this);
             if(dlg.exec() == QDialog::Accepted)
-                _modbusClient.writeRegister(pointType, params);
+                _modbusClient.writeRegister(pointType, params, _formId);
         }
         break;
 
@@ -249,13 +261,13 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
                 if(dlg.exec() == QDialog::Accepted)
-                    _modbusClient.writeRegister(pointType, params);
+                    _modbusClient.writeRegister(pointType, params, _formId);
             }
             else
             {
                 DialogWriteHoldingRegister dlg(params, mode, this);
                 if(dlg.exec() == QDialog::Accepted)
-                    _modbusClient.writeRegister(pointType, params);
+                    _modbusClient.writeRegister(pointType, params, _formId);
             }
         }
         break;

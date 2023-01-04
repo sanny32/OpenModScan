@@ -21,11 +21,11 @@ public:
     bool isValid() const;
     QModbusDevice::State state() const;
 
-    void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server);
-    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
+    void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId);
+    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId);
 
 signals:
-    void modbusRequest(const QModbusRequest& request);
+    void modbusRequest(int requestId, const QModbusRequest& request);
     void modbusReply(QModbusReply* reply);
     void modbusWriteError(const QString& error);
     void modbusConnectionError(const QString& error);

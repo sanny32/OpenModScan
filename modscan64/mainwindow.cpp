@@ -281,6 +281,7 @@ void MainWindow::on_actionForceCoils_triggered()
     ModbusWriteParams params;
     params.Node = dd.DeviceId;
     params.Address = dd.PointAddress;
+    params.Value = QVariant::fromValue(frm->data());
 
     DialogForceMultipleCoils dlg(params, dd.Length, this);
     if(dlg.exec() == QDialog::Accepted)

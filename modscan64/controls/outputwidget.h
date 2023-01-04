@@ -22,6 +22,8 @@ public:
     explicit OutputWidget(QWidget *parent = nullptr);
     ~OutputWidget();
 
+    QVector<quint16> data() const;
+
     void setup(const DisplayDefinition& dd);
 
     DisplayMode displayMode() const;
@@ -34,6 +36,7 @@ public:
     void setDisplayHexAddreses(bool on);
 
     void setStatus(const QString& status);
+
     void update(const QModbusRequest& request);
     void update(QModbusReply* reply);
 
@@ -55,7 +58,7 @@ private:
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     DisplayDefinition _displayDefinition;
-    QModbusDataUnit _lastDataResult;
+    QModbusDataUnit _lastData;
 };
 
 #endif // OUTPUTWIDGET_H

@@ -25,6 +25,8 @@ public:
     explicit FormModSca(int num, ModbusClient& client, MainWindow* parent);
     ~FormModSca();
 
+    QVector<quint16> data() const;
+
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);
 
@@ -51,8 +53,8 @@ private slots:
 
 private:
     Ui::FormModSca *ui;
-    QTimer _timer;
     int _formId;
+    QTimer _timer;
     ModbusClient& _modbusClient;
 };
 

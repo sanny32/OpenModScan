@@ -51,6 +51,15 @@ FormModSca::~FormModSca()
 }
 
 ///
+/// \brief FormModSca::data
+/// \return
+///
+QVector<quint16> FormModSca::data() const
+{
+    return ui->outputWidget->data();
+}
+
+///
 /// \brief FormModSca::displayDefinition
 /// \return
 ///

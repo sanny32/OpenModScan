@@ -2,6 +2,7 @@
 #define DIALOGFORCEMULTIPLECOILS_H
 
 #include <QDialog>
+#include <QTableWidgetItem>
 #include "displaydefinition.h"
 #include "modbuswriteparams.h"
 
@@ -19,8 +20,17 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_pushButton0_clicked();
+    void on_pushButton1_clicked();
+    void on_tableWidget_itemDoubleClicked(QTableWidgetItem *item);
+
+private:
+    void updateTableWidget();
+
 private:
     Ui::DialogForceMultipleCoils *ui;
+    QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
 };
 

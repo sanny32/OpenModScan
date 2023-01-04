@@ -35,6 +35,15 @@ OutputWidget::~OutputWidget()
 }
 
 ///
+/// \brief OutputWidget::data
+/// \return
+///
+QVector<quint16> OutputWidget::data() const
+{
+    return _lastData.values();
+}
+
+///
 /// \brief OutputWidget::setup
 /// \param dd
 ///
@@ -60,7 +69,7 @@ bool OutputWidget::displayHexAddreses() const
 void OutputWidget::setDisplayHexAddreses(bool on)
 {
     _displayHexAddreses = on;
-    updateDataWidget(_lastDataResult);
+    updateDataWidget(_lastData);
 }
 
 ///
@@ -115,7 +124,7 @@ void OutputWidget::update(QModbusReply* reply)
             {
                 setStatus(QString());
                 updateDataWidget(data);
-                _lastDataResult = data;
+                _lastData = data;
             }
         }
         else if (reply->error() == QModbusDevice::ProtocolError)
@@ -174,7 +183,7 @@ DataDisplayMode OutputWidget::dataDisplayMode() const
 void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
-    updateDataWidget(_lastDataResult);
+    updateDataWidget(_lastData);
 }
 
 ///

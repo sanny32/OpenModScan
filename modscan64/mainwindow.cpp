@@ -3,6 +3,7 @@
 #include "dialogconnectiondetails.h"
 #include "dialogmaskwriteregiter.h"
 #include "dialogsetuppresetdata.h"
+#include "dialogforcemultiplecoils.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -269,10 +270,19 @@ void MainWindow::on_actionForceCoils_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    auto params = frm->displayDefinition();
-    params.PointType = QModbusDataUnit::Coils;
+    auto dd = frm->displayDefinition();
+    dd.PointType = QModbusDataUnit::Coils;
 
-    DialogSetupPresetData dlg(params, this);
+    {
+        DialogSetupPresetData dlg(dd, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Node = dd.DeviceId;
+    params.Address = dd.PointAddress;
+
+    DialogForceMultipleCoils dlg(params, dd.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
 
@@ -287,10 +297,10 @@ void MainWindow::on_actionPresetRegs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    auto params = frm->displayDefinition();
-    params.PointType = QModbusDataUnit::HoldingRegisters;
+    auto dd = frm->displayDefinition();
+    dd.PointType = QModbusDataUnit::HoldingRegisters;
 
-    DialogSetupPresetData dlg(params, this);
+    DialogSetupPresetData dlg(dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
 

@@ -24,6 +24,7 @@ SOURCES += \
     controls/pointtypecombobox.cpp \
     dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
+    dialogforcemultiplecoils.cpp \
     dialogmaskwriteregiter.cpp \
     dialogprotocolselections.cpp \
     dialogsetuppresetdata.cpp \
@@ -51,6 +52,7 @@ HEADERS += \
     controls/pointtypecombobox.h \
     dialogconnectiondetails.h \
     dialogdisplaydefinition.h \
+    dialogforcemultiplecoils.h \
     dialogmaskwriteregiter.h \
     dialogprotocolselections.h \
     dialogsetuppresetdata.h \
@@ -74,6 +76,7 @@ FORMS += \
     controls/statisticwidget.ui \
     dialogconnectiondetails.ui \
     dialogdisplaydefinition.ui \
+    dialogforcemultiplecoils.ui \
     dialogmaskwriteregiter.ui \
     dialogprotocolselections.ui \
     dialogsetuppresetdata.ui \

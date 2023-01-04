@@ -1,3 +1,4 @@
+#include <QtMath>
 #include "dialogforcemultiplecoils.h"
 #include "ui_dialogforcemultiplecoils.h"
 
@@ -95,7 +96,7 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     ui->tableWidget->clear();
     ui->tableWidget->setColumnCount(columns);
-    ui->tableWidget->setRowCount(ceil(length / (double)columns));
+    ui->tableWidget->setRowCount(qCeil(length / (double)columns));
 
     for(int i = 0; i < ui->tableWidget->columnCount(); i++)
     {

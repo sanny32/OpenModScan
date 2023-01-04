@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QModbusClient>
 #include "enums.h"
+#include "modbusclient.h"
 #include "displaydefinition.h"
 #include "modbuswriteparams.h"
 
@@ -22,7 +22,7 @@ class FormModSca : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormModSca(int num, QModbusClient* client, MainWindow* parent);
+    explicit FormModSca(int num, ModbusClient& client, MainWindow* parent);
     ~FormModSca();
 
     DisplayDefinition displayDefinition() const;
@@ -41,8 +41,8 @@ public:
 
 private slots:
     void on_timeout();
-    void on_readReply();
-    void on_writeReply();
+    void on_modbusReply(QModbusReply* reply);
+    void on_modbusRequest(const QModbusRequest& request);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -50,13 +50,9 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
 
 private:
-    void sendReadRequest();
-    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
-
-private:
     Ui::FormModSca *ui;
     QTimer _timer;
-    QModbusClient* _modbusClient;
+    ModbusClient& _modbusClient;
 };
 
 #endif // FORMMODSCA_H

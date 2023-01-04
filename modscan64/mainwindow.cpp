@@ -1,6 +1,4 @@
 #include <QtWidgets>
-#include <QModbusTcpClient>
-#include <QModbusRtuSerialMaster>
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
 #include "mainwindow.h"
@@ -22,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenus);
+    connect(&_modbusClient, &ModbusClient::modbusWriteError, this, &MainWindow::on_modbusWriteError);
+    connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
 
     ui->actionNew->trigger();
 }
@@ -54,7 +54,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::on_awake()
 {
     auto frm = currentMdiChild();
-    const auto state = _modbusClient ? _modbusClient->state() : QModbusDevice::UnconnectedState;
+    const auto state = _modbusClient.state();
 
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
@@ -96,6 +96,24 @@ void MainWindow::on_awake()
 }
 
 ///
+/// \brief MainWindow::on_modbusWriteError
+/// \param error
+///
+void MainWindow::on_modbusWriteError(const QString& error)
+{
+    QMessageBox::warning(this, windowTitle(), error);
+}
+
+///
+/// \brief MainWindow::on_modbusConnectionError
+/// \param error
+///
+void MainWindow::on_modbusConnectionError(const QString& error)
+{
+    QMessageBox::warning(this, windowTitle(), error);
+}
+
+///
 /// \brief MainWindow::on_actionNew_triggered
 ///
 void MainWindow::on_actionNew_triggered()
@@ -113,7 +131,6 @@ void MainWindow::on_actionConnect_triggered()
     DialogConnectionDetails dlg(_settings.ConnectionParams, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        setupModbusClient(_settings.ConnectionParams);
         ui->actionQuickConnect->trigger();
     }
 }
@@ -123,10 +140,7 @@ void MainWindow::on_actionConnect_triggered()
 ///
 void MainWindow::on_actionDisconnect_triggered()
 {
-    if(_modbusClient != nullptr)
-    {
-        _modbusClient->disconnectDevice();
-    }
+    _modbusClient.disconnectDevice();
 }
 
 ///
@@ -134,10 +148,7 @@ void MainWindow::on_actionDisconnect_triggered()
 ///
 void MainWindow::on_actionQuickConnect_triggered()
 {
-    if(_modbusClient == nullptr)
-        setupModbusClient(_settings.ConnectionParams);
-
-    _modbusClient->connectDevice();
+    _modbusClient.connectDevice(_settings.ConnectionParams);
 }
 
 ///
@@ -258,74 +269,6 @@ void MainWindow::on_actionResetCtrs_triggered()
 ///
 void MainWindow::updateMenus()
 {
-}
-
-///
-/// \brief MainWindow::setupModbusClient
-/// \param cd
-///
-void MainWindow::setupModbusClient(const ConnectionDetails& cd)
-{
-    if(_modbusClient != nullptr)
-    {
-        delete _modbusClient;
-        _modbusClient = nullptr;
-    }
-
-    switch(cd.Type)
-    {
-        case ConnectionType::Tcp:
-        {
-            _modbusClient = new QModbusTcpClient(this);
-            _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
-            _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
-            _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
-            _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
-            _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
-
-            emit modbusClientChanged(_modbusClient);
-        }
-        break;
-
-        case ConnectionType::Serial:
-            _modbusClient = new QModbusRtuSerialMaster(this);
-            _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
-            _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
-            _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
-            ((QModbusRtuSerialMaster*)_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
-            _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
-            _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
-            _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
-            _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
-            _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
-            ((QSerialPort*)_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
-
-            emit modbusClientChanged(_modbusClient);
-        break;
-    }
-
-    connect(_modbusClient, &QModbusDevice::stateChanged, this,
-            [&](QModbusDevice::State state)
-            {
-                if(cd.Type == ConnectionType::Serial &&
-                   state == QModbusDevice::ConnectedState)
-                {
-                    auto port = (QSerialPort*)_modbusClient->device();
-                    port->setDataTerminalReady(cd.SerialParams.SetDTR);
-                    if(cd.SerialParams.FlowControl != QSerialPort::HardwareControl)
-                        port->setRequestToSend(cd.SerialParams.SetRTS);
-                }
-            });
-
-    connect(_modbusClient, &QModbusDevice::errorOccurred, this,
-            [&](QModbusDevice::Error error)
-            {
-                if(error == QModbusDevice::ConnectionError)
-                {
-                    const auto errorString = QString("Connection error. %1").arg(_modbusClient->errorString());
-                    QMessageBox::warning(this, windowTitle(), errorString);
-                }
-            });
 }
 
 ///

@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QModbusClient>
+#include "modbusclient.h"
 #include "appsettings.h"
 #include "formmodsca.h"
 
@@ -44,10 +44,12 @@ private slots:
     void on_actionResetCtrs_triggered();
     void on_awake();
 
+    void on_modbusWriteError(const QString& error);
+    void on_modbusConnectionError(const QString& error);
+
 private:
     void updateMenus();
     void updateDataDisplayMode(DataDisplayMode mode);
-    void setupModbusClient(const ConnectionDetails& cd);
 
     FormModSca* createMdiChild();
     FormModSca* currentMdiChild();
@@ -57,6 +59,6 @@ private:
 
 private:
     AppSettings _settings;
-    QModbusClient* _modbusClient;
+    ModbusClient _modbusClient;
 };
 #endif // MAINWINDOW_H

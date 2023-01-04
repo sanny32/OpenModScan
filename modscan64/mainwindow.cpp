@@ -2,6 +2,7 @@
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
 #include "dialogmaskwriteregiter.h"
+#include "dialogsetuppresetdata.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -265,7 +266,17 @@ void MainWindow::on_actionHexAddresses_triggered()
 ///
 void MainWindow::on_actionForceCoils_triggered()
 {
+    auto frm = currentMdiChild();
+    if(!frm) return;
 
+    auto params = frm->displayDefinition();
+    params.PointType = QModbusDataUnit::Coils;
+
+    DialogSetupPresetData dlg(params, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+
+    }
 }
 
 ///
@@ -273,7 +284,17 @@ void MainWindow::on_actionForceCoils_triggered()
 ///
 void MainWindow::on_actionPresetRegs_triggered()
 {
+    auto frm = currentMdiChild();
+    if(!frm) return;
 
+    auto params = frm->displayDefinition();
+    params.PointType = QModbusDataUnit::HoldingRegisters;
+
+    DialogSetupPresetData dlg(params, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+
+    }
 }
 
 ///

@@ -26,6 +26,7 @@ SOURCES += \
     dialogdisplaydefinition.cpp \
     dialogmaskwriteregiter.cpp \
     dialogprotocolselections.cpp \
+    dialogsetuppresetdata.cpp \
     dialogwritecoilregister.cpp \
     dialogwriteholdingregister.cpp \
     dialogwriteholdingregisterbits.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     dialogdisplaydefinition.h \
     dialogmaskwriteregiter.h \
     dialogprotocolselections.h \
+    dialogsetuppresetdata.h \
     dialogwritecoilregister.h \
     dialogwriteholdingregister.h \
     dialogwriteholdingregisterbits.h \
@@ -74,6 +76,7 @@ FORMS += \
     dialogdisplaydefinition.ui \
     dialogmaskwriteregiter.ui \
     dialogprotocolselections.ui \
+    dialogsetuppresetdata.ui \
     dialogwritecoilregister.ui \
     dialogwriteholdingregister.ui \
     dialogwriteholdingregisterbits.ui \

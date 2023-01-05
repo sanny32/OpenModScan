@@ -4,6 +4,7 @@
 #include "dialogmaskwriteregiter.h"
 #include "dialogsetuppresetdata.h"
 #include "dialogforcemultiplecoils.h"
+#include "dialogforcemultipleregisters.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -270,18 +271,22 @@ void MainWindow::on_actionForceCoils_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    auto dd = frm->displayDefinition();
-    dd.PointType = QModbusDataUnit::Coils;
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length };
 
     {
-        DialogSetupPresetData dlg(dd, this);
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
 
     ModbusWriteParams params;
-    params.Node = dd.DeviceId;
-    params.Address = dd.PointAddress;
-    params.Value = QVariant::fromValue(frm->data());
+    params.Node = presetParams.SlaveAddress;
+    params.Address = presetParams.PointAddress;
+
+    if(dd.PointType == QModbusDataUnit::Coils)
+    {
+        params.Value = QVariant::fromValue(frm->data());
+    }
 
     DialogForceMultipleCoils dlg(params, dd.Length, this);
     if(dlg.exec() == QDialog::Accepted)
@@ -298,13 +303,28 @@ void MainWindow::on_actionPresetRegs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    auto dd = frm->displayDefinition();
-    dd.PointType = QModbusDataUnit::HoldingRegisters;
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length };
 
-    DialogSetupPresetData dlg(dd, this);
+    {
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Node = presetParams.SlaveAddress;
+    params.Address = presetParams.PointAddress;
+    params.DisplayMode = frm->dataDisplayMode();
+
+    if(dd.PointType == QModbusDataUnit::HoldingRegisters)
+    {
+        params.Value = QVariant::fromValue(frm->data());
+    }
+
+    DialogForceMultipleRegisters dlg(params, dd.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-
+        //_modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
     }
 }
 

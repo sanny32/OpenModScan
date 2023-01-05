@@ -21,6 +21,7 @@ public:
 
     explicit NumericLineEdit(QWidget* parent = nullptr);
     explicit NumericLineEdit(const QString&, QWidget *parent = nullptr);
+    explicit NumericLineEdit(InputMode mode, QWidget *parent = nullptr);
 
     template<typename T>
     T value() const { return _value.value<T>(); }

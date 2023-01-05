@@ -249,33 +249,28 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
     {
         case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:
-            numEdit = new NumericLineEdit(ui->tableWidget);
+            numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setPaddingZeroes(true);
-            numEdit->setInputMode(NumericLineEdit::HexMode);
             numEdit->setValue(_data[idx]);
         break;
 
         case DataDisplayMode::Decimal:
-            numEdit = new NumericLineEdit(ui->tableWidget);
+            numEdit = new NumericLineEdit(NumericLineEdit::IntMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
-            numEdit->setInputMode(NumericLineEdit::IntMode);
             numEdit->setValue(_data[idx]);
         break;
 
         case DataDisplayMode::Integer:
-            numEdit = new NumericLineEdit(ui->tableWidget);
+            numEdit = new NumericLineEdit(NumericLineEdit::IntMode, ui->tableWidget);
             numEdit->setInputRange(SHRT_MIN, SHRT_MAX);
-            numEdit->setInputMode(NumericLineEdit::IntMode);
             numEdit->setValue((qint16)_data[idx]);
         break;
 
         case DataDisplayMode::FloatingPt:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                numEdit = new NumericLineEdit(ui->tableWidget);
-                numEdit->setInputRange(-FLT_MAX, FLT_MAX);
-                numEdit->setInputMode(NumericLineEdit::FloatMode);
+                numEdit = new NumericLineEdit(NumericLineEdit::FloatMode, ui->tableWidget);
                 numEdit->setValue(makeFloat(_data[idx], _data[idx + 1]));
             }
         break;
@@ -283,9 +278,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::SwappedFP:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                numEdit = new NumericLineEdit(ui->tableWidget);
-                numEdit->setInputRange(-FLT_MAX, FLT_MAX);
-                numEdit->setInputMode(NumericLineEdit::FloatMode);
+                numEdit = new NumericLineEdit(NumericLineEdit::FloatMode, ui->tableWidget);
                 numEdit->setValue(makeFloat(_data[idx + 1], _data[idx]));
             }
         break;
@@ -293,9 +286,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::DblFloat:
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
-                numEdit = new NumericLineEdit(ui->tableWidget);
-                numEdit->setInputRange(-DBL_MAX, DBL_MAX);
-                numEdit->setInputMode(NumericLineEdit::DoubleMode);
+                numEdit = new NumericLineEdit(NumericLineEdit::DoubleMode, ui->tableWidget);
                 numEdit->setValue(makeDouble(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3]));
             }
         break;
@@ -303,9 +294,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::SwappedDbl:
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
-                numEdit = new NumericLineEdit(ui->tableWidget);
-                numEdit->setInputRange(-DBL_MAX, DBL_MAX);
-                numEdit->setInputMode(NumericLineEdit::DoubleMode);
+                numEdit = new NumericLineEdit(NumericLineEdit::DoubleMode, ui->tableWidget);
                 numEdit->setValue(makeDouble(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx]));
             }
         break;

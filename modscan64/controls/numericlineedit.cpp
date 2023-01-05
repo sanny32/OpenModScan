@@ -41,6 +41,41 @@ NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
 }
 
 ///
+/// \brief NumericLineEdit::NumericLineEdit
+/// \param mode
+/// \param parent
+///
+NumericLineEdit::NumericLineEdit(NumericLineEdit::InputMode mode, QWidget *parent)
+    : QLineEdit(parent)
+    ,_paddingZeroes(false)
+    ,_paddingZeroWidth(0)
+{
+    switch(mode)
+    {
+        case IntMode:
+            setInputRange(INT_MIN, INT_MAX);
+        break;
+
+        case HexMode:
+            setInputRange(INT_MIN, INT_MAX);
+        break;
+
+        case FloatMode:
+            setInputRange(-FLT_MAX, FLT_MAX);
+        break;
+
+        case DoubleMode:
+            setInputRange(-DBL_MAX, DBL_MAX);
+        break;
+    }
+    setInputMode(mode);
+
+    connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
+    connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
+    connect(this, &NumericLineEdit::rangeChanged, this, &NumericLineEdit::on_rangeChanged);
+}
+
+///
 /// \brief NumericLineEdit::paddingZeroes
 /// \return
 ///

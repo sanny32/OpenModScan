@@ -439,79 +439,47 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         const auto addr = _displayHexAddreses ?
                     QStringLiteral("%1H").arg(itemData.Address, 4, 16, QLatin1Char('0')) :
                     QStringLiteral("%1").arg(itemData.Address, 4, 10, QLatin1Char('0'));
-        const auto value1 = data.value(i);
+        const auto value = data.value(i);
         const auto format = "%1%2: %3                  ";
 
         QString valstr;
-        if(_displayDefinition.PointType == QModbusDataUnit::Coils ||
-           _displayDefinition.PointType == QModbusDataUnit::DiscreteInputs)
+        switch(_dataDisplayMode)
         {
-            valstr = formatBinatyValue(_displayDefinition.PointType, value1, itemData.Value);
-        }
-        else
-        {
-            switch(_dataDisplayMode)
-            {
-                case DataDisplayMode::Binary:
-                    valstr = formatBinatyValue(_displayDefinition.PointType, value1, itemData.Value);
-                break;
+            case DataDisplayMode::Binary:
+                valstr = formatBinatyValue(_displayDefinition.PointType, value, itemData.Value);
+            break;
 
-                case DataDisplayMode::Decimal:
-                    valstr = formatDecimalValue(_displayDefinition.PointType, value1, itemData.Value);
-                break;
+            case DataDisplayMode::Decimal:
+                valstr = formatDecimalValue(_displayDefinition.PointType, value, itemData.Value);
+            break;
 
-                case DataDisplayMode::Integer:
-                    valstr = formatIntegerValue(_displayDefinition.PointType, value1, itemData.Value);
-                break;
+            case DataDisplayMode::Integer:
+                valstr = formatIntegerValue(_displayDefinition.PointType, value, itemData.Value);
+            break;
 
-                case DataDisplayMode::Hex:
-                    valstr = formatHexValue(_displayDefinition.PointType, value1, itemData.Value);
-                break;
+            case DataDisplayMode::Hex:
+                valstr = formatHexValue(_displayDefinition.PointType, value, itemData.Value);
+            break;
 
-                case DataDisplayMode::FloatingPt:
-                {
-                    if( i + 1 < _displayDefinition.Length)
-                    {
-                        const auto value2 = data.value(i + 1);
-                        valstr = formatFloatValue(_displayDefinition.PointType, value1, value2, i%2, itemData.Value);
-                    }
-                }
-                break;
+            case DataDisplayMode::FloatingPt:
+                valstr = formatFloatValue(_displayDefinition.PointType, value, data.value(i + 1),
+                                          (i%2) || (i+1>=_displayDefinition.Length), itemData.Value);
+            break;
 
-                case DataDisplayMode::SwappedFP:
-                {
-                    if( i + 1 < _displayDefinition.Length)
-                    {
-                        const auto value2 = data.value(i + 1);
-                        valstr = formatFloatValue(_displayDefinition.PointType, value2, value1, i%2, itemData.Value);
-                    }
-                }
-                break;
+            case DataDisplayMode::SwappedFP:
+                valstr = formatFloatValue(_displayDefinition.PointType, data.value(i + 1), value,
+                                          (i%2) || (i+1>=_displayDefinition.Length), itemData.Value);
+            break;
 
-                case DataDisplayMode::DblFloat:
-                {
-                    if( i + 3 < _displayDefinition.Length)
-                    {
-                        const auto value2 = data.value(i + 1);
-                        const auto value3 = data.value(i + 2);
-                        const auto value4 = data.value(i + 3);
-                        valstr = formatDoubleValue(_displayDefinition.PointType, value1, value2, value3, value4, i%4, itemData.Value);
-                    }
-                }
-                break;
+            case DataDisplayMode::DblFloat:
+                valstr = formatDoubleValue(_displayDefinition.PointType, value, data.value(i + 1), data.value(i + 2), data.value(i + 3),
+                                           (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
+            break;
 
-                case DataDisplayMode::SwappedDbl:
-                {
-                    if( i + 3 < _displayDefinition.Length)
-                    {
-                        const auto value2 = data.value(i + 1);
-                        const auto value3 = data.value(i + 2);
-                        const auto value4 = data.value(i + 3);
-                        valstr = formatDoubleValue(_displayDefinition.PointType, value4, value3, value2, value1, i%4, itemData.Value);
-                    }
-                }
-                break;
-            }
+            case DataDisplayMode::SwappedDbl:
+                valstr = formatDoubleValue(_displayDefinition.PointType, data.value(i + 3), data.value(i + 2), data.value(i + 1), value,
+                                           (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
+            break;
         }
 
         const auto label = QString(format).arg(prefix, addr, valstr);

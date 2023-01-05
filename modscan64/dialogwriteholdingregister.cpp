@@ -17,7 +17,6 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->setupUi(this);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditValue->setInputRange(0, 65535);
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
@@ -27,14 +26,17 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         break;
 
         case DataDisplayMode::Decimal:
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
         case DataDisplayMode::Integer:
+            ui->lineEditValue->setInputRange(SHRT_MIN, SHRT_MAX);
             ui->lineEditValue->setValue(params.Value.toInt());
         break;
 
         case DataDisplayMode::Hex:
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->labelValue->setText("Value, (HEX): ");
             ui->lineEditValue->setPaddingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);

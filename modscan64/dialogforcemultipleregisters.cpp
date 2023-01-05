@@ -78,7 +78,7 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 void DialogForceMultipleRegisters::updateTableWidget()
 {
     const int columns = 8;
-    const int fieldWidth = 4;
+    const int addrFieldWidth = 4;
     const auto length = _data.length();
 
     ui->tableWidget->clear();
@@ -93,57 +93,59 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto address1Text = QString("%1").arg(_writeParams.Address + i * columns, fieldWidth, 10, QLatin1Char('0'));
-        const auto address2Text = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), fieldWidth, 10, QLatin1Char('0'));
-        ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(address1Text, address2Text)));
+        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, addrFieldWidth, 10, QLatin1Char('0'));
+        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), addrFieldWidth, 10, QLatin1Char('0'));
+        ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
         {
             const auto idx = i * columns + j;
-            auto numEdit = new NumericLineEdit(ui->tableWidget);
-
-            QString text;
-            switch(_writeParams.DisplayMode)
-            {
-                case DataDisplayMode::Binary:
-                case DataDisplayMode::Hex:
-                    numEdit->setInputRange(0, 65535);
-                    numEdit->setInputMode(NumericLineEdit::HexMode);
-                    text = (idx < length) ? QString("%1H").arg(_data[idx], 4, 16, QLatin1Char('0')).toUpper() : "-";
-                break;
-
-                case DataDisplayMode::Decimal:
-                case DataDisplayMode::Integer:
-                    numEdit->setInputMode(NumericLineEdit::IntMode);
-                    text = (idx < length) ?  QString::number(_data[idx]) : "-";
-                break;
-
-                case DataDisplayMode::FloatingPt:
-                case DataDisplayMode::SwappedFP:
-                break;
-
-                case DataDisplayMode::DblFloat:
-                case DataDisplayMode::SwappedDbl:
-                break;
-            }
-
-            /*auto item = new QTableWidgetItem(text);
-
-            item->setTextAlignment(Qt::AlignCenter);
             if(idx < length)
             {
-                item->setData(Qt::UserRole, idx);
-                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, fieldWidth, 10, QLatin1Char('0')));
+                auto numEdit = new NumericLineEdit(ui->tableWidget);
+                numEdit->setFrame(false);
+                numEdit->setMaximumWidth(60);
+                numEdit->setAlignment(Qt::AlignCenter);
+                numEdit->setToolTip(QString("%1").arg(_writeParams.Address + idx, addrFieldWidth, 10, QLatin1Char('0')));
+
+                QString text;
+                switch(_writeParams.DisplayMode)
+                {
+                    case DataDisplayMode::Binary:
+                    case DataDisplayMode::Hex:
+                        numEdit->setInputRange(0, 65535);
+                        numEdit->setPaddingZeroes(true);
+                        numEdit->setInputMode(NumericLineEdit::HexMode);
+                    break;
+
+                    case DataDisplayMode::Decimal:
+                    case DataDisplayMode::Integer:
+                        numEdit->setInputRange(0, 65535);
+                        numEdit->setInputMode(NumericLineEdit::IntMode);
+                    break;
+
+                    case DataDisplayMode::FloatingPt:
+                    case DataDisplayMode::SwappedFP:
+                    break;
+
+                    case DataDisplayMode::DblFloat:
+                    case DataDisplayMode::SwappedDbl:
+                    break;
+                }
+
+                numEdit->setValue(_data[idx]);
+                ui->tableWidget->setCellWidget(i, j, numEdit);
             }
-
-            ui->tableWidget->setItem(i, j, item);*/
-
-            numEdit->setFrame(false);
-            numEdit->setAlignment(Qt::AlignCenter);
-            numEdit->setMaximumWidth(60);
-            numEdit->setValue(idx < length ? _data[idx] : 0);
-
-            ui->tableWidget->setCellWidget(i, j, numEdit);
+            else
+            {
+                auto lineEdit = new QLineEdit(ui->tableWidget);
+                lineEdit->setText("-");
+                lineEdit->setFrame(false);
+                lineEdit->setMaximumWidth(60);
+                lineEdit->setEnabled(false);
+                lineEdit->setAlignment(Qt::AlignCenter);
+                ui->tableWidget->setCellWidget(i, j, lineEdit);
+            }
         }
     }
     ui->tableWidget->resizeColumnsToContents();

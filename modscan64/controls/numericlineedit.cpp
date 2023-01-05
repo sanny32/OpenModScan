@@ -148,6 +148,7 @@ void NumericLineEdit::updateValue()
             bool ok;
             const auto value = text().toInt(&ok);
             if(ok) internalSetValue(value);
+            else internalSetValue(_value);
         }
         break;
 
@@ -156,6 +157,7 @@ void NumericLineEdit::updateValue()
             bool ok;
             const auto value = text().toUInt(&ok, 16);
             if(ok) internalSetValue(value);
+            else internalSetValue(_value);
         }
         break;
 
@@ -164,6 +166,7 @@ void NumericLineEdit::updateValue()
             bool ok;
             const auto value = QLocale().toDouble(text(), &ok);
             if(ok) internalSetValue(value);
+            else internalSetValue(_value);
         }
         break;
     }

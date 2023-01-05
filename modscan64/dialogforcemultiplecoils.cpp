@@ -1,4 +1,5 @@
 #include <QtMath>
+#include <QLineEdit>
 #include "dialogforcemultiplecoils.h"
 #include "ui_dialogforcemultiplecoils.h"
 
@@ -92,7 +93,7 @@ void DialogForceMultipleCoils::on_tableWidget_itemDoubleClicked(QTableWidgetItem
 void DialogForceMultipleCoils::updateTableWidget()
 {
     const int columns = 8;
-    const int fieldWidth = 4;
+    const int addrFieldWidth = 4;
     const auto length = _data.length();
 
     ui->tableWidget->clear();
@@ -107,25 +108,35 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto address1Text = QString("%1").arg(_writeParams.Address + i * columns, fieldWidth, 10, QLatin1Char('0'));
-        const auto address2Text = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), fieldWidth, 10, QLatin1Char('0'));
-        ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(address1Text, address2Text)));
+        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, addrFieldWidth, 10, QLatin1Char('0'));
+        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), addrFieldWidth, 10, QLatin1Char('0'));
+        ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
         {
             const auto idx = i * columns + j;
-            const auto text = (idx < length) ? QString::number(_data[idx]) : "-";
-
-            auto item = new QTableWidgetItem(text);
-
-            item->setTextAlignment(Qt::AlignCenter);
             if(idx < length)
             {
-                item->setData(Qt::UserRole, idx);
-                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, fieldWidth, 10, QLatin1Char('0')));
-            }
+                const auto text = QString::number(_data[idx]);
 
-            ui->tableWidget->setItem(i, j, item);
+                auto item = new QTableWidgetItem(text);
+
+                item->setTextAlignment(Qt::AlignCenter);
+                item->setData(Qt::UserRole, idx);
+                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, addrFieldWidth, 10, QLatin1Char('0')));
+
+                ui->tableWidget->setItem(i, j, item);
+            }
+            else
+            {
+                auto lineEdit = new QLineEdit(ui->tableWidget);
+                lineEdit->setText("-");
+                lineEdit->setFrame(false);
+                lineEdit->setMaximumWidth(40);
+                lineEdit->setEnabled(false);
+                lineEdit->setAlignment(Qt::AlignCenter);
+                ui->tableWidget->setCellWidget(i, j, lineEdit);
+            }
         }
     }
     ui->tableWidget->resizeColumnsToContents();

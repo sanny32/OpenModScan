@@ -25,6 +25,7 @@ SOURCES += \
     dialogconnectiondetails.cpp \
     dialogdisplaydefinition.cpp \
     dialogforcemultiplecoils.cpp \
+    dialogforcemultipleregisters.cpp \
     dialogmaskwriteregiter.cpp \
     dialogprotocolselections.cpp \
     dialogsetuppresetdata.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     dialogconnectiondetails.h \
     dialogdisplaydefinition.h \
     dialogforcemultiplecoils.h \
+    dialogforcemultipleregisters.h \
     dialogmaskwriteregiter.h \
     dialogprotocolselections.h \
     dialogsetuppresetdata.h \
@@ -77,6 +79,7 @@ FORMS += \
     dialogconnectiondetails.ui \
     dialogdisplaydefinition.ui \
     dialogforcemultiplecoils.ui \
+    dialogforcemultipleregisters.ui \
     dialogmaskwriteregiter.ui \
     dialogprotocolselections.ui \
     dialogsetuppresetdata.ui \

@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include <QTableWidgetItem>
-#include "displaydefinition.h"
 #include "modbuswriteparams.h"
 
 namespace Ui {

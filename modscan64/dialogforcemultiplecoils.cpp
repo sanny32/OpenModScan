@@ -91,7 +91,8 @@ void DialogForceMultipleCoils::on_tableWidget_itemDoubleClicked(QTableWidgetItem
 ///
 void DialogForceMultipleCoils::updateTableWidget()
 {
-    const auto columns = 8;
+    const int columns = 8;
+    const int fieldWidth = 4;
     const auto length = _data.length();
 
     ui->tableWidget->clear();
@@ -106,8 +107,8 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto address1Text = QString("%1").arg(_writeParams.Address + i * columns, 4, 10, QLatin1Char('0'));
-        const auto address2Text = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 4, 10, QLatin1Char('0'));
+        const auto address1Text = QString("%1").arg(_writeParams.Address + i * columns, fieldWidth, 10, QLatin1Char('0'));
+        const auto address2Text = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), fieldWidth, 10, QLatin1Char('0'));
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(address1Text, address2Text)));
 
         for(int j = 0; j < columns; j++)
@@ -121,7 +122,7 @@ void DialogForceMultipleCoils::updateTableWidget()
             if(idx < length)
             {
                 item->setData(Qt::UserRole, idx);
-                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, 4, 10, QLatin1Char('0')));
+                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, fieldWidth, 10, QLatin1Char('0')));
             }
 
             ui->tableWidget->setItem(i, j, item);

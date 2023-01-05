@@ -81,6 +81,9 @@ void MainWindow::on_awake()
     ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionUserMsg->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
+    ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
+    ui->actionStatusBar->setChecked(ui->statusbar->isVisible());
+    ui->actionDsiplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionPrint->setEnabled(frm != nullptr);
 
     if(frm != nullptr)
@@ -356,6 +359,30 @@ void MainWindow::on_actionResetCtrs_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->resetCtrs();
+}
+
+///
+/// \brief MainWindow::on_actionToolbar_triggered
+///
+void MainWindow::on_actionToolbar_triggered()
+{
+    ui->toolBarMain->setVisible(!ui->toolBarMain->isVisible());
+}
+
+///
+/// \brief MainWindow::on_actionStatusBar_triggered
+///
+void MainWindow::on_actionStatusBar_triggered()
+{
+    ui->statusbar->setVisible(!ui->statusbar->isVisible());
+}
+
+///
+/// \brief MainWindow::on_actionDsiplayBar_triggered
+///
+void MainWindow::on_actionDsiplayBar_triggered()
+{
+    ui->toolBarDisplay->setVisible(!ui->toolBarDisplay->isVisible());
 }
 
 ///

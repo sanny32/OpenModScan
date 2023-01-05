@@ -46,6 +46,9 @@ private slots:
     void on_actionMaskWrite_triggered();
     void on_actionUserMsg_triggered();
     void on_actionResetCtrs_triggered();
+    void on_actionToolbar_triggered();
+    void on_actionStatusBar_triggered();
+    void on_actionDsiplayBar_triggered();
     void on_awake();
 
     void on_modbusWriteError(const QString& error);

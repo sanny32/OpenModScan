@@ -174,7 +174,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBarMain">
    <property name="windowTitle">
-    <string>Main Toolbar</string>
+    <string>Toolbar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -196,9 +196,9 @@
    <addaction name="actionPrint"/>
    <addaction name="actionAbout"/>
   </widget>
-  <widget class="QToolBar" name="toolBarFormats">
+  <widget class="QToolBar" name="toolBarDisplay">
    <property name="windowTitle">
-    <string>Formats Toolbar</string>
+    <string>Display Bar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>

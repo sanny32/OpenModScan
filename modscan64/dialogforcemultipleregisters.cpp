@@ -1,4 +1,3 @@
-#include <float.h>
 #include <QtMath>
 #include <QRandomGenerator>
 #include "floatutils.h"

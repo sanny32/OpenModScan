@@ -1,4 +1,4 @@
-#include <QDebug>
+#include <float.h>
 #include <QIntValidator>
 #include "qhexvalidator.h"
 #include "numericlineedit.h"

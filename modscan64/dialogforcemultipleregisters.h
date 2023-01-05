@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTableWidgetItem>
+#include "numericlineedit.h"
 #include "modbuswriteparams.h"
 
 namespace Ui {
@@ -28,6 +29,8 @@ private slots:
 
 private:
     void updateTableWidget();
+    QLineEdit* createLineEdit();
+    NumericLineEdit* createNumEdit(int idx);
 
 private:
     Ui::DialogForceMultipleRegisters *ui;

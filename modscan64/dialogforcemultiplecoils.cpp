@@ -93,7 +93,6 @@ void DialogForceMultipleCoils::on_tableWidget_itemDoubleClicked(QTableWidgetItem
 void DialogForceMultipleCoils::updateTableWidget()
 {
     const int columns = 8;
-    const int addrFieldWidth = 4;
     const auto length = _data.length();
 
     ui->tableWidget->clear();
@@ -108,8 +107,8 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, addrFieldWidth, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), addrFieldWidth, 10, QLatin1Char('0'));
+        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 4, 10, QLatin1Char('0'));
+        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 4, 10, QLatin1Char('0'));
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
@@ -117,14 +116,10 @@ void DialogForceMultipleCoils::updateTableWidget()
             const auto idx = i * columns + j;
             if(idx < length)
             {
-                const auto text = QString::number(_data[idx]);
-
-                auto item = new QTableWidgetItem(text);
-
-                item->setTextAlignment(Qt::AlignCenter);
+                auto item = new QTableWidgetItem(QString::number(_data[idx]));
                 item->setData(Qt::UserRole, idx);
-                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, addrFieldWidth, 10, QLatin1Char('0')));
-
+                item->setTextAlignment(Qt::AlignCenter);
+                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, 4, 10, QLatin1Char('0')));
                 ui->tableWidget->setItem(i, j, item);
             }
             else
@@ -140,4 +135,5 @@ void DialogForceMultipleCoils::updateTableWidget()
         }
     }
     ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }

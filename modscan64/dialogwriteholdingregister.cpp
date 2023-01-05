@@ -45,15 +45,15 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
-            ui->lineEditValue->setInputRange(FLT_MIN, FLT_MAX);
-            ui->lineEditValue->setInputMode(NumericLineEdit::RealMode);
+            ui->lineEditValue->setInputRange(-FLT_MAX, FLT_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
             ui->lineEditValue->setValue(params.Value.toFloat());
         break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
-            ui->lineEditValue->setInputRange(DBL_MIN, DBL_MAX);
-            ui->lineEditValue->setInputMode(NumericLineEdit::RealMode);
+            ui->lineEditValue->setInputRange(-DBL_MAX, DBL_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditValue->setValue(params.Value.toDouble());
         break;
     }

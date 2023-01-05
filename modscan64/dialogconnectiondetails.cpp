@@ -14,7 +14,7 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     ,_connectionDetails(cd)
 {
     ui->setupUi(this);
-    ui->lineEditServicePort->setInputRange(0, 65535);
+    ui->lineEditServicePort->setInputRange(0, USHRT_MAX);
     ui->comboBoxConnectUsing->setCurrentIndex(-1);
     ui->comboBoxFlowControl->setCurrentIndex(-1);
     ui->lineEditIPAddress->setText(cd.TcpParams.IPAddress);

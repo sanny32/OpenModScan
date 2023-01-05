@@ -63,6 +63,7 @@ HEADERS += \
     dialogwriteholdingregisterbits.h \
     displaydefinition.h \
     enums.h \
+    floatutils.h \
     formmodsca.h \
     mainwindow.h \
     modbusclient.h \

@@ -118,12 +118,17 @@ void NumericLineEdit::internalSetValue(QVariant value)
             }
             else
             {
-                const auto text = QString::number(value.toUInt(), 16);
+                const auto text = QString("%1").arg(value.toUInt(), 16);
                 QLineEdit::setText(text.toUpper());
             }
         break;
 
-        case RealMode:
+        case FloatMode:
+            value = qBound(_minValue.toFloat(), value.toFloat(), _maxValue.toFloat());
+            QLineEdit::setText(QLocale().toString(value.toFloat()));
+        break;
+
+        case DoubleMode:
             value = qBound(_minValue.toDouble(), value.toDouble(), _maxValue.toDouble());
             QLineEdit::setText(QLocale().toString(value.toDouble()));
         break;
@@ -161,7 +166,16 @@ void NumericLineEdit::updateValue()
         }
         break;
 
-        case RealMode:
+        case FloatMode:
+        {
+            bool ok;
+            const auto value = QLocale().toFloat(text(), &ok);
+            if(ok) internalSetValue(value);
+            else internalSetValue(_value);
+        }
+        break;
+
+        case DoubleMode:
         {
             bool ok;
             const auto value = QLocale().toDouble(text(), &ok);
@@ -214,7 +228,15 @@ void NumericLineEdit::on_textChanged(const QString& text)
         }
         break;
 
-        case RealMode:
+        case FloatMode:
+        {
+            bool ok;
+            const auto valueFloat = QLocale().toFloat(text, &ok);
+            if(ok) value = qBound(_minValue.toFloat(), valueFloat, _maxValue.toFloat());
+        }
+        break;
+
+        case DoubleMode:
         {
             bool ok;
             const auto valueDouble = QLocale().toDouble(text, &ok);
@@ -258,11 +280,10 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         }
         break;
 
-        case RealMode:
-        {
+        case FloatMode:
+        case DoubleMode:
             setMaxLength(INT16_MAX);
             setValidator(new QDoubleValidator(bottom.toDouble(), top.toDouble(), 6, this));
-        }
         break;
     }
 }

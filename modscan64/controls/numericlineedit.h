@@ -15,7 +15,8 @@ public:
     {
         IntMode = 0,
         HexMode,
-        RealMode
+        FloatMode,
+        DoubleMode
     };
 
     explicit NumericLineEdit(QWidget* parent = nullptr);

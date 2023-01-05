@@ -1,5 +1,6 @@
 #include <QtMath>
 #include <QRandomGenerator>
+#include "floatutils.h"
 #include "numericlineedit.h"
 #include "dialogforcemultipleregisters.h"
 #include "ui_dialogforcemultipleregisters.h"
@@ -64,12 +65,185 @@ void DialogForceMultipleRegisters::on_pushButton0_clicked()
 ///
 void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 {
-    for(auto& v : _data)
+    for(int i = 0; i < _data.size(); i++)
     {
-        v = QRandomGenerator::global()->bounded(0, 65535);
+        switch(_writeParams.DisplayMode)
+        {
+            case DataDisplayMode::Binary:
+            case DataDisplayMode::Hex:
+            case DataDisplayMode::Decimal:
+                _data[i] = QRandomGenerator::global()->bounded(0, USHRT_MAX);
+            break;
+
+            case DataDisplayMode::Integer:
+                _data[i] = QRandomGenerator::global()->bounded(SHRT_MIN, SHRT_MAX);
+            break;
+
+            case DataDisplayMode::FloatingPt:
+            {
+                if(!(i % 2) && (i + 1 < _data.size()))
+                {
+                    union {
+                       quint16 asUint16[2];
+                       float asFloat;
+                    } v;
+                    v.asFloat = QRandomGenerator::global()->bounded(100.);
+                    _data[i] = v.asUint16[0];
+                    _data[i + 1] = v.asUint16[1];
+                }
+            }
+            break;
+
+            case DataDisplayMode::SwappedFP:
+            {
+                if(!(i % 2) && (i + 1 < _data.size()))
+                {
+                    union {
+                       quint16 asUint16[2];
+                       float asFloat;
+                    } v;
+                    v.asFloat = QRandomGenerator::global()->bounded(100.);
+                    _data[i] = v.asUint16[1];
+                    _data[i + 1] = v.asUint16[0];
+                }
+            }
+            break;
+
+            case DataDisplayMode::DblFloat:
+            {
+                if(!(i % 4) && (i + 3 < _data.size()))
+                {
+                    union {
+                       quint16 asUint16[4];
+                       double asDouble;
+                    } v;
+                    v.asDouble = QRandomGenerator::global()->bounded(100.);
+                    _data[i] = v.asUint16[0];
+                    _data[i + 1] = v.asUint16[1];
+                    _data[i + 2] = v.asUint16[2];
+                    _data[i + 3] = v.asUint16[3];
+                }
+            }
+            break;
+
+            case DataDisplayMode::SwappedDbl:
+            {
+                if(!(i % 4) && (i + 3 < _data.size()))
+                {
+                    union {
+                       quint16 asUint16[4];
+                       double asDouble;
+                    } v;
+                    v.asDouble = QRandomGenerator::global()->bounded(100.);
+                    _data[i] = v.asUint16[3];
+                    _data[i + 1] = v.asUint16[2];
+                    _data[i + 2] = v.asUint16[1];
+                    _data[i + 3] = v.asUint16[0];
+                }
+            }
+            break;
+        }
     }
 
     updateTableWidget();
+}
+
+///
+/// \brief DialogForceMultipleRegisters::createNumEdit
+/// \param idx
+/// \return
+///
+NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
+{
+    NumericLineEdit* numEdit = nullptr;
+    switch(_writeParams.DisplayMode)
+    {
+        case DataDisplayMode::Binary:
+        case DataDisplayMode::Hex:
+            numEdit = new NumericLineEdit(ui->tableWidget);
+            numEdit->setInputRange(0, USHRT_MAX);
+            numEdit->setPaddingZeroes(true);
+            numEdit->setInputMode(NumericLineEdit::HexMode);
+            numEdit->setValue(_data[idx]);
+        break;
+
+        case DataDisplayMode::Decimal:
+            numEdit = new NumericLineEdit(ui->tableWidget);
+            numEdit->setInputRange(0, USHRT_MAX);
+            numEdit->setInputMode(NumericLineEdit::IntMode);
+            numEdit->setValue(_data[idx]);
+        break;
+
+        case DataDisplayMode::Integer:
+            numEdit = new NumericLineEdit(ui->tableWidget);
+            numEdit->setInputRange(SHRT_MIN, SHRT_MAX);
+            numEdit->setInputMode(NumericLineEdit::IntMode);
+            numEdit->setValue((qint16)_data[idx]);
+        break;
+
+        case DataDisplayMode::FloatingPt:
+            if(!(idx % 2) && (idx + 1 < _data.size()))
+            {
+                numEdit = new NumericLineEdit(ui->tableWidget);
+                numEdit->setInputRange(-FLT_MAX, FLT_MAX);
+                numEdit->setInputMode(NumericLineEdit::FloatMode);
+                numEdit->setValue(makeFloat(_data[idx], _data[idx + 1]));
+            }
+        break;
+
+        case DataDisplayMode::SwappedFP:
+            if(!(idx % 2) && (idx + 1 < _data.size()))
+            {
+                numEdit = new NumericLineEdit(ui->tableWidget);
+                numEdit->setInputRange(-FLT_MAX, FLT_MAX);
+                numEdit->setInputMode(NumericLineEdit::FloatMode);
+                numEdit->setValue(makeFloat(_data[idx + 1], _data[idx]));
+            }
+        break;
+
+        case DataDisplayMode::DblFloat:
+            if(!(idx % 4) && (idx + 3 < _data.size()))
+            {
+                numEdit->setInputRange(-DBL_MAX, DBL_MAX);
+                numEdit->setInputMode(NumericLineEdit::DoubleMode);
+                numEdit->setValue(makeDouble(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3]));
+            }
+        break;
+
+        case DataDisplayMode::SwappedDbl:
+            if(!(idx % 4) && (idx + 3 < _data.size()))
+            {
+                numEdit->setInputRange(-DBL_MAX, DBL_MAX);
+                numEdit->setInputMode(NumericLineEdit::DoubleMode);
+                numEdit->setValue(makeDouble(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx]));
+            }
+        break;
+    }
+
+    if(numEdit)
+    {
+        numEdit->setFrame(false);
+        numEdit->setMaximumWidth(70);
+        numEdit->setAlignment(Qt::AlignCenter);
+        numEdit->setToolTip(QString("%1").arg(_writeParams.Address + idx, 4, 10, QLatin1Char('0')));
+    }
+
+    return numEdit;
+}
+
+///
+/// \brief DialogForceMultipleRegisters::createLineEdit
+/// \return
+///
+QLineEdit* DialogForceMultipleRegisters::createLineEdit()
+{
+    auto lineEdit = new QLineEdit(ui->tableWidget);
+    lineEdit->setText("-");
+    lineEdit->setFrame(false);
+    lineEdit->setMaximumWidth(70);
+    lineEdit->setEnabled(false);
+    lineEdit->setAlignment(Qt::AlignCenter);
+    return lineEdit;
 }
 
 ///
@@ -78,7 +252,6 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 void DialogForceMultipleRegisters::updateTableWidget()
 {
     const int columns = 8;
-    const int addrFieldWidth = 4;
     const auto length = _data.length();
 
     ui->tableWidget->clear();
@@ -93,8 +266,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, addrFieldWidth, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), addrFieldWidth, 10, QLatin1Char('0'));
+        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 4, 10, QLatin1Char('0'));
+        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 4, 10, QLatin1Char('0'));
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
@@ -102,51 +275,16 @@ void DialogForceMultipleRegisters::updateTableWidget()
             const auto idx = i * columns + j;
             if(idx < length)
             {
-                auto numEdit = new NumericLineEdit(ui->tableWidget);
-                numEdit->setFrame(false);
-                numEdit->setMaximumWidth(60);
-                numEdit->setAlignment(Qt::AlignCenter);
-                numEdit->setToolTip(QString("%1").arg(_writeParams.Address + idx, addrFieldWidth, 10, QLatin1Char('0')));
-
-                QString text;
-                switch(_writeParams.DisplayMode)
-                {
-                    case DataDisplayMode::Binary:
-                    case DataDisplayMode::Hex:
-                        numEdit->setInputRange(0, 65535);
-                        numEdit->setPaddingZeroes(true);
-                        numEdit->setInputMode(NumericLineEdit::HexMode);
-                    break;
-
-                    case DataDisplayMode::Decimal:
-                    case DataDisplayMode::Integer:
-                        numEdit->setInputRange(0, 65535);
-                        numEdit->setInputMode(NumericLineEdit::IntMode);
-                    break;
-
-                    case DataDisplayMode::FloatingPt:
-                    case DataDisplayMode::SwappedFP:
-                    break;
-
-                    case DataDisplayMode::DblFloat:
-                    case DataDisplayMode::SwappedDbl:
-                    break;
-                }
-
-                numEdit->setValue(_data[idx]);
-                ui->tableWidget->setCellWidget(i, j, numEdit);
+                auto numEdit = createNumEdit(idx);
+                if(numEdit) ui->tableWidget->setCellWidget(i, j, numEdit);
+                else ui->tableWidget->setCellWidget(i, j, createLineEdit());
             }
             else
             {
-                auto lineEdit = new QLineEdit(ui->tableWidget);
-                lineEdit->setText("-");
-                lineEdit->setFrame(false);
-                lineEdit->setMaximumWidth(60);
-                lineEdit->setEnabled(false);
-                lineEdit->setAlignment(Qt::AlignCenter);
-                ui->tableWidget->setCellWidget(i, j, lineEdit);
+                ui->tableWidget->setCellWidget(i, j, createLineEdit());
             }
         }
     }
     ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }

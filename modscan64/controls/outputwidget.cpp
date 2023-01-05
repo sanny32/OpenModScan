@@ -1,3 +1,4 @@
+#include "floatutils.h"
 #include "modbusexception.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
@@ -317,15 +318,9 @@ QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1
         {
             if(flag) break;
 
-            union {
-               quint16 asUint16[2];
-               float asFloat;
-            } v;
-            v.asUint16[0] = value1;
-            v.asUint16[1] = value2;
-
-            outValue = v.asFloat;
-            result = QLocale().toString(v.asFloat);
+            const float value = makeFloat(value1, value2);
+            outValue = value;
+            result = QLocale().toString(value);
         }
         break;
         default:
@@ -359,17 +354,9 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
         {
             if(flag) break;
 
-            union {
-               quint16 asUint16[4];
-               double asDouble;
-            } v;
-            v.asUint16[0] = value1;
-            v.asUint16[1] = value2;
-            v.asUint16[2] = value3;
-            v.asUint16[3] = value4;
-
-            outValue = v.asDouble;
-            result = QLocale().toString(v.asDouble);
+            const double value = makeDouble(value1, value2, value3, value4);
+            outValue = value;
+            result = QLocale().toString(value);
         }
         break;
         default:

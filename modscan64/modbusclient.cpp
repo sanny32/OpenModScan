@@ -491,44 +491,28 @@ void ModbusClient::on_writeReply()
     emit modbusReply(reply);
 
     const auto raw  = reply->rawResult();
+    auto onError = [this, reply, raw](const QString& errorDesc)
+    {
+        if (reply->error() == QModbusDevice::ProtocolError)
+            emit modbusWriteError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())));
+        else if(reply->error() != QModbusDevice::NoError)
+            emit modbusWriteError(QString("%1. %2").arg(errorDesc, reply->errorString()));
+    };
+
     switch(raw.functionCode())
     {
         case QModbusRequest::WriteSingleCoil:
         case QModbusRequest::WriteMultipleCoils:
-            if (reply->error() == QModbusDevice::ProtocolError)
-            {
-                const QString exception = ModbusException(raw.exceptionCode());
-                emit modbusWriteError(QString("Coil Write Failure. %1").arg(exception));
-            }
-            else if(reply->error() != QModbusDevice::NoError)
-            {
-                emit modbusWriteError(QString("Coil Write Failure. %1").arg(reply->errorString()));
-            }
+            onError("Coil Write Failure");
         break;
 
         case QModbusRequest::WriteSingleRegister:
         case QModbusRequest::WriteMultipleRegisters:
-            if (reply->error() == QModbusDevice::ProtocolError)
-            {
-                const QString exception = ModbusException(raw.exceptionCode());
-                emit modbusWriteError(QString("Register Write Failure. %1").arg(exception));
-            }
-            else if(reply->error() != QModbusDevice::NoError)
-            {
-                emit modbusWriteError(QString("Register Write Failure. %1").arg(reply->errorString()));
-            }
+            onError("Register Write Failure");
         break;
 
         case QModbusRequest::MaskWriteRegister:
-            if (reply->error() == QModbusDevice::ProtocolError)
-            {
-                const QString exception = ModbusException(raw.exceptionCode());
-                emit modbusWriteError(QString("Mask Register Write Failure. %1").arg(exception));
-            }
-            else if(reply->error() != QModbusDevice::NoError)
-            {
-                emit modbusWriteError(QString("Mask Register Write Failure. %1").arg(reply->errorString()));
-            }
+            onError("Mask Register Write Failure");
         break;
 
     default:

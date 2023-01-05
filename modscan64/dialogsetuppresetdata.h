@@ -15,6 +15,9 @@ namespace Ui {
 class DialogSetupPresetData;
 }
 
+///
+/// \brief The DialogSetupPresetData class
+///
 class DialogSetupPresetData : public QFixedSizeDialog
 {
     Q_OBJECT

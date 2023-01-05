@@ -38,6 +38,7 @@ FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
+
     _timer.setInterval(1000);
     _timer.start();
 }

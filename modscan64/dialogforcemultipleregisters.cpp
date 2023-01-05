@@ -48,87 +48,55 @@ void DialogForceMultipleRegisters::accept()
         for(int j = 0; j < ui->tableWidget->columnCount(); j++)
         {
             const auto idx = i *  ui->tableWidget->columnCount() + j;
-            if(idx < _data.size())
+            if(idx >= _data.size())
             {
-                switch(_writeParams.DisplayMode)
-                {
-                    case DataDisplayMode::Binary:
-                    case DataDisplayMode::Hex:
-                    case DataDisplayMode::Decimal:
-                    case DataDisplayMode::Integer:
-                    {
-                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        _data[idx] = numEdit->value<quint16>();
-                    }
-                    break;
-
-                    case DataDisplayMode::FloatingPt:
-                        if(!(idx % 2) && (idx + 1 < _data.size()))
-                        {
-                            union {
-                               quint16 asUint16[2];
-                               float asFloat;
-                            } v;
-
-                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                            v.asFloat = numEdit->value<float>();
-                            _data[idx] = v.asUint16[0];
-                            _data[idx + 1] = v.asUint16[1];
-                        }
-                    break;
-
-                    case DataDisplayMode::SwappedFP:
-                        if(!(idx % 2) && (idx + 1 < _data.size()))
-                        {
-                            union {
-                               quint16 asUint16[2];
-                               float asFloat;
-                            } v;
-
-                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                            v.asFloat = numEdit->value<float>();
-                            _data[idx] = v.asUint16[1];
-                            _data[idx + 1] = v.asUint16[0];
-                        }
-                    break;
-
-                    case DataDisplayMode::DblFloat:
-                        if(!(idx % 4) && (idx + 3 < _data.size()))
-                        {
-                            union {
-                               quint16 asUint16[4];
-                               double asDouble;
-                            } v;
-
-                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                            v.asDouble = numEdit->value<double>();
-                            _data[idx] = v.asUint16[0];
-                            _data[idx + 1] = v.asUint16[1];
-                            _data[idx + 2] = v.asUint16[2];
-                            _data[idx + 3] = v.asUint16[3];
-                        }
-                    break;
-
-                    case DataDisplayMode::SwappedDbl:
-                        if(!(idx % 4) && (idx + 3 < _data.size()))
-                        {
-                            union {
-                               quint16 asUint16[4];
-                               double asDouble;
-                            } v;
-
-                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                            v.asDouble = numEdit->value<double>();
-                            _data[idx] = v.asUint16[3];
-                            _data[idx + 1] = v.asUint16[2];
-                            _data[idx + 2] = v.asUint16[1];
-                            _data[idx + 3] = v.asUint16[0];
-                        }
-                    break;
-                }
+                break;
             }
 
+            switch(_writeParams.DisplayMode)
+            {
+                case DataDisplayMode::Binary:
+                case DataDisplayMode::Hex:
+                case DataDisplayMode::Decimal:
+                case DataDisplayMode::Integer:
+                {
+                    auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                    _data[idx] = numEdit->value<quint16>();
+                }
+                break;
 
+                case DataDisplayMode::FloatingPt:
+                    if(!(idx % 2) && (idx + 1 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakFloat(numEdit->value<double>(), _data[idx], _data[idx + 1]);
+                    }
+                break;
+
+                case DataDisplayMode::SwappedFP:
+                    if(!(idx % 2) && (idx + 1 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakFloat(numEdit->value<double>(), _data[idx + 1], _data[idx]);
+                    }
+                break;
+
+                case DataDisplayMode::DblFloat:
+                    if(!(idx % 4) && (idx + 3 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakDouble(numEdit->value<double>(), _data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3]);
+                    }
+                break;
+
+                case DataDisplayMode::SwappedDbl:
+                    if(!(idx % 4) && (idx + 3 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakDouble(numEdit->value<double>(), _data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx]);
+                    }
+                break;
+            }
         }
     }
 
@@ -169,67 +137,23 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
             break;
 
             case DataDisplayMode::FloatingPt:
-            {
                 if(!(i % 2) && (i + 1 < _data.size()))
-                {
-                    union {
-                       quint16 asUint16[2];
-                       float asFloat;
-                    } v;
-                    v.asFloat = QRandomGenerator::global()->bounded(100.);
-                    _data[i] = v.asUint16[0];
-                    _data[i + 1] = v.asUint16[1];
-                }
-            }
+                    breakFloat(QRandomGenerator::global()->bounded(100.), _data[i], _data[i + 1]);
             break;
 
             case DataDisplayMode::SwappedFP:
-            {
                 if(!(i % 2) && (i + 1 < _data.size()))
-                {
-                    union {
-                       quint16 asUint16[2];
-                       float asFloat;
-                    } v;
-                    v.asFloat = QRandomGenerator::global()->bounded(100.);
-                    _data[i] = v.asUint16[1];
-                    _data[i + 1] = v.asUint16[0];
-                }
-            }
+                    breakFloat(QRandomGenerator::global()->bounded(100.), _data[i + 1], _data[i]);
             break;
 
             case DataDisplayMode::DblFloat:
-            {
                 if(!(i % 4) && (i + 3 < _data.size()))
-                {
-                    union {
-                       quint16 asUint16[4];
-                       double asDouble;
-                    } v;
-                    v.asDouble = QRandomGenerator::global()->bounded(100.);
-                    _data[i] = v.asUint16[0];
-                    _data[i + 1] = v.asUint16[1];
-                    _data[i + 2] = v.asUint16[2];
-                    _data[i + 3] = v.asUint16[3];
-                }
-            }
+                    breakDouble(QRandomGenerator::global()->bounded(100.), _data[i], _data[i + 1], _data[i + 2], _data[i + 3]);
             break;
 
             case DataDisplayMode::SwappedDbl:
-            {
                 if(!(i % 4) && (i + 3 < _data.size()))
-                {
-                    union {
-                       quint16 asUint16[4];
-                       double asDouble;
-                    } v;
-                    v.asDouble = QRandomGenerator::global()->bounded(100.);
-                    _data[i] = v.asUint16[3];
-                    _data[i + 1] = v.asUint16[2];
-                    _data[i + 2] = v.asUint16[1];
-                    _data[i + 3] = v.asUint16[0];
-                }
-            }
+                    breakDouble(QRandomGenerator::global()->bounded(100.), _data[i + 3], _data[i + 2], _data[i + 1], _data[i]);
             break;
         }
     }

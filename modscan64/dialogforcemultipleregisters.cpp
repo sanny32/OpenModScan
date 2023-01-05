@@ -43,7 +43,96 @@ DialogForceMultipleRegisters::~DialogForceMultipleRegisters()
 ///
 void DialogForceMultipleRegisters::accept()
 {
-    //_writeParams.Value = QVariant::fromValue(_data);
+    for(int i = 0; i < ui->tableWidget->rowCount(); i++)
+    {
+        for(int j = 0; j < ui->tableWidget->columnCount(); j++)
+        {
+            const auto idx = i *  ui->tableWidget->columnCount() + j;
+            if(idx < _data.size())
+            {
+                switch(_writeParams.DisplayMode)
+                {
+                    case DataDisplayMode::Binary:
+                    case DataDisplayMode::Hex:
+                    case DataDisplayMode::Decimal:
+                    case DataDisplayMode::Integer:
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        _data[idx] = numEdit->value<quint16>();
+                    }
+                    break;
+
+                    case DataDisplayMode::FloatingPt:
+                        if(!(idx % 2) && (idx + 1 < _data.size()))
+                        {
+                            union {
+                               quint16 asUint16[2];
+                               float asFloat;
+                            } v;
+
+                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                            v.asFloat = numEdit->value<float>();
+                            _data[idx] = v.asUint16[0];
+                            _data[idx + 1] = v.asUint16[1];
+                        }
+                    break;
+
+                    case DataDisplayMode::SwappedFP:
+                        if(!(idx % 2) && (idx + 1 < _data.size()))
+                        {
+                            union {
+                               quint16 asUint16[2];
+                               float asFloat;
+                            } v;
+
+                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                            v.asFloat = numEdit->value<float>();
+                            _data[idx] = v.asUint16[1];
+                            _data[idx + 1] = v.asUint16[0];
+                        }
+                    break;
+
+                    case DataDisplayMode::DblFloat:
+                        if(!(idx % 4) && (idx + 3 < _data.size()))
+                        {
+                            union {
+                               quint16 asUint16[4];
+                               double asDouble;
+                            } v;
+
+                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                            v.asDouble = numEdit->value<double>();
+                            _data[idx] = v.asUint16[0];
+                            _data[idx + 1] = v.asUint16[1];
+                            _data[idx + 2] = v.asUint16[2];
+                            _data[idx + 3] = v.asUint16[3];
+                        }
+                    break;
+
+                    case DataDisplayMode::SwappedDbl:
+                        if(!(idx % 4) && (idx + 3 < _data.size()))
+                        {
+                            union {
+                               quint16 asUint16[4];
+                               double asDouble;
+                            } v;
+
+                            auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                            v.asDouble = numEdit->value<double>();
+                            _data[idx] = v.asUint16[3];
+                            _data[idx + 1] = v.asUint16[2];
+                            _data[idx + 2] = v.asUint16[1];
+                            _data[idx + 3] = v.asUint16[0];
+                        }
+                    break;
+                }
+            }
+
+
+        }
+    }
+
+    _writeParams.Value = QVariant::fromValue(_data);
     QDialog::accept();
 }
 
@@ -204,6 +293,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::DblFloat:
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
+                numEdit = new NumericLineEdit(ui->tableWidget);
                 numEdit->setInputRange(-DBL_MAX, DBL_MAX);
                 numEdit->setInputMode(NumericLineEdit::DoubleMode);
                 numEdit->setValue(makeDouble(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3]));
@@ -213,6 +303,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::SwappedDbl:
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
+                numEdit = new NumericLineEdit(ui->tableWidget);
                 numEdit->setInputRange(-DBL_MAX, DBL_MAX);
                 numEdit->setInputMode(NumericLineEdit::DoubleMode);
                 numEdit->setValue(makeDouble(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx]));
@@ -223,9 +314,9 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
     if(numEdit)
     {
         numEdit->setFrame(false);
-        numEdit->setMaximumWidth(70);
+        numEdit->setMaximumWidth(80);
         numEdit->setAlignment(Qt::AlignCenter);
-        numEdit->setToolTip(QString("%1").arg(_writeParams.Address + idx, 4, 10, QLatin1Char('0')));
+        numEdit->setToolTip(QString("%1").arg(_writeParams.Address + idx, 5, 10, QLatin1Char('0')));
     }
 
     return numEdit;
@@ -240,7 +331,7 @@ QLineEdit* DialogForceMultipleRegisters::createLineEdit()
     auto lineEdit = new QLineEdit(ui->tableWidget);
     lineEdit->setText("-");
     lineEdit->setFrame(false);
-    lineEdit->setMaximumWidth(70);
+    lineEdit->setMaximumWidth(80);
     lineEdit->setEnabled(false);
     lineEdit->setAlignment(Qt::AlignCenter);
     return lineEdit;
@@ -266,8 +357,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 4, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 4, 10, QLatin1Char('0'));
+        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 5, 10, QLatin1Char('0'));
+        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 5, 10, QLatin1Char('0'));
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)

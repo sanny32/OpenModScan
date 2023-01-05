@@ -324,7 +324,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        //_modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
+        _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
     }
 }
 

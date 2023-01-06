@@ -50,6 +50,7 @@ void ByteListLineEdit::setValue(const QByteArray& value)
             for(auto&& v : value)
                 text.push_back(QString::number((quint8)v));
             QLineEdit::setText(text.join(','));
+            QLineEdit::setCursorPosition(0);
         }
         break;
 
@@ -59,6 +60,7 @@ void ByteListLineEdit::setValue(const QByteArray& value)
             for(auto&& v : value)
                 text.push_back(QString("%1").arg((quint8)v, 2, 16, QLatin1Char('0')));
             QLineEdit::setText(text.join(',').toUpper());
+            QLineEdit::setCursorPosition(0);
         }
         break;
     }

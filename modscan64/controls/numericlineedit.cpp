@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <float.h>
 #include <QIntValidator>
 #include "qhexvalidator.h"
@@ -9,11 +10,10 @@
 ///
 NumericLineEdit::NumericLineEdit(QWidget* parent)
     : QLineEdit(parent)
-    ,_inputMode(InputMode::IntMode)
     ,_paddingZeroes(false)
     ,_paddingZeroWidth(0)
 {
-    setInputRange(INT_MIN, INT_MAX);
+    setInputMode(IntMode);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
@@ -28,11 +28,10 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
 ///
 NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
     : QLineEdit(s, parent)
-    ,_inputMode(InputMode::IntMode)
     ,_paddingZeroes(false)
     ,_paddingZeroWidth(0)
 {
-    setInputRange(INT_MIN, INT_MAX);
+    setInputMode(IntMode);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
@@ -50,25 +49,8 @@ NumericLineEdit::NumericLineEdit(NumericLineEdit::InputMode mode, QWidget *paren
     ,_paddingZeroes(false)
     ,_paddingZeroWidth(0)
 {
-    switch(mode)
-    {
-        case IntMode:
-            setInputRange(INT_MIN, INT_MAX);
-        break;
-
-        case HexMode:
-            setInputRange(INT_MIN, INT_MAX);
-        break;
-
-        case FloatMode:
-            setInputRange(-FLT_MAX, FLT_MAX);
-        break;
-
-        case DoubleMode:
-            setInputRange(-DBL_MAX, DBL_MAX);
-        break;
-    }
     setInputMode(mode);
+    setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
     connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
@@ -109,6 +91,27 @@ NumericLineEdit::InputMode NumericLineEdit::inputMode() const
 void NumericLineEdit::setInputMode(InputMode mode)
 {
     _inputMode = mode;
+    if(!_minValue.isValid() || !_maxValue.isValid())
+    {
+        switch(mode)
+        {
+            case IntMode:
+            case HexMode:
+                _minValue = INT_MIN;
+                _maxValue = INT_MAX;
+            break;
+
+            case FloatMode:
+                _minValue = -FLT_MAX;
+                _maxValue = FLT_MAX;
+            break;
+
+            case DoubleMode:
+                _minValue = -DBL_MAX;
+                _maxValue = DBL_MAX;
+            break;
+        }
+    }
     emit rangeChanged(_minValue, _maxValue);
 }
 
@@ -153,7 +156,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
             }
             else
             {
-                const auto text = QString("%1").arg(value.toUInt(), 16);
+                const auto text = QString("%1").arg(value.toUInt(), -1, 16);
                 QLineEdit::setText(text.toUpper());
             }
         break;
@@ -321,4 +324,5 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             setValidator(new QDoubleValidator(bottom.toDouble(), top.toDouble(), 6, this));
         break;
     }
+    internalSetValue(_value);
 }

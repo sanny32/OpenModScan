@@ -5,6 +5,7 @@
 #include "dialogsetuppresetdata.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
+#include "dialogusermsg.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -59,6 +60,9 @@ void MainWindow::on_awake()
 {
     auto frm = currentMdiChild();
     const auto state = _modbusClient.state();
+
+    ui->menuSetup->setEnabled(frm != nullptr);
+    ui->menuWindow->setEnabled(frm != nullptr);
 
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
@@ -349,7 +353,13 @@ void MainWindow::on_actionMaskWrite_triggered()
 ///
 void MainWindow::on_actionUserMsg_triggered()
 {
+    auto frm = currentMdiChild();
+    if(!frm) return;
 
+    const auto dd = frm->displayDefinition();
+    const auto mode = frm->dataDisplayMode();
+    DialogUserMsg dlg(dd.DeviceId, mode, this);
+    dlg.exec();
 }
 
 ///

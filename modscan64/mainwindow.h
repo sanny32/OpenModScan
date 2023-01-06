@@ -51,7 +51,7 @@ private slots:
     void on_actionDsiplayBar_triggered();
     void on_awake();
 
-    void on_modbusWriteError(const QString& error);
+    void on_modbusError(const QString& error);
     void on_modbusConnectionError(const QString& error);
 
 private:

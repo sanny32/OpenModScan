@@ -180,13 +180,13 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         break;
 
         case DataDisplayMode::Decimal:
-            numEdit = new NumericLineEdit(NumericLineEdit::IntMode, ui->tableWidget);
+            numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setValue(_data[idx]);
         break;
 
         case DataDisplayMode::Integer:
-            numEdit = new NumericLineEdit(NumericLineEdit::IntMode, ui->tableWidget);
+            numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
             numEdit->setInputRange(SHRT_MIN, SHRT_MAX);
             numEdit->setValue((qint16)_data[idx]);
         break;

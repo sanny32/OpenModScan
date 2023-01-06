@@ -21,6 +21,7 @@ public:
     bool isValid() const;
     QModbusDevice::State state() const;
 
+    void sendRawRequest(const QModbusRequest& request, int server, int requestId);
     void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId);
     void maskWriteRegister(const ModbusMaskWriteParams& params, int requestId);
@@ -28,7 +29,7 @@ public:
 signals:
     void modbusRequest(int requestId, const QModbusRequest& request);
     void modbusReply(QModbusReply* reply);
-    void modbusWriteError(const QString& error);
+    void modbusError(const QString& error);
     void modbusConnectionError(const QString& error);
 
 private slots:

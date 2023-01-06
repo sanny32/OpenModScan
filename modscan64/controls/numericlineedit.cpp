@@ -13,25 +13,7 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
     ,_paddingZeroes(false)
     ,_paddingZeroWidth(0)
 {
-    setInputMode(IntMode);
-    setValue(0);
-
-    connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
-    connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
-    connect(this, &NumericLineEdit::rangeChanged, this, &NumericLineEdit::on_rangeChanged);
-}
-
-///
-/// \brief NumberLineEdit::NumberLineEdit
-/// \param s
-/// \param parent
-///
-NumericLineEdit::NumericLineEdit(const QString& s, QWidget* parent)
-    : QLineEdit(s, parent)
-    ,_paddingZeroes(false)
-    ,_paddingZeroWidth(0)
-{
-    setInputMode(IntMode);
+    setInputMode(DecMode);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
@@ -95,7 +77,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
     {
         switch(mode)
         {
-            case IntMode:
+            case DecMode:
             case HexMode:
                 _minValue = INT_MIN;
                 _maxValue = INT_MAX;
@@ -133,7 +115,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
 {
     switch(_inputMode)
     {
-        case IntMode:
+        case DecMode:
             value = qBound(_minValue.toInt(), value.toInt(), _maxValue.toInt());
             if(_paddingZeroes)
             {
@@ -186,7 +168,7 @@ void NumericLineEdit::updateValue()
 {
     switch(_inputMode)
     {
-        case IntMode:
+        case DecMode:
         {
             bool ok;
             const auto value = text().toInt(&ok);
@@ -250,7 +232,7 @@ void NumericLineEdit::on_textChanged(const QString& text)
     QVariant value;
     switch(_inputMode)
     {
-        case IntMode:
+        case DecMode:
         {
             bool ok;
             const auto valueInt = text.toInt(&ok);
@@ -297,15 +279,17 @@ void NumericLineEdit::on_textChanged(const QString& text)
 ///
 void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& top)
 {
+    blockSignals(true);
     setValidator(nullptr);
     switch(_inputMode)
     {
-        case IntMode:
+        case DecMode:
         {
             const int nums = QString::number(top.toInt()).length();
             _paddingZeroWidth = qMax(1, nums);
             setMaxLength(qMax(1, nums));
             setValidator(new QIntValidator(bottom.toInt(), top.toInt(), this));
+
         }
         break;
 
@@ -325,4 +309,5 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         break;
     }
     internalSetValue(_value);
+    blockSignals(false);
 }

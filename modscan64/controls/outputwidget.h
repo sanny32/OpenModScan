@@ -37,7 +37,7 @@ public:
 
     void setStatus(const QString& status);
 
-    void update(const QModbusRequest& request);
+    void update(const QModbusRequest& request, int server);
     void update(QModbusReply* reply);
 
 signals:
@@ -48,7 +48,7 @@ private slots:
 
 private:
     void updateDataWidget(const QModbusDataUnit& data);
-    void updateTrafficWidget(bool request, const QModbusPdu& pdu);
+    void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;

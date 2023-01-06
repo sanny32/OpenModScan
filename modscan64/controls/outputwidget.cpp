@@ -88,10 +88,11 @@ void OutputWidget::setStatus(const QString& status)
 ///
 /// \brief OutputWidget::update
 /// \param request
+/// \param server
 ///
-void OutputWidget::update(const QModbusRequest& request)
+void OutputWidget::update(const QModbusRequest& request, int server)
 {
-    updateTrafficWidget(true, request);
+    updateTrafficWidget(true, server, request);
 }
 
 ///
@@ -105,7 +106,7 @@ void OutputWidget::update(QModbusReply* reply)
     }
 
     const auto raw = reply->rawResult();
-    updateTrafficWidget(false, raw);
+    updateTrafficWidget(false, reply->serverAddress(), raw);
 
     const auto fc = raw.functionCode();
     if(fc == QModbusRequest::ReadCoils ||
@@ -494,12 +495,13 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 /// \param request
 /// \param pdu
 ///
-void OutputWidget::updateTrafficWidget(bool request, const QModbusPdu& pdu)
+void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPdu& pdu)
 {
     if(!pdu.isValid()) return;
 
     QByteArray rawData;
-    rawData.push_back(pdu.functionCode());
+    rawData.push_back(server);
+    rawData.push_back(pdu.functionCode() | ( pdu.isException() ? QModbusPdu::ExceptionByte : 0));
     rawData.push_back(pdu.data());
 
     QString text;

@@ -13,14 +13,13 @@ class NumericLineEdit : public QLineEdit
 public:
     enum InputMode
     {
-        IntMode = 0,
+        DecMode = 0,
         HexMode,
         FloatMode,
         DoubleMode
     };
 
     explicit NumericLineEdit(QWidget* parent = nullptr);
-    explicit NumericLineEdit(const QString&, QWidget *parent = nullptr);
     explicit NumericLineEdit(InputMode mode, QWidget *parent = nullptr);
 
     template<typename T>

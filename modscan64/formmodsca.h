@@ -6,7 +6,6 @@
 #include "enums.h"
 #include "modbusclient.h"
 #include "displaydefinition.h"
-#include "modbuswriteparams.h"
 
 class MainWindow;
 

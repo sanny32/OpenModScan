@@ -139,7 +139,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEditSendData"/>
+      <widget class="ByteListLineEdit" name="lineEditSendData"/>
      </item>
     </layout>
    </item>
@@ -150,7 +150,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLineEdit" name="lineEditResponse">
+       <widget class="ByteListLineEdit" name="lineEditResponse">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -179,6 +179,11 @@
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
    <header>numericlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ByteListLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>bytelistlineedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

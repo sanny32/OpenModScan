@@ -1,5 +1,7 @@
 #include <QPushButton>
+#include <QMessageBox>
 #include <QDialogButtonBox>
+#include <QRegExpValidator>
 #include "modbuslimits.h"
 #include "dialogusermsg.h"
 #include "ui_dialogusermsg.h"
@@ -10,9 +12,10 @@
 /// \param mode
 /// \param parent
 ///
-DialogUserMsg::DialogUserMsg(quint8 slaveAddress, DataDisplayMode mode, QWidget *parent) :
-    QFixedSizeDialog(parent),
-    ui(new Ui::DialogUserMsg)
+DialogUserMsg::DialogUserMsg(quint8 slaveAddress, DataDisplayMode mode, ModbusClient& client, QWidget *parent) :
+      QFixedSizeDialog(parent)
+    , ui(new Ui::DialogUserMsg)
+    ,_modbusClient(client)
 {
     ui->setupUi(this);
 
@@ -32,6 +35,8 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, DataDisplayMode mode, QWidget 
     }
 
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText("Send");
+
+    connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogUserMsg::on_modbusReply);
 }
 
 ///
@@ -47,6 +52,42 @@ DialogUserMsg::~DialogUserMsg()
 ///
 void DialogUserMsg::accept()
 {
+    ui->lineEditResponse->clear();
+
+    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    {
+        QMessageBox::warning(this, parentWidget()->windowTitle(), "Custom Cmd Write Failure");
+        return;
+    }
+
+    QModbusRequest request;
+    request.setFunctionCode(ui->lineEditFunction->value<QModbusPdu::FunctionCode>());
+    request.setData(ui->lineEditSendData->value());
+
+    _modbusClient.sendRawRequest(request, ui->lineEditSlaveAddress->value<int>(), 0);
+}
+
+///
+/// \brief DialogUserMsg::on_modbusReply
+/// \param reply
+///
+void DialogUserMsg::on_modbusReply(QModbusReply* reply)
+{
+    if(!reply) return;
+
+    if(0 != reply->property("RequestId").toInt())
+    {
+        return;
+    }
+
+    const auto raw = reply->rawResult();
+
+    QByteArray data;
+    data.push_back(reply->serverAddress());
+    data.push_back(raw.functionCode() | ( raw.isException() ? QModbusPdu::ExceptionByte : 0));
+    data.push_back(raw.data());
+
+    ui->lineEditResponse->setValue(data);
 }
 
 ///
@@ -57,10 +98,12 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
 {
     if(checked)
     {
-        //ui->lineEditSlaveAddress->setPaddingZeroes(true);
-        //ui->lineEditFunction->setPaddingZeroes(true);
+        ui->lineEditSlaveAddress->setPaddingZeroes(true);
         ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::HexMode);
+        ui->lineEditFunction->setPaddingZeroes(true);
         ui->lineEditFunction->setInputMode(NumericLineEdit::HexMode);
+        ui->lineEditSendData->setInputMode(ByteListLineEdit::HexMode);
+        ui->lineEditResponse->setInputMode(ByteListLineEdit::HexMode);
     }
 }
 
@@ -73,8 +116,10 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
     if(checked)
     {
         ui->lineEditSlaveAddress->setPaddingZeroes(false);
+        ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::DecMode);
         ui->lineEditFunction->setPaddingZeroes(false);
-        ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::IntMode);
-        ui->lineEditFunction->setInputMode(NumericLineEdit::IntMode);
+        ui->lineEditFunction->setInputMode(NumericLineEdit::DecMode);
+        ui->lineEditSendData->setInputMode(ByteListLineEdit::DecMode);
+        ui->lineEditResponse->setInputMode(ByteListLineEdit::DecMode);
     }
 }

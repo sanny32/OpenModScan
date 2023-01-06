@@ -209,7 +209,8 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
         return;
     }
 
-    ui->outputWidget->update(request);
+    const auto deviceId = ui->lineEditDeviceId->value<int>();
+    ui->outputWidget->update(request, deviceId);
     ui->statisticWidget->increaseNumberOfPolls();
 }
 

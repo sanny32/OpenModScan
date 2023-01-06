@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenus);
-    connect(&_modbusClient, &ModbusClient::modbusWriteError, this, &MainWindow::on_modbusWriteError);
+    connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError);
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
 
     ui->actionNew->trigger();
@@ -114,7 +114,7 @@ void MainWindow::on_awake()
 /// \brief MainWindow::on_modbusWriteError
 /// \param error
 ///
-void MainWindow::on_modbusWriteError(const QString& error)
+void MainWindow::on_modbusError(const QString& error)
 {
     QMessageBox::warning(this, windowTitle(), error);
 }
@@ -358,7 +358,8 @@ void MainWindow::on_actionUserMsg_triggered()
 
     const auto dd = frm->displayDefinition();
     const auto mode = frm->dataDisplayMode();
-    DialogUserMsg dlg(dd.DeviceId, mode, this);
+
+    DialogUserMsg dlg(dd.DeviceId, mode, _modbusClient, this);
     dlg.exec();
 }
 

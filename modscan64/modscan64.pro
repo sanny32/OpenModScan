@@ -14,6 +14,7 @@ INCLUDEPATH += controls \
 SOURCES += \
     appsettings.cpp \
     controls/booleancombobox.cpp \
+    controls/bytelistlineedit.cpp \
     controls/connectioncombobox.cpp \
     controls/flowcontroltypecombobox.cpp \
     controls/numericlineedit.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     appsettings.h \
     connectiondetails.h \
     controls/booleancombobox.h \
+    controls/bytelistlineedit.h \
     controls/connectioncombobox.h \
     controls/flowcontroltypecombobox.h \
     controls/numericlineedit.h \

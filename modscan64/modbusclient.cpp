@@ -100,6 +100,35 @@ QModbusRequest createReadRequest(const QModbusDataUnit& data)
 }
 
 ///
+/// \brief ModbusClient::sendRawRequest
+/// \param request
+/// \param server
+/// \param requestId
+///
+void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int requestId)
+{
+    if(_modbusClient == nullptr || state() != QModbusDevice::ConnectedState)
+    {
+        return;
+    }
+
+    if(auto reply = _modbusClient->sendRawRequest(request, server))
+    {
+        reply->setProperty("RequestId", requestId);
+        if (!reply->isFinished())
+        {
+            connect(reply, &QModbusReply::finished, this, &ModbusClient::on_readReply);
+        }
+        else
+        {
+            delete reply; // broadcast replies return immediately
+        }
+    }
+    else
+        emit modbusError("Invalid Modbus Request");
+}
+
+///
 /// \brief ModbusClient::sendReadRequest
 /// \param pointType
 /// \param startAddress
@@ -390,7 +419,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
             break;
         }
 
-        emit modbusWriteError(errorDesc);
+        emit modbusError(errorDesc);
         return;
     }
 
@@ -425,7 +454,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     if(_modbusClient == nullptr ||
        _modbusClient->state() != QModbusDevice::ConnectedState)
     {
-        emit modbusWriteError("Mask Write Register Failure");
+        emit modbusError("Mask Write Register Failure");
         return;
     }
 
@@ -494,9 +523,9 @@ void ModbusClient::on_writeReply()
     auto onError = [this, reply, raw](const QString& errorDesc)
     {
         if (reply->error() == QModbusDevice::ProtocolError)
-            emit modbusWriteError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())));
+            emit modbusError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())));
         else if(reply->error() != QModbusDevice::NoError)
-            emit modbusWriteError(QString("%1. %2").arg(errorDesc, reply->errorString()));
+            emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()));
     };
 
     switch(raw.functionCode())

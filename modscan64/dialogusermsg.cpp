@@ -1,3 +1,4 @@
+#include <QTimer>
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDialogButtonBox>
@@ -60,11 +61,16 @@ void DialogUserMsg::accept()
         return;
     }
 
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
     QModbusRequest request;
     request.setFunctionCode(ui->lineEditFunction->value<QModbusPdu::FunctionCode>());
     request.setData(ui->lineEditSendData->value());
 
     _modbusClient.sendRawRequest(request, ui->lineEditSlaveAddress->value<int>(), 0);
+
+    const auto timeout = _modbusClient.timeout() * _modbusClient.numberOfRetries();
+    QTimer::singleShot(timeout, this, [&] { ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true); });
 }
 
 ///
@@ -88,6 +94,7 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
     data.push_back(raw.data());
 
     ui->lineEditResponse->setValue(data);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 ///

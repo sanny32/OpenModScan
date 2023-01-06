@@ -498,6 +498,50 @@ QModbusDevice::State ModbusClient::state() const
 }
 
 ///
+/// \brief ModbusClient::timeout
+/// \return
+///
+int ModbusClient::timeout() const
+{
+    if(_modbusClient)
+        return _modbusClient->timeout();
+
+    return 0;
+}
+
+///
+/// \brief ModbusClient::setTimeout
+/// \param newTimeout
+///
+void ModbusClient::setTimeout(int newTimeout)
+{
+    if(_modbusClient)
+        _modbusClient->setTimeout(newTimeout);
+}
+
+///
+/// \brief ModbusClient::numberOfRetries
+/// \return
+///
+int ModbusClient::numberOfRetries() const
+{
+    if(_modbusClient)
+        return _modbusClient->numberOfRetries();
+
+    return 0;
+}
+
+///
+/// \brief ModbusClient::setNumberOfRetries
+/// \param number
+///
+void ModbusClient::setNumberOfRetries(int number)
+{
+    if(_modbusClient)
+        _modbusClient->setNumberOfRetries(number);
+}
+
+///
 /// \brief ModbusClient::on_readReply
 ///
 void ModbusClient::on_readReply()

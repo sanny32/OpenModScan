@@ -1,1 +1,1 @@
-# OpenModScan
+# Open ModScan

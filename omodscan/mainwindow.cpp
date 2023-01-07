@@ -63,6 +63,7 @@ void MainWindow::on_awake()
 
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
+    ui->menuConfig->setEnabled(frm != nullptr);
 
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
@@ -423,6 +424,59 @@ void MainWindow::on_actionStatusBar_triggered()
 void MainWindow::on_actionDsiplayBar_triggered()
 {
     ui->toolBarDisplay->setVisible(!ui->toolBarDisplay->isVisible());
+}
+
+///
+/// \brief MainWindow::on_actionBackground_triggered
+///
+void MainWindow::on_actionBackground_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    QColorDialog dlg(frm->backgroundColor(), this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        frm->setBackgroundColor(dlg.currentColor());
+    }
+}
+
+///
+/// \brief MainWindow::on_actionForeground_triggered
+///
+void MainWindow::on_actionForeground_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    QColorDialog dlg(frm->foregroundColor(), this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        frm->setForegroundColor(dlg.currentColor());
+    }
+}
+
+///
+/// \brief MainWindow::on_actionStatus_triggered
+///
+void MainWindow::on_actionStatus_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    QColorDialog dlg(frm->statusColor(), this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        frm->setStatusColor(dlg.currentColor());
+    }
+}
+
+///
+/// \brief MainWindow::on_actionFont_triggered
+///
+void MainWindow::on_actionFont_triggered()
+{
+
 }
 
 ///

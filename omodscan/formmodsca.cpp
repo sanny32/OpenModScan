@@ -172,6 +172,60 @@ void FormModSca::stopTextCapture()
 }
 
 ///
+/// \brief FormModSca::backgroundColor
+/// \return
+///
+QColor FormModSca::backgroundColor() const
+{
+    return ui->outputWidget->backgroundColor();
+}
+
+///
+/// \brief FormModSca::setBackgroundColor
+/// \param clr
+///
+void FormModSca::setBackgroundColor(QColor clr)
+{
+    ui->outputWidget->setBackgroundColor(clr);
+}
+
+///
+/// \brief FormModSca::foregroundColor
+/// \return
+///
+QColor FormModSca::foregroundColor() const
+{
+    return ui->outputWidget->foregroundColor();
+}
+
+///
+/// \brief FormModSca::setForegroundColor
+/// \param clr
+///
+void FormModSca::setForegroundColor(QColor clr)
+{
+    ui->outputWidget->setForegroundColor(clr);
+}
+
+///
+/// \brief FormModSca::statusColor
+/// \return
+///
+QColor FormModSca::statusColor() const
+{
+    return ui->outputWidget->statusColor();
+}
+
+///
+/// \brief FormModSca::setStatusColor
+/// \param clr
+///
+void FormModSca::setStatusColor(QColor clr)
+{
+    ui->outputWidget->setStatusColor(clr);
+}
+
+///
 /// \brief FormModSca::resetCtrls
 ///
 void FormModSca::resetCtrs()

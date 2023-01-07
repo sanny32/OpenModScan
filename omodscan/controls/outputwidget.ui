@@ -56,8 +56,8 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="styleSheet">
-          <string notr="true">color: red;</string>
+         <property name="autoFillBackground">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

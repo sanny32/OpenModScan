@@ -26,6 +26,13 @@ OutputWidget::OutputWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
+    ui->labelStatus->setAutoFillBackground(true);
+
+    setAutoFillBackground(true);
+    setForegroundColor(Qt::black);
+    setBackgroundColor(Qt::lightGray);
+
+    setStatusColor(Qt::red);
     setStatus("Data Uninitialized");
 }
 
@@ -35,7 +42,6 @@ OutputWidget::OutputWidget(QWidget *parent) :
 OutputWidget::~OutputWidget()
 {
     delete ui;
-    stopTextCapture();
 }
 
 ///
@@ -102,6 +108,67 @@ void OutputWidget::stopTextCapture()
 {
     if(_fileCapture.isOpen())
         _fileCapture.close();
+}
+
+///
+/// \brief OutputWidget::backgroundColor
+/// \return
+///
+QColor OutputWidget::backgroundColor() const
+{
+    return ui->listWidget->palette().color(QPalette::Base);
+}
+
+///
+/// \brief OutputWidget::setBackgroundColor
+/// \param clr
+///
+void OutputWidget::setBackgroundColor(const QColor& clr)
+{
+    auto pal = palette();
+    pal.setColor(QPalette::Base, clr);
+    pal.setColor(QPalette::Window, clr);
+    setPalette(pal);
+}
+
+///
+/// \brief OutputWidget::foregroundColor
+/// \return
+///
+QColor OutputWidget::foregroundColor() const
+{
+    return ui->listWidget->palette().color(QPalette::Text);
+}
+
+///
+/// \brief OutputWidget::setForegroundColor
+/// \param clr
+///
+void OutputWidget::setForegroundColor(const QColor& clr)
+{
+    auto pal = ui->listWidget->palette();
+    pal.setColor(QPalette::Text, clr);
+    ui->listWidget->setPalette(pal);
+}
+
+///
+/// \brief OutputWidget::statusColor
+/// \return
+///
+QColor OutputWidget::statusColor() const
+{
+    return ui->labelStatus->palette().color(QPalette::WindowText);
+}
+
+///
+/// \brief OutputWidget::setStatusColor
+/// \param clr
+///
+void OutputWidget::setStatusColor(const QColor& clr)
+{
+    auto pal = ui->labelStatus->palette();
+    pal.setColor(QPalette::WindowText, clr);
+    ui->labelStatus->setPalette(pal);
 }
 
 ///

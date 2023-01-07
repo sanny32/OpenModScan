@@ -42,6 +42,15 @@ public:
     void startTextCapture(const QString& file);
     void stopTextCapture();
 
+    QColor backgroundColor() const;
+    void setBackgroundColor(QColor clr);
+
+    QColor foregroundColor() const;
+    void setForegroundColor(QColor clr);
+
+    QColor statusColor() const;
+    void setStatusColor(QColor clr);
+
     void resetCtrs();
 
 private slots:

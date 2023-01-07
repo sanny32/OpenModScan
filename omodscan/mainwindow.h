@@ -51,6 +51,10 @@ private slots:
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDsiplayBar_triggered();
+    void on_actionBackground_triggered();
+    void on_actionForeground_triggered();
+    void on_actionStatus_triggered();
+    void on_actionFont_triggered();
     void on_awake();
 
     void on_modbusError(const QString& error);

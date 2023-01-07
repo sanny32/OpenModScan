@@ -49,4 +49,12 @@ enum class TransmissionMode
 };
 Q_DECLARE_METATYPE(TransmissionMode);
 
+///
+/// \brief The CaptureMode enum
+///
+enum class CaptureMode{
+    Off = 0,
+    TextCapture
+};
+
 #endif // ENUMS_H

@@ -1,6 +1,7 @@
 #ifndef OUTPUTWIDGET_H
 #define OUTPUTWIDGET_H
 
+#include <QFile>
 #include <QWidget>
 #include <QListWidgetItem>
 #include <QModbusReply>
@@ -18,7 +19,7 @@ class OutputWidget : public QWidget
 {
     Q_OBJECT
 
-public:
+public:  
     explicit OutputWidget(QWidget *parent = nullptr);
     ~OutputWidget();
 
@@ -35,6 +36,10 @@ public:
     bool displayHexAddreses() const;
     void setDisplayHexAddreses(bool on);
 
+    CaptureMode captureMode() const;
+    void startTextCapture(const QString& file);
+    void stopTextCapture();
+
     void setStatus(const QString& status);
 
     void update(const QModbusRequest& request, int server);
@@ -47,6 +52,7 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
+    void captureString(const QString& s);
     void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 
@@ -59,6 +65,7 @@ private:
     DataDisplayMode _dataDisplayMode;
     DisplayDefinition _displayDefinition;
     QModbusDataUnit _lastData;
+    QFile _fileCapture;
 };
 
 #endif // OUTPUTWIDGET_H

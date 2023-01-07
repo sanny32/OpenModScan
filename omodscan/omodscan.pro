@@ -40,8 +40,7 @@ SOURCES += \
     mainwindow.cpp \
     modbusclient.cpp \
     qfixedsizedialog.cpp \
-    qhexvalidator.cpp \
-    textcapturehandler.cpp
+    qhexvalidator.cpp
 
 HEADERS += \
     appsettings.h \
@@ -78,8 +77,7 @@ HEADERS += \
     modbuswriteparams.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
-    qrange.h \
-    textcapturehandler.h
+    qrange.h
 
 FORMS += \
     controls/outputwidget.ui \

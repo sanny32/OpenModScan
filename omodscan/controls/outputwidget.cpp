@@ -1,3 +1,5 @@
+#include <QDateTime>
+#include <QTextStream>
 #include "floatutils.h"
 #include "modbusexception.h"
 #include "outputwidget.h"
@@ -33,6 +35,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
 OutputWidget::~OutputWidget()
 {
     delete ui;
+    stopTextCapture();
 }
 
 ///
@@ -74,15 +77,52 @@ void OutputWidget::setDisplayHexAddreses(bool on)
 }
 
 ///
+/// \brief OutputWidget::captureMode
+/// \return
+///
+CaptureMode OutputWidget::captureMode() const
+{
+    return _fileCapture.isOpen() ? CaptureMode::TextCapture : CaptureMode::Off;
+}
+
+///
+/// \brief OutputWidget::startTextCapture
+/// \param file
+///
+void OutputWidget::startTextCapture(const QString& file)
+{
+    _fileCapture.setFileName(file);
+    _fileCapture.open(QFile::Text | QFile::WriteOnly);
+}
+
+///
+/// \brief OutputWidget::stopTextCapture
+///
+void OutputWidget::stopTextCapture()
+{
+    if(_fileCapture.isOpen())
+        _fileCapture.close();
+}
+
+///
 /// \brief OutputWidget::setStatus
 /// \param status
 ///
 void OutputWidget::setStatus(const QString& status)
 {
     if(status.isEmpty())
-        ui->labelStatus->setText(QString());
+    {
+        ui->labelStatus->setText(status);
+    }
     else
-        ui->labelStatus->setText(QString("** %1 **").arg(status));
+    {
+        const auto info = QString("** %1 **").arg(status);
+        if(info != ui->labelStatus->text())
+        {
+            ui->labelStatus->setText(info);
+            captureString(info);
+        }
+    }
 }
 
 ///
@@ -367,6 +407,38 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
 }
 
 ///
+/// \brief formatAddress
+/// \param pointType
+/// \param address
+/// \param hexFormat
+/// \return
+///
+QString formatAddress(QModbusDataUnit::RegisterType pointType, int address, bool hexFormat)
+{
+    QString prefix;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+            prefix = "0";
+        break;
+        case QModbusDataUnit::DiscreteInputs:
+            prefix = "1";
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+            prefix = "4";
+        break;
+        case QModbusDataUnit::InputRegisters:
+            prefix = "3";
+        break;
+        default:
+        break;
+    }
+
+    return hexFormat ? QStringLiteral("%1H").arg(address, 4, 16, QLatin1Char('0')) :
+               prefix + QStringLiteral("%1").arg(address, 4, 10, QLatin1Char('0'));
+}
+
+///
 /// \brief OutputWidget::on_listWidget_itemDoubleClicked
 /// \param item
 ///
@@ -402,6 +474,21 @@ void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 }
 
 ///
+/// \brief OutputWidget::captureString
+/// \param s
+///
+void OutputWidget::captureString(const QString& s)
+{
+    if(_fileCapture.isOpen())
+    {
+       QTextStream stream(&_fileCapture);
+       stream << QDateTime::currentDateTime().toString() << " " <<
+              formatAddress(_displayDefinition.PointType, _displayDefinition.PointAddress, false) << " "
+              << s << "\n";
+    }
+}
+
+///
 /// \brief OutputWidget::updateDataWidget
 /// \param data
 ///
@@ -409,39 +496,16 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 {
     ui->listWidget->clear();
 
-    QString prefix;
-    if(!_displayHexAddreses)
-    {
-        switch(_displayDefinition.PointType)
-        {
-            case QModbusDataUnit::Coils:
-                prefix = "0";
-            break;
-            case QModbusDataUnit::DiscreteInputs:
-                prefix = "1";
-            break;
-            case QModbusDataUnit::HoldingRegisters:
-                prefix = "4";
-            break;
-            case QModbusDataUnit::InputRegisters:
-                prefix = "3";
-            break;
-            default:
-            break;
-        }
-    }
-
+    QStringList capstr;
     for(int i = 0; i < _displayDefinition.Length; i++)
     {
         ListItemData itemData;
         itemData.Row = i;
         itemData.Address = i + _displayDefinition.PointAddress;
 
-        const auto addr = _displayHexAddreses ?
-                    QStringLiteral("%1H").arg(itemData.Address, 4, 16, QLatin1Char('0')) :
-                    QStringLiteral("%1").arg(itemData.Address, 4, 10, QLatin1Char('0'));
+        const auto addr = formatAddress(_displayDefinition.PointType, itemData.Address, _displayHexAddreses);
         const auto value = data.value(i);
-        const auto format = "%1%2: %3                  ";
+        const auto format = "%1: %2                ";
 
         QString valstr;
         switch(_dataDisplayMode)
@@ -482,12 +546,15 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
                                            (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
             break;
         }
+        capstr.push_back(QString(valstr).remove('<').remove('>'));
 
-        const auto label = QString(format).arg(prefix, addr, valstr);
+        const auto label = QString(format).arg(addr, valstr);
         auto item = new QListWidgetItem(label, ui->listWidget);
         item->setData(Qt::UserRole, QVariant::fromValue(itemData));
         ui->listWidget->addItem(item);
     }
+
+    captureString(capstr.join(' '));
 }
 
 ///

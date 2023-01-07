@@ -110,8 +110,8 @@ void MainWindow::on_awake()
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
 
-        ui->actionTextCapture->setEnabled(!frm->hasTextCapture());
-        ui->actionCaptureOff->setEnabled(frm->hasTextCapture());
+        ui->actionTextCapture->setEnabled(frm->captureMode() == CaptureMode::Off);
+        ui->actionCaptureOff->setEnabled(frm->captureMode() == CaptureMode::TextCapture);
     }
 }
 
@@ -376,7 +376,7 @@ void MainWindow::on_actionTextCapture_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    const auto filename = QFileDialog::getSaveFileName(this, "Saving...", QString(), "Text files (*.txt)");
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
     frm->startTextCapture(filename);
 }
 

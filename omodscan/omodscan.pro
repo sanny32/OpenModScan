@@ -1,7 +1,5 @@
 QT += core gui widgets network serialbus serialport
 CONFIG += c++17
-CONFIG += debug_and_release
-CONFIG += debug_and_release_target
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -10,6 +8,7 @@ CONFIG += debug_and_release_target
 win32:RC_ICONS += res/omodscan.ico
 
 INCLUDEPATH += controls \
+               dialogs \
 
 SOURCES += \
     appsettings.cpp \

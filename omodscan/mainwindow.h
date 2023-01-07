@@ -63,7 +63,7 @@ private slots:
     void on_modbusError(const QString& error);
     void on_modbusConnectionError(const QString& error);
 
-    void updateMenus();
+    void updateMenuWindow();
 
 private:
     void updateDataDisplayMode(DataDisplayMode mode);

@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
-    connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenus);
+    connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError);
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
 
@@ -75,13 +75,7 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
             auto action = child->property("Action").value<QAction*>();
             ui->menuWindow->removeAction(action);
 
-            int i = 0;
-            for(auto&& a : ui->menuWindow->actions())
-            {
-                auto wnd = a->data().value<QMdiSubWindow*>();
-                if(wnd) a->setText(QString("%1 %2").arg(QString::number(++i), wnd->windowTitle()));
-            }
-
+            updateMenuWindow();
             break;
         }
         default:
@@ -540,15 +534,23 @@ void MainWindow::on_actionTile_triggered()
 }
 
 ///
-/// \brief MainWindow::updateMenus
+/// \brief MainWindow::updateMenuWindow
 ///
-void MainWindow::updateMenus()
+void MainWindow::updateMenuWindow()
 {
+    int i = 0;
     auto activeWnd = ui->mdiArea->activeSubWindow();
+
     for(auto&& a : ui->menuWindow->actions())
     {
         auto wnd = a->data().value<QMdiSubWindow*>();
-        a->setChecked(activeWnd == wnd);
+        if(wnd)
+        {
+            a->setChecked(activeWnd == wnd);
+            a->setText(QString("%1 %2").arg(QString::number(++i), wnd->windowTitle()));
+        }
+        else
+            a->setChecked(false);
     }
 }
 
@@ -574,20 +576,19 @@ FormModSca* MainWindow::createMdiChild()
     child->installEventFilter(this);
     child->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    const auto num = ui->mdiArea->subWindowList().count();
-    const auto text = QString("%1 %2").arg(QString::number(num), frm->windowTitle());
-    auto action = new QAction(text, ui->menuWindow);
+    auto action = new QAction(ui->menuWindow);
     action->setData(QVariant::fromValue(child));
     action->setCheckable(true);
-    child->setProperty("Action", QVariant::fromValue(action));
 
     connect(action, &QAction::triggered, this, [this, child](bool)
     {
         ui->mdiArea->setActiveSubWindow(child);
     });
 
+    child->setProperty("Action", QVariant::fromValue(action));
+
     ui->menuWindow->addAction(action);
-    updateMenus();
+    updateMenuWindow();
 
     return frm;
 }

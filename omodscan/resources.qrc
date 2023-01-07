@@ -18,6 +18,6 @@
         <file>res/actionSwappedDbl.png</file>
         <file>res/actionSwappedFP.png</file>
         <file>res/actionUnsignedDecimal.png</file>
-        <file>res/modscan64.png</file>
+        <file>res/omodscan.png</file>
     </qresource>
 </RCC>

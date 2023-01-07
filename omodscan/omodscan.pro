@@ -7,7 +7,7 @@ CONFIG += debug_and_release_target
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-win32:RC_ICONS += res/modscan64.ico
+win32:RC_ICONS += res/omodscan.ico
 
 INCLUDEPATH += controls \
 
@@ -23,17 +23,17 @@ SOURCES += \
     controls/numericcombobox.cpp \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
-    dialogconnectiondetails.cpp \
-    dialogdisplaydefinition.cpp \
-    dialogforcemultiplecoils.cpp \
-    dialogforcemultipleregisters.cpp \
-    dialogmaskwriteregiter.cpp \
-    dialogprotocolselections.cpp \
-    dialogsetuppresetdata.cpp \
-    dialogusermsg.cpp \
-    dialogwritecoilregister.cpp \
-    dialogwriteholdingregister.cpp \
-    dialogwriteholdingregisterbits.cpp \
+    dialogs/dialogconnectiondetails.cpp \
+    dialogs/dialogdisplaydefinition.cpp \
+    dialogs/dialogforcemultiplecoils.cpp \
+    dialogs/dialogforcemultipleregisters.cpp \
+    dialogs/dialogmaskwriteregiter.cpp \
+    dialogs/dialogprotocolselections.cpp \
+    dialogs/dialogsetuppresetdata.cpp \
+    dialogs/dialogusermsg.cpp \
+    dialogs/dialogwritecoilregister.cpp \
+    dialogs/dialogwriteholdingregister.cpp \
+    dialogs/dialogwriteholdingregisterbits.cpp \
     formmodsca.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -54,17 +54,17 @@ HEADERS += \
     controls/numericcombobox.h \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
-    dialogconnectiondetails.h \
-    dialogdisplaydefinition.h \
-    dialogforcemultiplecoils.h \
-    dialogforcemultipleregisters.h \
-    dialogmaskwriteregiter.h \
-    dialogprotocolselections.h \
-    dialogsetuppresetdata.h \
-    dialogusermsg.h \
-    dialogwritecoilregister.h \
-    dialogwriteholdingregister.h \
-    dialogwriteholdingregisterbits.h \
+    dialogs/dialogconnectiondetails.h \
+    dialogs/dialogdisplaydefinition.h \
+    dialogs/dialogforcemultiplecoils.h \
+    dialogs/dialogforcemultipleregisters.h \
+    dialogs/dialogmaskwriteregiter.h \
+    dialogs/dialogprotocolselections.h \
+    dialogs/dialogsetuppresetdata.h \
+    dialogs/dialogusermsg.h \
+    dialogs/dialogwritecoilregister.h \
+    dialogs/dialogwriteholdingregister.h \
+    dialogs/dialogwriteholdingregisterbits.h \
     displaydefinition.h \
     enums.h \
     floatutils.h \
@@ -81,17 +81,17 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
-    dialogconnectiondetails.ui \
-    dialogdisplaydefinition.ui \
-    dialogforcemultiplecoils.ui \
-    dialogforcemultipleregisters.ui \
-    dialogmaskwriteregiter.ui \
-    dialogprotocolselections.ui \
-    dialogsetuppresetdata.ui \
-    dialogusermsg.ui \
-    dialogwritecoilregister.ui \
-    dialogwriteholdingregister.ui \
-    dialogwriteholdingregisterbits.ui \
+    dialogs/dialogconnectiondetails.ui \
+    dialogs/dialogdisplaydefinition.ui \
+    dialogs/dialogforcemultiplecoils.ui \
+    dialogs/dialogforcemultipleregisters.ui \
+    dialogs/dialogmaskwriteregiter.ui \
+    dialogs/dialogprotocolselections.ui \
+    dialogs/dialogsetuppresetdata.ui \
+    dialogs/dialogusermsg.ui \
+    dialogs/dialogwritecoilregister.ui \
+    dialogs/dialogwriteholdingregister.ui \
+    dialogs/dialogwriteholdingregisterbits.ui \
     formmodsca.ui \
     mainwindow.ui
 

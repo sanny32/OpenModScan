@@ -482,7 +482,7 @@ void OutputWidget::captureString(const QString& s)
     if(_fileCapture.isOpen())
     {
        QTextStream stream(&_fileCapture);
-       stream << QDateTime::currentDateTime().toString() << " " <<
+       stream << QDateTime::currentDateTime().toString(Qt::ISODateWithMs) << " " <<
               formatAddress(_displayDefinition.PointType, _displayDefinition.PointAddress, false) << " "
               << s << "\n";
     }

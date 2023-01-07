@@ -23,6 +23,7 @@ signals:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
+    bool eventFilter(QObject * obj, QEvent * e) override;
 
 private slots:
     void on_actionNew_triggered();
@@ -55,13 +56,16 @@ private slots:
     void on_actionForeground_triggered();
     void on_actionStatus_triggered();
     void on_actionFont_triggered();
+    void on_actionCascade_triggered();
+    void on_actionTile_triggered();
     void on_awake();
 
     void on_modbusError(const QString& error);
     void on_modbusConnectionError(const QString& error);
 
-private:
     void updateMenus();
+
+private:
     void updateDataDisplayMode(DataDisplayMode mode);
 
     FormModSca* createMdiChild();
@@ -71,6 +75,7 @@ private:
     Ui::MainWindow *ui;
 
 private:
+    int _windowCounter;
     AppSettings _settings;
     ModbusClient _modbusClient;
 };

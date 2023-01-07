@@ -155,7 +155,6 @@
     </property>
     <addaction name="actionCascade"/>
     <addaction name="actionTile"/>
-    <addaction name="actionArrangeIcons"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">

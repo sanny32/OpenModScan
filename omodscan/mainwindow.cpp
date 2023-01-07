@@ -16,6 +16,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,_windowCounter(0)
     ,_modbusClient(nullptr)
 {
     ui->setupUi(this);
@@ -56,6 +57,42 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
+///
+/// \brief MainWindow::eventFilter
+/// \param obj
+/// \param e
+/// \return
+///
+bool MainWindow::eventFilter(QObject * obj, QEvent * e)
+{
+    switch (e->type())
+    {
+        case QEvent::Close:
+        {
+            auto child = dynamic_cast<QMdiSubWindow*>(obj);
+            Q_ASSERT (child != NULL);
+
+            auto action = child->property("Action").value<QAction*>();
+            ui->menuWindow->removeAction(action);
+
+            int i = 0;
+            for(auto&& a : ui->menuWindow->actions())
+            {
+                auto wnd = a->data().value<QMdiSubWindow*>();
+                if(wnd) a->setText(QString("%1 %2").arg(QString::number(++i), wnd->windowTitle()));
+            }
+
+            break;
+        }
+        default:
+            qt_noop();
+    }
+    return QObject::eventFilter(obj, e);
+}
+
+///
+/// \brief MainWindow::on_awake
+///
 void MainWindow::on_awake()
 {
     auto frm = currentMdiChild();
@@ -487,10 +524,32 @@ void MainWindow::on_actionFont_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionCascade_triggered
+///
+void MainWindow::on_actionCascade_triggered()
+{
+    ui->mdiArea->cascadeSubWindows();
+}
+
+///
+/// \brief MainWindow::on_actionTile_triggered
+///
+void MainWindow::on_actionTile_triggered()
+{
+    ui->mdiArea->tileSubWindows();
+}
+
+///
 /// \brief MainWindow::updateMenus
 ///
 void MainWindow::updateMenus()
 {
+    auto activeWnd = ui->mdiArea->activeSubWindow();
+    for(auto&& a : ui->menuWindow->actions())
+    {
+        auto wnd = a->data().value<QMdiSubWindow*>();
+        a->setChecked(activeWnd == wnd);
+    }
 }
 
 ///
@@ -510,9 +569,26 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 ///
 FormModSca* MainWindow::createMdiChild()
 {
-    const auto num = ui->mdiArea->subWindowList().count() + 1;
-    auto frm = new FormModSca(num, _modbusClient, this);
-    ui->mdiArea->addSubWindow(frm);
+    auto frm = new FormModSca(++_windowCounter, _modbusClient, this);
+    auto child = ui->mdiArea->addSubWindow(frm);
+    child->installEventFilter(this);
+    child->setAttribute(Qt::WA_DeleteOnClose, true);
+
+    const auto num = ui->mdiArea->subWindowList().count();
+    const auto text = QString("%1 %2").arg(QString::number(num), frm->windowTitle());
+    auto action = new QAction(text, ui->menuWindow);
+    action->setData(QVariant::fromValue(child));
+    action->setCheckable(true);
+    child->setProperty("Action", QVariant::fromValue(action));
+
+    connect(action, &QAction::triggered, this, [this, child](bool)
+    {
+        ui->mdiArea->setActiveSubWindow(child);
+    });
+
+    ui->menuWindow->addAction(action);
+    updateMenus();
+
     return frm;
 }
 

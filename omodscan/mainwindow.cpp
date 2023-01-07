@@ -376,7 +376,8 @@ void MainWindow::on_actionTextCapture_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
+    auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
+    if(!filename.toLower().endsWith(".txt")) filename += ".txt";
     frm->startTextCapture(filename);
 }
 

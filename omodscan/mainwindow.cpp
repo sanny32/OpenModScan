@@ -70,12 +70,13 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
         case QEvent::Close:
         {
             auto child = dynamic_cast<QMdiSubWindow*>(obj);
-            Q_ASSERT (child != NULL);
+            if(child != nullptr)
+            {
+                auto action = child->property("Action").value<QAction*>();
+                ui->menuWindow->removeAction(action);
 
-            auto action = child->property("Action").value<QAction*>();
-            ui->menuWindow->removeAction(action);
-
-            updateMenuWindow();
+                updateMenuWindow();
+            }
             break;
         }
         default:

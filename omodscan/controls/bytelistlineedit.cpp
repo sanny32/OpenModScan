@@ -20,6 +20,7 @@ ByteListLineEdit::ByteListLineEdit(QWidget* parent)
 /// \param parent
 ///
 ByteListLineEdit::ByteListLineEdit(InputMode mode, QWidget *parent)
+    :QLineEdit(parent)
 {
     setInputMode(mode);
 

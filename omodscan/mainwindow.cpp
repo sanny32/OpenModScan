@@ -377,7 +377,7 @@ void MainWindow::on_actionTextCapture_triggered()
     if(!frm) return;
 
     auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
-    if(!filename.toLower().endsWith(".txt")) filename += ".txt";
+    if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
     frm->startTextCapture(filename);
 }
 

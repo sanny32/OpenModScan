@@ -45,6 +45,8 @@ private slots:
     void on_actionPresetRegs_triggered();
     void on_actionMaskWrite_triggered();
     void on_actionUserMsg_triggered();
+    void on_actionTextCapture_triggered();
+    void on_actionCaptureOff_triggered();
     void on_actionResetCtrs_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();

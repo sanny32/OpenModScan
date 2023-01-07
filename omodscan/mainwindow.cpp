@@ -84,6 +84,8 @@ void MainWindow::on_awake()
     ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionUserMsg->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionTextCapture->setEnabled(frm != nullptr);
+    ui->actionCaptureOff->setEnabled(frm != nullptr);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(ui->statusbar->isVisible());
@@ -107,6 +109,9 @@ void MainWindow::on_awake()
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
+
+        ui->actionTextCapture->setEnabled(!frm->hasTextCapture());
+        ui->actionCaptureOff->setEnabled(frm->hasTextCapture());
     }
 }
 
@@ -361,6 +366,29 @@ void MainWindow::on_actionUserMsg_triggered()
 
     DialogUserMsg dlg(dd.DeviceId, mode, _modbusClient, this);
     dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_actionTextCapture_triggered
+///
+void MainWindow::on_actionTextCapture_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto filename = QFileDialog::getSaveFileName(this, "Saving...", QString(), "Text files (*.txt)");
+    frm->startTextCapture(filename);
+}
+
+///
+/// \brief MainWindow::on_actionCaptureOff_triggered
+///
+void MainWindow::on_actionCaptureOff_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->stopTextCapture();
 }
 
 ///

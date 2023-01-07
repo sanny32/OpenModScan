@@ -6,6 +6,7 @@
 #include "enums.h"
 #include "modbusclient.h"
 #include "displaydefinition.h"
+#include "textcapturehandler.h"
 
 class MainWindow;
 
@@ -38,6 +39,10 @@ public:
     bool displayHexAddreses() const;
     void setDisplayHexAddreses(bool on);
 
+    bool hasTextCapture() const;
+    void startTextCapture(const QString& file);
+    void stopTextCapture();
+
     void resetCtrs();
 
 private slots:
@@ -55,6 +60,7 @@ private:
     int _formId;
     QTimer _timer;
     ModbusClient& _modbusClient;
+    TextCaptureHandler* _captureHandler;
 };
 
 #endif // FORMMODSCA_H

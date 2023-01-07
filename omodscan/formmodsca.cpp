@@ -16,6 +16,7 @@ FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
     , ui(new Ui::FormModSca)
     ,_formId(num)
     ,_modbusClient(client)
+    ,_captureHandler(nullptr)
 {
     Q_ASSERT(parent != nullptr);
 
@@ -49,6 +50,7 @@ FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
 FormModSca::~FormModSca()
 {
     delete ui;
+    stopTextCapture();
 }
 
 ///
@@ -147,6 +149,36 @@ void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief FormModSca::hasTextCapture
+///
+bool FormModSca::hasTextCapture() const
+{
+    return _captureHandler != nullptr;
+}
+
+///
+/// \brief FormModSca::startTextCapture
+/// \param file
+///
+void FormModSca::startTextCapture(const QString& file)
+{
+    _captureHandler = new TextCaptureHandler(this);
+    _captureHandler->startCapture(file);
+}
+
+///
+/// \brief FormModSca::stopTextCapture
+///
+void FormModSca::stopTextCapture()
+{
+    if(_captureHandler)
+    {
+        delete _captureHandler;
+        _captureHandler = nullptr;
+    }
+}
+
+///
 /// \brief FormModSca::resetCtrls
 ///
 void FormModSca::resetCtrs()
@@ -190,6 +222,7 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
     }
 
     ui->outputWidget->update(reply);
+    if(_captureHandler) _captureHandler->update(reply);
 
     if(reply->error() == QModbusDevice::NoError)
     {

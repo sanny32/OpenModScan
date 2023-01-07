@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ModScan64</string>
+   <string>Open ModScan</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
-    <normaloff>:/res/modscan64.png</normaloff>:/res/modscan64.png</iconset>
+    <normaloff>:/res/omodscan.png</normaloff>:/res/omodscan.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">

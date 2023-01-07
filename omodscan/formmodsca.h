@@ -51,6 +51,9 @@ public:
     QColor statusColor() const;
     void setStatusColor(QColor clr);
 
+    QFont font() const;
+    void setFont(const QFont& font);
+
     void resetCtrs();
 
 private slots:

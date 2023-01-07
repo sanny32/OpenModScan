@@ -476,7 +476,14 @@ void MainWindow::on_actionStatus_triggered()
 ///
 void MainWindow::on_actionFont_triggered()
 {
+    auto frm = currentMdiChild();
+    if(!frm) return;
 
+    QFontDialog dlg(frm->font(), this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        frm->setFont(dlg.currentFont());
+    }
 }
 
 ///

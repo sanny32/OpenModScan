@@ -226,6 +226,24 @@ void FormModSca::setStatusColor(QColor clr)
 }
 
 ///
+/// \brief FormModSca::font
+/// \return
+///
+QFont FormModSca::font() const
+{
+   return ui->outputWidget->font();
+}
+
+///
+/// \brief FormModSca::setFont
+/// \param font
+///
+void FormModSca::setFont(const QFont& font)
+{
+    ui->outputWidget->setFont(font);
+}
+
+///
 /// \brief FormModSca::resetCtrls
 ///
 void FormModSca::resetCtrs()

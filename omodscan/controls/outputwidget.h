@@ -49,6 +49,9 @@ public:
     QColor statusColor() const;
     void setStatusColor(const QColor& clr);
 
+    QFont font() const;
+    void setFont(const QFont& font);
+
     void setStatus(const QString& status);
 
     void update(const QModbusRequest& request, int server);

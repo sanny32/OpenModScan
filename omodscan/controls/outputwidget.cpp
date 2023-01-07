@@ -172,6 +172,25 @@ void OutputWidget::setStatusColor(const QColor& clr)
 }
 
 ///
+/// \brief OutputWidget::font
+/// \return
+///
+QFont OutputWidget::font() const
+{
+    return ui->listWidget->font();
+}
+
+///
+/// \brief OutputWidget::setFont
+/// \param font
+///
+void OutputWidget::setFont(const QFont& font)
+{
+    ui->listWidget->setFont(font);
+    ui->labelStatus->setFont(font);
+}
+
+///
 /// \brief OutputWidget::setStatus
 /// \param status
 ///

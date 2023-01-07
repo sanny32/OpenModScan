@@ -546,7 +546,9 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
                                            (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
             break;
         }
-        capstr.push_back(QString(valstr).remove('<').remove('>'));
+
+        if(captureMode() == CaptureMode::TextCapture)
+            capstr.push_back(QString(valstr).remove('<').remove('>'));
 
         const auto label = QString(format).arg(addr, valstr);
         auto item = new QListWidgetItem(label, ui->listWidget);
@@ -554,7 +556,8 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         ui->listWidget->addItem(item);
     }
 
-    captureString(capstr.join(' '));
+    if(captureMode() == CaptureMode::TextCapture)
+        captureString(capstr.join(' '));
 }
 
 ///

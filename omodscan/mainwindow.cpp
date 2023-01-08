@@ -72,7 +72,7 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
             auto child = dynamic_cast<QMdiSubWindow*>(obj);
             if(child != nullptr)
             {
-                auto action = child->property("Action").value<QAction*>();
+                auto action = child->property("actionActivate").value<QAction*>();
                 ui->menuWindow->removeAction(action);
 
                 updateMenuWindow();
@@ -577,18 +577,18 @@ FormModSca* MainWindow::createMdiChild()
     child->installEventFilter(this);
     child->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    auto action = new QAction(ui->menuWindow);
-    action->setData(QVariant::fromValue(child));
-    action->setCheckable(true);
+    auto actionActivate = new QAction(ui->menuWindow);
+    actionActivate->setData(QVariant::fromValue(child));
+    actionActivate->setCheckable(true);
 
-    connect(action, &QAction::triggered, this, [this, child](bool)
+    connect(actionActivate, &QAction::triggered, this, [this, child](bool)
     {
         ui->mdiArea->setActiveSubWindow(child);
     });
 
-    child->setProperty("Action", QVariant::fromValue(action));
+    child->setProperty("actionActivate", QVariant::fromValue(actionActivate));
 
-    ui->menuWindow->addAction(action);
+    ui->menuWindow->addAction(actionActivate);
     updateMenuWindow();
 
     return frm;

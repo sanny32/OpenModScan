@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>440</width>
-    <height>311</height>
+    <height>310</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -142,8 +142,11 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>140</height>
+       <height>160</height>
       </size>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
      <property name="readOnly">
       <bool>true</bool>

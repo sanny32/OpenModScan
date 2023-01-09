@@ -27,6 +27,9 @@ protected:
 
 private slots:
     void on_actionNew_triggered();
+    void on_actionOpen_triggered();
+    void on_actionSave_triggered();
+    void on_actionSaveAs_triggered();
     void on_actionConnect_triggered();
     void on_actionDisconnect_triggered();
     void on_actionQuickConnect_triggered();
@@ -69,8 +72,12 @@ private slots:
 private:
     void updateDataDisplayMode(DataDisplayMode mode);
 
-    FormModSca* createMdiChild();
-    FormModSca* currentMdiChild();
+    FormModSca* createMdiChild(int num);
+    FormModSca* currentMdiChild() const;
+    FormModSca* findMdiChild(int num) const;
+
+    FormModSca* loadMdiChild(const QString& filename);
+    void saveMdiChild(const QString& filename, FormModSca* frm) const;
 
 private:
     Ui::MainWindow *ui;

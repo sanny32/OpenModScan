@@ -138,7 +138,7 @@ void MainWindow::on_awake()
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
-        ui->actionHexAddresses->setChecked(frm->displayHexAddreses());
+        ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
@@ -172,9 +172,42 @@ void MainWindow::on_modbusConnectionError(const QString& error)
 ///
 void MainWindow::on_actionNew_triggered()
 {
-    auto frm = createMdiChild();
+    auto frm = createMdiChild(++_windowCounter);
     //frm->setDataDisplayMode(_settings.DataDisplayMode);
     frm->show();
+}
+
+///
+/// \brief MainWindow::on_actionOpen_triggered
+///
+void MainWindow::on_actionOpen_triggered()
+{
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
+    if(!filename.isEmpty())
+    {
+        auto frm = loadMdiChild(filename);
+        if(frm) frm->show();
+    }
+}
+
+///
+/// \brief MainWindow::on_actionSave_triggered
+///
+void MainWindow::on_actionSave_triggered()
+{
+
+}
+
+///
+/// \brief MainWindow::on_actionSaveAs_triggered
+///
+void MainWindow::on_actionSaveAs_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), "All files (*)");
+    if(!filename.isEmpty()) saveMdiChild(filename, frm);
 }
 
 ///
@@ -210,12 +243,11 @@ void MainWindow::on_actionQuickConnect_triggered()
 ///
 void MainWindow::on_actionDataDefinition_triggered()
 {
-     auto frm = currentMdiChild();
-     if(frm)
-     {
-        DialogDisplayDefinition dlg(frm);
-        dlg.exec();
-     }
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    DialogDisplayDefinition dlg(frm);
+    dlg.exec();
 }
 
 ///
@@ -306,7 +338,7 @@ void MainWindow::on_actionSwappedDbl_triggered()
 void MainWindow::on_actionHexAddresses_triggered()
 {
     auto frm = currentMdiChild();
-    if(frm) frm->setDisplayHexAddreses(!frm->displayHexAddreses());
+    if(frm) frm->setDisplayHexAddresses(!frm->displayHexAddresses());
 }
 
 ///
@@ -411,8 +443,11 @@ void MainWindow::on_actionTextCapture_triggered()
     if(!frm) return;
 
     auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
-    if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
-    frm->startTextCapture(filename);
+    if(!filename.isEmpty())
+    {
+        if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
+        frm->startTextCapture(filename);
+    }
 }
 
 ///
@@ -578,11 +613,12 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 
 ///
 /// \brief MainWindow::createMdiChild
+/// \param num
 /// \return
 ///
-FormModSca* MainWindow::createMdiChild()
+FormModSca* MainWindow::createMdiChild(int num)
 {
-    auto frm = new FormModSca(++_windowCounter, _modbusClient, this);
+    auto frm = new FormModSca(num, _modbusClient, this);
     auto child = ui->mdiArea->addSubWindow(frm);
     child->installEventFilter(this);
     child->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -608,8 +644,111 @@ FormModSca* MainWindow::createMdiChild()
 /// \brief MainWindow::currentMdiChild
 /// \return
 ///
-FormModSca* MainWindow::currentMdiChild()
+FormModSca* MainWindow::currentMdiChild() const
 {
     auto child = ui->mdiArea->currentSubWindow();
     return child ? (FormModSca*)child->widget() : nullptr;
+}
+
+///
+/// \brief MainWindow::findMdiChild
+/// \param num
+/// \return
+///
+FormModSca* MainWindow::findMdiChild(int num) const
+{
+    for(auto&& wnd : ui->mdiArea->subWindowList())
+    {
+        auto frm = (FormModSca*)wnd->widget();
+        if(frm && frm->formId() == num) return frm;
+    }
+    return nullptr;
+}
+
+///
+/// \brief MainWindow::loadMdiChild
+/// \param filename
+/// \return
+///
+FormModSca* MainWindow::loadMdiChild(const QString& filename)
+{
+    QFile file(filename);
+    if(!file.open(QFile::ReadOnly))
+        return nullptr;
+
+    QDataStream s(&file);
+    s.setVersion(QDataStream::Version::Qt_5_0);
+
+    int formId;
+    s >> formId;
+
+    auto frm = findMdiChild(formId);
+    if(!frm) frm = createMdiChild(formId);
+
+    DisplayMode displayMode;
+    s >> displayMode;
+    frm->setDisplayMode(displayMode);
+
+    DataDisplayMode dataDisplayMode;
+    s >> dataDisplayMode;
+    frm->setDataDisplayMode(dataDisplayMode);
+
+    bool hexAddresses;
+    s >> hexAddresses;
+    frm->setDisplayHexAddresses(hexAddresses);
+
+    QColor clr;
+    s >> clr;
+    frm->setBackgroundColor(clr);
+    s >> clr;
+    frm->setForegroundColor(clr);
+    s >> clr;
+    frm->setStatusColor(clr);
+
+    QFont font;
+    s >> font;
+    frm->setFont(font);
+
+    DisplayDefinition dd;
+    s >> dd.ScanRate;
+    s >> dd.DeviceId;
+    s >> dd.PointType;
+    s >> dd.PointAddress;
+    s >> dd.Length;
+    frm->setDisplayDefinition(dd);
+
+    return frm;
+}
+
+///
+/// \brief MainWindow::saveMdiChild
+/// \param filename
+/// \param frm
+///
+void MainWindow::saveMdiChild(const QString& filename, FormModSca* frm) const
+{
+    QFile file(filename);
+    if(!file.open(QFile::WriteOnly))
+        return;
+
+    QDataStream s(&file);
+    s.setVersion(QDataStream::Version::Qt_5_0);
+
+    s << frm->formId();
+
+    s << frm->displayMode();
+    s << frm->dataDisplayMode();
+    s << frm->displayHexAddresses();
+
+    s << frm->backgroundColor();
+    s << frm->foregroundColor();
+    s << frm->statusColor();
+    s << frm->font();
+
+    const auto dd = frm->displayDefinition();
+    s << dd.ScanRate;
+    s << dd.DeviceId;
+    s << dd.PointType;
+    s << dd.PointAddress;
+    s << dd.Length;
 }

@@ -24,6 +24,8 @@ public:
     explicit FormModSca(int num, ModbusClient& client, MainWindow* parent);
     ~FormModSca();
 
+    int formId() const { return _formId; }
+
     QVector<quint16> data() const;
 
     DisplayDefinition displayDefinition() const;
@@ -35,21 +37,21 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
-    bool displayHexAddreses() const;
-    void setDisplayHexAddreses(bool on);
+    bool displayHexAddresses() const;
+    void setDisplayHexAddresses(bool on);
 
     CaptureMode captureMode() const;
     void startTextCapture(const QString& file);
     void stopTextCapture();
 
     QColor backgroundColor() const;
-    void setBackgroundColor(QColor clr);
+    void setBackgroundColor(const QColor& clr);
 
     QColor foregroundColor() const;
-    void setForegroundColor(QColor clr);
+    void setForegroundColor(const QColor& clr);
 
     QColor statusColor() const;
-    void setStatusColor(QColor clr);
+    void setStatusColor(const QColor& clr);
 
     QFont font() const;
     void setFont(const QFont& font);

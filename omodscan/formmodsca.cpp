@@ -20,6 +20,8 @@ FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
+
+    _timer.setInterval(1000);
     setWindowTitle(QString("ModSca%1").arg(_formId));
 
     ui->lineEditAddress->setPaddingZeroes(true);
@@ -39,7 +41,6 @@ FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
 
-    _timer.setInterval(1000);
     _timer.start();
 }
 
@@ -120,21 +121,21 @@ DataDisplayMode FormModSca::dataDisplayMode() const
 }
 
 ///
-/// \brief FormModSca::displayHexAddreses
+/// \brief FormModSca::displayHexAddresses
 /// \return
 ///
-bool FormModSca::displayHexAddreses() const
+bool FormModSca::displayHexAddresses() const
 {
-    return ui->outputWidget->displayHexAddreses();
+    return ui->outputWidget->displayHexAddresses();
 }
 
 ///
-/// \brief FormModSca::setDisplayHexAddreses
+/// \brief FormModSca::setDisplayHexAddresses
 /// \param on
 ///
-void FormModSca::setDisplayHexAddreses(bool on)
+void FormModSca::setDisplayHexAddresses(bool on)
 {
-    ui->outputWidget->setDisplayHexAddreses(on);
+    ui->outputWidget->setDisplayHexAddresses(on);
 }
 
 ///
@@ -184,7 +185,7 @@ QColor FormModSca::backgroundColor() const
 /// \brief FormModSca::setBackgroundColor
 /// \param clr
 ///
-void FormModSca::setBackgroundColor(QColor clr)
+void FormModSca::setBackgroundColor(const QColor& clr)
 {
     ui->outputWidget->setBackgroundColor(clr);
 }
@@ -202,7 +203,7 @@ QColor FormModSca::foregroundColor() const
 /// \brief FormModSca::setForegroundColor
 /// \param clr
 ///
-void FormModSca::setForegroundColor(QColor clr)
+void FormModSca::setForegroundColor(const QColor& clr)
 {
     ui->outputWidget->setForegroundColor(clr);
 }
@@ -220,7 +221,7 @@ QColor FormModSca::statusColor() const
 /// \brief FormModSca::setStatusColor
 /// \param clr
 ///
-void FormModSca::setStatusColor(QColor clr)
+void FormModSca::setStatusColor(const QColor& clr)
 {
     ui->outputWidget->setStatusColor(clr);
 }

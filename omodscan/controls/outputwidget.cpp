@@ -64,19 +64,19 @@ void OutputWidget::setup(const DisplayDefinition& dd)
 }
 
 ///
-/// \brief OutputWidget::displayHexAddreses
+/// \brief OutputWidget::displayHexAddresses
 /// \return
 ///
-bool OutputWidget::displayHexAddreses() const
+bool OutputWidget::displayHexAddresses() const
 {
     return _displayHexAddreses;
 }
 
 ///
-/// \brief OutputWidget::setDisplayHexAddreses
+/// \brief OutputWidget::setDisplayHexAddresses
 /// \param on
 ///
-void OutputWidget::setDisplayHexAddreses(bool on)
+void OutputWidget::setDisplayHexAddresses(bool on)
 {
     _displayHexAddreses = on;
     updateDataWidget(_lastData);

@@ -680,7 +680,7 @@ void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPd
     ui->plainTextEdit->moveCursor(QTextCursor::End);
 
     QTextCharFormat fmt;
-    fmt.setForeground(request? Qt::black : Qt::white);
+    fmt.setForeground(request? foregroundColor() : Qt::white);
     fmt.setBackground(request? Qt::transparent : Qt::black);
     ui->plainTextEdit->mergeCurrentCharFormat(fmt);
 

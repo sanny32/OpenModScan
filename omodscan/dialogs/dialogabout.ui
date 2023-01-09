@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>440</width>
-    <height>310</height>
+    <height>305</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -142,7 +142,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>160</height>
+       <height>155</height>
       </size>
      </property>
      <property name="verticalScrollBarPolicy">

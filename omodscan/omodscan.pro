@@ -3,9 +3,13 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
+VERSION = 1.0.0b
+
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 win32:RC_ICONS += res/omodscan.ico
 
@@ -24,6 +28,7 @@ SOURCES += \
     controls/numericcombobox.cpp \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
+    dialogs/dialogabout.cpp \
     dialogs/dialogconnectiondetails.cpp \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogforcemultiplecoils.cpp \
@@ -55,6 +60,7 @@ HEADERS += \
     controls/numericcombobox.h \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
+    dialogs/dialogabout.h \
     dialogs/dialogconnectiondetails.h \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogforcemultiplecoils.h \
@@ -82,6 +88,7 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
+    dialogs/dialogabout.ui \
     dialogs/dialogconnectiondetails.ui \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogforcemultiplecoils.ui \

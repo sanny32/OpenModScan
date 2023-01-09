@@ -58,6 +58,7 @@ private slots:
     void on_actionFont_triggered();
     void on_actionCascade_triggered();
     void on_actionTile_triggered();
+    void on_actionAbout_triggered();
     void on_awake();
 
     void on_modbusError(const QString& error);

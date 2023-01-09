@@ -23,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setUnifiedTitleAndToolBarOnMac(true);
 
+    _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile, this);
+    connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openRecentFile);
+
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
@@ -100,6 +103,7 @@ void MainWindow::on_awake()
 
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
+    ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
     ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
     ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionQuickConnect->setEnabled(state == QModbusDevice::UnconnectedState);
@@ -188,7 +192,7 @@ void MainWindow::on_actionOpen_triggered()
     auto frm = loadMdiChild(filename);
     if(!frm) return;
 
-    _windowCounter = qMax(frm->formId(), _windowCounter);
+    addRecentFile(filename);
     frm->show();
 }
 
@@ -219,6 +223,7 @@ void MainWindow::on_actionSaveAs_triggered()
     {
         frm->setFilename(filename);
         saveMdiChild(frm);
+        addRecentFile(filename);
     }
 }
 
@@ -613,6 +618,33 @@ void MainWindow::updateMenuWindow()
 }
 
 ///
+/// \brief MainWindow::openRecentFile
+/// \param filename
+///
+void MainWindow::openRecentFile(const QString& filename)
+{
+    auto frm = loadMdiChild(filename);
+    if(frm)
+    {
+        frm->show();
+    }
+    else
+    {
+        _recentFileActionList->removeRecentFile(filename);
+        QMessageBox::warning(this, windowTitle(), QString("%1 was not found").arg(filename));
+    }
+}
+
+///
+/// \brief MainWindow::addRecentFile
+/// \param filename
+///
+void MainWindow::addRecentFile(const QString& filename)
+{
+    _recentFileActionList->addRecentFile(filename);
+}
+
+///
 /// \brief MainWindow::updateDisplayMode
 /// \param mode
 ///
@@ -632,6 +664,12 @@ FormModSca* MainWindow::createMdiChild(int id)
 {
     auto frm = new FormModSca(id, _modbusClient, this);
     auto child = ui->mdiArea->addSubWindow(frm);
+
+    connect(frm, &FormModSca::formShowed, this, [this, child]
+    {
+        ui->mdiArea->setActiveSubWindow(child);
+    });
+
     child->installEventFilter(this);
     child->setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -744,6 +782,8 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     frm->setStatusColor(stCrl);
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
+
+    _windowCounter = qMax(frm->formId(), _windowCounter);
 
     return frm;
 }

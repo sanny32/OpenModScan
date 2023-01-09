@@ -61,6 +61,12 @@ public:
 
     void resetCtrs();
 
+public slots:
+    void show();
+
+signals:
+    void formShowed();
+
 private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);

@@ -5,6 +5,7 @@
 #include "modbusclient.h"
 #include "appsettings.h"
 #include "formmodsca.h"
+#include "recentfileactionlist.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -68,8 +69,10 @@ private slots:
     void on_modbusConnectionError(const QString& error);
 
     void updateMenuWindow();
+    void openRecentFile(const QString& filename);
 
 private:
+    void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
 
     FormModSca* createMdiChild(int id);
@@ -86,5 +89,6 @@ private:
     int _windowCounter;
     AppSettings _settings;
     ModbusClient _modbusClient;
+    RecentFileActionList* _recentFileActionList;
 };
 #endif // MAINWINDOW_H

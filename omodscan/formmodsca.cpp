@@ -271,6 +271,15 @@ void FormModSca::resetCtrs()
 }
 
 ///
+/// \brief FormModSca::show
+///
+void FormModSca::show()
+{
+    QWidget::show();
+    emit formShowed();
+}
+
+///
 /// \brief FormModSca::on_timeout
 ///
 void FormModSca::on_timeout()

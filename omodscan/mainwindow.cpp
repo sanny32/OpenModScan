@@ -6,6 +6,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
+#include "dialogabout.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -532,6 +533,15 @@ void MainWindow::on_actionCascade_triggered()
 void MainWindow::on_actionTile_triggered()
 {
     ui->mdiArea->tileSubWindows();
+}
+
+///
+/// \brief MainWindow::on_actionAbout_triggered
+///
+void MainWindow::on_actionAbout_triggered()
+{
+    DialogAbout dlg(this);
+    dlg.exec();
 }
 
 ///

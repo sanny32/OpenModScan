@@ -183,11 +183,13 @@ void MainWindow::on_actionNew_triggered()
 void MainWindow::on_actionOpen_triggered()
 {
     const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
-    if(!filename.isEmpty())
-    {
-        auto frm = loadMdiChild(filename);
-        if(frm) frm->show();
-    }
+    if(filename.isEmpty()) return;
+
+    auto frm = loadMdiChild(filename);
+    if(!frm) return;
+
+    _windowCounter = qMax(frm->formId(), _windowCounter);
+    frm->show();
 }
 
 ///
@@ -195,7 +197,13 @@ void MainWindow::on_actionOpen_triggered()
 ///
 void MainWindow::on_actionSave_triggered()
 {
+    auto frm = currentMdiChild();
+    if(!frm) return;
 
+    if(frm->filename().isEmpty())
+        ui->actionSaveAs->trigger();
+    else
+        saveMdiChild(frm);
 }
 
 ///
@@ -207,7 +215,11 @@ void MainWindow::on_actionSaveAs_triggered()
     if(!frm) return;
 
     const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), "All files (*)");
-    if(!filename.isEmpty()) saveMdiChild(filename, frm);
+    if(!filename.isEmpty())
+    {
+        frm->setFilename(filename);
+        saveMdiChild(frm);
+    }
 }
 
 ///
@@ -677,37 +689,38 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
         return nullptr;
 
     QDataStream s(&file);
+    s.setByteOrder(QDataStream::BigEndian);
     s.setVersion(QDataStream::Version::Qt_5_0);
 
     int formId;
     s >> formId;
 
-    auto frm = findMdiChild(formId);
-    if(!frm) frm = createMdiChild(formId);
+    if(s.status() != QDataStream::Ok)
+        return nullptr;
+
+    Qt::WindowState windowState;
+    s >> windowState;
 
     DisplayMode displayMode;
     s >> displayMode;
-    frm->setDisplayMode(displayMode);
 
     DataDisplayMode dataDisplayMode;
     s >> dataDisplayMode;
-    frm->setDataDisplayMode(dataDisplayMode);
 
     bool hexAddresses;
     s >> hexAddresses;
-    frm->setDisplayHexAddresses(hexAddresses);
 
-    QColor clr;
-    s >> clr;
-    frm->setBackgroundColor(clr);
-    s >> clr;
-    frm->setForegroundColor(clr);
-    s >> clr;
-    frm->setStatusColor(clr);
+    QColor bkgClr;
+    s >> bkgClr;
+
+    QColor fgClr;
+    s >> fgClr;
+
+    QColor stCrl;
+    s >> stCrl;
 
     QFont font;
     s >> font;
-    frm->setFont(font);
 
     DisplayDefinition dd;
     s >> dd.ScanRate;
@@ -715,6 +728,21 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     s >> dd.PointType;
     s >> dd.PointAddress;
     s >> dd.Length;
+
+    if(s.status() != QDataStream::Ok)
+        return nullptr;
+
+    auto frm = findMdiChild(formId);
+    if(!frm) frm = createMdiChild(formId);
+
+    frm->setWindowState(windowState);
+    frm->setDisplayMode(displayMode);
+    frm->setDataDisplayMode(dataDisplayMode);
+    frm->setDisplayHexAddresses(hexAddresses);
+    frm->setBackgroundColor(bkgClr);
+    frm->setForegroundColor(fgClr);
+    frm->setStatusColor(stCrl);
+    frm->setFont(font);
     frm->setDisplayDefinition(dd);
 
     return frm;
@@ -722,19 +750,22 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
 
 ///
 /// \brief MainWindow::saveMdiChild
-/// \param filename
 /// \param frm
 ///
-void MainWindow::saveMdiChild(const QString& filename, FormModSca* frm) const
+void MainWindow::saveMdiChild(FormModSca* frm) const
 {
-    QFile file(filename);
+    if(!frm) return;
+
+    QFile file(frm->filename());
     if(!file.open(QFile::WriteOnly))
         return;
 
     QDataStream s(&file);
+    s.setByteOrder(QDataStream::BigEndian);
     s.setVersion(QDataStream::Version::Qt_5_0);
 
     s << frm->formId();
+    s << frm->windowState();
 
     s << frm->displayMode();
     s << frm->dataDisplayMode();

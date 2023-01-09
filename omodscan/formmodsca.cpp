@@ -53,6 +53,24 @@ FormModSca::~FormModSca()
 }
 
 ///
+/// \brief FormModSca::filename
+/// \return
+///
+QString FormModSca::filename() const
+{
+    return _filename;
+}
+
+///
+/// \brief FormModSca::setFilename
+/// \param filename
+///
+void FormModSca::setFilename(const QString& filename)
+{
+    _filename = filename;
+}
+
+///
 /// \brief FormModSca::data
 /// \return
 ///

@@ -77,7 +77,7 @@ private:
     FormModSca* findMdiChild(int num) const;
 
     FormModSca* loadMdiChild(const QString& filename);
-    void saveMdiChild(const QString& filename, FormModSca* frm) const;
+    void saveMdiChild(FormModSca* frm) const;
 
 private:
     Ui::MainWindow *ui;

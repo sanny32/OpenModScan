@@ -26,6 +26,9 @@ public:
 
     int formId() const { return _formId; }
 
+    QString filename() const;
+    void setFilename(const QString& filename);
+
     QVector<quint16> data() const;
 
     DisplayDefinition displayDefinition() const;
@@ -72,6 +75,7 @@ private:
     Ui::FormModSca *ui;
     int _formId;
     QTimer _timer;
+    QString _filename;
     ModbusClient& _modbusClient;
 };
 

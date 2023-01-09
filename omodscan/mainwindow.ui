@@ -183,7 +183,7 @@
    </attribute>
    <addaction name="actionNew"/>
    <addaction name="actionOpen"/>
-   <addaction name="actionSaveAs"/>
+   <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionQuickConnect"/>
    <addaction name="actionDisconnect"/>
@@ -240,15 +240,15 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSaveAs.png</normaloff>:/res/actionSaveAs.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
   </action>
   <action name="actionSaveAs">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSaveAs.png</normaloff>:/res/actionSaveAs.png</iconset>
-   </property>
    <property name="text">
     <string>Save As...</string>
    </property>

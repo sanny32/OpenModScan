@@ -72,9 +72,9 @@ private slots:
 private:
     void updateDataDisplayMode(DataDisplayMode mode);
 
-    FormModSca* createMdiChild(int num);
+    FormModSca* createMdiChild(int id);
     FormModSca* currentMdiChild() const;
-    FormModSca* findMdiChild(int num) const;
+    FormModSca* findMdiChild(int id) const;
 
     FormModSca* loadMdiChild(const QString& filename);
     void saveMdiChild(FormModSca* frm) const;

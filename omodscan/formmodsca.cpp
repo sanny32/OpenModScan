@@ -11,10 +11,10 @@
 /// \param num
 /// \param parent
 ///
-FormModSca::FormModSca(int num, ModbusClient& client, MainWindow* parent) :
+FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
-    ,_formId(num)
+    ,_formId(id)
     ,_modbusClient(client)
 {
     Q_ASSERT(parent != nullptr);

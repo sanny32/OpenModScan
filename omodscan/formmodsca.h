@@ -21,7 +21,7 @@ class FormModSca : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormModSca(int num, ModbusClient& client, MainWindow* parent);
+    explicit FormModSca(int id, ModbusClient& client, MainWindow* parent);
     ~FormModSca();
 
     int formId() const { return _formId; }

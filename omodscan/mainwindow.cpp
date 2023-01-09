@@ -625,12 +625,12 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 
 ///
 /// \brief MainWindow::createMdiChild
-/// \param num
+/// \param id
 /// \return
 ///
-FormModSca* MainWindow::createMdiChild(int num)
+FormModSca* MainWindow::createMdiChild(int id)
 {
-    auto frm = new FormModSca(num, _modbusClient, this);
+    auto frm = new FormModSca(id, _modbusClient, this);
     auto child = ui->mdiArea->addSubWindow(frm);
     child->installEventFilter(this);
     child->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -667,12 +667,12 @@ FormModSca* MainWindow::currentMdiChild() const
 /// \param num
 /// \return
 ///
-FormModSca* MainWindow::findMdiChild(int num) const
+FormModSca* MainWindow::findMdiChild(int id) const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
         auto frm = (FormModSca*)wnd->widget();
-        if(frm && frm->formId() == num) return frm;
+        if(frm && frm->formId() == id) return frm;
     }
     return nullptr;
 }

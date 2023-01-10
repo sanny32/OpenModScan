@@ -1,4 +1,5 @@
 #include <QFileInfo>
+#include <QSettings>
 #include "recentfileactionlist.h"
 
 ///
@@ -7,26 +8,52 @@
 /// \param holder
 /// \param parent
 ///
-RecentFileActionList::RecentFileActionList(QMenu* menu, QAction* holder, QObject* parent)
+RecentFileActionList::RecentFileActionList(QMenu* menu, QAction* placeholder, QObject* parent)
     : QObject(parent)
     ,_menu(menu)
-    ,_holder(holder)
-    ,_insert(nullptr)
+    ,_placeholder(placeholder)
+    ,_placeinserter(placeholder)
 {
     Q_ASSERT(_menu != nullptr);
-    Q_ASSERT(_holder != nullptr);
+    Q_ASSERT(_placeholder != nullptr);
 
-    _holder->setVisible(true);
+    _placeholder->setVisible(true);
 
     const auto actions = _menu->actions();
     for(int i = 0; i < actions.count() ; i++)
     {
-        if(actions.at(i) == _holder && i + 1 < actions.count())
+        if(actions.at(i) == _placeholder && i + 1 < actions.count())
         {
-            _insert = actions.at(i + 1);
+            _placeinserter = actions.at(i + 1);
             break;
         }
     }
+
+    QSettings m;
+    const int size = m.beginReadArray("RecentFiles");
+    for (int i = 0; i < size; ++i)
+    {
+        m.setArrayIndex(i);
+        addRecentFile(m.value("file").toString());
+    }
+    m.endArray();
+
+}
+
+///
+/// \brief RecentFileActionList::~RecentFileActionList
+///
+RecentFileActionList::~RecentFileActionList()
+{
+    QSettings m;
+    m.beginWriteArray("RecentFiles", _actionList.size());
+    for(int i = 0; i < _actionList.size(); i++)
+    {
+        m.setArrayIndex(i);
+        const auto filename = _actionList[i]->data().toString();
+        m.setValue("file", filename);
+    }
+    m.endArray();
 }
 
 ///
@@ -44,7 +71,9 @@ bool RecentFileActionList::isEmpty() const
 ///
 void RecentFileActionList::addRecentFile(const QString& filename)
 {
-    _holder->setVisible(false);
+    if(filename.isEmpty()) return;
+
+    _placeholder->setVisible(false);
 
     for(auto&& a : _actionList)
     {
@@ -53,7 +82,7 @@ void RecentFileActionList::addRecentFile(const QString& filename)
 
     const auto num = _actionList.count() + 1;
     const auto name = QString("%1 %2").arg(QString::number(num), QFileInfo(filename).fileName());
-    auto openAction = new QAction(name, this);
+    auto openAction = new QAction(name, _menu);
     openAction->setData(filename);
 
     connect(openAction, &QAction::triggered, this, [this, filename]
@@ -62,8 +91,7 @@ void RecentFileActionList::addRecentFile(const QString& filename)
     });
 
     _actionList.append(openAction);
-
-    _menu->insertAction(_insert, openAction);
+    _menu->insertAction(_placeinserter, openAction);
 }
 
 ///
@@ -72,11 +100,16 @@ void RecentFileActionList::addRecentFile(const QString& filename)
 ///
 void RecentFileActionList::removeRecentFile(const QString& filename)
 {
+    if(filename.isEmpty()) return;
+
     QAction* openAction = nullptr;
     for(auto&& a : _actionList)
     {
         if(a->data().toString() == filename)
+        {
             openAction = a;
+            break;
+        }
     }
 
     if(!openAction) return;
@@ -94,7 +127,7 @@ void RecentFileActionList::updateMenu()
 {
     if(isEmpty())
     {
-        _holder->setVisible(true);
+        _placeholder->setVisible(true);
     }
     else
     {

@@ -3,12 +3,16 @@
 
 #include <QMenu>
 
+///
+/// \brief The RecentFileActionList class
+///
 class RecentFileActionList : public QObject
 {
     Q_OBJECT
 
 public:
-    RecentFileActionList(QMenu* menu, QAction* holder, QObject* parent = nullptr);
+    explicit RecentFileActionList(QMenu* menu, QAction* placeholder, QObject* parent = nullptr);
+    ~RecentFileActionList() override;
 
     bool isEmpty() const;
 
@@ -23,8 +27,8 @@ private:
 
 private:
     QMenu* _menu;
-    QAction* _holder;
-    QAction* _insert;
+    QAction* _placeholder;
+    QAction* _placeinserter;
     QList<QAction*> _actionList;
 };
 

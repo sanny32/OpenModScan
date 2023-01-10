@@ -5,6 +5,7 @@
 #include "modbusclient.h"
 #include "appsettings.h"
 #include "formmodsca.h"
+#include "windowactionlist.h"
 #include "recentfileactionlist.h"
 
 QT_BEGIN_NAMESPACE
@@ -69,7 +70,8 @@ private slots:
     void on_modbusConnectionError(const QString& error);
 
     void updateMenuWindow();
-    void openRecentFile(const QString& filename);
+    void openFile(const QString& filename);
+    void windowActivate(QMdiSubWindow* wnd);
 
 private:
     void addRecentFile(const QString& filename);
@@ -89,6 +91,7 @@ private:
     int _windowCounter;
     AppSettings _settings;
     ModbusClient _modbusClient;
+    WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
 };
 #endif // MAINWINDOW_H

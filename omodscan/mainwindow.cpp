@@ -24,7 +24,10 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
 
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile, this);
-    connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openRecentFile);
+    connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
+
+    _windowActionList = new WindowActionList(ui->menuWindow, this);
+    connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
@@ -72,17 +75,8 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
     switch (e->type())
     {
         case QEvent::Close:
-        {
-            auto child = dynamic_cast<QMdiSubWindow*>(obj);
-            if(child != nullptr)
-            {
-                auto action = child->property("actionActivate").value<QAction*>();
-                ui->menuWindow->removeAction(action);
-
-                updateMenuWindow();
-            }
-            break;
-        }
+            _windowActionList->removeWindow(dynamic_cast<QMdiSubWindow*>(obj));
+        break;
         default:
             qt_noop();
     }
@@ -189,11 +183,8 @@ void MainWindow::on_actionOpen_triggered()
     const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
     if(filename.isEmpty()) return;
 
-    auto frm = loadMdiChild(filename);
-    if(!frm) return;
-
+    openFile(filename);
     addRecentFile(filename);
-    frm->show();
 }
 
 ///
@@ -219,12 +210,12 @@ void MainWindow::on_actionSaveAs_triggered()
     if(!frm) return;
 
     const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), "All files (*)");
-    if(!filename.isEmpty())
-    {
-        frm->setFilename(filename);
-        saveMdiChild(frm);
-        addRecentFile(filename);
-    }
+    if(filename.isEmpty()) return;
+
+    frm->setFilename(filename);
+
+    saveMdiChild(frm);
+    addRecentFile(filename);
 }
 
 ///
@@ -601,27 +592,28 @@ void MainWindow::on_actionAbout_triggered()
 ///
 void MainWindow::updateMenuWindow()
 {
-    int i = 0;
     auto activeWnd = ui->mdiArea->activeSubWindow();
-
-    for(auto&& a : ui->menuWindow->actions())
+    for(auto&& wnd : ui->mdiArea->subWindowList())
     {
-        auto wnd = a->data().value<QMdiSubWindow*>();
-        if(wnd)
-        {
-            a->setChecked(activeWnd == wnd);
-            a->setText(QString("%1 %2").arg(QString::number(++i), wnd->windowTitle()));
-        }
-        else
-            a->setChecked(false);
+        wnd->setProperty("isActive", wnd == activeWnd);
     }
+    _windowActionList->update();
 }
 
 ///
-/// \brief MainWindow::openRecentFile
+/// \brief MainWindow::windowActivate
+/// \param wnd
+///
+void MainWindow::windowActivate(QMdiSubWindow* wnd)
+{
+    if(wnd) ui->mdiArea->setActiveSubWindow(wnd);
+}
+
+///
+/// \brief MainWindow::openFile
 /// \param filename
 ///
-void MainWindow::openRecentFile(const QString& filename)
+void MainWindow::openFile(const QString& filename)
 {
     auto frm = loadMdiChild(filename);
     if(frm)
@@ -630,8 +622,12 @@ void MainWindow::openRecentFile(const QString& filename)
     }
     else
     {
+        QString message = !QFileInfo::exists(filename) ?
+                    QString("%1 was not found").arg(filename) :
+                    QString("Failed to open %1").arg(filename);
+
         _recentFileActionList->removeRecentFile(filename);
-        QMessageBox::warning(this, windowTitle(), QString("%1 was not found").arg(filename));
+        QMessageBox::warning(this, windowTitle(), message);
     }
 }
 
@@ -664,28 +660,15 @@ FormModSca* MainWindow::createMdiChild(int id)
 {
     auto frm = new FormModSca(id, _modbusClient, this);
     auto child = ui->mdiArea->addSubWindow(frm);
-
-    connect(frm, &FormModSca::formShowed, this, [this, child]
-    {
-        ui->mdiArea->setActiveSubWindow(child);
-    });
-
     child->installEventFilter(this);
     child->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    auto actionActivate = new QAction(ui->menuWindow);
-    actionActivate->setData(QVariant::fromValue(child));
-    actionActivate->setCheckable(true);
-
-    connect(actionActivate, &QAction::triggered, this, [this, child](bool)
+    connect(frm, &FormModSca::formShowed, this, [this, child]
     {
-        ui->mdiArea->setActiveSubWindow(child);
+        windowActivate(child);
     });
 
-    child->setProperty("actionActivate", QVariant::fromValue(actionActivate));
-
-    ui->menuWindow->addAction(actionActivate);
-    updateMenuWindow();
+    _windowActionList->addWindow(child);
 
     return frm;
 }
@@ -730,11 +713,17 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     s.setByteOrder(QDataStream::BigEndian);
     s.setVersion(QDataStream::Version::Qt_5_0);
 
+    quint8 magic;
+    s >> magic;
+
+    if(magic != 0x32 ||
+       s.status() != QDataStream::Ok)
+    {
+        return nullptr;
+    }
+
     int formId;
     s >> formId;
-
-    if(s.status() != QDataStream::Ok)
-        return nullptr;
 
     Qt::WindowState windowState;
     s >> windowState;
@@ -803,6 +792,8 @@ void MainWindow::saveMdiChild(FormModSca* frm) const
     QDataStream s(&file);
     s.setByteOrder(QDataStream::BigEndian);
     s.setVersion(QDataStream::Version::Qt_5_0);
+
+    s << 0x32ui8;
 
     s << frm->formId();
     s << frm->windowState();

@@ -4,15 +4,12 @@
 /// \brief WindowActionList::WindowActionList
 /// \param menu
 ///
-WindowActionList::WindowActionList(QMenu* menu)
+WindowActionList::WindowActionList(QMenu* menu, QAction* placeHolder)
     : QObject{menu}
     ,_menu(menu)
+    ,_placeHolder(placeHolder)
 {
-    _actionWindows = new QAction("Windows...", _menu);
-    connect(_actionWindows, &QAction::triggered, this, &WindowActionList::showWindowsDialog);
-
-    _actionWindows->setVisible(false);
-    _menu->addAction(_actionWindows);
+    _placeHolder->setVisible(false);
 }
 
 ///
@@ -22,6 +19,15 @@ WindowActionList::WindowActionList(QMenu* menu)
 bool WindowActionList::isEmpty() const
 {
     return _actionList.isEmpty();
+}
+
+///
+/// \brief WindowActionList::actionList
+/// \return
+///
+QList<QAction*> WindowActionList::actionList() const
+{
+    return _actionList;
 }
 
 ///
@@ -47,7 +53,7 @@ void WindowActionList::addWindow(QMdiSubWindow* wnd)
     });
 
     _actionList.append(activateAction);
-    _menu->insertAction(_actionWindows, activateAction);
+    _menu->insertAction(_placeHolder, activateAction);
 
     updateMenu();
 }
@@ -87,14 +93,6 @@ void WindowActionList::update()
 }
 
 ///
-/// \brief WindowActionList::showWindowsDialog
-///
-void WindowActionList::showWindowsDialog()
-{
-
-}
-
-///
 /// \brief WindowActionList::updateMenu
 ///
 void WindowActionList::updateMenu()
@@ -116,5 +114,5 @@ void WindowActionList::updateMenu()
         a->setText(QString("%1 %2").arg(QString::number(num), wnd->windowTitle()));
     }
 
-    _actionWindows->setVisible(largeList);
+    _placeHolder->setVisible(largeList);
 }

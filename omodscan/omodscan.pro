@@ -44,6 +44,7 @@ SOURCES += \
     dialogs/dialogprotocolselections.cpp \
     dialogs/dialogsetuppresetdata.cpp \
     dialogs/dialogusermsg.cpp \
+    dialogs/dialogwindowsmanager.cpp \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     dialogs/dialogprotocolselections.h \
     dialogs/dialogsetuppresetdata.h \
     dialogs/dialogusermsg.h \
+    dialogs/dialogwindowsmanager.h \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
@@ -108,6 +110,7 @@ FORMS += \
     dialogs/dialogprotocolselections.ui \
     dialogs/dialogsetuppresetdata.ui \
     dialogs/dialogusermsg.ui \
+    dialogs/dialogwindowsmanager.ui \
     dialogs/dialogwritecoilregister.ui \
     dialogs/dialogwriteholdingregister.ui \
     dialogs/dialogwriteholdingregisterbits.ui \

@@ -11,9 +11,10 @@ class WindowActionList : public QObject
 {
     Q_OBJECT
 public:
-    explicit WindowActionList(QMenu* menu);
+    explicit WindowActionList(QMenu* menu, QAction* placeHolder);
 
     bool isEmpty() const;
+    QList<QAction*> actionList() const;
 
     void addWindow(QMdiSubWindow* wnd);
     void removeWindow(QMdiSubWindow* wnd);
@@ -23,15 +24,12 @@ public:
 signals:
     void triggered(QMdiSubWindow* wnd);
 
-private slots:
-    void showWindowsDialog();
-
 private:
     void updateMenu();
 
 private:
     QMenu* _menu;
-    QAction* _actionWindows;
+    QAction* _placeHolder;
     QList<QAction*> _actionList;
 };
 

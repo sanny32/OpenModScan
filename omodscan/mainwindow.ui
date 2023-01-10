@@ -156,6 +156,7 @@
     <addaction name="actionCascade"/>
     <addaction name="actionTile"/>
     <addaction name="separator"/>
+    <addaction name="actionWindows"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -558,6 +559,11 @@
    </property>
    <property name="text">
     <string>About ModScan64...</string>
+   </property>
+  </action>
+  <action name="actionWindows">
+   <property name="text">
+    <string>Windows...</string>
    </property>
   </action>
  </widget>

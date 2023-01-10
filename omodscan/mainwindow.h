@@ -64,6 +64,7 @@ private slots:
     void on_actionFont_triggered();
     void on_actionCascade_triggered();
     void on_actionTile_triggered();
+    void on_actionWindows_triggered();
     void on_actionAbout_triggered();
     void on_awake();
 

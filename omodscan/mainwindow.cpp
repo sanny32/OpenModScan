@@ -6,6 +6,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
+#include "dialogwindowsmanager.h"
 #include "dialogabout.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -26,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
     connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
 
-    _windowActionList = new WindowActionList(ui->menuWindow);
+    _windowActionList = new WindowActionList(ui->menuWindow, ui->actionWindows);
     connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
@@ -582,6 +583,15 @@ void MainWindow::on_actionCascade_triggered()
 void MainWindow::on_actionTile_triggered()
 {
     ui->mdiArea->tileSubWindows();
+}
+
+///
+/// \brief MainWindow::on_actionWindows_triggered
+///
+void MainWindow::on_actionWindows_triggered()
+{
+    DialogWindowsManager dlg(_windowActionList->actionList(), ui->actionSave, this);
+    dlg.exec();
 }
 
 ///

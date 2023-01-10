@@ -99,18 +99,22 @@ void WindowActionList::showWindowsDialog()
 ///
 void WindowActionList::updateMenu()
 {
-    int i = 0;
-    for(auto&& a : _actionList)
+    int i = 0, ci = 0;
+    const bool largeList = _actionList.size() > 9;
+    for(auto&& a: _actionList)
     {
-        auto wnd = a->data().value<QMdiSubWindow*>();
+        const auto wnd = a->data().value<QMdiSubWindow*>();
         if(!wnd) continue;
 
         a->setChecked(wnd->property("isActive").toBool());
-        a->setVisible(++i < 9 || a->isChecked());
+        a->setVisible(++i < 10 || a->isChecked());
 
-        const int num = (i >= 10 && a->isVisible()) ? 9 : i;
+        if(a->isChecked()) ci = i;
+        if(largeList) _actionList[8]->setVisible(ci < 10);
+
+        const int num = (i < 10) ? i : (a->isChecked() ? 9 : i);
         a->setText(QString("%1 %2").arg(QString::number(num), wnd->windowTitle()));
     }
 
-    _actionWindows->setVisible(_actionList.size() > 10);
+    _actionWindows->setVisible(largeList);
 }

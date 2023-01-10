@@ -598,7 +598,7 @@ void MainWindow::on_actionAbout_triggered()
 ///
 void MainWindow::updateMenuWindow()
 {
-    auto activeWnd = ui->mdiArea->activeSubWindow();
+    const auto activeWnd = ui->mdiArea->activeSubWindow();
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
         wnd->setProperty("isActive", wnd == activeWnd);

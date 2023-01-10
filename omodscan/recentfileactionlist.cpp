@@ -70,8 +70,6 @@ void RecentFileActionList::addRecentFile(const QString& filename)
 {
     if(filename.isEmpty()) return;
 
-    _placeholder->setVisible(false);
-
     for(auto&& a : _actionList)
     {
         if(a->data().toString() == filename) return;
@@ -88,7 +86,14 @@ void RecentFileActionList::addRecentFile(const QString& filename)
     });
 
     _actionList.append(openAction);
+    if(_actionList.size() > 10)
+    {
+        _menu->removeAction(_actionList.first());
+        _actionList.removeFirst();
+    }
+
     _menu->insertAction(_placeinserter, openAction);
+    updateMenu();
 }
 
 ///
@@ -112,8 +117,8 @@ void RecentFileActionList::removeRecentFile(const QString& filename)
     if(!openAction) return;
 
     _actionList.removeOne(openAction);
-    _menu->removeAction(openAction);
 
+    _menu->removeAction(openAction);
     updateMenu();
 }
 
@@ -122,11 +127,7 @@ void RecentFileActionList::removeRecentFile(const QString& filename)
 ///
 void RecentFileActionList::updateMenu()
 {
-    if(isEmpty())
-    {
-        _placeholder->setVisible(true);
-    }
-    else
+    if(!isEmpty())
     {
         int i = 0;
         for(auto&& a : _actionList)
@@ -135,4 +136,6 @@ void RecentFileActionList::updateMenu()
             a->setText(QString("%1 %2").arg(QString::number(++i), QFileInfo(filename).fileName()));
         }
     }
+
+    _placeholder->setVisible(isEmpty());
 }

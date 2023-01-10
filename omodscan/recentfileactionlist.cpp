@@ -69,11 +69,7 @@ bool RecentFileActionList::isEmpty() const
 void RecentFileActionList::addRecentFile(const QString& filename)
 {
     if(filename.isEmpty()) return;
-
-    for(auto&& a : _actionList)
-    {
-        if(a->data().toString() == filename) return;
-    }
+    removeRecentFile(filename);
 
     const auto num = _actionList.count() + 1;
     const auto name = QString("%1 %2").arg(QString::number(num), QFileInfo(filename).fileName());

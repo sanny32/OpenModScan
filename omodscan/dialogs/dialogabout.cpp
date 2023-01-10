@@ -11,7 +11,9 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui(new Ui::DialogAbout)
 {
     ui->setupUi(this);
-    ui->labelVersion->setText(QString("Version: %1").arg(qApp->applicationVersion()));
+    ui->labelName->setText(APP_NAME);
+    ui->labelDescription->setText(APP_DESCRIPTION);
+    ui->labelVersion->setText(QString("Version: %1").arg(APP_VERSION));
 }
 
 ///

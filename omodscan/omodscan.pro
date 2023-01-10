@@ -3,7 +3,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.0.0b
+VERSION = 1.0b
 
 QMAKE_TARGET_COMPANY = "Open Modscan"
 QMAKE_TARGET_PRODUCT = omodscan
@@ -16,6 +16,7 @@ QMAKE_TARGET_DOMAIN = "com.omodscan.app"
 
 DEFINES += APP_NAME=\"\\\"$${QMAKE_TARGET_COMPANY}\\\"\"
 DEFINES += APP_DOMAIN=\"\\\"$${QMAKE_TARGET_DOMAIN}\\\"\"
+DEFINES += APP_DESCRIPTION=\"\\\"$${QMAKE_TARGET_DESCRIPTION}\\\"\"
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 win32:RC_ICONS += res/omodscan.ico

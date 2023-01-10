@@ -23,11 +23,15 @@ public:
 signals:
     void triggered(QMdiSubWindow* wnd);
 
+private slots:
+    void showWindowsDialog();
+
 private:
     void updateMenu();
 
 private:
     QMenu* _menu;
+    QAction* _actionWindows;
     QList<QAction*> _actionList;
 };
 

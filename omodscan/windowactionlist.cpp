@@ -8,6 +8,11 @@ WindowActionList::WindowActionList(QMenu* menu)
     : QObject{menu}
     ,_menu(menu)
 {
+    _actionWindows = new QAction("Windows...", _menu);
+    connect(_actionWindows, &QAction::triggered, this, &WindowActionList::showWindowsDialog);
+
+    _actionWindows->setVisible(false);
+    _menu->addAction(_actionWindows);
 }
 
 ///
@@ -42,7 +47,7 @@ void WindowActionList::addWindow(QMdiSubWindow* wnd)
     });
 
     _actionList.append(activateAction);
-    _menu->addAction(activateAction);
+    _menu->insertAction(_actionWindows, activateAction);
 
     updateMenu();
 }
@@ -82,6 +87,14 @@ void WindowActionList::update()
 }
 
 ///
+/// \brief WindowActionList::showWindowsDialog
+///
+void WindowActionList::showWindowsDialog()
+{
+
+}
+
+///
 /// \brief WindowActionList::updateMenu
 ///
 void WindowActionList::updateMenu()
@@ -93,6 +106,11 @@ void WindowActionList::updateMenu()
         if(!wnd) continue;
 
         a->setChecked(wnd->property("isActive").toBool());
-        a->setText(QString("%1 %2").arg(QString::number(++i), wnd->windowTitle()));
+        a->setVisible(++i < 9 || a->isChecked());
+
+        const int num = (i >= 10 && a->isVisible()) ? 9 : i;
+        a->setText(QString("%1 %2").arg(QString::number(num), wnd->windowTitle()));
     }
+
+    _actionWindows->setVisible(_actionList.size() > 10);
 }

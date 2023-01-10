@@ -814,7 +814,7 @@ void MainWindow::saveMdiChild(FormModSca* frm)
     s.setVersion(QDataStream::Version::Qt_5_0);
 
     // magic number
-    s << 0x32ui8;
+    s << (quint8)0x32;
 
     // version number
     s << QVersionNumber(1, 0);

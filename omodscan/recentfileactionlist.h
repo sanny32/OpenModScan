@@ -11,7 +11,7 @@ class RecentFileActionList : public QObject
     Q_OBJECT
 
 public:
-    explicit RecentFileActionList(QMenu* menu, QAction* placeholder, QObject* parent = nullptr);
+    explicit RecentFileActionList(QMenu* menu, QAction* placeholder);
     ~RecentFileActionList() override;
 
     bool isEmpty() const;

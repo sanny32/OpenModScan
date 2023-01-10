@@ -11,7 +11,7 @@ class WindowActionList : public QObject
 {
     Q_OBJECT
 public:
-    explicit WindowActionList(QMenu* menu, QObject *parent = nullptr);
+    explicit WindowActionList(QMenu* menu);
 
     bool isEmpty() const;
 

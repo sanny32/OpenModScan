@@ -6,10 +6,9 @@
 /// \brief RecentFileActionList::RecentFileActionList
 /// \param menu
 /// \param holder
-/// \param parent
 ///
-RecentFileActionList::RecentFileActionList(QMenu* menu, QAction* placeholder, QObject* parent)
-    : QObject(parent)
+RecentFileActionList::RecentFileActionList(QMenu* menu, QAction* placeholder)
+    : QObject(menu)
     ,_menu(menu)
     ,_placeholder(placeholder)
     ,_placeinserter(placeholder)
@@ -34,10 +33,9 @@ RecentFileActionList::RecentFileActionList(QMenu* menu, QAction* placeholder, QO
     for (int i = 0; i < size; ++i)
     {
         m.setArrayIndex(i);
-        addRecentFile(m.value("file").toString());
+        addRecentFile(m.value("Name").toString());
     }
     m.endArray();
-
 }
 
 ///
@@ -50,8 +48,7 @@ RecentFileActionList::~RecentFileActionList()
     for(int i = 0; i < _actionList.size(); i++)
     {
         m.setArrayIndex(i);
-        const auto filename = _actionList[i]->data().toString();
-        m.setValue("file", filename);
+        m.setValue("Name", _actionList[i]->data().toString());
     }
     m.endArray();
 }

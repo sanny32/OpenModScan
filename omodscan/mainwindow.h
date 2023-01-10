@@ -32,6 +32,7 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionSaveAs_triggered();
+    void on_actionExit_triggered();
     void on_actionConnect_triggered();
     void on_actionDisconnect_triggered();
     void on_actionQuickConnect_triggered();
@@ -82,7 +83,7 @@ private:
     FormModSca* findMdiChild(int id) const;
 
     FormModSca* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSca* frm) const;
+    void saveMdiChild(FormModSca* frm);
 
 private:
     Ui::MainWindow *ui;

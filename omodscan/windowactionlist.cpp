@@ -3,10 +3,9 @@
 ///
 /// \brief WindowActionList::WindowActionList
 /// \param menu
-/// \param parent
 ///
-WindowActionList::WindowActionList(QMenu* menu, QObject *parent)
-    : QObject{parent}
+WindowActionList::WindowActionList(QMenu* menu)
+    : QObject{menu}
     ,_menu(menu)
 {
 }

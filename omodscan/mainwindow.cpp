@@ -23,10 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setUnifiedTitleAndToolBarOnMac(true);
 
-    _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile, this);
+    _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
     connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
 
-    _windowActionList = new WindowActionList(ui->menuWindow, this);
+    _windowActionList = new WindowActionList(ui->menuWindow);
     connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
@@ -184,7 +184,6 @@ void MainWindow::on_actionOpen_triggered()
     if(filename.isEmpty()) return;
 
     openFile(filename);
-    addRecentFile(filename);
 }
 
 ///
@@ -215,7 +214,14 @@ void MainWindow::on_actionSaveAs_triggered()
     frm->setFilename(filename);
 
     saveMdiChild(frm);
-    addRecentFile(filename);
+}
+
+///
+/// \brief MainWindow::on_actionExit_triggered
+///
+void MainWindow::on_actionExit_triggered()
+{
+    close();
 }
 
 ///
@@ -713,14 +719,17 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     s.setByteOrder(QDataStream::BigEndian);
     s.setVersion(QDataStream::Version::Qt_5_0);
 
-    quint8 magic;
+    quint8 magic = 0;
     s >> magic;
 
-    if(magic != 0x32 ||
-       s.status() != QDataStream::Ok)
-    {
+    if(magic != 0x32)
         return nullptr;
-    }
+
+    QVersionNumber ver;
+    s >> ver;
+
+    if(ver != QVersionNumber(1, 0))
+        return nullptr;
 
     int formId;
     s >> formId;
@@ -772,6 +781,7 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
 
+    addRecentFile(filename);
     _windowCounter = qMax(frm->formId(), _windowCounter);
 
     return frm;
@@ -781,7 +791,7 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
 /// \brief MainWindow::saveMdiChild
 /// \param frm
 ///
-void MainWindow::saveMdiChild(FormModSca* frm) const
+void MainWindow::saveMdiChild(FormModSca* frm)
 {
     if(!frm) return;
 
@@ -793,7 +803,11 @@ void MainWindow::saveMdiChild(FormModSca* frm) const
     s.setByteOrder(QDataStream::BigEndian);
     s.setVersion(QDataStream::Version::Qt_5_0);
 
+    // magic number
     s << 0x32ui8;
+
+    // version number
+    s << QVersionNumber(1, 0);
 
     s << frm->formId();
     s << frm->windowState();
@@ -813,4 +827,6 @@ void MainWindow::saveMdiChild(FormModSca* frm) const
     s << dd.PointType;
     s << dd.PointAddress;
     s << dd.Length;
+
+    addRecentFile(frm->filename());
 }

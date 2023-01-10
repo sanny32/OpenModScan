@@ -18,6 +18,9 @@ public:
     explicit StatisticWidget(QWidget *parent = nullptr);
     ~StatisticWidget();
 
+    uint numberOfPolls() const { return _numberOfPolls; }
+    uint validSlaveResposes() const { return _validSlaveResponses; }
+
     void increaseNumberOfPolls();
     void increaseValidSlaveResponses();
     void resetCtrs();

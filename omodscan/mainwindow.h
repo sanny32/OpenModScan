@@ -28,14 +28,23 @@ protected:
     bool eventFilter(QObject * obj, QEvent * e) override;
 
 private slots:
+    void on_awake();
+
+    /* File menu slots */
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
     void on_actionSave_triggered();
     void on_actionSaveAs_triggered();
+    void on_actionPrint_triggered();
+    void on_actionPrintSetup_triggered();
     void on_actionExit_triggered();
+
+    /* Connection menu slots */
     void on_actionConnect_triggered();
     void on_actionDisconnect_triggered();
     void on_actionQuickConnect_triggered();
+
+    /* Setup menu slots*/
     void on_actionDataDefinition_triggered();
     void on_actionShowData_triggered();
     void on_actionShowTraffic_triggered();
@@ -55,6 +64,8 @@ private slots:
     void on_actionTextCapture_triggered();
     void on_actionCaptureOff_triggered();
     void on_actionResetCtrs_triggered();
+
+    /* View menu slots */
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDsiplayBar_triggered();
@@ -62,11 +73,14 @@ private slots:
     void on_actionForeground_triggered();
     void on_actionStatus_triggered();
     void on_actionFont_triggered();
+
+    /* Window menu slots */
     void on_actionCascade_triggered();
     void on_actionTile_triggered();
     void on_actionWindows_triggered();
+
+    /* Help menu slots */
     void on_actionAbout_triggered();
-    void on_awake();
 
     void on_modbusError(const QString& error);
     void on_modbusConnectionError(const QString& error);

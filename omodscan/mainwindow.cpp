@@ -1,4 +1,6 @@
 #include <QtWidgets>
+#include <QPrintDialog>
+#include <QPageSetupDialog>
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
 #include "dialogmaskwriteregiter.h"
@@ -215,6 +217,30 @@ void MainWindow::on_actionSaveAs_triggered()
     frm->setFilename(filename);
 
     saveMdiChild(frm);
+}
+
+///
+/// \brief MainWindow::on_actionPrint_triggered
+///
+void MainWindow::on_actionPrint_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    QPrintDialog dlg(this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        auto printer = dlg.printer();
+        frm->print(printer);
+    }
+}
+
+///
+/// \brief MainWindow::on_actionPrintSetup_triggered
+///
+void MainWindow::on_actionPrintSetup_triggered()
+{
+
 }
 
 ///

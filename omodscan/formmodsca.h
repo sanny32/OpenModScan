@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QPrinter>
 #include "enums.h"
 #include "modbusclient.h"
 #include "displaydefinition.h"
@@ -58,6 +59,8 @@ public:
 
     QFont font() const;
     void setFont(const QFont& font);
+
+    void print(QPrinter* painter);
 
     void resetCtrs();
 

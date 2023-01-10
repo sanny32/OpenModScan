@@ -1,9 +1,9 @@
-QT += core gui widgets network serialbus serialport
+QT += core gui widgets network printsupport serialbus serialport
 CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.0b
+VERSION = 1.0.0b
 
 QMAKE_TARGET_COMPANY = "Open Modscan"
 QMAKE_TARGET_PRODUCT = omodscan

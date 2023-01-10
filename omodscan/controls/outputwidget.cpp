@@ -212,6 +212,15 @@ void OutputWidget::setStatus(const QString& status)
 }
 
 ///
+/// \brief OutputWidget::print
+/// \param painter
+///
+void OutputWidget::print(QPainter& painter)
+{
+
+}
+
+///
 /// \brief OutputWidget::update
 /// \param request
 /// \param server

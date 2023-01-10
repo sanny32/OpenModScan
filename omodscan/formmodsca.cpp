@@ -1,3 +1,4 @@
+#include <QPainter>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "formmodsca.h"
@@ -260,6 +261,65 @@ QFont FormModSca::font() const
 void FormModSca::setFont(const QFont& font)
 {
     ui->outputWidget->setFont(font);
+}
+
+///
+/// \brief FormModSca::print
+/// \param printer
+///
+void FormModSca::print(QPrinter* printer)
+{
+    if(!printer) return;
+
+    auto layout = printer->pageLayout();
+    layout.setMargins(QMargins(20, 20, 20, 20));
+
+    const auto resolution = printer->resolution();
+    const auto pageRect = layout.paintRectPixels(resolution);
+    const auto margins = layout.margins();
+
+    const int pageWidth = pageRect.width();
+    const int pageHeight = pageRect.height();
+
+    int cx = pageRect.x() + margins.left();
+    int cy = pageRect.y() + margins.top();
+
+    QPainter painter(printer);
+    /*const double xscale = layout.paintRectPixels(resolution).width() / double(width());
+    const double yscale = layout.paintRectPixels(resolution).height() / double(height());
+    const double scale = qMin(xscale, yscale);
+    painter.translate(layout.fullRectPixels(resolution).center());
+    painter.scale(scale, scale);
+    painter.translate(-width()/ 2, -height()/ 2);
+    render(&painter);*/
+
+    /*auto f = font();
+    f.setPointSize(14);
+    painter.setFont(f);*/
+
+    const auto textDevId = QString("Device Id: %1").arg(ui->lineEditDeviceId->text());
+    auto rcDevId = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevId);
+
+    const auto textAddrLen = QString("Address: %1\nLength: %2").arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
+    auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
+
+    const auto textType = QString("MODBUS Point Type:\n%1").arg(ui->comboBoxModbusPointType->currentText());
+    auto rcType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textType);
+
+    const auto textStat = QString("Number of Polls: %1\nValid Slave Responses: %2").arg(QString::number(ui->statisticWidget->numberOfPolls()),
+                                                                                        QString::number(ui->statisticWidget->validSlaveResposes()));
+    auto rcStat = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textStat);
+
+    rcDevId.moveLeft(rcAddrLen.right() + 40);
+    rcAddrLen.moveTop(rcDevId.width() + 10);
+    rcType.moveTopLeft({ rcDevId.left(), rcAddrLen.top() });
+    rcStat.moveTopLeft({ rcType.right() + 40, rcDevId.top() });
+
+    painter.drawText(rcDevId, Qt::TextWordWrap, textDevId);
+    painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
+    painter.drawText(rcType, Qt::TextWordWrap, textType);
+    painter.drawText(rcStat, Qt::TextWordWrap, textStat);
+    painter.drawRect(rcStat.adjusted(-2, -2, 40, 2));
 }
 
 ///

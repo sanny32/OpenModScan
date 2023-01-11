@@ -31,12 +31,6 @@ DialogAbout::~DialogAbout()
 ///
 void DialogAbout::on_labelLicense_clicked()
 {
-    auto dlg = new QDialog(this);
-    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-    dlg->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
-    dlg->setWindowTitle(QString(tr("License Agreement - %1")).arg(APP_NAME));
-    dlg->resize({ 530, 380});
-
     QString license;
     QFile f(":/res/license.txt");
     if(f.open(QFile::ReadOnly))
@@ -44,6 +38,13 @@ void DialogAbout::on_labelLicense_clicked()
 
     if(license.isEmpty())
         return;
+
+    auto dlg = new QDialog(this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+    dlg->setWindowTitle(QString(tr("License Agreement - %1")).arg(APP_NAME));
+    dlg->resize({ 530, 380});
+
 
     auto buttonBox = new QDialogButtonBox(dlg);
     buttonBox->setOrientation(Qt::Horizontal);

@@ -152,7 +152,7 @@ void MainWindow::on_awake()
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
-        ui->actionPrint->setEnabled(ui->actionPrint->isEnabled() && dm == DisplayMode::Data);
+        ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
 
         ui->actionTextCapture->setEnabled(frm->captureMode() == CaptureMode::Off);
         ui->actionCaptureOff->setEnabled(frm->captureMode() == CaptureMode::TextCapture);

@@ -33,6 +33,7 @@ void DialogAbout::on_labelLicense_clicked()
 {
     auto dlg = new QDialog(this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
     dlg->setWindowTitle(QString(tr("License Agreement - %1")).arg(APP_NAME));
     dlg->resize({ 530, 380});
 

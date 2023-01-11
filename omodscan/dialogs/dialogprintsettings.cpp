@@ -98,6 +98,7 @@ void DialogPrintSettings::on_comboBoxPrinters_currentIndexChanged(int index)
     const auto sz = printer->pageLayout().pageSize();
     ui->comboBoxSize->setCurrentText(sz.name());
     ui->comboBoxSize->setEnabled(!supportedPageSizes.empty());
+    ui->labelSize->setEnabled(ui->comboBoxSize->isEnabled());
 
     ui->comboBoxSources->clear();
     const auto papreSources = supportedPaperSources(printer.get());
@@ -107,6 +108,7 @@ void DialogPrintSettings::on_comboBoxPrinters_currentIndexChanged(int index)
     const auto ps = printer->paperSource();
     ui->comboBoxSources->setCurrentIndex(ui->comboBoxSources->findData(ps));
     ui->comboBoxSources->setEnabled(!papreSources.empty());
+    ui->labelSource->setEnabled(ui->comboBoxSources->isEnabled());
 
     switch (printer->pageLayout().orientation())
     {

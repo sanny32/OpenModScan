@@ -5,7 +5,7 @@ CONFIG -= debug_and_release_target
 
 VERSION = 1.0.0b
 
-QMAKE_TARGET_COMPANY = "Open Modscan"
+QMAKE_TARGET_COMPANY = "Open ModScan"
 QMAKE_TARGET_PRODUCT = omodscan
 QMAKE_TARGET_DESCRIPTION = "Free modbus rtu/tcp master (client) utility"
 QMAKE_TARGET_DOMAIN = "com.omodscan.app"

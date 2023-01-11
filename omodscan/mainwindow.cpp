@@ -27,6 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     ,_selectedPrinter(nullptr)
 {
     ui->setupUi(this);
+
+    setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
 
     if(const auto defaultPrinter = QPrinterInfo::defaultPrinter(); !defaultPrinter.isNull())

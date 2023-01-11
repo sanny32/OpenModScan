@@ -12,6 +12,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui(new Ui::DialogAbout)
 {
     ui->setupUi(this);
+    setWindowTitle(QString(tr("About %1...")).arg(APP_NAME));
     ui->labelName->setText(APP_NAME);
     ui->labelDescription->setText(tr(APP_DESCRIPTION));
     ui->labelVersion->setText(QString(tr("Version: %1")).arg(APP_VERSION));
@@ -43,8 +44,7 @@ void DialogAbout::on_labelLicense_clicked()
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
     dlg->setWindowTitle(QString(tr("License Agreement - %1")).arg(APP_NAME));
-    dlg->resize({ 530, 380});
-
+    dlg->resize({ 530, 415});
 
     auto buttonBox = new QDialogButtonBox(dlg);
     buttonBox->setOrientation(Qt::Horizontal);

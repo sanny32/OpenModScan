@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
+#include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
 #include "dialogmaskwriteregiter.h"
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     ,_windowCounter(0)
     ,_modbusClient(nullptr)
+    ,_selectedPrinter(nullptr)
 {
     ui->setupUi(this);
     setUnifiedTitleAndToolBarOnMac(true);
@@ -231,8 +233,8 @@ void MainWindow::on_actionPrint_triggered()
     QPrintDialog dlg(this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        auto printer = dlg.printer();
-        frm->print(printer);
+        _selectedPrinter = dlg.printer();
+        frm->print(_selectedPrinter);
     }
 }
 
@@ -241,7 +243,8 @@ void MainWindow::on_actionPrint_triggered()
 ///
 void MainWindow::on_actionPrintSetup_triggered()
 {
-
+    DialogPrintSettings dlg(_selectedPrinter, this);
+    dlg.exec();
 }
 
 ///

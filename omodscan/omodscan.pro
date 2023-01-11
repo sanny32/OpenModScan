@@ -42,6 +42,7 @@ SOURCES += \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
     dialogs/dialogmaskwriteregiter.cpp \
+    dialogs/dialogprintsettings.cpp \
     dialogs/dialogprotocolselections.cpp \
     dialogs/dialogsetuppresetdata.cpp \
     dialogs/dialogusermsg.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
     dialogs/dialogmaskwriteregiter.h \
+    dialogs/dialogprintsettings.h \
     dialogs/dialogprotocolselections.h \
     dialogs/dialogsetuppresetdata.h \
     dialogs/dialogusermsg.h \
@@ -108,6 +110,7 @@ FORMS += \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
     dialogs/dialogmaskwriteregiter.ui \
+    dialogs/dialogprintsettings.ui \
     dialogs/dialogprotocolselections.ui \
     dialogs/dialogsetuppresetdata.ui \
     dialogs/dialogusermsg.ui \

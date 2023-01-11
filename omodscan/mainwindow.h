@@ -107,6 +107,7 @@ private:
     int _windowCounter;
     AppSettings _settings;
     ModbusClient _modbusClient;
+    QPrinter* _selectedPrinter;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
 };

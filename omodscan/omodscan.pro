@@ -28,6 +28,7 @@ SOURCES += \
     appsettings.cpp \
     controls/booleancombobox.cpp \
     controls/bytelistlineedit.cpp \
+    controls/clickablelabel.cpp \
     controls/connectioncombobox.cpp \
     controls/flowcontroltypecombobox.cpp \
     controls/numericlineedit.cpp \
@@ -64,6 +65,7 @@ HEADERS += \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/bytelistlineedit.h \
+    controls/clickablelabel.h \
     controls/connectioncombobox.h \
     controls/flowcontroltypecombobox.h \
     controls/numericlineedit.h \

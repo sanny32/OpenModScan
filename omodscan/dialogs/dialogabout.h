@@ -15,6 +15,9 @@ public:
     explicit DialogAbout(QWidget *parent = nullptr);
     ~DialogAbout();
 
+private slots:
+    void on_labelLicense_clicked();
+
 private:
     Ui::DialogAbout *ui;
 };

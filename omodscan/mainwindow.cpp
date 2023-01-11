@@ -24,11 +24,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     ,_windowCounter(0)
     ,_modbusClient(nullptr)
+    ,_selectedPrinter(nullptr)
 {
     ui->setupUi(this);
     setUnifiedTitleAndToolBarOnMac(true);
 
-    _selectedPrinter = new QPrinter(QPrinterInfo::defaultPrinter());
+    if(const auto defaultPrinter = QPrinterInfo::defaultPrinter(); !defaultPrinter.isNull())
+        _selectedPrinter = new QPrinter(defaultPrinter);
 
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
     connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
@@ -105,6 +107,8 @@ void MainWindow::on_awake()
 
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
+    ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
+    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
     ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
     ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
@@ -130,7 +134,6 @@ void MainWindow::on_awake()
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(ui->statusbar->isVisible());
     ui->actionDsiplayBar->setChecked(ui->toolBarDisplay->isVisible());
-    ui->actionPrint->setEnabled(frm != nullptr);
 
     if(frm != nullptr)
     {
@@ -149,7 +152,7 @@ void MainWindow::on_awake()
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
-        ui->actionPrint->setEnabled(dm == DisplayMode::Data);
+        ui->actionPrint->setEnabled(ui->actionPrint->isEnabled() && dm == DisplayMode::Data);
 
         ui->actionTextCapture->setEnabled(frm->captureMode() == CaptureMode::Off);
         ui->actionCaptureOff->setEnabled(frm->captureMode() == CaptureMode::TextCapture);

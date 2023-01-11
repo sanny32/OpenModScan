@@ -26,7 +26,7 @@ Registers
     0x17 - Read Write Multiple Registers
 
 ## Building
-  Now building is available with Qt/qmake or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
   
 ## MIT License
 Copyright 2022 Alexandr Ananev

@@ -22,5 +22,6 @@
         <file>res/iconAbout.png</file>
         <file>res/iconLandscape.png</file>
         <file>res/iconPortrait.png</file>
+        <file>res/license.txt</file>
     </qresource>
 </RCC>

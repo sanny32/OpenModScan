@@ -273,19 +273,21 @@ void FormModSca::print(QPrinter* printer)
     if(!printer) return;
 
     auto layout = printer->pageLayout();
-    layout.setMargins(QMargins(20, 20, 20, 20));
-
     const auto resolution = printer->resolution();
     auto pageRect = layout.paintRectPixels(resolution);
+
+    layout.setMargins(QMargins(pageRect.width() * 0.05, pageRect.height() * 0.05, pageRect.width() * 0.05, pageRect.height() * 0.05));
     pageRect.adjust(layout.margins().left(), layout.margins().top(), -layout.margins().right(), -layout.margins().bottom());
 
     const int pageWidth = pageRect.width();
     const int pageHeight = pageRect.height();
 
-    const int cx = pageRect.x();
-    const int cy = pageRect.y();
+    const int cx = pageRect.left();
+    const int cy = pageRect.top();
 
     QPainter painter(printer);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing);
 
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
@@ -305,9 +307,9 @@ void FormModSca::print(QPrinter* printer)
 
     rcTime.moveTopRight({ pageRect.right(), 10 });
     rcDevId.moveLeft(rcAddrLen.right() + 40);
-    rcAddrLen.moveTop(rcDevId.width() + 10);
+    rcAddrLen.moveTop(rcDevId.bottom() + 10);
     rcType.moveTopLeft({ rcDevId.left(), rcAddrLen.top() });
-    rcStat.moveTopLeft({ rcType.right() + 40, rcDevId.top() });
+    rcStat.moveLeft(rcType.right() + 40);
 
     painter.drawText(rcTime, Qt::TextSingleLine, textTime);
     painter.drawText(rcDevId, Qt::TextSingleLine, textDevId);

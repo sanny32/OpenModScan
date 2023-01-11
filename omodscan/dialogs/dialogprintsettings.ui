@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>310</height>
+    <width>413</width>
+    <height>296</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,7 +43,14 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="comboBoxPrinters"/>
+       <widget class="QComboBox" name="comboBoxPrinters">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="labelStatus">
@@ -137,7 +144,7 @@
      <item>
       <widget class="QGroupBox" name="groupBox_3">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="title">
         <string>Orientation</string>
@@ -167,7 +174,7 @@
           <item>
            <widget class="QRadioButton" name="radioButtonPortrait">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -183,7 +190,7 @@
           <item>
            <widget class="QRadioButton" name="radioButtonLandscape">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">

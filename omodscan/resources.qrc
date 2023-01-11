@@ -20,5 +20,7 @@
         <file>res/actionUnsignedDecimal.png</file>
         <file>res/omodscan.png</file>
         <file>res/iconAbout.png</file>
+        <file>res/iconLandscape.png</file>
+        <file>res/iconPortrait.png</file>
     </qresource>
 </RCC>

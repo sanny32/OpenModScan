@@ -9,6 +9,15 @@ namespace Ui {
 class DialogPrintSettings;
 }
 
+struct PapeSource
+{
+    QString Name;
+    QPrinter::PaperSource Source;
+};
+
+///
+/// \brief The DialogPrintSettings class
+///
 class DialogPrintSettings : public QFixedSizeDialog
  {
     Q_OBJECT
@@ -21,7 +30,10 @@ public:
 
 private slots:
     void on_comboBoxPrinters_currentIndexChanged(int index);
-    void orientationToggled(int checked);
+    void orientationChanged();
+
+private:
+    QList<PapeSource> supportedPaperSources(const QPrinter* printer);
 
 private:
     Ui::DialogPrintSettings *ui;    

@@ -1,4 +1,5 @@
 #include <QtWidgets>
+#include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
 #include "dialogprintsettings.h"
@@ -23,10 +24,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     ,_windowCounter(0)
     ,_modbusClient(nullptr)
-    ,_selectedPrinter(nullptr)
 {
     ui->setupUi(this);
     setUnifiedTitleAndToolBarOnMac(true);
+
+    _selectedPrinter = new QPrinter(QPrinterInfo::defaultPrinter());
 
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
     connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
@@ -50,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete _selectedPrinter;
 }
 
 ///
@@ -230,7 +233,7 @@ void MainWindow::on_actionPrint_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    QPrintDialog dlg(this);
+    QPrintDialog dlg(_selectedPrinter, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _selectedPrinter = dlg.printer();

@@ -12,6 +12,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui(new Ui::DialogAbout)
 {
     ui->setupUi(this);
+    setWindowTitle(QString(tr("About %1...")).arg(APP_NAME));
     ui->labelName->setText(APP_NAME);
     ui->labelDescription->setText(tr(APP_DESCRIPTION));
     ui->labelVersion->setText(QString(tr("Version: %1")).arg(APP_VERSION));

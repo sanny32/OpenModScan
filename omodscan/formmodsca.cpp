@@ -1,11 +1,12 @@
 #include <QPainter>
+#include <QDateTime>
 #include "modbuslimits.h"
 #include "mainwindow.h"
-#include "formmodsca.h"
-#include "ui_formmodsca.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
 #include "dialogwriteholdingregisterbits.h"
+#include "formmodsca.h"
+#include "ui_formmodsca.h"
 
 ///
 /// \brief FormModSca::FormModSca
@@ -275,30 +276,22 @@ void FormModSca::print(QPrinter* printer)
     layout.setMargins(QMargins(20, 20, 20, 20));
 
     const auto resolution = printer->resolution();
-    const auto pageRect = layout.paintRectPixels(resolution);
-    const auto margins = layout.margins();
+    auto pageRect = layout.paintRectPixels(resolution);
+    pageRect.adjust(layout.margins().left(), layout.margins().top(), -layout.margins().right(), -layout.margins().bottom());
 
     const int pageWidth = pageRect.width();
     const int pageHeight = pageRect.height();
 
-    int cx = pageRect.x() + margins.left();
-    int cy = pageRect.y() + margins.top();
+    const int cx = pageRect.x();
+    const int cy = pageRect.y();
 
     QPainter painter(printer);
-    /*const double xscale = layout.paintRectPixels(resolution).width() / double(width());
-    const double yscale = layout.paintRectPixels(resolution).height() / double(height());
-    const double scale = qMin(xscale, yscale);
-    painter.translate(layout.fullRectPixels(resolution).center());
-    painter.scale(scale, scale);
-    painter.translate(-width()/ 2, -height()/ 2);
-    render(&painter);*/
 
-    /*auto f = font();
-    f.setPointSize(14);
-    painter.setFont(f);*/
+    const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
+    auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
 
     const auto textDevId = QString("Device Id: %1").arg(ui->lineEditDeviceId->text());
-    auto rcDevId = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevId);
+    auto rcDevId = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textDevId);
 
     const auto textAddrLen = QString("Address: %1\nLength: %2").arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
     auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
@@ -310,16 +303,23 @@ void FormModSca::print(QPrinter* printer)
                                                                                         QString::number(ui->statisticWidget->validSlaveResposes()));
     auto rcStat = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textStat);
 
+    rcTime.moveTopRight({ pageRect.right(), 10 });
     rcDevId.moveLeft(rcAddrLen.right() + 40);
     rcAddrLen.moveTop(rcDevId.width() + 10);
     rcType.moveTopLeft({ rcDevId.left(), rcAddrLen.top() });
     rcStat.moveTopLeft({ rcType.right() + 40, rcDevId.top() });
 
-    painter.drawText(rcDevId, Qt::TextWordWrap, textDevId);
+    painter.drawText(rcTime, Qt::TextSingleLine, textTime);
+    painter.drawText(rcDevId, Qt::TextSingleLine, textDevId);
     painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
     painter.drawText(rcType, Qt::TextWordWrap, textType);
     painter.drawText(rcStat, Qt::TextWordWrap, textStat);
     painter.drawRect(rcStat.adjusted(-2, -2, 40, 2));
+
+    auto rcOutput = pageRect;
+    rcOutput.setTop(rcAddrLen.bottom() + 20);
+
+    ui->outputWidget->paint(rcOutput, painter);
 }
 
 ///

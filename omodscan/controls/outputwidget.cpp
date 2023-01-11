@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QPainter>
 #include <QTextStream>
 #include "floatutils.h"
 #include "modbusexception.h"
@@ -212,12 +213,48 @@ void OutputWidget::setStatus(const QString& status)
 }
 
 ///
-/// \brief OutputWidget::print
+/// \brief OutputWidget::paint
+/// \param rc
 /// \param painter
 ///
-void OutputWidget::print(QPainter& painter)
+void OutputWidget::paint(const QRect& rc, QPainter& painter)
 {
+    const auto textStatus = ui->labelStatus->text();
+    auto rcStatus = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextWordWrap, textStatus);
+    painter.drawText(rcStatus, Qt::TextWordWrap, textStatus);
 
+    rcStatus.setBottom(rcStatus.bottom() + 4);
+    painter.drawLine(rc.left(), rcStatus.bottom(), rc.right(), rcStatus.bottom());
+    rcStatus.setBottom(rcStatus.bottom() + 4);
+
+    int cx = rc.left();
+    int cy = rcStatus.bottom();
+    for(int i = 0; i < ui->listWidget->count(); ++i)
+    {
+        QListWidgetItem* item = ui->listWidget->item(i);
+        if(!item) continue;
+
+        const auto textItem = item->text().trimmed();
+        auto rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, textItem);
+
+        if(rcItem.right() > rc.right()) break;
+        else if(rcItem.bottom() < rc.bottom())
+        {
+            painter.drawText(rcItem, Qt::TextSingleLine, textItem);
+        }
+        else
+        {
+            cy = rcStatus.bottom();
+            cx = rcItem.right() + 10;
+
+            rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, textItem);
+            if(rcItem.right() > rc.right()) break;
+
+            painter.drawText(rcItem, Qt::TextSingleLine, textItem);
+        }
+
+        cy += rcItem.height();
+    }
 }
 
 ///

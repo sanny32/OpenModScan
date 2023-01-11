@@ -54,7 +54,7 @@ public:
 
     void setStatus(const QString& status);
 
-    void print(QPainter& painter);
+    void paint(const QRect& rc, QPainter& painter);
 
     void update(const QModbusRequest& request, int server);
     void update(QModbusReply* reply);

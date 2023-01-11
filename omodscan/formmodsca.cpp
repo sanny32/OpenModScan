@@ -276,7 +276,8 @@ void FormModSca::print(QPrinter* printer)
     const auto resolution = printer->resolution();
     auto pageRect = layout.paintRectPixels(resolution);
 
-    layout.setMargins(QMargins(pageRect.width() * 0.05, pageRect.height() * 0.05, pageRect.width() * 0.05, pageRect.height() * 0.05));
+    const auto margin = qMax(pageRect.width(), pageRect.height()) * 0.05;
+    layout.setMargins(QMargins(margin, margin, margin, margin));
     pageRect.adjust(layout.margins().left(), layout.margins().top(), -layout.margins().right(), -layout.margins().bottom());
 
     const int pageWidth = pageRect.width();

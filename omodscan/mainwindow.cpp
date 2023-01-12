@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError);
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
 
+    ui->actionNew->trigger();
     loadSettings();
 }
 
@@ -1027,15 +1028,14 @@ void MainWindow::saveConfig(const QString& filename)
 ///
 void MainWindow::loadSettings()
 {
-    ui->actionNew->trigger();
+    const auto filepath = QString("%1%2%3.ini").arg(
+                qApp->applicationDirPath(), QDir::separator(),
+                QFileInfo(qApp->applicationFilePath()).baseName());
 
-    const auto filepath = QString("%1%2%3.ini").arg(qApp->applicationDirPath(),
-                                                    QDir::separator(),
-                                                    QFileInfo(qApp->applicationFilePath()).baseName());
     if(!QFile::exists(filepath)) return;
 
     QSettings m(filepath, QSettings::IniFormat, this);
-    FormModSca* frm = firstMdiChild();
+    auto frm = firstMdiChild();
 
     _autoStart = m.value("AutoStart").toBool();
     _fileAutoStart = m.value("StartUpFile").toString();
@@ -1060,7 +1060,9 @@ void MainWindow::loadSettings()
     m >> _connParams;
 
     if(_autoStart)
+    {
         loadConfig(_fileAutoStart);
+    }
 }
 
 ///
@@ -1068,10 +1070,10 @@ void MainWindow::loadSettings()
 ///
 void MainWindow::saveSettings()
 {
-    FormModSca* frm = firstMdiChild();
-    const auto filepath = QString("%1%2%3.ini").arg(qApp->applicationDirPath(),
-                                                    QDir::separator(),
-                                                    QFileInfo(qApp->applicationFilePath()).baseName());
+    const auto frm = firstMdiChild();
+    const auto filepath = QString("%1%2%3.ini").arg(
+                qApp->applicationDirPath(), QDir::separator(),
+                QFileInfo(qApp->applicationFilePath()).baseName());
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.setValue("AutoStart", _autoStart);

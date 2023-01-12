@@ -74,7 +74,6 @@
      <addaction name="actionDisable"/>
      <addaction name="separator"/>
      <addaction name="actionSaveConfig"/>
-     <addaction name="separator"/>
      <addaction name="actionRestoreNow"/>
     </widget>
     <addaction name="actionConnect"/>

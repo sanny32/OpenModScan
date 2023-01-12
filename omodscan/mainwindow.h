@@ -111,6 +111,8 @@ private:
 
 private:
     int _windowCounter;
+    bool _autoStart;
+    QString _fileAutoStart;
     ConnectionDetails _connParams;
     ModbusClient _modbusClient;
     QPrinter* _selectedPrinter;

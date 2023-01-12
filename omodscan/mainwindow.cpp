@@ -3,6 +3,7 @@
 #include <QPrintDialog>
 #include <QPageSetupDialog>
 #include "dialogprintsettings.h"
+#include "dialogautostart.h"
 #include "dialogdisplaydefinition.h"
 #include "dialogconnectiondetails.h"
 #include "dialogmaskwriteregiter.h"
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_windowCounter(0)
+    ,_autoStart(false)
     ,_modbusClient(nullptr)
     ,_selectedPrinter(nullptr)
 {
@@ -115,6 +117,8 @@ void MainWindow::on_awake()
     ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
     ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionQuickConnect->setEnabled(state == QModbusDevice::UnconnectedState);
+    ui->actionEnable->setEnabled(!_autoStart);
+    ui->actionDisable->setEnabled(_autoStart);
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
     ui->actionShowTraffic->setEnabled(frm != nullptr);
@@ -296,7 +300,8 @@ void MainWindow::on_actionQuickConnect_triggered()
 ///
 void MainWindow::on_actionEnable_triggered()
 {
-
+    DialogAutoStart dlg(_fileAutoStart, this);
+    _autoStart = dlg.exec() == QDialog::Accepted;
 }
 
 ///
@@ -304,7 +309,7 @@ void MainWindow::on_actionEnable_triggered()
 ///
 void MainWindow::on_actionDisable_triggered()
 {
-
+    _autoStart = false;
 }
 
 ///

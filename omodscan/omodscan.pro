@@ -29,6 +29,7 @@ SOURCES += \
     controls/bytelistlineedit.cpp \
     controls/clickablelabel.cpp \
     controls/connectioncombobox.cpp \
+    controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
@@ -37,6 +38,7 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
     dialogs/dialogabout.cpp \
+    dialogs/dialogautostart.cpp \
     dialogs/dialogconnectiondetails.cpp \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogforcemultiplecoils.cpp \
@@ -65,6 +67,7 @@ HEADERS += \
     controls/bytelistlineedit.h \
     controls/clickablelabel.h \
     controls/connectioncombobox.h \
+    controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \
@@ -73,6 +76,7 @@ HEADERS += \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
     dialogs/dialogabout.h \
+    dialogs/dialogautostart.h \
     dialogs/dialogconnectiondetails.h \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogforcemultiplecoils.h \
@@ -105,6 +109,7 @@ FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
     dialogs/dialogabout.ui \
+    dialogs/dialogautostart.ui \
     dialogs/dialogconnectiondetails.ui \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogforcemultiplecoils.ui \

@@ -26,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
     ,_windowCounter(0)
     ,_autoStart(false)
     ,_modbusClient(nullptr)
-    ,_selectedPrinter(nullptr)
 {
     ui->setupUi(this);
 
@@ -34,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
 
     if(const auto defaultPrinter = QPrinterInfo::defaultPrinter(); !defaultPrinter.isNull())
-        _selectedPrinter = new QPrinter(defaultPrinter);
+        _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
 
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
     connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
@@ -49,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError);
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
 
-    ui->actionNew->trigger();
+    loadSettings();
 }
 
 ///
@@ -58,7 +57,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete _selectedPrinter;
 }
 
 ///
@@ -67,14 +65,12 @@ MainWindow::~MainWindow()
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    saveSettings();
+
     ui->mdiArea->closeAllSubWindows();
     if (ui->mdiArea->currentSubWindow())
     {
         event->ignore();
-    }
-    else
-    {
-        event->accept();
     }
 }
 
@@ -242,11 +238,10 @@ void MainWindow::on_actionPrint_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    QPrintDialog dlg(_selectedPrinter, this);
+    QPrintDialog dlg(_selectedPrinter.get(), this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _selectedPrinter = dlg.printer();
-        frm->print(_selectedPrinter);
+        frm->print(_selectedPrinter.get());
     }
 }
 
@@ -255,7 +250,7 @@ void MainWindow::on_actionPrint_triggered()
 ///
 void MainWindow::on_actionPrintSetup_triggered()
 {
-    DialogPrintSettings dlg(_selectedPrinter, this);
+    DialogPrintSettings dlg(_selectedPrinter.get(), this);
     dlg.exec();
 }
 
@@ -789,9 +784,21 @@ FormModSca* MainWindow::findMdiChild(int id) const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
-        auto frm = (FormModSca*)wnd->widget();
+        const auto frm = (FormModSca*)wnd->widget();
         if(frm && frm->formId() == id) return frm;
     }
+    return nullptr;
+}
+
+///
+/// \brief MainWindow::firstMdiChild
+/// \return
+///
+FormModSca* MainWindow::firstMdiChild() const
+{
+    for(auto&& wnd : ui->mdiArea->subWindowList())
+        return (FormModSca*)wnd->widget();
+
     return nullptr;
 }
 
@@ -1013,4 +1020,70 @@ void MainWindow::saveConfig(const QString& filename)
 
     // connection state
     s << (_modbusClient.state() == QModbusDevice::ConnectedState);
+}
+
+///
+/// \brief MainWindow::loadSettings
+///
+void MainWindow::loadSettings()
+{
+    ui->actionNew->trigger();
+
+    const auto filepath = QString("%1%2%3.ini").arg(qApp->applicationDirPath(),
+                                                    QDir::separator(),
+                                                    QFileInfo(qApp->applicationFilePath()).baseName());
+    if(!QFile::exists(filepath)) return;
+
+    QSettings m(filepath, QSettings::IniFormat, this);
+    FormModSca* frm = firstMdiChild();
+
+    _autoStart = m.value("AutoStart").toBool();
+    _fileAutoStart = m.value("StartUpFile").toString();
+
+    if(frm)
+    {
+        DisplayMode displayMode;
+        m >> displayMode;
+
+        DataDisplayMode dataDisplayMode;
+        m >> dataDisplayMode;
+
+        DisplayDefinition displayDefinition;
+        m >> displayDefinition;
+
+        frm->setDisplayMode(displayMode);
+        frm->setDataDisplayMode(dataDisplayMode);
+        frm->setDisplayDefinition(displayDefinition);
+        frm->setDisplayHexAddresses(m.value("DisplayHexAddresses").toBool());
+    }
+
+    m >> _connParams;
+
+    if(_autoStart)
+        loadConfig(_fileAutoStart);
+}
+
+///
+/// \brief MainWindow::saveSettings
+///
+void MainWindow::saveSettings()
+{
+    FormModSca* frm = firstMdiChild();
+    const auto filepath = QString("%1%2%3.ini").arg(qApp->applicationDirPath(),
+                                                    QDir::separator(),
+                                                    QFileInfo(qApp->applicationFilePath()).baseName());
+    QSettings m(filepath, QSettings::IniFormat, this);
+
+    m.setValue("AutoStart", _autoStart);
+    m.setValue("StartUpFile", _fileAutoStart);
+
+    if(frm)
+    {
+        m << frm->displayMode();
+        m << frm->dataDisplayMode();
+        m << frm->displayDefinition();
+        m.setValue("DisplayHexAddresses", frm->displayHexAddresses());
+    }
+
+    m << _connParams;
 }

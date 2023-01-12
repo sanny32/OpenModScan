@@ -13,7 +13,7 @@ DialogProtocolSelections::DialogProtocolSelections(ModbusProtocolSelections& mps
 {
     ui->setupUi(this);
     ui->lineEditTimeout->setInputRange(10, 300000);
-    ui->lineEditTimeout->setInputRange(0, 300000);
+    ui->lineEditDelay->setInputRange(0, 300000);
     ui->lineEditTimeout->setValue(mps.SlaveResponseTimeOut);
     ui->spinBoxRetries->setValue(mps.NumberOfRetries);
     ui->lineEditDelay->setValue(mps.InterFrameDelay);

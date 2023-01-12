@@ -99,12 +99,16 @@ private:
     FormModSca* createMdiChild(int id);
     FormModSca* currentMdiChild() const;
     FormModSca* findMdiChild(int id) const;
+    FormModSca* firstMdiChild() const;
 
     FormModSca* loadMdiChild(const QString& filename);
     void saveMdiChild(FormModSca* frm);
 
     void loadConfig(const QString& filename);
     void saveConfig(const QString& filename);
+
+    void loadSettings();
+    void saveSettings();
 
 private:
     Ui::MainWindow *ui;
@@ -115,8 +119,9 @@ private:
     QString _fileAutoStart;
     ConnectionDetails _connParams;
     ModbusClient _modbusClient;
-    QPrinter* _selectedPrinter;
+
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
+    QSharedPointer<QPrinter> _selectedPrinter;
 };
 #endif // MAINWINDOW_H

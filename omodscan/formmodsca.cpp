@@ -334,6 +334,24 @@ void FormModSca::resetCtrs()
 }
 
 ///
+/// \brief FormModSca::numberOfPolls
+/// \return
+///
+uint FormModSca::numberOfPolls() const
+{
+    return ui->statisticWidget->numberOfPolls();
+}
+
+///
+/// \brief FormModSca::validSlaveResposes
+/// \return
+///
+uint FormModSca::validSlaveResposes() const
+{
+    return ui->statisticWidget->validSlaveResposes();
+}
+
+///
 /// \brief FormModSca::show
 ///
 void FormModSca::show()
@@ -475,4 +493,22 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
         default:
         break;
     }
+}
+
+///
+/// \brief FormModSca::on_statisticWidget_numberOfPollsChanged
+/// \param value
+///
+void FormModSca::on_statisticWidget_numberOfPollsChanged(uint value)
+{
+    emit numberOfPollsChanged(value);
+}
+
+///
+/// \brief FormModSca::on_statisticWidget_validSlaveResposesChanged
+/// \param value
+///
+void FormModSca::on_statisticWidget_validSlaveResposesChanged(uint value)
+{
+    emit validSlaveResposesChanged(value);
 }

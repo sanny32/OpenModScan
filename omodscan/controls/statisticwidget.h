@@ -25,6 +25,10 @@ public:
     void increaseValidSlaveResponses();
     void resetCtrs();
 
+signals:
+    void numberOfPollsChanged(uint value);
+    void validSlaveResposesChanged(uint value);
+
 private slots:
     void on_pushButtonResetCtrs_clicked();
 

@@ -31,6 +31,7 @@ SOURCES += \
     controls/connectioncombobox.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/mainstatusbar.cpp \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
     controls/statisticwidget.cpp \
@@ -69,6 +70,7 @@ HEADERS += \
     controls/connectioncombobox.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/mainstatusbar.h \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \
     controls/statisticwidget.h \

@@ -29,6 +29,8 @@ void StatisticWidget::increaseNumberOfPolls()
 {
     _numberOfPolls++;
     updateStatistic();
+
+    emit numberOfPollsChanged(_numberOfPolls);
 }
 
 ///
@@ -38,6 +40,8 @@ void StatisticWidget::increaseValidSlaveResponses()
 {
    _validSlaveResponses++;
    updateStatistic();
+
+   emit validSlaveResposesChanged(_validSlaveResponses);
 }
 
 ///
@@ -49,6 +53,9 @@ void StatisticWidget::resetCtrs()
     _validSlaveResponses = 0;
 
     updateStatistic();
+
+    emit numberOfPollsChanged(_numberOfPolls);
+    emit validSlaveResposesChanged(_validSlaveResponses);
 }
 
 ///

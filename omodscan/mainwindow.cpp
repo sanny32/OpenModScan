@@ -13,6 +13,7 @@
 #include "dialogusermsg.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
+#include "mainstatusbar.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -31,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
+    setStatusBar(new MainStatusBar(ui->mdiArea));
 
     if(const auto defaultPrinter = QPrinterInfo::defaultPrinter(); !defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
@@ -135,7 +137,7 @@ void MainWindow::on_awake()
     ui->actionCaptureOff->setEnabled(frm != nullptr);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
-    ui->actionStatusBar->setChecked(ui->statusbar->isVisible());
+    ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDsiplayBar->setChecked(ui->toolBarDisplay->isVisible());
 
     if(frm != nullptr)
@@ -752,16 +754,26 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 FormModSca* MainWindow::createMdiChild(int id)
 {
     auto frm = new FormModSca(id, _modbusClient, this);
-    auto child = ui->mdiArea->addSubWindow(frm);
-    child->installEventFilter(this);
-    child->setAttribute(Qt::WA_DeleteOnClose, true);
+    auto wnd = ui->mdiArea->addSubWindow(frm);
+    wnd->installEventFilter(this);
+    wnd->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    connect(frm, &FormModSca::formShowed, this, [this, child]
+    connect(frm, &FormModSca::formShowed, this, [this, wnd]
     {
-        windowActivate(child);
+        windowActivate(wnd);
     });
 
-    _windowActionList->addWindow(child);
+    connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)
+    {
+        dynamic_cast<MainStatusBar*>(statusBar())->updateNumberOfPolls();
+    });
+
+    connect(frm, &FormModSca::validSlaveResposesChanged, this, [this](uint)
+    {
+        dynamic_cast<MainStatusBar*>(statusBar())->updateValidSlaveResponses();
+    });
+
+    _windowActionList->addWindow(wnd);
 
     return frm;
 }
@@ -772,8 +784,8 @@ FormModSca* MainWindow::createMdiChild(int id)
 ///
 FormModSca* MainWindow::currentMdiChild() const
 {
-    auto child = ui->mdiArea->currentSubWindow();
-    return child ? (FormModSca*)child->widget() : nullptr;
+    const auto wnd = ui->mdiArea->currentSubWindow();
+    return wnd ? dynamic_cast<FormModSca*>(wnd->widget()) : nullptr;
 }
 
 ///
@@ -785,7 +797,7 @@ FormModSca* MainWindow::findMdiChild(int id) const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
-        const auto frm = (FormModSca*)wnd->widget();
+        const auto frm = dynamic_cast<FormModSca*>(wnd->widget());
         if(frm && frm->formId() == id) return frm;
     }
     return nullptr;
@@ -798,7 +810,7 @@ FormModSca* MainWindow::findMdiChild(int id) const
 FormModSca* MainWindow::firstMdiChild() const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
-        return (FormModSca*)wnd->widget();
+        return dynamic_cast<FormModSca*>(wnd->widget());
 
     return nullptr;
 }
@@ -997,7 +1009,7 @@ void MainWindow::saveConfig(const QString& filename)
         windowActivate(wnd);
         ui->actionSave->trigger();
 
-        const auto frm = (FormModSca*)wnd->widget();
+        const auto frm = dynamic_cast<FormModSca*>(wnd->widget());
         const auto filename = frm->filename();
         if(!filename.isEmpty()) listFilename.push_back(filename);
     }

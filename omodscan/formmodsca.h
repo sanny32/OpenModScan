@@ -63,12 +63,16 @@ public:
     void print(QPrinter* painter);
 
     void resetCtrs();
+    uint numberOfPolls() const;
+    uint validSlaveResposes() const;
 
 public slots:
     void show();
 
 signals:
     void formShowed();
+    void numberOfPollsChanged(uint value);
+    void validSlaveResposesChanged(uint value);
 
 private slots:
     void on_timeout();
@@ -79,6 +83,8 @@ private slots:
     void on_lineEditDeviceId_valueChanged(const QVariant&);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
+    void on_statisticWidget_numberOfPollsChanged(uint value);
+    void on_statisticWidget_validSlaveResposesChanged(uint value);
 
 private:
     Ui::FormModSca *ui;

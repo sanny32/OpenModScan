@@ -1054,6 +1054,7 @@ void MainWindow::loadSettings()
         frm->setDisplayMode(displayMode);
         frm->setDataDisplayMode(dataDisplayMode);
         frm->setDisplayDefinition(displayDefinition);
+        frm->setWindowState((Qt::WindowState)m.value("WindowState").toUInt());
         frm->setDisplayHexAddresses(m.value("DisplayHexAddresses").toBool());
     }
 
@@ -1084,6 +1085,7 @@ void MainWindow::saveSettings()
         m << frm->displayMode();
         m << frm->dataDisplayMode();
         m << frm->displayDefinition();
+        m.setValue("WindowState", (uint)frm->windowState());
         m.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     }
 

@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include "modbusclient.h"
-#include "appsettings.h"
 #include "formmodsca.h"
 #include "windowactionlist.h"
 #include "recentfileactionlist.h"
@@ -43,6 +42,10 @@ private slots:
     void on_actionConnect_triggered();
     void on_actionDisconnect_triggered();
     void on_actionQuickConnect_triggered();
+    void on_actionEnable_triggered();
+    void on_actionDisable_triggered();
+    void on_actionSaveConfig_triggered();
+    void on_actionRestoreNow_triggered();
 
     /* Setup menu slots*/
     void on_actionDataDefinition_triggered();
@@ -100,12 +103,15 @@ private:
     FormModSca* loadMdiChild(const QString& filename);
     void saveMdiChild(FormModSca* frm);
 
+    void loadConfig(const QString& filename);
+    void saveConfig(const QString& filename);
+
 private:
     Ui::MainWindow *ui;
 
 private:
     int _windowCounter;
-    AppSettings _settings;
+    ConnectionDetails _connParams;
     ModbusClient _modbusClient;
     QPrinter* _selectedPrinter;
     WindowActionList* _windowActionList;

@@ -25,7 +25,6 @@ INCLUDEPATH += controls \
                dialogs \
 
 SOURCES += \
-    appsettings.cpp \
     controls/booleancombobox.cpp \
     controls/bytelistlineedit.cpp \
     controls/clickablelabel.cpp \
@@ -61,7 +60,6 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
-    appsettings.h \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/bytelistlineedit.h \

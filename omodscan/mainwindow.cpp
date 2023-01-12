@@ -268,7 +268,7 @@ void MainWindow::on_actionExit_triggered()
 ///
 void MainWindow::on_actionConnect_triggered()
 {
-    DialogConnectionDetails dlg(_settings.ConnectionParams, this);
+    DialogConnectionDetails dlg(_connParams, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         ui->actionQuickConnect->trigger();
@@ -288,7 +288,45 @@ void MainWindow::on_actionDisconnect_triggered()
 ///
 void MainWindow::on_actionQuickConnect_triggered()
 {
-    _modbusClient.connectDevice(_settings.ConnectionParams);
+    _modbusClient.connectDevice(_connParams);
+}
+
+///
+/// \brief MainWindow::on_actionEnable_triggered
+///
+void MainWindow::on_actionEnable_triggered()
+{
+
+}
+
+///
+/// \brief MainWindow::on_actionDisable_triggered
+///
+void MainWindow::on_actionDisable_triggered()
+{
+
+}
+
+///
+/// \brief MainWindow::on_actionSaveConfig_triggered
+///
+void MainWindow::on_actionSaveConfig_triggered()
+{
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "All files (*)");
+    if(filename.isEmpty()) return;
+
+    saveConfig(filename);
+}
+
+///
+/// \brief MainWindow::on_actionRestoreNow_triggered
+///
+void MainWindow::on_actionRestoreNow_triggered()
+{
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
+    if(filename.isEmpty()) return;
+
+    loadConfig(filename);
 }
 
 ///
@@ -819,6 +857,7 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     auto frm = findMdiChild(formId);
     if(!frm) frm = createMdiChild(formId);
 
+    frm->setFilename(filename);
     frm->setWindowState(windowState);
     frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
@@ -877,4 +916,96 @@ void MainWindow::saveMdiChild(FormModSca* frm)
     s << dd.Length;
 
     addRecentFile(frm->filename());
+}
+
+///
+/// \brief MainWindow::loadConfig
+/// \param filename
+///
+void MainWindow::loadConfig(const QString& filename)
+{
+    QFile file(filename);
+    if(!file.open(QFile::ReadOnly))
+        return;
+
+    QDataStream s(&file);
+    s.setByteOrder(QDataStream::BigEndian);
+    s.setVersion(QDataStream::Version::Qt_5_0);
+
+    quint8 magic = 0;
+    s >> magic;
+
+    if(magic != 0x33)
+        return;
+
+    QVersionNumber ver;
+    s >> ver;
+
+    if(ver != QVersionNumber(1, 0))
+        return;
+
+    QStringList listFilename;
+    s >> listFilename;
+
+    ConnectionDetails connParams;
+    s >> connParams;
+
+    bool connected;
+    s >> connected;
+
+    if(s.status() != QDataStream::Ok)
+        return;
+
+    ui->mdiArea->closeAllSubWindows();
+    for(auto&& filename: listFilename)
+    {
+        if(!filename.isEmpty())
+            openFile(filename);
+    }
+
+    _connParams = connParams;
+    if(connected) ui->actionQuickConnect->trigger();
+}
+
+///
+/// \brief MainWindow::saveConfig
+/// \param filename
+///
+void MainWindow::saveConfig(const QString& filename)
+{
+    QFile file(filename);
+    if(!file.open(QFile::WriteOnly))
+        return;
+
+    QStringList listFilename;
+    const auto activeWnd = ui->mdiArea->currentSubWindow();
+    for(auto&& wnd : ui->mdiArea->subWindowList())
+    {
+        windowActivate(wnd);
+        ui->actionSave->trigger();
+
+        const auto frm = (FormModSca*)wnd->widget();
+        const auto filename = frm->filename();
+        if(!filename.isEmpty()) listFilename.push_back(filename);
+    }
+    windowActivate(activeWnd);
+
+    QDataStream s(&file);
+    s.setByteOrder(QDataStream::BigEndian);
+    s.setVersion(QDataStream::Version::Qt_5_0);
+
+    // magic number
+    s << (quint8)0x33;
+
+    // version number
+    s << QVersionNumber(1, 0);
+
+    // list of files
+    s << listFilename;
+
+    // connection params
+    s << _connParams;
+
+    // connection state
+    s << (_modbusClient.state() == QModbusDevice::ConnectedState);
 }

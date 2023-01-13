@@ -2,7 +2,6 @@
 #include <QPainter>
 #include <QTextStream>
 #include "floatutils.h"
-#include "modbusexception.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -61,7 +60,7 @@ QVector<quint16> OutputWidget::data() const
 void OutputWidget::setup(const DisplayDefinition& dd)
 {
     _displayDefinition = dd;
-    updateDataWidget(QModbusDataUnit());
+    updateDataWidget(QModbusDataUnit(QModbusDataUnit::Invalid, 0, dd.Length));
 }
 
 ///
@@ -258,59 +257,32 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 }
 
 ///
-/// \brief OutputWidget::update
+/// \brief OutputWidget::updateTraffic
 /// \param request
 /// \param server
 ///
-void OutputWidget::update(const QModbusRequest& request, int server)
+void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
 {
     updateTrafficWidget(true, server, request);
 }
 
 ///
-/// \brief OutputWidget::update
+/// \brief OutputWidget::updateTraffic
+/// \param response
+/// \param server
 ///
-void OutputWidget::update(QModbusReply* reply)
+void OutputWidget::updateTraffic(const QModbusResponse& response, int server)
 {
-    if(!reply)
-    {
-        return;
-    }
+    updateTrafficWidget(false, server, response);
+}
 
-    const auto raw = reply->rawResult();
-    updateTrafficWidget(false, reply->serverAddress(), raw);
-
-    const auto fc = raw.functionCode();
-    if(fc == QModbusRequest::ReadCoils ||
-       fc == QModbusRequest::ReadDiscreteInputs ||
-       fc == QModbusRequest::ReadInputRegisters ||
-       fc == QModbusRequest::ReadHoldingRegisters)
-    {
-        const auto data = reply->result();
-        if (reply->error() == QModbusDevice::NoError)
-        {
-            if(data.valueCount() != _displayDefinition.Length ||
-               data.startAddress() != _displayDefinition.PointAddress - 1)
-            {
-                setStatus("Received Invalid Response MODBUS Query");
-            }
-            else
-            {
-                setStatus(QString());
-                updateDataWidget(data);
-                _lastData = data;
-            }
-        }
-        else if (reply->error() == QModbusDevice::ProtocolError)
-        {
-            const QString exception = ModbusException(raw.exceptionCode());
-            setStatus(exception);
-        }
-        else
-        {
-            setStatus(reply->errorString());
-        }
-    }
+///
+/// \brief OutputWidget::updateData
+///
+void OutputWidget::updateData(const QModbusDataUnit& data)
+{
+    updateDataWidget(data);
+    _lastData = data;
 }
 
 ///

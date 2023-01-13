@@ -1,6 +1,7 @@
 #include <QPainter>
 #include <QDateTime>
 #include "modbuslimits.h"
+#include "modbusexception.h"
 #include "mainwindow.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
@@ -383,6 +384,35 @@ void FormModSca::on_timeout()
 }
 
 ///
+/// \brief FormModSca::isValidReply
+/// \param reply
+/// \return
+///
+bool FormModSca::isValidReply(const QModbusReply* reply)
+{
+    const auto dd = displayDefinition();
+    const auto data = reply->result();
+    const auto response = reply->rawResult();
+
+    switch(response.functionCode())
+    {
+        case QModbusRequest::ReadCoils:
+        case QModbusRequest::ReadDiscreteInputs:
+            return (data.startAddress() == dd.PointAddress - 1) && qAbs(data.valueCount() - dd.Length) < 8;
+        break;
+
+        case QModbusRequest::ReadInputRegisters:
+        case QModbusRequest::ReadHoldingRegisters:
+            return (data.valueCount() == dd.Length) && (data.startAddress() == dd.PointAddress - 1);
+
+        default:
+            break;
+    }
+
+    return false;
+}
+
+///
 /// \brief FormModSca::on_modbusReply
 /// \param reply
 ///
@@ -395,12 +425,45 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
         return;
     }
 
-    ui->outputWidget->update(reply);
+    const auto data = reply->result();
+    const auto response = reply->rawResult();
 
-    if(reply->error() == QModbusDevice::NoError)
+    switch(response.functionCode())
     {
-        ui->statisticWidget->increaseValidSlaveResponses();
+        case QModbusRequest::ReadCoils:
+        case QModbusRequest::ReadDiscreteInputs:
+        case QModbusRequest::ReadInputRegisters:
+        case QModbusRequest::ReadHoldingRegisters:
+        break;
+
+        default:
+        return;
     }
+
+    ui->outputWidget->updateTraffic(response, reply->serverAddress());
+
+    if (reply->error() == QModbusDevice::NoError)
+    {
+        if(!isValidReply(reply))
+        {
+            ui->outputWidget->setStatus("Received Invalid Response MODBUS Query");
+        }
+        else
+        {
+            ui->outputWidget->updateData(data);
+            ui->outputWidget->setStatus(QString());
+            ui->statisticWidget->increaseValidSlaveResponses();
+        }
+    }
+    else if (reply->error() == QModbusDevice::ProtocolError)
+    {
+        ui->outputWidget->setStatus(ModbusException(response.exceptionCode()));
+    }
+    else
+    {
+        ui->outputWidget->setStatus(reply->errorString());
+    }
+
 }
 
 ///
@@ -416,7 +479,7 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
     }
 
     const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->update(request, deviceId);
+    ui->outputWidget->updateTraffic(request, deviceId);
     ui->statisticWidget->increaseNumberOfPolls();
 }
 

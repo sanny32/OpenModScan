@@ -187,8 +187,14 @@ void MainWindow::on_modbusConnectionError(const QString& error)
 ///
 void MainWindow::on_actionNew_triggered()
 {
+    const auto cur = currentMdiChild();
     auto frm = createMdiChild(++_windowCounter);
-    //frm->setDataDisplayMode(_settings.DataDisplayMode);
+
+    if(cur) {
+        frm->setDisplayMode(cur->displayMode());
+        frm->setDataDisplayMode(cur->dataDisplayMode());
+    }
+
     frm->show();
 }
 

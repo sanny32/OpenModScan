@@ -138,7 +138,7 @@
        <item>
         <widget class="QLabel" name="labelCopyright">
          <property name="text">
-          <string>© Alexandr Ananev, 2022</string>
+          <string>© Alexandr Ananev, 2023</string>
          </property>
         </widget>
        </item>

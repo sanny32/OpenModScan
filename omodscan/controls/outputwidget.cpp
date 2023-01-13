@@ -292,7 +292,7 @@ void OutputWidget::update(QModbusReply* reply)
             if(data.valueCount() != _displayDefinition.Length ||
                data.startAddress() != _displayDefinition.PointAddress - 1)
             {
-                setStatus("Received Invalid Response MODBUS Query");
+                 setStatus("Received Invalid Response MODBUS Query");
             }
             else
             {
@@ -640,7 +640,8 @@ void OutputWidget::captureString(const QString& s)
 ///
 void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 {
-    if(data.valueCount() != _lastData.valueCount() ||
+    if(!data.isValid() || !_lastData.isValid() ||
+       data.valueCount() != _lastData.valueCount() ||
        data.startAddress() != _lastData.startAddress() ||
        data.registerType() != _lastData.registerType())
     {

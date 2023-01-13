@@ -484,6 +484,7 @@ QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
             result = QString("<%1>").arg(value1);
         break;
         case QModbusDataUnit::HoldingRegisters:
@@ -520,6 +521,7 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
             result = QString("<%1>").arg(value1);
         break;
         case QModbusDataUnit::HoldingRegisters:

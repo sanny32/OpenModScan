@@ -579,29 +579,41 @@ void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     if(item == nullptr) return;
     auto itemData = item->data(Qt::UserRole).value<ListItemData>();
 
-    switch(_dataDisplayMode)
+    switch(_displayDefinition.PointType)
     {
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
-            if(itemData.Row % 2)
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            switch(_dataDisplayMode)
             {
-                auto item = ui->listWidget->item(itemData.Row - 1);
-                if(item) itemData = item->data(Qt::UserRole).value<ListItemData>();
-            }
-        break;
+                case DataDisplayMode::FloatingPt:
+                case DataDisplayMode::SwappedFP:
+                    if(itemData.Row % 2)
+                    {
+                        const auto item = ui->listWidget->item(itemData.Row - 1);
+                        if(item) itemData = item->data(Qt::UserRole).value<ListItemData>();
+                    }
+                break;
 
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
-            if(itemData.Row % 4)
-            {
-                auto item = ui->listWidget->item(itemData.Row - itemData.Row % 4);
-                if(item) itemData = item->data(Qt::UserRole).value<ListItemData>();
+                case DataDisplayMode::DblFloat:
+                case DataDisplayMode::SwappedDbl:
+                    if(itemData.Row % 4)
+                    {
+                        const auto item = ui->listWidget->item(itemData.Row - itemData.Row % 4);
+                        if(item) itemData = item->data(Qt::UserRole).value<ListItemData>();
+                    }
+                break;
+
+                default:
+                break;
             }
+        }
         break;
 
         default:
         break;
     }
+
     emit itemDoubleClicked(itemData.Address, itemData.Value);
 }
 
@@ -626,7 +638,12 @@ void OutputWidget::captureString(const QString& s)
 ///
 void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 {
-    ui->listWidget->clear();
+    if(data.valueCount() != _lastData.valueCount() ||
+       data.startAddress() != _lastData.startAddress() ||
+       data.registerType() != _lastData.registerType())
+    {
+        ui->listWidget->clear();
+    }
 
     QStringList capstr;
     for(int i = 0; i < _displayDefinition.Length; i++)
@@ -682,10 +699,13 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         if(captureMode() == CaptureMode::TextCapture)
             capstr.push_back(QString(valstr).remove('<').remove('>'));
 
-        const auto label = QString(format).arg(addr, valstr);
-        auto item = new QListWidgetItem(label, ui->listWidget);
+        auto item = ui->listWidget->item(i);
+        if(!item) {
+            item = new QListWidgetItem(ui->listWidget);
+            ui->listWidget->addItem(item);
+        }
+        item->setText(QString(format).arg(addr, valstr));
         item->setData(Qt::UserRole, QVariant::fromValue(itemData));
-        ui->listWidget->addItem(item);
     }
 
     if(captureMode() == CaptureMode::TextCapture)

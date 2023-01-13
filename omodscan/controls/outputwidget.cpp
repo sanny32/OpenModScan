@@ -60,7 +60,7 @@ QVector<quint16> OutputWidget::data() const
 void OutputWidget::setup(const DisplayDefinition& dd)
 {
     _displayDefinition = dd;
-    updateDataWidget(QModbusDataUnit(QModbusDataUnit::Invalid, 0, dd.Length));
+    updateDataWidget(QModbusDataUnit());
 }
 
 ///
@@ -612,7 +612,8 @@ void OutputWidget::captureString(const QString& s)
 ///
 void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 {
-    if(data.valueCount() != _lastData.valueCount() ||
+    if(!data.isValid() || !_lastData.isValid() ||
+       data.valueCount() != _lastData.valueCount() ||
        data.startAddress() != _lastData.startAddress() ||
        data.registerType() != _lastData.registerType())
     {

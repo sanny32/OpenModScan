@@ -694,8 +694,6 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
 ///
 void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPdu& pdu)
 {
-    if(!pdu.isValid()) return;
-
     QByteArray rawData;
     rawData.push_back(server);
     rawData.push_back(pdu.functionCode() | ( pdu.isException() ? QModbusPdu::ExceptionByte : 0));

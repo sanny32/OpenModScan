@@ -1,4 +1,5 @@
 QT += core gui widgets network printsupport serialbus serialport
+
 CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target

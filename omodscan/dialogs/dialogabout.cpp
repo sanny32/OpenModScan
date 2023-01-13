@@ -1,3 +1,4 @@
+#include <QFile>
 #include <QApplication>
 #include <QPlainTextEdit>
 #include "dialogabout.h"

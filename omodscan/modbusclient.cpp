@@ -1,7 +1,13 @@
 #include <QModbusTcpClient>
-#include <QModbusRtuSerialMaster>
 #include "modbusexception.h"
 #include "modbusclient.h"
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    #include <QModbusRtuSerialMaster>
+    typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
+#else
+    #include <QModbusRtuSerialClient>
+#endif
 
 ///
 /// \brief ModbusClient::ModbusClient
@@ -40,20 +46,20 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
         break;
 
         case ConnectionType::Serial:
-            _modbusClient = new QModbusRtuSerialMaster(this);
+            _modbusClient = new QModbusRtuSerialClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
             _modbusClient->setProperty("ConnectionType", QVariant::fromValue(cd.Type));
             _modbusClient->setProperty("DTRControl", cd.SerialParams.SetDTR);
             _modbusClient->setProperty("RTSControl", cd.SerialParams.SetRTS);
             _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
-            ((QModbusRtuSerialMaster*)_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
+            dynamic_cast<QModbusRtuSerialClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
-            ((QSerialPort*)_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
+            dynamic_cast<QSerialPort*>(_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
         break;
     }
 

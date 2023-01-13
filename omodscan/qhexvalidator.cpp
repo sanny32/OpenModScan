@@ -1,3 +1,4 @@
+#include <QRegularExpression>
 #include "qhexvalidator.h"
 
 ///
@@ -21,8 +22,8 @@ QHexValidator::QHexValidator(int bottom, int top, QObject* parent)
 ///
 QHexValidator::State QHexValidator::validate(QString& input, int&) const
 {
-    QRegExp rx("(?:[0-9a-fA-F]{2})*[0-9a-fA-F]{0,3}");
-    if (rx.exactMatch(input))
+    QRegularExpression rx("(?:[0-9a-fA-F]{2})*[0-9a-fA-F]{0,3}");
+    if (rx.match(input).hasMatch())
     {
         return QValidator::Acceptable;
     }

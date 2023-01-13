@@ -1,4 +1,4 @@
-#include <QRegExpValidator>
+#include <QRegularExpressionValidator>
 #include "bytelistlineedit.h"
 
 ///
@@ -94,11 +94,11 @@ void ByteListLineEdit::setInputMode(InputMode mode)
     switch(mode)
     {
         case DecMode:
-            setValidator(new QRegExpValidator(QRegExp("(?:[0-9]{1,2}[,]{0,1})*"), this));
+            setValidator(new QRegularExpressionValidator(QRegularExpression("(?:[0-9]{1,2}[,]{0,1})*"), this));
         break;
 
         case HexMode:
-            setValidator(new QRegExpValidator(QRegExp("(?:[0-9a-fA-F]{1,2}[,]{0,1})*"), this));
+            setValidator(new QRegularExpressionValidator(QRegularExpression("(?:[0-9a-fA-F]{1,2}[,]{0,1})*"), this));
         break;
     }
     setValue(_value);

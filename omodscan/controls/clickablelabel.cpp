@@ -6,7 +6,7 @@
 /// \param f
 ///
 ClickableLabel::ClickableLabel(QWidget* parent, Qt::WindowFlags f)
-    : QLabel(parent)
+    : QLabel(parent, f)
 {
 }
 

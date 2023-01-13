@@ -2,7 +2,6 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDialogButtonBox>
-#include <QRegExpValidator>
 #include "modbuslimits.h"
 #include "dialogusermsg.h"
 #include "ui_dialogusermsg.h"

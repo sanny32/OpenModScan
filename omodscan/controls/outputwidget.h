@@ -56,8 +56,9 @@ public:
 
     void paint(const QRect& rc, QPainter& painter);
 
-    void update(const QModbusRequest& request, int server);
-    void update(QModbusReply* reply);
+    void updateTraffic(const QModbusRequest& request, int server);
+    void updateTraffic(const QModbusResponse& response, int server);
+    void updateData(const QModbusDataUnit& data);
 
 signals:
     void itemDoubleClicked(quint32 address, const QVariant& value);

@@ -87,6 +87,9 @@ private slots:
     void on_statisticWidget_validSlaveResposesChanged(uint value);
 
 private:
+    bool isValidReply(const QModbusReply* reply);
+
+private:
     Ui::FormModSca *ui;
     int _formId;
     QTimer _timer;

@@ -30,6 +30,7 @@ SOURCES += \
     controls/bytelistlineedit.cpp \
     controls/clickablelabel.cpp \
     controls/connectioncombobox.cpp \
+    controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
     controls/mainstatusbar.cpp \
@@ -69,6 +70,7 @@ HEADERS += \
     controls/bytelistlineedit.h \
     controls/clickablelabel.h \
     controls/connectioncombobox.h \
+    controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
     controls/mainstatusbar.h \

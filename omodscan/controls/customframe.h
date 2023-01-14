@@ -3,6 +3,9 @@
 
 #include <QFrame>
 
+///
+/// \brief The CustomFrame class
+///
 class CustomFrame : public QFrame
 {
     Q_OBJECT

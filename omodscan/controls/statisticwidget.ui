@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>318</width>
-    <height>114</height>
+    <height>144</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,6 +43,9 @@
      <property name="frameShadow">
       <enum>QFrame::Plain</enum>
      </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="labelNumberOfPolls">
@@ -74,9 +77,6 @@
        <width>0</width>
        <height>26</height>
       </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: #F0F0F0;</string>
      </property>
      <property name="text">
       <string>Reset Ctrs</string>

@@ -2,6 +2,7 @@
 #define NUMERICLINEEDIT_H
 
 #include <QLineEdit>
+#include <QStyleOptionFrame>
 #include "qrange.h"
 
 class NumericLineEdit : public QLineEdit
@@ -59,6 +60,11 @@ signals:
 
 protected:
     void focusOutEvent(QFocusEvent*) override;
+    /*void initStyleOption(QStyleOptionFrame *option) const override
+    {
+        QLineEdit::initStyleOption(option);
+        option->lineWidth = 3;
+    }*/
 
 private slots:
     void on_editingFinished();

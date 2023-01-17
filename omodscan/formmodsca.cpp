@@ -41,14 +41,6 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
     ui->outputWidget->setup(displayDefinition());
     ui->outputWidget->setFocus();
 
-    {
-        auto pal = ui->frameDataDefinition->palette();
-        pal.setColor(QPalette::Base, Qt::white);
-        pal.setColor(QPalette::Window, Qt::white);
-        pal.setColor(QPalette::Text, Qt::black);
-        ui->frameDataDefinition->setPalette(pal);
-    }
-
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);

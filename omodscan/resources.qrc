@@ -23,5 +23,17 @@
         <file>res/iconLandscape.png</file>
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
+        <file>res/actionAbout.svg</file>
+        <file>res/actionConnect.svg</file>
+        <file>res/actionDefineData.svg</file>
+        <file>res/actionDisconnect.svg</file>
+        <file>res/actionNew.svg</file>
+        <file>res/actionOpen.svg</file>
+        <file>res/actionPrint.svg</file>
+        <file>res/actionSaveAs.svg</file>
+        <file>res/actionShowData.svg</file>
+        <file>res/actionShowTraffic.svg</file>
+        <file>res/iconAbout.svg</file>
+        <file>res/omodscan.svg</file>
     </qresource>
 </RCC>

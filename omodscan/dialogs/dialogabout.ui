@@ -28,10 +28,10 @@
         </sizepolicy>
        </property>
        <property name="pixmap">
-        <pixmap resource="../resources.qrc">:/res/iconAbout.png</pixmap>
+        <pixmap resource="../resources.qrc">:/res/iconAbout.svg</pixmap>
        </property>
-       <property name="scaledContents">
-        <bool>false</bool>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>

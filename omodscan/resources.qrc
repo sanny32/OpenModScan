@@ -19,7 +19,6 @@
         <file>res/actionSwappedFP.png</file>
         <file>res/actionUnsignedDecimal.png</file>
         <file>res/omodscan.png</file>
-        <file>res/iconAbout.png</file>
         <file>res/iconLandscape.png</file>
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
@@ -33,7 +32,14 @@
         <file>res/actionSaveAs.svg</file>
         <file>res/actionShowData.svg</file>
         <file>res/actionShowTraffic.svg</file>
-        <file>res/iconAbout.svg</file>
         <file>res/omodscan.svg</file>
+        <file>res/actionBinary.svg</file>
+        <file>res/actionUnsignedDecimal.svg</file>
+        <file>res/actionInteger.svg</file>
+        <file>res/actionHex.svg</file>
+        <file>res/actionFloatingPt.svg</file>
+        <file>res/actionSwappedFP.svg</file>
+        <file>res/actionDblFloat.svg</file>
+        <file>res/actionSwappedDbl.svg</file>
     </qresource>
 </RCC>

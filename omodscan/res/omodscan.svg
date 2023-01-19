@@ -6,11 +6,18 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <g
-     id="icon"
-     fill="#000000"
-     transform="translate(0,12.8)">
-     <path
-       d="M 38.4,0 V 44.8 H 0 V 0 Z M 128,57.6 v 44.8 H 89.6 V 57.6 Z M 128,0 V 44.8 H 51.2 V 0 Z M 76.8,57.6 v 44.8 H 0 V 57.6 Z"
-       id="Combined-Shape" />
+     transform="translate(0,0.9999985)">
+    <path
+       style="opacity:1;fill:#ffffff;stroke:#000000;stroke-width:8;stroke-dasharray:none;stroke-opacity:1"
+       d="M 82.8,63.857627 V 108.65763 H 6 V 63.857627 Z" />
+    <path
+       style="fill:#ffffff;stroke:#000000;stroke-width:8;stroke-dasharray:none;stroke-opacity:1"
+       d="m 122,17.342373 v 44.8 H 45.2 v -44.8 z" />
+    <path
+       style="fill:#2b5d0a;stroke:#000000;stroke-width:8;stroke-dasharray:none;stroke-opacity:1"
+       d="M 122,63.857627 V 108.65763 H 83.6 V 63.857627 Z" />
+    <path
+       style="fill:#00cc00;stroke:#000000;stroke-width:8;stroke-dasharray:none;stroke-opacity:1"
+       d="m 44.4,17.342373 v 44.8 H 6 v -44.8 z" />
   </g>
 </svg>

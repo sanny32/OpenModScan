@@ -199,6 +199,9 @@
    <property name="windowTitle">
     <string>Display Bar</string>
    </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -359,7 +362,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
+     <normaloff>:/res/actionBinary.svg</normaloff>:/res/actionBinary.svg</iconset>
    </property>
    <property name="text">
     <string>Binary</string>
@@ -371,7 +374,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
+     <normaloff>:/res/actionHex.svg</normaloff>:/res/actionHex.svg</iconset>
    </property>
    <property name="text">
     <string>Hex</string>
@@ -383,7 +386,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUnsignedDecimal.png</normaloff>:/res/actionUnsignedDecimal.png</iconset>
+     <normaloff>:/res/actionUnsignedDecimal.svg</normaloff>:/res/actionUnsignedDecimal.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned Decimal</string>
@@ -395,7 +398,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInteger.png</normaloff>:/res/actionInteger.png</iconset>
+     <normaloff>:/res/actionInteger.svg</normaloff>:/res/actionInteger.svg</iconset>
    </property>
    <property name="text">
     <string>Integer</string>
@@ -407,7 +410,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
+     <normaloff>:/res/actionFloatingPt.svg</normaloff>:/res/actionFloatingPt.svg</iconset>
    </property>
    <property name="text">
     <string>Floating Pt</string>
@@ -419,7 +422,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
+     <normaloff>:/res/actionSwappedFP.svg</normaloff>:/res/actionSwappedFP.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped FP</string>
@@ -431,7 +434,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
+     <normaloff>:/res/actionDblFloat.svg</normaloff>:/res/actionDblFloat.svg</iconset>
    </property>
    <property name="text">
     <string>Dbl Float</string>
@@ -443,7 +446,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
+     <normaloff>:/res/actionSwappedDbl.svg</normaloff>:/res/actionSwappedDbl.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped Dbl</string>

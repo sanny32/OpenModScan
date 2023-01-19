@@ -27,8 +27,17 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>69</width>
+         <height>54</height>
+        </size>
+       </property>
        <property name="pixmap">
-        <pixmap resource="../resources.qrc">:/res/iconAbout.svg</pixmap>
+        <pixmap resource="../resources.qrc">:/res/omodscan.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

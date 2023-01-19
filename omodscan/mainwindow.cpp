@@ -747,7 +747,6 @@ void MainWindow::addRecentFile(const QString& filename)
 ///
 void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 {
-    //_settings.DataDisplayMode = mode;
     auto frm = currentMdiChild();
     if(frm) frm->setDataDisplayMode(mode);
 }

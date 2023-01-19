@@ -1052,11 +1052,16 @@ void MainWindow::loadSettings()
     if(!QFile::exists(filepath)) return;
 
     QSettings m(filepath, QSettings::IniFormat, this);
-    auto frm = firstMdiChild();
+
+    const auto toolbarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea").toInt(), 0xf);
+    const auto toolbarBreal = m.value("DisplayBarBreak").toBool();
+    if(toolbarBreal) addToolBarBreak(toolbarArea);
+    addToolBar(toolbarArea, ui->toolBarDisplay);
 
     _autoStart = m.value("AutoStart").toBool();
     _fileAutoStart = m.value("StartUpFile").toString();
 
+    auto frm = firstMdiChild();
     if(frm)
     {
         DisplayMode displayMode;
@@ -1071,7 +1076,7 @@ void MainWindow::loadSettings()
         frm->setDisplayMode(displayMode);
         frm->setDataDisplayMode(dataDisplayMode);
         frm->setDisplayDefinition(displayDefinition);
-        frm->setWindowState((Qt::WindowState)m.value("WindowState").toUInt());
+        frm->setWindowState((Qt::WindowState)m.value("ViewState").toUInt());
         frm->setDisplayHexAddresses(m.value("DisplayHexAddresses").toBool());
     }
 
@@ -1094,6 +1099,9 @@ void MainWindow::saveSettings()
                 QFileInfo(qApp->applicationFilePath()).baseName());
     QSettings m(filepath, QSettings::IniFormat, this);
 
+    m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
+    m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
+
     m.setValue("AutoStart", _autoStart);
     m.setValue("StartUpFile", _fileAutoStart);
 
@@ -1102,7 +1110,7 @@ void MainWindow::saveSettings()
         m << frm->displayMode();
         m << frm->dataDisplayMode();
         m << frm->displayDefinition();
-        m.setValue("WindowState", (uint)frm->windowState());
+        m.setValue("ViewState", (uint)frm->windowState());
         m.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     }
 

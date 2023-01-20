@@ -34,7 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(ui->mdiArea));
 
-    if(const auto defaultPrinter = QPrinterInfo::defaultPrinter(); !defaultPrinter.isNull())
+    const auto defaultPrinter = QPrinterInfo::defaultPrinter();
+    if(!defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
 
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);

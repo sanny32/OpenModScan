@@ -180,6 +180,7 @@ void MainWindow::on_modbusError(const QString& error)
 ///
 void MainWindow::on_modbusConnectionError(const QString& error)
 {
+    _modbusClient.disconnectDevice();
     QMessageBox::warning(this, windowTitle(), error);
 }
 

@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Open ModScan</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/res/omodscan.png</normaloff>:/res/omodscan.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QMdiArea" name="mdiArea"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionClose"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint"/>
+    <addaction name="actionPrintSetup"/>
+    <addaction name="separator"/>
+    <addaction name="actionRecentFile"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuConnection">
+    <property name="title">
+     <string>Connection</string>
+    </property>
+    <widget class="QMenu" name="menuAutoStart">
+     <property name="title">
+      <string>Auto-Start</string>
+     </property>
+     <addaction name="actionEnable"/>
+     <addaction name="actionDisable"/>
+     <addaction name="separator"/>
+     <addaction name="actionSaveConfig"/>
+     <addaction name="actionRestoreNow"/>
+    </widget>
+    <addaction name="actionConnect"/>
+    <addaction name="actionDisconnect"/>
+    <addaction name="separator"/>
+    <addaction name="menuAutoStart"/>
+    <addaction name="actionQuickConnect"/>
+   </widget>
+   <widget class="QMenu" name="menuSetup">
+    <property name="title">
+     <string>Setup</string>
+    </property>
+    <widget class="QMenu" name="menuDisplayOptions">
+     <property name="title">
+      <string>Display Options</string>
+     </property>
+     <addaction name="actionShowData"/>
+     <addaction name="actionShowTraffic"/>
+     <addaction name="separator"/>
+     <addaction name="actionBinary"/>
+     <addaction name="actionHex"/>
+     <addaction name="actionUnsignedDecimal"/>
+     <addaction name="actionInteger"/>
+     <addaction name="actionFloatingPt"/>
+     <addaction name="actionSwappedFP"/>
+     <addaction name="actionDblFloat"/>
+     <addaction name="actionSwappedDbl"/>
+     <addaction name="separator"/>
+     <addaction name="actionHexAddresses"/>
+    </widget>
+    <widget class="QMenu" name="menuExtended">
+     <property name="title">
+      <string>Extended</string>
+     </property>
+     <addaction name="actionForceCoils"/>
+     <addaction name="actionPresetRegs"/>
+     <addaction name="actionMaskWrite"/>
+     <addaction name="separator"/>
+     <addaction name="actionUserMsg"/>
+    </widget>
+    <addaction name="actionDataDefinition"/>
+    <addaction name="menuDisplayOptions"/>
+    <addaction name="menuExtended"/>
+    <addaction name="separator"/>
+    <addaction name="actionTextCapture"/>
+    <addaction name="actionCaptureOff"/>
+    <addaction name="separator"/>
+    <addaction name="actionResetCtrs"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <widget class="QMenu" name="menuConfig">
+     <property name="title">
+      <string>Config</string>
+     </property>
+     <widget class="QMenu" name="menuColors">
+      <property name="title">
+       <string>Colors</string>
+      </property>
+      <addaction name="actionBackground"/>
+      <addaction name="actionForeground"/>
+      <addaction name="actionStatus"/>
+     </widget>
+     <addaction name="menuColors"/>
+     <addaction name="actionFont"/>
+    </widget>
+    <addaction name="actionToolbar"/>
+    <addaction name="actionStatusBar"/>
+    <addaction name="actionDsiplayBar"/>
+    <addaction name="separator"/>
+    <addaction name="menuConfig"/>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionCascade"/>
+    <addaction name="actionTile"/>
+    <addaction name="separator"/>
+    <addaction name="actionWindows"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuConnection"/>
+   <addaction name="menuSetup"/>
+   <addaction name="menuView"/>
+   <addaction name="menuWindow"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBarMain">
+   <property name="windowTitle">
+    <string>Toolbar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionQuickConnect"/>
+   <addaction name="actionDisconnect"/>
+   <addaction name="separator"/>
+   <addaction name="actionDataDefinition"/>
+   <addaction name="actionShowData"/>
+   <addaction name="actionShowTraffic"/>
+   <addaction name="separator"/>
+   <addaction name="actionPrint"/>
+   <addaction name="actionAbout"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarDisplay">
+   <property name="windowTitle">
+    <string>Display Bar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="actionBinary"/>
+   <addaction name="actionUnsignedDecimal"/>
+   <addaction name="actionInteger"/>
+   <addaction name="actionHex"/>
+   <addaction name="separator"/>
+   <addaction name="actionFloatingPt"/>
+   <addaction name="actionSwappedFP"/>
+   <addaction name="separator"/>
+   <addaction name="actionDblFloat"/>
+   <addaction name="actionSwappedDbl"/>
+  </widget>
+  <action name="actionNew">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionNew.png</normaloff>:/res/actionNew.png</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionOpen.png</normaloff>:/res/actionOpen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open...</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSaveAs.png</normaloff>:/res/actionSaveAs.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>Save As...</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionPrint.png</normaloff>:/res/actionPrint.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print...</string>
+   </property>
+  </action>
+  <action name="actionPrintSetup">
+   <property name="text">
+    <string>Print Setup...</string>
+   </property>
+  </action>
+  <action name="actionRecentFile">
+   <property name="text">
+    <string>Recent File</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionConnect">
+   <property name="text">
+    <string>Connect</string>
+   </property>
+  </action>
+  <action name="actionDisconnect">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionDisconnect.png</normaloff>:/res/actionDisconnect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionEnable">
+   <property name="text">
+    <string>Enable</string>
+   </property>
+  </action>
+  <action name="actionDisable">
+   <property name="text">
+    <string>Disable</string>
+   </property>
+  </action>
+  <action name="actionSaveConfig">
+   <property name="text">
+    <string>Save Config</string>
+   </property>
+  </action>
+  <action name="actionRestoreNow">
+   <property name="text">
+    <string>Restore Now</string>
+   </property>
+  </action>
+  <action name="actionQuickConnect">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionConnect.png</normaloff>:/res/actionConnect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quick Connect</string>
+   </property>
+  </action>
+  <action name="actionDataDefinition">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionDefineData.png</normaloff>:/res/actionDefineData.png</iconset>
+   </property>
+   <property name="text">
+    <string>Data Definition</string>
+   </property>
+  </action>
+  <action name="actionShowData">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionShowData.png</normaloff>:/res/actionShowData.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Data</string>
+   </property>
+  </action>
+  <action name="actionShowTraffic">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Traffic</string>
+   </property>
+  </action>
+  <action name="actionBinary">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
+   </property>
+   <property name="text">
+    <string>Binary</string>
+   </property>
+  </action>
+  <action name="actionHex">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hex</string>
+   </property>
+  </action>
+  <action name="actionUnsignedDecimal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUnsignedDecimal.png</normaloff>:/res/actionUnsignedDecimal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned Decimal</string>
+   </property>
+  </action>
+  <action name="actionInteger">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionInteger.png</normaloff>:/res/actionInteger.png</iconset>
+   </property>
+   <property name="text">
+    <string>Integer</string>
+   </property>
+  </action>
+  <action name="actionFloatingPt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
+   </property>
+   <property name="text">
+    <string>Floating Pt</string>
+   </property>
+  </action>
+  <action name="actionSwappedFP">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swapped FP</string>
+   </property>
+  </action>
+  <action name="actionDblFloat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
+   </property>
+   <property name="text">
+    <string>Dbl Float</string>
+   </property>
+  </action>
+  <action name="actionSwappedDbl">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swapped Dbl</string>
+   </property>
+  </action>
+  <action name="actionHexAddresses">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hex Addresses</string>
+   </property>
+  </action>
+  <action name="actionForceCoils">
+   <property name="text">
+    <string>Force Coils</string>
+   </property>
+  </action>
+  <action name="actionPresetRegs">
+   <property name="text">
+    <string>Preset Regs</string>
+   </property>
+  </action>
+  <action name="actionMaskWrite">
+   <property name="text">
+    <string>Mask Write</string>
+   </property>
+  </action>
+  <action name="actionUserMsg">
+   <property name="text">
+    <string>User Msg</string>
+   </property>
+  </action>
+  <action name="actionTextCapture">
+   <property name="text">
+    <string>Text Capture</string>
+   </property>
+  </action>
+  <action name="actionCaptureOff">
+   <property name="text">
+    <string>Capture Off</string>
+   </property>
+  </action>
+  <action name="actionResetCtrs">
+   <property name="text">
+    <string>Reset Ctrs</string>
+   </property>
+  </action>
+  <action name="actionToolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Toolbar</string>
+   </property>
+  </action>
+  <action name="actionStatusBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Status Bar</string>
+   </property>
+  </action>
+  <action name="actionDsiplayBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dsiplay Bar</string>
+   </property>
+  </action>
+  <action name="actionBackground">
+   <property name="text">
+    <string>Background</string>
+   </property>
+  </action>
+  <action name="actionForeground">
+   <property name="text">
+    <string>Foreground</string>
+   </property>
+  </action>
+  <action name="actionStatus">
+   <property name="text">
+    <string>Status</string>
+   </property>
+  </action>
+  <action name="actionFont">
+   <property name="text">
+    <string>Font</string>
+   </property>
+  </action>
+  <action name="actionCascade">
+   <property name="text">
+    <string>Cascade</string>
+   </property>
+  </action>
+  <action name="actionTile">
+   <property name="text">
+    <string>Tile</string>
+   </property>
+  </action>
+  <action name="actionArrangeIcons">
+   <property name="text">
+    <string>Arrange Icons</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionAbout.png</normaloff>:/res/actionAbout.png</iconset>
+   </property>
+   <property name="text">
+    <string>About ModScan64...</string>
+   </property>
+  </action>
+  <action name="actionWindows">
+   <property name="text">
+    <string>Windows...</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

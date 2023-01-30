@@ -139,7 +139,7 @@ void MainWindow::on_awake()
     ui->actionResetCtrs->setEnabled(frm != nullptr);
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
-    ui->actionDsiplayBar->setChecked(ui->toolBarDisplay->isVisible());
+    ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
 
     if(frm != nullptr)
     {
@@ -589,9 +589,9 @@ void MainWindow::on_actionStatusBar_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionDsiplayBar_triggered
+/// \brief MainWindow::on_actionDisplayBar_triggered
 ///
-void MainWindow::on_actionDsiplayBar_triggered()
+void MainWindow::on_actionDisplayBar_triggered()
 {
     ui->toolBarDisplay->setVisible(!ui->toolBarDisplay->isVisible());
 }

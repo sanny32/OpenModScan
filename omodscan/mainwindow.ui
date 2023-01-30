@@ -144,7 +144,7 @@
     </widget>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
-    <addaction name="actionDsiplayBar"/>
+    <addaction name="actionDisplayBar"/>
     <addaction name="separator"/>
     <addaction name="menuConfig"/>
    </widget>
@@ -508,7 +508,7 @@
     <string>Status Bar</string>
    </property>
   </action>
-  <action name="actionDsiplayBar">
+  <action name="actionDisplayBar">
    <property name="checkable">
     <bool>true</bool>
    </property>

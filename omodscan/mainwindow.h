@@ -71,7 +71,7 @@ private slots:
     /* View menu slots */
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
-    void on_actionDsiplayBar_triggered();
+    void on_actionDisplayBar_triggered();
     void on_actionBackground_triggered();
     void on_actionForeground_triggered();
     void on_actionStatus_triggered();

@@ -938,7 +938,8 @@ void MainWindow::saveMdiChild(FormModSca* frm)
 
     const auto wnd = frm->parentWidget();
     s << wnd->isMaximized();
-    s << wnd->size();
+    s << ((wnd->isMinimized() || wnd->isMaximized()) ?
+              wnd->sizeHint() : wnd->size());
 
     s << frm->displayMode();
     s << frm->dataDisplayMode();
@@ -1089,7 +1090,6 @@ void MainWindow::loadSettings()
 
         QSize wndSize;
         wndSize = m.value("ViewSize").toSize();
-        qDebug() << wndSize;
 
         auto wnd = frm->parentWidget();
         wnd->resize(wndSize);
@@ -1130,7 +1130,10 @@ void MainWindow::saveSettings()
     {
         const auto wnd = frm->parentWidget();
         m.setValue("ViewMaximized", wnd->isMaximized());
-        if(!wnd->isMaximized()) m.setValue("ViewSize", wnd->size());
+        if(!wnd->isMaximized() && !wnd->isMinimized())
+        {
+            m.setValue("ViewSize", wnd->size());
+        }
 
         m << frm->displayMode();
         m << frm->dataDisplayMode();

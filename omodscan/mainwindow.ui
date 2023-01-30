@@ -557,7 +557,7 @@
      <normaloff>:/res/actionAbout.png</normaloff>:/res/actionAbout.png</iconset>
    </property>
    <property name="text">
-    <string>About ModScan64...</string>
+    <string>About Open ModScan...</string>
    </property>
   </action>
   <action name="actionWindows">

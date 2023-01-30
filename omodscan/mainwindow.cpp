@@ -1075,10 +1075,16 @@ void MainWindow::loadSettings()
         DisplayDefinition displayDefinition;
         m >> displayDefinition;
 
+        Qt::WindowState wndState;
+        wndState = (Qt::WindowState)m.value("ViewState").toUInt();
+
+        auto wnd = frm->parentWidget();
+        wnd->resize(m.value("ViewSize").toSize());
+        wnd->setWindowState(wndState);
+
         frm->setDisplayMode(displayMode);
         frm->setDataDisplayMode(dataDisplayMode);
         frm->setDisplayDefinition(displayDefinition);
-        frm->setWindowState((Qt::WindowState)m.value("ViewState").toUInt());
         frm->setDisplayHexAddresses(m.value("DisplayHexAddresses").toBool());
     }
 
@@ -1109,10 +1115,14 @@ void MainWindow::saveSettings()
 
     if(frm)
     {
+        const auto wnd = frm->parentWidget();
+        const auto wndSate = wnd->windowState();
+
         m << frm->displayMode();
         m << frm->dataDisplayMode();
         m << frm->displayDefinition();
-        m.setValue("ViewState", (uint)frm->windowState());
+        m.setValue("ViewState", (uint)wndSate);
+        if(!wnd->isMaximized()) m.setValue("ViewSize", wnd->size());
         m.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     }
 

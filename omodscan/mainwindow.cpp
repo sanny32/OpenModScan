@@ -852,8 +852,11 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     int formId;
     s >> formId;
 
-    Qt::WindowState windowState;
-    s >> windowState;
+    bool isMaximized;
+    s >> isMaximized;
+
+    QSize windowSize;
+    s >> windowSize;
 
     DisplayMode displayMode;
     s >> displayMode;
@@ -889,8 +892,11 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     auto frm = findMdiChild(formId);
     if(!frm) frm = createMdiChild(formId);
 
+    auto wnd = frm->parentWidget();
+    wnd->resize(windowSize);
+    if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
+
     frm->setFilename(filename);
-    frm->setWindowState(windowState);
     frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
     frm->setDisplayHexAddresses(hexAddresses);
@@ -929,7 +935,10 @@ void MainWindow::saveMdiChild(FormModSca* frm)
     s << QVersionNumber(1, 0);
 
     s << frm->formId();
-    s << frm->windowState();
+
+    const auto wnd = frm->parentWidget();
+    s << wnd->isMaximized();
+    s << wnd->size();
 
     s << frm->displayMode();
     s << frm->dataDisplayMode();
@@ -1075,12 +1084,16 @@ void MainWindow::loadSettings()
         DisplayDefinition displayDefinition;
         m >> displayDefinition;
 
-        Qt::WindowState wndState;
-        wndState = (Qt::WindowState)m.value("ViewState").toUInt();
+        bool isMaximized;
+        isMaximized = m.value("ViewMaximized").toBool();
+
+        QSize wndSize;
+        wndSize = m.value("ViewSize").toSize();
+        qDebug() << wndSize;
 
         auto wnd = frm->parentWidget();
-        wnd->resize(m.value("ViewSize").toSize());
-        wnd->setWindowState(wndState);
+        wnd->resize(wndSize);
+        if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
         frm->setDisplayMode(displayMode);
         frm->setDataDisplayMode(dataDisplayMode);
@@ -1116,13 +1129,12 @@ void MainWindow::saveSettings()
     if(frm)
     {
         const auto wnd = frm->parentWidget();
-        const auto wndSate = wnd->windowState();
+        m.setValue("ViewMaximized", wnd->isMaximized());
+        if(!wnd->isMaximized()) m.setValue("ViewSize", wnd->size());
 
         m << frm->displayMode();
         m << frm->dataDisplayMode();
         m << frm->displayDefinition();
-        m.setValue("ViewState", (uint)wndSate);
-        if(!wnd->isMaximized()) m.setValue("ViewSize", wnd->size());
         m.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     }
 

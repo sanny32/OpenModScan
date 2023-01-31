@@ -33,7 +33,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setBackgroundColor(Qt::lightGray);
 
     setStatusColor(Qt::red);
-    setStatus("Data Uninitialized");
+    setStatus(tr("Data Uninitialized"));
 }
 
 ///

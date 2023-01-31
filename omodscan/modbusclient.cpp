@@ -20,6 +20,15 @@ ModbusClient::ModbusClient(QObject *parent)
 }
 
 ///
+/// \brief ModbusClient::~ModbusClient
+///
+ModbusClient::~ModbusClient()
+{
+    if(_modbusClient)
+        delete _modbusClient;
+}
+
+///
 /// \brief ModbusClient::connectDevice
 /// \param cd
 ///

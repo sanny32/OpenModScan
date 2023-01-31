@@ -14,6 +14,7 @@ class ModbusClient : public QObject
     Q_OBJECT
 public:
     explicit ModbusClient(QObject *parent = nullptr);
+    ~ModbusClient() override;
 
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice();

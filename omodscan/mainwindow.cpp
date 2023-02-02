@@ -323,7 +323,7 @@ void MainWindow::on_actionDisable_triggered()
 ///
 void MainWindow::on_actionSaveConfig_triggered()
 {
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "All files (*)");
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     saveConfig(filename);
@@ -334,7 +334,7 @@ void MainWindow::on_actionSaveConfig_triggered()
 ///
 void MainWindow::on_actionRestoreNow_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     loadConfig(filename);
@@ -726,8 +726,8 @@ void MainWindow::openFile(const QString& filename)
     else
     {
         QString message = !QFileInfo::exists(filename) ?
-                    QString("%1 was not found").arg(filename) :
-                    QString("Failed to open %1").arg(filename);
+                    QString(tr("%1 was not found")).arg(filename) :
+                    QString(tr("Failed to open %1")).arg(filename);
 
         _recentFileActionList->removeRecentFile(filename);
         QMessageBox::warning(this, windowTitle(), message);

@@ -62,13 +62,13 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
             _modbusClient->setProperty("DTRControl", cd.SerialParams.SetDTR);
             _modbusClient->setProperty("RTSControl", cd.SerialParams.SetRTS);
             _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
-            dynamic_cast<QModbusRtuSerialClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
+            qobject_cast<QModbusRtuSerialClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
-            dynamic_cast<QSerialPort*>(_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
+            qobject_cast<QSerialPort*>(_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
         break;
     }
 

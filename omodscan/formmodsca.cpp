@@ -19,6 +19,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
     ,_formId(id)
+    ,_validSlaveResponses(0)
+    ,_noSlaveResponsesCounter(0)
     ,_modbusClient(client)
 {
     Q_ASSERT(parent != nullptr);
@@ -381,6 +383,15 @@ void FormModSca::on_timeout()
         return;
     }
 
+    if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
+    {
+        _noSlaveResponsesCounter++;
+        if(_noSlaveResponsesCounter > 3)
+        {
+            ui->outputWidget->setStatus(tr("No Responses from Slave Device"));
+        }
+    }
+
     _modbusClient.sendReadRequest(dd.PointType, dd.PointAddress - 1, dd.Length, dd.DeviceId, _formId);
 }
 
@@ -465,6 +476,8 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
         ui->outputWidget->setStatus(reply->errorString());
     }
 
+    _noSlaveResponsesCounter = 0;
+    _validSlaveResponses = ui->statisticWidget->validSlaveResposes();
 }
 
 ///

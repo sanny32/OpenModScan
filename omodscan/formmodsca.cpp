@@ -386,7 +386,7 @@ void FormModSca::on_timeout()
     if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
     {
         _noSlaveResponsesCounter++;
-        if(_noSlaveResponsesCounter > 3)
+        if(_noSlaveResponsesCounter > _modbusClient.numberOfRetries())
         {
             ui->outputWidget->setStatus(tr("No Responses from Slave Device"));
         }

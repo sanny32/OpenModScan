@@ -140,7 +140,7 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
         }
     }
     else
-        emit modbusError("Invalid Modbus Request");
+        emit modbusError(tr("Invalid Modbus Request"));
 }
 
 ///
@@ -423,11 +423,11 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
         switch(pointType)
         {
             case QModbusDataUnit::Coils:
-                errorDesc = "Coil Write Failure";
+                errorDesc = tr("Coil Write Failure");
             break;
 
             case QModbusDataUnit::HoldingRegisters:
-                errorDesc = "Register Write Failure";
+                errorDesc = tr("Register Write Failure");
             break;
 
             default:
@@ -469,7 +469,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     if(_modbusClient == nullptr ||
        _modbusClient->state() != QModbusDevice::ConnectedState)
     {
-        emit modbusError("Mask Write Register Failure");
+        emit modbusError(tr("Mask Write Register Failure"));
         return;
     }
 
@@ -591,16 +591,16 @@ void ModbusClient::on_writeReply()
     {
         case QModbusRequest::WriteSingleCoil:
         case QModbusRequest::WriteMultipleCoils:
-            onError("Coil Write Failure");
+            onError(tr("Coil Write Failure"));
         break;
 
         case QModbusRequest::WriteSingleRegister:
         case QModbusRequest::WriteMultipleRegisters:
-            onError("Register Write Failure");
+            onError(tr("Register Write Failure"));
         break;
 
         case QModbusRequest::MaskWriteRegister:
-            onError("Mask Register Write Failure");
+            onError(tr("Mask Register Write Failure"));
         break;
 
     default:
@@ -618,7 +618,7 @@ void ModbusClient::on_errorOccured(QModbusDevice::Error error)
 {
     if(error == QModbusDevice::ConnectionError)
     {
-        emit modbusConnectionError(QString("Connection error. %1").arg(_modbusClient->errorString()));
+        emit modbusConnectionError(QString(tr("Connection error. %1")).arg(_modbusClient->errorString()));
     }
 }
 

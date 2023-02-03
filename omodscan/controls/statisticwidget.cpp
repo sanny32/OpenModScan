@@ -71,6 +71,6 @@ void StatisticWidget::on_pushButtonResetCtrs_clicked()
 ///
 void StatisticWidget::updateStatistic()
 {
-    ui->labelNumberOfPolls->setText(QString("Number of Polls: %1").arg(_numberOfPolls));
-    ui->labelValidSlaveResponses->setText(QString("Valid Slave Responses: %1").arg(_validSlaveResponses));
+    ui->labelNumberOfPolls->setText(QString(tr("Number of Polls: %1")).arg(_numberOfPolls));
+    ui->labelValidSlaveResponses->setText(QString(tr("Valid Slave Responses: %1")).arg(_validSlaveResponses));
 }

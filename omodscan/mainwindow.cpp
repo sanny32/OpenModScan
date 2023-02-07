@@ -195,6 +195,11 @@ void MainWindow::on_actionNew_triggered()
     if(cur) {
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
+
+        frm->setFont(cur->font());
+        frm->setStatusColor(cur->statusColor());
+        frm->setBackgroundColor(cur->backgroundColor());
+        frm->setForegroundColor(cur->foregroundColor());
     }
 
     frm->show();
@@ -1091,6 +1096,11 @@ void MainWindow::loadSettings()
         QSize wndSize;
         wndSize = m.value("ViewSize").toSize();
 
+        frm->setFont(m.value("Font", font()).value<QFont>());
+        frm->setForegroundColor(m.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
+        frm->setBackgroundColor(m.value("BackgroundColor", QColor(Qt::lightGray)).value<QColor>());
+        frm->setStatusColor(m.value("StatusColor", QColor(Qt::red)).value<QColor>());
+
         auto wnd = frm->parentWidget();
         wnd->resize(wndSize);
         if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
@@ -1128,6 +1138,11 @@ void MainWindow::saveSettings()
 
     if(frm)
     {
+        m.setValue("Font", frm->font());
+        m.setValue("ForegroundColor", frm->foregroundColor());
+        m.setValue("BackgroundColor", frm->backgroundColor());
+        m.setValue("StatusColor", frm->statusColor());
+
         const auto wnd = frm->parentWidget();
         m.setValue("ViewMaximized", wnd->isMaximized());
         if(!wnd->isMaximized() && !wnd->isMinimized())

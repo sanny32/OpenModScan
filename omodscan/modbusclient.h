@@ -42,7 +42,7 @@ signals:
 private slots:
     void on_readReply();
     void on_writeReply();
-    void on_errorOccured(QModbusDevice::Error error);
+    void on_errorOccurred(QModbusDevice::Error error);
     void on_stateChanged(QModbusDevice::State state);
 
 private:

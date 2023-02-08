@@ -75,7 +75,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
     if(_modbusClient)
     {
         connect(_modbusClient, &QModbusDevice::stateChanged, this, &ModbusClient::on_stateChanged);
-        connect(_modbusClient, &QModbusDevice::errorOccurred, this, &ModbusClient::on_errorOccured);
+        connect(_modbusClient, &QModbusDevice::errorOccurred, this, &ModbusClient::on_errorOccurred);
         _modbusClient->connectDevice();
     }
 }
@@ -611,10 +611,10 @@ void ModbusClient::on_writeReply()
 }
 
 ///
-/// \brief ModbusClient::on_errorOccured
+/// \brief ModbusClient::on_errorOccurred
 /// \param error
 ///
-void ModbusClient::on_errorOccured(QModbusDevice::Error error)
+void ModbusClient::on_errorOccurred(QModbusDevice::Error error)
 {
     if(error == QModbusDevice::ConnectionError)
     {

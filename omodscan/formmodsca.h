@@ -99,4 +99,175 @@ private:
     ModbusClient& _modbusClient;
 };
 
+///
+/// \brief operator <<
+/// \param out
+/// \param frm
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
+{
+    if(!frm) return out;
+
+    out.setValue("Font", frm->font());
+    out.setValue("ForegroundColor", frm->foregroundColor());
+    out.setValue("BackgroundColor", frm->backgroundColor());
+    out.setValue("StatusColor", frm->statusColor());
+
+    const auto wnd = frm->parentWidget();
+    out.setValue("ViewMaximized", wnd->isMaximized());
+    if(!wnd->isMaximized() && !wnd->isMinimized())
+    {
+        out.setValue("ViewSize", wnd->size());
+    }
+
+    out << frm->displayMode();
+    out << frm->dataDisplayMode();
+    out << frm->displayDefinition();
+    out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param frm
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, FormModSca* frm)
+{
+    if(!frm) return in;
+
+    DisplayMode displayMode;
+    in >> displayMode;
+
+    DataDisplayMode dataDisplayMode;
+    in >> dataDisplayMode;
+
+    DisplayDefinition displayDefinition;
+    in >> displayDefinition;
+
+    bool isMaximized;
+    isMaximized = in.value("ViewMaximized").toBool();
+
+    QSize wndSize;
+    wndSize = in.value("ViewSize").toSize();
+
+    auto wnd = frm->parentWidget();
+    frm->setFont(in.value("Font", wnd->font()).value<QFont>());
+    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::lightGray)).value<QColor>());
+    frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+
+    wnd->resize(wndSize);
+    if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
+
+    frm->setDisplayMode(displayMode);
+    frm->setDataDisplayMode(dataDisplayMode);
+    frm->setDisplayDefinition(displayDefinition);
+    frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
+
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param frm
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
+{
+    if(!frm) return out;
+
+    out << frm->formId();
+
+    const auto wnd = frm->parentWidget();
+    out << wnd->isMaximized();
+    out << ((wnd->isMinimized() || wnd->isMaximized()) ?
+              wnd->sizeHint() : wnd->size());
+
+    out << frm->displayMode();
+    out << frm->dataDisplayMode();
+    out << frm->displayHexAddresses();
+
+    out << frm->backgroundColor();
+    out << frm->foregroundColor();
+    out << frm->statusColor();
+    out << frm->font();
+
+    const auto dd = frm->displayDefinition();
+    out << dd.ScanRate;
+    out << dd.DeviceId;
+    out << dd.PointType;
+    out << dd.PointAddress;
+    out << dd.Length;
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param frm
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
+{
+    if(!frm) return in;
+
+    bool isMaximized;
+    in >> isMaximized;
+
+    QSize windowSize;
+    in >> windowSize;
+
+    DisplayMode displayMode;
+    in >> displayMode;
+
+    DataDisplayMode dataDisplayMode;
+    in >> dataDisplayMode;
+
+    bool hexAddresses;
+    in >> hexAddresses;
+
+    QColor bkgClr;
+    in >> bkgClr;
+
+    QColor fgClr;
+    in >> fgClr;
+
+    QColor stCrl;
+    in >> stCrl;
+
+    QFont font;
+    in >> font;
+
+    DisplayDefinition dd;
+    in >> dd.ScanRate;
+    in >> dd.DeviceId;
+    in >> dd.PointType;
+    in >> dd.PointAddress;
+    in >> dd.Length;
+
+    if(in.status() != QDataStream::Ok)
+        return in;
+
+    auto wnd = frm->parentWidget();
+    wnd->resize(windowSize);
+    if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
+
+    frm->setDisplayMode(displayMode);
+    frm->setDataDisplayMode(dataDisplayMode);
+    frm->setDisplayHexAddresses(hexAddresses);
+    frm->setBackgroundColor(bkgClr);
+    frm->setForegroundColor(fgClr);
+    frm->setStatusColor(stCrl);
+    frm->setFont(font);
+    frm->setDisplayDefinition(dd);
+
+    return in;
+}
+
 #endif // FORMMODSCA_H

@@ -410,7 +410,7 @@ bool FormModSca::isValidReply(const QModbusReply* reply)
     {
         case QModbusRequest::ReadCoils:
         case QModbusRequest::ReadDiscreteInputs:
-            return (data.startAddress() == dd.PointAddress - 1) && qAbs(data.valueCount() - dd.Length) < 8;
+            return (data.startAddress() == dd.PointAddress - 1) && (data.valueCount() - dd.Length) < 8;
         break;
 
         case QModbusRequest::ReadInputRegisters:

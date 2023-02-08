@@ -92,8 +92,8 @@ private:
 private:
     Ui::FormModSca *ui;
     int _formId;
-    int _validSlaveResponses;
-    int _noSlaveResponsesCounter;
+    uint _validSlaveResponses;
+    uint _noSlaveResponsesCounter;
     QTimer _timer;
     QString _filename;
     ModbusClient& _modbusClient;

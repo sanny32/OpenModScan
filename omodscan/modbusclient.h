@@ -25,8 +25,8 @@ public:
     int timeout() const;
     void setTimeout(int newTimeout);
 
-    int numberOfRetries() const;
-    void setNumberOfRetries(int number);
+    uint numberOfRetries() const;
+    void setNumberOfRetries(uint number);
 
     void sendRawRequest(const QModbusRequest& request, int server, int requestId);
     void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId);

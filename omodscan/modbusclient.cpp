@@ -538,7 +538,7 @@ void ModbusClient::setTimeout(int newTimeout)
 /// \brief ModbusClient::numberOfRetries
 /// \return
 ///
-int ModbusClient::numberOfRetries() const
+uint ModbusClient::numberOfRetries() const
 {
     if(_modbusClient)
         return _modbusClient->numberOfRetries();
@@ -550,7 +550,7 @@ int ModbusClient::numberOfRetries() const
 /// \brief ModbusClient::setNumberOfRetries
 /// \param number
 ///
-void ModbusClient::setNumberOfRetries(int number)
+void ModbusClient::setNumberOfRetries(uint number)
 {
     if(_modbusClient)
         _modbusClient->setNumberOfRetries(number);

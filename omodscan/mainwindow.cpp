@@ -857,6 +857,9 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     int formId;
     s >> formId;
 
+    if(s.status() != QDataStream::Ok)
+        return nullptr;
+
     bool created = false;
     auto frm = findMdiChild(formId);
     if(!frm)

@@ -217,6 +217,17 @@ void MainWindow::on_actionOpen_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionClose_triggered
+///
+void MainWindow::on_actionClose_triggered()
+{
+    const auto wnd = ui->mdiArea->currentSubWindow();
+    if(!wnd) return;
+
+    wnd->close();
+}
+
+///
 /// \brief MainWindow::on_actionSave_triggered
 ///
 void MainWindow::on_actionSave_triggered()

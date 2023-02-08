@@ -1,4 +1,5 @@
 #include <QModbusTcpClient>
+#include "floatutils.h"
 #include "modbusexception.h"
 #include "modbusclient.h"
 
@@ -280,29 +281,20 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, quint16 valu
 /// \brief createHoldingRegistersDataUnit
 /// \param newStartAddress
 /// \param value
-/// \param inv
+/// \param swapped
 /// \return
 ///
-QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value, bool inv)
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value, bool swapped)
 {
-    union {
-       quint16 asUint16[2];
-       float asFloat;
-    } v;
-    v.asFloat = value;
-
+    QVector<quint16> values(2);
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
-    if(inv)
-    {
-        data.setValue(0, v.asUint16[1]);
-        data.setValue(1, v.asUint16[0]);
-    }
-    else
-    {
-        data.setValue(0, v.asUint16[0]);
-        data.setValue(1, v.asUint16[1]);
-    }
 
+    if(swapped)
+        breakFloat(value, values[1], values[0]);
+    else
+        breakFloat(value, values[0], values[1]);
+
+    data.setValues(values);
     return data;
 }
 
@@ -310,33 +302,20 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value,
 /// \brief createHoldingRegistersDataUnit
 /// \param newStartAddress
 /// \param value
-/// \param inv
+/// \param swapped
 /// \return
 ///
-QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value, bool inv)
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value, bool swapped)
 {
-    union {
-       quint16 asUint16[4];
-       double asDouble;
-    } v;
-    v.asDouble = value;
-
+    QVector<quint16> values(4);
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 4);
-    if(inv)
-    {
-        data.setValue(0, v.asUint16[3]);
-        data.setValue(1, v.asUint16[2]);
-        data.setValue(2, v.asUint16[1]);
-        data.setValue(3, v.asUint16[0]);
-    }
-    else
-    {
-        data.setValue(0, v.asUint16[0]);
-        data.setValue(1, v.asUint16[1]);
-        data.setValue(2, v.asUint16[2]);
-        data.setValue(3, v.asUint16[3]);
-    }
 
+    if(swapped)
+        breakDouble(value, values[3], values[2], values[1], values[0]);
+    else
+        breakDouble(value, values[0], values[1], values[2], values[3]);
+
+    data.setValues(values);
     return data;
 }
 

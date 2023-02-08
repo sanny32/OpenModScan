@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QStatusBar>
 #include <QMdiArea>
+#include "modbusclient.h"
 
 ///
 /// \brief The MainStatusBar class
@@ -12,15 +13,17 @@ class MainStatusBar : public QStatusBar
 {
     Q_OBJECT
 public:
-    MainStatusBar(QMdiArea* parent);
+    MainStatusBar(const ModbusClient& client, QMdiArea* parent);
 
     void updateNumberOfPolls();
     void updateValidSlaveResponses();
+    void updateConnectionInfo(const ConnectionDetails& cd);
 
 private:
     QMdiArea* _mdiArea;
     QLabel* _labelPolls;
     QLabel* _labelResps;
+    QLabel* _labelConnectionDetails;
 };
 
 #endif // MAINSTATUSBAR_H

@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
-    setStatusBar(new MainStatusBar(ui->mdiArea));
+    setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())

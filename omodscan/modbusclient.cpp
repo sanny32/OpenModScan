@@ -48,7 +48,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
             _modbusClient = new QModbusTcpClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
-            _modbusClient->setProperty("ConnectionType", QVariant::fromValue(cd.Type));
+            _modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
             _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
@@ -59,7 +59,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
             _modbusClient = new QModbusRtuSerialClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
-            _modbusClient->setProperty("ConnectionType", QVariant::fromValue(cd.Type));
+            _modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
             _modbusClient->setProperty("DTRControl", cd.SerialParams.SetDTR);
             _modbusClient->setProperty("RTSControl", cd.SerialParams.SetRTS);
             _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
@@ -607,18 +607,39 @@ void ModbusClient::on_errorOccurred(QModbusDevice::Error error)
 ///
 void ModbusClient::on_stateChanged(QModbusDevice::State state)
 {
-    const auto connType = _modbusClient->property("ConnectionType").value<ConnectionType>();
-    if(connType == ConnectionType::Serial && state == QModbusDevice::ConnectedState)
+    const auto cd = _modbusClient->property("ConnectionDetails").value<ConnectionDetails>();
+    switch(state)
     {
-        auto port = (QSerialPort*)_modbusClient->device();
+        case QModbusDevice::ConnectingState:
+            emit modbusConnecting(cd);
+        break;
 
-        const bool setDTR = _modbusClient->property("DTRControl").toBool();
-        port->setDataTerminalReady(setDTR);
-
-        if(port->flowControl() != QSerialPort::HardwareControl)
+        case QModbusDevice::ConnectedState:
         {
-            const bool setRTS = _modbusClient->property("RTSControl").toBool();
-            port->setRequestToSend(setRTS);
+            if(cd.Type == ConnectionType::Serial)
+            {
+                auto port = (QSerialPort*)_modbusClient->device();
+
+                const bool setDTR = _modbusClient->property("DTRControl").toBool();
+                port->setDataTerminalReady(setDTR);
+
+                if(port->flowControl() != QSerialPort::HardwareControl)
+                {
+                    const bool setRTS = _modbusClient->property("RTSControl").toBool();
+                    port->setRequestToSend(setRTS);
+                }
+            }
+
+            emit modbusConnected(cd);
         }
+        break;
+
+        case QModbusDevice::UnconnectedState:
+            emit modbusDisconnected(cd);
+        break;
+
+        default:
+        break;
     }
+
 }

@@ -38,6 +38,9 @@ signals:
     void modbusReply(QModbusReply* reply);
     void modbusError(const QString& error);
     void modbusConnectionError(const QString& error);
+    void modbusConnecting(const ConnectionDetails& cd);
+    void modbusConnected(const ConnectionDetails& cd);
+    void modbusDisconnected(const ConnectionDetails& cd);
 
 private slots:
     void on_readReply();

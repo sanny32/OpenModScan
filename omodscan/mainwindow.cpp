@@ -89,7 +89,7 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
     switch (e->type())
     {
         case QEvent::Close:
-            _windowActionList->removeWindow(dynamic_cast<QMdiSubWindow*>(obj));
+            _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
         break;
         default:
             qt_noop();
@@ -788,12 +788,12 @@ FormModSca* MainWindow::createMdiChild(int id)
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)
     {
-        dynamic_cast<MainStatusBar*>(statusBar())->updateNumberOfPolls();
+        qobject_cast<MainStatusBar*>(statusBar())->updateNumberOfPolls();
     });
 
     connect(frm, &FormModSca::validSlaveResposesChanged, this, [this](uint)
     {
-        dynamic_cast<MainStatusBar*>(statusBar())->updateValidSlaveResponses();
+        qobject_cast<MainStatusBar*>(statusBar())->updateValidSlaveResponses();
     });
 
     _windowActionList->addWindow(wnd);
@@ -808,7 +808,7 @@ FormModSca* MainWindow::createMdiChild(int id)
 FormModSca* MainWindow::currentMdiChild() const
 {
     const auto wnd = ui->mdiArea->currentSubWindow();
-    return wnd ? dynamic_cast<FormModSca*>(wnd->widget()) : nullptr;
+    return wnd ? qobject_cast<FormModSca*>(wnd->widget()) : nullptr;
 }
 
 ///
@@ -820,7 +820,7 @@ FormModSca* MainWindow::findMdiChild(int id) const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
-        const auto frm = dynamic_cast<FormModSca*>(wnd->widget());
+        const auto frm = qobject_cast<FormModSca*>(wnd->widget());
         if(frm && frm->formId() == id) return frm;
     }
     return nullptr;
@@ -833,7 +833,7 @@ FormModSca* MainWindow::findMdiChild(int id) const
 FormModSca* MainWindow::firstMdiChild() const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
-        return dynamic_cast<FormModSca*>(wnd->widget());
+        return qobject_cast<FormModSca*>(wnd->widget());
 
     return nullptr;
 }
@@ -988,7 +988,7 @@ void MainWindow::saveConfig(const QString& filename)
         windowActivate(wnd);
         ui->actionSave->trigger();
 
-        const auto frm = dynamic_cast<FormModSca*>(wnd->widget());
+        const auto frm = qobject_cast<FormModSca*>(wnd->widget());
         const auto filename = frm->filename();
         if(!filename.isEmpty()) listFilename.push_back(filename);
     }

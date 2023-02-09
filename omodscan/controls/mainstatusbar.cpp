@@ -3,31 +3,6 @@
 #include "mainstatusbar.h"
 
 ///
-/// \brief FlowControl_toString
-/// \param flowControl
-/// \return
-///
-QString FlowControl_toString(QSerialPort::FlowControl flowControl)
-{
-    switch(flowControl)
-    {
-        case QSerialPort::NoFlowControl:
-        return QObject::tr("NO CONTROL");
-
-        case QSerialPort::HardwareControl:
-        return QObject::tr("HARDWARE (RTS/CTS)");
-
-        case QSerialPort::SoftwareControl:
-        return QObject::tr("SOFTWARE (XON/XOFF)");
-
-        default:
-        break;
-    }
-
-    return QString();
-}
-
-///
 /// \brief Parity_toString
 /// \param parity
 /// \return
@@ -166,13 +141,12 @@ void MainStatusBar::updateConnectionInfo(const ConnectionDetails& cd)
 
         case ConnectionType::Serial:
         {
-            const auto info = QString(tr("Port: %1 | Baud Rate: %2 | Word Length: %3 | Parity: %4 | Stop Bits: %5 | HW Control: %6  ")).arg(
+            const auto info = QString(tr("Port %1:%2:%3:%4:%5  ")).arg(
                         cd.SerialParams.PortName,
                         QString::number(cd.SerialParams.BaudRate),
                         QString::number(cd.SerialParams.WordLength),
                         Parity_toString(cd.SerialParams.Parity),
-                        QString::number(cd.SerialParams.StopBits),
-                        FlowControl_toString(cd.SerialParams.FlowControl));
+                        QString::number(cd.SerialParams.StopBits));
             _labelConnectionDetails->setText(info);
         }
         break;

@@ -64,10 +64,22 @@ MainWindow::~MainWindow()
 }
 
 ///
+/// \brief MainWindow::changeEvent
+/// \param event
+///
+void MainWindow::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+}
+
+///
 /// \brief MainWindow::closeEvent
 /// \param event
 ///
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
     saveSettings();
 
@@ -84,7 +96,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 /// \param e
 /// \return
 ///
-bool MainWindow::eventFilter(QObject * obj, QEvent * e)
+bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 {
     switch (e->type())
     {
@@ -670,6 +682,27 @@ void MainWindow::on_actionFont_triggered()
     {
         frm->setFont(dlg.currentFont());
     }
+}
+
+///
+/// \brief MainWindow::on_actionEnglish_triggered
+///
+void MainWindow::on_actionEnglish_triggered()
+{
+    qApp->removeTranslator(&_appTranslator);
+    qApp->removeTranslator(&_qtTranslator);
+}
+
+///
+/// \brief MainWindow::on_actionRussian_triggered
+///
+void MainWindow::on_actionRussian_triggered()
+{
+    if(_appTranslator.load(":/translations/omodscan_ru"))
+        qApp->installTranslator(&_appTranslator);
+
+    if(_qtTranslator.load(QString("%1/translations/qt_ru").arg(qApp->applicationDirPath())))
+        qApp->installTranslator(&_qtTranslator);
 }
 
 ///

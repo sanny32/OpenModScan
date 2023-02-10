@@ -45,6 +45,19 @@ OutputWidget::~OutputWidget()
 }
 
 ///
+/// \brief OutputWidget::changeEvent
+/// \param event
+///
+void OutputWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        if(!_lastData.isValid())
+            setStatus(tr("Data Uninitialized"));
+    }
+}
+
+///
 /// \brief OutputWidget::data
 /// \return
 ///

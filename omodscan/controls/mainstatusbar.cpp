@@ -1,4 +1,5 @@
 #include <QMdiSubWindow>
+#include <QEvent>
 #include "formmodsca.h"
 #include "mainstatusbar.h"
 
@@ -12,19 +13,19 @@ QString Parity_toString(QSerialPort::Parity parity)
     switch(parity)
     {
         case QSerialPort::NoParity:
-        return QObject::tr("NONE");
+        return MainStatusBar::tr("NONE");
 
         case QSerialPort::EvenParity:
-        return QObject::tr("EVEN");
+        return MainStatusBar::tr("EVEN");
 
         case QSerialPort::OddParity:
-        return QObject::tr("ODD");
+        return MainStatusBar::tr("ODD");
 
         case QSerialPort::SpaceParity:
-        return QObject::tr("SPACE");
+        return MainStatusBar::tr("SPACE");
 
         case QSerialPort::MarkParity:
-        return QObject::tr("MARK");
+        return MainStatusBar::tr("MARK");
 
         default:
         break;
@@ -66,26 +67,12 @@ MainStatusBar::MainStatusBar(const ModbusClient& client, QMdiArea* parent)
 
     connect(&client, &ModbusClient::modbusConnecting, this, [&](const ConnectionDetails& cd)
     {
-        QString info;
-        switch(cd.Type)
-        {
-            case ConnectionType::Tcp:
-                info = QString(tr("Connecting to %1:%2...  ").arg(cd.TcpParams.IPAddress,
-                                                                  QString::number(cd.TcpParams.ServicePort)));
-            break;
-
-            case ConnectionType::Serial:
-                info = QString(tr("Connecting to %1...  ").arg(cd.SerialParams.PortName));
-            break;
-        }
-
-         _labelConnectionDetails->setText(info);
-        _labelConnectionDetails->setVisible(true);
+        updateConnectionInfo(cd, true);
     });
 
     connect(&client, &ModbusClient::modbusConnected, this, [&](const ConnectionDetails& cd)
     {
-        updateConnectionInfo(cd);
+        updateConnectionInfo(cd, false);
     });
 
     connect(&client, &ModbusClient::modbusDisconnected, this, [&](const ConnectionDetails&)
@@ -93,6 +80,26 @@ MainStatusBar::MainStatusBar(const ModbusClient& client, QMdiArea* parent)
         _labelConnectionDetails->setText(QString());
         _labelConnectionDetails->setVisible(false);
     });
+}
+
+///
+/// \brief MainStatusBar::changeEvent
+/// \param event
+///
+void MainStatusBar::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+       updateNumberOfPolls();
+       updateValidSlaveResponses();
+
+       if(_labelConnectionDetails->isVisible())
+       {
+            const bool connecting = _labelConnectionDetails->property("Connecting").toBool();
+            const auto cd = _labelConnectionDetails->property("ConnectionDetails").value<ConnectionDetails>();
+            updateConnectionInfo(cd, connecting);
+       }
+    }
 }
 
 ///
@@ -129,28 +136,31 @@ void MainStatusBar::updateValidSlaveResponses()
 ///
 /// \brief MainStatusBar::updateConnectionInfo
 /// \param cd
+/// \param connecting
 ///
-void MainStatusBar::updateConnectionInfo(const ConnectionDetails& cd)
+void MainStatusBar::updateConnectionInfo(const ConnectionDetails& cd, bool connecting)
 {
+    _labelConnectionDetails->setProperty("Connecting", connecting);
+    _labelConnectionDetails->setProperty("ConnectionDetails", QVariant::fromValue(cd));
+
+    QString info;
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
-            _labelConnectionDetails->setText(QString(tr("Remote TCP/IP Server %1:%2  ")).arg(cd.TcpParams.IPAddress,
-                                                                              QString::number(cd.TcpParams.ServicePort)));
+            info = connecting ? QString(tr("Connecting to %1:%2...  ").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort))) :
+                                QString(tr("Remote TCP/IP Server %1:%2  ")).arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
         break;
-
         case ConnectionType::Serial:
-        {
-            const auto info = QString(tr("Port %1:%2:%3:%4:%5  ")).arg(
-                        cd.SerialParams.PortName,
-                        QString::number(cd.SerialParams.BaudRate),
-                        QString::number(cd.SerialParams.WordLength),
-                        Parity_toString(cd.SerialParams.Parity),
-                        QString::number(cd.SerialParams.StopBits));
-            _labelConnectionDetails->setText(info);
-        }
+            info = connecting ? QString(tr("Connecting to %1...  ").arg(cd.SerialParams.PortName)) :
+                                QString(tr("Port %1:%2:%3:%4:%5  ")).arg(
+                                cd.SerialParams.PortName,
+                                QString::number(cd.SerialParams.BaudRate),
+                                QString::number(cd.SerialParams.WordLength),
+                                Parity_toString(cd.SerialParams.Parity),
+                                QString::number(cd.SerialParams.StopBits));
         break;
     }
 
+    _labelConnectionDetails->setText(info);
     _labelConnectionDetails->setVisible(true);
 }

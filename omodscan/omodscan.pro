@@ -134,3 +134,6 @@ FORMS += \
 
 RESOURCES += \
     resources.qrc
+
+TRANSLATIONS += \
+    translations/omodscan_ru.ts

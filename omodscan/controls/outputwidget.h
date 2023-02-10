@@ -63,6 +63,9 @@ public:
 signals:
     void itemDoubleClicked(quint32 address, const QVariant& value);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 

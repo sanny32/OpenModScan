@@ -583,9 +583,9 @@
         <source>Force modbus command 15 and 16 for single-point writes.
 (To be used in case where the slave does not support the
 single-point  write functions 05 and 06.)</source>
-        <translation>Использовать функции 15 и 16 для записи в регистр.
-(Используется в случае, если устройство
- не поддерживает функции 05 и 06)</translation>
+        <translation type="unfinished">Использовать функции 15 и 16 для записи в регистр.
+(Используется в случае, если устройство не поддерживает
+ функции 05 и 06.)</translation>
     </message>
 </context>
 <context>

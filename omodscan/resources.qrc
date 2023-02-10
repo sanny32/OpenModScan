@@ -23,5 +23,6 @@
         <file>res/iconLandscape.png</file>
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
+        <file>translations/omodscan_ru.qm</file>
     </qresource>
 </RCC>

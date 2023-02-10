@@ -37,7 +37,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
         case DataDisplayMode::Hex:
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
-            ui->labelValue->setText("Value, (HEX): ");
+            ui->labelValue->setText(tr("Value, (HEX): "));
             ui->lineEditValue->setPaddingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
             ui->lineEditValue->setValue(params.Value.toUInt());

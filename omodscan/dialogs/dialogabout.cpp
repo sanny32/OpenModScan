@@ -15,7 +15,6 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(QString(tr("About %1...")).arg(APP_NAME));
     ui->labelName->setText(APP_NAME);
-    ui->labelDescription->setText(tr(APP_DESCRIPTION));
     ui->labelVersion->setText(QString(tr("Version: %1")).arg(APP_VERSION));
     ui->labelQtFramework->setText(QString(tr("• Qt %1 (build with version %2)")).arg(qVersion(), QT_VERSION_STR));
 }

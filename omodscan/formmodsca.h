@@ -74,6 +74,9 @@ signals:
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);

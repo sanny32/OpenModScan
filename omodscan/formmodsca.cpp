@@ -59,6 +59,20 @@ FormModSca::~FormModSca()
 }
 
 ///
+/// \brief FormModSca::changeEvent
+/// \param event
+///
+void FormModSca::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+
+    QWidget::changeEvent(event);
+}
+
+///
 /// \brief FormModSca::filename
 /// \return
 ///

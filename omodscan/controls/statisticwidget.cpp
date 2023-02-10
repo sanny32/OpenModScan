@@ -23,6 +23,20 @@ StatisticWidget::~StatisticWidget()
 }
 
 ///
+/// \brief StatisticWidget::changeEvent
+/// \param event
+///
+void StatisticWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+
+    QWidget::changeEvent(event);
+}
+
+///
 /// \brief StatisticWidget::increaseNumberOfPolls
 ///
 void StatisticWidget::increaseNumberOfPolls()

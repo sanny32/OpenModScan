@@ -92,6 +92,9 @@
       <string>Modbus Data</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="labelAlignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
       <property name="verticalSpacing">
        <number>12</number>
       </property>

@@ -21,7 +21,7 @@ class OutputWidget : public QWidget
 
 public:  
     explicit OutputWidget(QWidget *parent = nullptr);
-    ~OutputWidget();
+    ~OutputWidget() override;
 
     QVector<quint16> data() const;
 
@@ -70,6 +70,7 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
+    void setUninitializedStatus();
     void captureString(const QString& s);
     void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);

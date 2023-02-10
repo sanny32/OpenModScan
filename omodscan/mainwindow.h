@@ -20,6 +20,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void setLanguage(const QString& lang);
+
 signals:
     void modbusClientChanged(QModbusClient* cli);
 
@@ -119,6 +121,8 @@ private:
 
 private:
     Ui::MainWindow *ui;
+
+    QString _lang;
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
 

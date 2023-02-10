@@ -574,11 +574,17 @@
    </property>
   </action>
   <action name="actionEnglish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>English</string>
    </property>
   </action>
   <action name="actionRussian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Русский</string>
    </property>

@@ -68,6 +68,8 @@ void FormModSca::changeEvent(QEvent* event)
     {
         ui->retranslateUi(this);
     }
+
+    QWidget::changeEvent(event);
 }
 
 ///

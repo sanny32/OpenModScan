@@ -33,7 +33,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setBackgroundColor(Qt::lightGray);
 
     setStatusColor(Qt::red);
-    setStatus(tr("Data Uninitialized"));
+    setUninitializedStatus();
 }
 
 ///
@@ -53,8 +53,10 @@ void OutputWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         if(!_lastData.isValid())
-            setStatus(tr("Data Uninitialized"));
+            setUninitializedStatus();
     }
+
+    QWidget::changeEvent(event);
 }
 
 ///
@@ -602,6 +604,14 @@ void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     }
 
     emit itemDoubleClicked(itemData.Address, itemData.Value);
+}
+
+///
+/// \brief OutputWidget::setUninitializedStatus
+///
+void OutputWidget::setUninitializedStatus()
+{
+    setStatus(tr("Data Uninitialized"));
 }
 
 ///

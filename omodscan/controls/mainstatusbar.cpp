@@ -100,6 +100,8 @@ void MainStatusBar::changeEvent(QEvent* event)
             updateConnectionInfo(cd, connecting);
        }
     }
+
+    QStatusBar::changeEvent(event);
 }
 
 ///

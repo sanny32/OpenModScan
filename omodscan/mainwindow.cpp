@@ -24,6 +24,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,_lang("en")
     ,_windowCounter(0)
     ,_autoStart(false)
     ,_modbusClient(nullptr)
@@ -64,6 +65,28 @@ MainWindow::~MainWindow()
 }
 
 ///
+/// \brief MainWindow::setLanguage
+/// \param lang
+///
+void MainWindow::setLanguage(const QString& lang)
+{
+    if(lang == "en")
+    {
+        _lang = lang;
+        qApp->removeTranslator(&_appTranslator);
+        qApp->removeTranslator(&_qtTranslator);
+    }
+    else if(_appTranslator.load(QString(":/translations/omodscan_%1").arg(lang)))
+    {
+        _lang = lang;
+        qApp->installTranslator(&_appTranslator);
+
+        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang)))
+            qApp->installTranslator(&_qtTranslator);
+    }
+}
+
+///
 /// \brief MainWindow::changeEvent
 /// \param event
 ///
@@ -73,6 +96,8 @@ void MainWindow::changeEvent(QEvent* event)
     {
         ui->retranslateUi(this);
     }
+
+    QMainWindow::changeEvent(event);
 }
 
 ///
@@ -88,6 +113,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
     {
         event->ignore();
     }
+
+    QMainWindow::closeEvent(event);
 }
 
 ///
@@ -152,6 +179,8 @@ void MainWindow::on_awake()
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
+    ui->actionEnglish->setChecked(_lang == "en");
+    ui->actionRussian->setChecked(_lang == "ru");
 
     if(frm != nullptr)
     {
@@ -689,8 +718,7 @@ void MainWindow::on_actionFont_triggered()
 ///
 void MainWindow::on_actionEnglish_triggered()
 {
-    qApp->removeTranslator(&_appTranslator);
-    qApp->removeTranslator(&_qtTranslator);
+    setLanguage("en");
 }
 
 ///
@@ -698,11 +726,7 @@ void MainWindow::on_actionEnglish_triggered()
 ///
 void MainWindow::on_actionRussian_triggered()
 {
-    if(_appTranslator.load(":/translations/omodscan_ru"))
-        qApp->installTranslator(&_appTranslator);
-
-    if(_qtTranslator.load(QString("%1/translations/qt_ru").arg(qApp->applicationDirPath())))
-        qApp->installTranslator(&_qtTranslator);
+   setLanguage("ru");
 }
 
 ///
@@ -1068,6 +1092,9 @@ void MainWindow::loadSettings()
     _autoStart = m.value("AutoStart").toBool();
     _fileAutoStart = m.value("StartUpFile").toString();
 
+    _lang = m.value("Language", "en").toString();
+    setLanguage(_lang);
+
     m >> firstMdiChild();
     m >> _connParams;
 
@@ -1093,6 +1120,7 @@ void MainWindow::saveSettings()
 
     m.setValue("AutoStart", _autoStart);
     m.setValue("StartUpFile", _fileAutoStart);
+    m.setValue("Language", _lang);
 
     m << frm;
     m << _connParams;

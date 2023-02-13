@@ -83,6 +83,16 @@ MainStatusBar::MainStatusBar(const ModbusClient& client, QMdiArea* parent)
 }
 
 ///
+/// \brief MainStatusBar::~MainStatusBar
+///
+MainStatusBar::~MainStatusBar()
+{
+    delete _labelPolls;
+    delete _labelResps;
+    delete _labelConnectionDetails;
+}
+
+///
 /// \brief MainStatusBar::changeEvent
 /// \param event
 ///

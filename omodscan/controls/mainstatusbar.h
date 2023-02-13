@@ -13,7 +13,8 @@ class MainStatusBar : public QStatusBar
 {
     Q_OBJECT
 public:
-    MainStatusBar(const ModbusClient& client, QMdiArea* parent);
+    explicit MainStatusBar(const ModbusClient& client, QMdiArea* parent);
+    ~MainStatusBar();
 
     void updateNumberOfPolls();
     void updateValidSlaveResponses();

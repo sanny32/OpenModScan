@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     ,_lang("en")
     ,_windowCounter(0)
     ,_autoStart(false)
-    ,_modbusClient(nullptr)
 {
     ui->setupUi(this);
 

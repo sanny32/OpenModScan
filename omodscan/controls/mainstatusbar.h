@@ -17,10 +17,12 @@ public:
 
     void updateNumberOfPolls();
     void updateValidSlaveResponses();
-    void updateConnectionInfo(const ConnectionDetails& cd, bool connecting);
 
 protected:
     void changeEvent(QEvent* event) override;
+
+private:
+    void updateConnectionInfo(const ConnectionDetails& cd, bool connecting);
 
 private:
     QMdiArea* _mdiArea;

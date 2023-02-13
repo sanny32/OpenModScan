@@ -37,7 +37,7 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="68"/>
         <source>Open Modscan</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="75"/>
@@ -57,12 +57,12 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="141"/>
         <source>© Alexandr Ananev, 2023</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="164"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/sanny32/OpenModScan&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/sanny32/OpenModScan&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="177"/>
@@ -133,7 +133,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="114"/>
         <source>127.0.0.1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="146"/>
         <source>502</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="181"/>
@@ -158,42 +158,42 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="221"/>
         <source>1200</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="226"/>
         <source>2400</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="231"/>
         <source>4800</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="236"/>
         <source>9600</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="241"/>
         <source>19200</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="246"/>
         <source>38400</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="251"/>
         <source>57600</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="256"/>
         <source>115200</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="264"/>
@@ -203,12 +203,12 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="281"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="286"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="294"/>
@@ -223,12 +223,12 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="328"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="333"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="349"/>
@@ -304,7 +304,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <source>15: FORCE MULTIPLE COILS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="28"/>
@@ -332,7 +332,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
         <source>16: PRESET MULTIPLE REGISTERS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="28"/>
@@ -551,7 +551,7 @@
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="60"/>
         <source>250</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="67"/>
@@ -571,7 +571,7 @@
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="205"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="212"/>
@@ -583,7 +583,7 @@
         <source>Force modbus command 15 and 16 for single-point writes.
 (To be used in case where the slave does not support the
 single-point  write functions 05 and 06.)</source>
-        <translation type="unfinished">Использовать функции 15 и 16 для записи в регистр.
+        <translation>Использовать функции 15 и 16 для записи в регистр.
 (Используется в случае, если устройство не поддерживает
  функции 05 и 06.)</translation>
     </message>
@@ -913,7 +913,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>Open ModScan</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="50"/>
@@ -1219,12 +1219,12 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="578"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="583"/>
         <source>Русский</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="354"/>

@@ -1,5 +1,5 @@
-#include <QMdiSubWindow>
 #include <QEvent>
+#include <QMdiSubWindow>
 #include "formmodsca.h"
 #include "mainstatusbar.h"
 

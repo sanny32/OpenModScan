@@ -1075,9 +1075,12 @@ void MainWindow::saveConfig(const QString& filename)
 ///
 void MainWindow::loadSettings()
 {
-    const auto filepath = QString("%1%2%3.ini").arg(
-                qApp->applicationDirPath(), QDir::separator(),
-                QFileInfo(qApp->applicationFilePath()).baseName());
+    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+
+    if(!QFile::exists(filepath))
+        filepath = QString("%1%2%3").arg(QStandardPaths::locate(QStandardPaths::ConfigLocation, APP_NAME, QStandardPaths::LocateDirectory),
+                                         QDir::separator(), filename);
 
     if(!QFile::exists(filepath)) return;
 
@@ -1108,10 +1111,13 @@ void MainWindow::loadSettings()
 ///
 void MainWindow::saveSettings()
 {
-    const auto frm = firstMdiChild();
-    const auto filepath = QString("%1%2%3.ini").arg(
-                qApp->applicationDirPath(), QDir::separator(),
-                QFileInfo(qApp->applicationFilePath()).baseName());
+    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+
+    if(!QFileInfo(qApp->applicationDirPath()).isWritable())
+        filepath = QString("%1%2%3").arg(QStandardPaths::locate(QStandardPaths::ConfigLocation, APP_NAME, QStandardPaths::LocateDirectory),
+                                         QDir::separator(), filename);
+
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
@@ -1121,6 +1127,6 @@ void MainWindow::saveSettings()
     m.setValue("StartUpFile", _fileAutoStart);
     m.setValue("Language", _lang);
 
-    m << frm;
+    m << firstMdiChild();
     m << _connParams;
 }

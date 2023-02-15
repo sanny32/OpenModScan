@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTranslator>
 #include "modbusclient.h"
 #include "formmodsca.h"
 #include "windowactionlist.h"
@@ -19,12 +20,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void setLanguage(const QString& lang);
+
 signals:
     void modbusClientChanged(QModbusClient* cli);
 
 protected:
-    void closeEvent(QCloseEvent *event) override;
-    bool eventFilter(QObject * obj, QEvent * e) override;
+    void changeEvent(QEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* e) override;
 
 private slots:
     void on_awake();
@@ -32,6 +36,7 @@ private slots:
     /* File menu slots */
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
+    void on_actionClose_triggered();
     void on_actionSave_triggered();
     void on_actionSaveAs_triggered();
     void on_actionPrint_triggered();
@@ -71,11 +76,15 @@ private slots:
     /* View menu slots */
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
-    void on_actionDsiplayBar_triggered();
+    void on_actionDisplayBar_triggered();
     void on_actionBackground_triggered();
     void on_actionForeground_triggered();
     void on_actionStatus_triggered();
     void on_actionFont_triggered();
+
+    /* Language menu slots */
+    void on_actionEnglish_triggered();
+    void on_actionRussian_triggered();
 
     /* Window menu slots */
     void on_actionCascade_triggered();
@@ -112,6 +121,10 @@ private:
 
 private:
     Ui::MainWindow *ui;
+
+    QString _lang;
+    QTranslator _qtTranslator;
+    QTranslator _appTranslator;
 
 private:
     int _windowCounter;

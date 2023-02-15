@@ -14,6 +14,7 @@ class ModbusClient : public QObject
     Q_OBJECT
 public:
     explicit ModbusClient(QObject *parent = nullptr);
+    ~ModbusClient() override;
 
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice();
@@ -24,8 +25,8 @@ public:
     int timeout() const;
     void setTimeout(int newTimeout);
 
-    int numberOfRetries() const;
-    void setNumberOfRetries(int number);
+    uint numberOfRetries() const;
+    void setNumberOfRetries(uint number);
 
     void sendRawRequest(const QModbusRequest& request, int server, int requestId);
     void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId);
@@ -37,11 +38,14 @@ signals:
     void modbusReply(QModbusReply* reply);
     void modbusError(const QString& error);
     void modbusConnectionError(const QString& error);
+    void modbusConnecting(const ConnectionDetails& cd);
+    void modbusConnected(const ConnectionDetails& cd);
+    void modbusDisconnected(const ConnectionDetails& cd);
 
 private slots:
     void on_readReply();
     void on_writeReply();
-    void on_errorOccured(QModbusDevice::Error error);
+    void on_errorOccurred(QModbusDevice::Error error);
     void on_stateChanged(QModbusDevice::State state);
 
 private:

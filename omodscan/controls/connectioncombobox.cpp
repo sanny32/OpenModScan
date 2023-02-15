@@ -19,12 +19,12 @@ Q_DECLARE_METATYPE(ConnectionPort)
 ConnectionComboBox::ConnectionComboBox(QWidget* parent)
     :QComboBox(parent)
 {
-    addItem("Remote TCP/IP Server", ConnectionType::Tcp, QString());
+    addItem(tr("Remote TCP/IP Server"), ConnectionType::Tcp, QString());
 
     QStringList ports;
     for(auto&& port: QSerialPortInfo::availablePorts())
     {
-        const auto text = QString("Direct Connection to %1").arg(port.portName());
+        const auto text = QString(tr("Direct Connection to %1")).arg(port.portName());
         addItem(text, ConnectionType::Serial, port.portName());
     }
 }

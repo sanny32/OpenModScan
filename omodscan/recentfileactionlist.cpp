@@ -28,7 +28,7 @@ RecentFileActionList::RecentFileActionList(QMenu* menu, QAction* placeholder)
         }
     }
 
-    QSettings m;
+    QSettings m(QSettings::NativeFormat, QSettings::UserScope, APP_NAME, APP_VERSION);
     const int size = m.beginReadArray("RecentFiles");
     for (int i = 0; i < size; ++i)
     {
@@ -43,7 +43,7 @@ RecentFileActionList::RecentFileActionList(QMenu* menu, QAction* placeholder)
 ///
 RecentFileActionList::~RecentFileActionList()
 {
-    QSettings m;
+    QSettings m(QSettings::NativeFormat, QSettings::UserScope, APP_NAME, APP_VERSION);
     m.beginWriteArray("RecentFiles", _actionList.size());
     for(int i = 0; i < _actionList.size(); i++)
     {

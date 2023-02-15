@@ -1,4 +1,5 @@
 #include <QModbusTcpClient>
+#include "floatutils.h"
 #include "modbusexception.h"
 #include "modbusclient.h"
 
@@ -20,6 +21,15 @@ ModbusClient::ModbusClient(QObject *parent)
 }
 
 ///
+/// \brief ModbusClient::~ModbusClient
+///
+ModbusClient::~ModbusClient()
+{
+    if(_modbusClient)
+        delete _modbusClient;
+}
+
+///
 /// \brief ModbusClient::connectDevice
 /// \param cd
 ///
@@ -38,7 +48,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
             _modbusClient = new QModbusTcpClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
-            _modbusClient->setProperty("ConnectionType", QVariant::fromValue(cd.Type));
+            _modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
             _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
@@ -49,24 +59,24 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
             _modbusClient = new QModbusRtuSerialClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
-            _modbusClient->setProperty("ConnectionType", QVariant::fromValue(cd.Type));
+            _modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
             _modbusClient->setProperty("DTRControl", cd.SerialParams.SetDTR);
             _modbusClient->setProperty("RTSControl", cd.SerialParams.SetRTS);
             _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
-            dynamic_cast<QModbusRtuSerialClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
+            qobject_cast<QModbusRtuSerialClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
-            dynamic_cast<QSerialPort*>(_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
+            qobject_cast<QSerialPort*>(_modbusClient->device())->setFlowControl(cd.SerialParams.FlowControl);
         break;
     }
 
     if(_modbusClient)
     {
         connect(_modbusClient, &QModbusDevice::stateChanged, this, &ModbusClient::on_stateChanged);
-        connect(_modbusClient, &QModbusDevice::errorOccurred, this, &ModbusClient::on_errorOccured);
+        connect(_modbusClient, &QModbusDevice::errorOccurred, this, &ModbusClient::on_errorOccurred);
         _modbusClient->connectDevice();
     }
 }
@@ -131,7 +141,7 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
         }
     }
     else
-        emit modbusError("Invalid Modbus Request");
+        emit modbusError(tr("Invalid Modbus Request"));
 }
 
 ///
@@ -271,29 +281,20 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, quint16 valu
 /// \brief createHoldingRegistersDataUnit
 /// \param newStartAddress
 /// \param value
-/// \param inv
+/// \param swapped
 /// \return
 ///
-QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value, bool inv)
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value, bool swapped)
 {
-    union {
-       quint16 asUint16[2];
-       float asFloat;
-    } v;
-    v.asFloat = value;
-
+    QVector<quint16> values(2);
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
-    if(inv)
-    {
-        data.setValue(0, v.asUint16[1]);
-        data.setValue(1, v.asUint16[0]);
-    }
-    else
-    {
-        data.setValue(0, v.asUint16[0]);
-        data.setValue(1, v.asUint16[1]);
-    }
 
+    if(swapped)
+        breakFloat(value, values[1], values[0]);
+    else
+        breakFloat(value, values[0], values[1]);
+
+    data.setValues(values);
     return data;
 }
 
@@ -301,33 +302,20 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value,
 /// \brief createHoldingRegistersDataUnit
 /// \param newStartAddress
 /// \param value
-/// \param inv
+/// \param swapped
 /// \return
 ///
-QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value, bool inv)
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value, bool swapped)
 {
-    union {
-       quint16 asUint16[4];
-       double asDouble;
-    } v;
-    v.asDouble = value;
-
+    QVector<quint16> values(4);
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 4);
-    if(inv)
-    {
-        data.setValue(0, v.asUint16[3]);
-        data.setValue(1, v.asUint16[2]);
-        data.setValue(2, v.asUint16[1]);
-        data.setValue(3, v.asUint16[0]);
-    }
-    else
-    {
-        data.setValue(0, v.asUint16[0]);
-        data.setValue(1, v.asUint16[1]);
-        data.setValue(2, v.asUint16[2]);
-        data.setValue(3, v.asUint16[3]);
-    }
 
+    if(swapped)
+        breakDouble(value, values[3], values[2], values[1], values[0]);
+    else
+        breakDouble(value, values[0], values[1], values[2], values[3]);
+
+    data.setValues(values);
     return data;
 }
 
@@ -414,11 +402,11 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
         switch(pointType)
         {
             case QModbusDataUnit::Coils:
-                errorDesc = "Coil Write Failure";
+                errorDesc = tr("Coil Write Failure");
             break;
 
             case QModbusDataUnit::HoldingRegisters:
-                errorDesc = "Register Write Failure";
+                errorDesc = tr("Register Write Failure");
             break;
 
             default:
@@ -460,7 +448,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     if(_modbusClient == nullptr ||
        _modbusClient->state() != QModbusDevice::ConnectedState)
     {
-        emit modbusError("Mask Write Register Failure");
+        emit modbusError(tr("Mask Write Register Failure"));
         return;
     }
 
@@ -529,7 +517,7 @@ void ModbusClient::setTimeout(int newTimeout)
 /// \brief ModbusClient::numberOfRetries
 /// \return
 ///
-int ModbusClient::numberOfRetries() const
+uint ModbusClient::numberOfRetries() const
 {
     if(_modbusClient)
         return _modbusClient->numberOfRetries();
@@ -541,7 +529,7 @@ int ModbusClient::numberOfRetries() const
 /// \brief ModbusClient::setNumberOfRetries
 /// \param number
 ///
-void ModbusClient::setNumberOfRetries(int number)
+void ModbusClient::setNumberOfRetries(uint number)
 {
     if(_modbusClient)
         _modbusClient->setNumberOfRetries(number);
@@ -582,16 +570,16 @@ void ModbusClient::on_writeReply()
     {
         case QModbusRequest::WriteSingleCoil:
         case QModbusRequest::WriteMultipleCoils:
-            onError("Coil Write Failure");
+            onError(tr("Coil Write Failure"));
         break;
 
         case QModbusRequest::WriteSingleRegister:
         case QModbusRequest::WriteMultipleRegisters:
-            onError("Register Write Failure");
+            onError(tr("Register Write Failure"));
         break;
 
         case QModbusRequest::MaskWriteRegister:
-            onError("Mask Register Write Failure");
+            onError(tr("Mask Register Write Failure"));
         break;
 
     default:
@@ -602,14 +590,14 @@ void ModbusClient::on_writeReply()
 }
 
 ///
-/// \brief ModbusClient::on_errorOccured
+/// \brief ModbusClient::on_errorOccurred
 /// \param error
 ///
-void ModbusClient::on_errorOccured(QModbusDevice::Error error)
+void ModbusClient::on_errorOccurred(QModbusDevice::Error error)
 {
     if(error == QModbusDevice::ConnectionError)
     {
-        emit modbusConnectionError(QString("Connection error. %1").arg(_modbusClient->errorString()));
+        emit modbusConnectionError(QString(tr("Connection error. %1")).arg(_modbusClient->errorString()));
     }
 }
 
@@ -619,18 +607,39 @@ void ModbusClient::on_errorOccured(QModbusDevice::Error error)
 ///
 void ModbusClient::on_stateChanged(QModbusDevice::State state)
 {
-    const auto connType = _modbusClient->property("ConnectionType").value<ConnectionType>();
-    if(connType == ConnectionType::Serial && state == QModbusDevice::ConnectedState)
+    const auto cd = _modbusClient->property("ConnectionDetails").value<ConnectionDetails>();
+    switch(state)
     {
-        auto port = (QSerialPort*)_modbusClient->device();
+        case QModbusDevice::ConnectingState:
+            emit modbusConnecting(cd);
+        break;
 
-        const bool setDTR = _modbusClient->property("DTRControl").toBool();
-        port->setDataTerminalReady(setDTR);
-
-        if(port->flowControl() != QSerialPort::HardwareControl)
+        case QModbusDevice::ConnectedState:
         {
-            const bool setRTS = _modbusClient->property("RTSControl").toBool();
-            port->setRequestToSend(setRTS);
+            if(cd.Type == ConnectionType::Serial)
+            {
+                auto port = (QSerialPort*)_modbusClient->device();
+
+                const bool setDTR = _modbusClient->property("DTRControl").toBool();
+                port->setDataTerminalReady(setDTR);
+
+                if(port->flowControl() != QSerialPort::HardwareControl)
+                {
+                    const bool setRTS = _modbusClient->property("RTSControl").toBool();
+                    port->setRequestToSend(setRTS);
+                }
+            }
+
+            emit modbusConnected(cd);
         }
+        break;
+
+        case QModbusDevice::UnconnectedState:
+            emit modbusDisconnected(cd);
+        break;
+
+        default:
+        break;
     }
+
 }

@@ -3,6 +3,7 @@
 
 #include <QSettings>
 #include <QModbusDataUnit>
+#include "modbuslimits.h"
 
 ///
 /// \brief The DisplayDefinition struct
@@ -18,10 +19,10 @@ struct DisplayDefinition
     void normalize()
     {
         ScanRate = qBound(20U, ScanRate, 10000U);
-        DeviceId = qBound<quint8>(1, DeviceId, 255);
-        PointAddress = qMax<quint16>(1U, PointAddress);
+        DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
+        PointAddress = qMax<quint16>(ModbusLimits::addressRange().from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
-        Length = qBound<quint16>(1, Length, 128);
+        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
     }
 };
 Q_DECLARE_METATYPE(DisplayDefinition)
@@ -45,11 +46,11 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 ///
 inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
 {
-    dd.ScanRate = in.value("DisplayDefinition/ScanRate").toUInt();
-    dd.DeviceId = in.value("DisplayDefinition/DeviceId").toUInt();
-    dd.PointAddress = in.value("DisplayDefinition/PointAddress").toUInt();
-    dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType").toUInt();
-    dd.Length = in.value("DisplayDefinition/Length").toUInt();
+    dd.ScanRate = in.value("DisplayDefinition/ScanRate", 1000).toUInt();
+    dd.DeviceId = in.value("DisplayDefinition/DeviceId", 1).toUInt();
+    dd.PointAddress = in.value("DisplayDefinition/PointAddress", 1).toUInt();
+    dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType", 1).toUInt();
+    dd.Length = in.value("DisplayDefinition/Length", 50).toUInt();
 
     dd.normalize();
     return in;

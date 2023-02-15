@@ -7,8 +7,8 @@
 BooleanComboBox::BooleanComboBox(QWidget* parent)
     :QComboBox(parent)
 {
-    addItem("Disable", false);
-    addItem("Enable", true);
+    addItem(tr("Disable"), false);
+    addItem(tr("Enable"), true);
 }
 
 ///

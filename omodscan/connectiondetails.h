@@ -75,8 +75,8 @@ inline QSettings& operator <<(QSettings& out, const TcpConnectionParams& params)
 ///
 inline QSettings& operator >>(QSettings& in, TcpConnectionParams& params)
 {
-    params.IPAddress    = in.value("TcpParams/IPAddress").toString();
-    params.ServicePort  = in.value("TcpParams/ServicePort").toUInt();
+    params.IPAddress    = in.value("TcpParams/IPAddress", "127.0.0.1").toString();
+    params.ServicePort  = in.value("TcpParams/ServicePort", 502).toUInt();
 
     params.normalize();
     return in;
@@ -175,12 +175,12 @@ inline QSettings& operator <<(QSettings& out, const SerialConnectionParams& para
 inline QSettings& operator >>(QSettings& in, SerialConnectionParams& params)
 {
     params.PortName    = in.value("SerialParams/PortName").toString();
-    params.BaudRate    = (QSerialPort::BaudRate)in.value("SerialParams/BaudRate").toUInt();
-    params.WordLength  = (QSerialPort::DataBits)in.value("SerialParams/WordLength").toUInt();
-    params.Parity      = (QSerialPort::Parity)in.value("SerialParams/Parity").toUInt();
-    params.FlowControl = (QSerialPort::FlowControl)in.value("SerialParams/FlowControl").toUInt();
-    params.SetDTR      = in.value("SerialParams/DTR").toBool();
-    params.SetRTS      = in.value("SerialParams/RTS").toBool();
+    params.BaudRate    = (QSerialPort::BaudRate)in.value("SerialParams/BaudRate", 9600).toUInt();
+    params.WordLength  = (QSerialPort::DataBits)in.value("SerialParams/WordLength", 8).toUInt();
+    params.Parity      = (QSerialPort::Parity)in.value("SerialParams/Parity", 0).toUInt();
+    params.FlowControl = (QSerialPort::FlowControl)in.value("SerialParams/FlowControl", 0).toUInt();
+    params.SetDTR      = in.value("SerialParams/DTR", false).toBool();
+    params.SetRTS      = in.value("SerialParams/RTS", false).toBool();
 
     params.normalize();
     return in;
@@ -268,11 +268,11 @@ inline QSettings& operator <<(QSettings& out, const ModbusProtocolSelections& pa
 ///
 inline QSettings& operator >>(QSettings& in, ModbusProtocolSelections& params)
 {
-    params.Mode                    = (TransmissionMode)in.value("ModbusParams/Mode").toUInt();
-    params.SlaveResponseTimeOut    = in.value("ModbusParams/SlaveResponseTimeOut").toUInt();
-    params.NumberOfRetries         = in.value("ModbusParams/NumberOfRetries").toUInt();
-    params.InterFrameDelay         = in.value("ModbusParams/InterFrameDelay").toUInt();
-    params.ForceModbus15And16Func  = in.value("ModbusParams/ForceModbus15And16Func").toBool();
+    params.Mode                    = (TransmissionMode)in.value("ModbusParams/Mode", 1).toUInt();
+    params.SlaveResponseTimeOut    = in.value("ModbusParams/SlaveResponseTimeOut", 250).toUInt();
+    params.NumberOfRetries         = in.value("ModbusParams/NumberOfRetries", 3).toUInt();
+    params.InterFrameDelay         = in.value("ModbusParams/InterFrameDelay", 0).toUInt();
+    params.ForceModbus15And16Func  = in.value("ModbusParams/ForceModbus15And16Func", false).toBool();
 
     params.normalize();
     return in;
@@ -346,7 +346,7 @@ inline QSettings& operator <<(QSettings& out, const ConnectionDetails& params)
 ///
 inline QSettings& operator >>(QSettings& in, ConnectionDetails& params)
 {
-    params.Type = (ConnectionType)in.value("ConnectionParams/Type").toUInt();
+    params.Type = (ConnectionType)in.value("ConnectionParams/Type", 0).toUInt();
     in >> params.TcpParams;
     in >> params.SerialParams;
     in >> params.ModbusParams;

@@ -142,11 +142,19 @@
      <addaction name="menuColors"/>
      <addaction name="actionFont"/>
     </widget>
+    <widget class="QMenu" name="menuLanguage">
+     <property name="title">
+      <string>Language</string>
+     </property>
+     <addaction name="actionEnglish"/>
+     <addaction name="actionRussian"/>
+    </widget>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
-    <addaction name="actionDsiplayBar"/>
+    <addaction name="actionDisplayBar"/>
     <addaction name="separator"/>
     <addaction name="menuConfig"/>
+    <addaction name="menuLanguage"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -508,7 +516,7 @@
     <string>Status Bar</string>
    </property>
   </action>
-  <action name="actionDsiplayBar">
+  <action name="actionDisplayBar">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -557,12 +565,28 @@
      <normaloff>:/res/actionAbout.png</normaloff>:/res/actionAbout.png</iconset>
    </property>
    <property name="text">
-    <string>About ModScan64...</string>
+    <string>About Open ModScan...</string>
    </property>
   </action>
   <action name="actionWindows">
    <property name="text">
     <string>Windows...</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionRussian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Русский</string>
    </property>
   </action>
  </widget>

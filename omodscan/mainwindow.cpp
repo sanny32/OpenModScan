@@ -24,15 +24,15 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,_lang("en")
     ,_windowCounter(0)
     ,_autoStart(false)
-    ,_modbusClient(nullptr)
 {
     ui->setupUi(this);
 
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
-    setStatusBar(new MainStatusBar(ui->mdiArea));
+    setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -64,10 +64,46 @@ MainWindow::~MainWindow()
 }
 
 ///
+/// \brief MainWindow::setLanguage
+/// \param lang
+///
+void MainWindow::setLanguage(const QString& lang)
+{
+    if(lang == "en")
+    {
+        _lang = lang;
+        qApp->removeTranslator(&_appTranslator);
+        qApp->removeTranslator(&_qtTranslator);
+    }
+    else if(_appTranslator.load(QString(":/translations/omodscan_%1").arg(lang)))
+    {
+        _lang = lang;
+        qApp->installTranslator(&_appTranslator);
+
+        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang)))
+            qApp->installTranslator(&_qtTranslator);
+    }
+}
+
+///
+/// \brief MainWindow::changeEvent
+/// \param event
+///
+void MainWindow::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+
+    QMainWindow::changeEvent(event);
+}
+
+///
 /// \brief MainWindow::closeEvent
 /// \param event
 ///
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent* event)
 {
     saveSettings();
 
@@ -76,6 +112,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         event->ignore();
     }
+
+    QMainWindow::closeEvent(event);
 }
 
 ///
@@ -84,12 +122,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 /// \param e
 /// \return
 ///
-bool MainWindow::eventFilter(QObject * obj, QEvent * e)
+bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 {
     switch (e->type())
     {
         case QEvent::Close:
-            _windowActionList->removeWindow(dynamic_cast<QMdiSubWindow*>(obj));
+            _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
         break;
         default:
             qt_noop();
@@ -139,7 +177,9 @@ void MainWindow::on_awake()
     ui->actionResetCtrs->setEnabled(frm != nullptr);
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
-    ui->actionDsiplayBar->setChecked(ui->toolBarDisplay->isVisible());
+    ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
+    ui->actionEnglish->setChecked(_lang == "en");
+    ui->actionRussian->setChecked(_lang == "ru");
 
     if(frm != nullptr)
     {
@@ -195,6 +235,11 @@ void MainWindow::on_actionNew_triggered()
     if(cur) {
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
+
+        frm->setFont(cur->font());
+        frm->setStatusColor(cur->statusColor());
+        frm->setBackgroundColor(cur->backgroundColor());
+        frm->setForegroundColor(cur->foregroundColor());
     }
 
     frm->show();
@@ -209,6 +254,17 @@ void MainWindow::on_actionOpen_triggered()
     if(filename.isEmpty()) return;
 
     openFile(filename);
+}
+
+///
+/// \brief MainWindow::on_actionClose_triggered
+///
+void MainWindow::on_actionClose_triggered()
+{
+    const auto wnd = ui->mdiArea->currentSubWindow();
+    if(!wnd) return;
+
+    wnd->close();
 }
 
 ///
@@ -323,7 +379,7 @@ void MainWindow::on_actionDisable_triggered()
 ///
 void MainWindow::on_actionSaveConfig_triggered()
 {
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "All files (*)");
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     saveConfig(filename);
@@ -334,7 +390,7 @@ void MainWindow::on_actionSaveConfig_triggered()
 ///
 void MainWindow::on_actionRestoreNow_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     loadConfig(filename);
@@ -589,9 +645,9 @@ void MainWindow::on_actionStatusBar_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionDsiplayBar_triggered
+/// \brief MainWindow::on_actionDisplayBar_triggered
 ///
-void MainWindow::on_actionDsiplayBar_triggered()
+void MainWindow::on_actionDisplayBar_triggered()
 {
     ui->toolBarDisplay->setVisible(!ui->toolBarDisplay->isVisible());
 }
@@ -654,6 +710,22 @@ void MainWindow::on_actionFont_triggered()
     {
         frm->setFont(dlg.currentFont());
     }
+}
+
+///
+/// \brief MainWindow::on_actionEnglish_triggered
+///
+void MainWindow::on_actionEnglish_triggered()
+{
+    setLanguage("en");
+}
+
+///
+/// \brief MainWindow::on_actionRussian_triggered
+///
+void MainWindow::on_actionRussian_triggered()
+{
+   setLanguage("ru");
 }
 
 ///
@@ -726,8 +798,8 @@ void MainWindow::openFile(const QString& filename)
     else
     {
         QString message = !QFileInfo::exists(filename) ?
-                    QString("%1 was not found").arg(filename) :
-                    QString("Failed to open %1").arg(filename);
+                    QString(tr("%1 was not found")).arg(filename) :
+                    QString(tr("Failed to open %1")).arg(filename);
 
         _recentFileActionList->removeRecentFile(filename);
         QMessageBox::warning(this, windowTitle(), message);
@@ -772,12 +844,12 @@ FormModSca* MainWindow::createMdiChild(int id)
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)
     {
-        dynamic_cast<MainStatusBar*>(statusBar())->updateNumberOfPolls();
+        qobject_cast<MainStatusBar*>(statusBar())->updateNumberOfPolls();
     });
 
     connect(frm, &FormModSca::validSlaveResposesChanged, this, [this](uint)
     {
-        dynamic_cast<MainStatusBar*>(statusBar())->updateValidSlaveResponses();
+        qobject_cast<MainStatusBar*>(statusBar())->updateValidSlaveResponses();
     });
 
     _windowActionList->addWindow(wnd);
@@ -792,7 +864,7 @@ FormModSca* MainWindow::createMdiChild(int id)
 FormModSca* MainWindow::currentMdiChild() const
 {
     const auto wnd = ui->mdiArea->currentSubWindow();
-    return wnd ? dynamic_cast<FormModSca*>(wnd->widget()) : nullptr;
+    return wnd ? qobject_cast<FormModSca*>(wnd->widget()) : nullptr;
 }
 
 ///
@@ -804,7 +876,7 @@ FormModSca* MainWindow::findMdiChild(int id) const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
-        const auto frm = dynamic_cast<FormModSca*>(wnd->widget());
+        const auto frm = qobject_cast<FormModSca*>(wnd->widget());
         if(frm && frm->formId() == id) return frm;
     }
     return nullptr;
@@ -817,7 +889,7 @@ FormModSca* MainWindow::findMdiChild(int id) const
 FormModSca* MainWindow::firstMdiChild() const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
-        return dynamic_cast<FormModSca*>(wnd->widget());
+        return qobject_cast<FormModSca*>(wnd->widget());
 
     return nullptr;
 }
@@ -852,54 +924,26 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     int formId;
     s >> formId;
 
-    Qt::WindowState windowState;
-    s >> windowState;
-
-    DisplayMode displayMode;
-    s >> displayMode;
-
-    DataDisplayMode dataDisplayMode;
-    s >> dataDisplayMode;
-
-    bool hexAddresses;
-    s >> hexAddresses;
-
-    QColor bkgClr;
-    s >> bkgClr;
-
-    QColor fgClr;
-    s >> fgClr;
-
-    QColor stCrl;
-    s >> stCrl;
-
-    QFont font;
-    s >> font;
-
-    DisplayDefinition dd;
-    s >> dd.ScanRate;
-    s >> dd.DeviceId;
-    s >> dd.PointType;
-    s >> dd.PointAddress;
-    s >> dd.Length;
-
     if(s.status() != QDataStream::Ok)
         return nullptr;
 
+    bool created = false;
     auto frm = findMdiChild(formId);
-    if(!frm) frm = createMdiChild(formId);
+    if(!frm)
+    {
+        created = true;
+        frm = createMdiChild(formId);
+    }
+
+    s >> frm;
+
+    if(s.status() != QDataStream::Ok)
+    {
+        if(created) frm->close();
+        return nullptr;
+    }
 
     frm->setFilename(filename);
-    frm->setWindowState(windowState);
-    frm->setDisplayMode(displayMode);
-    frm->setDataDisplayMode(dataDisplayMode);
-    frm->setDisplayHexAddresses(hexAddresses);
-    frm->setBackgroundColor(bkgClr);
-    frm->setForegroundColor(fgClr);
-    frm->setStatusColor(stCrl);
-    frm->setFont(font);
-    frm->setDisplayDefinition(dd);
-
     addRecentFile(filename);
     _windowCounter = qMax(frm->formId(), _windowCounter);
 
@@ -928,24 +972,8 @@ void MainWindow::saveMdiChild(FormModSca* frm)
     // version number
     s << QVersionNumber(1, 0);
 
-    s << frm->formId();
-    s << frm->windowState();
-
-    s << frm->displayMode();
-    s << frm->dataDisplayMode();
-    s << frm->displayHexAddresses();
-
-    s << frm->backgroundColor();
-    s << frm->foregroundColor();
-    s << frm->statusColor();
-    s << frm->font();
-
-    const auto dd = frm->displayDefinition();
-    s << dd.ScanRate;
-    s << dd.DeviceId;
-    s << dd.PointType;
-    s << dd.PointAddress;
-    s << dd.Length;
+    // form
+    s << frm;
 
     addRecentFile(frm->filename());
 }
@@ -1016,7 +1044,7 @@ void MainWindow::saveConfig(const QString& filename)
         windowActivate(wnd);
         ui->actionSave->trigger();
 
-        const auto frm = dynamic_cast<FormModSca*>(wnd->widget());
+        const auto frm = qobject_cast<FormModSca*>(wnd->widget());
         const auto filename = frm->filename();
         if(!filename.isEmpty()) listFilename.push_back(filename);
     }
@@ -1047,9 +1075,12 @@ void MainWindow::saveConfig(const QString& filename)
 ///
 void MainWindow::loadSettings()
 {
-    const auto filepath = QString("%1%2%3.ini").arg(
-                qApp->applicationDirPath(), QDir::separator(),
-                QFileInfo(qApp->applicationFilePath()).baseName());
+    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+
+    if(!QFile::exists(filepath))
+        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
+                                         QDir::separator(), filename);
 
     if(!QFile::exists(filepath)) return;
 
@@ -1063,25 +1094,10 @@ void MainWindow::loadSettings()
     _autoStart = m.value("AutoStart").toBool();
     _fileAutoStart = m.value("StartUpFile").toString();
 
-    auto frm = firstMdiChild();
-    if(frm)
-    {
-        DisplayMode displayMode;
-        m >> displayMode;
+    _lang = m.value("Language", "en").toString();
+    setLanguage(_lang);
 
-        DataDisplayMode dataDisplayMode;
-        m >> dataDisplayMode;
-
-        DisplayDefinition displayDefinition;
-        m >> displayDefinition;
-
-        frm->setDisplayMode(displayMode);
-        frm->setDataDisplayMode(dataDisplayMode);
-        frm->setDisplayDefinition(displayDefinition);
-        frm->setWindowState((Qt::WindowState)m.value("ViewState").toUInt());
-        frm->setDisplayHexAddresses(m.value("DisplayHexAddresses").toBool());
-    }
-
+    m >> firstMdiChild();
     m >> _connParams;
 
     if(_autoStart)
@@ -1091,14 +1107,31 @@ void MainWindow::loadSettings()
 }
 
 ///
+/// \brief checkPathIsWritable
+/// \param path
+/// \return
+///
+bool checkPathIsWritable(const QString& path)
+{
+    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
+    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
+
+    QFile::remove(filepath);
+    return true;
+}
+
+///
 /// \brief MainWindow::saveSettings
 ///
 void MainWindow::saveSettings()
 {
-    const auto frm = firstMdiChild();
-    const auto filepath = QString("%1%2%3.ini").arg(
-                qApp->applicationDirPath(), QDir::separator(),
-                QFileInfo(qApp->applicationFilePath()).baseName());
+    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+
+    if(!QFileInfo(qApp->applicationDirPath()).isWritable() || !checkPathIsWritable(qApp->applicationDirPath()))
+        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
+                                         QDir::separator(), filename);
+
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
@@ -1106,15 +1139,8 @@ void MainWindow::saveSettings()
 
     m.setValue("AutoStart", _autoStart);
     m.setValue("StartUpFile", _fileAutoStart);
+    m.setValue("Language", _lang);
 
-    if(frm)
-    {
-        m << frm->displayMode();
-        m << frm->dataDisplayMode();
-        m << frm->displayDefinition();
-        m.setValue("ViewState", (uint)frm->windowState());
-        m.setValue("DisplayHexAddresses", frm->displayHexAddresses());
-    }
-
+    m << firstMdiChild();
     m << _connParams;
 }

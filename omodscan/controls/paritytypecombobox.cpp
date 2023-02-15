@@ -7,9 +7,9 @@
 ParityTypeComboBox::ParityTypeComboBox(QWidget* parent)
     :QComboBox(parent)
 {
-    addItem("ODD", QSerialPort::OddParity);
-    addItem("EVEN", QSerialPort::EvenParity);
-    addItem("NONE", QSerialPort::NoParity);
+    addItem(tr("ODD"), QSerialPort::OddParity);
+    addItem(tr("EVEN"), QSerialPort::EvenParity);
+    addItem(tr("NONE"), QSerialPort::NoParity);
 }
 
 ///

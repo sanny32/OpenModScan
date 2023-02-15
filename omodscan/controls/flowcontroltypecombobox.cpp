@@ -7,9 +7,9 @@
 FlowControlTypeComboBox::FlowControlTypeComboBox(QWidget* parent)
     :QComboBox(parent)
 {
-    addItem("NO CONTROL", QSerialPort::NoFlowControl);
-    addItem("HARDWARE (RTS/CTS)", QSerialPort::HardwareControl);
-    addItem("SOFTWARE (XON/XOFF)", QSerialPort::SoftwareControl);
+    addItem(tr("NO CONTROL"), QSerialPort::NoFlowControl);
+    addItem(tr("HARDWARE (RTS/CTS)"), QSerialPort::HardwareControl);
+    addItem(tr("SOFTWARE (XON/XOFF)"), QSerialPort::SoftwareControl);
 }
 
 ///

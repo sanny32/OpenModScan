@@ -19,6 +19,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSca)
     ,_formId(id)
+    ,_validSlaveResponses(0)
+    ,_noSlaveResponsesCounter(0)
     ,_modbusClient(client)
 {
     Q_ASSERT(parent != nullptr);
@@ -54,6 +56,20 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
 FormModSca::~FormModSca()
 {
     delete ui;
+}
+
+///
+/// \brief FormModSca::changeEvent
+/// \param event
+///
+void FormModSca::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+
+    QWidget::changeEvent(event);
 }
 
 ///
@@ -111,7 +127,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    ui->outputWidget->setStatus("Data Uninitialized");
+    ui->outputWidget->setStatus(tr("Data Uninitialized"));
     ui->outputWidget->setup(dd);
 }
 
@@ -295,16 +311,16 @@ void FormModSca::print(QPrinter* printer)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
 
-    const auto textDevId = QString("Device Id: %1").arg(ui->lineEditDeviceId->text());
+    const auto textDevId = QString(tr("Device Id: %1")).arg(ui->lineEditDeviceId->text());
     auto rcDevId = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textDevId);
 
-    const auto textAddrLen = QString("Address: %1\nLength: %2").arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
+    const auto textAddrLen = QString(tr("Address: %1\nLength: %2")).arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
     auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
 
-    const auto textType = QString("MODBUS Point Type:\n%1").arg(ui->comboBoxModbusPointType->currentText());
+    const auto textType = QString(tr("MODBUS Point Type:\n%1")).arg(ui->comboBoxModbusPointType->currentText());
     auto rcType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textType);
 
-    const auto textStat = QString("Number of Polls: %1\nValid Slave Responses: %2").arg(QString::number(ui->statisticWidget->numberOfPolls()),
+    const auto textStat = QString(tr("Number of Polls: %1\nValid Slave Responses: %2")).arg(QString::number(ui->statisticWidget->numberOfPolls()),
                                                                                         QString::number(ui->statisticWidget->validSlaveResposes()));
     auto rcStat = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textStat);
 
@@ -370,15 +386,24 @@ void FormModSca::on_timeout()
     if(!_modbusClient.isValid()) return;
     if(_modbusClient.state() != QModbusDevice::ConnectedState)
     {
-        ui->outputWidget->setStatus("Device NOT CONNECTED!");
+        ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
         return;
     }
 
     const auto dd = displayDefinition();
     if(dd.PointAddress + dd.Length - 1 > ModbusLimits::addressRange().to())
     {
-        ui->outputWidget->setStatus("Invalid Data Length Specified");
+        ui->outputWidget->setStatus(tr("Invalid Data Length Specified"));
         return;
+    }
+
+    if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
+    {
+        _noSlaveResponsesCounter++;
+        if(_noSlaveResponsesCounter > _modbusClient.numberOfRetries())
+        {
+            ui->outputWidget->setStatus(tr("No Responses from Slave Device"));
+        }
     }
 
     _modbusClient.sendReadRequest(dd.PointType, dd.PointAddress - 1, dd.Length, dd.DeviceId, _formId);
@@ -399,7 +424,7 @@ bool FormModSca::isValidReply(const QModbusReply* reply)
     {
         case QModbusRequest::ReadCoils:
         case QModbusRequest::ReadDiscreteInputs:
-            return (data.startAddress() == dd.PointAddress - 1) && qAbs(data.valueCount() - dd.Length) < 8;
+            return (data.startAddress() == dd.PointAddress - 1) && (data.valueCount() - dd.Length) < 8;
         break;
 
         case QModbusRequest::ReadInputRegisters:
@@ -447,7 +472,7 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
     {
         if(!isValidReply(reply))
         {
-            ui->outputWidget->setStatus("Received Invalid Response MODBUS Query");
+            ui->outputWidget->setStatus(tr("Received Invalid Response MODBUS Query"));
         }
         else
         {
@@ -465,6 +490,8 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
         ui->outputWidget->setStatus(reply->errorString());
     }
 
+    _noSlaveResponsesCounter = 0;
+    _validSlaveResponses = ui->statisticWidget->validSlaveResposes();
 }
 
 ///

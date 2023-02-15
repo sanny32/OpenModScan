@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.0.0b
+VERSION = 1.0.0
 
 QMAKE_TARGET_COMPANY = "Open ModScan"
 QMAKE_TARGET_PRODUCT = omodscan

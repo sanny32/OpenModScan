@@ -3,6 +3,7 @@
 
 #include <QSettings>
 #include <QModbusDataUnit>
+#include "modbuslimits.h"
 
 ///
 /// \brief The DisplayDefinition struct
@@ -18,10 +19,10 @@ struct DisplayDefinition
     void normalize()
     {
         ScanRate = qBound(20U, ScanRate, 10000U);
-        DeviceId = qBound<quint8>(1, DeviceId, 255);
-        PointAddress = qMax<quint16>(1U, PointAddress);
+        DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
+        PointAddress = qMax<quint16>(ModbusLimits::addressRange().from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
-        Length = qBound<quint16>(1, Length, 128);
+        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
     }
 };
 Q_DECLARE_METATYPE(DisplayDefinition)

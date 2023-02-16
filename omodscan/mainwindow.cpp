@@ -11,6 +11,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
+#include "dialogaddressscan.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
 #include "mainstatusbar.h"
@@ -172,6 +173,7 @@ void MainWindow::on_awake()
     ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionUserMsg->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionAddressScan->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionTextCapture->setEnabled(frm != nullptr);
     ui->actionCaptureOff->setEnabled(frm != nullptr);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
@@ -589,6 +591,15 @@ void MainWindow::on_actionUserMsg_triggered()
     const auto mode = frm->dataDisplayMode();
 
     DialogUserMsg dlg(dd.DeviceId, mode, _modbusClient, this);
+    dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_actionAddressScan_triggered
+///
+void MainWindow::on_actionAddressScan_triggered()
+{
+    DialogAddressScan dlg(_modbusClient, this);
     dlg.exec();
 }
 

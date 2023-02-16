@@ -113,6 +113,7 @@
      <addaction name="actionMaskWrite"/>
      <addaction name="separator"/>
      <addaction name="actionUserMsg"/>
+     <addaction name="actionAddressScan"/>
     </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplayOptions"/>
@@ -587,6 +588,14 @@
    </property>
    <property name="text">
     <string>Русский</string>
+   </property>
+  </action>
+  <action name="actionAddressScan">
+   <property name="text">
+    <string>Address scan</string>
+   </property>
+   <property name="toolTip">
+    <string>Address scan</string>
    </property>
   </action>
  </widget>

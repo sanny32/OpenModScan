@@ -167,6 +167,7 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
     if(auto reply = _modbusClient->sendReadRequest(dataUnit, server))
     {
         reply->setProperty("RequestId", requestId);
+        reply->setProperty("RequestData", QVariant::fromValue(dataUnit));
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_readReply);

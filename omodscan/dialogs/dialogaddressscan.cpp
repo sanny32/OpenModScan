@@ -175,6 +175,84 @@ Qt::ItemFlags TableViewItemModel::flags(const QModelIndex &index) const
 }
 
 ///
+/// \brief LogViewItemModel::LogViewItemModel
+/// \param items
+/// \param parent
+///
+LogViewItemModel::LogViewItemModel(QVector<LogViewItem>& items, QObject* parent)
+    : QAbstractListModel(parent)
+    ,_items(items)
+{
+}
+
+///
+/// \brief LogViewItemModel::rowCount
+/// \param parent
+/// \return
+///
+int LogViewItemModel::rowCount(const QModelIndex&) const
+{
+    return _items.size();
+}
+
+///
+/// \brief LogViewItemModel::data
+/// \param index
+/// \param role
+/// \return
+///
+QVariant LogViewItemModel::data(const QModelIndex& index, int role) const
+{
+    if(!index.isValid() ||
+       index.row() < 0  ||
+       index.row() >= _items.size())
+    {
+        return QVariant();
+    }
+
+    const auto item = _items.at(index.row());
+    switch(role)
+    {
+        case Qt::DisplayRole:
+            return item.Text;
+
+        case Qt::BackgroundRole:
+            return item.IsRequest ? QVariant() : QColor(Qt::lightGray);
+
+        case Qt::TextAlignmentRole:
+            return Qt::AlignVCenter;
+
+        case Qt::UserRole:
+            return QVariant::fromValue(item);
+    }
+
+    return QVariant();
+}
+
+///
+/// \brief LogViewItemProxyModel::LogViewItemProxyModel
+/// \param parent
+///
+LogViewItemProxyModel::LogViewItemProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+    ,_showValid(false)
+{
+}
+
+///
+/// \brief LogViewItemProxyModel::filterAcceptsRow
+/// \param source_row
+/// \param source_parent
+/// \return
+///
+bool LogViewItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    const auto index = sourceModel()->index(source_row, 0, source_parent);
+    const auto item = sourceModel()->data(index, Qt::UserRole).value<LogViewItem>();
+    return _showValid ? item.IsValid && !item.IsRequest : true;
+}
+
+///
 /// \brief DialogAddressScan::DialogAddressScan
 /// \param dd
 /// \param client
@@ -194,12 +272,14 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ui->lineEditStartAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(999);
+    ui->tabWidget->setCurrentIndex(0);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
 
-    connect(&_elapsedTimer, &QTimer::timeout, this, &DialogAddressScan::on_timeout);
+    connect(&_scanTimer, &QTimer::timeout, this, &DialogAddressScan::on_timeout);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogAddressScan::on_modbusReply);
+    connect(&_modbusClient, &ModbusClient::modbusRequest, this, &DialogAddressScan::on_modbusRequest);
 
     clearTableView();
 }
@@ -265,6 +345,34 @@ void DialogAddressScan::on_comboBoxPointType_pointTypeChanged(QModbusDataUnit::R
 }
 
 ///
+/// \brief DialogAddressScan::on_checkBoxShowValid_toggled
+/// \param on
+///
+void DialogAddressScan::on_checkBoxShowValid_toggled(bool on)
+{
+    if(!_proxyLogModel)
+        return;
+
+    _proxyLogModel->setShowValid(on);
+    _logModel->update();
+}
+
+///
+/// \brief DialogAddressScan::on_modbusRequest
+/// \param requestId
+/// \param request
+///
+void DialogAddressScan::on_modbusRequest(int requestId, const QModbusRequest& request)
+{
+    if(requestId != 0)
+    {
+        return;
+    }
+
+    updateLogView(request);
+}
+
+///
 /// \brief DialogAddressScan::on_modbusReply
 /// \param reply
 ///
@@ -277,19 +385,14 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
         return;
     }
 
-    const auto length = ui->lineEditLength->value<int>();
-    const int progress = 100.0 * _requestCount / length;
-    ui->progressBar->setValue(progress);
+    updateProgress();
 
-    const auto hasError = (reply->error() != QModbusDevice::NoError);
-    const auto address = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + 1;
+    if (reply->error() == QModbusDevice::NoError)
+        updateTableView(reply->result().startAddress() + 1, reply->result().value(0));
 
-    if (!hasError)
-        updateTableView(address, reply->result().value(0));
+    updateLogView(reply);
 
-    updateLogView(address, hasError ? tr("FAILED"): tr("OK"));
-
-    if(length == _requestCount)
+    if(ui->lineEditLength->value<int>() == _requestCount)
         stopScan();
     else
         sendReadRequest();
@@ -323,7 +426,7 @@ void DialogAddressScan::startScan()
     clearProgress();
 
     sendReadRequest();
-    _elapsedTimer.start(1000);
+    _scanTimer.start(1000);
 }
 
 ///
@@ -332,7 +435,7 @@ void DialogAddressScan::startScan()
 void DialogAddressScan::stopScan()
 {
     _scanning = false;
-    _elapsedTimer.stop();
+    _scanTimer.stop();
 }
 
 ///
@@ -371,7 +474,11 @@ void DialogAddressScan::clearTableView()
 ///
 void DialogAddressScan::clearLogView()
 {
-    ui->plainTextEdit->clear();
+    _logItems.clear();
+    _logModel = QSharedPointer<LogViewItemModel>(new LogViewItemModel(_logItems, this));
+    _proxyLogModel = QSharedPointer<LogViewItemProxyModel>(new LogViewItemProxyModel(this));
+    _proxyLogModel->setSourceModel(_logModel.get());
+    ui->logView->setModel(_proxyLogModel.get());
 }
 
 ///
@@ -390,6 +497,16 @@ void DialogAddressScan::clearProgress()
 {
     _requestCount = 0;
     ui->progressBar->setValue(0);
+}
+
+///
+/// \brief DialogAddressScan::updateProgress
+///
+void DialogAddressScan::updateProgress()
+{
+    const auto length = ui->lineEditLength->value<int>();
+    const int progress = 100.0 * _requestCount / length;
+    ui->progressBar->setValue(progress);
 }
 
 ///
@@ -414,17 +531,68 @@ void DialogAddressScan::updateTableView(int pointAddress, quint16 value)
     }
 }
 
-///
-/// \brief DialogAddressScan::updateLogView
-/// \param pointAddress
-/// \param status
-///
-void DialogAddressScan::updateLogView(int pointAddress, const QString& status)
+void DialogAddressScan::updateLogView(const QModbusRequest& request)
 {
+    const auto deviceId = ui->lineEditSlaveAddress->value<int>();
     const auto pointType = ui->comboBoxPointType->currentPointType();
+
+    quint16 pointAddress;
+    request.decodeData(&pointAddress);
     const auto address = formatAddress(pointType, pointAddress);
 
-    const auto text = QString("[%1] - %2\n").arg(address, status);
-    ui->plainTextEdit->insertPlainText(text);
-    ui->plainTextEdit->moveCursor(QTextCursor::End);
+    QByteArray rawData;
+    rawData.push_back(deviceId);
+    rawData.push_back(request.functionCode() | ( request.isException() ? QModbusPdu::ExceptionByte : 0));
+    rawData.push_back(request.data());
+
+    QStringList textData;
+    for(auto&& c : rawData)
+        textData.append(QString("%1").arg(QString::number((uchar)c), 3, '0'));
+
+    LogViewItem item;
+    item.IsRequest = true;
+    item.IsValid = true;
+    item.PointAddress = pointAddress;
+    item.Text = QString("[%1] << [%2]").arg(address, textData.join(' '));
+
+    _logItems.push_back(item);
+    _logModel->update();
+
+    ui->logView->scrollTo(_proxyLogModel->index(_logItems.size() - 1, 0), QAbstractItemView::PositionAtBottom);
+}
+
+///
+/// \brief DialogAddressScan::updateLogView
+/// \param reply
+///
+void DialogAddressScan::updateLogView(const QModbusReply* reply)
+{
+    if(!reply)
+        return;
+
+    const auto deviceId = ui->lineEditSlaveAddress->value<int>();
+    const auto pointType = ui->comboBoxPointType->currentPointType();
+    const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + 1;
+    const auto address = formatAddress(pointType, pointAddress);
+    const auto pdu = reply->rawResult();
+
+    QByteArray rawData;
+    rawData.push_back(deviceId);
+    rawData.push_back(pdu.functionCode() | ( pdu.isException() ? QModbusPdu::ExceptionByte : 0));
+    rawData.push_back(pdu.data());
+
+    QStringList textData;
+    for(auto&& c : rawData)
+        textData.append(QString("%1").arg(QString::number((uchar)c), 3, '0'));
+
+    LogViewItem item;
+    item.IsRequest = false;
+    item.IsValid = (reply->error() == QModbusDevice::NoError);
+    item.PointAddress = pointAddress;
+    item.Text = QString("[%1] >> [%2]").arg(address, textData.join(' '));
+
+    _logItems.push_back(item);
+    _logModel->update();
+
+    ui->logView->scrollTo(_proxyLogModel->index(_logItems.size() - 1, 0), QAbstractItemView::PositionAtBottom);
 }

@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include <QAbstractEventDispatcher>
 #include "modbuslimits.h"
 #include "dialogaddressscan.h"
@@ -78,11 +79,11 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
     }
 
     const auto parentWidget = qobject_cast<QWidget*>(parent());
-    const auto idx = _data.startAddress() + index.row() * _columns + index.column();
+    const auto idx = index.row() * _columns + index.column();
     switch(role)
     {
         case Qt::ToolTipRole:
-            return formatAddress(_data.registerType(), idx);
+            return formatAddress(_data.registerType(), _data.startAddress() + idx);
 
         case Qt::DisplayRole:
             return _data.hasValue(idx) ? QString::number(_data.value(idx)) : "-";
@@ -94,7 +95,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             return _data.hasValue(idx) ? QVariant() : parentWidget->palette().color(QPalette::Disabled, QPalette::Base);
 
         case Qt::UserRole:
-            return idx;
+            return _data.startAddress() + idx;
     }
 
     return QVariant();
@@ -114,7 +115,7 @@ bool TableViewItemModel::setData(const QModelIndex &index, const QVariant &value
         return false;
     }
 
-    const auto idx = _data.startAddress() + index.row() * _columns + index.column();
+    const auto idx = index.row() * _columns + index.column();
     _data.setValue(idx, value.toUInt());
 
     emit dataChanged(index, index, QList<int>() << Qt::DisplayRole);
@@ -189,12 +190,15 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ui->lineEditStartAddress->setPaddingZeroes(true);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditLength->setInputRange(1, 65530);
+    ui->lineEditStartAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(999);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
 
+    connect(&_elapsedTimer, &QTimer::timeout, this, &DialogAddressScan::on_timeout);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogAddressScan::on_modbusReply);
 
     clearTableView();
@@ -226,8 +230,8 @@ void DialogAddressScan::on_awake()
 ///
 void DialogAddressScan::on_timeout()
 {
-    if(_scanning)
-        sendReadRequest();
+    const auto elapsed = QDateTime::fromSecsSinceEpoch(_scanTime++).toUTC().toString("hh:mm:ss");
+    ui->labelElapsed->setText(elapsed);
 }
 
 ///
@@ -235,7 +239,6 @@ void DialogAddressScan::on_timeout()
 ///
 void DialogAddressScan::on_lineEditStartAddress_valueChanged(const QVariant&)
 {
-
 }
 
 ///
@@ -243,7 +246,6 @@ void DialogAddressScan::on_lineEditStartAddress_valueChanged(const QVariant&)
 ///
 void DialogAddressScan::on_lineEditLength_valueChanged(const QVariant&)
 {
-
 }
 
 ///
@@ -314,13 +316,14 @@ void DialogAddressScan::on_pushButtonScan_clicked()
 void DialogAddressScan::startScan()
 {
     _scanning = true;
-    _requestCount = 0;
 
     clearTableView();
     clearLogView();
-    ui->progressBar->setValue(0);
+    clearScanTime();
+    clearProgress();
 
     sendReadRequest();
+    _elapsedTimer.start(1000);
 }
 
 ///
@@ -329,6 +332,7 @@ void DialogAddressScan::startScan()
 void DialogAddressScan::stopScan()
 {
     _scanning = false;
+    _elapsedTimer.stop();
 }
 
 ///
@@ -339,7 +343,8 @@ void DialogAddressScan::sendReadRequest()
     const auto deviceId = ui->lineEditSlaveAddress->value<int>();
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
-    _modbusClient.sendReadRequest(pointType, pointAddress - 1 + _requestCount++, 1, deviceId, 0);
+    const auto address = pointAddress - 1 + _requestCount++;
+    _modbusClient.sendReadRequest(pointType, address, 1, deviceId, 0);
 }
 
 ///
@@ -367,6 +372,24 @@ void DialogAddressScan::clearTableView()
 void DialogAddressScan::clearLogView()
 {
     ui->plainTextEdit->clear();
+}
+
+///
+/// \brief DialogAddressScan::clearScanTime
+///
+void DialogAddressScan::clearScanTime()
+{
+    _scanTime = 0;
+    ui->labelElapsed->setText("00:00:00");
+}
+
+///
+/// \brief DialogAddressScan::clearProgress
+///
+void DialogAddressScan::clearProgress()
+{
+    _requestCount = 0;
+    ui->progressBar->setValue(0);
 }
 
 ///

@@ -2,6 +2,7 @@
 #define DIALOGADDRESSSCAN_H
 
 #include <QDialog>
+#include <QTimer>
 #include <QAbstractTableModel>
 #include "modbusdataunit.h"
 #include "modbusclient.h"
@@ -63,6 +64,8 @@ private:
 
     void clearTableView();
     void clearLogView();
+    void clearScanTime();
+    void clearProgress();
 
     void updateTableView(int pointAddress, quint16 value);
     void updateLogView(int pointAddress, const QString& status);
@@ -73,7 +76,9 @@ private:
 private:
     int _requestCount = 0;
     bool _scanning = false;
+    quint64 _scanTime = 0;
     ModbusClient& _modbusClient;
+    QTimer _elapsedTimer;
     QSharedPointer<TableViewItemModel> _viewModel;
 };
 

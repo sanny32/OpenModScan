@@ -39,7 +39,7 @@ QString formatAddress(QModbusDataUnit::RegisterType pointType, int address)
 /// \param columns
 /// \param parent
 ///
-TableViewItemModel::TableViewItemModel(const QModbusDataUnit& data, int columns, QObject* parent)
+TableViewItemModel::TableViewItemModel(const ModbusDataUnit& data, int columns, QObject* parent)
     : QAbstractTableModel(parent)
     ,_columns(columns)
     ,_data(data)
@@ -77,22 +77,24 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    const auto parentWidget = qobject_cast<QWidget*>(parent());
+    const auto idx = _data.startAddress() + index.row() * _columns + index.column();
     switch(role)
     {
         case Qt::ToolTipRole:
-            return formatAddress(_data.registerType(), _data.startAddress() + index.row() * _columns + index.column());
+            return formatAddress(_data.registerType(), idx);
 
         case Qt::DisplayRole:
-        {
-            const auto idx = _data.startAddress() + index.row() * _columns + index.column();
-            return QString::number(_data.value(idx));
-        }
+            return _data.hasValue(idx) ? QString::number(_data.value(idx)) : "-";
 
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
 
         case Qt::BackgroundRole:
-        break;
+            return _data.hasValue(idx) ? QVariant() : parentWidget->palette().color(QPalette::Disabled, QPalette::Base);
+
+        case Qt::UserRole:
+            return idx;
     }
 
     return QVariant();
@@ -115,6 +117,7 @@ bool TableViewItemModel::setData(const QModelIndex &index, const QVariant &value
     const auto idx = _data.startAddress() + index.row() * _columns + index.column();
     _data.setValue(idx, value.toUInt());
 
+    emit dataChanged(index, index, QList<int>() << Qt::DisplayRole);
     return true;
 }
 
@@ -127,28 +130,32 @@ bool TableViewItemModel::setData(const QModelIndex &index, const QVariant &value
 ///
 QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (section < 0 || role != Qt::DisplayRole)
+    if (section < 0)
     {
-        return QAbstractTableModel::headerData(section, orientation, role);
+        return QVariant();
     }
 
-
-    switch(orientation)
+    switch(role)
     {
-        case Qt::Horizontal:
-            return QString("+%1").arg(section);
+        case Qt::DisplayRole:
+            switch(orientation)
+            {
+                case Qt::Horizontal:
+                    return QString("+%1").arg(section);
 
-        case Qt::Vertical:
-        {
-            const auto length = _data.valueCount();
-            const auto pointAddress = _data.startAddress();
-            const auto addressFrom = QString("%1").arg(pointAddress + section * _columns, 5, 10, QLatin1Char('0'));
-            const auto addressTo = QString("%1").arg(pointAddress + qMin(length - 1, (section + 1) * _columns - 1), 5, 10, QLatin1Char('0'));
-            return QString("%1-%2").arg(addressFrom, addressTo);
-        }
+                case Qt::Vertical:
+                {
+                    const auto length = _data.valueCount();
+                    const auto pointAddress = _data.startAddress();
+                    const auto addressFrom = QString("%1").arg(pointAddress + section * _columns, 5, 10, QLatin1Char('0'));
+                    const auto addressTo = QString("%1").arg(pointAddress + qMin(length - 1, (section + 1) * _columns - 1), 5, 10, QLatin1Char('0'));
+                    return QString("%1-%2").arg(addressFrom, addressTo);
+                }
+            }
+        break;
     }
 
-    return QAbstractTableModel::headerData(section, orientation, role);
+    return QVariant();
 }
 
 ///
@@ -168,19 +175,22 @@ Qt::ItemFlags TableViewItemModel::flags(const QModelIndex &index) const
 
 ///
 /// \brief DialogAddressScan::DialogAddressScan
+/// \param dd
 /// \param client
 /// \param parent
 ///
-DialogAddressScan::DialogAddressScan(ModbusClient& client, QWidget *parent)
+DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogAddressScan)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
+    ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditStartAddress->setPaddingZeroes(true);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditLength->setValue(10);
+    ui->lineEditSlaveAddress->setValue(dd.DeviceId);
+    ui->lineEditLength->setValue(999);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
@@ -269,27 +279,18 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     const int progress = 100.0 * _requestCount / length;
     ui->progressBar->setValue(progress);
 
-    const auto result = reply->result();
-    if (reply->error() == QModbusDevice::NoError)
-    {
-        const auto address = result.startAddress() + 1;
-        updateTableView(address, result.value(0));
-        updateLogView(address, tr("OK"));
-    }
-    else
-    {
-        const auto data = reply->property("RequestData").value<QModbusDataUnit>();
-        updateLogView(data.startAddress() + 1, tr("FAILED"));
-    }
+    const auto hasError = (reply->error() != QModbusDevice::NoError);
+    const auto address = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + 1;
 
-    if(_requestCount == length)
-    {
+    if (!hasError)
+        updateTableView(address, reply->result().value(0));
+
+    updateLogView(address, hasError ? tr("FAILED"): tr("OK"));
+
+    if(length == _requestCount)
         stopScan();
-    }
     else
-    {
         sendReadRequest();
-    }
 }
 
 ///
@@ -346,46 +347,18 @@ void DialogAddressScan::sendReadRequest()
 ///
 void DialogAddressScan::clearTableView()
 {
-    /*const int columns = 8;
-    const auto length = ui->lineEditLength->value<int>();
-    const auto pointAddress = ui->lineEditStartAddress->value<int>();
-
-    ui->tableWidget->clear();
-    ui->tableWidget->setColumnCount(columns);
-    ui->tableWidget->setRowCount(qCeil(length / (double)columns));
-
-    for(int i = 0; i < ui->tableWidget->columnCount(); i++)
-    {
-        const auto text = QString("+%1").arg(i);
-        ui->tableWidget->setHorizontalHeaderItem(i, new QTableWidgetItem(text));
-    }
-
-    for(int i = 0; i < ui->tableWidget->rowCount(); i++)
-    {
-        const auto addressFrom = QString("%1").arg(pointAddress + i * columns, 5, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(pointAddress + qMin(length - 1, (i + 1) * columns - 1), 5, 10, QLatin1Char('0'));
-        ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
-
-        for(int j = 0; j < ui->tableWidget->columnCount(); j++)
-        {
-            ui->tableWidget->setCellWidget(i, j, createLineEdit(pointAddress + i * columns + j));
-        }
-    }
-    ui->tableWidget->resizeColumnsToContents();
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    */
-
     const auto length = ui->lineEditLength->value<int>();
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
 
-    QModbusDataUnit data(pointType, pointAddress, length);
+    ModbusDataUnit data(pointType, pointAddress, length);
     _viewModel = QSharedPointer<TableViewItemModel>(new TableViewItemModel(data, 8, this));
     ui->tableView->setModel(_viewModel.get());
 
     ui->tableView->resizeColumnsToContents();
     ui->tableView->horizontalHeader()->setMinimumSectionSize(80);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
 
 ///
@@ -403,19 +376,19 @@ void DialogAddressScan::clearLogView()
 ///
 void DialogAddressScan::updateTableView(int pointAddress, quint16 value)
 {
-    /*for(int i = 0; i < ui->tableWidget->rowCount(); i++)
+    if(!_viewModel) return;
+    for(int i = 0; i < _viewModel->rowCount(); i++)
     {
-        for(int j = 0; j < ui->tableWidget->columnCount(); j++)
+        for(int j = 0; j < _viewModel->columnCount(); j++)
         {
-            auto lineEdit = (QLineEdit*)ui->tableWidget->cellWidget(i, j);
-            if(lineEdit->property("Address").toInt() == pointAddress)
+            const auto index = _viewModel->index(i, j);
+            if(_viewModel->data(index, Qt::UserRole).toInt() == pointAddress)
             {
-                lineEdit->setEnabled(true);
-                lineEdit->setReadOnly(true);
-                lineEdit->setText(QString::number(value));
+                _viewModel->setData(index, value, Qt::DisplayRole);
+                return;
             }
         }
-    }*/
+    }
 }
 
 ///

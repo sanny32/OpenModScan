@@ -599,7 +599,10 @@ void MainWindow::on_actionUserMsg_triggered()
 ///
 void MainWindow::on_actionAddressScan_triggered()
 {
-    DialogAddressScan dlg(_modbusClient, this);
+    auto frm = currentMdiChild();
+    const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
+
+    DialogAddressScan dlg(dd, _modbusClient, this);
     dlg.exec();
 }
 

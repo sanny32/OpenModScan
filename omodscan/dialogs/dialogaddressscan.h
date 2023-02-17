@@ -3,7 +3,9 @@
 
 #include <QDialog>
 #include <QAbstractTableModel>
+#include "modbusdataunit.h"
 #include "modbusclient.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class DialogAddressScan;
@@ -17,7 +19,7 @@ class TableViewItemModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit TableViewItemModel(const QModbusDataUnit& data, int columns, QObject* parent = nullptr);
+    explicit TableViewItemModel(const ModbusDataUnit& data, int columns, QObject* parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -28,7 +30,7 @@ public:
 
 private:
     int _columns;
-    QModbusDataUnit _data;
+    ModbusDataUnit _data;
 };
 
 
@@ -40,7 +42,7 @@ class DialogAddressScan : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogAddressScan(ModbusClient& client, QWidget *parent = nullptr);
+    explicit DialogAddressScan(const DisplayDefinition& dd, ModbusClient& client, QWidget *parent = nullptr);
     ~DialogAddressScan();
 
 private slots:

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTimer>
+#include <QPrinter>
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 #include "modbusdataunit.h"
@@ -45,6 +46,7 @@ struct LogViewItem
     bool IsRequest = false;
     bool IsValid = false;
 };
+Q_DECLARE_METATYPE(LogViewItem)
 
 ///
 /// \brief The LogViewItemModel class
@@ -89,7 +91,32 @@ private:
     bool _showValid;
 };
 
+///
+/// \brief The PdfExporter class
+///
+class PdfExporter : public QObject
+{
+    Q_OBJECT
 
+public:
+    explicit PdfExporter(QAbstractTableModel* model, const DisplayDefinition& dd);
+    void exportPdf(const QString& filename);
+
+private:
+    void calcTable(QPainter& painter);
+    void paintPageHeader(int& yPos, QPainter& painter);
+
+private:
+    int _rowHeight = 0;
+    int _colWidth = 60;
+    int _headerWidth = 0;
+    const int _cy = 4;
+    const int _cx = 10;
+    QRect _pageRect;
+    QAbstractTableModel* _model;
+    DisplayDefinition _displayDefs;
+    QSharedPointer<QPrinter> _printer;
+};
 
 ///
 /// \brief The DialogAddressScan class
@@ -113,6 +140,7 @@ private slots:
     void on_comboBoxPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
     void on_checkBoxShowValid_toggled(bool);
     void on_pushButtonScan_clicked();
+    void on_pushButtonExport_clicked();
 
 private:
     void startScan();
@@ -131,12 +159,15 @@ private:
     void updateLogView(const QModbusRequest& request);
     void updateLogView(const QModbusReply* reply);
 
+    void exportPdf(const QString& filename);
+
 private:
     Ui::DialogAddressScan *ui;
 
 private:
     int _requestCount = 0;
     bool _scanning = false;
+    bool _finished = false;
     quint64 _scanTime = 0;
     QTimer _scanTimer;
     ModbusClient& _modbusClient;

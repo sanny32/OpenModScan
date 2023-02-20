@@ -10,6 +10,7 @@
     #include <QModbusRtuSerialClient>
 #endif
 
+
 ///
 /// \brief ModbusClient::ModbusClient
 /// \param parent

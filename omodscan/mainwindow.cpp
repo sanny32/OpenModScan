@@ -252,7 +252,7 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     openFile(filename);
@@ -291,7 +291,7 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), "All files (*)");
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     frm->setFilename(filename);
@@ -602,8 +602,9 @@ void MainWindow::on_actionAddressScan_triggered()
     auto frm = currentMdiChild();
     const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
 
-    DialogAddressScan dlg(dd, _modbusClient, this);
-    dlg.exec();
+    auto dlg = new DialogAddressScan(dd, _modbusClient);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
 }
 
 ///

@@ -12,7 +12,6 @@ public:
     ModbusDataUnit() = default;
     explicit ModbusDataUnit(RegisterType type);
     explicit ModbusDataUnit(RegisterType type, int newStartAddress, quint16 newValueCount);
-    explicit ModbusDataUnit(RegisterType type, int newStartAddress, const QList<quint16> &newValues);
 
     bool hasValue(qsizetype index) const;
     void setValue(qsizetype index, quint16 newValue);

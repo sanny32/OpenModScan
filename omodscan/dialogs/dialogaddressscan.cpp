@@ -1,5 +1,6 @@
-#include <QDateTime>
-#include <QAbstractEventDispatcher>
+#include <QtCore>
+#include <QtWidgets>
+#include <QtPrintSupport>
 #include "modbuslimits.h"
 #include "dialogaddressscan.h"
 #include "ui_dialogaddressscan.h"
@@ -118,7 +119,7 @@ bool TableViewItemModel::setData(const QModelIndex &index, const QVariant &value
     const auto idx = index.row() * _columns + index.column();
     _data.setValue(idx, value.toUInt());
 
-    emit dataChanged(index, index, QList<int>() << Qt::DisplayRole);
+    emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
     return true;
 }
 
@@ -147,10 +148,11 @@ QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation
                 case Qt::Vertical:
                 {
                     const auto length = _data.valueCount();
+                    const auto pointType = _data.registerType();
                     const auto pointAddress = _data.startAddress();
-                    const auto addressFrom = QString("%1").arg(pointAddress + section * _columns, 5, 10, QLatin1Char('0'));
-                    const auto addressTo = QString("%1").arg(pointAddress + qMin(length - 1, (section + 1) * _columns - 1), 5, 10, QLatin1Char('0'));
-                    return QString("%1-%2").arg(addressFrom, addressTo);
+                    const auto addressFrom = pointAddress + section * _columns;
+                    const auto addressTo = pointAddress + qMin<quint16>(length - 1, (section + 1) * _columns - 1);
+                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom), formatAddress(pointType, addressTo));
                 }
             }
         break;
@@ -264,6 +266,11 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ,_modbusClient(client)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::Dialog |
+                   Qt::WindowCloseButtonHint |
+                   Qt::WindowMaximizeButtonHint |
+                   Qt::WindowMinimizeButtonHint);
+
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditStartAddress->setPaddingZeroes(true);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange());
@@ -271,7 +278,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ui->lineEditLength->setInputRange(1, 65530);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
-    ui->lineEditLength->setValue(999);
+    ui->lineEditLength->setValue(100);
     ui->tabWidget->setCurrentIndex(0);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
@@ -301,6 +308,7 @@ void DialogAddressScan::on_awake()
     ui->lineEditLength->setEnabled(!_scanning);
     ui->lineEditSlaveAddress->setEnabled(!_scanning);
     ui->comboBoxPointType->setEnabled(!_scanning);
+    ui->pushButtonExport->setEnabled(_finished);
     ui->progressBar->setVisible(_scanning);
     ui->pushButtonScan->setText(_scanning ? tr("Stop") : tr("Scan"));
 }
@@ -386,11 +394,10 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     }
 
     updateProgress();
+    updateLogView(reply);
 
     if (reply->error() == QModbusDevice::NoError)
         updateTableView(reply->result().startAddress() + 1, reply->result().value(0));
-
-    updateLogView(reply);
 
     if(ui->lineEditLength->value<int>() == _requestCount)
         stopScan();
@@ -404,13 +411,20 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
 void DialogAddressScan::on_pushButtonScan_clicked()
 {
     if(!_scanning)
-    {
         startScan();
-    }
     else
-    {
         stopScan();
-    }
+}
+
+///
+/// \brief DialogAddressScan::on_pushButtonExport_clicked
+///
+void DialogAddressScan::on_pushButtonExport_clicked()
+{
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), windowTitle(), tr("Pdf files (*.pdf)"));
+    if(filename.isEmpty()) return;
+
+    exportPdf(filename);
 }
 
 ///
@@ -418,7 +432,11 @@ void DialogAddressScan::on_pushButtonScan_clicked()
 ///
 void DialogAddressScan::startScan()
 {
+    if(_scanning)
+        return;
+
     _scanning = true;
+    _finished = false;
 
     clearTableView();
     clearLogView();
@@ -434,7 +452,11 @@ void DialogAddressScan::startScan()
 ///
 void DialogAddressScan::stopScan()
 {
+    if(!_scanning)
+        return;
+
     _scanning = false;
+    _finished = true;
     _scanTimer.stop();
 }
 
@@ -447,7 +469,10 @@ void DialogAddressScan::sendReadRequest()
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
     const auto address = pointAddress - 1 + _requestCount++;
-    _modbusClient.sendReadRequest(pointType, address, 1, deviceId, 0);
+    if(address >= ModbusLimits::addressRange().to())
+        stopScan();
+    else
+        _modbusClient.sendReadRequest(pointType, address, 1, deviceId, 0);
 }
 
 ///
@@ -460,7 +485,7 @@ void DialogAddressScan::clearTableView()
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
 
     ModbusDataUnit data(pointType, pointAddress, length);
-    _viewModel = QSharedPointer<TableViewItemModel>(new TableViewItemModel(data, 8, this));
+    _viewModel = QSharedPointer<TableViewItemModel>(new TableViewItemModel(data, 10, this));
     ui->tableView->setModel(_viewModel.get());
 
     ui->tableView->resizeColumnsToContents();
@@ -595,4 +620,288 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
     _logModel->update();
 
     ui->logView->scrollTo(_proxyLogModel->index(_logItems.size() - 1, 0), QAbstractItemView::PositionAtBottom);
+}
+
+///
+/// \brief DialogAddressScan::exportPdf
+/// \param filename
+///
+void DialogAddressScan::exportPdf(const QString& filename)
+{
+    DisplayDefinition dd;
+    dd.DeviceId = ui->lineEditSlaveAddress->value<int>();
+    dd.PointAddress = ui->lineEditStartAddress->value<int>();
+    dd.PointType = ui->comboBoxPointType->currentPointType();
+    dd.Length = ui->lineEditLength->value<int>();
+
+    PdfExporter exporter(_viewModel.get(), dd);
+    exporter.exportPdf(filename);
+}
+
+///
+/// \brief DialogAddressScan::paintPageHeader
+/// \param rc
+/// \param painter
+///
+int DialogAddressScan::paintPageHeader(const QRect& rc, QPainter& painter)
+{
+    const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
+    auto rcTime = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextSingleLine, textTime);
+
+    const auto textSlaveAddrPtTp = QString(tr("Device Id: %1\nPoint Type: [%2]")).arg(ui->lineEditSlaveAddress->text(), ui->comboBoxPointType->currentText());
+    auto rcSlaveAddrPtTp = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextWordWrap, textSlaveAddrPtTp);
+
+    const auto textAddrLen = QString(tr("Start Address: %1\nLength: %2")).arg(ui->lineEditStartAddress->text(), ui->lineEditLength->text());
+    auto rcAddrLen = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextWordWrap, textAddrLen);
+
+    rcTime.moveTopRight({ rc.right(), 10 });
+    rcSlaveAddrPtTp.moveLeft(rcAddrLen.right() + 40);
+
+    painter.drawText(rcTime, Qt::TextSingleLine, textTime);
+    painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
+    painter.drawText(rcSlaveAddrPtTp, Qt::TextWordWrap, textSlaveAddrPtTp);
+
+    return qMax(rcAddrLen.height(), rcSlaveAddrPtTp.height());
+}
+
+///
+/// \brief DialogAddressScan::printTable
+/// \param rc
+/// \param printer
+///
+void DialogAddressScan::print(QPrinter& printer)
+{
+    auto layout = printer.pageLayout();
+    const auto resolution = printer.resolution();
+    auto pageRect = layout.paintRectPixels(resolution);
+
+    const auto margin = qMax(pageRect.width(), pageRect.height()) * 0.05;
+    layout.setMargins(QMargins(margin, margin, margin, margin));
+    pageRect.adjust(layout.margins().left(), layout.margins().top(), -layout.margins().right(), -layout.margins().bottom());
+
+    QPainter painter(&printer);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing);
+
+    const auto rows = _viewModel->rowCount();
+    const auto cols = _viewModel->columnCount();
+    const int cy = 4;
+    const int cx = 10;
+
+    int rowHeight = 0;
+    int colWidth = 70;
+    int headerWidth = 0;
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            if(j == 0)
+            {
+                const auto text = _viewModel->headerData(i, Qt::Vertical, Qt::DisplayRole).toString();
+                const auto rcText = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextSingleLine, text);
+                headerWidth = qMax(headerWidth, rcText.width() + cx);
+            }
+
+            const auto text = _viewModel->data(_viewModel->index(i, j), Qt::DisplayRole).toString();
+            const auto rcText = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextSingleLine, text);
+
+            colWidth = qMax(colWidth, rcText.width() + cx);
+            rowHeight = qMax(rowHeight, rcText.height());
+        }
+    }
+
+    /* paint table header */
+    paintTableHeader(QRect(rc.left(), rc.top(), rc.width(), rowHeight + cy), headerWidth, colWidth, painter);
+
+    auto rcPaint = rc;
+    int ypos = rc.top() + rowHeight + cy;
+    for(int i = 0; i < rows; i++)
+    {
+        if(ypos > rc.bottom())
+        {
+            if(!printer.newPage())
+                break;
+
+            paintPageHeader(rc, painter);
+            paintTableHeader(QRect(rc.left(), rc.top(), rc.width(), rowHeight + cy), headerWidth, colWidth, painter);
+            ypos = rc.top() + rowHeight + cy;
+        }
+
+        rcPaint.setTop(ypos);
+        paintTableRow(i, rcPaint, headerWidth, colWidth, painter);
+
+        ypos += rowHeight;
+    }
+
+    /* draw vertical line */
+    {
+        auto rcPaint = rc;
+        rcPaint.setLeft(rc.left() + headerWidth - cy);
+        rcPaint.setBottom(rc.top() + rowHeight * (rows + 1) + cy);
+        painter.drawLine(rcPaint.topLeft(), rcPaint.bottomLeft());
+    }
+
+}
+
+///
+/// \brief DialogAddressScan::startPage
+/// \param rc
+/// \param painter
+///
+void DialogAddressScan::startPage(const QRect& rc, QPainter& painter)
+{
+    QRect pageRect = rc;
+    const auto height = paintPageHeader(pageRect, painter);
+    pageRect.setTop(pageRect.top() + height + 20);
+
+
+}
+
+///
+/// \brief DialogAddressScan::endPage
+/// \param rc
+/// \param painter
+///
+void DialogAddressScan::endPage(const QRect& rc, int rows, int headerWidth, int rowHeight, QPainter& painter)
+{
+    auto rcPaint = rc;
+    rcPaint.setLeft(rc.left() + headerWidth - 4);
+    rcPaint.setBottom(rc.top() + rowHeight * (rows + 1) + 4);
+    painter.drawLine(rcPaint.topLeft(), rcPaint.bottomLeft());
+}
+
+
+///
+/// \brief DialogAddressScan::paintTableHeader
+/// \param rc
+/// \param headerWidth
+/// \param colWidth
+/// \param painter
+///
+void DialogAddressScan::paintTableHeader(const QRect& rc, int headerWidth, int colWidth, QPainter& painter)
+{
+    for(int j = 0; j < _viewModel->columnCount(); j++)
+    {
+        auto rcPaint = rc;
+        rcPaint.setLeft(rc.left() + headerWidth + colWidth * j);
+        painter.drawText(rcPaint, Qt::TextSingleLine, _viewModel->headerData(j, Qt::Horizontal, Qt::DisplayRole).toString());
+    }
+
+    painter.drawLine(rc.bottomLeft(), rc.bottomRight());
+}
+
+///
+/// \brief DialogAddressScan::paintTableRow
+/// \param row
+/// \param rc
+/// \param headerWidth
+/// \param colWidth
+/// \param painter
+///
+void DialogAddressScan::paintTableRow(int row, const QRect& rc, int headerWidth, int colWidth, QPainter& painter)
+{
+    for(int j = 0; j < _viewModel->columnCount(); j++)
+    {
+        if(j == 0)
+              painter.drawText(rc, Qt::TextSingleLine, _viewModel->headerData(row, Qt::Vertical, Qt::DisplayRole).toString());
+
+        auto rcPaint = rc;
+        rcPaint.setLeft(rc.left() + headerWidth + colWidth * j);
+        painter.drawText(rcPaint, Qt::TextSingleLine, _viewModel->data(_viewModel->index(row, j), Qt::DisplayRole).toString());
+    }
+}
+
+///
+/// \brief PdfExporter::PdfExporter
+/// \param model
+/// \param dd
+///
+PdfExporter::PdfExporter(QAbstractTableModel* model, const DisplayDefinition& dd)
+    :_model(model)
+    ,_displayDefs(dd)
+{
+    _printer = QSharedPointer<QPrinter>(new QPrinter(QPrinter::PrinterResolution));
+    _printer->setOutputFormat(QPrinter::PdfFormat);
+    _printer->setPageSize(QPageSize::A4);
+    _printer->setPageOrientation(QPageLayout::Landscape);
+
+    auto layout = _printer->pageLayout();
+    const auto resolution = _printer->resolution();
+    _pageRect = layout.paintRectPixels(resolution);
+
+    const auto margin = qMax(_pageRect.width(), _pageRect.height()) * 0.05;
+    layout.setMargins(QMargins(margin, margin, margin, margin));
+    _pageRect.adjust(layout.margins().left(), layout.margins().top(), -layout.margins().right(), -layout.margins().bottom());
+
+    _yPos = _pageRect.top();
+}
+
+///
+/// \brief PdfExporter::exportPdf
+/// \param filename
+///
+void PdfExporter::exportPdf(const QString& filename)
+{
+     _printer->setOutputFileName(filename);
+
+     QPainter painter(_printer.get());
+     painter.setRenderHint(QPainter::Antialiasing);
+     painter.setRenderHint(QPainter::TextAntialiasing);
+
+     calcTable(painter);
+}
+
+///
+/// \brief PdfExporter::calcTable
+///
+void PdfExporter::calcTable(QPainter& painter)
+{
+    const auto rc = _pageRect;
+    const auto rows = _model->rowCount();
+    const auto cols = _model->columnCount();
+
+    for(int i = 0; i < rows; i++)
+    {
+        for(int j = 0; j < cols; j++)
+        {
+            if(j == 0)
+            {
+                const auto text = _model->headerData(i, Qt::Vertical, Qt::DisplayRole).toString();
+                const auto rcText = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextSingleLine, text);
+                _headerWidth = qMax(_headerWidth, rcText.width() + _cx);
+            }
+
+            const auto text = _model->data(_model->index(i, j), Qt::DisplayRole).toString();
+            const auto rcText = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextSingleLine, text);
+
+            _colWidth = qMax(_colWidth, rcText.width() + _cx);
+            _rowHeight = qMax(_rowHeight, rcText.height());
+        }
+    }
+}
+
+///
+/// \brief PdfExporter::paintPageHeader
+/// \param yPos
+/// \param painter
+///
+void PdfExporter::paintPageHeader(int& yPos, QPainter& painter)
+{
+    const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
+    auto rcTime = painter.boundingRect(_pageRect, Qt::TextSingleLine, textTime);
+
+    const auto textSlaveAddrPtTp = QString(tr("Device Id: %1\nPoint Type: [%2]")).arg(_displayDefs.DeviceId, _displayDefs.PointType);
+    auto rcSlaveAddrPtTp = painter.boundingRect(_pageRect, Qt::TextWordWrap, textSlaveAddrPtTp);
+
+    const auto textAddrLen = QString(tr("Start Address: %1\nLength: %2")).arg(ui->lineEditStartAddress->text(), ui->lineEditLength->text());
+    auto rcAddrLen = painter.boundingRect(_pageRect, Qt::TextWordWrap, textAddrLen);
+
+    rcTime.moveTopRight({ _pageRect.right(), 10 });
+    rcSlaveAddrPtTp.moveLeft(rcAddrLen.right() + 40);
+
+    painter.drawText(rcTime, Qt::TextSingleLine, textTime);
+    painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
+    painter.drawText(rcSlaveAddrPtTp, Qt::TextWordWrap, textSlaveAddrPtTp);
+
+    yPos =  qMax(rcAddrLen.height(), rcSlaveAddrPtTp.height());
 }

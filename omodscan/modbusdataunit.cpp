@@ -22,19 +22,6 @@ ModbusDataUnit::ModbusDataUnit(RegisterType type, int newStartAddress, quint16 n
 }
 
 ///
-/// \brief ModbusDataUnit::ModbusDataUnit
-/// \param type
-/// \param newStartAddress
-/// \param newValues
-///
-ModbusDataUnit::ModbusDataUnit(RegisterType type, int newStartAddress, const QList<quint16> &newValues)
-    : QModbusDataUnit(type, newStartAddress, newValues)
-{
-    _hasValues.resize(newValues.count());
-    for(auto&& hv : _hasValues) hv = true;
-}
-
-///
 /// \brief ModbusDataUnit::hasValue
 /// \param index
 /// \return

@@ -119,27 +119,17 @@ bool TableViewItemModel::setData(const QModelIndex &index, const QVariant &value
     const auto idx = index.row() * _columns + index.column();
     if(value.userType() == qMetaTypeId<QVector<quint16>>())
     {
-        int row = index.row();
-        int col = index.column();
         const auto values = value.value<QVector<quint16>>();
         for(int i = 0; i < values.size(); i++)
-        {
-            col++;
-            if(col > _columns - 1)
-            {
-                col = 0;
-                row++;
-            }
             _data.setValue(idx + i, values.at(i));
-        }
-        emit dataChanged(index, this->index(row, col), QVector<int>() << Qt::DisplayRole);
+
+        emit dataChanged(index, this->index(rowCount() - 1, columnCount() - 1), QVector<int>() << Qt::DisplayRole);
     }
     else
     {
         _data.setValue(idx, value.toUInt());
         emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
     }
-
 
     return true;
 }
@@ -752,7 +742,7 @@ void PdfExporter::paintPageHeader(int& yPos, QPainter& painter)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(_pageRect, Qt::TextSingleLine, textTime);
 
-    const auto text1 = QString(tr("Device Id: %1   Length: %2\nPoint Type: [%3]")).arg(_deviceId, _length, _pointType);
+    const auto text1 = QString(tr("Device Id: %1\tLength: %2\nPoint Type: [%3]")).arg(_deviceId, _length, _pointType);
     auto rc1 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text1);
 
     const auto text2 = QString(tr("Start Address: %1\nRegisters on Query: %2")).arg(_startAddress, _regsOnQuery);

@@ -101,7 +101,8 @@ public:
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
-                         const QString& pointType);
+                         const QString& pointType,
+                         QObject* parent = nullptr);
     void exportPdf(const QString& filename);
 
 private:
@@ -145,10 +146,6 @@ private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& data);
-    void on_lineEditStartAddress_valueChanged(const QVariant&);
-    void on_lineEditLength_valueChanged(const QVariant&);
-    void on_lineEditSlaveAddress_valueChanged(const QVariant&);
-    void on_comboBoxPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
     void on_checkBoxShowValid_toggled(bool);
     void on_pushButtonScan_clicked();
     void on_pushButtonExport_clicked();

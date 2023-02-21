@@ -278,7 +278,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ui->lineEditLength->setInputRange(1, 65530);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
-    ui->lineEditLength->setValue(499);
+    ui->lineEditLength->setValue(999);
     ui->tabWidget->setCurrentIndex(0);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
@@ -320,36 +320,6 @@ void DialogAddressScan::on_timeout()
 {
     const auto elapsed = QDateTime::fromSecsSinceEpoch(_scanTime++).toUTC().toString("hh:mm:ss");
     ui->labelElapsed->setText(elapsed);
-}
-
-///
-/// \brief DialogAddressScan::on_lineEditAddress_valueChanged
-///
-void DialogAddressScan::on_lineEditStartAddress_valueChanged(const QVariant&)
-{
-}
-
-///
-/// \brief DialogAddressScan::on_lineEditLength_valueChanged
-///
-void DialogAddressScan::on_lineEditLength_valueChanged(const QVariant&)
-{
-}
-
-///
-/// \brief DialogAddressScan::on_lineEditDeviceId_valueChanged
-///
-void DialogAddressScan::on_lineEditSlaveAddress_valueChanged(const QVariant&)
-{
-
-}
-
-///
-/// \brief DialogAddressScan::on_comboBoxModbusPointType_pointTypeChanged
-///
-void DialogAddressScan::on_comboBoxPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
-{
-
 }
 
 ///
@@ -434,6 +404,12 @@ void DialogAddressScan::startScan()
 {
     if(_scanning)
         return;
+
+    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    {
+        QMessageBox::warning(this, windowTitle(), tr("No connection to MODBUS device!"));
+        return;
+    }
 
     _scanning = true;
     _finished = false;
@@ -632,7 +608,8 @@ void DialogAddressScan::exportPdf(const QString& filename)
                          ui->lineEditStartAddress->text(),
                          ui->lineEditLength->text(),
                          ui->lineEditSlaveAddress->text(),
-                         ui->comboBoxPointType->currentText());
+                         ui->comboBoxPointType->currentText(),
+                         this);
 
     exporter.exportPdf(filename);
 }
@@ -644,13 +621,16 @@ void DialogAddressScan::exportPdf(const QString& filename)
 /// \param length
 /// \param devId
 /// \param pointType
+/// \param parent
 ///
 PdfExporter::PdfExporter(QAbstractTableModel* model,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
-                         const QString& pointType)
-    :_model(model)
+                         const QString& pointType,
+                         QObject* parent)
+    : QObject(parent)
+    ,_model(model)
     ,_startAddress(startAddress)
     ,_length(length)
     ,_deviceId(devId)
@@ -678,7 +658,16 @@ void PdfExporter::exportPdf(const QString& filename)
 {
      _printer->setOutputFileName(filename);
 
-     QPainter painter(_printer.get());
+     QPainter painter;
+     if(!painter.begin(_printer.get()))
+     {
+         auto w = qobject_cast<QWidget*>(parent());
+         Q_ASSERT(w != nullptr);
+
+         QMessageBox::warning(w, w->windowTitle(), tr("Error. Failed to write PDF file!"));
+         return;
+     }
+
      painter.setRenderHint(QPainter::Antialiasing);
      painter.setRenderHint(QPainter::TextAntialiasing);
 

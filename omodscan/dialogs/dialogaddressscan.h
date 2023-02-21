@@ -96,25 +96,33 @@ private:
 ///
 class PdfExporter : public QObject
 {
-    Q_OBJECT
-
 public:
-    explicit PdfExporter(QAbstractTableModel* model, const DisplayDefinition& dd);
+    explicit PdfExporter(QAbstractTableModel* model,
+                         const QString& startAddress,
+                         const QString& length,
+                         const QString& devId,
+                         const QString& pointType);
     void exportPdf(const QString& filename);
 
 private:
     void calcTable(QPainter& painter);
     void paintPageHeader(int& yPos, QPainter& painter);
+    void paintTableHeader(int& yPos, QPainter& painter);
+    void paintTableRow(int& yPos, QPainter& painter, int row);
+    void paintTable(int& yPos, QPainter& painter);
 
 private:
     int _rowHeight = 0;
-    int _colWidth = 60;
+    int _colWidth = 65;
     int _headerWidth = 0;
     const int _cy = 4;
     const int _cx = 10;
     QRect _pageRect;
     QAbstractTableModel* _model;
-    DisplayDefinition _displayDefs;
+    const QString _startAddress;
+    const QString _length;
+    const QString _deviceId;
+    const QString _pointType;
     QSharedPointer<QPrinter> _printer;
 };
 

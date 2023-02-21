@@ -638,7 +638,7 @@ PdfExporter::PdfExporter(QAbstractTableModel* model,
 {
     _printer = QSharedPointer<QPrinter>(new QPrinter(QPrinter::PrinterResolution));
     _printer->setOutputFormat(QPrinter::PdfFormat);
-    _printer->setPageSize(QPageSize::A4);
+    _printer->setPageSize(QPageSize(QPageSize::A4));
     _printer->setPageOrientation(QPageLayout::Landscape);
 
     auto layout = _printer->pageLayout();

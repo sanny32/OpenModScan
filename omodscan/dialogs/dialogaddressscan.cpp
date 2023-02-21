@@ -641,6 +641,7 @@ void DialogAddressScan::exportPdf(const QString& filename)
                          ui->lineEditLength->text(),
                          ui->lineEditSlaveAddress->text(),
                          ui->comboBoxPointType->currentText(),
+                         ui->spinBoxRegsOnQuery->text(),
                          this);
 
     exporter.exportPdf(filename);
@@ -660,6 +661,7 @@ PdfExporter::PdfExporter(QAbstractTableModel* model,
                          const QString& length,
                          const QString& devId,
                          const QString& pointType,
+                         const QString& regsOnQuery,
                          QObject* parent)
     : QObject(parent)
     ,_model(model)
@@ -667,6 +669,7 @@ PdfExporter::PdfExporter(QAbstractTableModel* model,
     ,_length(length)
     ,_deviceId(devId)
     ,_pointType(pointType)
+    ,_regsOnQuery(regsOnQuery)
 {
     _printer = QSharedPointer<QPrinter>(new QPrinter(QPrinter::PrinterResolution));
     _printer->setOutputFormat(QPrinter::PdfFormat);
@@ -749,20 +752,20 @@ void PdfExporter::paintPageHeader(int& yPos, QPainter& painter)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(_pageRect, Qt::TextSingleLine, textTime);
 
-    const auto textSlaveAddrPtTp = QString(tr("Device Id: %1\nPoint Type: [%2]")).arg(_deviceId, _pointType);
-    auto rcSlaveAddrPtTp = painter.boundingRect(_pageRect, Qt::TextWordWrap, textSlaveAddrPtTp);
+    const auto text1 = QString(tr("Device Id: %1   Length: %2\nPoint Type: [%3]")).arg(_deviceId, _length, _pointType);
+    auto rc1 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text1);
 
-    const auto textAddrLen = QString(tr("Start Address: %1\nLength: %2")).arg(_startAddress, _length);
-    auto rcAddrLen = painter.boundingRect(_pageRect, Qt::TextWordWrap, textAddrLen);
+    const auto text2 = QString(tr("Start Address: %1\nRegisters on Query: %2")).arg(_startAddress, _regsOnQuery);
+    auto rc2 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text2);
 
     rcTime.moveTopRight({ _pageRect.right(), 10 });
-    rcSlaveAddrPtTp.moveLeft(rcAddrLen.right() + 40);
+    rc1.moveLeft(rc2.right() + 40);
 
     painter.drawText(rcTime, Qt::TextSingleLine, textTime);
-    painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
-    painter.drawText(rcSlaveAddrPtTp, Qt::TextWordWrap, textSlaveAddrPtTp);
+    painter.drawText(rc2, Qt::TextWordWrap, text2);
+    painter.drawText(rc1, Qt::TextWordWrap, text1);
 
-    yPos += qMax(rcAddrLen.height(), rcSlaveAddrPtTp.height()) + 20;
+    yPos += qMax(rc1.height(), rc2.height()) + 20;
 }
 
 ///

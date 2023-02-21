@@ -102,6 +102,7 @@ public:
                          const QString& length,
                          const QString& devId,
                          const QString& pointType,
+                         const QString& regsOnQuery,
                          QObject* parent = nullptr);
     void exportPdf(const QString& filename);
 
@@ -127,6 +128,7 @@ private:
     const QString _length;
     const QString _deviceId;
     const QString _pointType;
+    const QString _regsOnQuery;
     QSharedPointer<QPrinter> _printer;
 };
 

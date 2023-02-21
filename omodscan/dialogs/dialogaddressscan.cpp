@@ -278,7 +278,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ui->lineEditLength->setInputRange(1, 65530);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
-    ui->lineEditLength->setValue(100);
+    ui->lineEditLength->setValue(499);
     ui->tabWidget->setCurrentIndex(0);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
@@ -745,6 +745,19 @@ void PdfExporter::paintPageHeader(int& yPos, QPainter& painter)
 }
 
 ///
+/// \brief PdfExporter::paintPageFooter
+/// \param painter
+///
+void PdfExporter::paintPageFooter(QPainter& painter)
+{
+    const auto textNumber = QString::number(_pageNumber);
+    auto rc = painter.boundingRect(_pageRect, Qt::TextSingleLine, textNumber);
+
+    rc.moveTopRight({ _pageRect.right(), _pageRect.bottom() + 10 });
+    painter.drawText(rc, Qt::TextSingleLine, textNumber);
+}
+
+///
 /// \brief PdfExporter::paintTableHeader
 /// \param yPos
 /// \param painter
@@ -806,24 +819,30 @@ void PdfExporter::paintTable(int& yPos, QPainter& painter)
 
     for(int i = 0; i < _model->rowCount(); i++)
     {
-        /*if(ypos > rc.bottom())
+        paintTableRow(yPos, painter, i);
+
+        if(yPos > rc.bottom() - _rowHeight)
         {
-            if(!printer.newPage())
+            paintPageFooter(painter);
+
+            if(!_printer->newPage())
                 break;
 
-            paintPageHeader(rc, painter);
-            paintTableHeader(QRect(rc.left(), rc.top(), rc.width(), rowHeight + cy), headerWidth, colWidth, painter);
-            ypos = rc.top() + rowHeight + cy;
-        }*/
-
-        paintTableRow(yPos, painter, i);
+            _pageNumber++;
+            yPos = _pageRect.top();
+            paintPageHeader(yPos, painter);
+            paintTableHeader(yPos, painter);
+        }
     }
 
+    if(_pageNumber > 1)
+        paintPageFooter(painter);
+
     /* draw vertical line */
-    {
+    /*{
         rc.setTop(rc.top() - _rowHeight);
         rc.setLeft(rc.left() + _headerWidth - _cy);
         rc.setBottom(rc.top() + _rowHeight * (_model->rowCount() + 1) + _cy);
         painter.drawLine(rc.topLeft(), rc.bottomLeft());
-    }
+    }*/
 }

@@ -107,6 +107,7 @@ public:
 private:
     void calcTable(QPainter& painter);
     void paintPageHeader(int& yPos, QPainter& painter);
+    void paintPageFooter(QPainter& painter);
     void paintTableHeader(int& yPos, QPainter& painter);
     void paintTableRow(int& yPos, QPainter& painter, int row);
     void paintTable(int& yPos, QPainter& painter);
@@ -115,6 +116,7 @@ private:
     int _rowHeight = 0;
     int _colWidth = 65;
     int _headerWidth = 0;
+    int _pageNumber = 1;
     const int _cy = 4;
     const int _cx = 10;
     QRect _pageRect;

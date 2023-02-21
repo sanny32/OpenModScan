@@ -230,7 +230,7 @@ QVariant LogViewItemModel::data(const QModelIndex& index, int role) const
             return item.Text;
 
         case Qt::BackgroundRole:
-            return item.IsRequest ? QVariant() : QColor(Qt::lightGray);
+            return item.IsRequest ? QVariant() : QColor(0xDCDCDC);
 
         case Qt::TextAlignmentRole:
             return Qt::AlignVCenter;

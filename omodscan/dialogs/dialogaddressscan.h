@@ -162,7 +162,7 @@ private:
     void clearProgress();
 
     void updateProgress();
-    void updateTableView(int pointAddress, quint16 value);
+    void updateTableView(int pointAddress, QVector<quint16> values);
 
     void updateLogView(const QModbusRequest& request);
     void updateLogView(const QModbusReply* reply);

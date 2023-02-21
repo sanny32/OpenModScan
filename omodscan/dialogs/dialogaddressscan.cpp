@@ -117,9 +117,30 @@ bool TableViewItemModel::setData(const QModelIndex &index, const QVariant &value
     }
 
     const auto idx = index.row() * _columns + index.column();
-    _data.setValue(idx, value.toUInt());
+    if(value.userType() == qMetaTypeId<QVector<quint16>>())
+    {
+        int row = index.row();
+        int col = index.column();
+        const auto values = value.value<QVector<quint16>>();
+        for(int i = 0; i < values.size(); i++)
+        {
+            col++;
+            if(col > _columns - 1)
+            {
+                col = 0;
+                row++;
+            }
+            _data.setValue(idx + i, values.at(i));
+        }
+        emit dataChanged(index, this->index(row, col), QVector<int>() << Qt::DisplayRole);
+    }
+    else
+    {
+        _data.setValue(idx, value.toUInt());
+        emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+    }
 
-    emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+
     return true;
 }
 
@@ -307,6 +328,7 @@ void DialogAddressScan::on_awake()
     ui->lineEditStartAddress->setEnabled(!_scanning);
     ui->lineEditLength->setEnabled(!_scanning);
     ui->lineEditSlaveAddress->setEnabled(!_scanning);
+    ui->spinBoxRegsOnQuery->setEnabled(!_scanning);
     ui->comboBoxPointType->setEnabled(!_scanning);
     ui->pushButtonExport->setEnabled(_finished);
     ui->progressBar->setVisible(_scanning);
@@ -367,9 +389,9 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     updateLogView(reply);
 
     if (reply->error() == QModbusDevice::NoError)
-        updateTableView(reply->result().startAddress() + 1, reply->result().value(0));
+        updateTableView(reply->result().startAddress() + 1, reply->result().values());
 
-    if(ui->lineEditLength->value<int>() == _requestCount)
+    if(ui->lineEditLength->value<int>() <= _requestCount)
         stopScan();
     else
         sendReadRequest();
@@ -445,11 +467,16 @@ void DialogAddressScan::sendReadRequest()
     const auto deviceId = ui->lineEditSlaveAddress->value<int>();
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
-    const auto address = pointAddress - 1 + _requestCount++;
+    const auto count = ui->spinBoxRegsOnQuery->value();
+    const auto address = pointAddress - 1 + _requestCount;
+
     if(address >= ModbusLimits::addressRange().to())
         stopScan();
     else
-        _modbusClient.sendReadRequest(pointType, address, 1, deviceId, 0);
+    {
+        _requestCount += count;
+        _modbusClient.sendReadRequest(pointType, address, count, deviceId, 0);
+    }
 }
 
 ///
@@ -514,9 +541,9 @@ void DialogAddressScan::updateProgress()
 ///
 /// \brief DialogAddressScan::updateTableView
 /// \param pointAddress
-/// \param value
+/// \param values
 ///
-void DialogAddressScan::updateTableView(int pointAddress, quint16 value)
+void DialogAddressScan::updateTableView(int pointAddress, QVector<quint16> values)
 {
     if(!_viewModel) return;
     for(int i = 0; i < _viewModel->rowCount(); i++)
@@ -526,13 +553,17 @@ void DialogAddressScan::updateTableView(int pointAddress, quint16 value)
             const auto index = _viewModel->index(i, j);
             if(_viewModel->data(index, Qt::UserRole).toInt() == pointAddress)
             {
-                _viewModel->setData(index, value, Qt::DisplayRole);
+                _viewModel->setData(index, QVariant::fromValue(values), Qt::DisplayRole);
                 return;
             }
         }
     }
 }
 
+///
+/// \brief DialogAddressScan::updateLogView
+/// \param request
+///
 void DialogAddressScan::updateLogView(const QModbusRequest& request)
 {
     const auto deviceId = ui->lineEditSlaveAddress->value<int>();

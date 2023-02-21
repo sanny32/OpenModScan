@@ -25,9 +25,6 @@
      </property>
      <item>
       <layout class="QFormLayout" name="formLayout">
-       <property name="labelAlignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
        <item row="1" column="0">
         <widget class="QLabel" name="labelStartAddress">
          <property name="text">
@@ -57,19 +54,6 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="labelRegsOnQuery">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Registers on Query: </string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
         <widget class="QSpinBox" name="spinBoxRegsOnQuery">
          <property name="sizePolicy">
@@ -92,28 +76,35 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelRegsOnQuery">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Registers on Query: </string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
-      <layout class="QFormLayout" name="formLayout_2">
-       <property name="labelAlignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
+      <layout class="QFormLayout" name="formLayout_3">
        <item row="0" column="0">
-        <widget class="QLabel" name="labelDeviceId">
-         <property name="text">
-          <string>Device Id:</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="labelDeviceId">
+           <property name="text">
+            <string>Device Id:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="labelPoinType">
-         <property name="text">
-          <string>Point Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
+       <item row="1" column="1">
         <widget class="PointTypeComboBox" name="comboBoxPointType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -123,14 +114,21 @@
          </property>
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>160</width>
            <height>25</height>
           </size>
          </property>
         </widget>
        </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelPoinType">
+         <property name="text">
+          <string>Point Type:</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <widget class="NumericLineEdit" name="lineEditSlaveAddress">
            <property name="sizePolicy">
@@ -155,6 +153,12 @@
          </item>
          <item>
           <widget class="QLabel" name="labelLength">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Length:</string>
            </property>
@@ -176,7 +180,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>60</width>
+             <width>55</width>
              <height>16777215</height>
             </size>
            </property>
@@ -428,8 +432,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>lineEditStartAddress</tabstop>
-  <tabstop>comboBoxPointType</tabstop>
   <tabstop>pushButtonScan</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>tableView</tabstop>

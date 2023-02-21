@@ -497,6 +497,7 @@ void DialogAddressScan::clearLogView()
     _logModel = QSharedPointer<LogViewItemModel>(new LogViewItemModel(_logItems, this));
     _proxyLogModel = QSharedPointer<LogViewItemProxyModel>(new LogViewItemProxyModel(this));
     _proxyLogModel->setSourceModel(_logModel.get());
+    _proxyLogModel->setShowValid(ui->checkBoxShowValid->isChecked());
     ui->logView->setModel(_proxyLogModel.get());
 }
 

@@ -391,8 +391,9 @@ void DialogAddressScan::on_pushButtonScan_clicked()
 ///
 void DialogAddressScan::on_pushButtonExport_clicked()
 {
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), windowTitle(), tr("Pdf files (*.pdf)"));
+    auto filename = QFileDialog::getSaveFileName(this, QString(), windowTitle(), tr("Pdf files (*.pdf)"));
     if(filename.isEmpty()) return;
+    if(!filename.endsWith(".pdf", Qt::CaseInsensitive)) filename += ".pdf";
 
     exportPdf(filename);
 }

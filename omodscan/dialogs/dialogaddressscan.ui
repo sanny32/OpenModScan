@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MODBUS Address Scan</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources.qrc">
+    <normaloff>:/res/omodscan.png</normaloff>:/res/omodscan.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -368,7 +372,9 @@
    <header>pointtypecombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

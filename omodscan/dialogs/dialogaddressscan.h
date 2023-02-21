@@ -111,6 +111,7 @@ private:
     void paintTableHeader(int& yPos, QPainter& painter);
     void paintTableRow(int& yPos, QPainter& painter, int row);
     void paintTable(int& yPos, QPainter& painter);
+    void paintVLine(int top, int bottom, QPainter& painter);
 
 private:
     int _rowHeight = 0;

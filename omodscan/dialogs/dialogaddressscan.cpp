@@ -823,6 +823,7 @@ void PdfExporter::paintTable(int& yPos, QPainter& painter)
 
         if(yPos > rc.bottom() - _rowHeight)
         {
+            paintVLine(rc.top() - _rowHeight, yPos + _cy, painter);
             paintPageFooter(painter);
 
             if(!_printer->newPage())
@@ -838,11 +839,21 @@ void PdfExporter::paintTable(int& yPos, QPainter& painter)
     if(_pageNumber > 1)
         paintPageFooter(painter);
 
-    /* draw vertical line */
-    /*{
-        rc.setTop(rc.top() - _rowHeight);
-        rc.setLeft(rc.left() + _headerWidth - _cy);
-        rc.setBottom(rc.top() + _rowHeight * (_model->rowCount() + 1) + _cy);
-        painter.drawLine(rc.topLeft(), rc.bottomLeft());
-    }*/
+    paintVLine(rc.top() - _rowHeight, yPos + _cy, painter);
+}
+
+///
+/// \brief PdfExporter::paintVLine
+/// \param top
+/// \param bottom
+/// \param painter
+///
+void PdfExporter::paintVLine(int top, int bottom, QPainter& painter)
+{
+    QRect rc = _pageRect;
+
+    rc.setTop(top);
+    rc.setLeft(rc.left() + _headerWidth - _cy);
+    rc.setBottom(bottom);
+    painter.drawLine(rc.topLeft(), rc.bottomLeft());
 }

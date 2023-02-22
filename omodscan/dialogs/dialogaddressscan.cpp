@@ -279,8 +279,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
                    Qt::WindowCloseButtonHint |
-                   Qt::WindowMaximizeButtonHint |
-                   Qt::WindowMinimizeButtonHint);
+                   Qt::WindowMaximizeButtonHint);
 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditStartAddress->setPaddingZeroes(true);
@@ -308,6 +307,18 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
 DialogAddressScan::~DialogAddressScan()
 {
     delete ui;
+}
+
+///
+/// \brief DialogAddressScan::changeEvent
+/// \param event
+///
+void DialogAddressScan::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
 }
 
 ///

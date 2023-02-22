@@ -602,7 +602,7 @@ void MainWindow::on_actionAddressScan_triggered()
     auto frm = currentMdiChild();
     const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
 
-    auto dlg = new DialogAddressScan(dd, _modbusClient);
+    auto dlg = new DialogAddressScan(dd, _modbusClient, this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }

@@ -143,6 +143,9 @@ public:
     explicit DialogAddressScan(const DisplayDefinition& dd, ModbusClient& client, QWidget *parent = nullptr);
     ~DialogAddressScan();
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_awake();
     void on_timeout();

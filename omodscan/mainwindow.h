@@ -64,6 +64,8 @@ private slots:
     void on_actionSwappedFP_triggered();
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
+    void on_actionLittleEndian_triggered();
+    void on_actionBigEndian_triggered();
     void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
     void on_actionPresetRegs_triggered();

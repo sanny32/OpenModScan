@@ -283,18 +283,19 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, quint16 valu
 /// \brief createHoldingRegistersDataUnit
 /// \param newStartAddress
 /// \param value
+/// \param order
 /// \param swapped
 /// \return
 ///
-QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value, bool swapped)
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value, ByteOrder order, bool swapped)
 {
     QVector<quint16> values(2);
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
 
     if(swapped)
-        breakFloat(value, values[1], values[0]);
+        breakFloat(value, values[1], values[0], order);
     else
-        breakFloat(value, values[0], values[1]);
+        breakFloat(value, values[0], values[1], order);
 
     data.setValues(values);
     return data;
@@ -304,18 +305,19 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value,
 /// \brief createHoldingRegistersDataUnit
 /// \param newStartAddress
 /// \param value
+/// \param order
 /// \param swapped
 /// \return
 ///
-QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value, bool swapped)
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value, ByteOrder order, bool swapped)
 {
     QVector<quint16> values(4);
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 4);
 
     if(swapped)
-        breakDouble(value, values[3], values[2], values[1], values[0]);
+        breakDouble(value, values[3], values[2], values[1], values[0], order);
     else
-        breakDouble(value, values[0], values[1], values[2], values[3]);
+        breakDouble(value, values[0], values[1], values[2], values[3], order);
 
     data.setValues(values);
     return data;
@@ -378,16 +380,16 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toUInt());
                     break;
                     case DataDisplayMode::FloatingPt:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toFloat(), false);
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toFloat(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedFP:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toFloat(), true);
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toFloat(), params.Order, true);
                     break;
                     case DataDisplayMode::DblFloat:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), false);
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedDbl:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), true);
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), params.Order, true);
                     break;
                 }
             break;

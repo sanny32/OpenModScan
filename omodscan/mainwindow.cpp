@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
 
+    ui->actionByteOrder->setMenu(ui->menuByteOrder);
+    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
+
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
@@ -194,6 +197,15 @@ void MainWindow::on_awake()
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
+
+        const auto byteOrder = frm->byteOrder();
+        ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
+        ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
+
+        switch(byteOrder){
+        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(QIcon(":/res/actionBigEndian.png")); break;
+        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(QIcon(":/res/actionLittleEndian.png")); break;
+        }
 
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
@@ -490,6 +502,24 @@ void MainWindow::on_actionDblFloat_triggered()
 void MainWindow::on_actionSwappedDbl_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::SwappedDbl);
+}
+
+///
+/// \brief MainWindow::on_actionLittleEndian_triggered
+///
+void MainWindow::on_actionLittleEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::LittleEndian);
+}
+
+///
+/// \brief MainWindow::on_actionBigEndian_triggered
+///
+void MainWindow::on_actionBigEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::BigEndian);
 }
 
 ///

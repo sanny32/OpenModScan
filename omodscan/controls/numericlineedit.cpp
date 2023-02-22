@@ -130,7 +130,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         break;
 
         case HexMode:
-            value = qBound(_minValue.toUInt(), value.toUInt(), _maxValue.toUInt());
+            value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
             if(_paddingZeroes)
             {
                 const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 16, QLatin1Char('0'));

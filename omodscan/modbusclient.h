@@ -1,10 +1,11 @@
 #ifndef MODBUSCLIENT_H
 #define MODBUSCLIENT_H
 
-#include <QObject>
 #include <QModbusClient>
 #include "connectiondetails.h"
 #include "modbuswriteparams.h"
+
+Q_DECLARE_METATYPE(QModbusDataUnit)
 
 ///
 /// \brief The ModbusClient class

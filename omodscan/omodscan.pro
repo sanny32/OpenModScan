@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.0.0
+VERSION = 1.1.0
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -38,6 +38,7 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
     dialogs/dialogabout.cpp \
+    dialogs/dialogaddressscan.cpp \
     dialogs/dialogautostart.cpp \
     dialogs/dialogconnectiondetails.cpp \
     dialogs/dialogdisplaydefinition.cpp \
@@ -56,6 +57,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     modbusclient.cpp \
+    modbusdataunit.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
     recentfileactionlist.cpp \
@@ -78,6 +80,7 @@ HEADERS += \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
     dialogs/dialogabout.h \
+    dialogs/dialogaddressscan.h \
     dialogs/dialogautostart.h \
     dialogs/dialogconnectiondetails.h \
     dialogs/dialogdisplaydefinition.h \
@@ -98,6 +101,7 @@ HEADERS += \
     formmodsca.h \
     mainwindow.h \
     modbusclient.h \
+    modbusdataunit.h \
     modbusexception.h \
     modbuslimits.h \
     modbuswriteparams.h \
@@ -111,6 +115,7 @@ FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
     dialogs/dialogabout.ui \
+    dialogs/dialogaddressscan.ui \
     dialogs/dialogautostart.ui \
     dialogs/dialogconnectiondetails.ui \
     dialogs/dialogdisplaydefinition.ui \

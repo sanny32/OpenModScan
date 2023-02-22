@@ -11,6 +11,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
+#include "dialogaddressscan.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
 #include "mainstatusbar.h"
@@ -172,6 +173,7 @@ void MainWindow::on_awake()
     ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionUserMsg->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionAddressScan->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionTextCapture->setEnabled(frm != nullptr);
     ui->actionCaptureOff->setEnabled(frm != nullptr);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
@@ -250,7 +252,7 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     openFile(filename);
@@ -289,7 +291,7 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), "All files (*)");
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     frm->setFilename(filename);
@@ -590,6 +592,19 @@ void MainWindow::on_actionUserMsg_triggered()
 
     DialogUserMsg dlg(dd.DeviceId, mode, _modbusClient, this);
     dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_actionAddressScan_triggered
+///
+void MainWindow::on_actionAddressScan_triggered()
+{
+    auto frm = currentMdiChild();
+    const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
+
+    auto dlg = new DialogAddressScan(dd, _modbusClient, this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
 }
 
 ///

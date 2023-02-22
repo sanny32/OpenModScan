@@ -291,4 +291,5 @@ void DialogForceMultipleRegisters::updateTableWidget()
     }
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }

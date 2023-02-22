@@ -365,7 +365,7 @@ void DialogAddressScan::on_checkBoxShowValid_toggled(bool on)
 ///
 void DialogAddressScan::on_modbusRequest(int requestId, const QModbusRequest& request)
 {
-    if(requestId != 0)
+    if(requestId != -1)
     {
         return;
     }
@@ -381,7 +381,7 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
 {
     if(!_scanning || !reply) return;
 
-    if(0 != reply->property("RequestId").toInt())
+    if(-1 != reply->property("RequestId").toInt())
     {
         return;
     }
@@ -476,7 +476,7 @@ void DialogAddressScan::sendReadRequest()
     else
     {
         _requestCount += count;
-        _modbusClient.sendReadRequest(pointType, address, count, deviceId, 0);
+        _modbusClient.sendReadRequest(pointType, address, count, deviceId, -1);
     }
 }
 

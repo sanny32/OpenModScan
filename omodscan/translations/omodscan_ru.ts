@@ -141,12 +141,12 @@
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="283"/>
         <source>Table View</source>
-        <translation>Табличный вид</translation>
+        <translation>Таблица</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="330"/>
         <source>Log View</source>
-        <translation>Лог</translation>
+        <translation>Журнал</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="382"/>

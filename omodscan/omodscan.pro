@@ -44,6 +44,7 @@ SOURCES += \
     dialogs/dialogaddressscan.cpp \
     dialogs/dialogautosimulation.cpp \
     dialogs/dialogautostart.cpp \
+    dialogs/dialogcoilsimulation.cpp \
     dialogs/dialogconnectiondetails.cpp \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogforcemultiplecoils.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     dialogs/dialogaddressscan.h \
     dialogs/dialogautosimulation.h \
     dialogs/dialogautostart.h \
+    dialogs/dialogcoilsimulation.h \
     dialogs/dialogconnectiondetails.h \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogforcemultiplecoils.h \
@@ -128,6 +130,7 @@ FORMS += \
     dialogs/dialogaddressscan.ui \
     dialogs/dialogautosimulation.ui \
     dialogs/dialogautostart.ui \
+    dialogs/dialogcoilsimulation.ui \
     dialogs/dialogconnectiondetails.ui \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogforcemultiplecoils.ui \

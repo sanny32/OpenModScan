@@ -637,9 +637,12 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
         case QModbusDataUnit::Coils:
         {
             ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
-            DialogWriteCoilRegister dlg(params, this);
+            DialogWriteCoilRegister dlg(params, simParams, this);
             if(dlg.exec() == QDialog::Accepted)
-                _modbusClient.writeRegister(pointType, params, _formId);
+            {
+                if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, _formId);
+                _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+            }
         }
         break;
 

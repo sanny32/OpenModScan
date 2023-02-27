@@ -632,8 +632,10 @@ void MainWindow::on_actionAddressScan_triggered()
 {
     auto frm = currentMdiChild();
     const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
+    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Decimal;
+    const auto order = frm ? frm->byteOrder() : ByteOrder::LittleEndian;
 
-    auto dlg = new DialogAddressScan(dd, _modbusClient, this);
+    auto dlg = new DialogAddressScan(dd, mode, order, _modbusClient, this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }

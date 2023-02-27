@@ -1,6 +1,7 @@
 #include <QtCore>
 #include <QtWidgets>
 #include <QtPrintSupport>
+#include "byteorderutils.h"
 #include "modbuslimits.h"
 #include "dialogaddressscan.h"
 #include "ui_dialogaddressscan.h"
@@ -33,6 +34,46 @@ QString formatAddress(QModbusDataUnit::RegisterType pointType, int address)
     }
 
     return prefix + QStringLiteral("%1").arg(address, 4, 10, QLatin1Char('0'));
+}
+
+///
+/// \brief formatValue
+/// \param pointType
+/// \param value
+/// \param mode
+/// \param order
+/// \return
+///
+QString formatValue(QModbusDataUnit::RegisterType pointType, quint16 value, DataDisplayMode mode, ByteOrder order)
+{
+    QString result;
+    value = toByteOrderValue(value, order);
+
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString("%1").arg(value);
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            switch(mode)
+            {
+                case DataDisplayMode::Hex:
+                    result = QStringLiteral("%1H").arg(value, 4, 16, QLatin1Char('0'));
+                break;
+
+                default:
+                    result = QString("%1").arg(value);
+                break;
+            }
+        }
+        break;
+        default:
+        break;
+    }
+    return result.toUpper();
 }
 
 ///
@@ -87,7 +128,10 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             return formatAddress(_data.registerType(), _data.startAddress() + idx);
 
         case Qt::DisplayRole:
-            return _data.hasValue(idx) ? QString::number(_data.value(idx)) : "-";
+        {
+            const auto mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
+            return _data.hasValue(idx) ? formatValue(_data.registerType(), _data.value(idx), mode, _byteOrder) : "-";
+        }
 
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
@@ -268,10 +312,12 @@ bool LogViewItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
 ///
 /// \brief DialogAddressScan::DialogAddressScan
 /// \param dd
+/// \param mode
+/// \param order
 /// \param client
 /// \param parent
 ///
-DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& client, QWidget *parent)
+DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMode mode, ByteOrder order, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogAddressScan)
     ,_modbusClient(client)
@@ -290,6 +336,8 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, ModbusClient& 
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(999);
     ui->tabWidget->setCurrentIndex(0);
+    ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
+    ui->comboBoxByteOrder->setCurrentByteOrder(order);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
@@ -346,6 +394,18 @@ void DialogAddressScan::on_timeout()
 }
 
 ///
+/// \brief DialogAddressScan::on_checkBoxHexView_toggled
+/// \param on
+///
+void DialogAddressScan::on_checkBoxHexView_toggled(bool on)
+{
+    if(!_viewModel)
+        return;
+
+    _viewModel->setHexView(on);
+}
+
+///
 /// \brief DialogAddressScan::on_checkBoxShowValid_toggled
 /// \param on
 ///
@@ -355,7 +415,18 @@ void DialogAddressScan::on_checkBoxShowValid_toggled(bool on)
         return;
 
     _proxyLogModel->setShowValid(on);
-    _logModel->update();
+}
+
+///
+/// \brief DialogAddressScan::on_comboBoxByteOrder_byteOrderChanged
+/// \param order
+///
+void DialogAddressScan::on_comboBoxByteOrder_byteOrderChanged(ByteOrder order)
+{
+    if(!_viewModel)
+        return;
+
+    _viewModel->setByteOrder(order);
 }
 
 ///
@@ -491,6 +562,8 @@ void DialogAddressScan::clearTableView()
 
     ModbusDataUnit data(pointType, pointAddress, length);
     _viewModel = QSharedPointer<TableViewItemModel>(new TableViewItemModel(data, 10, this));
+    _viewModel->setHexView(ui->checkBoxHexView->isChecked());
+    _viewModel->setByteOrder(ui->comboBoxByteOrder->currentByteOrder());
     ui->tableView->setModel(_viewModel.get());
 
     ui->tableView->resizeColumnsToContents();

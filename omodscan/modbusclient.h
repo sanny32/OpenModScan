@@ -2,6 +2,7 @@
 #define MODBUSCLIENT_H
 
 #include <QModbusClient>
+#include "datasimulator.h"
 #include "connectiondetails.h"
 #include "modbuswriteparams.h"
 

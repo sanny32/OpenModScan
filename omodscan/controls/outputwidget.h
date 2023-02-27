@@ -24,6 +24,9 @@ public:
     ~OutputWidget() override;
 
     QVector<quint16> data() const;
+    quint16 data(quint16 addr) const;
+    float getFloat(quint16 addr) const;
+    double getDouble(quint16 addr) const;
 
     void setup(const DisplayDefinition& dd);
 

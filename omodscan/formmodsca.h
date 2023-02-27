@@ -7,6 +7,7 @@
 #include "enums.h"
 #include "modbusclient.h"
 #include "displaydefinition.h"
+#include "modbussimulationparams.h"
 
 class MainWindow;
 
@@ -31,6 +32,9 @@ public:
     void setFilename(const QString& filename);
 
     QVector<quint16> data() const;
+    quint16 data(quint16 addr) const;
+    float getFloat(quint16 addr) const;
+    double getDouble(quint16 addr) const;
 
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);
@@ -84,6 +88,7 @@ private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& request);
+    void on_dataSimulated(QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -103,6 +108,9 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusClient& _modbusClient;
+
+    QSharedPointer<DataSimulator> _dataSimulator;
+    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
 };
 
 ///

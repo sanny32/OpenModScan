@@ -22,6 +22,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
     ,_validSlaveResponses(0)
     ,_noSlaveResponsesCounter(0)
     ,_modbusClient(client)
+    ,_dataSimulator(new DataSimulator(this))
 {
     Q_ASSERT(parent != nullptr);
 
@@ -43,6 +44,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
     ui->outputWidget->setup(displayDefinition());
     ui->outputWidget->setFocus();
 
+    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSca::on_dataSimulated);
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
@@ -97,6 +99,36 @@ void FormModSca::setFilename(const QString& filename)
 QVector<quint16> FormModSca::data() const
 {
     return ui->outputWidget->data();
+}
+
+///
+/// \brief FormModSca::data
+/// \param addr
+/// \return
+///
+quint16 FormModSca::data(quint16 addr) const
+{
+    return ui->outputWidget->data(addr);
+}
+
+///
+/// \brief FormModSca::getFloat
+/// \param addr
+/// \return
+///
+float FormModSca::getFloat(quint16 addr) const
+{
+    return ui->outputWidget->getFloat(addr);
+}
+
+///
+/// \brief FormModSca::getDouble
+/// \param addr
+/// \return
+///
+double FormModSca::getDouble(quint16 addr) const
+{
+    return ui->outputWidget->getDouble(addr);
 }
 
 ///
@@ -530,6 +562,20 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
 }
 
 ///
+/// \brief FormModSca::on_dataSimulated
+/// \param type
+/// \param addr
+/// \param value
+///
+void FormModSca::on_dataSimulated(QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    const quint32 node = ui->lineEditDeviceId->value<int>();
+    ModbusWriteParams params = { node, addr, value, dataDisplayMode(), byteOrder() };
+
+    _modbusClient.writeRegister(type, params, _formId);
+}
+
+///
 /// \brief FormModSca::on_lineEditAddress_valueChanged
 ///
 void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
@@ -570,6 +616,8 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
     const auto mode = dataDisplayMode();
     const quint32 node = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+    auto& simParams = _simulationMap[{pointType, addr}];
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -592,9 +640,12 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, mode, this);
+                DialogWriteHoldingRegister dlg(params, simParams, mode, this);
                 if(dlg.exec() == QDialog::Accepted)
-                    _modbusClient.writeRegister(pointType, params, _formId);
+                {
+                    if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, _formId);
+                    _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                }
             }
         }
         break;

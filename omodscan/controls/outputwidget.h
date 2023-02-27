@@ -82,7 +82,7 @@ private:
     Ui::OutputWidget *ui;
 
 private:
-    bool _displayHexAddreses;
+    bool _displayHexAddresses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     ByteOrder _byteOrder;

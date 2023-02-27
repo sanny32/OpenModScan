@@ -64,6 +64,7 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
+    byteorderutils.h \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/bytelistlineedit.h \

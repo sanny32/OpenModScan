@@ -3,7 +3,7 @@
 
 #include <QtGlobal>
 #include <QtEndian>
-#include "enums.h"
+#include "byteorderutils.h"
 
 ///
 /// \brief breakFloat
@@ -20,18 +20,8 @@ inline void breakFloat(float value, quint16& lo, quint16& hi, ByteOrder order = 
     } v;
     v.asFloat = value;
 
-    switch(order)
-    {
-        case ByteOrder::BigEndian:
-            lo = qToBigEndian<quint16>(v.asUint16[0]);
-            hi = qToBigEndian<quint16>(v.asUint16[1]);
-        break;
-
-        case ByteOrder::LittleEndian:
-            lo = qToLittleEndian<quint16>(v.asUint16[0]);
-            hi = qToLittleEndian<quint16>(v.asUint16[1]);
-        break;
-    }
+    lo = toByteOrderValue(v.asUint16[0], order);
+    hi = toByteOrderValue(v.asUint16[1], order);
 }
 
 ///
@@ -51,22 +41,10 @@ inline void breakDouble(double value, quint16& lolo, quint16& lohi, quint16& hil
     } v;
     v.asDouble = value;
 
-    switch(order)
-    {
-        case ByteOrder::BigEndian:
-            lolo = qToBigEndian<quint16>(v.asUint16[0]);
-            lohi = qToBigEndian<quint16>(v.asUint16[1]);
-            hilo = qToBigEndian<quint16>(v.asUint16[2]);
-            hihi = qToBigEndian<quint16>(v.asUint16[3]);
-        break;
-
-        case ByteOrder::LittleEndian:
-            lolo = qToLittleEndian<quint16>(v.asUint16[0]);
-            lohi = qToLittleEndian<quint16>(v.asUint16[1]);
-            hilo = qToLittleEndian<quint16>(v.asUint16[2]);
-            hihi = qToLittleEndian<quint16>(v.asUint16[3]);
-        break;
-    }
+    lolo = toByteOrderValue(v.asUint16[0], order);
+    lohi = toByteOrderValue(v.asUint16[1], order);
+    hilo = toByteOrderValue(v.asUint16[2], order);
+    hihi = toByteOrderValue(v.asUint16[3], order);
 }
 
 ///
@@ -83,21 +61,8 @@ inline float makeFloat(quint16 lo, quint16 hi, ByteOrder order = ByteOrder::Litt
        float asFloat;
     } v;
 
-    switch(order)
-    {
-        case ByteOrder::BigEndian:
-            lo = qToBigEndian<quint16>(lo);
-            hi = qToBigEndian<quint16>(hi);
-        break;
-
-        case ByteOrder::LittleEndian:
-            lo = qToLittleEndian<quint16>(lo);
-            hi = qToLittleEndian<quint16>(hi);
-        break;
-    }
-
-    v.asUint16[0] = lo;
-    v.asUint16[1] = hi;
+    v.asUint16[0] = toByteOrderValue(lo, order);
+    v.asUint16[1] = toByteOrderValue(hi, order);
 
     return v.asFloat;
 }
@@ -118,27 +83,10 @@ inline double makeDouble(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi,
        double asDouble;
     } v;
 
-    switch(order)
-    {
-        case ByteOrder::BigEndian:
-            lolo = qToBigEndian<quint16>(lolo);
-            lohi = qToBigEndian<quint16>(lohi);
-            hilo = qToBigEndian<quint16>(hilo);
-            hihi = qToBigEndian<quint16>(hihi);
-        break;
-
-        case ByteOrder::LittleEndian:
-            lolo = qToLittleEndian<quint16>(lolo);
-            lohi = qToLittleEndian<quint16>(lohi);
-            hilo = qToLittleEndian<quint16>(hilo);
-            hihi = qToLittleEndian<quint16>(hihi);
-        break;
-    }
-
-    v.asUint16[0] = lolo;
-    v.asUint16[1] = lohi;
-    v.asUint16[2] = hilo;
-    v.asUint16[3] = hihi;
+    v.asUint16[0] = toByteOrderValue(lolo, order);
+    v.asUint16[1] = toByteOrderValue(lohi, order);
+    v.asUint16[2] = toByteOrderValue(hilo, order);
+    v.asUint16[3] = toByteOrderValue(hihi, order);
 
     return v.asDouble;
 }

@@ -20,7 +20,7 @@ Q_DECLARE_METATYPE(ListItemData)
 OutputWidget::OutputWidget(QWidget *parent) :
      QWidget(parent)
    , ui(new Ui::OutputWidget)
-   ,_displayHexAddreses(false)
+   ,_displayHexAddresses(false)
    ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Binary)
    ,_byteOrder(ByteOrder::LittleEndian)
@@ -85,7 +85,7 @@ void OutputWidget::setup(const DisplayDefinition& dd)
 ///
 bool OutputWidget::displayHexAddresses() const
 {
-    return _displayHexAddreses;
+    return _displayHexAddresses;
 }
 
 ///
@@ -94,7 +94,7 @@ bool OutputWidget::displayHexAddresses() const
 ///
 void OutputWidget::setDisplayHexAddresses(bool on)
 {
-    _displayHexAddreses = on;
+    _displayHexAddresses = on;
     updateDataWidget(_lastData);
 }
 
@@ -374,9 +374,11 @@ void OutputWidget::setByteOrder(ByteOrder order)
 /// \param outValue
 /// \return
 ///
-QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
+QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -401,9 +403,11 @@ QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value
 /// \param outValue
 /// \return
 ///
-QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
+QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -428,9 +432,11 @@ QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 valu
 /// \param outValue
 /// \return
 ///
-QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value, QVariant& outValue)
+QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -455,9 +461,11 @@ QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value
 /// \param outValue
 /// \return
 ///
-QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
+QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -672,7 +680,8 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         itemData.Row = i;
         itemData.Address = i + _displayDefinition.PointAddress;
 
-        const auto addr = formatAddress(_displayDefinition.PointType, itemData.Address, _displayHexAddreses);
+        const auto pointType = _displayDefinition.PointType;
+        const auto addr = formatAddress(pointType, itemData.Address, displayHexAddresses());
         const auto value = data.value(i);
         const auto format = "%1: %2                ";
 
@@ -680,38 +689,38 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         switch(_dataDisplayMode)
         {
             case DataDisplayMode::Binary:
-                valstr = formatBinaryValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatBinaryValue(pointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::Decimal:
-                valstr = formatDecimalValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatDecimalValue(pointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::Integer:
-                valstr = formatIntegerValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatIntegerValue(pointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::Hex:
-                valstr = formatHexValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatHexValue(pointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::FloatingPt:
-                valstr = formatFloatValue(_displayDefinition.PointType, value, data.value(i + 1), _byteOrder,
+                valstr = formatFloatValue(pointType, value, data.value(i + 1), byteOrder(),
                                           (i%2) || (i+1>=_displayDefinition.Length), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedFP:
-                valstr = formatFloatValue(_displayDefinition.PointType, data.value(i + 1), value, _byteOrder,
+                valstr = formatFloatValue(pointType, data.value(i + 1), value, byteOrder(),
                                           (i%2) || (i+1>=_displayDefinition.Length), itemData.Value);
             break;
 
             case DataDisplayMode::DblFloat:
-                valstr = formatDoubleValue(_displayDefinition.PointType, value, data.value(i + 1), data.value(i + 2), data.value(i + 3), _byteOrder,
+                valstr = formatDoubleValue(pointType, value, data.value(i + 1), data.value(i + 2), data.value(i + 3), byteOrder(),
                                            (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedDbl:
-                valstr = formatDoubleValue(_displayDefinition.PointType, data.value(i + 3), data.value(i + 2), data.value(i + 1), value, _byteOrder,
+                valstr = formatDoubleValue(pointType, data.value(i + 3), data.value(i + 2), data.value(i + 1), value, byteOrder(),
                                            (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
             break;
         }
@@ -747,7 +756,7 @@ void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPd
     QString text;
     for(auto&& c : rawData)
     {
-        switch(_dataDisplayMode)
+        switch(dataDisplayMode())
         {
             case DataDisplayMode::Decimal:
             case DataDisplayMode::Integer:

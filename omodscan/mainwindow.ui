@@ -90,6 +90,13 @@
      <property name="title">
       <string>Display Options</string>
      </property>
+     <widget class="QMenu" name="menuByteOrder">
+      <property name="title">
+       <string>Byte Order</string>
+      </property>
+      <addaction name="actionLittleEndian"/>
+      <addaction name="actionBigEndian"/>
+     </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
      <addaction name="separator"/>
@@ -101,6 +108,7 @@
      <addaction name="actionSwappedFP"/>
      <addaction name="actionDblFloat"/>
      <addaction name="actionSwappedDbl"/>
+     <addaction name="menuByteOrder"/>
      <addaction name="separator"/>
      <addaction name="actionHexAddresses"/>
     </widget>
@@ -224,6 +232,8 @@
    <addaction name="separator"/>
    <addaction name="actionDblFloat"/>
    <addaction name="actionSwappedDbl"/>
+   <addaction name="separator"/>
+   <addaction name="actionByteOrder"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -555,11 +565,6 @@
     <string>Tile</string>
    </property>
   </action>
-  <action name="actionArrangeIcons">
-   <property name="text">
-    <string>Arrange Icons</string>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -596,6 +601,27 @@
    </property>
    <property name="toolTip">
     <string>Address scan</string>
+   </property>
+  </action>
+  <action name="actionLittleEndian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Little Endian</string>
+   </property>
+  </action>
+  <action name="actionBigEndian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Big Endian</string>
+   </property>
+  </action>
+  <action name="actionByteOrder">
+   <property name="text">
+    <string>Byte Order</string>
    </property>
   </action>
  </widget>

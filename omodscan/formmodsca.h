@@ -41,6 +41,9 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    ByteOrder byteOrder() const;
+    void setByteOrder(ByteOrder order);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -126,6 +129,7 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
 
     out << frm->displayMode();
     out << frm->dataDisplayMode();
+    out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
 
@@ -148,6 +152,9 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     DataDisplayMode dataDisplayMode;
     in >> dataDisplayMode;
 
+    ByteOrder byteOrder;
+    in >> byteOrder;
+
     DisplayDefinition displayDefinition;
     in >> displayDefinition;
 
@@ -168,6 +175,7 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
 
     frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
+    frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
 

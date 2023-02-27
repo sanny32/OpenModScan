@@ -31,9 +31,23 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+    void setHexView(bool on){
+        beginResetModel();
+        _hexView = on;
+        endResetModel();
+    }
+
+    void setByteOrder(ByteOrder order){
+        beginResetModel();
+        _byteOrder = order;
+        endResetModel();
+    }
+
 private:
     int _columns;
     ModbusDataUnit _data;
+    bool _hexView = false;
+    ByteOrder _byteOrder = ByteOrder::LittleEndian;
 };
 
 ///
@@ -81,7 +95,9 @@ public:
     explicit LogViewItemProxyModel(QObject* parent = nullptr);
 
     void setShowValid(bool on){
+        beginResetModel();
         _showValid = on;
+        endResetModel();
     }
 
 protected:
@@ -140,7 +156,7 @@ class DialogAddressScan : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogAddressScan(const DisplayDefinition& dd, ModbusClient& client, QWidget *parent = nullptr);
+    explicit DialogAddressScan(const DisplayDefinition& dd, DataDisplayMode mode, ByteOrder order, ModbusClient& client, QWidget *parent = nullptr);
     ~DialogAddressScan();
 
 protected:
@@ -151,7 +167,9 @@ private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& data);
+    void on_checkBoxHexView_toggled(bool);
     void on_checkBoxShowValid_toggled(bool);
+    void on_comboBoxByteOrder_byteOrderChanged(ByteOrder);
     void on_pushButtonScan_clicked();
     void on_pushButtonExport_clicked();
 

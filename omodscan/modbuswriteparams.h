@@ -13,6 +13,7 @@ struct ModbusWriteParams
     quint32 Address;
     QVariant Value;
     DataDisplayMode DisplayMode;
+    ByteOrder Order;
 };
 
 ///

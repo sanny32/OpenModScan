@@ -33,6 +33,9 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    ByteOrder byteOrder() const;
+    void setByteOrder(ByteOrder order);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -79,9 +82,10 @@ private:
     Ui::OutputWidget *ui;
 
 private:
-    bool _displayHexAddreses;
+    bool _displayHexAddresses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
+    ByteOrder _byteOrder;
     DisplayDefinition _displayDefinition;
     QModbusDataUnit _lastData;
     QFile _fileCapture;

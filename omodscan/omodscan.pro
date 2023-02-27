@@ -25,6 +25,7 @@ INCLUDEPATH += controls \
 SOURCES += \
     controls/booleancombobox.cpp \
     controls/bytelistlineedit.cpp \
+    controls/byteordercombobox.cpp \
     controls/clickablelabel.cpp \
     controls/connectioncombobox.cpp \
     controls/customframe.cpp \
@@ -64,9 +65,11 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
+    byteorderutils.h \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/bytelistlineedit.h \
+    controls/byteordercombobox.h \
     controls/clickablelabel.h \
     controls/connectioncombobox.h \
     controls/customframe.h \

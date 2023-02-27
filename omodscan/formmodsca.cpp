@@ -186,6 +186,24 @@ void FormModSca::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief FormModSca::byteOrder
+/// \return
+///
+ByteOrder FormModSca::byteOrder() const
+{
+    return ui->outputWidget->byteOrder();
+}
+
+///
+/// \brief FormModSca::setByteOrder
+/// \param order
+///
+void FormModSca::setByteOrder(ByteOrder order)
+{
+    ui->outputWidget->setByteOrder(order);
+}
+
+///
 /// \brief FormModSca::captureMode
 ///
 CaptureMode FormModSca::captureMode() const
@@ -556,7 +574,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
     {
         case QModbusDataUnit::Coils:
         {
-            ModbusWriteParams params = { node, addr, value, mode };
+            ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
             DialogWriteCoilRegister dlg(params, this);
             if(dlg.exec() == QDialog::Accepted)
                 _modbusClient.writeRegister(pointType, params, _formId);
@@ -565,7 +583,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
 
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { node, addr, value, mode};
+            ModbusWriteParams params = { node, addr, value, mode, byteOrder()};
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);

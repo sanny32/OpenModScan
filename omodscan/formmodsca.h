@@ -88,7 +88,7 @@ private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& request);
-    void on_dataSimulated(QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);

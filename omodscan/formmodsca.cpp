@@ -27,9 +27,9 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
+    setWindowTitle(QString("ModSca%1").arg(_formId));
 
     _timer.setInterval(1000);
-    setWindowTitle(QString("ModSca%1").arg(_formId));
 
     ui->lineEditAddress->setPaddingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
@@ -556,21 +556,35 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
         return;
     }
 
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->updateTraffic(request, deviceId);
-    ui->statisticWidget->increaseNumberOfPolls();
+    switch(request.functionCode())
+    {
+        case QModbusPdu::ReadCoils:
+        case QModbusPdu::ReadDiscreteInputs:
+        case QModbusPdu::ReadHoldingRegisters:
+        case QModbusPdu::ReadInputRegisters:
+        {
+            const auto deviceId = ui->lineEditDeviceId->value<int>();
+            ui->outputWidget->updateTraffic(request, deviceId);
+            ui->statisticWidget->increaseNumberOfPolls();
+        }
+        break;
+
+    default:
+        break;
+    }
 }
 
 ///
 /// \brief FormModSca::on_dataSimulated
+/// \param mode
 /// \param type
 /// \param addr
 /// \param value
 ///
-void FormModSca::on_dataSimulated(QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+void FormModSca::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
 {
     const quint32 node = ui->lineEditDeviceId->value<int>();
-    ModbusWriteParams params = { node, addr, value, dataDisplayMode(), byteOrder() };
+    ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
 
     _modbusClient.writeRegister(type, params, _formId);
 }
@@ -616,7 +630,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
     const auto mode = dataDisplayMode();
     const quint32 node = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
-    auto& simParams = _simulationMap[{pointType, addr}];
+    auto&& simParams = _simulationMap[{pointType, addr}];
 
     switch(pointType)
     {

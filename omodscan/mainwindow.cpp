@@ -583,6 +583,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.Node = presetParams.SlaveAddress;
     params.Address = presetParams.PointAddress;
     params.DisplayMode = frm->dataDisplayMode();
+    params.Order = frm->byteOrder();
 
     if(dd.PointType == QModbusDataUnit::HoldingRegisters)
     {

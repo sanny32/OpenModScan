@@ -12,7 +12,7 @@
 /// \param hi
 /// \param order
 ///
-inline void breakFloat(float value, quint16& lo, quint16& hi, ByteOrder order = ByteOrder::LittleEndian)
+inline void breakFloat(float value, quint16& lo, quint16& hi, ByteOrder order)
 {
     union {
        quint16 asUint16[2];
@@ -33,7 +33,7 @@ inline void breakFloat(float value, quint16& lo, quint16& hi, ByteOrder order = 
 /// \param hihi
 /// \param order
 ///
-inline void breakDouble(double value, quint16& lolo, quint16& lohi, quint16& hilo, quint16& hihi, ByteOrder order = ByteOrder::LittleEndian)
+inline void breakDouble(double value, quint16& lolo, quint16& lohi, quint16& hilo, quint16& hihi, ByteOrder order)
 {
     union {
        quint16 asUint16[4];
@@ -54,7 +54,7 @@ inline void breakDouble(double value, quint16& lolo, quint16& lohi, quint16& hil
 /// \param order
 /// \return
 ///
-inline float makeFloat(quint16 lo, quint16 hi, ByteOrder order = ByteOrder::LittleEndian)
+inline float makeFloat(quint16 lo, quint16 hi, ByteOrder order)
 {
     union {
        quint16 asUint16[2];
@@ -76,7 +76,7 @@ inline float makeFloat(quint16 lo, quint16 hi, ByteOrder order = ByteOrder::Litt
 /// \param order
 /// \return
 ///
-inline double makeDouble(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, ByteOrder order = ByteOrder::LittleEndian)
+inline double makeDouble(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, ByteOrder order)
 {
     union {
        quint16 asUint16[4];

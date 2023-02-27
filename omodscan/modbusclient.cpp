@@ -341,7 +341,7 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, const QVecto
         for(int i = 0; i < vv.size(); i++)
             vv[i] = toByteOrderValue(values[i], order);
 
-        data.setValues(vv);
+        data.setValues(values);
     }
 
     return data;

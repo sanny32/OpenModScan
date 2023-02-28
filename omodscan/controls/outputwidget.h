@@ -24,9 +24,6 @@ public:
     ~OutputWidget() override;
 
     QVector<quint16> data() const;
-    quint16 data(quint16 addr) const;
-    float getFloat(quint16 addr) const;
-    double getDouble(quint16 addr) const;
 
     void setup(const DisplayDefinition& dd);
 
@@ -67,7 +64,7 @@ public:
     void updateData(const QModbusDataUnit& data);
 
 signals:
-    void itemDoubleClicked(quint32 address, const QVariant& value);
+    void itemDoubleClicked(quint16 address, const QVariant& value);
 
 protected:
     void changeEvent(QEvent* event) override;

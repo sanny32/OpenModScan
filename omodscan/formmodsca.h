@@ -7,6 +7,7 @@
 #include <QVersionNumber>
 #include "enums.h"
 #include "modbusclient.h"
+#include "datasimulator.h"
 #include "displaydefinition.h"
 #include "modbussimulationparams.h"
 
@@ -35,9 +36,6 @@ public:
     void setFilename(const QString& filename);
 
     QVector<quint16> data() const;
-    quint16 data(quint16 addr) const;
-    float getFloat(quint16 addr) const;
-    double getDouble(quint16 addr) const;
 
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);
@@ -80,7 +78,8 @@ public slots:
     void show();
 
 signals:
-    void formShowed();
+    void showed();
+    void byteOrderChanged(ByteOrder);
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
 
@@ -96,7 +95,7 @@ private slots:
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
-    void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
+    void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
 

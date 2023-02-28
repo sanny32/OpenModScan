@@ -70,53 +70,6 @@ QVector<quint16> OutputWidget::data() const
 }
 
 ///
-/// \brief OutputWidget::data
-/// \param addr
-/// \return
-///
-quint16 OutputWidget::data(quint16 addr) const
-{
-    const int idx = addr - _displayDefinition.PointAddress;
-    return idx >= 0 ? _lastData.value(idx) : 0;
-}
-
-///
-/// \brief OutputWidget::getFloat
-/// \param addr
-/// \return
-///
-float OutputWidget::getFloat(quint16 addr) const
-{
-    const int idx = addr - _displayDefinition.PointAddress;
-    const auto item = ui->listWidget->item(idx);
-
-    if(item)
-    {
-        auto itemData = item->data(Qt::UserRole).value<ListItemData>();
-        return itemData.Value.toFloat();
-    }
-    return 0;
-}
-
-///
-/// \brief OutputWidget::getDouble
-/// \param addr
-/// \return
-///
-double OutputWidget::getDouble(quint16 addr) const
-{
-    const int idx = addr - _displayDefinition.PointAddress;
-    const auto item = ui->listWidget->item(idx);
-
-    if(item)
-    {
-        auto itemData = item->data(Qt::UserRole).value<ListItemData>();
-        return itemData.Value.toDouble();
-    }
-    return 0;
-}
-
-///
 /// \brief OutputWidget::setup
 /// \param dd
 ///

@@ -106,36 +106,6 @@ QVector<quint16> FormModSca::data() const
 }
 
 ///
-/// \brief FormModSca::data
-/// \param addr
-/// \return
-///
-quint16 FormModSca::data(quint16 addr) const
-{
-    return ui->outputWidget->data(addr);
-}
-
-///
-/// \brief FormModSca::getFloat
-/// \param addr
-/// \return
-///
-float FormModSca::getFloat(quint16 addr) const
-{
-    return ui->outputWidget->getFloat(addr);
-}
-
-///
-/// \brief FormModSca::getDouble
-/// \param addr
-/// \return
-///
-double FormModSca::getDouble(quint16 addr) const
-{
-    return ui->outputWidget->getDouble(addr);
-}
-
-///
 /// \brief FormModSca::displayDefinition
 /// \return
 ///
@@ -237,6 +207,7 @@ ByteOrder FormModSca::byteOrder() const
 void FormModSca::setByteOrder(ByteOrder order)
 {
     ui->outputWidget->setByteOrder(order);
+    emit byteOrderChanged(order);
 }
 
 ///
@@ -429,7 +400,7 @@ uint FormModSca::validSlaveResposes() const
 void FormModSca::show()
 {
     QWidget::show();
-    emit formShowed();
+    emit showed();
 }
 
 ///
@@ -629,7 +600,7 @@ void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 /// \param addr
 /// \param value
 ///
-void FormModSca::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value)
+void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
     const auto mode = dataDisplayMode();
     const quint32 node = ui->lineEditDeviceId->value<int>();

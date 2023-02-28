@@ -37,7 +37,10 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
 
-    ui->actionByteOrder->setMenu(ui->menuByteOrder);
+    auto menuByteOrder = new QMenu(this);
+    menuByteOrder->addAction(ui->actionLittleEndian);
+    menuByteOrder->addAction(ui->actionBigEndian);
+    ui->actionByteOrder->setMenu(menuByteOrder);
     qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();

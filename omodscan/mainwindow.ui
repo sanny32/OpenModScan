@@ -599,16 +599,13 @@
    <property name="text">
     <string>Address scan</string>
    </property>
-   <property name="toolTip">
-    <string>Address scan</string>
-   </property>
   </action>
   <action name="actionLittleEndian">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Little Endian</string>
+    <string>Little-Endian</string>
    </property>
   </action>
   <action name="actionBigEndian">
@@ -616,7 +613,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Big Endian</string>
+    <string>Big-Endian</string>
    </property>
   </action>
   <action name="actionByteOrder">

@@ -7,8 +7,8 @@
 ByteOrderComboBox::ByteOrderComboBox(QWidget *parent)
     :QComboBox(parent)
 {
-    addItem(tr("Little Endian"), QVariant::fromValue(ByteOrder::LittleEndian));
-    addItem(tr("Big Endian"), QVariant::fromValue(ByteOrder::BigEndian));
+    addItem(tr("Little-Endian"), QVariant::fromValue(ByteOrder::LittleEndian));
+    addItem(tr("Big-Endian"), QVariant::fromValue(ByteOrder::BigEndian));
 
     connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
 }

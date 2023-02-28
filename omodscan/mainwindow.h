@@ -129,6 +129,9 @@ private:
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
 
+    QIcon _icoBigEndian;
+    QIcon _icoLittleEndian;
+
 private:
     int _windowCounter;
     bool _autoStart;

@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
+    ,_icoBigEndian(":/res/actionBigEndian.png")
+    ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_autoStart(false)
 {
@@ -202,11 +204,6 @@ void MainWindow::on_awake()
         ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
         ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
 
-        switch(byteOrder){
-        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(QIcon(":/res/actionBigEndian.png")); break;
-        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(QIcon(":/res/actionLittleEndian.png")); break;
-        }
-
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
         const auto dm = frm->displayMode();
@@ -247,6 +244,7 @@ void MainWindow::on_actionNew_triggered()
     auto frm = createMdiChild(++_windowCounter);
 
     if(cur) {
+        frm->setByteOrder(cur->byteOrder());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
 
@@ -885,9 +883,17 @@ FormModSca* MainWindow::createMdiChild(int id)
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    connect(frm, &FormModSca::formShowed, this, [this, wnd]
+    connect(frm, &FormModSca::showed, this, [this, wnd]
     {
         windowActivate(wnd);
+    });
+
+    connect(frm, &FormModSca::byteOrderChanged, this, [this](ByteOrder order)
+    {
+        switch(order){
+        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
+        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
+        }
     });
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)
@@ -966,7 +972,7 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     QVersionNumber ver;
     s >> ver;
 
-    if(ver != QVersionNumber(1, 0))
+    if(ver > FormModSca::VERSION)
         return nullptr;
 
     int formId;
@@ -983,6 +989,10 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
         frm = createMdiChild(formId);
     }
 
+    if(!frm)
+        return nullptr;
+
+    frm->setProperty("Version", QVariant::fromValue(ver));
     s >> frm;
 
     if(s.status() != QDataStream::Ok)
@@ -1018,7 +1028,7 @@ void MainWindow::saveMdiChild(FormModSca* frm)
     s << (quint8)0x32;
 
     // version number
-    s << QVersionNumber(1, 0);
+    s << FormModSca::VERSION;
 
     // form
     s << frm;

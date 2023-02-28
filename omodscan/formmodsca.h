@@ -4,9 +4,12 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
+#include <QVersionNumber>
 #include "enums.h"
 #include "modbusclient.h"
+#include "datasimulator.h"
 #include "displaydefinition.h"
+#include "modbussimulationparams.h"
 
 class MainWindow;
 
@@ -22,6 +25,8 @@ class FormModSca : public QWidget
     Q_OBJECT
 
 public:
+    static QVersionNumber VERSION;
+
     explicit FormModSca(int id, ModbusClient& client, MainWindow* parent);
     ~FormModSca();
 
@@ -73,7 +78,8 @@ public slots:
     void show();
 
 signals:
-    void formShowed();
+    void showed();
+    void byteOrderChanged(ByteOrder);
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
 
@@ -84,11 +90,12 @@ private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& request);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
-    void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
+    void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
 
@@ -103,6 +110,9 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusClient& _modbusClient;
+
+    QSharedPointer<DataSimulator> _dataSimulator;
+    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
 };
 
 ///
@@ -215,6 +225,8 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.PointAddress;
     out << dd.Length;
 
+    out << frm->byteOrder();
+
     return out;
 }
 
@@ -262,6 +274,11 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     in >> dd.PointAddress;
     in >> dd.Length;
 
+    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    const auto ver = frm->property("Version").value<QVersionNumber>();
+    if(ver >= QVersionNumber(1, 1))
+        in >> byteOrder;
+
     if(in.status() != QDataStream::Ok)
         return in;
 
@@ -277,6 +294,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setStatusColor(stCrl);
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
+    frm->setByteOrder(byteOrder);
 
     return in;
 }

@@ -34,13 +34,17 @@ SOURCES += \
     controls/mainstatusbar.cpp \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
+    controls/simulationmodecombobox.cpp \
     controls/statisticwidget.cpp \
     controls/numericcombobox.cpp \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
+    datasimulator.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogaddressscan.cpp \
+    dialogs/dialogautosimulation.cpp \
     dialogs/dialogautostart.cpp \
+    dialogs/dialogcoilsimulation.cpp \
     dialogs/dialogconnectiondetails.cpp \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogforcemultiplecoils.cpp \
@@ -78,13 +82,17 @@ HEADERS += \
     controls/mainstatusbar.h \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \
+    controls/simulationmodecombobox.h \
     controls/statisticwidget.h \
     controls/numericcombobox.h \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
+    datasimulator.h \
     dialogs/dialogabout.h \
     dialogs/dialogaddressscan.h \
+    dialogs/dialogautosimulation.h \
     dialogs/dialogautostart.h \
+    dialogs/dialogcoilsimulation.h \
     dialogs/dialogconnectiondetails.h \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogforcemultiplecoils.h \
@@ -107,6 +115,7 @@ HEADERS += \
     modbusdataunit.h \
     modbusexception.h \
     modbuslimits.h \
+    modbussimulationparams.h \
     modbuswriteparams.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
@@ -119,7 +128,9 @@ FORMS += \
     controls/statisticwidget.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogaddressscan.ui \
+    dialogs/dialogautosimulation.ui \
     dialogs/dialogautostart.ui \
+    dialogs/dialogcoilsimulation.ui \
     dialogs/dialogconnectiondetails.ui \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogforcemultiplecoils.ui \

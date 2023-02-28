@@ -22,6 +22,9 @@ public:
     void stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr);
     void stopSimulations();
 
+    void pauseSimulations();
+    void resumeSimulations();
+
 signals:
     void dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
@@ -37,6 +40,7 @@ private:
 private:
     QTimer _timer;
     quint32 _elapsed;
+    const int _interval = 1000;
 
     struct SimulationParams {
         DataDisplayMode Mode;

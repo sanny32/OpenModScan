@@ -10,7 +10,7 @@ DataSimulator::DataSimulator(QObject* parent)
     ,_elapsed(0)
 {
     connect(&_timer, &QTimer::timeout, this, &DataSimulator::on_timeout);
-    _timer.start(1000);
+    _timer.start(_interval);
 }
 
 ///
@@ -66,6 +66,23 @@ void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 a
 void DataSimulator::stopSimulations()
 {
     _simulationMap.clear();
+}
+
+///
+/// \brief DataSimulator::pauseSimulations
+///
+void DataSimulator::pauseSimulations()
+{
+    _timer.stop();
+}
+
+///
+/// \brief DataSimulator::resumeSimulations
+///
+void DataSimulator::resumeSimulations()
+{
+    if(!_timer.isActive())
+        _timer.start(_interval);
 }
 
 ///

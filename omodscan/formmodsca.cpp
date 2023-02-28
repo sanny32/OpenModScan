@@ -49,6 +49,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent)
     ui->outputWidget->setFocus();
 
     connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSca::on_dataSimulated);
+    connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &FormModSca::on_modbusDisconnected);
+    connect(&_modbusClient, &ModbusClient::modbusConnected, this, &FormModSca::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
@@ -550,6 +552,22 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
 }
 
 ///
+/// \brief FormModSca::on_modbusConnected
+///
+void FormModSca::on_modbusConnected(const ConnectionDetails&)
+{
+    _dataSimulator->resumeSimulations();
+}
+
+///
+/// \brief FormModSca::on_modbusDisconnected
+///
+void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
+{
+    _dataSimulator->pauseSimulations();
+}
+
+///
 /// \brief FormModSca::on_dataSimulated
 /// \param mode
 /// \param type
@@ -558,6 +576,12 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
 ///
 void FormModSca::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
 {
+    if(!_modbusClient.isValid() ||
+        _modbusClient.state() != QModbusDevice::ConnectedState)
+    {
+        return;
+    }
+
     const quint32 node = ui->lineEditDeviceId->value<int>();
     ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
 

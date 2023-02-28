@@ -10,13 +10,17 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 1);
+
 ///
 /// \brief FormModSca::FormModSca
-/// \param num
+/// \param id
+/// \param client
+/// \param ver
 /// \param parent
 ///
-FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent) :
-    QWidget(parent)
+FormModSca::FormModSca(int id, ModbusClient& client, MainWindow* parent)
+    : QWidget(parent)
     , ui(new Ui::FormModSca)
     ,_formId(id)
     ,_validSlaveResponses(0)

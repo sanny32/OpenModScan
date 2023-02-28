@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
+#include <QVersionNumber>
 #include "enums.h"
 #include "modbusclient.h"
 #include "displaydefinition.h"
@@ -23,6 +24,8 @@ class FormModSca : public QWidget
     Q_OBJECT
 
 public:
+    static QVersionNumber VERSION;
+
     explicit FormModSca(int id, ModbusClient& client, MainWindow* parent);
     ~FormModSca();
 
@@ -223,6 +226,8 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.PointAddress;
     out << dd.Length;
 
+    out << frm->byteOrder();
+
     return out;
 }
 
@@ -270,6 +275,11 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     in >> dd.PointAddress;
     in >> dd.Length;
 
+    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    const auto ver = frm->property("Version").value<QVersionNumber>();
+    if(ver >= QVersionNumber(1, 1))
+        in >> byteOrder;
+
     if(in.status() != QDataStream::Ok)
         return in;
 
@@ -285,6 +295,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setStatusColor(stCrl);
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
+    frm->setByteOrder(byteOrder);
 
     return in;
 }

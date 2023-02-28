@@ -966,7 +966,7 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     QVersionNumber ver;
     s >> ver;
 
-    if(ver != QVersionNumber(1, 0))
+    if(ver > FormModSca::VERSION)
         return nullptr;
 
     int formId;
@@ -983,6 +983,10 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
         frm = createMdiChild(formId);
     }
 
+    if(!frm)
+        return nullptr;
+
+    frm->setProperty("Version", QVariant::fromValue(ver));
     s >> frm;
 
     if(s.status() != QDataStream::Ok)
@@ -1018,7 +1022,7 @@ void MainWindow::saveMdiChild(FormModSca* frm)
     s << (quint8)0x32;
 
     // version number
-    s << QVersionNumber(1, 0);
+    s << FormModSca::VERSION;
 
     // form
     s << frm;

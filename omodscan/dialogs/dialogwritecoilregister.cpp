@@ -1,4 +1,5 @@
 #include "modbuslimits.h"
+#include "dialogcoilsimulation.h"
 #include "dialogwritecoilregister.h"
 #include "ui_dialogwritecoilregister.h"
 
@@ -7,10 +8,11 @@
 /// \param params
 /// \param parent
 ///
-DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, QWidget *parent) :
+DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, QWidget *parent) :
     QFixedSizeDialog(parent),
     ui(new Ui::DialogWriteCoilRegister)
     ,_writeParams(params)
+    ,_simParams(simParams)
 {
     ui->setupUi(this);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
@@ -40,4 +42,13 @@ void DialogWriteCoilRegister::accept()
     _writeParams.Node = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
+}
+
+///
+/// \brief DialogWriteCoilRegister::on_pushButtonSimulation_clicked
+///
+void DialogWriteCoilRegister::on_pushButtonSimulation_clicked()
+{
+    DialogCoilSimulation dlg(_simParams, this);
+    if(dlg.exec() == QDialog::Accepted) done(2);
 }

@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
+    ,_icoBigEndian(":/res/actionBigEndian.png")
+    ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_autoStart(false)
 {
@@ -34,6 +36,12 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
+
+    auto menuByteOrder = new QMenu(this);
+    menuByteOrder->addAction(ui->actionLittleEndian);
+    menuByteOrder->addAction(ui->actionBigEndian);
+    ui->actionByteOrder->setMenu(menuByteOrder);
+    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -195,6 +203,10 @@ void MainWindow::on_awake()
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
+        const auto byteOrder = frm->byteOrder();
+        ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
+        ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
+
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
         const auto dm = frm->displayMode();
@@ -208,12 +220,14 @@ void MainWindow::on_awake()
 }
 
 ///
-/// \brief MainWindow::on_modbusWriteError
+/// \brief MainWindow::on_modbusError
 /// \param error
+/// \param requestId
 ///
-void MainWindow::on_modbusError(const QString& error)
+void MainWindow::on_modbusError(const QString& error, int requestId)
 {
-    QMessageBox::warning(this, windowTitle(), error);
+    if(0 == requestId)
+        QMessageBox::warning(this, windowTitle(), error);
 }
 
 ///
@@ -235,6 +249,7 @@ void MainWindow::on_actionNew_triggered()
     auto frm = createMdiChild(++_windowCounter);
 
     if(cur) {
+        frm->setByteOrder(cur->byteOrder());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
 
@@ -493,6 +508,24 @@ void MainWindow::on_actionSwappedDbl_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionLittleEndian_triggered
+///
+void MainWindow::on_actionLittleEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::LittleEndian);
+}
+
+///
+/// \brief MainWindow::on_actionBigEndian_triggered
+///
+void MainWindow::on_actionBigEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::BigEndian);
+}
+
+///
 /// \brief MainWindow::on_actionHexAddresses_triggered
 ///
 void MainWindow::on_actionHexAddresses_triggered()
@@ -553,6 +586,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.Node = presetParams.SlaveAddress;
     params.Address = presetParams.PointAddress;
     params.DisplayMode = frm->dataDisplayMode();
+    params.Order = frm->byteOrder();
 
     if(dd.PointType == QModbusDataUnit::HoldingRegisters)
     {
@@ -601,8 +635,10 @@ void MainWindow::on_actionAddressScan_triggered()
 {
     auto frm = currentMdiChild();
     const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
+    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Decimal;
+    const auto order = frm ? frm->byteOrder() : ByteOrder::LittleEndian;
 
-    auto dlg = new DialogAddressScan(dd, _modbusClient, this);
+    auto dlg = new DialogAddressScan(dd, mode, order, _modbusClient, this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }
@@ -852,9 +888,17 @@ FormModSca* MainWindow::createMdiChild(int id)
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    connect(frm, &FormModSca::formShowed, this, [this, wnd]
+    connect(frm, &FormModSca::showed, this, [this, wnd]
     {
         windowActivate(wnd);
+    });
+
+    connect(frm, &FormModSca::byteOrderChanged, this, [this](ByteOrder order)
+    {
+        switch(order){
+        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
+        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
+        }
     });
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)
@@ -933,7 +977,7 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
     QVersionNumber ver;
     s >> ver;
 
-    if(ver != QVersionNumber(1, 0))
+    if(ver > FormModSca::VERSION)
         return nullptr;
 
     int formId;
@@ -950,6 +994,10 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
         frm = createMdiChild(formId);
     }
 
+    if(!frm)
+        return nullptr;
+
+    frm->setProperty("Version", QVariant::fromValue(ver));
     s >> frm;
 
     if(s.status() != QDataStream::Ok)
@@ -985,7 +1033,7 @@ void MainWindow::saveMdiChild(FormModSca* frm)
     s << (quint8)0x32;
 
     // version number
-    s << QVersionNumber(1, 0);
+    s << FormModSca::VERSION;
 
     // form
     s << frm;

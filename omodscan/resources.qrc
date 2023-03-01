@@ -24,5 +24,7 @@
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
         <file>translations/omodscan_ru.qm</file>
+        <file>res/actionBigEndian.png</file>
+        <file>res/actionLittleEndian.png</file>
     </qresource>
 </RCC>

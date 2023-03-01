@@ -79,6 +79,40 @@ inline QSettings& operator >>(QSettings& in, DataDisplayMode& mode)
 }
 
 ///
+/// \brief The ByteOrder enum
+///
+enum class ByteOrder
+{
+    LittleEndian = 0,
+    BigEndian
+};
+Q_DECLARE_METATYPE(ByteOrder);
+
+///
+/// \brief operator <<
+/// \param out
+/// \param order
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const ByteOrder& order)
+{
+    out.setValue("ByteOrder", (uint)order);
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param order
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, ByteOrder& order)
+{
+    order = (ByteOrder)in.value("ByteOrder").toUInt();
+    return in;
+}
+
+///
 /// \brief The ConnectionType enum
 ///
 enum class ConnectionType
@@ -107,5 +141,19 @@ enum class CaptureMode
     TextCapture
 };
 Q_DECLARE_METATYPE(CaptureMode);
+
+///
+/// \brief The SimulationMode enum
+///
+enum class SimulationMode
+{
+    No = 0,
+    Random,
+    Increment,
+    Decrement,
+    Toggle
+};
+Q_DECLARE_METATYPE(SimulationMode);
+
 
 #endif // ENUMS_H

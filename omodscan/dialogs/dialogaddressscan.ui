@@ -272,13 +272,13 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabTableView">
       <attribute name="title">
        <string>Table View</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -318,6 +318,47 @@
           <bool>false</bool>
          </attribute>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBoxHexView">
+           <property name="text">
+            <string>Hex View</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelByteOrder">
+           <property name="text">
+            <string>Byte Order: </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="ByteOrderComboBox" name="comboBoxByteOrder"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -440,6 +481,11 @@
    <class>PointTypeComboBox</class>
    <extends>QComboBox</extends>
    <header>pointtypecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ByteOrderComboBox</class>
+   <extends>QComboBox</extends>
+   <header>byteordercombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

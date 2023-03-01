@@ -1,18 +1,21 @@
 #include <float.h>
 #include "modbuslimits.h"
+#include "dialogautosimulation.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
 
 ///
 /// \brief DialogWriteHoldingRegister::DialogWriteHoldingRegister
 /// \param params
+/// \param simParams
 /// \param mode
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, DataDisplayMode mode, QWidget* parent) :
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, DataDisplayMode mode, QWidget* parent) :
       QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
     ,_writeParams(params)
+    ,_simParams(simParams)
 {
     ui->setupUi(this);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
@@ -78,4 +81,13 @@ void DialogWriteHoldingRegister::accept()
     _writeParams.Node = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_pushButtonSimulation_clicked
+///
+void DialogWriteHoldingRegister::on_pushButtonSimulation_clicked()
+{
+    DialogAutoSimulation dlg(_writeParams.DisplayMode, _simParams, this);
+    if(dlg.exec() == QDialog::Accepted) done(2);
 }

@@ -61,7 +61,7 @@ void DialogForceMultipleRegisters::accept()
                 case DataDisplayMode::Integer:
                 {
                     auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                    _data[idx] = numEdit->value<quint16>();
+                    _data[idx] = toByteOrderValue(numEdit->value<quint16>(), _writeParams.Order);
                 }
                 break;
 
@@ -69,7 +69,7 @@ void DialogForceMultipleRegisters::accept()
                     if(!(idx % 2) && (idx + 1 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakFloat(numEdit->value<double>(), _data[idx], _data[idx + 1]);
+                        breakFloat(numEdit->value<double>(), _data[idx], _data[idx + 1], _writeParams.Order);
                     }
                 break;
 
@@ -77,7 +77,7 @@ void DialogForceMultipleRegisters::accept()
                     if(!(idx % 2) && (idx + 1 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakFloat(numEdit->value<double>(), _data[idx + 1], _data[idx]);
+                        breakFloat(numEdit->value<double>(), _data[idx + 1], _data[idx], _writeParams.Order);
                     }
                 break;
 
@@ -85,7 +85,7 @@ void DialogForceMultipleRegisters::accept()
                     if(!(idx % 4) && (idx + 3 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakDouble(numEdit->value<double>(), _data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3]);
+                        breakDouble(numEdit->value<double>(), _data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3], _writeParams.Order);
                     }
                 break;
 
@@ -93,7 +93,7 @@ void DialogForceMultipleRegisters::accept()
                     if(!(idx % 4) && (idx + 3 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakDouble(numEdit->value<double>(), _data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx]);
+                        breakDouble(numEdit->value<double>(), _data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order);
                     }
                 break;
             }
@@ -138,22 +138,22 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 
             case DataDisplayMode::FloatingPt:
                 if(!(i % 2) && (i + 1 < _data.size()))
-                    breakFloat(QRandomGenerator::global()->bounded(100.), _data[i], _data[i + 1]);
+                    breakFloat(QRandomGenerator::global()->bounded(100.), _data[i], _data[i + 1], _writeParams.Order);
             break;
 
             case DataDisplayMode::SwappedFP:
                 if(!(i % 2) && (i + 1 < _data.size()))
-                    breakFloat(QRandomGenerator::global()->bounded(100.), _data[i + 1], _data[i]);
+                    breakFloat(QRandomGenerator::global()->bounded(100.), _data[i + 1], _data[i], _writeParams.Order);
             break;
 
             case DataDisplayMode::DblFloat:
                 if(!(i % 4) && (i + 3 < _data.size()))
-                    breakDouble(QRandomGenerator::global()->bounded(100.), _data[i], _data[i + 1], _data[i + 2], _data[i + 3]);
+                    breakDouble(QRandomGenerator::global()->bounded(100.), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
             break;
 
             case DataDisplayMode::SwappedDbl:
                 if(!(i % 4) && (i + 3 < _data.size()))
-                    breakDouble(QRandomGenerator::global()->bounded(100.), _data[i + 3], _data[i + 2], _data[i + 1], _data[i]);
+                    breakDouble(QRandomGenerator::global()->bounded(100.), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
             break;
         }
     }
@@ -176,26 +176,26 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setPaddingZeroes(true);
-            numEdit->setValue(_data[idx]);
+            numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
         case DataDisplayMode::Decimal:
             numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
-            numEdit->setValue(_data[idx]);
+            numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
         case DataDisplayMode::Integer:
             numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
             numEdit->setInputRange(SHRT_MIN, SHRT_MAX);
-            numEdit->setValue((qint16)_data[idx]);
+            numEdit->setValue((qint16)toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
         case DataDisplayMode::FloatingPt:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::FloatMode, ui->tableWidget);
-                numEdit->setValue(makeFloat(_data[idx], _data[idx + 1]));
+                numEdit->setValue(makeFloat(_data[idx], _data[idx + 1], _writeParams.Order));
             }
         break;
 
@@ -203,7 +203,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::FloatMode, ui->tableWidget);
-                numEdit->setValue(makeFloat(_data[idx + 1], _data[idx]));
+                numEdit->setValue(makeFloat(_data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
 
@@ -211,7 +211,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::DoubleMode, ui->tableWidget);
-                numEdit->setValue(makeDouble(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3]));
+                numEdit->setValue(makeDouble(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3], _writeParams.Order));
             }
         break;
 
@@ -219,7 +219,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::DoubleMode, ui->tableWidget);
-                numEdit->setValue(makeDouble(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx]));
+                numEdit->setValue(makeDouble(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
     }

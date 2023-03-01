@@ -64,6 +64,8 @@ private slots:
     void on_actionSwappedFP_triggered();
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
+    void on_actionLittleEndian_triggered();
+    void on_actionBigEndian_triggered();
     void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
     void on_actionPresetRegs_triggered();
@@ -95,7 +97,7 @@ private slots:
     /* Help menu slots */
     void on_actionAbout_triggered();
 
-    void on_modbusError(const QString& error);
+    void on_modbusError(const QString& error, int requestId);
     void on_modbusConnectionError(const QString& error);
 
     void updateMenuWindow();
@@ -126,6 +128,9 @@ private:
     QString _lang;
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
+
+    QIcon _icoBigEndian;
+    QIcon _icoLittleEndian;
 
 private:
     int _windowCounter;

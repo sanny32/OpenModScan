@@ -4,9 +4,12 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
+#include <QVersionNumber>
 #include "enums.h"
 #include "modbusclient.h"
+#include "datasimulator.h"
 #include "displaydefinition.h"
+#include "modbussimulationparams.h"
 
 class MainWindow;
 
@@ -21,7 +24,12 @@ class FormModSca : public QWidget
 {
     Q_OBJECT
 
+    friend QDataStream& operator <<(QDataStream& out, const FormModSca* frm);
+    friend QDataStream& operator >>(QDataStream& in, FormModSca* frm);
+
 public:
+    static QVersionNumber VERSION;
+
     explicit FormModSca(int id, ModbusClient& client, MainWindow* parent);
     ~FormModSca();
 
@@ -40,6 +48,9 @@ public:
 
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
+
+    ByteOrder byteOrder() const;
+    void setByteOrder(ByteOrder order);
 
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
@@ -66,11 +77,16 @@ public:
     uint numberOfPolls() const;
     uint validSlaveResposes() const;
 
+    void resumeSimulations();
+    void pauseSimulations();
+    void restartSimulations();
+
 public slots:
     void show();
 
 signals:
-    void formShowed();
+    void showed();
+    void byteOrderChanged(ByteOrder);
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
 
@@ -81,11 +97,14 @@ private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& request);
+    void on_modbusConnected(const ConnectionDetails& cd);
+    void on_modbusDisconnected(const ConnectionDetails& cd);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
-    void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
+    void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
 
@@ -100,6 +119,9 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusClient& _modbusClient;
+
+    QSharedPointer<DataSimulator> _dataSimulator;
+    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
 };
 
 ///
@@ -126,6 +148,7 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
 
     out << frm->displayMode();
     out << frm->dataDisplayMode();
+    out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
 
@@ -148,6 +171,9 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     DataDisplayMode dataDisplayMode;
     in >> dataDisplayMode;
 
+    ByteOrder byteOrder;
+    in >> byteOrder;
+
     DisplayDefinition displayDefinition;
     in >> displayDefinition;
 
@@ -168,6 +194,7 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
 
     frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
+    frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
 
@@ -206,6 +233,9 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.PointType;
     out << dd.PointAddress;
     out << dd.Length;
+
+    out << frm->byteOrder();
+    out << frm->_simulationMap;
 
     return out;
 }
@@ -254,11 +284,20 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     in >> dd.PointAddress;
     in >> dd.Length;
 
+    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    const auto ver = frm->property("Version").value<QVersionNumber>();
+    if(ver >= QVersionNumber(1, 1))
+    {
+        in >> byteOrder;
+        in >> frm->_simulationMap;
+    }
+
     if(in.status() != QDataStream::Ok)
         return in;
 
     auto wnd = frm->parentWidget();
     wnd->resize(windowSize);
+    wnd->setWindowState(Qt::WindowActive);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
     frm->setDisplayMode(displayMode);
@@ -269,6 +308,8 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setStatusColor(stCrl);
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
+    frm->setByteOrder(byteOrder);
+    frm->restartSimulations();
 
     return in;
 }

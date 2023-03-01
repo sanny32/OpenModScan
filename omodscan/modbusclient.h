@@ -37,7 +37,7 @@ public:
 signals:
     void modbusRequest(int requestId, const QModbusRequest& request);
     void modbusReply(QModbusReply* reply);
-    void modbusError(const QString& error);
+    void modbusError(const QString& error, int requestId);
     void modbusConnectionError(const QString& error);
     void modbusConnecting(const ConnectionDetails& cd);
     void modbusConnected(const ConnectionDetails& cd);

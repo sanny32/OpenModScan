@@ -669,10 +669,16 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         {
             ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
             DialogWriteCoilRegister dlg(params, simParams, this);
-            if(dlg.exec() == QDialog::Accepted)
+            switch(dlg.exec())
             {
-                if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, 0);
-                _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                case QDialog::Accepted:
+                    _modbusClient.writeRegister(pointType, params, 0);
+                break;
+
+                case 2:
+                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
+                    else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                break;
             }
         }
         break;
@@ -689,10 +695,16 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             else
             {
                 DialogWriteHoldingRegister dlg(params, simParams, mode, this);
-                if(dlg.exec() == QDialog::Accepted)
+                switch(dlg.exec())
                 {
-                    if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, 0);
-                    _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                    case QDialog::Accepted:
+                        _modbusClient.writeRegister(pointType, params, 0);
+                    break;
+
+                    case 2:
+                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
+                        else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                    break;
                 }
             }
         }

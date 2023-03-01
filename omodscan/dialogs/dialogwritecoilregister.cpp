@@ -50,5 +50,5 @@ void DialogWriteCoilRegister::accept()
 void DialogWriteCoilRegister::on_pushButtonSimulation_clicked()
 {
     DialogCoilSimulation dlg(_simParams, this);
-    if(dlg.exec() == QDialog::Accepted) accept();
+    if(dlg.exec() == QDialog::Accepted) done(2);
 }

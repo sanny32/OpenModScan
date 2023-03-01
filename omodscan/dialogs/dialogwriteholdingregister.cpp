@@ -89,5 +89,5 @@ void DialogWriteHoldingRegister::accept()
 void DialogWriteHoldingRegister::on_pushButtonSimulation_clicked()
 {
     DialogAutoSimulation dlg(_writeParams.DisplayMode, _simParams, this);
-    if(dlg.exec() == QDialog::Accepted) accept();
+    if(dlg.exec() == QDialog::Accepted) done(2);
 }

@@ -112,6 +112,8 @@ private:
 ///
 class PdfExporter : public QObject
 {
+    Q_OBJECT
+
 public:
     explicit PdfExporter(QAbstractTableModel* model,
                          const QString& startAddress,

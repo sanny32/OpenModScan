@@ -142,7 +142,7 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
         }
     }
     else
-        emit modbusError(tr("Invalid Modbus Request"));
+        emit modbusError(tr("Invalid Modbus Request"), requestId);
 }
 
 ///
@@ -427,7 +427,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
             break;
         }
 
-        emit modbusError(errorDesc);
+        emit modbusError(errorDesc, requestId);
         return;
     }
 
@@ -462,7 +462,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     if(_modbusClient == nullptr ||
        _modbusClient->state() != QModbusDevice::ConnectedState)
     {
-        emit modbusError(tr("Mask Write Register Failure"));
+        emit modbusError(tr("Mask Write Register Failure"), requestId);
         return;
     }
 
@@ -572,28 +572,29 @@ void ModbusClient::on_writeReply()
     emit modbusReply(reply);
 
     const auto raw  = reply->rawResult();
-    auto onError = [this, reply, raw](const QString& errorDesc)
+    auto onError = [this, reply, raw](const QString& errorDesc, int requestId)
     {
         if (reply->error() == QModbusDevice::ProtocolError)
-            emit modbusError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())));
+            emit modbusError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())), requestId);
         else if(reply->error() != QModbusDevice::NoError)
-            emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()));
+            emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);
     };
 
+    const int requestId = reply->property("RequestId").toInt();
     switch(raw.functionCode())
     {
         case QModbusRequest::WriteSingleCoil:
         case QModbusRequest::WriteMultipleCoils:
-            onError(tr("Coil Write Failure"));
+            onError(tr("Coil Write Failure"), requestId);
         break;
 
         case QModbusRequest::WriteSingleRegister:
         case QModbusRequest::WriteMultipleRegisters:
-            onError(tr("Register Write Failure"));
+            onError(tr("Register Write Failure"), requestId);
         break;
 
         case QModbusRequest::MaskWriteRegister:
-            onError(tr("Mask Register Write Failure"));
+            onError(tr("Mask Register Write Failure"), requestId);
         break;
 
     default:

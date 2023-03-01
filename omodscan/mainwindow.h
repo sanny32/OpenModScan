@@ -97,7 +97,7 @@ private slots:
     /* Help menu slots */
     void on_actionAbout_triggered();
 
-    void on_modbusError(const QString& error);
+    void on_modbusError(const QString& error, int requestId);
     void on_modbusConnectionError(const QString& error);
 
     void updateMenuWindow();

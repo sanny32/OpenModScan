@@ -397,6 +397,32 @@ uint FormModSca::validSlaveResposes() const
 }
 
 ///
+/// \brief FormModSca::resumeSimulations
+///
+void FormModSca::resumeSimulations()
+{
+    _dataSimulator->resumeSimulations();
+}
+
+///
+/// \brief FormModSca::pauseSimulations
+///
+void FormModSca::pauseSimulations()
+{
+    _dataSimulator->pauseSimulations();
+}
+
+///
+/// \brief FormModSca::restartSimulations
+///
+void FormModSca::restartSimulations()
+{
+    _dataSimulator->stopSimulations();
+    for(auto&& k : _simulationMap.keys())
+        _dataSimulator->startSimulation(dataDisplayMode(), k.first, k.second,  _simulationMap[k]);
+}
+
+///
 /// \brief FormModSca::show
 ///
 void FormModSca::show()
@@ -645,7 +671,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             DialogWriteCoilRegister dlg(params, simParams, this);
             if(dlg.exec() == QDialog::Accepted)
             {
-                if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, _formId);
+                if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, 0);
                 _dataSimulator->startSimulation(mode, pointType, addr, simParams);
             }
         }
@@ -658,14 +684,14 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
                 if(dlg.exec() == QDialog::Accepted)
-                    _modbusClient.writeRegister(pointType, params, _formId);
+                    _modbusClient.writeRegister(pointType, params, 0);
             }
             else
             {
                 DialogWriteHoldingRegister dlg(params, simParams, mode, this);
                 if(dlg.exec() == QDialog::Accepted)
                 {
-                    if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, _formId);
+                    if(simParams.Mode == SimulationMode::No) _modbusClient.writeRegister(pointType, params, 0);
                     _dataSimulator->startSimulation(mode, pointType, addr, simParams);
                 }
             }

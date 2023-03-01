@@ -65,6 +65,7 @@ void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 a
 ///
 void DataSimulator::stopSimulations()
 {
+    pauseSimulations();
     _simulationMap.clear();
 }
 

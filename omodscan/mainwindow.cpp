@@ -220,12 +220,14 @@ void MainWindow::on_awake()
 }
 
 ///
-/// \brief MainWindow::on_modbusWriteError
+/// \brief MainWindow::on_modbusError
 /// \param error
+/// \param requestId
 ///
-void MainWindow::on_modbusError(const QString& error)
+void MainWindow::on_modbusError(const QString& error, int requestId)
 {
-    QMessageBox::warning(this, windowTitle(), error);
+    if(0 == requestId)
+        QMessageBox::warning(this, windowTitle(), error);
 }
 
 ///

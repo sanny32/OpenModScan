@@ -24,6 +24,9 @@ class FormModSca : public QWidget
 {
     Q_OBJECT
 
+    friend QDataStream& operator <<(QDataStream& out, const FormModSca* frm);
+    friend QDataStream& operator >>(QDataStream& in, FormModSca* frm);
+
 public:
     static QVersionNumber VERSION;
 
@@ -73,6 +76,10 @@ public:
     void resetCtrs();
     uint numberOfPolls() const;
     uint validSlaveResposes() const;
+
+    void resumeSimulations();
+    void pauseSimulations();
+    void restartSimulations();
 
 public slots:
     void show();
@@ -228,6 +235,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.Length;
 
     out << frm->byteOrder();
+    out << frm->_simulationMap;
 
     return out;
 }
@@ -279,13 +287,17 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     ByteOrder byteOrder = ByteOrder::LittleEndian;
     const auto ver = frm->property("Version").value<QVersionNumber>();
     if(ver >= QVersionNumber(1, 1))
+    {
         in >> byteOrder;
+        in >> frm->_simulationMap;
+    }
 
     if(in.status() != QDataStream::Ok)
         return in;
 
     auto wnd = frm->parentWidget();
     wnd->resize(windowSize);
+    wnd->setWindowState(Qt::WindowActive);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
     frm->setDisplayMode(displayMode);
@@ -297,6 +309,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
+    frm->restartSimulations();
 
     return in;
 }

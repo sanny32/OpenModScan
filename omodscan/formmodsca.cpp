@@ -626,6 +626,12 @@ void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 ///
 void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
+    if(!_modbusClient.isValid() ||
+        _modbusClient.state() != QModbusDevice::ConnectedState)
+    {
+        return;
+    }
+
     const auto mode = dataDisplayMode();
     const quint32 node = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();

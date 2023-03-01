@@ -10,7 +10,6 @@ DataSimulator::DataSimulator(QObject* parent)
     ,_elapsed(0)
 {
     connect(&_timer, &QTimer::timeout, this, &DataSimulator::on_timeout);
-    _timer.start(_interval);
 }
 
 ///
@@ -48,6 +47,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
     }
 
     _simulationMap[{ type, addr}] = { mode, params, value };
+    resumeSimulations();
 }
 
 ///

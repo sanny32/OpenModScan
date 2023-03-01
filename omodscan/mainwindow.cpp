@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     menuByteOrder->addAction(ui->actionLittleEndian);
     menuByteOrder->addAction(ui->actionBigEndian);
     ui->actionByteOrder->setMenu(menuByteOrder);
+    ui->actionByteOrder->setIcon(_icoLittleEndian);
     qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();

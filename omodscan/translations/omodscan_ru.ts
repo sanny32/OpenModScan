@@ -1346,20 +1346,20 @@ Valid Slave Responses: %2</source>
         <translation>Сканирование адресов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="265"/>
-        <location filename="../mainwindow.cpp" line="304"/>
-        <location filename="../mainwindow.cpp" line="394"/>
-        <location filename="../mainwindow.cpp" line="405"/>
+        <location filename="../mainwindow.cpp" line="268"/>
+        <location filename="../mainwindow.cpp" line="307"/>
+        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="408"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="847"/>
+        <location filename="../mainwindow.cpp" line="850"/>
         <source>%1 was not found</source>
         <translation>%1 не найден</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="848"/>
+        <location filename="../mainwindow.cpp" line="851"/>
         <source>Failed to open %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
@@ -1445,6 +1445,30 @@ Point Type: [%3]</source>
 Registers on Query: %2</source>
         <translation>Начальный адрес: %1
 Количество регистров в запросе: %2</translation>
+    </message>
+</context>
+<context>
+    <name>SimulationModeComboBox</name>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="43"/>
+        <location filename="../controls/simulationmodecombobox.cpp" line="49"/>
+        <source>Random</source>
+        <translation>Случайное</translation>
+    </message>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="44"/>
+        <source>Toggle</source>
+        <translation>Переключение</translation>
+    </message>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="50"/>
+        <source>Increment</source>
+        <translation>Увеличение</translation>
+    </message>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="51"/>
+        <source>Decrement</source>
+        <translation>Уменьшение</translation>
     </message>
 </context>
 <context>

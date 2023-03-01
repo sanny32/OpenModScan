@@ -40,15 +40,15 @@ void SimulationModeComboBox::setup(QModbusDataUnit::RegisterType type)
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
-            addItem("Random", QVariant::fromValue(SimulationMode::Random));
-            addItem("Toggle", QVariant::fromValue(SimulationMode::Toggle));
+            addItem(tr("Random"), QVariant::fromValue(SimulationMode::Random));
+            addItem(tr("Toggle"), QVariant::fromValue(SimulationMode::Toggle));
         break;
 
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
-            addItem("Random", QVariant::fromValue(SimulationMode::Random));
-            addItem("Increment", QVariant::fromValue(SimulationMode::Increment));
-            addItem("Decrement", QVariant::fromValue(SimulationMode::Decrement));
+            addItem(tr("Random"), QVariant::fromValue(SimulationMode::Random));
+            addItem(tr("Increment"), QVariant::fromValue(SimulationMode::Increment));
+            addItem(tr("Decrement"), QVariant::fromValue(SimulationMode::Decrement));
         break;
 
         default:

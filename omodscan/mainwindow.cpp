@@ -894,12 +894,23 @@ FormModSca* MainWindow::createMdiChild(int id)
         windowActivate(wnd);
     });
 
-    connect(frm, &FormModSca::byteOrderChanged, this, [this](ByteOrder order)
+    auto updateIcons = [this](ByteOrder order)
     {
         switch(order){
         case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
         case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
         }
+    };
+
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons](Qt::WindowStates, Qt::WindowStates newState)
+    {
+        if(newState == Qt::WindowActive)
+            updateIcons(frm->byteOrder());
+    });
+
+    connect(frm, &FormModSca::byteOrderChanged, this, [updateIcons](ByteOrder order)
+    {
+        updateIcons(order);
     });
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)

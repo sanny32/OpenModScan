@@ -5,7 +5,7 @@
 #include <QModbusDataUnit>
 #include "modbussimulationparams.h"
 
-class FormModSca;
+typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> ModbusSimulationMap;
 
 ///
 /// \brief The DataSimulator class
@@ -24,6 +24,10 @@ public:
 
     void pauseSimulations();
     void resumeSimulations();
+    void restartSimulations();
+
+    ModbusSimulationParams simulationParams(QModbusDataUnit::RegisterType type, quint16 addr) const;
+    ModbusSimulationMap simulationMap() const;
 
 signals:
     void dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);

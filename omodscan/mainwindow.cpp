@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_autoStart(false)
+    ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
 
@@ -60,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError);
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
+    connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
+    connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
+    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &MainWindow::on_dataSimulated);
 
     ui->actionNew->trigger();
     loadSettings();
@@ -239,6 +243,45 @@ void MainWindow::on_modbusConnectionError(const QString& error)
 {
     _modbusClient.disconnectDevice();
     QMessageBox::warning(this, windowTitle(), error);
+}
+
+///
+/// \brief MainWindow::on_modbusConnected
+///
+void MainWindow::on_modbusConnected(const ConnectionDetails&)
+{
+    _dataSimulator->resumeSimulations();
+}
+
+///
+/// \brief MainWindow::on_modbusDisconnected
+///
+void MainWindow::on_modbusDisconnected(const ConnectionDetails&)
+{
+    _dataSimulator->pauseSimulations();
+}
+
+///
+/// \brief MainWindow::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void MainWindow::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    {
+        return;
+    }
+
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const quint32 node = frm->displayDefinition().DeviceId;
+    ModbusWriteParams params = { node, addr, value, mode, frm->byteOrder() };
+
+    _modbusClient.writeRegister(type, params, frm->formId());
 }
 
 ///
@@ -884,7 +927,7 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 ///
 FormModSca* MainWindow::createMdiChild(int id)
 {
-    auto frm = new FormModSca(id, _modbusClient, this);
+    auto frm = new FormModSca(id, _modbusClient, _dataSimulator, this);
     auto wnd = ui->mdiArea->addSubWindow(frm);
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);

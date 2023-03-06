@@ -30,7 +30,7 @@ class FormModSca : public QWidget
 public:
     static QVersionNumber VERSION;
 
-    explicit FormModSca(int id, ModbusClient& client, MainWindow* parent);
+    explicit FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulator> simulator, MainWindow* parent);
     ~FormModSca();
 
     int formId() const { return _formId; }
@@ -73,13 +73,12 @@ public:
 
     void print(QPrinter* painter);
 
+    ModbusSimulationMap simulationMap() const;
+    void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
+
     void resetCtrs();
     uint numberOfPolls() const;
     uint validSlaveResposes() const;
-
-    void resumeSimulations();
-    void pauseSimulations();
-    void restartSimulations();
 
 public slots:
     void show();
@@ -97,9 +96,6 @@ private slots:
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& request);
-    void on_modbusConnected(const ConnectionDetails& cd);
-    void on_modbusDisconnected(const ConnectionDetails& cd);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -119,9 +115,7 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusClient& _modbusClient;
-
     QSharedPointer<DataSimulator> _dataSimulator;
-    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
 };
 
 ///
@@ -235,7 +229,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.Length;
 
     out << frm->byteOrder();
-    out << frm->_simulationMap;
+    out << frm->simulationMap();
 
     return out;
 }
@@ -285,11 +279,13 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     in >> dd.Length;
 
     ByteOrder byteOrder = ByteOrder::LittleEndian;
+    ModbusSimulationMap simulationMap;
+
     const auto ver = frm->property("Version").value<QVersionNumber>();
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
-        in >> frm->_simulationMap;
+        in >> simulationMap;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -309,7 +305,9 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
-    frm->restartSimulations();
+
+    for(auto&& k : simulationMap.keys())
+        frm->startSimulation(k.first, k.second,  simulationMap[k]);
 
     return in;
 }

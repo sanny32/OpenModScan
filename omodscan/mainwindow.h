@@ -99,6 +99,10 @@ private slots:
 
     void on_modbusError(const QString& error, int requestId);
     void on_modbusConnectionError(const QString& error);
+    void on_modbusConnected(const ConnectionDetails& cd);
+    void on_modbusDisconnected(const ConnectionDetails& cd);
+
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
     void updateMenuWindow();
     void openFile(const QString& filename);
@@ -142,5 +146,6 @@ private:
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
+    QSharedPointer<DataSimulator> _dataSimulator;
 };
 #endif // MAINWINDOW_H

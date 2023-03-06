@@ -400,6 +400,7 @@ ModbusSimulationMap FormModSca::simulationMap() const
 void FormModSca::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
+    if(_modbusClient.state() != QModbusDevice::ConnectedState) _dataSimulator->pauseSimulations();
 }
 
 ///

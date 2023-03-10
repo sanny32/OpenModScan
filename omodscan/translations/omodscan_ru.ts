@@ -1432,12 +1432,12 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="10"/>
         <source>ODD</source>
-        <translation>Чет</translation>
+        <translation>Нечет</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="11"/>
         <source>EVEN</source>
-        <translation>Нечет</translation>
+        <translation>Чёт</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>

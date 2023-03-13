@@ -422,7 +422,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="21"/>
         <source>Address: %1</source>
-        <translation>Address: %1</translation>
+        <translation>Адрес: %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="22"/>

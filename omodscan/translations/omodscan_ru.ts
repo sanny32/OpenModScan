@@ -419,6 +419,16 @@
         <source>Length: </source>
         <translation>Количество: </translation>
     </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="21"/>
+        <source>Address: %1</source>
+        <translation>Address: %1</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="22"/>
+        <source>Length: %1</source>
+        <translation>Количество: %1</translation>
+    </message>
 </context>
 <context>
     <name>DialogForceMultipleRegisters</name>
@@ -446,6 +456,16 @@
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="62"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="24"/>
+        <source>Address: %1</source>
+        <translation>Адрес: %1</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="25"/>
+        <source>Length: %1</source>
+        <translation>Количество: %1</translation>
     </message>
 </context>
 <context>
@@ -900,53 +920,53 @@ single-point  write functions 05 and 06.)</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="138"/>
+        <location filename="../formmodsca.cpp" line="135"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="341"/>
+        <location filename="../formmodsca.cpp" line="338"/>
         <source>Device Id: %1</source>
         <translation>Узел: %1</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="344"/>
+        <location filename="../formmodsca.cpp" line="341"/>
         <source>Address: %1
 Length: %2</source>
         <translation>Адрес: %1
 Количество: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="347"/>
+        <location filename="../formmodsca.cpp" line="344"/>
         <source>MODBUS Point Type:
 %1</source>
         <translation>Тип регистров MODBUS:
 %1</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="350"/>
+        <location filename="../formmodsca.cpp" line="347"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="416"/>
+        <location filename="../formmodsca.cpp" line="449"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="423"/>
+        <location filename="../formmodsca.cpp" line="456"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="432"/>
+        <location filename="../formmodsca.cpp" line="465"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="502"/>
+        <location filename="../formmodsca.cpp" line="535"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -1346,20 +1366,20 @@ Valid Slave Responses: %2</source>
         <translation>Сканирование адресов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="268"/>
-        <location filename="../mainwindow.cpp" line="307"/>
-        <location filename="../mainwindow.cpp" line="397"/>
-        <location filename="../mainwindow.cpp" line="408"/>
+        <location filename="../mainwindow.cpp" line="314"/>
+        <location filename="../mainwindow.cpp" line="353"/>
+        <location filename="../mainwindow.cpp" line="443"/>
+        <location filename="../mainwindow.cpp" line="454"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="850"/>
+        <location filename="../mainwindow.cpp" line="896"/>
         <source>%1 was not found</source>
         <translation>%1 не найден</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="851"/>
+        <location filename="../mainwindow.cpp" line="897"/>
         <source>Failed to open %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
@@ -1373,13 +1393,13 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../modbusclient.cpp" line="419"/>
-        <location filename="../modbusclient.cpp" line="587"/>
+        <location filename="../modbusclient.cpp" line="588"/>
         <source>Coil Write Failure</source>
         <translation>Ошибка записи в Coil регистр</translation>
     </message>
     <message>
         <location filename="../modbusclient.cpp" line="423"/>
-        <location filename="../modbusclient.cpp" line="592"/>
+        <location filename="../modbusclient.cpp" line="593"/>
         <source>Register Write Failure</source>
         <translation>Ошибка записи в регистр</translation>
     </message>
@@ -1389,12 +1409,12 @@ Valid Slave Responses: %2</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="596"/>
+        <location filename="../modbusclient.cpp" line="597"/>
         <source>Mask Register Write Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="614"/>
+        <location filename="../modbusclient.cpp" line="615"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -1412,12 +1432,12 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="10"/>
         <source>ODD</source>
-        <translation>Чет</translation>
+        <translation>Нечет</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="11"/>
         <source>EVEN</source>
-        <translation>Нечет</translation>
+        <translation>Чёт</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>

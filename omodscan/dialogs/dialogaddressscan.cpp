@@ -1020,22 +1020,22 @@ void CsvExporter::exportCsv(const QString& filename)
         return;
 
     QTextStream ts(&file);
-    const char* sep = ";";
+    const char* delim = ";";
 
-    const auto header = QString("%2%1%3%1%4%1%5%1%6").arg(sep, tr("Device Id"), tr("Start Address"), tr("Length"), tr("Point Type"), tr("Registers on Query"));
+    const auto header = QString("%2%1%3%1%4%1%5%1%6").arg(delim, tr("Device Id"), tr("Start Address"), tr("Length"), tr("Point Type"), tr("Registers on Query"));
     ts << header << "\n";
 
-    const auto headerData = QString("%2%1%3%1%4%1%5%1%6").arg(sep, _deviceId, _startAddress, _length, _pointType, _regsOnQuery);
+    const auto headerData = QString("%2%1%3%1%4%1%5%1%6").arg(delim, _deviceId, _startAddress, _length, _pointType, _regsOnQuery);
     ts << headerData << "\n";
 
-    ts << "\n" << "Address" << sep << "Value\n";
+    ts << "\n" << "Address" << delim << "Value\n";
     for(int i = 0; i < _model->rowCount(); i++)
     {
         for(int j = 0; j < _model->columnCount(); j++)
         {
             const auto address = _model->data(_model->index(i, j), Qt::ToolTipRole).toString();
             const auto value = _model->data(_model->index(i, j), Qt::DisplayRole).toString();
-            ts << address << sep << value << "\n";
+            ts << address << delim << value << "\n";
         }
     }
 }

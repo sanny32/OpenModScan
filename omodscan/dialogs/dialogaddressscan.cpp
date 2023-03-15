@@ -1029,14 +1029,17 @@ void CsvExporter::exportCsv(const QString& filename)
     const auto headerData = QString("%2%1%3%1%4%1%5%1%6").arg(delim, _deviceId, _startAddress, _length, _pointType, _regsOnQuery);
     ts << headerData << "\n";
 
-    ts << "\n" << tr("Address") << delim << tr("Value") << "\n";
+    ts << "\n";
+
+    for(int j = 0; j < _model->columnCount(); j++)
+        ts << delim << QString("=\"%1\"").arg(_model->headerData(j, Qt::Horizontal, Qt::DisplayRole).toString());
+
     for(int i = 0; i < _model->rowCount(); i++)
     {
+        ts << "\n" << _model->headerData(i, Qt::Vertical, Qt::DisplayRole).toString();
         for(int j = 0; j < _model->columnCount(); j++)
         {
-            const auto address = _model->data(_model->index(i, j), Qt::ToolTipRole).toString();
-            const auto value = _model->data(_model->index(i, j), Qt::DisplayRole).toString();
-            ts << address << delim << value << "\n";
+            ts << delim << _model->data(_model->index(i, j), Qt::DisplayRole).toString();
         }
     }
 }

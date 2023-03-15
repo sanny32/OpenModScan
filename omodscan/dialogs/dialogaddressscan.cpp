@@ -1020,8 +1020,9 @@ void CsvExporter::exportCsv(const QString& filename)
         return;
 
     QTextStream ts(&file);
-    const char* delim = ";";
+    ts.setGenerateByteOrderMark(true);
 
+    const char* delim = ";";
     const auto header = QString("%2%1%3%1%4%1%5%1%6").arg(delim, tr("Device Id"), tr("Start Address"), tr("Length"), tr("Point Type"), tr("Registers on Query"));
     ts << header << "\n";
 

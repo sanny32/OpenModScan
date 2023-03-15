@@ -67,6 +67,16 @@
         <source>Registers on Query</source>
         <translation>Количество регистров в запросе</translation>
     </message>
+    <message>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1031"/>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1031"/>
+        <source>Value</source>
+        <translation>Значение</translation>
+    </message>
 </context>
 <context>
     <name>DialogAbout</name>

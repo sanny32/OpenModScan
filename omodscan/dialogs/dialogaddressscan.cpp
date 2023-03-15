@@ -1028,7 +1028,7 @@ void CsvExporter::exportCsv(const QString& filename)
     const auto headerData = QString("%2%1%3%1%4%1%5%1%6").arg(delim, _deviceId, _startAddress, _length, _pointType, _regsOnQuery);
     ts << headerData << "\n";
 
-    ts << "\n" << "Address" << delim << "Value\n";
+    ts << "\n" << tr("Address") << delim << tr("Value") << "\n";
     for(int i = 0; i < _model->rowCount(); i++)
     {
         for(int j = 0; j < _model->columnCount(); j++)

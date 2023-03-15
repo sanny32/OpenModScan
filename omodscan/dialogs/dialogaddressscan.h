@@ -151,6 +151,32 @@ private:
 };
 
 ///
+/// \brief The CsvExporter class
+///
+class CsvExporter: public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit CsvExporter(QAbstractTableModel* model,
+                         const QString& startAddress,
+                         const QString& length,
+                         const QString& devId,
+                         const QString& pointType,
+                         const QString& regsOnQuery,
+                         QObject* parent = nullptr);
+    void exportCsv(const QString& filename);
+
+private:
+    QAbstractTableModel* _model;
+    const QString _startAddress;
+    const QString _length;
+    const QString _deviceId;
+    const QString _pointType;
+    const QString _regsOnQuery;
+};
+
+///
 /// \brief The DialogAddressScan class
 ///
 class DialogAddressScan : public QDialog
@@ -193,6 +219,7 @@ private:
     void updateLogView(const QModbusReply* reply);
 
     void exportPdf(const QString& filename);
+    void exportCsv(const QString& filename);
 
 private:
     Ui::DialogAddressScan *ui;

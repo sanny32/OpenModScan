@@ -485,11 +485,19 @@ void DialogAddressScan::on_pushButtonScan_clicked()
 ///
 void DialogAddressScan::on_pushButtonExport_clicked()
 {
-    auto filename = QFileDialog::getSaveFileName(this, QString(), windowTitle(), tr("Pdf files (*.pdf)"));
+    auto filename = QFileDialog::getSaveFileName(this, QString(), windowTitle(), tr("Pdf files (*.pdf);;CSV files (*.csv)"));
     if(filename.isEmpty()) return;
-    if(!filename.endsWith(".pdf", Qt::CaseInsensitive)) filename += ".pdf";
 
-    exportPdf(filename);
+    if(!filename.endsWith(".pdf", Qt::CaseInsensitive) &&
+       !filename.endsWith(".csv", Qt::CaseInsensitive))
+    {
+        filename += ".pdf";
+    }
+
+    if(filename.endsWith(".pdf", Qt::CaseInsensitive))
+        exportPdf(filename);
+    else if(filename.endsWith(".csv", Qt::CaseInsensitive))
+        exportCsv(filename);
 }
 
 ///
@@ -720,6 +728,23 @@ void DialogAddressScan::exportPdf(const QString& filename)
                          this);
 
     exporter.exportPdf(filename);
+}
+
+///
+/// \brief DialogAddressScan::exportCsv
+/// \param filename
+///
+void DialogAddressScan::exportCsv(const QString& filename)
+{
+    CsvExporter exporter(_viewModel.get(),
+                         ui->lineEditStartAddress->text(),
+                         ui->lineEditLength->text(),
+                         ui->lineEditSlaveAddress->text(),
+                         ui->comboBoxPointType->currentText(),
+                         ui->spinBoxRegsOnQuery->text(),
+                         this);
+
+    exporter.exportCsv(filename);
 }
 
 ///
@@ -955,4 +980,66 @@ void PdfExporter::paintVLine(int top, int bottom, QPainter& painter)
     rc.setLeft(rc.left() + _headerWidth - _cy);
     rc.setBottom(bottom);
     painter.drawLine(rc.topLeft(), rc.bottomLeft());
+}
+
+///
+/// \brief CsvExporter::CsvExporter
+/// \param model
+/// \param startAddress
+/// \param length
+/// \param devId
+/// \param pointType
+/// \param regsOnQuery
+/// \param parent
+///
+CsvExporter::CsvExporter(QAbstractTableModel* model,
+                         const QString& startAddress,
+                         const QString& length,
+                         const QString& devId,
+                         const QString& pointType,
+                         const QString& regsOnQuery,
+                         QObject* parent)
+    : QObject(parent)
+    ,_model(model)
+    ,_startAddress(startAddress)
+    ,_length(length)
+    ,_deviceId(devId)
+    ,_pointType(pointType)
+    ,_regsOnQuery(regsOnQuery)
+{
+}
+
+///
+/// \brief CsvExporter::exportCsv
+/// \param filename
+///
+void CsvExporter::exportCsv(const QString& filename)
+{
+    QFile file(filename);
+    if(!file.open(QFile::WriteOnly))
+        return;
+
+    QTextStream ts(&file);
+    ts.setGenerateByteOrderMark(true);
+
+    const char* delim = ";";
+    const auto header = QString("%2%1%3%1%4%1%5%1%6").arg(delim, tr("Device Id"), tr("Start Address"), tr("Length"), tr("Point Type"), tr("Registers on Query"));
+    ts << header << "\n";
+
+    const auto headerData = QString("%2%1%3%1%4%1%5%1%6").arg(delim, _deviceId, _startAddress, _length, _pointType, _regsOnQuery);
+    ts << headerData << "\n";
+
+    ts << "\n";
+
+    for(int j = 0; j < _model->columnCount(); j++)
+        ts << delim << QString("=\"%1\"").arg(_model->headerData(j, Qt::Horizontal, Qt::DisplayRole).toString());
+
+    for(int i = 0; i < _model->rowCount(); i++)
+    {
+        ts << "\n" << _model->headerData(i, Qt::Vertical, Qt::DisplayRole).toString();
+        for(int j = 0; j < _model->columnCount(); j++)
+        {
+            ts << delim << _model->data(_model->index(i, j), Qt::DisplayRole).toString();
+        }
+    }
 }

@@ -354,7 +354,7 @@
              </size>
             </property>
             <property name="minimum">
-             <number>300</number>
+             <number>100</number>
             </property>
             <property name="maximum">
              <number>20000</number>
@@ -485,9 +485,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBoxTimeLeft">
+        <widget class="QGroupBox" name="groupBoxSanTime">
          <property name="title">
-          <string>Time Left</string>
+          <string>San Time</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>

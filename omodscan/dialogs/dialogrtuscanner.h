@@ -42,6 +42,9 @@ private:
     void printScanInfo(const SerialConnectionParams& params, int address);
     void printResult(const SerialConnectionParams& params, int address);
 
+    void prepareParams();
+    void setScanTme(quint64 time);
+
     void connectDevice(const SerialConnectionParams& params);
     void sendRequest(int address);
 
@@ -50,10 +53,8 @@ private:
     QModbusRtuSerialClient* _modbusClient;
 
 private:
-    int _requestCount = 0;
     quint64 _scanTime = 0;
     bool _scanning = false;
-    bool _finished = false;
 
     QTimer _scanTimer;
     QVector<SerialConnectionParams> _connParams;

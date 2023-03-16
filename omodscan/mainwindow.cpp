@@ -12,6 +12,7 @@
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
 #include "dialogaddressscan.h"
+#include "dialogrtuscanner.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
 #include "mainstatusbar.h"
@@ -455,6 +456,16 @@ void MainWindow::on_actionRestoreNow_triggered()
     if(filename.isEmpty()) return;
 
     loadConfig(filename);
+}
+
+///
+/// \brief MainWindow::on_actionRtuScanner_triggered
+///
+void MainWindow::on_actionRtuScanner_triggered()
+{
+    auto dlg = new DialogRtuScanner(this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
 }
 
 ///

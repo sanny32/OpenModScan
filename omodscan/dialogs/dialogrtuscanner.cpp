@@ -81,6 +81,7 @@ void DialogRtuScanner::on_awake()
     ui->groupBoxAddress->setEnabled(!_scanning);
     ui->groupBoxStopBits->setEnabled(!_scanning);
     ui->groupBoxTimeoute->setEnabled(!_scanning);
+    ui->pushButtonScan->setEnabled(ui->comboBoxSerial->count() > 0);
     ui->pushButtonScan->setText(_scanning ? tr("Stop Scan") : tr("Start Scan"));
 }
 
@@ -305,7 +306,7 @@ void DialogRtuScanner::prepareParams()
 ///
 void DialogRtuScanner::setScanTme(quint64 time)
 {
-    _scanTime = qMax(0U, time);
+    _scanTime = time;
     const auto str = QDateTime::fromSecsSinceEpoch(_scanTime).toUTC().toString("hh:mm:ss");
     ui->labelTimeLeft->setText(QString("<html><head/><body><p><span style=\"font-weight:700;\">%1</span></p></body></html>").arg(str));
 }

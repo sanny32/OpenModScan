@@ -207,8 +207,10 @@ void DialogRtuScanner::printScanInfo(const SerialConnectionParams& params, int a
     ui->labelStopBits->setText(QString(tr("Stop Bits: %1")).arg(params.StopBits));
     ui->labelAddress->setText(QString(tr("Address: %1")).arg(address));
 
-    const double total = _connParams.size() * (ui->spinBoxAddressTo->value() - ui->spinBoxAddressFrom->value() + 1);
-    const double progress = ((std::distance(_connParams.cbegin(), _iterator) + 1) + (address - ui->spinBoxAddressFrom->value() + 1)) / total;
+    const double size = _connParams.size();
+    const double addrLen = (ui->spinBoxAddressTo->value() - ui->spinBoxAddressFrom->value() + 1);
+    const double total = size * addrLen;
+    const double progress = std::distance(_connParams.cbegin(), _iterator) / size  + (address - ui->spinBoxAddressFrom->value() + 1) / total;
     ui->progressBar->setValue(progress * 100);
 }
 

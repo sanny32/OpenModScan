@@ -51,6 +51,7 @@ private slots:
     void on_actionDisable_triggered();
     void on_actionSaveConfig_triggered();
     void on_actionRestoreNow_triggered();
+    void on_actionRtuScanner_triggered();
 
     /* Setup menu slots*/
     void on_actionDataDefinition_triggered();

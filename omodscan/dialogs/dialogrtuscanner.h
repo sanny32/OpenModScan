@@ -39,14 +39,14 @@ private:
     void clearScanTime();
     void clearProgress();
 
-    void printScanInfo(const SerialConnectionParams& params, int address);
-    void printResult(const SerialConnectionParams& params, int address);
+    void printScanInfo(const SerialConnectionParams& params, int deviceId);
+    void printResult(const SerialConnectionParams& params, int deviceId);
 
     void prepareParams();
     void setScanTme(quint64 time);
 
     void connectDevice(const SerialConnectionParams& params);
-    void sendRequest(int address);
+    void sendRequest(int deviceId);
 
 private:
     Ui::DialogRtuScanner *ui;

@@ -15,19 +15,19 @@ inline QString Parity_toString(QSerialPort::Parity parity)
     switch(parity)
     {
         case QSerialPort::NoParity:
-        return DialogRtuScanner::tr("NONE");
+        return DialogRtuScanner::tr("None");
 
         case QSerialPort::EvenParity:
-        return DialogRtuScanner::tr("EVEN");
+        return DialogRtuScanner::tr("Even");
 
         case QSerialPort::OddParity:
-        return DialogRtuScanner::tr("ODD");
+        return DialogRtuScanner::tr("Odd");
 
         case QSerialPort::SpaceParity:
-        return DialogRtuScanner::tr("SPACE");
+        return DialogRtuScanner::tr("Space");
 
         case QSerialPort::MarkParity:
-        return DialogRtuScanner::tr("MARK");
+        return DialogRtuScanner::tr("Mark");
 
         default:
         break;
@@ -58,6 +58,13 @@ DialogRtuScanner::DialogRtuScanner(QWidget *parent)
     connect(&_scanTimer, &QTimer::timeout, this, &DialogRtuScanner::on_timeout);
     connect(_modbusClient, &QModbusClient::stateChanged, this, &DialogRtuScanner::on_stateChanged);
     connect(_modbusClient, &QModbusClient::errorOccurred, this, &DialogRtuScanner::on_errorOccurred);
+
+    auto serialPort = qobject_cast<QSerialPort*>(_modbusClient->device());
+    QObject::connect(serialPort, &QSerialPort::readyRead, this,
+    [this]()
+    {
+        printResult(*_iterator, _modbusClient->property("Address").toInt());
+    });
 }
 
 ///
@@ -81,6 +88,7 @@ void DialogRtuScanner::on_awake()
     ui->groupBoxAddress->setEnabled(!_scanning);
     ui->groupBoxStopBits->setEnabled(!_scanning);
     ui->groupBoxTimeoute->setEnabled(!_scanning);
+    ui->pushButtonClear->setEnabled(!_scanning);
     ui->pushButtonScan->setEnabled(ui->comboBoxSerial->count() > 0);
     ui->pushButtonScan->setText(_scanning ? tr("Stop Scan") : tr("Start Scan"));
 }
@@ -228,7 +236,10 @@ void DialogRtuScanner::printResult(const SerialConnectionParams& params, int add
                                                            QString::number(params.WordLength),
                                                            Parity_toString(params.Parity),
                                                            QString::number(params.StopBits));
-    ui->listWidget->addItem(result);
+
+    const auto items = ui->listWidget->findItems(result, Qt::MatchExactly);
+    if(items.empty())
+        ui->listWidget->addItem(result);
 }
 
 ///
@@ -318,7 +329,7 @@ void DialogRtuScanner::setScanTme(quint64 time)
 void DialogRtuScanner::connectDevice(const SerialConnectionParams& params)
 {
     _modbusClient->disconnectDevice();
-    _modbusClient->setNumberOfRetries(1);
+    _modbusClient->setNumberOfRetries(0);
     _modbusClient->setTimeout(ui->spinBoxTimeout->value());
     _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, params.PortName);
     _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, params.Parity);
@@ -349,14 +360,16 @@ void DialogRtuScanner::sendRequest(int address)
     }
 
     printScanInfo(*_iterator, address);
+    _modbusClient->setProperty("Address", address);
 
-    QModbusRequest req(QModbusRequest::ReadHoldingRegisters, quint16(1), quint16(1));
+    QModbusRequest req(QModbusPdu::ReportServerId);
     if(auto reply = _modbusClient->sendRawRequest(req, address))
     {
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, [this, reply, address]()
             {
+                //qDebug() << reply->error();
                 if(reply->error() != QModbusDevice::TimeoutError &&
                    reply->error() != QModbusDevice::ConnectionError &&
                    reply->error() != QModbusDevice::ReplyAbortedError)

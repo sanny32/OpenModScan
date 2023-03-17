@@ -464,6 +464,24 @@ void MainWindow::on_actionRestoreNow_triggered()
 void MainWindow::on_actionRtuScanner_triggered()
 {
     auto dlg = new DialogRtuScanner(this);
+    connect(dlg, &DialogRtuScanner::attemptToConnect, this,
+    [this](const SerialConnectionParams& params, int deviceId)
+    {
+        _connParams.SerialParams = params;
+        _connParams.Type = ConnectionType::Serial;
+
+        _modbusClient.disconnectDevice();
+        _modbusClient.connectDevice(_connParams);
+
+        auto frm = currentMdiChild();
+        if(frm)
+        {
+            auto dd = frm->displayDefinition();
+            dd.DeviceId = deviceId;
+            frm->setDisplayDefinition(dd);
+        }
+    });
+
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }

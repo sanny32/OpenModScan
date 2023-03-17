@@ -150,6 +150,21 @@ void DialogRtuScanner::on_stateChanged(QModbusDevice::State state)
 }
 
 ///
+/// \brief DialogRtuScanner::on_listWidget_itemDoubleClicked
+/// \param item
+///
+void DialogRtuScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    stopScan();
+
+    const auto deviceId = item->data(Qt::UserRole + 1).toInt();
+    const auto params = item->data(Qt::UserRole).value<SerialConnectionParams>();
+
+    emit attemptToConnect(params, deviceId);
+    close();
+}
+
+///
 /// \brief DialogRtuScanner::startScan
 ///
 void DialogRtuScanner::startScan()
@@ -240,7 +255,14 @@ void DialogRtuScanner::printResult(const SerialConnectionParams& params, int dev
 
     const auto items = ui->listWidget->findItems(result, Qt::MatchExactly);
     if(items.empty())
-        ui->listWidget->addItem(result);
+    {
+        auto item = new QListWidgetItem(ui->listWidget);
+        item->setText(result);
+        item->setData(Qt::UserRole, QVariant::fromValue(params));
+        item->setData(Qt::UserRole + 1, deviceId);
+
+        ui->listWidget->addItem(item);
+    }
 }
 
 ///

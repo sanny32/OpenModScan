@@ -2,6 +2,7 @@
 #define DIALOGRTUSCANNER_H
 
 #include <QTimer>
+#include <QListWidgetItem>
 #include "qfixedsizedialog.h"
 #include "connectiondetails.h"
 
@@ -16,6 +17,9 @@ namespace Ui {
 class DialogRtuScanner;
 }
 
+///
+/// \brief The DialogRtuScanner class
+///
 class DialogRtuScanner : public QFixedSizeDialog
 {
     Q_OBJECT
@@ -24,6 +28,9 @@ public:
     explicit DialogRtuScanner(QWidget *parent = nullptr);
     ~DialogRtuScanner();
 
+signals:
+    void attemptToConnect(const SerialConnectionParams& params, int deviceId);
+
 private slots:
     void on_awake();
     void on_timeout();
@@ -31,6 +38,7 @@ private slots:
     void on_pushButtonClear_clicked();
     void on_errorOccurred(QModbusDevice::Error error);
     void on_stateChanged(QModbusDevice::State state);
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
     void startScan();

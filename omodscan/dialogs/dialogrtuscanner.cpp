@@ -46,11 +46,10 @@ DialogRtuScanner::DialogRtuScanner(QWidget *parent)
     ,_modbusClient(new QModbusRtuSerialClient(this))
 {
     ui->setupUi(this);
+    ui->progressBar->setAlignment(Qt::AlignCenter);
 
     for(auto&& port: QSerialPortInfo::availablePorts())
-    {
         ui->comboBoxSerial->addItem(port.portName());
-    }
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogRtuScanner::on_awake);

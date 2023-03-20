@@ -265,9 +265,6 @@
    <property name="text">
     <string>Close</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+F4</string>
-   </property>
   </action>
   <action name="actionSave">
    <property name="icon">

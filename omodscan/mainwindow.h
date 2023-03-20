@@ -103,8 +103,6 @@ private slots:
     void on_modbusConnected(const ConnectionDetails& cd);
     void on_modbusDisconnected(const ConnectionDetails& cd);
 
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
-
     void updateMenuWindow();
     void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);

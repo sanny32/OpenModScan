@@ -64,7 +64,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
-    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &MainWindow::on_dataSimulated);
 
     ui->actionNew->trigger();
     loadSettings();
@@ -260,29 +259,6 @@ void MainWindow::on_modbusConnected(const ConnectionDetails&)
 void MainWindow::on_modbusDisconnected(const ConnectionDetails&)
 {
     _dataSimulator->pauseSimulations();
-}
-
-///
-/// \brief MainWindow::on_dataSimulated
-/// \param mode
-/// \param type
-/// \param addr
-/// \param value
-///
-void MainWindow::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
-{
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
-    {
-        return;
-    }
-
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    const quint32 node = frm->displayDefinition().DeviceId;
-    ModbusWriteParams params = { node, addr, value, mode, frm->byteOrder() };
-
-    _modbusClient.writeRegister(type, params, frm->formId());
 }
 
 ///

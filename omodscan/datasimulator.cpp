@@ -48,6 +48,8 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
 
     _simulationMap[{ type, addr}] = { mode, params, value };
     resumeSimulations();
+
+    emit simulationStarted(type, addr);
 }
 
 ///
@@ -58,6 +60,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
 void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr)
 {
     _simulationMap.remove({ type, addr});
+    emit simulationStopped(type, addr);
 }
 
 ///

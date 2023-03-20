@@ -28,6 +28,9 @@ public:
     explicit DialogRtuScanner(QWidget *parent = nullptr);
     ~DialogRtuScanner();
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 signals:
     void attemptToConnect(const SerialConnectionParams& params, int deviceId);
 

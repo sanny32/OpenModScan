@@ -76,6 +76,18 @@ DialogRtuScanner::~DialogRtuScanner()
 }
 
 ///
+/// \brief DialogRtuScanner::changeEvent
+/// \param event
+///
+void DialogRtuScanner::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogRtuScanner::on_awake
 ///
 void DialogRtuScanner::on_awake()

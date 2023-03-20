@@ -29,6 +29,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulato
     ,_dataSimulator(simulator)
 {
     Q_ASSERT(parent != nullptr);
+    Q_ASSERT(simulator != nullptr);
 
     ui->setupUi(this);
     setWindowTitle(QString("ModSca%1").arg(_formId));
@@ -45,12 +46,16 @@ FormModSca::FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulato
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
 
-    ui->outputWidget->setup(displayDefinition());
+    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap());
     ui->outputWidget->setFocus();
 
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
+
+    connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSca::on_simulationStarted);
+    connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSca::on_simulationStopped);
+    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSca::on_dataSimulated);
 
     _timer.start();
 }
@@ -133,7 +138,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
     ui->outputWidget->setStatus(tr("Data Uninitialized"));
-    ui->outputWidget->setup(dd);
+    ui->outputWidget->setup(dd, _dataSimulator->simulationMap());
 }
 
 ///
@@ -589,7 +594,7 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
 ///
 void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 {
-    ui->outputWidget->setup(displayDefinition());
+    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap());
 }
 
 ///
@@ -597,7 +602,7 @@ void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 ///
 void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
 {
-    ui->outputWidget->setup(displayDefinition());
+    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap());
 }
 
 ///
@@ -612,7 +617,7 @@ void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
 ///
 void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
 {
-    ui->outputWidget->setup(displayDefinition());
+    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap());
 }
 
 ///
@@ -701,4 +706,46 @@ void FormModSca::on_statisticWidget_numberOfPollsChanged(uint value)
 void FormModSca::on_statisticWidget_validSlaveResposesChanged(uint value)
 {
     emit validSlaveResposesChanged(value);
+}
+
+///
+/// \brief FormModSca::on_simulationStarted
+/// \param type
+/// \param addr
+///
+void FormModSca::on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr)
+{
+    ui->outputWidget->setSimulated(type, addr, true);
+}
+
+///
+/// \brief FormModSca::on_simulationStopped
+/// \param type
+/// \param addr
+///
+void FormModSca::on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr)
+{
+    ui->outputWidget->setSimulated(type, addr, false);
+}
+
+///
+/// \brief FormModSca::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void FormModSca::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    {
+        return;
+    }
+
+    const auto dd = displayDefinition();
+    if(type == dd.PointType && addr >= dd.PointAddress && addr < dd.PointAddress + dd.Length)
+    {
+        const ModbusWriteParams params = { dd.DeviceId, addr, value, mode, byteOrder() };
+        _modbusClient.writeRegister(type, params, formId());
+    }
 }

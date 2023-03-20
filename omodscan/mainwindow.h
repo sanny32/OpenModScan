@@ -51,6 +51,7 @@ private slots:
     void on_actionDisable_triggered();
     void on_actionSaveConfig_triggered();
     void on_actionRestoreNow_triggered();
+    void on_actionRtuScanner_triggered();
 
     /* Setup menu slots*/
     void on_actionDataDefinition_triggered();
@@ -101,8 +102,6 @@ private slots:
     void on_modbusConnectionError(const QString& error);
     void on_modbusConnected(const ConnectionDetails& cd);
     void on_modbusDisconnected(const ConnectionDetails& cd);
-
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
     void updateMenuWindow();
     void openFile(const QString& filename);

@@ -24,6 +24,8 @@ OutputWidget::OutputWidget(QWidget *parent) :
    ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Binary)
    ,_byteOrder(ByteOrder::LittleEndian)
+   ,_iconPointGreen(QIcon(":/res/pointGreen.png"))
+   ,_iconPointEmpty(QIcon(":/res/pointEmpty.png"))
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
@@ -72,10 +74,16 @@ QVector<quint16> OutputWidget::data() const
 ///
 /// \brief OutputWidget::setup
 /// \param dd
+/// \param simulations
 ///
-void OutputWidget::setup(const DisplayDefinition& dd)
+void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap& simulations)
 {
     _displayDefinition = dd;
+
+    _simulatedItems.clear();
+    for(auto&& key : simulations.keys())
+        _simulatedItems[key] = true;
+
     updateDataWidget(QModbusDataUnit());
 }
 
@@ -299,6 +307,22 @@ void OutputWidget::updateData(const QModbusDataUnit& data)
 {
     updateDataWidget(data);
     _lastData = data;
+}
+
+///
+/// \brief OutputWidget::setSimulated
+/// \param type
+/// \param addr
+/// \param on
+///
+void OutputWidget::setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+{
+    if(on)
+        _simulatedItems[{type, addr}] = true;
+    else
+        _simulatedItems.remove({type, addr});
+
+    updateDataWidget(_lastData);
 }
 
 ///
@@ -735,6 +759,7 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         }
         item->setText(QString(format).arg(addr, valstr));
         item->setData(Qt::UserRole, QVariant::fromValue(itemData));
+        item->setIcon(listWidgetItemIcon(pointType, itemData.Address));
     }
 
     if(captureMode() == CaptureMode::TextCapture)
@@ -782,4 +807,16 @@ void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPd
 
     ui->plainTextEdit->insertPlainText(text);
     ui->plainTextEdit->moveCursor(QTextCursor::End);
+}
+
+///
+/// \brief OutputWidget::listWidgetItemIcon
+/// \param type
+/// \param addr
+/// \return
+///
+const QIcon& OutputWidget::listWidgetItemIcon(QModbusDataUnit::RegisterType type, quint16 addr) const
+{
+    return _simulatedItems.find({type, addr}) != _simulatedItems.end() ?
+                _iconPointGreen : _iconPointEmpty;
 }

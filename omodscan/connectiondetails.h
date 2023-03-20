@@ -21,6 +21,10 @@ struct TcpConnectionParams
         IPAddress = IPAddress.isEmpty() ? "127.0.0.1" : IPAddress;
         ServicePort = qMax<quint16>(1, ServicePort);
     }
+
+    bool operator==(const TcpConnectionParams& params) const {
+        return ServicePort == params.ServicePort && IPAddress == params.IPAddress;
+    }
 };
 Q_DECLARE_METATYPE(TcpConnectionParams)
 
@@ -102,6 +106,18 @@ struct SerialConnectionParams
         WordLength = qBound(QSerialPort::Data5, WordLength, QSerialPort::Data8);
         Parity = qBound(QSerialPort::NoParity, Parity, QSerialPort::MarkParity);
         FlowControl = qBound(QSerialPort::NoFlowControl, FlowControl, QSerialPort::SoftwareControl);
+    }
+
+    bool operator==(const SerialConnectionParams& params) const{
+        return PortName == params.PortName &&
+                BaudRate == params.BaudRate &&
+                WordLength == params.WordLength &&
+                Parity == params.Parity &&
+                StopBits == params.StopBits &&
+                FlowControl == params.FlowControl &&
+                SetDTR == params.SetDTR &&
+                SetRTS == params.SetRTS;
+
     }
 };
 Q_DECLARE_METATYPE(SerialConnectionParams)
@@ -204,6 +220,14 @@ struct ModbusProtocolSelections
         NumberOfRetries = qBound(1U, NumberOfRetries, 10U);
         InterFrameDelay = qBound(0U, InterFrameDelay, 300000U);
     }
+
+    bool operator==(const ModbusProtocolSelections& params) const{
+        return Mode == params.Mode &&
+                SlaveResponseTimeOut == params.SlaveResponseTimeOut &&
+                NumberOfRetries == params.NumberOfRetries &&
+                InterFrameDelay == params.InterFrameDelay &&
+                ForceModbus15And16Func == params.ForceModbus15And16Func;
+    }
 };
 Q_DECLARE_METATYPE(ModbusProtocolSelections)
 
@@ -287,6 +311,12 @@ struct ConnectionDetails
     TcpConnectionParams TcpParams;
     SerialConnectionParams SerialParams;
     ModbusProtocolSelections ModbusParams;
+
+    bool operator==(const ConnectionDetails& cd) const{
+        return Type == cd.Type &&
+                ModbusParams == cd.ModbusParams &&
+                ((Type == ConnectionType::Tcp) ? TcpParams == cd.TcpParams: SerialParams == cd.SerialParams);
+    }
 };
 Q_DECLARE_METATYPE(ConnectionDetails)
 

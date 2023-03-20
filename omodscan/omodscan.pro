@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.2.2
+VERSION = 1.3.0
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -40,6 +40,7 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
     datasimulator.cpp \
+    dialogs/dialogrtuscanner.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogaddressscan.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -88,6 +89,7 @@ HEADERS += \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
     datasimulator.h \
+    dialogs/dialogrtuscanner.h \
     dialogs/dialogabout.h \
     dialogs/dialogaddressscan.h \
     dialogs/dialogautosimulation.h \
@@ -126,6 +128,7 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
+    dialogs/dialogrtuscanner.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogaddressscan.ui \
     dialogs/dialogautosimulation.ui \

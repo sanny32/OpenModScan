@@ -12,6 +12,7 @@
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
 #include "dialogaddressscan.h"
+#include "dialogrtuscanner.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
 #include "mainstatusbar.h"
@@ -63,7 +64,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
-    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &MainWindow::on_dataSimulated);
 
     ui->actionNew->trigger();
     loadSettings();
@@ -262,29 +262,6 @@ void MainWindow::on_modbusDisconnected(const ConnectionDetails&)
 }
 
 ///
-/// \brief MainWindow::on_dataSimulated
-/// \param mode
-/// \param type
-/// \param addr
-/// \param value
-///
-void MainWindow::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
-{
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
-    {
-        return;
-    }
-
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    const quint32 node = frm->displayDefinition().DeviceId;
-    ModbusWriteParams params = { node, addr, value, mode, frm->byteOrder() };
-
-    _modbusClient.writeRegister(type, params, frm->formId());
-}
-
-///
 /// \brief MainWindow::on_actionNew_triggered
 ///
 void MainWindow::on_actionNew_triggered()
@@ -455,6 +432,34 @@ void MainWindow::on_actionRestoreNow_triggered()
     if(filename.isEmpty()) return;
 
     loadConfig(filename);
+}
+
+///
+/// \brief MainWindow::on_actionRtuScanner_triggered
+///
+void MainWindow::on_actionRtuScanner_triggered()
+{
+    auto dlg = new DialogRtuScanner(this);
+    connect(dlg, &DialogRtuScanner::attemptToConnect, this,
+    [this](const SerialConnectionParams& params, int deviceId)
+    {
+        _connParams.SerialParams = params;
+        _connParams.Type = ConnectionType::Serial;
+
+        _modbusClient.disconnectDevice();
+        _modbusClient.connectDevice(_connParams);
+
+        auto frm = currentMdiChild();
+        if(frm)
+        {
+            auto dd = frm->displayDefinition();
+            dd.DeviceId = deviceId;
+            frm->setDisplayDefinition(dd);
+        }
+    });
+
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
 }
 
 ///

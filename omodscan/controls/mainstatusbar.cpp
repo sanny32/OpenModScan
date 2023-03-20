@@ -8,7 +8,7 @@
 /// \param parity
 /// \return
 ///
-QString Parity_toString(QSerialPort::Parity parity)
+inline QString Parity_toString(QSerialPort::Parity parity)
 {
     switch(parity)
     {

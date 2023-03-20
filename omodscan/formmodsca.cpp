@@ -745,9 +745,7 @@ void FormModSca::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::Registe
     const auto dd = displayDefinition();
     if(type == dd.PointType && addr >= dd.PointAddress && addr < dd.PointAddress + dd.Length)
     {
-        const quint32 node = dd.DeviceId;
-        ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
-
+        const ModbusWriteParams params = { dd.DeviceId, addr, value, mode, byteOrder() };
         _modbusClient.writeRegister(type, params, formId());
     }
 }

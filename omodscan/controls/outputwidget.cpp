@@ -321,6 +321,8 @@ void OutputWidget::setSimulated(QModbusDataUnit::RegisterType type, quint16 addr
         _simulatedItems[{type, addr}] = true;
     else
         _simulatedItems.remove({type, addr});
+
+    updateDataWidget(_lastData);
 }
 
 ///

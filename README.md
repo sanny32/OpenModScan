@@ -24,6 +24,16 @@ Registers
     0x06 - Write Single Register
     0x10 - Write Multiple Registers
     0x16 - Mask Write Register
+    
+## Extended Featues
+  Modbus Address Scan
+  
+  ![image](https://user-images.githubusercontent.com/13627951/226310086-4160c8c7-503a-48c0-bdf8-f5bb970592d3.png)
+
+  Modbus RTU Scanner
+  
+  ![image](https://user-images.githubusercontent.com/13627951/226309566-fb2326c5-76f3-45cf-aa6d-8e0c1ea73737.png)
+
 
 ## Building
   Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.

@@ -330,8 +330,7 @@ void DialogRtuScanner::prepareParams()
                     params.WordLength = wordLength;
                     params.Parity = parity;
                     params.StopBits = stop;
-                    if(!_connParams.contains(params))
-                        _connParams.push_back(params);
+                    _connParams.insert(params);
                 }
             }
         }

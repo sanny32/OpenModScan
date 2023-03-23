@@ -8,12 +8,6 @@
 #include <QSettings>
 #include "enums.h"
 
-template <class T>
-inline void hash_combine(size_t& seed, const T& v)
-{
-    seed ^= qHash(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-}
-
 ///
 /// \brief The TcpConnectionParams class
 ///
@@ -127,25 +121,6 @@ struct SerialConnectionParams
     }
 };
 Q_DECLARE_METATYPE(SerialConnectionParams)
-
-///
-/// \brief qHash
-/// \param params
-/// \return
-///
-inline size_t qHash(const SerialConnectionParams& params)
-{
-   size_t seed = 0;
-   hash_combine(seed, params.PortName);
-   hash_combine(seed, params.BaudRate);
-   hash_combine(seed, params.WordLength);
-   hash_combine(seed, params.Parity);
-   hash_combine(seed, params.StopBits);
-   hash_combine(seed, params.FlowControl);
-   hash_combine(seed, params.SetDTR);
-   hash_combine(seed, params.SetRTS);
-   return seed;
-}
 
 ///
 /// \brief operator <<

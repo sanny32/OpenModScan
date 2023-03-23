@@ -340,13 +340,13 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
     {
         case SimulationRole:
             _mapItems[index.row()].Simulated = value.toBool();
-            emit dataChanged(index, index, QList<int>() << role);
+            emit dataChanged(index, index, QVector<int>() << role);
         return true;
 
 
         case DescriptionRole:
             _mapItems[index.row()].Description = value.toString();
-            emit dataChanged(index, index, QList<int>() << role);
+            emit dataChanged(index, index, QVector<int>() << role);
         return true;
 
         default:
@@ -448,7 +448,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
         }
     }
 
-    emit dataChanged(index(0), index(rowCount() - 1), QList<int>() << Qt::DisplayRole);
+    emit dataChanged(index(0), index(rowCount() - 1), QVector<int>() << Qt::DisplayRole);
 }
 
 ///
@@ -871,7 +871,7 @@ void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 {
     if(!index.isValid()) return;
-    auto itemData = _listModel->data(index, Qt::UserRole).value<OutputListModel::ItemData>();
+    auto itemData = _listModel->data(index, Qt::UserRole).value<ItemData>();
 
     switch(_displayDefinition.PointType)
     {
@@ -885,7 +885,7 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
                     if(index.row() % 2)
                     {
                         const auto idx = _listModel->index(index.row() - 1);
-                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<OutputListModel::ItemData>();
+                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<ItemData>();
                     }
                 break;
 
@@ -894,7 +894,7 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
                     if(index.row() % 4)
                     {
                         const auto idx = _listModel->index(index.row() - index.row() % 4);
-                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<OutputListModel::ItemData>();
+                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<ItemData>();
                     }
                 break;
 

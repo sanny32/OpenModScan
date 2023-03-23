@@ -182,6 +182,7 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
+    ui->actionByteOrder->setEnabled(frm != nullptr);
     ui->actionForceCoils->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);

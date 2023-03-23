@@ -22,6 +22,8 @@ class OutputListModel : public QAbstractListModel
 {
     Q_OBJECT
 
+    friend class OutputWidget;
+
 public:
     explicit OutputListModel(OutputWidget* parent);
 
@@ -38,14 +40,19 @@ public:
     QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
-    const QIcon& itemIcon(QModbusDataUnit::RegisterType type, quint16 addr) const;
+    struct ItemData
+    {
+        quint32 Address = 0;
+        QVariant Value;
+        QString ValueStr;
+        bool Simulated = false;
+    };
 
-private:
     OutputWidget* _parentWidget;
     QModbusDataUnit _lastData;
     QIcon _iconPointGreen;
     QIcon _iconPointEmpty;
-    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, bool> _simulatedItems;
+    QMap<int, ItemData> _mapItems;
 };
 
 ///

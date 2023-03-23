@@ -5,14 +5,6 @@
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
-struct ListItemData
-{
-    int Row;
-    quint32 Address;
-    QVariant Value;
-};
-Q_DECLARE_METATYPE(ListItemData)
-
 ///
 /// \brief SimulationRole
 ///
@@ -274,71 +266,29 @@ int OutputListModel::rowCount(const QModelIndex&) const
 ///
 QVariant OutputListModel::data(const QModelIndex& index, int role) const
 {
-    if(!index.isValid())
+    if(!index.isValid() ||
+       !_mapItems.contains(index.row()))
+    {
         return QVariant();
+    }
 
-    ListItemData itemData;
-    itemData.Row = index.row();
-    itemData.Address = _parentWidget->_displayDefinition.PointAddress + itemData.Row;
-
-    const auto mode = _parentWidget->dataDisplayMode();
+    const auto row = index.row();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
-    const auto byteOrder = _parentWidget->byteOrder();
 
+    const ItemData& itemData = _mapItems[row];
     const auto addrstr = formatAddress(pointType, itemData.Address, hexAddresses);
-    const auto value = _lastData.value(itemData.Row);
-
-    QString valstr;
-    switch(mode)
-    {
-        case DataDisplayMode::Binary:
-            valstr = formatBinaryValue(pointType, value, byteOrder, itemData.Value);
-        break;
-
-        case DataDisplayMode::Decimal:
-            valstr = formatDecimalValue(pointType, value, byteOrder, itemData.Value);
-        break;
-
-        case DataDisplayMode::Integer:
-            valstr = formatIntegerValue(pointType, value, byteOrder, itemData.Value);
-        break;
-
-        case DataDisplayMode::Hex:
-            valstr = formatHexValue(pointType, value, byteOrder, itemData.Value);
-        break;
-
-        case DataDisplayMode::FloatingPt:
-            valstr = formatFloatValue(pointType, value, _lastData.value(itemData.Row+1), byteOrder,
-                                      (itemData.Row%2) || (itemData.Row+1>=rowCount()), itemData.Value);
-        break;
-
-        case DataDisplayMode::SwappedFP:
-            valstr = formatFloatValue(pointType, _lastData.value(itemData.Row+1), value, byteOrder,
-                                      (itemData.Row%2) || (itemData.Row+1>=rowCount()), itemData.Value);
-        break;
-
-        case DataDisplayMode::DblFloat:
-            valstr = formatDoubleValue(pointType, value, _lastData.value(itemData.Row+1), _lastData.value(itemData.Row+2), _lastData.value(itemData.Row+3),
-                                       byteOrder, (itemData.Row%4) || (itemData.Row+3>=rowCount()), itemData.Value);
-        break;
-
-        case DataDisplayMode::SwappedDbl:
-            valstr = formatDoubleValue(pointType, _lastData.value(itemData.Row+3), _lastData.value(itemData.Row+2), _lastData.value(itemData.Row+1), value,
-                                       byteOrder, (itemData.Row%4) || (itemData.Row+3>=rowCount()), itemData.Value);
-        break;
-    }
 
     switch(role)
     {
         case Qt::DisplayRole:
-            return QString("%1: %2                ").arg(addrstr, valstr);
+            return QString("%1: %2                ").arg(addrstr, itemData.ValueStr);
 
         case CaptureRole:
-            return QString(valstr).remove('<').remove('>');
+            return QString(itemData.ValueStr).remove('<').remove('>');
 
         case Qt::DecorationRole:
-            return itemIcon(pointType, itemData.Address);
+            return itemData.Simulated ? _iconPointGreen : _iconPointEmpty;
 
         case Qt::UserRole:
             return QVariant::fromValue(itemData);
@@ -363,16 +313,11 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
     {
         case SimulationRole:
         {
-            const auto pointType = _parentWidget->_displayDefinition.PointType;
-            const auto address = _parentWidget->_displayDefinition.PointAddress + index.row();
-            if(address <= 0) return false;
-
-            if(value.toBool())
-                _simulatedItems[{pointType, address}] = true;
-            else
-                _simulatedItems.remove({pointType, address});
-
-            return true;
+            if(_mapItems.find(index.row()) != _mapItems.end())
+            {
+                _mapItems[index.row()].Simulated = value.toBool();
+                return true;
+            }
         }
         break;
 
@@ -406,8 +351,8 @@ QVector<quint16> OutputListModel::values() const
 ///
 void OutputListModel::clear()
 {
-    _simulatedItems.clear();
-    _lastData = QModbusDataUnit();
+    _mapItems.clear();
+    updateData(QModbusDataUnit());
 }
 
 ///
@@ -417,6 +362,57 @@ void OutputListModel::clear()
 void OutputListModel::updateData(const QModbusDataUnit& data)
 {
     _lastData = data;
+
+    const auto mode = _parentWidget->dataDisplayMode();
+    const auto pointType = _parentWidget->_displayDefinition.PointType;
+    const auto byteOrder = _parentWidget->byteOrder();
+
+    for(int i = 0; i < rowCount(); i++)
+    {
+        const auto value = _lastData.value(i);
+
+        auto& itemData = _mapItems[i];
+        itemData.Address = _parentWidget->_displayDefinition.PointAddress + i;
+
+        switch(mode)
+        {
+            case DataDisplayMode::Binary:
+                itemData.ValueStr = formatBinaryValue(pointType, value, byteOrder, itemData.Value);
+            break;
+
+            case DataDisplayMode::Decimal:
+                itemData.ValueStr = formatDecimalValue(pointType, value, byteOrder, itemData.Value);
+            break;
+
+            case DataDisplayMode::Integer:
+                itemData.ValueStr = formatIntegerValue(pointType, value, byteOrder, itemData.Value);
+            break;
+
+            case DataDisplayMode::Hex:
+                itemData.ValueStr = formatHexValue(pointType, value, byteOrder, itemData.Value);
+            break;
+
+            case DataDisplayMode::FloatingPt:
+                itemData.ValueStr = formatFloatValue(pointType, value, _lastData.value(i+1), byteOrder,
+                                          (i%2) || (i+1>=rowCount()), itemData.Value);
+            break;
+
+            case DataDisplayMode::SwappedFP:
+                itemData.ValueStr = formatFloatValue(pointType, _lastData.value(i+1), value, byteOrder,
+                                          (i%2) || (i+1>=rowCount()), itemData.Value);
+            break;
+
+            case DataDisplayMode::DblFloat:
+                itemData.ValueStr = formatDoubleValue(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+            break;
+
+            case DataDisplayMode::SwappedDbl:
+                itemData.ValueStr = formatDoubleValue(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+            break;
+        }
+    }
 }
 
 ///
@@ -435,18 +431,6 @@ QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 ad
         return index(row);
 
     return QModelIndex();
-}
-
-///
-/// \brief OutputListModel::itemIcon
-/// \param type
-/// \param addr
-/// \return
-///
-const QIcon& OutputListModel::itemIcon(QModbusDataUnit::RegisterType type, quint16 addr) const
-{
-    return _simulatedItems.find({type, addr}) != _simulatedItems.end() ?
-                _iconPointGreen : _iconPointEmpty;
 }
 
 ///
@@ -835,7 +819,7 @@ void OutputWidget::setByteOrder(ByteOrder order)
 void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 {
     if(!index.isValid()) return;
-    auto itemData = _listModel->data(index, Qt::UserRole).value<ListItemData>();
+    auto itemData = _listModel->data(index, Qt::UserRole).value<OutputListModel::ItemData>();
 
     switch(_displayDefinition.PointType)
     {
@@ -846,19 +830,19 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
             {
                 case DataDisplayMode::FloatingPt:
                 case DataDisplayMode::SwappedFP:
-                    if(itemData.Row % 2)
+                    if(index.row() % 2)
                     {
-                        const auto idx = _listModel->index(itemData.Row - 1);
-                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<ListItemData>();
+                        const auto idx = _listModel->index(index.row() - 1);
+                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<OutputListModel::ItemData>();
                     }
                 break;
 
                 case DataDisplayMode::DblFloat:
                 case DataDisplayMode::SwappedDbl:
-                    if(itemData.Row % 4)
+                    if(index.row() % 4)
                     {
-                        const auto idx = _listModel->index(itemData.Row - itemData.Row % 4);
-                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<ListItemData>();
+                        const auto idx = _listModel->index(index.row() - index.row() % 4);
+                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<OutputListModel::ItemData>();
                     }
                 break;
 

@@ -371,8 +371,6 @@ void OutputListModel::update()
 ///
 void OutputListModel::updateData(const QModbusDataUnit& data)
 {
-    beginResetModel();
-
     _lastData = data;
 
     const auto mode = _parentWidget->dataDisplayMode();
@@ -426,7 +424,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
         }
     }
 
-    endResetModel();
+    emit dataChanged(index(0), index(rowCount() - 1), QList<int>() << Qt::DisplayRole);
 }
 
 ///

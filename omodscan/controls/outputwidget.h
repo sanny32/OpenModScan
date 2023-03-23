@@ -16,6 +16,19 @@ class OutputWidget;
 class OutputWidget;
 
 ///
+/// \brief The ItemData class
+///
+struct ItemData
+{
+    quint32 Address = 0;
+    QVariant Value;
+    QString ValueStr;
+    QString Description;
+    bool Simulated = false;
+};
+Q_DECLARE_METATYPE(ItemData)
+
+///
 /// \brief The OutputListModel class
 ///
 class OutputListModel : public QAbstractListModel
@@ -41,15 +54,6 @@ public:
     QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
-    struct ItemData
-    {
-        quint32 Address = 0;
-        QVariant Value;
-        QString ValueStr;
-        QString Description;
-        bool Simulated = false;
-    };
-
     OutputWidget* _parentWidget;
     QModbusDataUnit _lastData;
     QIcon _iconPointGreen;

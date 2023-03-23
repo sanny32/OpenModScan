@@ -35,6 +35,7 @@ public:
     QVector<quint16> values() const;
 
     void clear();
+    void update();
     void updateData(const QModbusDataUnit& data);
 
     QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;

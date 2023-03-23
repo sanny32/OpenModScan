@@ -316,6 +316,8 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
             if(_mapItems.find(index.row()) != _mapItems.end())
             {
                 _mapItems[index.row()].Simulated = value.toBool();
+
+                emit dataChanged(index, index, QList<int>() << role);
                 return true;
             }
         }
@@ -356,11 +358,21 @@ void OutputListModel::clear()
 }
 
 ///
+/// \brief OutputListModel::update
+///
+void OutputListModel::update()
+{
+    updateData(_lastData);
+}
+
+///
 /// \brief OutputListModel::updateData
 /// \param data
 ///
 void OutputListModel::updateData(const QModbusDataUnit& data)
 {
+    beginResetModel();
+
     _lastData = data;
 
     const auto mode = _parentWidget->dataDisplayMode();
@@ -413,6 +425,8 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
         }
     }
+
+    endResetModel();
 }
 
 ///
@@ -504,7 +518,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
     for(auto&& key : simulations.keys())
         _listModel->setData(_listModel->find(key.first, key.second), true, SimulationRole);
 
-    ui->listView->reset();
+    _listModel->update();
 }
 
 ///
@@ -523,7 +537,7 @@ bool OutputWidget::displayHexAddresses() const
 void OutputWidget::setDisplayHexAddresses(bool on)
 {
     _displayHexAddresses = on;
-    ui->listView->reset();
+    _listModel->update();
 }
 
 ///
@@ -723,7 +737,6 @@ void OutputWidget::updateTraffic(const QModbusResponse& response, int server)
 void OutputWidget::updateData(const QModbusDataUnit& data)
 {
     _listModel->updateData(data);
-    ui->listView->reset();
 
     if(captureMode() == CaptureMode::TextCapture)
     {
@@ -743,7 +756,6 @@ void OutputWidget::updateData(const QModbusDataUnit& data)
 void OutputWidget::setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on)
 {
     _listModel->setData(_listModel->find(type, addr), on, SimulationRole);
-    ui->listView->reset();
 }
 
 ///
@@ -790,7 +802,7 @@ DataDisplayMode OutputWidget::dataDisplayMode() const
 void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
-    ui->listView->reset();
+    _listModel->update();
 }
 
 ///
@@ -809,7 +821,7 @@ ByteOrder OutputWidget::byteOrder() const
 void OutputWidget::setByteOrder(ByteOrder order)
 {
     _byteOrder = order;
-    ui->listView->reset();
+    _listModel->update();
 }
 
 ///

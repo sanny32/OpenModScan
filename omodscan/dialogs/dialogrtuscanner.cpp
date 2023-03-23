@@ -330,11 +330,14 @@ void DialogRtuScanner::prepareParams()
                     params.WordLength = wordLength;
                     params.Parity = parity;
                     params.StopBits = stop;
-                    _connParams.insert(params);
+                    _connParams.append(params);
                 }
             }
         }
     }
+
+    // remove duplicates
+    _connParams.erase(std::unique(_connParams.begin(), _connParams.end()), _connParams.end());
 
     // normalize modbus address
     if(ui->spinBoxDeviceIdFrom->value() > ui->spinBoxDeviceIdTo->value())

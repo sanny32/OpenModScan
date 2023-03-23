@@ -62,7 +62,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget">
+        <widget class="QListView" name="listView">
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
          </property>

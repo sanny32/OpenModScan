@@ -67,7 +67,7 @@
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="contextMenuPolicy">
-          <enum>Qt::NoContextMenu</enum>
+          <enum>Qt::CustomContextMenu</enum>
          </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>

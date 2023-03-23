@@ -46,6 +46,7 @@ private:
         quint32 Address = 0;
         QVariant Value;
         QString ValueStr;
+        QString Description;
         bool Simulated = false;
     };
 
@@ -119,6 +120,7 @@ protected:
 
 private slots:
     void on_listView_doubleClicked(const QModelIndex& index);
+    void on_listView_customContextMenuRequested(const QPoint &pos);
 
 private:
     void setUninitializedStatus();

@@ -164,8 +164,9 @@ void MainWindow::on_awake()
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
-    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
+    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
+
     ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
     ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionQuickConnect->setEnabled(state == QModbusDevice::UnconnectedState);
@@ -183,14 +184,16 @@ void MainWindow::on_awake()
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
     ui->actionByteOrder->setEnabled(frm != nullptr);
+
     ui->actionForceCoils->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionUserMsg->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionAddressScan->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionTextCapture->setEnabled(frm != nullptr);
-    ui->actionCaptureOff->setEnabled(frm != nullptr);
+    ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
+    ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
+
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
@@ -218,10 +221,6 @@ void MainWindow::on_awake()
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
-        ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
-
-        ui->actionTextCapture->setEnabled(frm->captureMode() == CaptureMode::Off);
-        ui->actionCaptureOff->setEnabled(frm->captureMode() == CaptureMode::TextCapture);
     }
 }
 

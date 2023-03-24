@@ -141,6 +141,7 @@ private:
     ByteOrder _byteOrder;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
+    AddressDescriptionMap _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };
 

@@ -22,9 +22,19 @@ const int CaptureRole = Qt::UserRole + 2;
 const int DescriptionRole = Qt::UserRole + 3;
 
 ///
+/// \brief AddressStringRole
+///
+const int AddressStringRole = Qt::UserRole + 4;
+
+///
 /// \brief AddressRole
 ///
-const int AddressRole = Qt::UserRole + 4;
+const int AddressRole = Qt::UserRole + 5;
+
+///
+/// \brief ValueRole
+///
+const int ValueRole = Qt::UserRole + 6;
 
 ///
 /// \brief formatBinaryValue
@@ -305,17 +315,20 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
         case CaptureRole:
             return QString(itemData.ValueStr).remove('<').remove('>');
 
-        case AddressRole:
+        case AddressStringRole:
             return addrstr;
+
+        case AddressRole:
+            return itemData.Address;
+
+        case ValueRole:
+            return itemData.Value;
 
         case DescriptionRole:
             return itemData.Description;
 
         case Qt::DecorationRole:
             return itemData.Simulated ? _iconPointGreen : _iconPointEmpty;
-
-        case Qt::UserRole:
-            return QVariant::fromValue(itemData);
     }
 
     return QVariant();
@@ -856,7 +869,7 @@ void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
     if(!index.isValid()) return;
 
     QInputDialog dlg(this);
-    dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressRole).toString()));
+    dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressStringRole).toString()));
     dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
     if(dlg.exec() == QDialog::Accepted)
     {
@@ -871,8 +884,8 @@ void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 {
     if(!index.isValid()) return;
-    auto itemData = _listModel->data(index, Qt::UserRole).value<ItemData>();
 
+    QModelIndex idx = index;
     switch(_displayDefinition.PointType)
     {
         case QModbusDataUnit::HoldingRegisters:
@@ -883,19 +896,13 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
                 case DataDisplayMode::FloatingPt:
                 case DataDisplayMode::SwappedFP:
                     if(index.row() % 2)
-                    {
-                        const auto idx = _listModel->index(index.row() - 1);
-                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<ItemData>();
-                    }
+                        idx = _listModel->index(index.row() - 1);
                 break;
 
                 case DataDisplayMode::DblFloat:
                 case DataDisplayMode::SwappedDbl:
                     if(index.row() % 4)
-                    {
-                        const auto idx = _listModel->index(index.row() - index.row() % 4);
-                        if(idx.isValid()) itemData = _listModel->data(idx, Qt::UserRole).value<ItemData>();
-                    }
+                       idx = _listModel->index(index.row() - index.row() % 4);
                 break;
 
                 default:
@@ -908,7 +915,10 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
         break;
     }
 
-    emit itemDoubleClicked(itemData.Address, itemData.Value);
+    const auto address = _listModel->data(idx, AddressRole).toUInt();
+    const auto value = _listModel->data(idx, ValueRole);
+
+    emit itemDoubleClicked(address, value);
 }
 
 ///

@@ -14,6 +14,7 @@ class OutputWidget;
 }
 
 class OutputWidget;
+typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QString> AddressDescriptionMap;
 
 ///
 /// \brief The OutputListModel class
@@ -109,6 +110,9 @@ public:
     void updateTraffic(const QModbusRequest& request, int server);
     void updateTraffic(const QModbusResponse& response, int server);
     void updateData(const QModbusDataUnit& data);
+
+    AddressDescriptionMap descriptionMap() const;
+    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     void setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 

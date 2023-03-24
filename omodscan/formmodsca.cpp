@@ -10,7 +10,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 1);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 2);
 
 ///
 /// \brief FormModSca::FormModSca
@@ -406,6 +406,26 @@ void FormModSca::startSimulation(QModbusDataUnit::RegisterType type, quint16 add
 {
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
     if(_modbusClient.state() != QModbusDevice::ConnectedState) _dataSimulator->pauseSimulations();
+}
+
+///
+/// \brief FormModSca::descriptionMap
+/// \return
+///
+AddressDescriptionMap FormModSca::descriptionMap() const
+{
+    return ui->outputWidget->descriptionMap();
+}
+
+///
+/// \brief FormModSca::setDescription
+/// \param type
+/// \param addr
+/// \param desc
+///
+void FormModSca::setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+{
+    ui->outputWidget->setDescription(type, addr, desc);
 }
 
 ///

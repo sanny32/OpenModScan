@@ -783,6 +783,33 @@ void OutputWidget::updateData(const QModbusDataUnit& data)
 }
 
 ///
+/// \brief OutputWidget::descriptionMap
+/// \return
+///
+AddressDescriptionMap OutputWidget::descriptionMap() const
+{
+    AddressDescriptionMap descriptionMap;
+    for(int i = 0; i < _listModel->rowCount(); i++)
+    {
+        const auto desc = _listModel->data(_listModel->index(i), DescriptionRole).toString();
+        const auto addr = _listModel->data(_listModel->index(i), AddressRole).toUInt();
+        descriptionMap[{_displayDefinition.PointType, addr}] = desc;
+    }
+    return descriptionMap;
+}
+
+///
+/// \brief OutputWidget::setDescription
+/// \param type
+/// \param addr
+/// \param desc
+///
+void OutputWidget::setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+{
+    _listModel->setData(_listModel->find(type, addr), desc, DescriptionRole);
+}
+
+///
 /// \brief OutputWidget::setSimulated
 /// \param type
 /// \param addr

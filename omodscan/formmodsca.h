@@ -9,6 +9,7 @@
 #include "modbusclient.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
+#include "outputwidget.h"
 #include "modbussimulationparams.h"
 
 class MainWindow;
@@ -75,6 +76,9 @@ public:
 
     ModbusSimulationMap simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
+
+    AddressDescriptionMap descriptionMap() const;
+    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     void resetCtrs();
     uint numberOfPolls() const;
@@ -233,6 +237,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
 
     out << frm->byteOrder();
     out << frm->simulationMap();
+    out << frm->descriptionMap();
 
     return out;
 }
@@ -281,14 +286,20 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     in >> dd.PointAddress;
     in >> dd.Length;
 
+    const auto ver = frm->property("Version").value<QVersionNumber>();
+
     ByteOrder byteOrder = ByteOrder::LittleEndian;
     ModbusSimulationMap simulationMap;
-
-    const auto ver = frm->property("Version").value<QVersionNumber>();
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
         in >> simulationMap;
+    }
+
+    AddressDescriptionMap descriptionMap;
+    if(ver >= QVersionNumber(1, 2))
+    {
+        in >> descriptionMap;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -311,6 +322,9 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
 
     for(auto&& k : simulationMap.keys())
         frm->startSimulation(k.first, k.second,  simulationMap[k]);
+
+    for(auto&& k : descriptionMap.keys())
+        frm->setDescription(k.first, k.second, descriptionMap[k]);
 
     return in;
 }

@@ -107,9 +107,9 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
-    void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
-    void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
+    void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
+    void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, QVariant value);
 
 private:
     bool isValidReply(const QModbusReply* reply);

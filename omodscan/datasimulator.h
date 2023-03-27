@@ -18,30 +18,30 @@ public:
     explicit DataSimulator(QObject* parent);
     ~DataSimulator() override;
 
-    void startSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
-    void stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr);
+    void startSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const ModbusSimulationParams& params);
+    void stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
     void stopSimulations();
 
     void pauseSimulations();
     void resumeSimulations();
     void restartSimulations();
 
-    ModbusSimulationParams simulationParams(QModbusDataUnit::RegisterType type, quint16 addr) const;
-    ModbusSimulationMap simulationMap() const;
+    ModbusSimulationParams simulationParams(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId) const;
+    ModbusSimulationMap simulationMap(quint8 deviceId) const;
 
 signals:
-    void simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
-    void simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
-    void dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
+    void simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
+    void simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
+    void dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, QVariant value);
 
 private slots:
     void on_timeout();
 
 private:
-    void randomSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params);
-    void incrementSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params);
-    void decrementSimailation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params);
-    void toggleSimulation(QModbusDataUnit::RegisterType type, quint16 addr);
+    void randomSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const RandomSimulationParams& params);
+    void incrementSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const IncrementSimulationParams& params);
+    void decrementSimailation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const DecrementSimulationParams& params);
+    void toggleSimulation(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
 
 private:
     QTimer _timer;
@@ -53,7 +53,16 @@ private:
         ModbusSimulationParams Params;
         QVariant CurrentValue;
     };
-    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, SimulationParams> _simulationMap;
+    struct SimulationKey{
+        QModbusDataUnit::RegisterType Type;
+        quint16 Address;
+        quint8 DeviceId;
+        bool operator<(const SimulationKey& key) const{
+            return Type < key.Type && Address < key.Address && DeviceId < key.DeviceId;
+        }
+    };
+
+    QMap<SimulationKey, SimulationParams> _simulationMap;
 };
 
 #endif // DATASIMULATOR_H

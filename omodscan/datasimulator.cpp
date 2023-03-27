@@ -59,7 +59,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
 ///
 void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId)
 {
-    _simulationMap.remove({ type, addr});
+    _simulationMap.remove({ type, addr, deviceId});
     emit simulationStopped(type, addr, deviceId);
 }
 

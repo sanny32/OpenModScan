@@ -27,29 +27,29 @@ DataSimulator::~DataSimulator()
 /// \param addr
 /// \param params
 ///
-void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
+void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const ModbusSimulationParams& params)
 {
     QVariant value;
     switch (params.Mode)
     {
         case SimulationMode::Increment:
             value = params.IncrementParams.Range.from();
-            emit dataSimulated(mode, type, addr, value);
+            emit dataSimulated(mode, type, addr, deviceId, value);
         break;
 
         case SimulationMode::Decrement:
             value = params.IncrementParams.Range.to();
-            emit dataSimulated(mode, type, addr, value);
+            emit dataSimulated(mode, type, addr, deviceId, value);
         break;
 
         default:
         break;
     }
 
-    _simulationMap[{ type, addr}] = { mode, params, value };
+    _simulationMap[{ type, addr, deviceId}] = { mode, params, value };
     resumeSimulations();
 
-    emit simulationStarted(type, addr);
+    emit simulationStarted(type, addr, deviceId);
 }
 
 ///
@@ -57,10 +57,10 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
 /// \param type
 /// \param addr
 ///
-void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr)
+void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId)
 {
-    _simulationMap.remove({ type, addr});
-    emit simulationStopped(type, addr);
+    _simulationMap.remove({ type, addr, deviceId});
+    emit simulationStopped(type, addr, deviceId);
 }
 
 ///
@@ -99,7 +99,7 @@ void DataSimulator::restartSimulations()
     {
         const auto mode = _simulationMap[key].Mode;
         const auto params = _simulationMap[key].Params;
-        startSimulation(mode, key.first, key.second, params);
+        startSimulation(mode, key.Type, key.Address,  key.DeviceId, params);
     }
 }
 
@@ -109,9 +109,9 @@ void DataSimulator::restartSimulations()
 /// \param addr
 /// \return
 ///
-ModbusSimulationParams DataSimulator::simulationParams(QModbusDataUnit::RegisterType type, quint16 addr) const
+ModbusSimulationParams DataSimulator::simulationParams(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId) const
 {
-    const auto it = _simulationMap.find({type, addr});
+    const auto it = _simulationMap.find({type, addr, deviceId});
     return (it != _simulationMap.end()) ? it->Params : ModbusSimulationParams();
 }
 
@@ -119,11 +119,12 @@ ModbusSimulationParams DataSimulator::simulationParams(QModbusDataUnit::Register
 /// \brief DataSimulator::simulationMap
 /// \return
 ///
-ModbusSimulationMap DataSimulator::simulationMap() const
+ModbusSimulationMap DataSimulator::simulationMap(quint8 deviceId) const
 {
     ModbusSimulationMap map;
     for(auto&& key : _simulationMap.keys())
-        map[key] = _simulationMap[key].Params;
+        if(key.DeviceId == deviceId)
+            map[{key.Type, key.Address}] = _simulationMap[key].Params;
 
     return map;
 }
@@ -145,19 +146,19 @@ void DataSimulator::on_timeout()
         switch(params.Mode)
         {
             case SimulationMode::Random:
-                randomSimulation(mode, key.first, key.second, params.RandomParams);
+                randomSimulation(mode, key.Type, key.Address, key.DeviceId, params.RandomParams);
             break;
 
             case SimulationMode::Increment:
-                incrementSimulation(mode, key.first, key.second, params.IncrementParams);
+                incrementSimulation(mode, key.Type, key.Address, key.DeviceId, params.IncrementParams);
             break;
 
             case SimulationMode::Decrement:
-                decrementSimailation(mode, key.first, key.second, params.DecrementParams);
+                decrementSimailation(mode, key.Type, key.Address, key.DeviceId, params.DecrementParams);
             break;
 
             case SimulationMode::Toggle:
-                toggleSimulation(key.first, key.second);
+                toggleSimulation(key.Type, key.Address, key.DeviceId);
             break;
 
             default:
@@ -186,9 +187,9 @@ T generateRandom(const QRange<double>& range)
 /// \param order
 /// \param params
 ///
-void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params)
+void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const RandomSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
+    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
     switch(type)
     {
         case QModbusDataUnit::Coils:
@@ -224,7 +225,7 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, type, addr, value);
+        emit dataSimulated(mode, type, addr, deviceId, value);
 }
 
 template<typename T>
@@ -242,9 +243,9 @@ T incrementValue(T value, T step, const QRange<double>& range)
 /// \param addr
 /// \param params
 ///
-void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params)
+void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const IncrementSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
+    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
     switch(mode)
     {
         case DataDisplayMode::Integer:
@@ -269,7 +270,7 @@ void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::R
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, type, addr, value);
+        emit dataSimulated(mode, type, addr, deviceId, value);
 }
 
 template<typename T>
@@ -288,9 +289,9 @@ T decrementValue(T value, T step, const QRange<double>& range)
 /// \param order
 /// \param params
 ///
-void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params)
+void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const DecrementSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
+    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
     switch(mode)
     {
         case DataDisplayMode::Integer:
@@ -315,7 +316,7 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, type, addr, value);
+        emit dataSimulated(mode, type, addr, deviceId, value);
 }
 
 ///
@@ -323,10 +324,10 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
 /// \param type
 /// \param addr
 ///
-void DataSimulator::toggleSimulation(QModbusDataUnit::RegisterType type, quint16 addr)
+void DataSimulator::toggleSimulation(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId)
 {
-    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
+    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
     value = !value.toBool();
 
-    emit dataSimulated(DataDisplayMode::Binary, type, addr, value);
+    emit dataSimulated(DataDisplayMode::Binary, type, addr, deviceId, value);
 }

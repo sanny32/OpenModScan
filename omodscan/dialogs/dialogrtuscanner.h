@@ -68,8 +68,8 @@ private:
     bool _scanning = false;
 
     QTimer _scanTimer;
-    QVector<SerialConnectionParams> _connParams;
-    QVector<SerialConnectionParams>::ConstIterator _iterator;
+    QList<SerialConnectionParams> _connParams;
+    QList<SerialConnectionParams>::ConstIterator _iterator;
 };
 
 #endif // DIALOGRTUSCANNER_H

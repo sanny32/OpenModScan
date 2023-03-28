@@ -217,7 +217,7 @@ QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value
 
             const double value = makeDouble(value1, value2, value3, value4, order);
             outValue = value;
-            result = QLocale().toString(value);
+            result = QLocale().toString(value, 'g', 16);
         }
         break;
         default:

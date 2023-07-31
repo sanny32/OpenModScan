@@ -94,7 +94,7 @@ void DialogModbusScanner::changeEvent(QEvent* event)
 void DialogModbusScanner::showEvent(QShowEvent* e)
 {
     QFixedSizeDialog::showEvent(e);
-    ui->radioButtonTCP->click();
+    ui->radioButtonRTU->click();
 }
 
 ///
@@ -102,12 +102,13 @@ void DialogModbusScanner::showEvent(QShowEvent* e)
 ///
 void DialogModbusScanner::on_awake()
 {
-    ui->comboBoxSerial->setEnabled(!_scanning);
-    ui->groupBoxBaudRate->setEnabled(!_scanning);
-    ui->groupBoxDataBits->setEnabled(!_scanning);
-    ui->groupBoxParity->setEnabled(!_scanning);
+    const bool rtuConnection = ui->radioButtonRTU->isChecked();
+    ui->comboBoxSerial->setEnabled(!_scanning && rtuConnection);
+    ui->groupBoxBaudRate->setEnabled(!_scanning && rtuConnection);
+    ui->groupBoxDataBits->setEnabled(!_scanning && rtuConnection);
+    ui->groupBoxParity->setEnabled(!_scanning && rtuConnection);
+    ui->groupBoxStopBits->setEnabled(!_scanning && rtuConnection);
     ui->groupBoxDeviceId->setEnabled(!_scanning);
-    ui->groupBoxStopBits->setEnabled(!_scanning);
     ui->groupBoxTimeoute->setEnabled(!_scanning);
     ui->pushButtonClear->setEnabled(!_scanning);
     ui->pushButtonScan->setEnabled(ui->comboBoxSerial->count() > 0);
@@ -193,6 +194,7 @@ void DialogModbusScanner::on_radioButtonRTU_clicked()
 {
     ui->groupBoxIPAddressRange->setVisible(false);
     ui->groupBoxPort->setVisible(true);
+    ui->labelScanResultsDesc->setText("PORT: Device Id (serial port settings)");
 }
 
 ///
@@ -202,6 +204,7 @@ void DialogModbusScanner::on_radioButtonTCP_clicked()
 {
     ui->groupBoxIPAddressRange->setVisible(true);
     ui->groupBoxPort->setVisible(false);
+    ui->labelScanResultsDesc->setText("IP Address: Device Id");
 }
 
 ///

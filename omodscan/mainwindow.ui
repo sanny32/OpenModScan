@@ -82,7 +82,7 @@
     <addaction name="menuAutoStart"/>
     <addaction name="actionQuickConnect"/>
     <addaction name="separator"/>
-    <addaction name="actionRtuScanner"/>
+    <addaction name="actionModbusScanner"/>
    </widget>
    <widget class="QMenu" name="menuSetup">
     <property name="title">
@@ -668,9 +668,12 @@
     <string>Byte Order</string>
    </property>
   </action>
-  <action name="actionRtuScanner">
+  <action name="actionModbusScanner">
    <property name="text">
-    <string>MODBUS RTU Scanner</string>
+    <string>MODBUS Scanner</string>
+   </property>
+   <property name="toolTip">
+    <string>MODBUS Scanner</string>
    </property>
    <property name="shortcut">
     <string>F3</string>

@@ -40,7 +40,6 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
     datasimulator.cpp \
-    dialogs/dialogrtuscanner.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogaddressscan.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -51,6 +50,7 @@ SOURCES += \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
     dialogs/dialogmaskwriteregiter.cpp \
+    dialogs/dialogmodbusscanner.cpp \
     dialogs/dialogprintsettings.cpp \
     dialogs/dialogprotocolselections.cpp \
     dialogs/dialogsetuppresetdata.cpp \
@@ -89,7 +89,6 @@ HEADERS += \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
     datasimulator.h \
-    dialogs/dialogrtuscanner.h \
     dialogs/dialogabout.h \
     dialogs/dialogaddressscan.h \
     dialogs/dialogautosimulation.h \
@@ -100,6 +99,7 @@ HEADERS += \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
     dialogs/dialogmaskwriteregiter.h \
+    dialogs/dialogmodbusscanner.h \
     dialogs/dialogprintsettings.h \
     dialogs/dialogprotocolselections.h \
     dialogs/dialogsetuppresetdata.h \
@@ -128,7 +128,6 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
-    dialogs/dialogrtuscanner.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogaddressscan.ui \
     dialogs/dialogautosimulation.ui \
@@ -139,6 +138,7 @@ FORMS += \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
     dialogs/dialogmaskwriteregiter.ui \
+    dialogs/dialogmodbusscanner.ui \
     dialogs/dialogprintsettings.ui \
     dialogs/dialogprotocolselections.ui \
     dialogs/dialogsetuppresetdata.ui \

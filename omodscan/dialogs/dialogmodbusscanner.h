@@ -1,5 +1,5 @@
-#ifndef DIALOGRTUSCANNER_H
-#define DIALOGRTUSCANNER_H
+#ifndef DIALOGMODBUSSCANNER_H
+#define DIALOGMODBUSSCANNER_H
 
 #include <QTimer>
 #include <QListWidgetItem>
@@ -14,22 +14,23 @@
 #endif
 
 namespace Ui {
-class DialogRtuScanner;
+class DialogModbusScanner;
 }
 
 ///
 /// \brief The DialogRtuScanner class
 ///
-class DialogRtuScanner : public QFixedSizeDialog
+class DialogModbusScanner : public QFixedSizeDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogRtuScanner(QWidget *parent = nullptr);
-    ~DialogRtuScanner();
+    explicit DialogModbusScanner(QWidget *parent = nullptr);
+    ~DialogModbusScanner();
 
 protected:
     void changeEvent(QEvent* event) override;
+    void showEvent(QShowEvent* e) override;
 
 signals:
     void attemptToConnect(const SerialConnectionParams& params, int deviceId);
@@ -42,6 +43,8 @@ private slots:
     void on_errorOccurred(QModbusDevice::Error error);
     void on_stateChanged(QModbusDevice::State state);
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_radioButtonRTU_clicked();
+    void on_radioButtonTCP_clicked();
 
 private:
     void startScan();
@@ -60,7 +63,7 @@ private:
     void sendRequest(int deviceId);
 
 private:
-    Ui::DialogRtuScanner *ui;
+    Ui::DialogModbusScanner *ui;
     QModbusRtuSerialClient* _modbusClient;
 
 private:
@@ -72,4 +75,4 @@ private:
     QList<SerialConnectionParams>::ConstIterator _iterator;
 };
 
-#endif // DIALOGRTUSCANNER_H
+#endif // DIALOGMODBUSSCANNER_H

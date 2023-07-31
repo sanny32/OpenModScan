@@ -102,12 +102,12 @@ void DialogModbusScanner::showEvent(QShowEvent* e)
 ///
 void DialogModbusScanner::on_awake()
 {
-    const bool rtuConnection = ui->radioButtonRTU->isChecked();
-    ui->comboBoxSerial->setEnabled(!_scanning && rtuConnection);
-    ui->groupBoxBaudRate->setEnabled(!_scanning && rtuConnection);
-    ui->groupBoxDataBits->setEnabled(!_scanning && rtuConnection);
-    ui->groupBoxParity->setEnabled(!_scanning && rtuConnection);
-    ui->groupBoxStopBits->setEnabled(!_scanning && rtuConnection);
+    const bool rtuScanning = ui->radioButtonRTU->isChecked();
+    ui->comboBoxSerial->setEnabled(!_scanning && rtuScanning);
+    ui->groupBoxBaudRate->setEnabled(!_scanning && rtuScanning);
+    ui->groupBoxDataBits->setEnabled(!_scanning && rtuScanning);
+    ui->groupBoxParity->setEnabled(!_scanning && rtuScanning);
+    ui->groupBoxStopBits->setEnabled(!_scanning && rtuScanning);
     ui->groupBoxDeviceId->setEnabled(!_scanning);
     ui->groupBoxTimeoute->setEnabled(!_scanning);
     ui->pushButtonClear->setEnabled(!_scanning);

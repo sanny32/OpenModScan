@@ -362,6 +362,20 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="labelIPAddress">
+           <property name="text">
+            <string>IP Address: </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelPort">
+           <property name="text">
+            <string>Port: </string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="labelSpeed">
            <property name="text">
             <string>Baud Rate: </string>

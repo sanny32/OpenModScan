@@ -173,7 +173,13 @@ void DialogModbusScanner::on_radioButtonRTU_clicked()
 {
     ui->groupBoxIPAddressRange->setVisible(false);
     ui->groupBoxSerialPort->setVisible(true);
+    ui->labelSpeed->setVisible(true);
+    ui->labelDataBits->setVisible(true);
+    ui->labelParity->setVisible(true);
+    ui->labelStopBits->setVisible(true);
     ui->groupBoxPortRange->setVisible(false);
+    ui->labelIPAddress->setVisible(false);
+    ui->labelPort->setVisible(false);
     ui->labelScanResultsDesc->setText("PORT: Device Id (serial port settings)");
 }
 
@@ -184,7 +190,13 @@ void DialogModbusScanner::on_radioButtonTCP_clicked()
 {
     ui->groupBoxIPAddressRange->setVisible(true);
     ui->groupBoxPortRange->setVisible(true);
+    ui->labelIPAddress->setVisible(true);
+    ui->labelPort->setVisible(true);
     ui->groupBoxSerialPort->setVisible(false);
+    ui->labelSpeed->setVisible(false);
+    ui->labelDataBits->setVisible(false);
+    ui->labelParity->setVisible(false);
+    ui->labelStopBits->setVisible(false);
     ui->labelScanResultsDesc->setText("IP Address: port (Device Id)");
 }
 
@@ -264,15 +276,17 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
     if(ui->radioButtonRTU->isChecked())
     {
        result = QString("%1: %2 (%3,%4,%5,%6)").arg(cd.SerialParams.PortName,
-                                                                QString::number(deviceId),
-                                                                QString::number(cd.SerialParams.BaudRate),
-                                                                QString::number(cd.SerialParams.WordLength),
-                                                                Parity_toString(cd.SerialParams.Parity),
-                                                                QString::number(cd.SerialParams.StopBits));
+                                                    QString::number(deviceId),
+                                                    QString::number(cd.SerialParams.BaudRate),
+                                                    QString::number(cd.SerialParams.WordLength),
+                                                    Parity_toString(cd.SerialParams.Parity),
+                                                    QString::number(cd.SerialParams.StopBits));
     }
     else
     {
-
+       result = QString("%1: %2 (%3)").arg(cd.TcpParams.IPAddress,
+                                           QString::number(cd.TcpParams.ServicePort),
+                                           QString::number(deviceId));
     }
 
     const auto items = ui->listWidget->findItems(result, Qt::MatchExactly);
@@ -301,13 +315,14 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
         ui->labelDataBits->setText(QString(tr("Data Bits: %1")).arg(cd.SerialParams.WordLength));
         ui->labelParity->setText(QString(tr("Parity: %1")).arg(Parity_toString(cd.SerialParams.Parity)));
         ui->labelStopBits->setText(QString(tr("Stop Bits: %1")).arg(cd.SerialParams.StopBits));
-        ui->labelAddress->setText(QString(tr("Device Id: %1")).arg(deviceId));
     }
     else
     {
-
+        ui->labelIPAddress->setText(QString("IP Address: %1").arg(cd.TcpParams.IPAddress));
+        ui->labelPort->setText(QString("Port: %1").arg(cd.TcpParams.ServicePort));
     }
 
+    ui->labelAddress->setText(QString(tr("Device Id: %1")).arg(deviceId));
     ui->progressBar->setValue(progress);
 }
 

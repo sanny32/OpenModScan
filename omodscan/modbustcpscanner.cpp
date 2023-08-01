@@ -1,29 +1,23 @@
-#include "modbusrtuscanner.h"
+#include "modbustcpscanner.h"
 
 ///
-/// \brief ModbusRtuScanner::ModbusRtuScanner
+/// \brief ModbusTcpScanner::ModbusTcpScanner
 /// \param params
+/// \param parent
 ///
-ModbusRtuScanner::ModbusRtuScanner(const ScanParams& params, QObject* parent)
-    : ModbusScanner(parent)
-    ,_modbusClient(new QModbusRtuSerialClient(this))
+ModbusTcpScanner::ModbusTcpScanner(const ScanParams& params, QObject *parent)
+    : ModbusScanner{parent}
+    ,_modbusClient(new QModbusTcpClient(this))
     ,_params(params)
 {
-    connect(_modbusClient, &QModbusClient::stateChanged, this, &ModbusRtuScanner::on_stateChanged);
-    connect(_modbusClient, &QModbusClient::errorOccurred, this, &ModbusRtuScanner::on_errorOccurred);
-
-    auto serialPort = qobject_cast<QSerialPort*>(_modbusClient->device());
-    QObject::connect(serialPort, &QSerialPort::readyRead, this,
-    [this]()
-    {
-        emit found(*_iterator, _modbusClient->property("DeviceId").toInt());
-    });
+    connect(_modbusClient, &QModbusClient::stateChanged, this, &ModbusTcpScanner::on_stateChanged);
+    connect(_modbusClient, &QModbusClient::errorOccurred, this, &ModbusTcpScanner::on_errorOccurred);
 }
 
 ///
-/// \brief ModbusRtuScanner::startScan
+/// \brief ModbusTcpScanner::startScan
 ///
-void ModbusRtuScanner::startScan()
+void ModbusTcpScanner::startScan()
 {
     ModbusScanner::startScan();
 
@@ -32,18 +26,18 @@ void ModbusRtuScanner::startScan()
 }
 
 ///
-/// \brief ModbusRtuScanner::stopScan
+/// \brief ModbusTcpScanner::stopScan
 ///
-void ModbusRtuScanner::stopScan()
+void ModbusTcpScanner::stopScan()
 {
     ModbusScanner::stopScan();
 }
 
 ///
-/// \brief ModbusRtuScanner::on_errorOccurred
+/// \brief ModbusTcpScanner::on_errorOccurred
 /// \param error
 ///
-void ModbusRtuScanner::on_errorOccurred(QModbusDevice::Error error)
+void ModbusTcpScanner::on_errorOccurred(QModbusDevice::Error error)
 {
     if(error == QModbusDevice::ConnectionError &&
         _modbusClient->state() == QModbusDevice::ConnectingState)
@@ -54,37 +48,34 @@ void ModbusRtuScanner::on_errorOccurred(QModbusDevice::Error error)
 }
 
 ///
-/// \brief ModbusRtuScanner::on_stateChanged
+/// \brief ModbusTcpScanner::on_stateChanged
 /// \param state
 ///
-void ModbusRtuScanner::on_stateChanged(QModbusDevice::State state)
+void ModbusTcpScanner::on_stateChanged(QModbusDevice::State state)
 {
     if(state == QModbusDevice::ConnectedState)
         sendRequest(_params.DeviceIds.from());
 }
 
 ///
-/// \brief ModbusRtuScanner::connectDevice
+/// \brief ModbusTcpScanner::connectDevice
 /// \param cd
 ///
-void ModbusRtuScanner::connectDevice(const ConnectionDetails& cd)
+void ModbusTcpScanner::connectDevice(const ConnectionDetails& cd)
 {
     _modbusClient->disconnectDevice();
     _modbusClient->setNumberOfRetries(0);
     _modbusClient->setTimeout(_params.Timeout);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
+    _modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
+    _modbusClient->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
     _modbusClient->connectDevice();
 }
 
 ///
-/// \brief ModbusRtuScanner::sendRequest
+/// \brief ModbusTcpScanner::sendRequest
 /// \param deviceId
 ///
-void ModbusRtuScanner::sendRequest(int deviceId)
+void ModbusTcpScanner::sendRequest(int deviceId)
 {
     if(!inProgress())
         return;

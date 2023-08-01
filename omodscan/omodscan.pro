@@ -66,6 +66,7 @@ SOURCES += \
     modbusdataunit.cpp \
     modbusrtuscanner.cpp \
     modbusscanner.cpp \
+    modbustcpscanner.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
     recentfileactionlist.cpp \
@@ -122,6 +123,7 @@ HEADERS += \
     modbusrtuscanner.h \
     modbusscanner.h \
     modbussimulationparams.h \
+    modbustcpscanner.h \
     modbuswriteparams.h \
     qfixedsizedialog.h \
     qhexvalidator.h \

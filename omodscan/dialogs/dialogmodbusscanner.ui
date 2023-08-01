@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>707</width>
-    <height>681</height>
+    <height>775</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -243,6 +243,37 @@
           </item>
           <item>
            <widget class="QLineEdit" name="lineEditIPAddressTo">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxSubnetMask">
+         <property name="title">
+          <string>Subnet Mask</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <item>
+           <widget class="QLineEdit" name="lineEditSubnetMask">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>

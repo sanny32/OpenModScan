@@ -1,9 +1,11 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QSerialPortInfo>
+#include <QHostInfo>
 #include <QNetworkInterface>
 #include <QAbstractEventDispatcher>
 #include "modbusrtuscanner.h"
+#include "modbustcpscanner.h"
 #include "dialogmodbusscanner.h"
 #include "ui_dialogmodbusscanner.h"
 
@@ -49,18 +51,26 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
     ui->setupUi(this);
     ui->progressBar->setAlignment(Qt::AlignCenter);
 
+    ui->radioButtonTCP->click();
     for(auto&& port: QSerialPortInfo::availablePorts())
         ui->comboBoxSerial->addItem(port.portName());
 
-    QHostAddress hostAddress;
-    const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
-    for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
-        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost){
-            hostAddress = address; break;
+    QHostAddress address, mask;
+    for(auto&& eth : QNetworkInterface::allInterfaces()) {
+        if((eth.flags() & QNetworkInterface::IsRunning) && !(eth.flags() & QNetworkInterface::IsLoopBack)){
+            for (auto&& entry : eth.addressEntries()) {
+                if(entry.ip().protocol() == QAbstractSocket::IPv4Protocol){
+                    address = entry.ip();
+                    mask = entry.netmask();
+                    break;
+                }
+            }
         }
     }
-    ui->lineEditIPAddressFrom->setText(hostAddress.toString());
-    ui->lineEditIPAddressTo->setText(hostAddress.toString());
+
+    ui->lineEditIPAddressFrom->setText(address.toString());
+    ui->lineEditIPAddressTo->setText(address.toString());
+    ui->lineEditSubnetMask->setText(mask.toString());
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
@@ -167,6 +177,24 @@ void DialogModbusScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 }
 
 ///
+/// \brief DialogModbusScanner::on_lineEditSubnetMask_textChanged
+/// \param text
+///
+void DialogModbusScanner::on_lineEditSubnetMask_textChanged(const QString& text)
+{
+    const auto hostAddress = QHostAddress(ui->lineEditIPAddressFrom->text());
+    if(hostAddress.isNull()) return;
+
+    const auto maskAddress = QHostAddress(ui->lineEditSubnetMask->text());
+    if(maskAddress.isNull()) return;
+
+    const auto address = hostAddress.toIPv4Address();
+    const auto mask = maskAddress.toIPv4Address();
+    ui->lineEditIPAddressFrom->setText(QHostAddress(address & mask).toString());
+    ui->lineEditIPAddressTo->setText(QHostAddress(address | ~mask).toString());
+}
+
+///
 /// \brief DialogModbusScanner::on_radioButtonRTU_clicked
 ///
 void DialogModbusScanner::on_radioButtonRTU_clicked()
@@ -178,6 +206,7 @@ void DialogModbusScanner::on_radioButtonRTU_clicked()
     ui->labelParity->setVisible(true);
     ui->labelStopBits->setVisible(true);
     ui->groupBoxPortRange->setVisible(false);
+    ui->groupBoxSubnetMask->setVisible(false);
     ui->labelIPAddress->setVisible(false);
     ui->labelPort->setVisible(false);
     ui->labelScanResultsDesc->setText("PORT: Device Id (serial port settings)");
@@ -190,6 +219,7 @@ void DialogModbusScanner::on_radioButtonTCP_clicked()
 {
     ui->groupBoxIPAddressRange->setVisible(true);
     ui->groupBoxPortRange->setVisible(true);
+    ui->groupBoxSubnetMask->setVisible(true);
     ui->labelIPAddress->setVisible(true);
     ui->labelPort->setVisible(true);
     ui->groupBoxSerialPort->setVisible(false);
@@ -216,7 +246,8 @@ void DialogModbusScanner::startScan()
     }
     else
     {
-
+        params = createTcpParams();
+        _scanner.reset(new ModbusTcpScanner(params, this));
     }
 
     if(params.ConnParams.empty())
@@ -329,7 +360,7 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
 ///
 /// \brief DialogRtuScanner::createSerialParams
 ///
-ScanParams DialogModbusScanner::createSerialParams()
+ScanParams DialogModbusScanner::createSerialParams() const
 {
     ScanParams params;
 
@@ -388,6 +419,20 @@ ScanParams DialogModbusScanner::createSerialParams()
 
     // remove duplicates
     params.ConnParams.erase(std::unique(params.ConnParams.begin(), params.ConnParams.end()), params.ConnParams.end());
+
+    params.Timeout = ui->spinBoxTimeout->value();
+    params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
+
+    return params;
+}
+
+///
+/// \brief DialogModbusScanner::createTcpParams
+/// \return
+///
+ScanParams DialogModbusScanner::createTcpParams() const
+{
+    ScanParams params;
 
     params.Timeout = ui->spinBoxTimeout->value();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());

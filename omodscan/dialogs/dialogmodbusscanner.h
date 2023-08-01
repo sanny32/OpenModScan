@@ -3,15 +3,9 @@
 
 #include <QTimer>
 #include <QListWidgetItem>
+#include "modbusscanner.h"
 #include "qfixedsizedialog.h"
 #include "connectiondetails.h"
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    #include <QModbusRtuSerialMaster>
-    typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
-#else
-    #include <QModbusRtuSerialClient>
-#endif
 
 namespace Ui {
 class DialogModbusScanner;
@@ -33,16 +27,19 @@ protected:
     void showEvent(QShowEvent* e) override;
 
 signals:
-    void attemptToConnect(const SerialConnectionParams& params, int deviceId);
+    void attemptToConnect(const ConnectionDetails& params, int deviceId);
 
 private slots:
     void on_awake();
-    void on_timeout();
+    void on_scanFinished();
+    void on_timeout(quint64 time);
+    void on_errorOccurred(const QString& error);
+    void on_deviceFound(const ConnectionDetails& cd, int deviceId);
+    void on_progress(const ConnectionDetails& cd, int deviceId, int progress);
+
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_pushButtonScan_clicked();
     void on_pushButtonClear_clicked();
-    void on_errorOccurred(QModbusDevice::Error error);
-    void on_stateChanged(QModbusDevice::State state);
-    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_radioButtonRTU_clicked();
     void on_radioButtonTCP_clicked();
 
@@ -53,26 +50,14 @@ private:
     void clearScanTime();
     void clearProgress();
 
-    void printScanInfo(const SerialConnectionParams& params, int deviceId);
-    void printResult(const SerialConnectionParams& params, int deviceId);
+    void printScanInfo(const ConnectionDetails& params, int deviceId);
+    void printResult(const ConnectionDetails& params, int deviceId);
 
-    void prepareParams();
-    void setScanTme(quint64 time);
-
-    void connectDevice(const SerialConnectionParams& params);
-    void sendRequest(int deviceId);
+    ScanParams createSerialParams();
 
 private:
     Ui::DialogModbusScanner *ui;
-    QModbusRtuSerialClient* _modbusClient;
-
-private:
-    quint64 _scanTime = 0;
-    bool _scanning = false;
-
-    QTimer _scanTimer;
-    QList<SerialConnectionParams> _connParams;
-    QList<SerialConnectionParams>::ConstIterator _iterator;
+    QScopedPointer<ModbusScanner> _scanner;
 };
 
 #endif // DIALOGMODBUSSCANNER_H

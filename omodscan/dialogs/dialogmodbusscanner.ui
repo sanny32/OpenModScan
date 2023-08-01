@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>707</width>
-    <height>600</height>
+    <height>681</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -175,7 +175,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBoxPort">
+        <widget class="QGroupBox" name="groupBoxSerialPort">
          <property name="minimumSize">
           <size>
            <width>115</width>
@@ -206,14 +206,14 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
-           <widget class="QLabel" name="labelFrom">
+           <widget class="QLabel" name="labelIPAddressFrom">
             <property name="text">
              <string>from</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEditIPFrom">
+           <widget class="QLineEdit" name="lineEditIPAddressFrom">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -235,14 +235,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="labelTo">
+           <widget class="QLabel" name="labelIPAddressTo">
             <property name="text">
              <string>to</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEditIPTo">
+           <widget class="QLineEdit" name="lineEditIPAddressTo">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -260,6 +260,79 @@
               <width>100</width>
               <height>16777215</height>
              </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxPortRange">
+         <property name="title">
+          <string>Port Range</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBoxPortFrom">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>255</number>
+            </property>
+            <property name="maximum">
+             <number>65535</number>
+            </property>
+            <property name="value">
+             <number>502</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelPortFrom">
+            <property name="text">
+             <string>from</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelPortTo">
+            <property name="text">
+             <string>to</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="spinBoxPortTo">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>255</number>
+            </property>
+            <property name="maximum">
+             <number>65535</number>
+            </property>
+            <property name="value">
+             <number>502</number>
             </property>
            </widget>
           </item>

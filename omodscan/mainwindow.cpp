@@ -441,11 +441,9 @@ void MainWindow::on_actionModbusScanner_triggered()
 {
     auto dlg = new DialogModbusScanner(this);
     connect(dlg, &DialogModbusScanner::attemptToConnect, this,
-    [this](const SerialConnectionParams& params, int deviceId)
+    [this](const ConnectionDetails& cd, int deviceId)
     {
-        _connParams.SerialParams = params;
-        _connParams.Type = ConnectionType::Serial;
-
+        _connParams = cd;
         _modbusClient.disconnectDevice();
         _modbusClient.connectDevice(_connParams);
 

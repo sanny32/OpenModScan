@@ -71,6 +71,7 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
     ui->lineEditIPAddressFrom->setText(address.toString());
     ui->lineEditIPAddressTo->setText(address.toString());
     ui->lineEditSubnetMask->setText(mask.toString());
+    on_lineEditSubnetMask_editingFinished();
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
@@ -177,10 +178,9 @@ void DialogModbusScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 }
 
 ///
-/// \brief DialogModbusScanner::on_lineEditSubnetMask_textChanged
-/// \param text
+/// \brief DialogModbusScanner::on_lineEditSubnetMask_editingFinished
 ///
-void DialogModbusScanner::on_lineEditSubnetMask_textChanged(const QString& text)
+void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
 {
     const auto hostAddress = QHostAddress(ui->lineEditIPAddressFrom->text());
     if(hostAddress.isNull()) return;

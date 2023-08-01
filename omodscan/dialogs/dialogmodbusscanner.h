@@ -38,7 +38,7 @@ private slots:
     void on_progress(const ConnectionDetails& cd, int deviceId, int progress);
 
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
-    void on_lineEditSubnetMask_textChanged(const QString& text);
+    void on_lineEditSubnetMask_editingFinished();
     void on_pushButtonScan_clicked();
     void on_pushButtonClear_clicked();
     void on_radioButtonRTU_clicked();

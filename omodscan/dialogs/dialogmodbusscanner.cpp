@@ -434,6 +434,39 @@ ScanParams DialogModbusScanner::createTcpParams() const
 {
     ScanParams params;
 
+    const auto addressFrom = QHostAddress(ui->lineEditIPAddressFrom->text());
+    const auto addressTo = QHostAddress(ui->lineEditIPAddressTo->text());
+
+    if(addressFrom.isNull() || addressTo.isNull())
+        return params;
+
+    QVector<QString> addreses;
+    for(quint32 addr = addressFrom.toIPv4Address(); addr <= addressTo.toIPv4Address(); addr++)
+    {
+        addreses.push_back(QHostAddress(addr).toString());
+    }
+
+    const auto portFrom = ui->spinBoxPortFrom->value();
+    const auto portTo = ui->spinBoxPortTo->value();
+
+    QVector<int> ports;
+    for(auto port = portFrom; port <= portTo; port++)
+    {
+        ports.push_back(port);
+    }
+
+    for(auto&& addr : addreses)
+    {
+        for(auto&& port : ports)
+        {
+            ConnectionDetails cd;
+            cd.Type = ConnectionType::Tcp;
+            cd.TcpParams.IPAddress = addr;
+            cd.TcpParams.ServicePort = port;
+            params.ConnParams.append(cd);
+        }
+    }
+
     params.Timeout = ui->spinBoxTimeout->value();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
 

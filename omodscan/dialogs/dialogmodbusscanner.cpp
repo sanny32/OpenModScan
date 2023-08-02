@@ -267,6 +267,12 @@ void DialogModbusScanner::startScan()
     clearScanTime();
     clearProgress();
 
+    if(ui->listWidget->count() > 0)
+    {
+        const auto result = QMessageBox::question(this, windowTitle(), tr("Clear previous scan results?"));
+        if(result == QMessageBox::Yes) ui->listWidget->clear();
+    }
+
     _scanner->startScan();
 }
 

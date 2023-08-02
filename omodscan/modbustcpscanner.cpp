@@ -24,7 +24,7 @@ void ModbusTcpScanner::startScan()
     {
         QTcpSocket* socket = new QTcpSocket(this);
         connect(socket, &QAbstractSocket::connected, this, [this, socket, cd]{
-            socket->disconnect();
+            socket->disconnectFromHost();
             connectDevice(cd);
         });
         connect(socket, &QAbstractSocket::stateChanged, this, [socket](QAbstractSocket::SocketState state){
@@ -56,7 +56,6 @@ void ModbusTcpScanner::connectDevice(const ConnectionDetails& cd)
         else if(state == QModbusDevice::UnconnectedState)
             modbusClient->deleteLater();
     });
-    modbusClient->disconnectDevice();
     modbusClient->setNumberOfRetries(0);
     modbusClient->setTimeout(_params.Timeout);
     modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
@@ -82,7 +81,7 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
 
     if(deviceId > _params.DeviceIds.to())
     {
-        client->disconnect();
+        client->disconnectDevice();
         return;
     }
 
@@ -102,8 +101,7 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
                     reply->deleteLater();
 
                     sendRequest(client, deviceId + 1);
-                },
-                Qt::QueuedConnection);
+                });
         }
         else
         {

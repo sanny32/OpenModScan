@@ -31,3 +31,12 @@ void IpAddressLineEdit::setValue(const QHostAddress& address)
     setText(address.toString());
     emit editingFinished();
 }
+
+///
+/// \brief IpAddressLineEdit::setValue
+/// \param address
+///
+void IpAddressLineEdit::setValue(quint32 address)
+{
+    setValue(QHostAddress(address));
+}

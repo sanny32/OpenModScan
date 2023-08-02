@@ -15,6 +15,7 @@ public:
 
     QHostAddress value() const;
     void setValue(const QHostAddress& address);
+    void setValue(quint32 address);
 };
 
 #endif // IPADDRESSLINEEDIT_H

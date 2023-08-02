@@ -184,16 +184,14 @@ void DialogModbusScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 ///
 void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
 {
-    const auto hostAddress = QHostAddress(ui->lineEditIPAddressFrom->text());
-    if(hostAddress.isNull()) return;
+    const auto address = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    if(address == 0) return;
 
-    const auto maskAddress = QHostAddress(ui->lineEditSubnetMask->text());
-    if(maskAddress.isNull()) return;
+    const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
+    if(mask == 0) return;
 
-    const auto address = hostAddress.toIPv4Address();
-    const auto mask = maskAddress.toIPv4Address();
-    ui->lineEditIPAddressFrom->setText(QHostAddress(address & mask).toString());
-    ui->lineEditIPAddressTo->setText(QHostAddress(address | ~mask).toString());
+    ui->lineEditIPAddressFrom->setValue(address & mask);
+    ui->lineEditIPAddressTo->setValue(address | ~mask);
 }
 
 ///

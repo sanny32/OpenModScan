@@ -19,8 +19,10 @@ public:
 private:
     void connectDevice(const ConnectionDetails& params);
     void sendRequest(QModbusTcpClient* client, int deviceId);
+    void processScan(const ConnectionDetails& cd, int deviceId);
 
 private:
+    int _proceesedScans;
     const ScanParams _params;
 };
 

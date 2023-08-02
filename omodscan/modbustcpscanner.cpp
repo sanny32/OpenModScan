@@ -20,15 +20,21 @@ void ModbusTcpScanner::startScan()
 {
     ModbusScanner::startScan();
 
+    _proceesedScans = 0;
     for(auto&& cd : _params.ConnParams)
     {
         QTcpSocket* socket = new QTcpSocket(this);
         connect(socket, &QAbstractSocket::connected, this, [this, socket, cd]{
             socket->disconnectFromHost();
             connectDevice(cd);
+            processScan(cd, _params.DeviceIds.from());
         });
-        connect(socket, &QAbstractSocket::stateChanged, this, [socket](QAbstractSocket::SocketState state){
-            if(state == QAbstractSocket::UnconnectedState) socket->deleteLater();
+        connect(socket, &QAbstractSocket::stateChanged, this, [this, socket, cd](QAbstractSocket::SocketState state){
+            if(state == QAbstractSocket::UnconnectedState)
+            {
+                socket->deleteLater();
+                processScan(cd, _params.DeviceIds.from());
+            }
         });
 
         socket->connectToHost(cd.TcpParams.IPAddress, cd.TcpParams.ServicePort, QIODevice::ReadOnly, QAbstractSocket::IPv4Protocol);
@@ -41,6 +47,20 @@ void ModbusTcpScanner::startScan()
 void ModbusTcpScanner::stopScan()
 {
     ModbusScanner::stopScan();
+}
+
+///
+/// \brief ModbusTcpScanner::processScan
+/// \param cd
+/// \param deviceId
+///
+void ModbusTcpScanner::processScan(const ConnectionDetails& cd, int deviceId)
+{
+    const int value = ++_proceesedScans * 100.0 / _params.ConnParams.size();
+    emit progress(cd, deviceId, value);
+
+    if(value >= 100)
+        stopScan();
 }
 
 ///

@@ -202,7 +202,7 @@
        <item>
         <widget class="QGroupBox" name="groupBoxIPAddressRange">
          <property name="title">
-          <string>IP Address Range</string>
+          <string>Address Range</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_12">
           <item>
@@ -395,7 +395,7 @@
          <item>
           <widget class="QLabel" name="labelIPAddress">
            <property name="text">
-            <string>IP Address: </string>
+            <string>Address: </string>
            </property>
           </widget>
          </item>

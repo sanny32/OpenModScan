@@ -16,20 +16,12 @@ public:
     void startScan() override;
     void stopScan() override;
 
-private slots:
-    void on_errorOccurred(QModbusDevice::Error error);
-    void on_stateChanged(QModbusDevice::State state);
-
 private:
     void connectDevice(const ConnectionDetails& params);
-    void sendRequest(int deviceId);
-
-private:
-    QModbusTcpClient* _modbusClient;
+    void sendRequest(QModbusTcpClient* client, int deviceId);
 
 private:
     const ScanParams _params;
-    QList<ConnectionDetails>::ConstIterator _iterator;
 };
 
 #endif // MODBUSTCPSCANNER_H

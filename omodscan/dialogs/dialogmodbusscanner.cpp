@@ -227,7 +227,7 @@ void DialogModbusScanner::on_radioButtonTCP_clicked()
     ui->labelDataBits->setVisible(false);
     ui->labelParity->setVisible(false);
     ui->labelStopBits->setVisible(false);
-    ui->labelScanResultsDesc->setText(tr("IP Address: port (Device Id)"));
+    ui->labelScanResultsDesc->setText(tr("Address: port (Device Id)"));
 }
 
 ///
@@ -298,7 +298,7 @@ void DialogModbusScanner::clearProgress()
     ui->labelDataBits->setText(QString(tr("Data Bits:")));
     ui->labelParity->setText(QString(tr("Parity:")));
     ui->labelStopBits->setText(QString(tr("Stop Bits:")));
-    ui->labelIPAddress->setText(QString(tr("IP Address:")));
+    ui->labelIPAddress->setText(QString(tr("Address:")));
     ui->labelPort->setText(QString(tr("Port:")));
     ui->labelAddress->setText(QString(tr("Device Id:")));
 }
@@ -356,7 +356,7 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
     }
     else
     {
-        ui->labelIPAddress->setText(QString(tr("IP Address: %1")).arg(cd.TcpParams.IPAddress));
+        ui->labelIPAddress->setText(QString(tr("Address: %1")).arg(cd.TcpParams.IPAddress));
         ui->labelPort->setText(QString(tr("Port: %1")).arg(cd.TcpParams.ServicePort));
     }
 

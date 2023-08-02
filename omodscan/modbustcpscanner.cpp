@@ -39,12 +39,7 @@ void ModbusTcpScanner::stopScan()
 ///
 void ModbusTcpScanner::on_errorOccurred(QModbusDevice::Error error)
 {
-    if(error == QModbusDevice::ConnectionError &&
-        _modbusClient->state() == QModbusDevice::ConnectingState)
-    {
-        stopScan();
-        emit errorOccurred(_modbusClient->errorString());
-    }
+
 }
 
 ///

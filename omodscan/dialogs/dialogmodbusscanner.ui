@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>707</width>
-    <height>775</height>
+    <height>792</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -213,7 +213,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEditIPAddressFrom">
+           <widget class="IpAddressLineEdit" name="lineEditIPAddressFrom">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -242,7 +242,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEditIPAddressTo">
+           <widget class="IpAddressLineEdit" name="lineEditIPAddressTo">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -273,7 +273,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
-           <widget class="QLineEdit" name="lineEditSubnetMask">
+           <widget class="IpAddressLineEdit" name="lineEditSubnetMask">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -772,6 +772,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>IpAddressLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>ipaddresslineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

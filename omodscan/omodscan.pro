@@ -31,6 +31,7 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/ipaddresslineedit.cpp \
     controls/mainstatusbar.cpp \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/ipaddresslineedit.h \
     controls/mainstatusbar.h \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \

@@ -641,7 +641,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBoxTimeoute">
+        <widget class="QGroupBox" name="groupBoxTimeout">
          <property name="minimumSize">
           <size>
            <width>160</width>

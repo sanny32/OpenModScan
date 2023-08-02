@@ -12,3 +12,22 @@ IpAddressLineEdit::IpAddressLineEdit(QWidget* parent)
     const QRegularExpression reg ("^" + range + "(\\." + range + ")" + "(\\." + range + ")" + "(\\." + range + ")$");
     setValidator(new QRegularExpressionValidator(reg, this));
 }
+
+///
+/// \brief IpAddressLineEdit::value
+/// \return
+///
+QHostAddress IpAddressLineEdit::value() const
+{
+    return QHostAddress(text());
+}
+
+///
+/// \brief IpAddressLineEdit::setValue
+/// \param address
+///
+void IpAddressLineEdit::setValue(const QHostAddress& address)
+{
+    setText(address.toString());
+    emit editingFinished();
+}

@@ -108,8 +108,7 @@ void ModbusRtuScanner::sendRequest(int deviceId)
     emit progress(*_iterator, deviceId, value * 100);
 
     _modbusClient->setProperty("DeviceId", deviceId);
-    QModbusRequest req(QModbusPdu::ReportServerId);
-    if(auto reply = _modbusClient->sendRawRequest(req, deviceId))
+    if(auto reply = _modbusClient->sendRawRequest(modbusRequest(), deviceId))
     {
         if (!reply->isFinished())
         {

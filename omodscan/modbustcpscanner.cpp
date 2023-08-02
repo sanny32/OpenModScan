@@ -20,23 +20,18 @@ void ModbusTcpScanner::startScan()
 {
     ModbusScanner::startScan();
 
-    for(auto it = _params.ConnParams.cbegin(); it != _params.ConnParams.end(); ++it)
+    for(auto&& cd : _params.ConnParams)
     {
-        const auto params = it->TcpParams;
-
         QTcpSocket* socket = new QTcpSocket(this);
-        socket->setProperty("ConnectionDetails", QVariant::fromValue(*it));
-
-        connect(socket, &QAbstractSocket::connected, this, [this, socket]{
-            const auto cd = socket->property("ConnectionDetails").value<ConnectionDetails>();
+        connect(socket, &QAbstractSocket::connected, this, [this, socket, cd]{
             socket->disconnect();
-
             connectDevice(cd);
         });
         connect(socket, &QAbstractSocket::stateChanged, this, [socket](QAbstractSocket::SocketState state){
             if(state == QAbstractSocket::UnconnectedState) socket->deleteLater();
         });
-        socket->connectToHost(params.IPAddress, params.ServicePort, QIODevice::ReadOnly, QAbstractSocket::IPv4Protocol);
+
+        socket->connectToHost(cd.TcpParams.IPAddress, cd.TcpParams.ServicePort, QIODevice::ReadOnly, QAbstractSocket::IPv4Protocol);
     }
 }
 
@@ -79,7 +74,6 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
     if(!inProgress())
         return;
 
-
     /*const double size = _params.ConnParams.size();
     const double addrLen = (_params.DeviceIds.to() - _params.DeviceIds.from() + 1);
     const double total = size * addrLen;
@@ -93,19 +87,17 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
     }
 
     client->setProperty("DeviceId", deviceId);
-    QModbusRequest req(QModbusPdu::ReportServerId);
-    if(auto reply = client->sendRawRequest(req, deviceId))
+    if(auto reply = client->sendRawRequest(modbusRequest(), deviceId))
     {
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, [this, reply, client, deviceId]()
                 {
                     if(reply->error() != QModbusDevice::TimeoutError &&
-                        reply->error() != QModbusDevice::ConnectionError &&
-                        reply->error() != QModbusDevice::ReplyAbortedError)
+                       reply->error() != QModbusDevice::ConnectionError &&
+                       reply->error() != QModbusDevice::ReplyAbortedError)
                     {
-                        const auto cd = client->property("ConnectionDetails").value<ConnectionDetails>();
-                        emit found(cd, deviceId);
+                        emit found(client->property("ConnectionDetails").value<ConnectionDetails>(), deviceId);
                     }
                     reply->deleteLater();
 

@@ -68,10 +68,9 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
         }
     }
 
-    ui->lineEditIPAddressFrom->setText(address.toString());
-    ui->lineEditIPAddressTo->setText(address.toString());
-    ui->lineEditSubnetMask->setText(mask.toString());
-    on_lineEditSubnetMask_editingFinished();
+    ui->lineEditIPAddressFrom->setValue(address);
+    ui->lineEditIPAddressTo->setValue(address);
+    ui->lineEditSubnetMask->setValue(mask);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
@@ -120,7 +119,10 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxParity->setEnabled(!inProgress && rtuScanning);
     ui->groupBoxStopBits->setEnabled(!inProgress && rtuScanning);
     ui->groupBoxDeviceId->setEnabled(!inProgress);
-    ui->groupBoxTimeoute->setEnabled(!inProgress);
+    ui->groupBoxTimeout->setEnabled(!inProgress);
+    ui->groupBoxIPAddressRange->setEnabled(!inProgress);
+    ui->groupBoxPortRange->setEnabled(!inProgress);
+    ui->groupBoxSubnetMask->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
     ui->pushButtonScan->setEnabled(ui->comboBoxSerial->count() > 0);
     ui->pushButtonScan->setText(inProgress ? tr("Stop Scan") : tr("Start Scan"));
@@ -441,8 +443,9 @@ ScanParams DialogModbusScanner::createTcpParams() const
 {
     ScanParams params;
 
-    const auto addressFrom = QHostAddress(ui->lineEditIPAddressFrom->text());
-    const auto addressTo = QHostAddress(ui->lineEditIPAddressTo->text());
+    const auto mask = ui->lineEditSubnetMask->value();
+    const auto addressFrom = ui->lineEditIPAddressFrom->value();
+    const auto addressTo = ui->lineEditIPAddressTo->value();
 
     if(addressFrom.isNull() || addressTo.isNull())
         return params;

@@ -2,6 +2,7 @@
 #define MODBUSSCANNER_H
 
 #include <QTimer>
+#include <QModbusRequest>
 #include <qrange.h>
 #include "connectiondetails.h"
 
@@ -31,6 +32,9 @@ signals:
     void found(const ConnectionDetails& cd, int deviceId);
     void progress(const ConnectionDetails& cd, int deviceId, int progress);
     void errorOccurred(const QString& error);
+
+protected:
+    virtual QModbusRequest modbusRequest() const;
 
 private slots:
     void on_timeout();

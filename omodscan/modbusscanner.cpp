@@ -41,6 +41,15 @@ bool ModbusScanner::inProgress() const
 }
 
 ///
+/// \brief ModbusScanner::modbusRequest
+/// \return
+///
+QModbusRequest ModbusScanner::modbusRequest() const
+{
+    return QModbusRequest(QModbusPdu::ReportServerId);
+}
+
+///
 /// \brief ModbusScanner::on_timeout
 ///
 void ModbusScanner::on_timeout()

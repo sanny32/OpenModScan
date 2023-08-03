@@ -57,11 +57,16 @@ void ModbusTcpScanner::stopScan()
 ///
 void ModbusTcpScanner::processScan(const ConnectionDetails& cd, int deviceId)
 {
+    if(!inProgress())
+        return;
+
     const double size = _params.ConnParams.size();
     const double addrLen = (_params.DeviceIds.to() - _params.DeviceIds.from() + 1);
     const double total = size * addrLen;
     const double value = ++_proceesedScans / size / addrLen  + (deviceId - _params.DeviceIds.from() + 1) / total;
     emit progress(cd, deviceId, value * 100);
+
+    //qDebug() << cd.TcpParams.IPAddress << deviceId;
 
     if(value >= 1)
     {

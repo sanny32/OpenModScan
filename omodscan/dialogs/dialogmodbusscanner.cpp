@@ -135,13 +135,13 @@ void DialogModbusScanner::on_pushButtonScan_clicked()
 {
     setCursor(Qt::WaitCursor);
 
-    if(!_scanner)
+    if(_scanner && _scanner->inProgress())
     {
-        startScan();
+        stopScan();
     }
     else
     {
-        stopScan();
+        startScan();
     }
 
     setCursor(Qt::ArrowCursor);
@@ -234,10 +234,7 @@ void DialogModbusScanner::on_radioButtonTCP_clicked()
 /// \brief DialogRtuScanner::startScan
 ///
 void DialogModbusScanner::startScan()
-{         
-    if(_scanner)
-        return;
-
+{
     ScanParams params;
     if(ui->radioButtonRTU->isChecked())
     {
@@ -282,7 +279,6 @@ void DialogModbusScanner::stopScan()
     if(_scanner)
     {
         _scanner->stopScan();
-        _scanner.reset();
     }
 }
 

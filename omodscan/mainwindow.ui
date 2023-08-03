@@ -246,7 +246,7 @@
     <string>New</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string notr="true">Ctrl+N</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -258,7 +258,7 @@
     <string>Open...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string notr="true">Ctrl+O</string>
    </property>
   </action>
   <action name="actionClose">
@@ -275,7 +275,7 @@
     <string>Save</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string notr="true">Ctrl+S</string>
    </property>
   </action>
   <action name="actionSaveAs">
@@ -292,7 +292,7 @@
     <string>Print...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string notr="true">Ctrl+P</string>
    </property>
   </action>
   <action name="actionPrintSetup">
@@ -315,7 +315,7 @@
     <string>Connect</string>
    </property>
    <property name="shortcut">
-    <string>F5</string>
+    <string notr="true">F5</string>
    </property>
   </action>
   <action name="actionDisconnect">
@@ -327,7 +327,7 @@
     <string>Disconnect</string>
    </property>
    <property name="shortcut">
-    <string>F6</string>
+    <string notr="true">F6</string>
    </property>
   </action>
   <action name="actionEnable">
@@ -404,7 +404,7 @@
     <string>Binary</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+1</string>
+    <string notr="true">Ctrl+1</string>
    </property>
   </action>
   <action name="actionHex">
@@ -419,7 +419,7 @@
     <string>Hex</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+4</string>
+    <string notr="true">Ctrl+4</string>
    </property>
   </action>
   <action name="actionUnsignedDecimal">
@@ -434,7 +434,7 @@
     <string>Unsigned Decimal</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+2</string>
+    <string notr="true">Ctrl+2</string>
    </property>
   </action>
   <action name="actionInteger">
@@ -449,7 +449,7 @@
     <string>Integer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+3</string>
+    <string notr="true">Ctrl+3</string>
    </property>
   </action>
   <action name="actionFloatingPt">
@@ -464,7 +464,7 @@
     <string>Floating Pt</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+5</string>
+    <string notr="true">Ctrl+5</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -479,7 +479,7 @@
     <string>Swapped FP</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+5</string>
+    <string notr="true">Ctrl+Shift+5</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -494,7 +494,7 @@
     <string>Dbl Float</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+6</string>
+    <string notr="true">Ctrl+6</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -509,7 +509,7 @@
     <string>Swapped Dbl</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+6</string>
+    <string notr="true">Ctrl+Shift+6</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -644,7 +644,7 @@
     <string>Address scan</string>
    </property>
    <property name="shortcut">
-    <string>F10</string>
+    <string notr="true">F10</string>
    </property>
   </action>
   <action name="actionLittleEndian">
@@ -652,7 +652,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Little-Endian</string>
+    <string notr="true">Little-Endian</string>
    </property>
   </action>
   <action name="actionBigEndian">
@@ -660,7 +660,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Big-Endian</string>
+    <string notr="true">Big-Endian</string>
    </property>
   </action>
   <action name="actionByteOrder">
@@ -676,7 +676,7 @@
     <string>MODBUS Scanner</string>
    </property>
    <property name="shortcut">
-    <string>F3</string>
+    <string notr="true">F3</string>
    </property>
   </action>
  </widget>

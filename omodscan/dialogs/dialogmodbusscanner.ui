@@ -160,14 +160,14 @@
           <item>
            <widget class="QRadioButton" name="radioButtonRTU">
             <property name="text">
-             <string>RTU</string>
+             <string notr="true">RTU</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="radioButtonTCP">
             <property name="text">
-             <string>TCP</string>
+             <string notr="true">TCP</string>
             </property>
            </widget>
           </item>

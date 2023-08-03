@@ -64,7 +64,10 @@ void ModbusTcpScanner::processScan(const ConnectionDetails& cd, int deviceId)
     emit progress(cd, deviceId, value * 100);
 
     if(value >= 1)
+    {
+        emit progress(_params.ConnParams.back(), _params.DeviceIds.to(), 100);
         stopScan();
+    }
 }
 
 ///

@@ -190,8 +190,8 @@ void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
     const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
     if(mask == 0) return;
 
-    ui->lineEditIPAddressFrom->setValue(address & mask);
-    ui->lineEditIPAddressTo->setValue(address | ~mask);
+    ui->lineEditIPAddressFrom->setValue((address & mask) + 1);
+    ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
 }
 
 ///
@@ -447,21 +447,35 @@ ScanParams DialogModbusScanner::createTcpParams() const
 {
     ScanParams params;
 
-    const auto mask = ui->lineEditSubnetMask->value();
-    const auto addressFrom = ui->lineEditIPAddressFrom->value();
-    const auto addressTo = ui->lineEditIPAddressTo->value();
+    const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
+    auto addressFrom = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    auto addressTo = ui->lineEditIPAddressTo->value().toIPv4Address();
 
-    if(addressFrom.isNull() || addressTo.isNull())
+    if(addressFrom == 0 || addressTo == 0)
+        return params;
+
+    if(addressTo < addressFrom)
+    {
+        std::swap(addressTo, addressFrom);
+    }
+
+    const auto addrRange = QRange<quint32>(addressFrom & mask, addressFrom | ~mask);
+    if(!addrRange.contains(addressTo))
         return params;
 
     QVector<QString> addreses;
-    for(quint32 addr = addressFrom.toIPv4Address(); addr <= addressTo.toIPv4Address(); addr++)
+    for(quint32 addr = addressFrom; addr <= addressTo; addr++)
     {
         addreses.push_back(QHostAddress(addr).toString());
     }
 
-    const auto portFrom = ui->spinBoxPortFrom->value();
-    const auto portTo = ui->spinBoxPortTo->value();
+    auto portFrom = ui->spinBoxPortFrom->value();
+    auto portTo = ui->spinBoxPortTo->value();
+
+    if(portTo < portFrom)
+    {
+        std::swap(portTo, portFrom);
+    }
 
     QVector<int> ports;
     for(auto port = portFrom; port <= portTo; port++)

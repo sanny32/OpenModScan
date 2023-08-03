@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>707</width>
-    <height>792</height>
+    <height>863</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -222,14 +222,8 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>0</width>
               <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -251,14 +245,8 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>0</width>
               <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -282,14 +270,8 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>0</width>
               <height>25</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -374,7 +356,7 @@
         <widget class="QPushButton" name="pushButtonScan">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>150</width>
            <height>60</height>
           </size>
          </property>

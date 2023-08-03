@@ -114,6 +114,7 @@ void DialogModbusScanner::on_awake()
     const bool inProgress = _scanner && _scanner->inProgress();
     const bool rtuScanning = ui->radioButtonRTU->isChecked();
     ui->comboBoxSerial->setEnabled(!inProgress && rtuScanning);
+    ui->groupBoxConnection->setEnabled(!inProgress);
     ui->groupBoxBaudRate->setEnabled(!inProgress && rtuScanning);
     ui->groupBoxDataBits->setEnabled(!inProgress && rtuScanning);
     ui->groupBoxParity->setEnabled(!inProgress && rtuScanning);

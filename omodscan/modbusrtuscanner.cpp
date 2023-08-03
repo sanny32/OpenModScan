@@ -36,6 +36,7 @@ void ModbusRtuScanner::startScan()
 ///
 void ModbusRtuScanner::stopScan()
 {
+    _modbusClient->disconnectDevice();
     ModbusScanner::stopScan();
 }
 

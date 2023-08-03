@@ -360,6 +360,10 @@
            <height>60</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">font-size: 13pt;
+font-weight: bold;</string>
+         </property>
          <property name="text">
           <string>Start Scan</string>
          </property>

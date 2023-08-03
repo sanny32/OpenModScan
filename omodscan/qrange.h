@@ -31,8 +31,8 @@ public:
     ///
     QRange(T from, T to)
     {
-        _from = from;
-        _to = to;
+        _from = from < to ? from : to;
+        _to = from < to ? to : from;
     }
 
     ///

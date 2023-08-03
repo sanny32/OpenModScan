@@ -12,7 +12,7 @@
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
 #include "dialogaddressscan.h"
-#include "dialogrtuscanner.h"
+#include "dialogmodbusscanner.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
 #include "mainstatusbar.h"
@@ -435,17 +435,15 @@ void MainWindow::on_actionRestoreNow_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionRtuScanner_triggered
+/// \brief MainWindow::on_actionModbusScanner_triggered
 ///
-void MainWindow::on_actionRtuScanner_triggered()
+void MainWindow::on_actionModbusScanner_triggered()
 {
-    auto dlg = new DialogRtuScanner(this);
-    connect(dlg, &DialogRtuScanner::attemptToConnect, this,
-    [this](const SerialConnectionParams& params, int deviceId)
+    auto dlg = new DialogModbusScanner(this);
+    connect(dlg, &DialogModbusScanner::attemptToConnect, this,
+    [this](const ConnectionDetails& cd, int deviceId)
     {
-        _connParams.SerialParams = params;
-        _connParams.Type = ConnectionType::Serial;
-
+        _connParams = cd;
         _modbusClient.disconnectDevice();
         _modbusClient.connectDevice(_connParams);
 

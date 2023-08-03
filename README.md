@@ -1,9 +1,11 @@
 # Open ModScan
-Open ModScan is a free implimentation of modbus master (client) utility for modbus-tcp and and modbus-rtu protocols.
+Open ModScan is a free implimentation of modbus master (client) utility for modbus-tcp and modbus-rtu protocols.
 
-![изображение](https://user-images.githubusercontent.com/13627951/211140780-cf5f1b7d-6709-429e-b4e7-0d85806f1955.png)
+![image](https://user-images.githubusercontent.com/13627951/227959348-7db5a333-8443-4824-873e-3d87d3ce6f8a.png)
 
-![изображение](https://user-images.githubusercontent.com/13627951/211140886-32905d1c-559f-4a6b-aaaf-9396962c3a28.png)
+
+![image](https://user-images.githubusercontent.com/13627951/227959984-7adbf285-fd1d-4198-8ff9-386a4eea0a87.png)
+
 
 ## Features
 
@@ -23,7 +25,16 @@ Registers
     0x06 - Write Single Register
     0x10 - Write Multiple Registers
     0x16 - Mask Write Register
-    0x17 - Read Write Multiple Registers
+    
+## Extended Featues
+  Modbus Address Scan
+  
+  ![image](https://user-images.githubusercontent.com/13627951/226310086-4160c8c7-503a-48c0-bdf8-f5bb970592d3.png)
+
+  Modbus RTU Scanner
+  
+  ![image](https://user-images.githubusercontent.com/13627951/226309566-fb2326c5-76f3-45cf-aa6d-8e0c1ea73737.png)
+
 
 ## Building
   Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.

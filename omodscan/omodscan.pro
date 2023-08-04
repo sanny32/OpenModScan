@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.3.1
+VERSION = 1.4.0
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -31,6 +31,7 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/ipaddresslineedit.cpp \
     controls/mainstatusbar.cpp \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
@@ -40,7 +41,6 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
     datasimulator.cpp \
-    dialogs/dialogrtuscanner.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogaddressscan.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -51,6 +51,7 @@ SOURCES += \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
     dialogs/dialogmaskwriteregiter.cpp \
+    dialogs/dialogmodbusscanner.cpp \
     dialogs/dialogprintsettings.cpp \
     dialogs/dialogprotocolselections.cpp \
     dialogs/dialogsetuppresetdata.cpp \
@@ -64,6 +65,9 @@ SOURCES += \
     mainwindow.cpp \
     modbusclient.cpp \
     modbusdataunit.cpp \
+    modbusrtuscanner.cpp \
+    modbusscanner.cpp \
+    modbustcpscanner.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
     recentfileactionlist.cpp \
@@ -80,6 +84,7 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/ipaddresslineedit.h \
     controls/mainstatusbar.h \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \
@@ -89,7 +94,6 @@ HEADERS += \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
     datasimulator.h \
-    dialogs/dialogrtuscanner.h \
     dialogs/dialogabout.h \
     dialogs/dialogaddressscan.h \
     dialogs/dialogautosimulation.h \
@@ -100,6 +104,7 @@ HEADERS += \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
     dialogs/dialogmaskwriteregiter.h \
+    dialogs/dialogmodbusscanner.h \
     dialogs/dialogprintsettings.h \
     dialogs/dialogprotocolselections.h \
     dialogs/dialogsetuppresetdata.h \
@@ -117,7 +122,10 @@ HEADERS += \
     modbusdataunit.h \
     modbusexception.h \
     modbuslimits.h \
+    modbusrtuscanner.h \
+    modbusscanner.h \
     modbussimulationparams.h \
+    modbustcpscanner.h \
     modbuswriteparams.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
@@ -128,7 +136,6 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
-    dialogs/dialogrtuscanner.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogaddressscan.ui \
     dialogs/dialogautosimulation.ui \
@@ -139,6 +146,7 @@ FORMS += \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
     dialogs/dialogmaskwriteregiter.ui \
+    dialogs/dialogmodbusscanner.ui \
     dialogs/dialogprintsettings.ui \
     dialogs/dialogprotocolselections.ui \
     dialogs/dialogsetuppresetdata.ui \

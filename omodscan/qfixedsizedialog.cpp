@@ -1,3 +1,4 @@
+#include <QStyle>
 #include "qfixedsizedialog.h"
 
 ///
@@ -21,4 +22,10 @@ void QFixedSizeDialog::showEvent(QShowEvent* e)
 {
     QDialog::showEvent(e);
     setFixedSize(sizeHint());
+
+    if(parentWidget() != nullptr)
+    {
+        QRect parentRect(parentWidget()->mapToGlobal(QPoint(0, 0)), parentWidget()->size());
+        move(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), parentRect).topLeft());
+    }
 }

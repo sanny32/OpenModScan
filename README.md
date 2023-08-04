@@ -33,7 +33,7 @@ Registers
 
   Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
   
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/5dc95109-e5e6-4e31-b0f3-210f72e0ffde)
+  ![изображение](https://github.com/sanny32/OpenModScan/assets/13627951/50876755-159b-4861-a2df-5d99e17c8388)
 
 
 

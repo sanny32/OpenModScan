@@ -10,7 +10,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 2);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 3);
 
 ///
 /// \brief FormModSca::FormModSca

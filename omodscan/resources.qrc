@@ -28,5 +28,9 @@
         <file>res/actionLittleEndian.png</file>
         <file>res/pointGreen.png</file>
         <file>res/pointEmpty.png</file>
+        <file>res/actionLongInteger.png</file>
+        <file>res/actionSwappedLI.png</file>
+        <file>res/actionSwappedUnsignedLI.png</file>
+        <file>res/actionUnsignedLI.png</file>
     </qresource>
 </RCC>

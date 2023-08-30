@@ -60,6 +60,10 @@ private slots:
     void on_actionBinary_triggered();
     void on_actionUnsignedDecimal_triggered();
     void on_actionInteger_triggered();
+    void on_actionLongInteger_triggered();
+    void on_actionSwappedLI_triggered();
+    void on_actionUnsignedLongInteger_triggered();
+    void on_actionSwappedUnsignedLI_triggered();
     void on_actionHex_triggered();
     void on_actionFloatingPt_triggered();
     void on_actionSwappedFP_triggered();

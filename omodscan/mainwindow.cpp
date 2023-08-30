@@ -206,6 +206,10 @@ void MainWindow::on_awake()
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
         ui->actionUnsignedDecimal->setChecked(ddm == DataDisplayMode::Decimal);
         ui->actionInteger->setChecked(ddm == DataDisplayMode::Integer);
+        ui->actionLongInteger->setChecked(ddm == DataDisplayMode::LongInteger);
+        ui->actionSwappedLI->setChecked(ddm == DataDisplayMode::SwappedLI);
+        ui->actionUnsignedLongInteger->setChecked(ddm == DataDisplayMode::UnsignedLongInteger);
+        ui->actionSwappedUnsignedLI->setChecked(ddm == DataDisplayMode::SwappedUnsignedLI);
         ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
         ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
@@ -512,6 +516,35 @@ void MainWindow::on_actionUnsignedDecimal_triggered()
 void MainWindow::on_actionInteger_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::Integer);
+}
+
+///
+/// \brief MainWindow::on_actionLongInteger_triggered
+///
+void MainWindow::on_actionLongInteger_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::LongInteger);
+}
+
+///
+/// \brief MainWindow::on_actionSwappedLI_triggered
+///
+void MainWindow::on_actionSwappedLI_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::SwappedLI);
+}
+
+///
+/// \brief MainWindow::on_actionUnsignedLongInteger_triggered
+///
+void MainWindow::on_actionUnsignedLongInteger_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::UnsignedLongInteger);
+}
+
+void MainWindow::on_actionSwappedUnsignedLI_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::SwappedUnsignedLI);
 }
 
 ///

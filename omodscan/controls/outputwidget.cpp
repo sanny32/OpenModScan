@@ -215,7 +215,7 @@ QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 value1,
 
             const qint32 value = makeLong(value1, value2, order);
             outValue = value;
-            result = result = QString("<%1>").arg(value);
+            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
         }
         break;
         default:
@@ -251,7 +251,7 @@ QString formatUnsignedLongValue(QModbusDataUnit::RegisterType pointType, quint16
 
             const quint32 value = makeULong(value1, value2, order);
             outValue = value;
-            result = result = QString("<%1>").arg(value);
+            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
     }
     break;
     default:

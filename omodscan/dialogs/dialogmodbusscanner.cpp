@@ -181,6 +181,20 @@ void DialogModbusScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 }
 
 ///
+/// \brief DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished
+///
+void DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished()
+{
+    const auto address = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    if(address == 0) return;
+
+    const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
+    if(mask == 0) return;
+
+    ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
+}
+
+///
 /// \brief DialogModbusScanner::on_lineEditSubnetMask_editingFinished
 ///
 void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()

@@ -25,6 +25,25 @@ inline void breakFloat(float value, quint16& lo, quint16& hi, ByteOrder order)
 }
 
 ///
+/// \brief breakLong
+/// \param value
+/// \param lo
+/// \param hi
+/// \param order
+///
+inline void breakLong(qint32 value, quint16& lo, quint16& hi, ByteOrder order)
+{
+    union {
+       quint16 asUint16[2];
+       qint32 asInt32;
+    } v;
+    v.asInt32 = value;
+
+    lo = toByteOrderValue(v.asUint16[0], order);
+    hi = toByteOrderValue(v.asUint16[1], order);
+}
+
+///
 /// \brief breakDouble
 /// \param value
 /// \param lolo
@@ -65,6 +84,38 @@ inline float makeFloat(quint16 lo, quint16 hi, ByteOrder order)
     v.asUint16[1] = toByteOrderValue(hi, order);
 
     return v.asFloat;
+}
+
+///
+/// \brief makeLong
+/// \param lo
+/// \param hi
+/// \param order
+/// \return
+///
+inline qint32 makeLong(quint16 lo, quint16 hi, ByteOrder order)
+{
+    union {
+       quint16 asUint16[2];
+       qint32 asInt32;
+    } v;
+
+    v.asUint16[0] = toByteOrderValue(lo, order);
+    v.asUint16[1] = toByteOrderValue(hi, order);
+
+    return v.asInt32;
+}
+
+///
+/// \brief makeULong
+/// \param lo
+/// \param hi
+/// \param order
+/// \return
+///
+inline quint32 makeULong(quint16 lo, quint16 hi, ByteOrder order)
+{
+    return (quint32)makeLong(lo, hi, order);
 }
 
 ///

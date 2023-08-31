@@ -310,6 +310,28 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value,
 /// \param swapped
 /// \return
 ///
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, qint32 value, ByteOrder order, bool swapped)
+{
+    QVector<quint16> values(2);
+    auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
+
+    if(swapped)
+        breakLong(value, values[1], values[0], order);
+    else
+        breakLong(value, values[0], values[1], order);
+
+    data.setValues(values);
+    return data;
+}
+
+///
+/// \brief createHoldingRegistersDataUnit
+/// \param newStartAddress
+/// \param value
+/// \param order
+/// \param swapped
+/// \return
+///
 QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value, ByteOrder order, bool swapped)
 {
     QVector<quint16> values(4);
@@ -400,6 +422,16 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                     break;
                     case DataDisplayMode::SwappedDbl:
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), params.Order, true);
+                    break;
+
+                    case DataDisplayMode::LongInteger:
+                    case DataDisplayMode::UnsignedLongInteger:
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, false);
+                    break;
+
+                    case DataDisplayMode::SwappedLI:
+                    case DataDisplayMode::SwappedUnsignedLI:
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, true);
                     break;
                 }
             break;

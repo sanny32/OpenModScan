@@ -130,11 +130,9 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
     {
         if (!reply->isFinished())
         {
-            connect(reply, &QModbusReply::finished, this, [this, client, deviceId, cd]()
+            connect(reply, &QModbusReply::finished, this, [this, client, reply, deviceId, cd]()
                 {
-                    auto reply = qobject_cast<QModbusReply*>(sender());
-                    if (!reply) return;
-
+                    qDebug() << deviceId << reply->error();
                     if(reply->error() != QModbusDevice::TimeoutError &&
                        reply->error() != QModbusDevice::ConnectionError &&
                        reply->error() != QModbusDevice::ReplyAbortedError)

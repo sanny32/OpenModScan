@@ -10,8 +10,9 @@
 ModbusTcpScanner::ModbusTcpScanner(const ScanParams& params, QObject *parent)
     : ModbusScanner{parent}
     ,_params(params)
+    ,_processedSocketCount(0)
 {
-    connect(this, &ModbusTcpScanner::scanDeviceFinished, this, &ModbusTcpScanner::on_scanDeviceFinished, Qt::QueuedConnection);
+    connect(this, &ModbusTcpScanner::scanDeviceFinished, this, &ModbusTcpScanner::on_scanDeviceFinished);
 }
 
 ///
@@ -21,8 +22,8 @@ void ModbusTcpScanner::startScan()
 {
     ModbusScanner::startScan();
 
+    _connParams.clear();
     _processedSocketCount = 0;
-    _itemsToScan.clear();
 
     for(auto&& cd : _params.ConnParams)
     {
@@ -37,19 +38,6 @@ void ModbusTcpScanner::startScan()
 
         socket->connectToHost(cd.TcpParams.IPAddress, cd.TcpParams.ServicePort, QIODevice::ReadOnly, QAbstractSocket::IPv4Protocol);
     }
-}
-
-///
-/// \brief ModbusTcpScanner::internalScan
-///
-void ModbusTcpScanner::internalScan()
-{
-    std::sort(_itemsToScan.begin(), _itemsToScan.end(), [](const ConnectionDetails& cd1, const ConnectionDetails& cd2){
-        return QHostAddress(cd1.TcpParams.IPAddress).toIPv4Address() < QHostAddress(cd2.TcpParams.IPAddress).toIPv4Address();
-    });
-
-    _iterator = _itemsToScan.cbegin();
-    connectDevice(*_iterator);
 }
 
 ///
@@ -68,12 +56,18 @@ void ModbusTcpScanner::stopScan()
 void ModbusTcpScanner::processSocket(QTcpSocket* sck, const ConnectionDetails& cd)
 {
     if(sck->state() == QAbstractSocket::ConnectedState)
-        _itemsToScan.push_back(cd);
+        _connParams.push_back(cd);
 
     sck->deleteLater();
 
     if(++_processedSocketCount == _params.ConnParams.size())
-        internalScan();
+    {
+        std::sort(_connParams.begin(), _connParams.end(), [](const ConnectionDetails& cd1, const ConnectionDetails& cd2){
+            return QHostAddress(cd1.TcpParams.IPAddress).toIPv4Address() < QHostAddress(cd2.TcpParams.IPAddress).toIPv4Address();
+        });
+
+        connectDevice(_connParams.pop());
+    }
 }
 
 ///
@@ -81,10 +75,10 @@ void ModbusTcpScanner::processSocket(QTcpSocket* sck, const ConnectionDetails& c
 ///
 void ModbusTcpScanner::on_scanDeviceFinished(QPrivateSignal)
 {
-    if(++_iterator == _itemsToScan.cend())
+    if(_connParams.isEmpty())
         stopScan();
     else
-        connectDevice(*_iterator);
+        connectDevice(_connParams.pop());
 }
 
 ///
@@ -97,9 +91,8 @@ void ModbusTcpScanner::connectDevice(const ConnectionDetails& cd)
     connect(modbusClient, &QModbusTcpClient::stateChanged, this, [this, modbusClient](QModbusDevice::State state){
         if(state == QModbusDevice::ConnectedState)
             sendRequest(modbusClient, _params.DeviceIds.from());
-        //else if(state == QModbusDevice::UnconnectedState)
-            //modbusClient->deleteLater();
         });
+    modbusClient->disconnectDevice();
     modbusClient->setNumberOfRetries(0);
     modbusClient->setTimeout(_params.Timeout);
     modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
@@ -119,7 +112,7 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
 
     if(deviceId > _params.DeviceIds.to())
     {
-        client->disconnectDevice();
+        client->deleteLater();
         emit scanDeviceFinished(QPrivateSignal());
 
         return;
@@ -127,19 +120,21 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
 
     const auto cd = client->property("ConnectionDetails").value<ConnectionDetails>();
 
-    const double size = _itemsToScan.size();
+    /*const double size = _itemsToScan.size();
     const double addrLen = (_params.DeviceIds.to() - _params.DeviceIds.from() + 1);
     const double total = size * addrLen;
-    const double value = std::distance(_itemsToScan.cbegin(), _iterator) / size  + (deviceId - _params.DeviceIds.from() + 1) / total;
-    emit progress(cd, deviceId, value * 100);
+    const double value = std::distance(_itemsToScan.cbegin(), _iterator) / size  + (deviceId - _params.DeviceIds.from() + 1) / total;*/
+    emit progress(cd, deviceId, 0);
 
-    client->setProperty("DeviceId", deviceId);
     if(auto reply = client->sendRawRequest(modbusRequest(), deviceId))
     {
         if (!reply->isFinished())
         {
-            connect(reply, &QModbusReply::finished, this, [this, reply, client, deviceId, cd]()
+            connect(reply, &QModbusReply::finished, this, [this, client, deviceId, cd]()
                 {
+                    auto reply = qobject_cast<QModbusReply*>(sender());
+                    if (!reply) return;
+
                     if(reply->error() != QModbusDevice::TimeoutError &&
                        reply->error() != QModbusDevice::ConnectionError &&
                        reply->error() != QModbusDevice::ReplyAbortedError)
@@ -149,7 +144,7 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
                     reply->deleteLater();
 
                     sendRequest(client, deviceId + 1);
-                }, Qt::QueuedConnection);
+                });
         }
         else
         {

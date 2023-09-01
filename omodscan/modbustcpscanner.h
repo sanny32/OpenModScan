@@ -1,6 +1,7 @@
 #ifndef MODBUSTCPSCANNER_H
 #define MODBUSTCPSCANNER_H
 
+#include <QStack>
 #include <QTcpSocket>
 #include <QModbusTcpClient>
 #include "modbusscanner.h"
@@ -24,16 +25,14 @@ private slots:
     void on_scanDeviceFinished(QPrivateSignal);
 
 private:
-    void internalScan();
     void processSocket(QTcpSocket* sck, const ConnectionDetails& cd);
     void connectDevice(const ConnectionDetails& params);
     void sendRequest(QModbusTcpClient* client, int deviceId);
 
 private:
-    int _processedSocketCount;
-    QVector<ConnectionDetails> _itemsToScan;
-    QVector<ConnectionDetails>::ConstIterator _iterator;
     const ScanParams _params;
+    int _processedSocketCount;
+    QStack<ConnectionDetails> _connParams;
 };
 
 #endif // MODBUSTCPSCANNER_H

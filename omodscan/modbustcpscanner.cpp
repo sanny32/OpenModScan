@@ -55,6 +55,9 @@ void ModbusTcpScanner::stopScan()
 ///
 void ModbusTcpScanner::processSocket(QTcpSocket* sck, const ConnectionDetails& cd)
 {
+    if(!inProgress())
+        return;
+
     _processedSocketCount++;
 
     if(sck->state() == QAbstractSocket::ConnectedState)
@@ -82,10 +85,13 @@ void ModbusTcpScanner::processSocket(QTcpSocket* sck, const ConnectionDetails& c
 ///
 void ModbusTcpScanner::on_scanNext(QPrivateSignal)
 {
+    if(!inProgress())
+        return;
+
     if(_connParams.isEmpty())
         stopScan();
     else
-        connectDevice(_connParams.pop());
+        connectDevice(_connParams.dequeue());
 }
 
 ///
@@ -137,7 +143,6 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
         {
             connect(reply, &QModbusReply::finished, this, [this, client, reply, deviceId, cd]()
                 {
-                    qDebug() << deviceId << reply->error();
                     if(reply->error() != QModbusDevice::TimeoutError &&
                        reply->error() != QModbusDevice::ConnectionError &&
                        reply->error() != QModbusDevice::ReplyAbortedError)

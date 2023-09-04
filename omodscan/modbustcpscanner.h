@@ -1,7 +1,7 @@
 #ifndef MODBUSTCPSCANNER_H
 #define MODBUSTCPSCANNER_H
 
-#include <QStack>
+#include <QQueue>
 #include <QTcpSocket>
 #include <QModbusTcpClient>
 #include "modbusscanner.h"
@@ -32,7 +32,7 @@ private:
 private:
     const ScanParams _params;
     int _processedSocketCount;
-    QStack<ConnectionDetails> _connParams;
+    QQueue<ConnectionDetails> _connParams;
 };
 
 #endif // MODBUSTCPSCANNER_H

@@ -429,7 +429,7 @@
     <string>Hex</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+4</string>
+    <string>Ctrl+6</string>
    </property>
   </action>
   <action name="actionUnsignedDecimal">
@@ -474,7 +474,7 @@
     <string>Floating Pt</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+5</string>
+    <string>Ctrl+7</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -489,7 +489,7 @@
     <string>Swapped FP</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Shift+5</string>
+    <string>Ctrl+Shift+7</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -504,7 +504,7 @@
     <string>Dbl Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+6</string>
+    <string>Ctrl+8</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -519,7 +519,7 @@
     <string>Swapped Dbl</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Shift+6</string>
+    <string>Ctrl+Shift+8</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -700,6 +700,9 @@
    <property name="text">
     <string>Long Integer</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+4</string>
+   </property>
   </action>
   <action name="actionSwappedLI">
    <property name="checkable">
@@ -715,6 +718,9 @@
    <property name="toolTip">
     <string>Swapped Long Integer</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+4</string>
+   </property>
   </action>
   <action name="actionUnsignedLongInteger">
    <property name="checkable">
@@ -726,6 +732,9 @@
    </property>
    <property name="text">
     <string>Unsigned Long Integer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+5</string>
    </property>
   </action>
   <action name="actionSwappedUnsignedLI">
@@ -741,6 +750,9 @@
    </property>
    <property name="toolTip">
     <string>Swapped Unsigned Long Integer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+5</string>
    </property>
   </action>
  </widget>

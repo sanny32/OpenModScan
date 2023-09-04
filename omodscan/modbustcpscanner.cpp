@@ -12,7 +12,7 @@ ModbusTcpScanner::ModbusTcpScanner(const ScanParams& params, QObject *parent)
     ,_params(params)
     ,_processedSocketCount(0)
 {
-    connect(this, &ModbusTcpScanner::scanDeviceFinished, this, &ModbusTcpScanner::on_scanDeviceFinished);
+    connect(this, &ModbusTcpScanner::scanNext, this, &ModbusTcpScanner::on_scanNext);
 }
 
 ///
@@ -55,25 +55,32 @@ void ModbusTcpScanner::stopScan()
 ///
 void ModbusTcpScanner::processSocket(QTcpSocket* sck, const ConnectionDetails& cd)
 {
+    _processedSocketCount++;
+
     if(sck->state() == QAbstractSocket::ConnectedState)
         _connParams.push_back(cd);
+    else
+    {
+        const double value = (_processedSocketCount - _connParams.size()) * 100. / _params.ConnParams.size();
+        emit progress(cd, _params.DeviceIds.from(), value);
+    }
 
     sck->deleteLater();
 
-    if(++_processedSocketCount == _params.ConnParams.size())
+    if(_processedSocketCount == _params.ConnParams.size())
     {
         std::sort(_connParams.begin(), _connParams.end(), [](const ConnectionDetails& cd1, const ConnectionDetails& cd2){
             return QHostAddress(cd1.TcpParams.IPAddress).toIPv4Address() < QHostAddress(cd2.TcpParams.IPAddress).toIPv4Address();
         });
 
-        connectDevice(_connParams.pop());
+        emit scanNext(QPrivateSignal());
     }
 }
 
 ///
-/// \brief ModbusTcpScanner::on_scanDeviceFinished
+/// \brief ModbusTcpScanner::on_scanNext
 ///
-void ModbusTcpScanner::on_scanDeviceFinished(QPrivateSignal)
+void ModbusTcpScanner::on_scanNext(QPrivateSignal)
 {
     if(_connParams.isEmpty())
         stopScan();
@@ -113,18 +120,16 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
     if(deviceId > _params.DeviceIds.to())
     {
         client->deleteLater();
-        emit scanDeviceFinished(QPrivateSignal());
+        emit scanNext(QPrivateSignal());
 
         return;
     }
 
     const auto cd = client->property("ConnectionDetails").value<ConnectionDetails>();
-
-    /*const double size = _itemsToScan.size();
-    const double addrLen = (_params.DeviceIds.to() - _params.DeviceIds.from() + 1);
-    const double total = size * addrLen;
-    const double value = std::distance(_itemsToScan.cbegin(), _iterator) / size  + (deviceId - _params.DeviceIds.from() + 1) / total;*/
-    emit progress(cd, deviceId, 0);
+    const double curr = (deviceId - _params.DeviceIds.from() + 1) / (double)(_params.DeviceIds.to() - _params.DeviceIds.from() + 1);
+    const double total = (_processedSocketCount - _connParams.size() - 1) / (double)_params.ConnParams.size();
+    const double value = total + (1 - total) * curr / (_connParams.size() + 1);
+    emit progress(cd, deviceId, value * 100);
 
     if(auto reply = client->sendRawRequest(modbusRequest(), deviceId))
     {

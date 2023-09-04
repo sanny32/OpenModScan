@@ -19,10 +19,10 @@ public:
     void stopScan() override;
 
 signals:
-    void scanDeviceFinished(QPrivateSignal);
+    void scanNext(QPrivateSignal);
 
 private slots:
-    void on_scanDeviceFinished(QPrivateSignal);
+    void on_scanNext(QPrivateSignal);
 
 private:
     void processSocket(QTcpSocket* sck, const ConnectionDetails& cd);

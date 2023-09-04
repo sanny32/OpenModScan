@@ -103,7 +103,7 @@ void DialogModbusScanner::changeEvent(QEvent* event)
 void DialogModbusScanner::showEvent(QShowEvent* e)
 {
     QFixedSizeDialog::showEvent(e);
-    ui->radioButtonRTU->click();
+    //ui->radioButtonRTU->click();
 }
 
 ///
@@ -181,6 +181,20 @@ void DialogModbusScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 }
 
 ///
+/// \brief DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished
+///
+void DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished()
+{
+    const auto address = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    if(address == 0) return;
+
+    const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
+    if(mask == 0) return;
+
+    ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
+}
+
+///
 /// \brief DialogModbusScanner::on_lineEditSubnetMask_editingFinished
 ///
 void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
@@ -255,10 +269,10 @@ void DialogModbusScanner::startScan()
     }
 
     connect(_scanner.get(), &ModbusScanner::timeout, this, &DialogModbusScanner::on_timeout);
-    connect(_scanner.get(), &ModbusScanner::finished, this, &DialogModbusScanner::on_scanFinished);
-    connect(_scanner.get(), &ModbusScanner::errorOccurred, this, &DialogModbusScanner::on_errorOccurred);
-    connect(_scanner.get(), &ModbusScanner::found, this, &DialogModbusScanner::on_deviceFound);
-    connect(_scanner.get(), &ModbusScanner::progress, this, &DialogModbusScanner::on_progress);
+    connect(_scanner.get(), &ModbusScanner::finished, this, &DialogModbusScanner::on_scanFinished, Qt::QueuedConnection);
+    connect(_scanner.get(), &ModbusScanner::errorOccurred, this, &DialogModbusScanner::on_errorOccurred, Qt::QueuedConnection);
+    connect(_scanner.get(), &ModbusScanner::found, this, &DialogModbusScanner::on_deviceFound, Qt::QueuedConnection);
+    connect(_scanner.get(), &ModbusScanner::progress, this, &DialogModbusScanner::on_progress, Qt::QueuedConnection);
 
     clearScanTime();
     clearProgress();
@@ -339,6 +353,7 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
        item->setData(Qt::UserRole + 1, deviceId);
 
        ui->listWidget->addItem(item);
+       ui->listWidget->scrollToItem(item);
     }
 }
 

@@ -6,7 +6,6 @@
 ///
 ModbusScanner::ModbusScanner(QObject *parent)
     : QObject{parent}
-    ,_request(QModbusRequest(QModbusPdu::ReportServerId))
 {
     connect(&_timer, &QTimer::timeout, this, &ModbusScanner::on_timeout);
 }
@@ -39,24 +38,6 @@ void ModbusScanner::stopScan()
 bool ModbusScanner::inProgress() const
 {
     return _inProgress;
-}
-
-///
-/// \brief ModbusScanner::modbusRequest
-/// \return
-///
-QModbusRequest ModbusScanner::modbusRequest() const
-{
-    return _request;
-}
-
-///
-/// \brief ModbusScanner::setModbusRequest
-/// \param req
-///
-void ModbusScanner::setModbusRequest(const QModbusRequest& req)
-{
-    _request = req;
 }
 
 ///

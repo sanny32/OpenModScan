@@ -16,7 +16,7 @@ ModbusRtuScanner::ModbusRtuScanner(const ScanParams& params, QObject* parent)
     QObject::connect(serialPort, &QSerialPort::readyRead, this,
     [this]()
     {
-        emit found(*_iterator, _modbusClient->property("DeviceId").toInt());
+        emit found(*_iterator, _modbusClient->property("DeviceId").toInt(), true);
     });
 }
 
@@ -109,7 +109,7 @@ void ModbusRtuScanner::sendRequest(int deviceId)
     emit progress(*_iterator, deviceId, value * 100);
 
     _modbusClient->setProperty("DeviceId", deviceId);
-    if(auto reply = _modbusClient->sendRawRequest(modbusRequest(), deviceId))
+    if(auto reply = _modbusClient->sendRawRequest(_params.Request, deviceId))
     {
         if (!reply->isFinished())
         {
@@ -119,7 +119,7 @@ void ModbusRtuScanner::sendRequest(int deviceId)
                         reply->error() != QModbusDevice::ConnectionError &&
                         reply->error() != QModbusDevice::ReplyAbortedError)
                     {
-                        emit found(*_iterator, deviceId);
+                        emit found(*_iterator, deviceId, reply->error() == QModbusDevice::ProtocolError);
                     }
                     reply->deleteLater();
 

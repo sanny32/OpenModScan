@@ -124,6 +124,7 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxIPAddressRange->setEnabled(!inProgress);
     ui->groupBoxPortRange->setEnabled(!inProgress);
     ui->groupBoxSubnetMask->setEnabled(!inProgress);
+    ui->groupBoxRequest->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
     ui->pushButtonScan->setEnabled(ui->comboBoxSerial->count() > 0);
     ui->pushButtonScan->setText(inProgress ? tr("Stop Scan") : tr("Start Scan"));
@@ -163,6 +164,16 @@ void DialogModbusScanner::on_pushButtonClear_clicked()
 void DialogModbusScanner::on_errorOccurred(const QString& error)
 {
     QMessageBox::warning(this, windowTitle(), error);
+}
+
+///
+/// \brief DialogModbusScanner::on_comboBoxFunction_functionCodeChanged
+/// \param funcCode
+///
+void DialogModbusScanner::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode funcCode)
+{
+    ui->spinBoxAddress->setEnabled(funcCode != QModbusPdu::ReportServerId);
+    ui->spinBoxLength->setEnabled(funcCode != QModbusPdu::ReportServerId);
 }
 
 ///
@@ -225,6 +236,7 @@ void DialogModbusScanner::on_radioButtonRTU_clicked()
     ui->labelIPAddress->setVisible(false);
     ui->labelPort->setVisible(false);
     ui->labelScanResultsDesc->setText(tr("PORT: Device Id (serial port settings)"));
+    ui->comboBoxFunction->setCurrentFunctionCode(QModbusPdu::ReportServerId);
 }
 
 ///
@@ -243,6 +255,7 @@ void DialogModbusScanner::on_radioButtonTCP_clicked()
     ui->labelParity->setVisible(false);
     ui->labelStopBits->setVisible(false);
     ui->labelScanResultsDesc->setText(tr("Address: port (Device Id)"));
+    ui->comboBoxFunction->setCurrentFunctionCode(QModbusPdu::ReadCoils);
 }
 
 ///
@@ -324,8 +337,9 @@ void DialogModbusScanner::clearProgress()
 /// \brief DialogModbusScanner::on_deviceFound
 /// \param cd
 /// \param deviceId
+/// \param dubious
 ///
-void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int deviceId)
+void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int deviceId, bool dubious)
 {
     QString result;
     if(ui->radioButtonRTU->isChecked())
@@ -344,7 +358,9 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
                                            QString::number(deviceId));
     }
 
+    if(dubious) result = QString("[?] %1").arg(result);
     const auto items = ui->listWidget->findItems(result, Qt::MatchExactly);
+
     if(items.empty())
     {
        auto item = new QListWidgetItem(ui->listWidget);
@@ -445,6 +461,7 @@ ScanParams DialogModbusScanner::createSerialParams() const
     // remove duplicates
     params.ConnParams.erase(std::unique(params.ConnParams.begin(), params.ConnParams.end()), params.ConnParams.end());
 
+    params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
 
@@ -507,10 +524,35 @@ ScanParams DialogModbusScanner::createTcpParams() const
         }
     }
 
+    params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
 
     return params;
+}
+
+///
+/// \brief DialogModbusScanner::createModbusRequest
+/// \return
+///
+QModbusRequest DialogModbusScanner::createModbusRequest() const
+{
+    switch(ui->comboBoxFunction->currentFunctionCode())
+    {
+        case QModbusPdu::ReportServerId:
+        return QModbusRequest(QModbusPdu::ReportServerId);
+
+        case QModbusPdu::ReadCoils:
+        case QModbusPdu::ReadDiscreteInputs:
+        case QModbusPdu::ReadHoldingRegisters:
+        case QModbusPdu::ReadInputRegisters:
+        return QModbusRequest(ui->comboBoxFunction->currentFunctionCode(),
+                              quint16(ui->spinBoxAddress->value()),
+                              quint16(ui->spinBoxLength->value()));
+
+        default:
+        return QModbusRequest();
+    }
 }
 
 ///

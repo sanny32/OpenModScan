@@ -137,7 +137,7 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
     const double value = total + (1 - total) * curr / (_connParams.size() + 1);
     emit progress(cd, deviceId, value * 100);
 
-    if(auto reply = client->sendRawRequest(modbusRequest(), deviceId))
+    if(auto reply = client->sendRawRequest(_params.Request, deviceId))
     {
         if (!reply->isFinished())
         {
@@ -147,7 +147,7 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
                        reply->error() != QModbusDevice::ConnectionError &&
                        reply->error() != QModbusDevice::ReplyAbortedError)
                     {
-                        emit found(cd, deviceId);
+                        emit found(cd, deviceId, reply->error() == QModbusDevice::ProtocolError);
                     }
                     reply->deleteLater();
 

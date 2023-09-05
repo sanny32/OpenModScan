@@ -31,6 +31,7 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/formattedspinbox.cpp \
     controls/functioncodecombobox.cpp \
     controls/ipaddresslineedit.cpp \
     controls/mainstatusbar.cpp \
@@ -85,6 +86,7 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/formattedspinbox.h \
     controls/functioncodecombobox.h \
     controls/ipaddresslineedit.h \
     controls/mainstatusbar.h \

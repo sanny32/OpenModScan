@@ -659,7 +659,7 @@ font-weight: bold;</string>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QSpinBox" name="spinBoxAddress">
+           <widget class="FormattedSpinBox" name="spinBoxAddress">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -702,7 +702,7 @@ font-weight: bold;</string>
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>123</number>
+             <number>125</number>
             </property>
            </widget>
           </item>
@@ -854,6 +854,11 @@ font-weight: bold;</string>
    <class>FunctionCodeComboBox</class>
    <extends>QComboBox</extends>
    <header>functioncodecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FormattedSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>formattedspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

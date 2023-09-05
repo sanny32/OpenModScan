@@ -910,7 +910,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="169"/>
         <source>Envelope</source>
-        <translation type="unfinished"></translation>
+        <translation>Конверт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="173"/>
@@ -930,12 +930,12 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="185"/>
         <source>Small Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Малый формат</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="189"/>
         <source>Large Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Большой формат</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="193"/>
@@ -945,7 +945,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="197"/>
         <source>Cassette</source>
-        <translation type="unfinished"></translation>
+        <translation>Кассета</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
@@ -955,7 +955,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="205"/>
         <source>Custom Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательский источник</translation>
     </message>
 </context>
 <context>
@@ -1008,141 +1008,6 @@ single-point  write functions 05 and 06.)</source>
         <translation>Использовать функции 15 и 16 для записи в регистр.
 (Используется в случае, если устройство не поддерживает
  функции 05 и 06.)</translation>
-    </message>
-</context>
-<context>
-    <name>DialogRtuScanner</name>
-    <message>
-        <source>MODBUS RTU Scanner</source>
-        <translation type="vanished">MODBUS RTU Сканер</translation>
-    </message>
-    <message>
-        <source>Baud Rate</source>
-        <translation type="vanished">Скорость</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scan Results:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Результаты:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>PORT: Device Id (serial port settings)</source>
-        <translation type="vanished">Порт: Узел (параметры порта)</translation>
-    </message>
-    <message>
-        <source>Clear Results</source>
-        <translation type="vanished">Очистить результаты</translation>
-    </message>
-    <message>
-        <source>Data Bits</source>
-        <translation type="vanished">Биты данных</translation>
-    </message>
-    <message>
-        <source>Parity</source>
-        <translation type="vanished">Четность</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Нет</translation>
-    </message>
-    <message>
-        <source>Odd</source>
-        <translation type="vanished">Нечет</translation>
-    </message>
-    <message>
-        <source>Even</source>
-        <translation type="vanished">Чёт</translation>
-    </message>
-    <message>
-        <source>Stop Bits</source>
-        <translation type="vanished">Стоповые биты</translation>
-    </message>
-    <message>
-        <source>Device Id</source>
-        <translation type="vanished">Узел</translation>
-    </message>
-    <message>
-        <source>from</source>
-        <translation type="vanished">с</translation>
-    </message>
-    <message>
-        <source>to</source>
-        <translation type="vanished">по</translation>
-    </message>
-    <message>
-        <source>Response Timeout</source>
-        <translation type="vanished">Таймаут ответа</translation>
-    </message>
-    <message>
-        <source>msec</source>
-        <translation type="vanished">мсек</translation>
-    </message>
-    <message>
-        <source>Serial port</source>
-        <translation type="vanished">Порт подключения</translation>
-    </message>
-    <message>
-        <source>Start Scan</source>
-        <translation type="vanished">Сканировать</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scanning:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Сканирование:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Baud Rate: </source>
-        <translation type="vanished">Скорость бит/с: </translation>
-    </message>
-    <message>
-        <source>Data Bits: </source>
-        <translation type="vanished">Биты данных: </translation>
-    </message>
-    <message>
-        <source>Parity: </source>
-        <translation type="vanished">Четность: </translation>
-    </message>
-    <message>
-        <source>Stop Bits: </source>
-        <translation type="vanished">Стоповые биты: </translation>
-    </message>
-    <message>
-        <source>Device Id: </source>
-        <translation type="vanished">Узел: </translation>
-    </message>
-    <message>
-        <source>Scan Time</source>
-        <translation type="vanished">Вермя сканирования</translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <translation type="vanished">Пробел</translation>
-    </message>
-    <message>
-        <source>Mark</source>
-        <translation type="vanished">Маркер</translation>
-    </message>
-    <message>
-        <source>Stop Scan</source>
-        <translation type="vanished">Остановить</translation>
-    </message>
-    <message>
-        <source>Baud Rate: %1</source>
-        <translation type="vanished">Скорость бит/с: %1</translation>
-    </message>
-    <message>
-        <source>Data Bits: %1</source>
-        <translation type="vanished">Биты данных: %1</translation>
-    </message>
-    <message>
-        <source>Parity: %1</source>
-        <translation type="vanished">Четность: %1</translation>
-    </message>
-    <message>
-        <source>Stop Bits: %1</source>
-        <translation type="vanished">Стоповые биты: %1</translation>
-    </message>
-    <message>
-        <source>Device Id: %1</source>
-        <translation type="vanished">Узел: %1</translation>
     </message>
 </context>
 <context>
@@ -1809,10 +1674,6 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="752"/>
         <source>Swapped Unsigned Long Integer</source>
         <translation>Перевернутое беззнаковое длинное целое</translation>
-    </message>
-    <message>
-        <source>MODBUS RTU Scanner</source>
-        <translation type="vanished">MODBUS RTU Сканер</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="628"/>

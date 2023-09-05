@@ -488,7 +488,7 @@ const ScanParams DialogModbusScanner::createSerialParams() const
 
     // remove duplicates
     auto last = std::unique(params.ConnParams.begin(), params.ConnParams.end());
-    params.ConnParams.erase((QList<ConnectionDetails>::ConstIterator)last, params.ConnParams.cend());
+    params.ConnParams.erase(last, params.ConnParams.end());
 
     params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();

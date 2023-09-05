@@ -79,6 +79,7 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
     ui->comboBoxFunction->addItem(QModbusPdu::ReadHoldingRegisters);
     ui->comboBoxFunction->addItem(QModbusPdu::ReadInputRegisters);
     ui->comboBoxFunction->addItem(QModbusPdu::ReportServerId);
+    ui->comboBoxFunction->setCurrentFunctionCode(QModbusPdu::ReadHoldingRegisters);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
@@ -111,7 +112,7 @@ void DialogModbusScanner::changeEvent(QEvent* event)
 void DialogModbusScanner::showEvent(QShowEvent* e)
 {
     QFixedSizeDialog::showEvent(e);
-    //ui->radioButtonRTU->click();
+    ui->radioButtonRTU->click();
 }
 
 ///

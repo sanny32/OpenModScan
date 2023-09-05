@@ -14,6 +14,8 @@ public:
     QModbusPdu::FunctionCode currentFunctionCode() const;
     void setCurrentFunctionCode(QModbusPdu::FunctionCode funcCode);
 
+    void addItem(QModbusPdu::FunctionCode funcCode);
+
 signals:
     void functionCodeChanged(QModbusPdu::FunctionCode funcCode);
 

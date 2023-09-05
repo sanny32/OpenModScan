@@ -54,12 +54,14 @@ private:
     void clearScanTime();
     void clearProgress();
 
-    ScanParams createSerialParams() const;
-    ScanParams createTcpParams() const;
-    QModbusRequest createModbusRequest() const;
+    const ScanParams createSerialParams() const;
+    const ScanParams createTcpParams() const;
+    const QModbusRequest createModbusRequest() const;
 
 private:
     Ui::DialogModbusScanner *ui;
+    QModbusPdu::FunctionCode _rtuFuncCode;
+    QModbusPdu::FunctionCode _tcpFuncCode;
     QScopedPointer<ModbusScanner> _scanner;
 };
 

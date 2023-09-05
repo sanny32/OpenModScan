@@ -69,6 +69,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         case DataDisplayMode::UnsignedLongInteger:
         case DataDisplayMode::SwappedUnsignedLI:
             ui->lineEditValue->setInputRange(0U, UINT_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::UnsignedMode);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
     }

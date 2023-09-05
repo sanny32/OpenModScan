@@ -14,6 +14,7 @@ public:
     enum InputMode
     {
         DecMode = 0,
+        UnsignedMode,
         HexMode,
         FloatMode,
         DoubleMode

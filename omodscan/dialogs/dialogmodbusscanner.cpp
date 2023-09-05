@@ -576,7 +576,7 @@ const QModbusRequest DialogModbusScanner::createModbusRequest() const
         case QModbusPdu::ReadHoldingRegisters:
         case QModbusPdu::ReadInputRegisters:
         return QModbusRequest(ui->comboBoxFunction->currentFunctionCode(),
-                              quint16(ui->spinBoxAddress->value()),
+                              quint16(ui->spinBoxAddress->value() - 1),
                               quint16(ui->spinBoxLength->value()));
 
         default:

@@ -421,7 +421,7 @@ font-weight: bold;</string>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="labelAddress">
+          <widget class="QLabel" name="labelDeviceId">
            <property name="text">
             <string>Device Id: </string>
            </property>
@@ -652,7 +652,7 @@ font-weight: bold;</string>
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="labelStartAddress">
+           <widget class="QLabel" name="labelAddress">
             <property name="text">
              <string>Address</string>
             </property>

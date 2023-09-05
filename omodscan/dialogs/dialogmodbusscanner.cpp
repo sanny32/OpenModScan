@@ -344,7 +344,7 @@ void DialogModbusScanner::clearProgress()
     ui->labelStopBits->setText(QString(tr("Stop Bits:")));
     ui->labelIPAddress->setText(QString(tr("Address:")));
     ui->labelPort->setText(QString(tr("Port:")));
-    ui->labelAddress->setText(QString(tr("Device Id:")));
+    ui->labelDeviceId->setText(QString(tr("Device Id:")));
 }
 
 ///
@@ -422,7 +422,7 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
         ui->labelPort->setText(QString(tr("Port: %1")).arg(cd.TcpParams.ServicePort));
     }
 
-    ui->labelAddress->setText(QString(tr("Device Id: %1")).arg(deviceId));
+    ui->labelDeviceId->setText(QString(tr("Device Id: %1")).arg(deviceId));
     ui->progressBar->setValue(progress);
 }
 
@@ -487,7 +487,8 @@ const ScanParams DialogModbusScanner::createSerialParams() const
     }
 
     // remove duplicates
-    params.ConnParams.erase(std::unique(params.ConnParams.begin(), params.ConnParams.end()), params.ConnParams.end());
+    auto last = std::unique(params.ConnParams.begin(), params.ConnParams.end());
+    params.ConnParams.erase((QList<ConnectionDetails>::ConstIterator)last, params.ConnParams.cend());
 
     params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();

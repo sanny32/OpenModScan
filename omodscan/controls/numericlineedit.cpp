@@ -2,6 +2,7 @@
 #include <float.h>
 #include <QIntValidator>
 #include "qhexvalidator.h"
+#include "quintvalidator.h"
 #include "numericlineedit.h"
 
 ///
@@ -334,7 +335,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             const int nums = QString::number(top.toUInt()).length();
             _paddingZeroWidth = qMax(1, nums);
             setMaxLength(qMax(1, nums));
-            setValidator(new QIntValidator(bottom.toUInt(), top.toUInt(), this));
+            setValidator(new QUIntValidator(bottom.toUInt(), top.toUInt(), this));
         }
         break;
 

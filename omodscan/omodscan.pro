@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.5.0
+VERSION = 1.5.1
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -72,6 +72,7 @@ SOURCES += \
     modbustcpscanner.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
+    quintvalidator.cpp \
     recentfileactionlist.cpp \
     windowactionlist.cpp
 
@@ -134,6 +135,7 @@ HEADERS += \
     qfixedsizedialog.h \
     qhexvalidator.h \
     qrange.h \
+    quintvalidator.h \
     recentfileactionlist.h \
     windowactionlist.h
 

@@ -34,15 +34,18 @@ private slots:
     void on_scanFinished();
     void on_timeout(quint64 time);
     void on_errorOccurred(const QString& error);
-    void on_deviceFound(const ConnectionDetails& cd, int deviceId);
+    void on_deviceFound(const ConnectionDetails& cd, int deviceId, bool dubious);
     void on_progress(const ConnectionDetails& cd, int deviceId, int progress);
 
+    void on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode funcCode);
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_lineEditIPAddressFrom_editingFinished();
     void on_lineEditSubnetMask_editingFinished();
     void on_pushButtonScan_clicked();
     void on_pushButtonClear_clicked();
     void on_radioButtonRTU_clicked();
     void on_radioButtonTCP_clicked();
+
 
 private:
     void startScan();
@@ -51,11 +54,14 @@ private:
     void clearScanTime();
     void clearProgress();
 
-    ScanParams createSerialParams() const;
-    ScanParams createTcpParams() const;
+    const ScanParams createSerialParams() const;
+    const ScanParams createTcpParams() const;
+    const QModbusRequest createModbusRequest() const;
 
 private:
     Ui::DialogModbusScanner *ui;
+    QModbusPdu::FunctionCode _rtuFuncCode;
+    QModbusPdu::FunctionCode _tcpFuncCode;
     QScopedPointer<ModbusScanner> _scanner;
 };
 

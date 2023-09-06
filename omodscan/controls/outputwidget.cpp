@@ -189,6 +189,78 @@ QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1
 }
 
 ///
+/// \brief formatLongValue
+/// \param pointType
+/// \param value1
+/// \param value2
+/// \param order
+/// \param flag
+/// \param outValue
+/// \return
+///
+QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
+
+            const qint32 value = makeLong(value1, value2, order);
+            outValue = value;
+            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
+        }
+        break;
+        default:
+            break;
+    }
+    return result;
+}
+
+///
+/// \brief formatUnsignedLongValue
+/// \param pointType
+/// \param value1
+/// \param value2
+/// \param order
+/// \param flag
+/// \param outValue
+/// \return
+///
+QString formatUnsignedLongValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
+{
+    QString result;
+    switch(pointType)
+    {
+    case QModbusDataUnit::Coils:
+    case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+    case QModbusDataUnit::HoldingRegisters:
+    case QModbusDataUnit::InputRegisters:
+    {
+            if(flag) break;
+
+            const quint32 value = makeULong(value1, value2, order);
+            outValue = value;
+            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
+    }
+    break;
+    default:
+            break;
+    }
+    return result;
+}
+
+///
 /// \brief formatDoubleValue
 /// \param pointType
 /// \param value1
@@ -457,6 +529,27 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             case DataDisplayMode::SwappedDbl:
                 itemData.ValueStr = formatDoubleValue(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                            byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+            break;
+
+            case DataDisplayMode::LongInteger:
+                itemData.ValueStr = formatLongValue(pointType, value, _lastData.value(i+1), byteOrder,
+                                              (i%2) || (i+1>=rowCount()), itemData.Value);
+            break;
+
+            case DataDisplayMode::SwappedLI:
+                itemData.ValueStr = formatLongValue(pointType, _lastData.value(i+1), value, byteOrder,
+                                              (i%2) || (i+1>=rowCount()), itemData.Value);
+
+            break;
+
+            case DataDisplayMode::UnsignedLongInteger:
+                itemData.ValueStr = formatUnsignedLongValue(pointType, value, _lastData.value(i+1), byteOrder,
+                                              (i%2) || (i+1>=rowCount()), itemData.Value);
+            break;
+
+            case DataDisplayMode::SwappedUnsignedLI:
+                itemData.ValueStr = formatUnsignedLongValue(pointType, _lastData.value(i+1), value, byteOrder,
+                                              (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
         }
     }
@@ -927,6 +1020,10 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
             {
                 case DataDisplayMode::FloatingPt:
                 case DataDisplayMode::SwappedFP:
+                case DataDisplayMode::LongInteger:
+                case DataDisplayMode::SwappedLI:
+                case DataDisplayMode::UnsignedLongInteger:
+                case DataDisplayMode::SwappedUnsignedLI:
                     if(index.row() % 2)
                         idx = _listModel->index(index.row() - 1);
                 break;

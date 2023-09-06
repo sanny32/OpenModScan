@@ -10,6 +10,7 @@ struct ScanParams
 {
     int Timeout = 1000;
     QRange<int> DeviceIds = {1, 10};
+    QModbusRequest Request;
     QList<ConnectionDetails> ConnParams;
 };
 
@@ -26,13 +27,10 @@ public:
     virtual void stopScan();
     virtual bool inProgress() const;
 
-    QModbusRequest modbusRequest() const;
-    void setModbusRequest(const QModbusRequest& req);
-
 signals:
     void finished();
     void timeout(quint64 time);
-    void found(const ConnectionDetails& cd, int deviceId);
+    void found(const ConnectionDetails& cd, int deviceId, bool dubious);
     void progress(const ConnectionDetails& cd, int deviceId, int progress);
     void errorOccurred(const QString& error);
 
@@ -44,7 +42,6 @@ protected:
     bool _inProgress = false;
 
     QTimer _timer;
-    QModbusRequest _request;
 };
 
 #endif // MODBUSSCANNER_H

@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.4.0
+VERSION = 1.5.0
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -31,6 +31,8 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/formattedspinbox.cpp \
+    controls/functioncodecombobox.cpp \
     controls/ipaddresslineedit.cpp \
     controls/mainstatusbar.cpp \
     controls/numericlineedit.cpp \
@@ -84,6 +86,8 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/formattedspinbox.h \
+    controls/functioncodecombobox.h \
     controls/ipaddresslineedit.h \
     controls/mainstatusbar.h \
     controls/numericlineedit.h \

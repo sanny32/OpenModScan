@@ -421,7 +421,7 @@ font-weight: bold;</string>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="labelAddress">
+          <widget class="QLabel" name="labelDeviceId">
            <property name="text">
             <string>Device Id: </string>
            </property>
@@ -627,6 +627,95 @@ font-weight: bold;</string>
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBoxRequest">
+         <property name="title">
+          <string>Modbus Request</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="formAlignment">
+           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+          </property>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="labelFunction">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Function</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelAddress">
+            <property name="text">
+             <string>Address</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="FormattedSpinBox" name="spinBoxAddress">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>65536</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="labelLength">
+            <property name="text">
+             <string>Length</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="spinBoxLength">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>125</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="FunctionCodeComboBox" name="comboBoxFunction"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBoxTimeout">
          <property name="minimumSize">
           <size>
@@ -763,6 +852,16 @@ font-weight: bold;</string>
    <class>IpAddressLineEdit</class>
    <extends>QLineEdit</extends>
    <header>ipaddresslineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FunctionCodeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>functioncodecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FormattedSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>formattedspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

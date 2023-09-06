@@ -83,6 +83,11 @@ void NumericLineEdit::setInputMode(InputMode mode)
                 _maxValue = INT_MAX;
             break;
 
+            case UnsignedMode:
+                _minValue = 0U;
+                _maxValue = UINT_MAX;
+            break;
+
             case FloatMode:
                 _minValue = -FLT_MAX;
                 _maxValue = FLT_MAX;
@@ -129,6 +134,20 @@ void NumericLineEdit::internalSetValue(QVariant value)
             }
         break;
 
+        case UnsignedMode:
+            value = qBound(_minValue.toUInt(), value.toUInt(), _maxValue.toUInt());
+            if(_paddingZeroes)
+            {
+                    const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 10, QLatin1Char('0'));
+                    QLineEdit::setText(text);
+            }
+            else
+            {
+                    const auto text = QString::number(value.toUInt());
+                    QLineEdit::setText(text);
+            }
+        break;
+
         case HexMode:
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
             if(_paddingZeroes)
@@ -172,6 +191,15 @@ void NumericLineEdit::updateValue()
         {
             bool ok;
             const auto value = text().toInt(&ok);
+            if(ok) internalSetValue(value);
+            else internalSetValue(_value);
+        }
+        break;
+
+        case UnsignedMode:
+        {
+            bool ok;
+            const auto value = text().toUInt(&ok);
             if(ok) internalSetValue(value);
             else internalSetValue(_value);
         }
@@ -240,6 +268,14 @@ void NumericLineEdit::on_textChanged(const QString& text)
         }
         break;
 
+        case UnsignedMode:
+        {
+            bool ok;
+            const auto valueInt = text.toUInt(&ok);
+            if(ok) value = qBound(_minValue.toUInt(), valueInt, _maxValue.toUInt());
+        }
+        break;
+
         case HexMode:
         {
             bool ok;
@@ -290,6 +326,15 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             setMaxLength(qMax(1, nums));
             setValidator(new QIntValidator(bottom.toInt(), top.toInt(), this));
 
+        }
+        break;
+
+        case UnsignedMode:
+        {
+            const int nums = QString::number(top.toUInt()).length();
+            _paddingZeroWidth = qMax(1, nums);
+            setMaxLength(qMax(1, nums));
+            setValidator(new QIntValidator(bottom.toUInt(), top.toUInt(), this));
         }
         break;
 

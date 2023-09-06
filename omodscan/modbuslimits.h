@@ -7,7 +7,7 @@ class ModbusLimits final
 {
 public:
     static QRange<int> addressRange()  { return { 1, 65535 }; }
-    static QRange<int> lengthRange()   { return { 1, 128   }; }
+    static QRange<int> lengthRange()   { return { 1, 125   }; }
     static QRange<int> slaveRange()    { return { 1, 255   }; }
 };
 

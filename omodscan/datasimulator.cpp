@@ -38,7 +38,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
         break;
 
         case SimulationMode::Decrement:
-            value = params.IncrementParams.Range.to();
+            value = params.DecrementParams.Range.to();
             emit dataSimulated(mode, type, addr, deviceId, value);
         break;
 
@@ -208,6 +208,16 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
                     value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
                 break;
 
+                case DataDisplayMode::LongInteger:
+                case DataDisplayMode::SwappedLI:
+                    value = generateRandom<qint32>(params.Range);
+                break;
+
+                case DataDisplayMode::UnsignedLongInteger:
+                case DataDisplayMode::SwappedUnsignedLI:
+                    value = generateRandom<quint32>(params.Range);
+                break;
+
                 case DataDisplayMode::FloatingPt:
                 case DataDisplayMode::SwappedFP:
                    value = generateRandom<float>(params.Range);
@@ -258,6 +268,16 @@ void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::R
             value = incrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
 
+        case DataDisplayMode::LongInteger:
+        case DataDisplayMode::SwappedLI:
+            value = incrementValue<qint32>(value.toInt(),  params.Step, params.Range);
+        break;
+
+        case DataDisplayMode::UnsignedLongInteger:
+        case DataDisplayMode::SwappedUnsignedLI:
+            value = incrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
+        break;
+
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
             value = incrementValue<float>(value.toFloat(), params.Step, params.Range);
@@ -302,6 +322,16 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
         case DataDisplayMode::Decimal:
         case DataDisplayMode::Hex:
             value = decrementValue<quint16>(value.toUInt(), params.Step, params.Range);
+        break;
+
+        case DataDisplayMode::LongInteger:
+        case DataDisplayMode::SwappedLI:
+            value = decrementValue<qint32>(value.toInt(),  params.Step, params.Range);
+            break;
+
+        case DataDisplayMode::UnsignedLongInteger:
+        case DataDisplayMode::SwappedUnsignedLI:
+            value = decrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
         break;
 
         case DataDisplayMode::FloatingPt:

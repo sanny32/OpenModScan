@@ -44,6 +44,18 @@ inline void breakLong(qint32 value, quint16& lo, quint16& hi, ByteOrder order)
 }
 
 ///
+/// \brief breakULong
+/// \param value
+/// \param lo
+/// \param hi
+/// \param order
+///
+inline void breakULong(quint32 value, quint16& lo, quint16& hi, ByteOrder order)
+{
+    breakLong((qint32)value, lo, hi, order);
+}
+
+///
 /// \brief breakDouble
 /// \param value
 /// \param lolo

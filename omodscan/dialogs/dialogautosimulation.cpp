@@ -43,6 +43,23 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
             ui->lineEditHighLimit->setInputRange(SHRT_MIN, SHRT_MAX);
         break;
 
+        case DataDisplayMode::LongInteger:
+        case DataDisplayMode::SwappedLI:
+            ui->lineEditStepValue->setInputRange(1, INT_MAX - 1);
+            ui->lineEditLowLimit->setInputRange(INT_MIN, INT_MAX);
+            ui->lineEditHighLimit->setInputRange(INT_MIN, INT_MAX);
+        break;
+
+        case DataDisplayMode::UnsignedLongInteger:
+        case DataDisplayMode::SwappedUnsignedLI:
+            ui->lineEditStepValue->setInputRange(1U, UINT_MAX - 1);
+            ui->lineEditStepValue->setInputMode(NumericLineEdit::UnsignedMode);
+            ui->lineEditLowLimit->setInputRange(0U, UINT_MAX);
+            ui->lineEditLowLimit->setInputMode(NumericLineEdit::UnsignedMode);
+            ui->lineEditHighLimit->setInputRange(0U, UINT_MAX);
+            ui->lineEditHighLimit->setInputMode(NumericLineEdit::UnsignedMode);
+        break;
+
         case DataDisplayMode::Hex:
             ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);

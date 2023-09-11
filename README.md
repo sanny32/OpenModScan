@@ -1,10 +1,11 @@
 # Open ModScan
 Open ModScan is a free implimentation of modbus master (client) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://user-images.githubusercontent.com/13627951/227959348-7db5a333-8443-4824-873e-3d87d3ce6f8a.png)
+![изображение](https://github.com/sanny32/OpenModScan/assets/13627951/aa912ece-4b76-44b4-9523-5b0b0156a64b)
 
 
-![image](https://user-images.githubusercontent.com/13627951/227959984-7adbf285-fd1d-4198-8ff9-386a4eea0a87.png)
+![изображение](https://github.com/sanny32/OpenModScan/assets/13627951/77bee5d8-09a8-4845-8d64-02b7bf3cf592)
+
 
 
 ## Features

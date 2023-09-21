@@ -1085,33 +1085,37 @@ void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPd
     rawData.push_back(pdu.functionCode() | ( pdu.isException() ? QModbusPdu::ExceptionByte : 0));
     rawData.push_back(pdu.data());
 
-    QString text;
+    QStringList data;
     for(auto&& c : rawData)
     {
         switch(dataDisplayMode())
         {
             case DataDisplayMode::Decimal:
             case DataDisplayMode::Integer:
-                text+= QString("[%1]").arg(QString::number((uchar)c), 3, '0');
+                data+= QString("%1").arg(QString::number((uchar)c), 3, '0');
             break;
 
             default:
-                text+= QString("[%1]").arg(QString::number((uchar)c, 16), 2, '0');
+                data+= QString("%1").arg(QString::number((uchar)c, 16).toUpper(), 2, '0');
             break;
         }
     }
-    if(text.isEmpty()) return;
+    if(data.isEmpty()) return;
+    QString text = QString("%1 %2 [%3]").arg(QDateTime::currentDateTime().toString(Qt::DateFormat::ISODateWithMs),
+                                   (request? ">>" : "<<"),
+                                   data.join(" "));
 
-    ui->plainTextEdit->moveCursor(QTextCursor::End);
+    //ui->plainTextEdit->moveCursor(QTextCursor::End);
 
     QTextCharFormat fmt;
-    fmt.setForeground(request? foregroundColor() : Qt::white);
-    fmt.setBackground(request? Qt::transparent : Qt::black);
+    //fmt.setForeground(request? foregroundColor() : Qt::black);
+    //fmt.setBackground(request? Qt::transparent : Qt::white);
+    fmt.setFontWeight(request ? 600 : 400);
     ui->plainTextEdit->mergeCurrentCharFormat(fmt);
 
-    if(request && ui->plainTextEdit->toPlainText().length() > 22000)
-        ui->plainTextEdit->clear();
+    //if(request && ui->plainTextEdit->toPlainText().length() > 22000)
+    //    ui->plainTextEdit->clear();
 
-    ui->plainTextEdit->insertPlainText(text);
-    ui->plainTextEdit->moveCursor(QTextCursor::End);
+    ui->plainTextEdit->appendPlainText(text);
+    //ui->plainTextEdit->moveCursor(QTextCursor::End);
 }

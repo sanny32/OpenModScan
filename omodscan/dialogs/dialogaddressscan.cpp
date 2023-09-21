@@ -463,7 +463,7 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     if (reply->error() == QModbusDevice::NoError)
         updateTableView(reply->result().startAddress() + 1, reply->result().values());
 
-    if(ui->lineEditLength->value<int>() <= _requestCount)
+    if(ui->lineEditLength->value<int>() < _requestCount)
         stopScan();
     else
         sendReadRequest();
@@ -654,7 +654,7 @@ void DialogAddressScan::updateLogView(const QModbusRequest& request)
 
     quint16 pointAddress;
     request.decodeData(&pointAddress);
-    const auto address = formatAddress(pointType, pointAddress);
+    const auto address = formatAddress(pointType, pointAddress + 1);
 
     QByteArray rawData;
     rawData.push_back(deviceId);

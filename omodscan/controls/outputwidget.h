@@ -3,6 +3,7 @@
 
 #include <QFile>
 #include <QWidget>
+#include <QDateTime>
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
@@ -56,6 +57,42 @@ private:
     QIcon _iconPointGreen;
     QIcon _iconPointEmpty;
     QMap<int, ItemData> _mapItems;
+};
+
+///
+/// \brief The TrafficData class
+///
+struct TrafficData
+{
+    QDateTime Date;
+    bool Request;
+    int Server;
+    bool IsException;
+    QModbusPdu::FunctionCode Func;
+    QByteArray Data;
+};
+Q_DECLARE_METATYPE(TrafficData)
+
+///
+/// \brief The TrafficModel class
+///
+class TrafficModel : public QAbstractListModel
+{
+    Q_OBJECT
+
+public:
+    explicit TrafficModel(OutputWidget* parent);
+
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+
+    void clear();
+    void append(const TrafficData& data);
+
+private:
+    QVector<TrafficData> _items;
+    OutputWidget* _parentWidget;
 };
 
 ///
@@ -143,6 +180,7 @@ private:
     QFile _fileCapture;
     AddressDescriptionMap _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
+    QSharedPointer<TrafficModel> _trafficModel;
 };
 
 #endif // OUTPUTWIDGET_H

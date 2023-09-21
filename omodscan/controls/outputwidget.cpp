@@ -5,6 +5,7 @@
 #include "floatutils.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
+#include <QDebug>
 
 ///
 /// \brief SimulationRole
@@ -576,6 +577,156 @@ QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 ad
 }
 
 ///
+/// \brief TrafficModel::TrafficModel
+/// \param parent
+///
+TrafficModel::TrafficModel(OutputWidget* parent)
+    : QAbstractListModel(parent)
+    ,_parentWidget(parent)
+{
+}
+
+///
+/// \brief TrafficModel::columnCount
+/// \param parent
+/// \return
+///
+int TrafficModel::columnCount(const QModelIndex&) const
+{
+    return 3;
+}
+
+///
+/// \brief TrafficModel::rowCount
+/// \param parent
+/// \return
+///
+int TrafficModel::rowCount(const QModelIndex&) const
+{
+    return _items.size();
+}
+
+///
+/// \brief TrafficModel::data
+/// \param index
+/// \param role
+/// \return
+///
+QVariant TrafficModel::data(const QModelIndex& index, int role) const
+{
+    if(!index.isValid() || index.row() >= rowCount())
+        return QVariant();
+
+    const auto& item = _items.at(index.row());
+    switch(role)
+    {
+        case Qt::DisplayRole:
+        {
+            /*switch(index.column())
+            {
+                case 0:
+                    return item.Date.toString(Qt::ISODateWithMs);
+
+                case 1:
+                    return item.Request? ">>" : "<<";
+
+                case 2:
+                {
+                    QByteArray rawData;
+                    rawData.push_back(item.Server);
+                    rawData.push_back(item.Func | ( item.IsException ? QModbusPdu::ExceptionByte : 0));
+                    rawData.push_back(item.Data);
+
+                    QStringList data;
+                    for(auto&& c : rawData)
+                    {
+                        switch(_parentWidget->dataDisplayMode())
+                        {
+                            case DataDisplayMode::Decimal:
+                            case DataDisplayMode::Integer:
+                                data+= QString("%1").arg(QString::number((uchar)c), 3, '0');
+                                break;
+
+                            default:
+                                data+= QString("%1").arg(QString::number((uchar)c, 16).toUpper(), 2, '0');
+                                break;
+                        }
+                    }
+                    return data.join(" ");
+                }
+
+                default:
+                    break;
+            }*/
+
+            QByteArray rawData;
+            rawData.push_back(item.Server);
+            rawData.push_back(item.Func | ( item.IsException ? QModbusPdu::ExceptionByte : 0));
+            rawData.push_back(item.Data);
+
+            QStringList data;
+            for(auto&& c : rawData)
+            {
+                switch(_parentWidget->dataDisplayMode())
+                {
+                case DataDisplayMode::Decimal:
+                case DataDisplayMode::Integer:
+                    data+= QString("%1").arg(QString::number((uchar)c), 3, '0');
+                    break;
+
+                default:
+                    data+= QString("%1").arg(QString::number((uchar)c, 16).toUpper(), 2, '0');
+                    break;
+                }
+            }
+            return QString("%1 %2 %3").arg(item.Date.toString(Qt::ISODateWithMs), (item.Request? ">>" : "<<"), data.join(" "));
+        }
+        break;
+
+        /*case Qt::TextAlignmentRole:
+        {
+            switch (index.column())
+            {
+                case 0:
+                case 1:
+                    return Qt::AlignHCenter;
+                case 2:
+                     return Qt::AlignLeft;
+                default:
+                     break;
+            }
+        }
+        break;*/
+
+        case Qt::UserRole:
+            return QVariant::fromValue(item);
+    }
+
+    return QVariant();
+}
+
+///
+/// \brief TrafficModel::clear
+///
+void TrafficModel::clear()
+{
+    beginResetModel();
+    _items.clear();
+    endResetModel();
+}
+
+///
+/// \brief TrafficModel::append
+/// \param data
+///
+void TrafficModel::append(const TrafficData& data)
+{
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    _items.push_back(data);
+    endInsertRows();
+}
+
+///
 /// \brief OutputWidget::OutputWidget
 /// \param parent
 ///
@@ -587,10 +738,12 @@ OutputWidget::OutputWidget(QWidget *parent) :
    ,_dataDisplayMode(DataDisplayMode::Binary)
    ,_byteOrder(ByteOrder::LittleEndian)
    ,_listModel(new OutputListModel(this))
+   ,_trafficModel(new TrafficModel(this))
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setModel(_listModel.get());
+    ui->logView->setModel(_trafficModel.get());
     ui->labelStatus->setAutoFillBackground(true);
 
     setAutoFillBackground(true);
@@ -1080,42 +1233,7 @@ void OutputWidget::captureString(const QString& s)
 ///
 void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPdu& pdu)
 {
-    QByteArray rawData;
-    rawData.push_back(server);
-    rawData.push_back(pdu.functionCode() | ( pdu.isException() ? QModbusPdu::ExceptionByte : 0));
-    rawData.push_back(pdu.data());
-
-    QStringList data;
-    for(auto&& c : rawData)
-    {
-        switch(dataDisplayMode())
-        {
-            case DataDisplayMode::Decimal:
-            case DataDisplayMode::Integer:
-                data+= QString("%1").arg(QString::number((uchar)c), 3, '0');
-            break;
-
-            default:
-                data+= QString("%1").arg(QString::number((uchar)c, 16).toUpper(), 2, '0');
-            break;
-        }
-    }
-    if(data.isEmpty()) return;
-    QString text = QString("%1 %2 [%3]").arg(QDateTime::currentDateTime().toString(Qt::DateFormat::ISODateWithMs),
-                                   (request? ">>" : "<<"),
-                                   data.join(" "));
-
-    //ui->plainTextEdit->moveCursor(QTextCursor::End);
-
-    QTextCharFormat fmt;
-    //fmt.setForeground(request? foregroundColor() : Qt::black);
-    //fmt.setBackground(request? Qt::transparent : Qt::white);
-    fmt.setFontWeight(request ? 600 : 400);
-    ui->plainTextEdit->mergeCurrentCharFormat(fmt);
-
-    //if(request && ui->plainTextEdit->toPlainText().length() > 22000)
-    //    ui->plainTextEdit->clear();
-
-    ui->plainTextEdit->appendPlainText(text);
-    //ui->plainTextEdit->moveCursor(QTextCursor::End);
+    _trafficModel->append({ QDateTime::currentDateTime(), request, server, pdu.isException(), pdu.functionCode(), pdu.data() });
+    //ui->tableView->resizeColumnsToContents();
+    ui->logView->scrollToBottom();
 }

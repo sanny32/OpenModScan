@@ -377,7 +377,9 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
     for(int i = 0; i < ui->listWidget->count(); ++i)
     {
        auto item = ui->listWidget->item(i);
-       if(item && item->data(Qt::UserRole).value<ConnectionDetails>() == cd)
+       if(item &&
+          item->data(Qt::UserRole).value<ConnectionDetails>() == cd &&
+          item->data(Qt::UserRole + 1).toInt() == deviceId)
        {
             foundItem = item;
             break;

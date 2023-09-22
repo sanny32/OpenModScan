@@ -14,6 +14,11 @@ public:
     {
     }
 
+    operator int()
+    {
+        return _code;
+    }
+
     operator QString()
     {
         QString desc;
@@ -53,7 +58,7 @@ public:
                 desc = "EXTENDED EXCEPTION";
             break;
         }
-        return QString("%1 (0x%2)").arg(desc, QString::number(_code, 16));
+        return desc;
     }
 
 private:

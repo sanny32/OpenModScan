@@ -126,6 +126,7 @@ HEADERS += \
     modbusclient.h \
     modbusdataunit.h \
     modbusexception.h \
+    modbusfunction.h \
     modbuslimits.h \
     modbusrtuscanner.h \
     modbusscanner.h \

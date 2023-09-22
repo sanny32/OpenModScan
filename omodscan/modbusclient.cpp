@@ -607,7 +607,10 @@ void ModbusClient::on_writeReply()
     auto onError = [this, reply, raw](const QString& errorDesc, int requestId)
     {
         if (reply->error() == QModbusDevice::ProtocolError)
-            emit modbusError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())), requestId);
+        {
+            ModbusException ex(raw.exceptionCode());
+            emit modbusError(QString("%1. %2 (0x%3)").arg(errorDesc, ex, QString::number(ex, 16)), requestId);
+        }
         else if(reply->error() != QModbusDevice::NoError)
             emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);
     };

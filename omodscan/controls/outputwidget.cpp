@@ -2,10 +2,11 @@
 #include <QPainter>
 #include <QTextStream>
 #include <QInputDialog>
+#include "modbusfunction.h"
+#include "modbusexception.h"
 #include "floatutils.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
-#include <QDebug>
 
 ///
 /// \brief SimulationRole
@@ -36,6 +37,25 @@ const int AddressRole = Qt::UserRole + 5;
 /// \brief ValueRole
 ///
 const int ValueRole = Qt::UserRole + 6;
+
+///
+/// \brief formatByteValue
+/// \param mode
+/// \param c
+/// \return
+///
+QString formatByteValue(DataDisplayMode mode, char c)
+{
+    switch(mode)
+    {
+        case DataDisplayMode::Decimal:
+        case DataDisplayMode::Integer:
+            return QString("%1").arg(QString::number((uchar)c), 3, '0');
+
+        default:
+            return QString("%1").arg(QString::number((uchar)c, 16).toUpper(), 2, '0');
+    }
+}
 
 ///
 /// \brief formatBinaryValue
@@ -639,19 +659,8 @@ QVariant TrafficModel::data(const QModelIndex& index, int role) const
 
                     QStringList data;
                     for(auto&& c : rawData)
-                    {
-                        switch(_parentWidget->dataDisplayMode())
-                        {
-                            case DataDisplayMode::Decimal:
-                            case DataDisplayMode::Integer:
-                                data+= QString("%1").arg(QString::number((uchar)c), 3, '0');
-                                break;
+                        data += formatByteValue(_parentWidget->dataDisplayMode(), c);
 
-                            default:
-                                data+= QString("%1").arg(QString::number((uchar)c, 16).toUpper(), 2, '0');
-                                break;
-                        }
-                    }
                     return data.join(" ");
                 }
 
@@ -661,24 +670,13 @@ QVariant TrafficModel::data(const QModelIndex& index, int role) const
 
             QByteArray rawData;
             rawData.push_back(item.Server);
-            rawData.push_back(item.Func | ( item.IsException ? QModbusPdu::ExceptionByte : 0));
+            rawData.push_back(item.FunctionCode);
             rawData.push_back(item.Data);
 
             QStringList data;
             for(auto&& c : rawData)
-            {
-                switch(_parentWidget->dataDisplayMode())
-                {
-                case DataDisplayMode::Decimal:
-                case DataDisplayMode::Integer:
-                    data+= QString("%1").arg(QString::number((uchar)c), 3, '0');
-                    break;
+                data += formatByteValue(_parentWidget->dataDisplayMode(), c);
 
-                default:
-                    data+= QString("%1").arg(QString::number((uchar)c, 16).toUpper(), 2, '0');
-                    break;
-                }
-            }
             return QString("%1 %2 %3").arg(item.Date.toString(Qt::ISODateWithMs), (item.Request? ">>" : "<<"), data.join(" "));
         }
         break;
@@ -1204,6 +1202,55 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 }
 
 ///
+/// \brief OutputWidget::on_logView_clicked
+/// \param index
+///
+void OutputWidget::on_logView_clicked(const QModelIndex &index)
+{
+    const auto data = _trafficModel->data(index, Qt::UserRole).value<TrafficData>();
+    //const auto func = ModbusFunctionCodeToString((QModbusPdu::FunctionCode)data.FunctionCode,
+    //                                             dataDisplayMode() == DataDisplayMode::Hex ? 16 : 10);
+
+    ModbusFunction func(data.FunctionCode);
+
+    ui->listWidget->clear();
+    ui->listWidget->addItem(tr("Type: %1").arg(data.Request ? tr("Tx Message") : tr("Rx Message")));
+    ui->listWidget->addItem(tr("Timestamp: %1").arg(data.Date.toString(Qt::ISODateWithMs)));
+    ui->listWidget->addItem(tr("Device ID: %1").arg(formatByteValue(dataDisplayMode(), data.Server)));
+
+    if(data.Request)
+    {
+        ui->listWidget->addItem(tr("Function Code: %1").arg(func));
+        ui->listWidget->addItem(tr("Start Address: %1").arg((quint16)data.Data[1]));
+        ui->listWidget->addItem(tr("Length: %1").arg((quint16)data.Data[3]));
+    }
+    else
+    {
+        if(data.FunctionCode & QModbusPdu::ExceptionByte)
+        {
+            ModbusException ex((QModbusPdu::ExceptionCode)data.ExceptionCode);
+            const auto exceptionByte = (dataDisplayMode() == DataDisplayMode::Hex) ? "80" : "128";
+            ui->listWidget->addItem(tr("Function Code [%1 + Rx Function Code]: %2").arg(exceptionByte, func));
+            ui->listWidget->addItem(tr("Exception Code: %1").arg(ex));
+        }
+        else
+        {
+            ui->listWidget->addItem(tr("Function Code: %1").arg(func));
+
+            QStringList values;
+            for(auto i = 1; i < data.Data.size(); i++)
+                values += formatByteValue(dataDisplayMode(), data.Data[i]);
+
+            if(!values.isEmpty())
+            {
+                ui->listWidget->addItem(tr("Bytes Count: %1").arg(data.Data.size() - 1));
+                ui->listWidget->addItem(tr("Register Values: %1").arg(values.join(" ")));
+            }
+        }
+    }
+}
+
+///
 /// \brief OutputWidget::setUninitializedStatus
 ///
 void OutputWidget::setUninitializedStatus()
@@ -1233,7 +1280,14 @@ void OutputWidget::captureString(const QString& s)
 ///
 void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPdu& pdu)
 {
-    _trafficModel->append({ QDateTime::currentDateTime(), request, server, pdu.isException(), pdu.functionCode(), pdu.data() });
-    //ui->tableView->resizeColumnsToContents();
+    TrafficData data;
+    data.Date = QDateTime::currentDateTime();
+    data.Request = request;
+    data.Server = server;
+    data.ExceptionCode = pdu.exceptionCode();
+    data.FunctionCode = (pdu.isException() ? (pdu.functionCode() | QModbusPdu::ExceptionByte) : pdu.functionCode());
+    data.Data = pdu.data();
+
+    _trafficModel->append(data);
     ui->logView->scrollToBottom();
 }

@@ -7,7 +7,7 @@
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
-#include <datasimulator.h>
+#include "datasimulator.h"
 #include "displaydefinition.h"
 
 namespace Ui {
@@ -66,9 +66,9 @@ struct TrafficData
 {
     QDateTime Date;
     bool Request;
-    int Server;
-    bool IsException;
-    QModbusPdu::FunctionCode Func;
+    quint8 Server;
+    quint8 ExceptionCode;
+    quint8 FunctionCode;
     QByteArray Data;
 };
 Q_DECLARE_METATYPE(TrafficData)
@@ -162,6 +162,7 @@ protected:
 private slots:
     void on_listView_doubleClicked(const QModelIndex& index);
     void on_listView_customContextMenuRequested(const QPoint &pos);
+    void on_logView_clicked(const QModelIndex &index);
 
 private:
     void setUninitializedStatus();

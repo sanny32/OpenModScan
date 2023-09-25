@@ -7,6 +7,7 @@
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
+#include "modbuspduinfo.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
 
@@ -60,20 +61,6 @@ private:
 };
 
 ///
-/// \brief The TrafficData class
-///
-struct TrafficData
-{
-    QDateTime Date;
-    bool Request;
-    quint8 Server;
-    quint8 ExceptionCode;
-    quint8 FunctionCode;
-    QByteArray Data;
-};
-Q_DECLARE_METATYPE(TrafficData)
-
-///
 /// \brief The TrafficModel class
 ///
 class TrafficModel : public QAbstractListModel
@@ -88,10 +75,13 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 
     void clear();
-    void append(const TrafficData& data);
+    void append(const ModbusPduInfo& data);
+    void update(){
+        emit dataChanged(index(0), index(_items.size() - 1));
+    }
 
 private:
-    QVector<TrafficData> _items;
+    QVector<ModbusPduInfo> _items;
     OutputWidget* _parentWidget;
 };
 
@@ -167,6 +157,7 @@ private slots:
 private:
     void setUninitializedStatus();
     void captureString(const QString& s);
+    void showTrafficInfo(const ModbusPduInfo& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 
 private:

@@ -128,6 +128,7 @@ HEADERS += \
     modbusexception.h \
     modbusfunction.h \
     modbuslimits.h \
+    modbuspduinfo.h \
     modbusrtuscanner.h \
     modbusscanner.h \
     modbussimulationparams.h \

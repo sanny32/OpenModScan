@@ -14,6 +14,11 @@ public:
     {
     }
 
+    bool isException() const
+    {
+        return _code & QModbusPdu::ExceptionByte;
+    }
+
     operator int()
     {
         return _code;
@@ -22,7 +27,7 @@ public:
     operator QString()
     {
         QString name;
-        switch(_code)
+        switch(_code & ~QModbusPdu::ExceptionByte)
         {
             case QModbusPdu::ReadCoils:
                 name = "READ COILS";

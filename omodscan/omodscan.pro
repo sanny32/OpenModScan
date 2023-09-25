@@ -121,6 +121,7 @@ HEADERS += \
     displaydefinition.h \
     enums.h \
     floatutils.h \
+    formatutils.h \
     formmodsca.h \
     mainwindow.h \
     modbusclient.h \

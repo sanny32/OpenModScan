@@ -21,6 +21,7 @@ win32:RC_ICONS += res/omodscan.ico
 
 INCLUDEPATH += controls \
                dialogs \
+               modbusinfo \
 
 SOURCES += \
     controls/booleancombobox.cpp \
@@ -63,10 +64,12 @@ SOURCES += \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
     formmodsca.cpp \
+    htmldelegate.cpp \
     main.cpp \
     mainwindow.cpp \
     modbusclient.cpp \
     modbusdataunit.cpp \
+    modbusinfo/modbuspduinfo.cpp \
     modbusrtuscanner.cpp \
     modbusscanner.cpp \
     modbustcpscanner.cpp \
@@ -120,21 +123,23 @@ HEADERS += \
     dialogs/dialogwriteholdingregisterbits.h \
     displaydefinition.h \
     enums.h \
-    floatutils.h \
     formatutils.h \
     formmodsca.h \
+    htmldelegate.h \
     mainwindow.h \
+    modbusinfo/modbuspduinfo.h \
     modbusclient.h \
     modbusdataunit.h \
     modbusexception.h \
     modbusfunction.h \
+    modbusinfo/readcoils.h \
     modbuslimits.h \
-    modbuspduinfo.h \
     modbusrtuscanner.h \
     modbusscanner.h \
     modbussimulationparams.h \
     modbustcpscanner.h \
     modbuswriteparams.h \
+    numericutils.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
     qrange.h \

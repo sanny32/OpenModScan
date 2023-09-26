@@ -1,6 +1,6 @@
 #include <QtMath>
 #include <QRandomGenerator>
-#include "floatutils.h"
+#include "numericutils.h"
 #include "numericlineedit.h"
 #include "dialogforcemultipleregisters.h"
 #include "ui_dialogforcemultipleregisters.h"

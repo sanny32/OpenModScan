@@ -1,9 +1,28 @@
-#ifndef FLOATUTILS_H
-#define FLOATUTILS_H
+#ifndef NUMERICUTILS_H
+#define NUMERICUTILS_H
 
 #include <QtGlobal>
 #include <QtEndian>
 #include "byteorderutils.h"
+
+///
+/// \brief makeWord
+/// \param lo
+/// \param hi
+/// \return
+///
+inline quint16 makeWord(quint8 lo, quint8 hi, ByteOrder order)
+{
+    union {
+        quint8 asUint8[2];
+        quint16 asUint16;
+    } v;
+
+    v.asUint8[0] = toByteOrderValue(lo, order);
+    v.asUint8[1] = toByteOrderValue(hi, order);
+
+    return v.asUint16;
+}
 
 ///
 /// \brief breakFloat
@@ -154,4 +173,4 @@ inline double makeDouble(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi,
     return v.asDouble;
 }
 
-#endif // FLOATUTILS_H
+#endif // NUMERICUTILS_H

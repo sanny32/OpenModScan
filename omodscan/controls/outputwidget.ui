@@ -163,7 +163,7 @@
            <bool>true</bool>
           </property>
          </widget>
-         <widget class="QListWidget" name="listWidget">
+         <widget class="QListWidget" name="trafficInfo">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>

@@ -5,7 +5,7 @@
 #include <QLocale>
 #include <QModbusDataUnit>
 #include "enums.h"
-#include "floatutils.h"
+#include "numericutils.h"
 #include "byteorderutils.h"
 
 ///
@@ -24,6 +24,21 @@ inline QString formatByteValue(DataDisplayMode mode, uchar c) {
         default:
             return QString("%1").arg(QString::number(c, 16).toUpper(), 2, '0');
     }
+}
+
+///
+/// \brief formatByteArray
+/// \param mode
+/// \param ar
+/// \return
+///
+inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
+{
+    QStringList values;
+    for(auto i = 0; i < ar.size(); i++)
+        values += formatByteValue(mode, ar[i]);
+
+    return values.join(" ");
 }
 
 ///

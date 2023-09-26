@@ -1,5 +1,5 @@
 #include <QModbusTcpClient>
-#include "floatutils.h"
+#include "numericutils.h"
 #include "modbusexception.h"
 #include "modbusclient.h"
 

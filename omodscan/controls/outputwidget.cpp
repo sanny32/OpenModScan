@@ -3,7 +3,9 @@
 #include <QTextStream>
 #include <QInputDialog>
 #include "formatutils.h"
+#include "htmldelegate.h"
 #include "outputwidget.h"
+#include "readcoils.h"
 #include "ui_outputwidget.h"
 
 ///
@@ -35,7 +37,6 @@ const int AddressRole = Qt::UserRole + 5;
 /// \brief ValueRole
 ///
 const int ValueRole = Qt::UserRole + 6;
-
 
 
 ///
@@ -328,53 +329,10 @@ QVariant TrafficModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
         case Qt::DisplayRole:
-        {
-            /*switch(index.column())
-            {
-                case 0:
-                    return item.Date.toString(Qt::ISODateWithMs);
+            return QString("<b>%1</b> %2 %3").arg(item->timestamp().toString(Qt::ISODateWithMs),
+                                              (item->request()? "&rarr;" : "&larr;"),
+                                              item->toString(_parentWidget->dataDisplayMode()));
 
-                case 1:
-                    return item.Request? ">>" : "<<";
-
-                case 2:
-                {
-                    QByteArray rawData;
-                    rawData.push_back(item.Server);
-                    rawData.push_back(item.Func | ( item.IsException ? QModbusPdu::ExceptionByte : 0));
-                    rawData.push_back(item.Data);
-
-                    QStringList data;
-                    for(auto&& c : rawData)
-                        data += formatByteValue(_parentWidget->dataDisplayMode(), c);
-
-                    return data.join(" ");
-                }
-
-                default:
-                    break;
-            }*/
-
-            return QString("%1 %2 %3").arg(item.timestamp().toString(Qt::ISODateWithMs),
-                                          (item.request()? ">>" : "<<"),
-                                           item.toString(_parentWidget->dataDisplayMode()));
-        }
-        break;
-
-        /*case Qt::TextAlignmentRole:
-        {
-            switch (index.column())
-            {
-                case 0:
-                case 1:
-                    return Qt::AlignHCenter;
-                case 2:
-                     return Qt::AlignLeft;
-                default:
-                     break;
-            }
-        }
-        break;*/
 
         case Qt::UserRole:
             return QVariant::fromValue(item);
@@ -397,8 +355,10 @@ void TrafficModel::clear()
 /// \brief TrafficModel::append
 /// \param data
 ///
-void TrafficModel::append(const ModbusPduInfo& data)
+void TrafficModel::append(const ModbusPduInfo* data)
 {
+    if(data == nullptr) return;
+
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     _items.push_back(data);
     endInsertRows();
@@ -430,6 +390,24 @@ OutputWidget::OutputWidget(QWidget *parent) :
 
     setStatusColor(Qt::red);
     setUninitializedStatus();
+
+    ui->logView->setItemDelegate(new HtmlDelegate(this));
+    ui->trafficInfo->setItemDelegate(new HtmlDelegate(this));
+
+    connect(ui->logView->selectionModel(),
+            &QItemSelectionModel::selectionChanged,
+            this, [&](const QItemSelection& sel) {
+                if(sel.indexes().isEmpty())
+                    ui->trafficInfo->clear();
+                else
+                    showTrafficInfo(_trafficModel->data(sel.indexes().first(), Qt::UserRole).value<const ModbusPduInfo*>());
+            });
+
+    connect(_trafficModel.get(), &TrafficModel::rowsInserted,
+        this, [&](const QModelIndex&, int first, int last) {
+        const auto index = _trafficModel->index(first);
+        ui->logView->scrollTo(index);
+        });
 }
 
 ///
@@ -610,6 +588,8 @@ void OutputWidget::setFont(const QFont& font)
 {
     ui->listView->setFont(font);
     ui->labelStatus->setFont(font);
+    ui->logView->setFont(font);
+    ui->trafficInfo->setFont(font);
 }
 
 ///
@@ -885,17 +865,6 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
     emit itemDoubleClicked(address, value);
 }
 
-///
-/// \brief OutputWidget::on_logView_clicked
-/// \param index
-///
-void OutputWidget::on_logView_clicked(const QModelIndex &index)
-{
-    if(index.isValid())
-        showTrafficInfo(_trafficModel->data(index, Qt::UserRole).value<ModbusPduInfo>());
-    else
-        ui->listWidget->clear();
-}
 
 ///
 /// \brief OutputWidget::setUninitializedStatus
@@ -924,41 +893,75 @@ void OutputWidget::captureString(const QString& s)
 /// \brief OutputWidget::showTrafficInfo
 /// \param data
 ///
-void OutputWidget::showTrafficInfo(const ModbusPduInfo& data)
+void OutputWidget::showTrafficInfo(const ModbusPduInfo* data)
 {
     const auto function = QString("%1 (%2)").arg(
-        formatByteValue(dataDisplayMode(), data.function()), data.function());
+        formatByteValue(dataDisplayMode(), data->function()), data->function());
 
-    ui->listWidget->clear();
-    ui->listWidget->addItem(tr("Type: %1").arg(data.request() ? tr("Tx Message") : tr("Rx Message")));
-    ui->listWidget->addItem(tr("Timestamp: %1").arg(data.timestamp().toString(Qt::ISODateWithMs)));
-    ui->listWidget->addItem(tr("Device ID: %1").arg(formatByteValue(dataDisplayMode(), data.deviceId())));
-
-    if(data.request())
+    auto fnPrintException = [&]()
     {
-       ui->listWidget->addItem(tr("Function Code: %1").arg(function));
-       ui->listWidget->addItem(tr("Start Address: %1").arg(data.startAddress()));
-       ui->listWidget->addItem(tr("Length: %1").arg(data.length()));
-    }
-    else
-    {
-       if(data.isException())
-       {
-            const auto exception = QString("%1 (%2)").arg(formatByteValue(dataDisplayMode(), data.exception()), data.exception());
-            ui->listWidget->addItem(tr("Error Code: %1").arg(formatByteValue(dataDisplayMode(), data.function())));
-            ui->listWidget->addItem(tr("Exception Code: %1").arg(exception));
-       }
-       else
-       {
-            ui->listWidget->addItem(tr("Function Code: %1").arg(function));
+        const auto exception = QString("%1 (%2)").arg(formatByteValue(dataDisplayMode(), data->exception()), data->exception());
+        ui->trafficInfo->addItem(tr("<b>Error Code:</b> %1").arg(formatByteValue(dataDisplayMode(), data->function())));
+        ui->trafficInfo->addItem(tr("<b>Exception Code:</b> %1").arg(exception));
+    };
 
-            const auto values = data.registerValues(dataDisplayMode());
-            if(!values.isEmpty())
+    ui->trafficInfo->clear();
+    ui->trafficInfo->addItem(tr("<b>Type:</b> %1").arg(data->request() ? tr("Tx Message") : tr("Rx Message")));
+    ui->trafficInfo->addItem(tr("<b>Timestamp:</b> %1").arg(data->timestamp().toString(Qt::ISODateWithMs)));
+    ui->trafficInfo->addItem(tr("<b>Device ID:</b> %1").arg(formatByteValue(dataDisplayMode(), data->deviceId())));
+
+    switch(data->function())
+    {
+        case QModbusPdu::ReadCoils:
+        {
+            if(data->request())
             {
-                ui->listWidget->addItem(tr("Bytes Count: %1").arg(formatByteValue(dataDisplayMode(), data.data().size() - 1)));
-                ui->listWidget->addItem(tr("Register Values: %1").arg(values));
+                auto req = qobject_cast<const ReadCoilsRequest*>(data);
+                ui->trafficInfo->addItem(tr("<b>Function Code:</b> %1").arg(function));
+                ui->trafficInfo->addItem(tr("<b>Start Address:</b> %1").arg(req->startAddress()));
+                ui->trafficInfo->addItem(tr("<b>Length:</b> %1").arg(req->length()));
             }
-       }
+            else if(data->isException())
+            {
+                fnPrintException();
+            }
+            else
+            {
+                auto resp = qobject_cast<const ReadCoilsResponse*>(data);
+                ui->trafficInfo->addItem(tr("<b>Function Code:</b> %1").arg(function));
+                ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(dataDisplayMode(), resp->bytesCount())));
+                ui->trafficInfo->addItem(tr("<b>Coil Status:</b> %1").arg(formatByteArray(dataDisplayMode(), resp->coilsStatus())));
+            }
+        }
+        break;
+
+       /*case QModbusPdu::ReadDiscreteInputs:
+        case QModbusPdu::ReadHoldingRegisters:
+        case QModbusPdu::ReadInputRegisters:
+        break;
+
+        case QModbusPdu::WriteSingleCoil:
+            ui->trafficInfo->addItem(tr("<b>Output Address:</b> %1").arg(data.startAddress()));
+            ui->trafficInfo->addItem(tr("<b>Output Value:</b> %1").arg(data.length()));
+        break;
+
+        case QModbusPdu::WriteSingleRegister:
+            ui->trafficInfo->addItem(tr("<b>Register Address:</b> %1").arg(data.startAddress()));
+            ui->trafficInfo->addItem(tr("<b>Register Value:</b> %1").arg(data.length()));
+        break;
+
+        case QModbusPdu::WriteMultipleCoils:
+            ui->trafficInfo->addItem(tr("<b>Starting Address:</b> %1").arg(data.startAddress()));
+            ui->trafficInfo->addItem(tr("<b>Quantity of Outputs:</b> %1").arg(data.length()));
+            ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(data.length()));
+            ui->trafficInfo->addItem(tr("<b>Output Value:</b> %1").arg(data.length()));
+        break;
+        case QModbusPdu::WriteMultipleRegisters:
+            ui->trafficInfo->addItem(tr("<b>Starting Address:</b> %1").arg(data.startAddress()));
+            ui->trafficInfo->addItem(tr("<b>Quantity of Registers:</b> %1").arg(data.length()));
+            ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(data.length()));
+            ui->trafficInfo->addItem(tr("<b>Registers Value:</b> %1").arg(data.length()));
+        break;*/
     }
 }
 
@@ -969,6 +972,6 @@ void OutputWidget::showTrafficInfo(const ModbusPduInfo& data)
 ///
 void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPdu& pdu)
 {
-    _trafficModel->append(ModbusPduInfo(pdu, QDateTime::currentDateTime(), server, request));
-    ui->logView->scrollToBottom();
+    auto info = ModbusPduInfo::create(pdu, QDateTime::currentDateTime(), server, request, this);
+    _trafficModel->append(info);
 }

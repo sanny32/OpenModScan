@@ -75,14 +75,14 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 
     void clear();
-    void append(const ModbusPduInfo& data);
+    void append(const ModbusPduInfo* data);
     void update(){
         emit dataChanged(index(0), index(_items.size() - 1));
     }
 
 private:
-    QVector<ModbusPduInfo> _items;
     OutputWidget* _parentWidget;
+    QVector<const ModbusPduInfo*> _items;
 };
 
 ///
@@ -152,12 +152,11 @@ protected:
 private slots:
     void on_listView_doubleClicked(const QModelIndex& index);
     void on_listView_customContextMenuRequested(const QPoint &pos);
-    void on_logView_clicked(const QModelIndex &index);
 
 private:
     void setUninitializedStatus();
     void captureString(const QString& s);
-    void showTrafficInfo(const ModbusPduInfo& data);
+    void showTrafficInfo(const ModbusPduInfo* data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 
 private:

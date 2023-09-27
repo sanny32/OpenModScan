@@ -134,14 +134,20 @@ HEADERS += \
     modbusmessages/diagnostics.h \
     modbusmessages/getcommeventcounter.h \
     modbusmessages/getcommeventlog.h \
+    modbusmessages/maskwriteregister.h \
     modbusmessages/modbusmessage.h \
     modbusmessages/modbusmessages.h \
     modbusmessages/readcoils.h \
     modbuslimits.h \
     modbusmessages/readdiscreteinputs.h \
     modbusmessages/readexceptionstatus.h \
+    modbusmessages/readfifoqueue.h \
+    modbusmessages/readfilerecord.h \
     modbusmessages/readholdingregisters.h \
     modbusmessages/readinputregisters.h \
+    modbusmessages/readwritemultipleregisters.h \
+    modbusmessages/reportserverid.h \
+    modbusmessages/writefilerecord.h \
     modbusmessages/writemultiplecoils.h \
     modbusmessages/writemultipleregisters.h \
     modbusmessages/writesinglecoil.h \

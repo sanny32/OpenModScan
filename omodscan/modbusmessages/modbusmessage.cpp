@@ -60,6 +60,30 @@ const ModbusMessage* ModbusMessage::create(const QModbusPdu& pdu, const QDateTim
             if(request) return new WriteMultipleRegistersRequest(pdu, timestamp, deviceId);
             else return new WriteMultipleRegistersResponse(pdu, timestamp, deviceId);
 
+        case QModbusPdu::ReportServerId:
+            if(request) return new ReportServerIdRequest(pdu, timestamp, deviceId);
+            else return new ReportServerIdResponse(pdu, timestamp, deviceId);
+
+        case QModbusPdu::ReadFileRecord:
+            if(request) return new ReadFileRecordRequest(pdu, timestamp, deviceId);
+            else return new ReadFileRecordResponse(pdu, timestamp, deviceId);
+
+        case QModbusPdu::WriteFileRecord:
+            if(request) return new WriteFileRecordRequest(pdu, timestamp, deviceId);
+            else return new WriteFileRecordResponse(pdu, timestamp, deviceId);
+
+        case QModbusPdu::MaskWriteRegister:
+            if(request) return new MaskWriteRegisterRequest(pdu, timestamp, deviceId);
+            else return new MaskWriteRegisterResponse(pdu, timestamp, deviceId);
+
+        case QModbusPdu::ReadWriteMultipleRegisters:
+            if(request) return new ReadWriteMultipleRegistersRequest(pdu, timestamp, deviceId);
+            else return new ReadWriteMultipleRegistersResponse(pdu, timestamp, deviceId);
+
+        case QModbusPdu::ReadFifoQueue:
+            if(request) return new ReadFifoQueueRequest(pdu, timestamp, deviceId);
+            else return new ReadFifoQueueResponse(pdu, timestamp, deviceId);
+
         default:
             return nullptr;
     }

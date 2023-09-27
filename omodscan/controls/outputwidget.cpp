@@ -1114,21 +1114,93 @@ void OutputWidget::showTrafficInfo(const QModelIndex& index)
         break;
 
         case QModbusPdu::ReportServerId:
+            if(!data->isRequest())
+            {
+                auto resp = reinterpret_cast<const ReportServerIdResponse*>(data);
+                ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(dataDisplayMode(), resp->byteCount())));
+                ui->trafficInfo->addItem(tr("<b>Data:</b> %1").arg(formatByteArray(dataDisplayMode(), resp->data())));
+            }
         break;
 
         case QModbusPdu::ReadFileRecord:
+            if(data->isRequest())
+            {
+                auto req = reinterpret_cast<const ReadFileRecordRequest*>(data);
+                ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(dataDisplayMode(), req->byteCount())));
+                ui->trafficInfo->addItem(tr("<b>Data:</b> %1").arg(formatByteArray(dataDisplayMode(), req->data())));
+            }
+            else
+            {
+                auto resp = reinterpret_cast<const ReadFileRecordResponse*>(data);
+                ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(dataDisplayMode(), resp->byteCount())));
+                ui->trafficInfo->addItem(tr("<b>Data:</b> %1").arg(formatByteArray(dataDisplayMode(), resp->data())));
+            }
         break;
 
         case QModbusPdu::WriteFileRecord:
+            if(data->isRequest())
+            {
+                auto req = reinterpret_cast<const WriteFileRecordRequest*>(data);
+                ui->trafficInfo->addItem(tr("<b>Request Data Length:</b> %1").arg(formatByteValue(dataDisplayMode(), req->length())));
+                ui->trafficInfo->addItem(tr("<b>Data:</b> %1").arg(formatByteArray(dataDisplayMode(), req->data())));
+            }
+            else
+            {
+                auto resp = reinterpret_cast<const WriteFileRecordResponse*>(data);
+                ui->trafficInfo->addItem(tr("<b>Request Data Length:</b> %1").arg(formatByteValue(dataDisplayMode(), resp->length())));
+                ui->trafficInfo->addItem(tr("<b>Data:</b> %1").arg(formatByteArray(dataDisplayMode(), resp->data())));
+            }
         break;
 
         case QModbusPdu::MaskWriteRegister:
+            if(data->isRequest())
+            {
+                auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(data);
+                ui->trafficInfo->addItem(tr("<b>Address:</b> %1").arg(formatWordValue(dataDisplayMode(), req->address())));
+                ui->trafficInfo->addItem(tr("<b>And Mask:</b> %1").arg(formatWordValue(dataDisplayMode(), req->andMask())));
+                ui->trafficInfo->addItem(tr("<b>Or Mask:</b> %1").arg(formatWordValue(dataDisplayMode(), req->orMask())));
+            }
+            else
+            {
+                auto resp = reinterpret_cast<const MaskWriteRegisterResponse*>(data);
+                ui->trafficInfo->addItem(tr("<b>Address:</b> %1").arg(formatWordValue(dataDisplayMode(), resp->address())));
+                ui->trafficInfo->addItem(tr("<b>And Mask:</b> %1").arg(formatWordValue(dataDisplayMode(), resp->andMask())));
+                ui->trafficInfo->addItem(tr("<b>Or Mask:</b> %1").arg(formatWordValue(dataDisplayMode(), resp->orMask())));
+            }
         break;
 
         case QModbusPdu::ReadWriteMultipleRegisters:
+            if(data->isRequest())
+            {
+                auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(data);
+                ui->trafficInfo->addItem(tr("<b>Read Starting Address:</b> %1").arg(formatWordValue(dataDisplayMode(), req->readStartAddress())));
+                ui->trafficInfo->addItem(tr("<b>Quantity to Read:</b> %1").arg(formatWordValue(dataDisplayMode(), req->readLength())));
+                ui->trafficInfo->addItem(tr("<b>Write Starting Address:</b> %1").arg(formatWordValue(dataDisplayMode(), req->writeStartAddress())));
+                ui->trafficInfo->addItem(tr("<b>Quantity to Write:</b> %1").arg(formatWordValue(dataDisplayMode(), req->writeLength())));
+                ui->trafficInfo->addItem(tr("<b>Write Byte Count:</b> %1").arg(formatByteValue(dataDisplayMode(), req->writeByteCount())));
+                ui->trafficInfo->addItem(tr("<b>Write Registers Value:</b> %1").arg(formatByteArray(dataDisplayMode(), req->writeValues())));
+            }
+            else
+            {
+                auto resp = reinterpret_cast<const ReadWriteMultipleRegistersResponse*>(data);
+                ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(dataDisplayMode(), resp->byteCount())));
+                ui->trafficInfo->addItem(tr("<b>Registers Value:</b> %1").arg(formatByteArray(dataDisplayMode(), resp->values())));
+            }
         break;
 
         case QModbusPdu::ReadFifoQueue:
+            if(data->isRequest())
+            {
+                auto req = reinterpret_cast<const ReadFifoQueueRequest*>(data);
+                ui->trafficInfo->addItem(tr("<b>FIFO Point Address:</b> %1").arg(formatWordValue(dataDisplayMode(), req->fifoAddress())));
+            }
+            else
+            {
+                auto resp = reinterpret_cast<const ReadFifoQueueResponse*>(data);
+                ui->trafficInfo->addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(dataDisplayMode(), resp->byteCount())));
+                ui->trafficInfo->addItem(tr("<b>FIFO Count:</b> %1").arg(formatByteValue(dataDisplayMode(), resp->fifoCount())));
+                ui->trafficInfo->addItem(tr("<b>FIFO Value Register:</b> %1").arg(formatByteArray(dataDisplayMode(), resp->fifoValue())));
+            }
         break;
 
         default:

@@ -1,5 +1,5 @@
-#ifndef MODBUSPDUINFO_H
-#define MODBUSPDUINFO_H
+#ifndef MODBUSMESSAGE_H
+#define MODBUSMESSAGE_H
 
 #include <QDateTime>
 #include <QModbusPdu>
@@ -8,16 +8,15 @@
 #include "modbusexception.h"
 
 ///
-/// \brief The ModbusPduInfo class
+/// \brief The ModbusMessage class
 ///
-class ModbusPduInfo: public QObject
+class ModbusMessage
 {
-    Q_OBJECT
 public:
     ///
-    /// \brief ModbusPduInfo
+    /// \brief ~ModbusMessage
     ///
-    explicit ModbusPduInfo() = default;
+    virtual ~ModbusMessage() = default;
 
     ///
     /// \brief create
@@ -27,7 +26,7 @@ public:
     /// \param request
     /// \return
     ///
-    static const ModbusPduInfo* create(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request, QObject* parent = nullptr);
+    static const ModbusMessage* create(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request);
 
     ///
     /// \brief isValid
@@ -49,7 +48,7 @@ public:
     /// \brief request
     /// \return
     ///
-    bool request() const {
+    bool isRequest() const {
         return _request;
     }
 
@@ -57,7 +56,7 @@ public:
     /// \brief deviceId
     /// \return
     ///
-    bool deviceId() const {
+    int deviceId() const {
         return _deviceId;
     }
 
@@ -86,14 +85,6 @@ public:
     }
 
     ///
-    /// \brief data
-    /// \return
-    ///
-    QByteArray data() const {
-        return _data;
-    }
-
-    ///
     /// \brief toString
     /// \param mode
     /// \return
@@ -111,49 +102,33 @@ public:
         return data.join(" ");
     }
 
-    ///
-    /// \brief registerValues
-    /// \param mode
-    /// \return
-    ///
-    QString registerValues(DataDisplayMode mode) const {
-        if(_request) return QString();
-
-        QStringList values;
-        for(auto i = 1; i < _data.size(); i++)
-            values += formatByteValue(mode, _data[i]);
-
-        return values.join(" ");
-    }
-
 protected:
     ///
-    /// \brief ModbusPduInfo
+    /// \brief ModbusMessage
     /// \param pdu
     /// \param timestamp
     /// \param deviceId
     /// \param request
     ///
-    ModbusPduInfo(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request, QObject* parent = nullptr)
-        : QObject(parent)
+    ModbusMessage(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request)
+        :_data(pdu.data())
+        ,_funcCode(pdu.isException() ? (pdu.functionCode() | QModbusPdu::ExceptionByte) : pdu.functionCode())
+        ,_exceptionCode(pdu.exceptionCode())
+        ,_timestamp(timestamp)
+        ,_deviceId(deviceId)
+        ,_request(request)
     {
-        _timestamp = timestamp;
-        _deviceId = deviceId;
-        _request = request;
-        _funcCode = pdu.isException() ? (pdu.functionCode() | QModbusPdu::ExceptionByte) : pdu.functionCode();
-        _exceptionCode = pdu.exceptionCode();
-        _data = pdu.data();
     }
 
 protected:
-    QByteArray _data;
-    quint8 _funcCode;
-    quint8 _exceptionCode;
+    const QByteArray _data;
+    const quint8 _funcCode;
+    const quint8 _exceptionCode;
 
 private:
-    QDateTime _timestamp;
-    int _deviceId = -1;
-    bool _request = false;
+    const QDateTime _timestamp;
+    const int _deviceId;
+    const bool _request;
 };
 
-#endif // MODBUSPDUINFO_H
+#endif // MODBUSMESSAGE_H

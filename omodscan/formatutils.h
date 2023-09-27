@@ -14,7 +14,8 @@
 /// \param c
 /// \return
 ///
-inline QString formatByteValue(DataDisplayMode mode, uchar c) {
+inline QString formatByteValue(DataDisplayMode mode, uchar c)
+{
     switch(mode)
     {
         case DataDisplayMode::Decimal:
@@ -39,6 +40,25 @@ inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
         values += formatByteValue(mode, ar[i]);
 
     return values.join(" ");
+}
+
+///
+/// \brief formatWordValue
+/// \param mode
+/// \param v
+/// \return
+///
+inline QString formatWordValue(DataDisplayMode mode, quint16 v)
+{
+    switch(mode)
+    {
+        case DataDisplayMode::Decimal:
+        case DataDisplayMode::Integer:
+            return QString("%1").arg(QString::number(v), 3, '0');
+
+        default:
+            return QString("%1").arg(QString::number(v, 16).toUpper(), 2, '0');
+    }
 }
 
 ///

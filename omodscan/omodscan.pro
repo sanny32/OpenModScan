@@ -21,7 +21,7 @@ win32:RC_ICONS += res/omodscan.ico
 
 INCLUDEPATH += controls \
                dialogs \
-               modbusinfo \
+               modbusmessages \
 
 SOURCES += \
     controls/booleancombobox.cpp \
@@ -69,7 +69,7 @@ SOURCES += \
     mainwindow.cpp \
     modbusclient.cpp \
     modbusdataunit.cpp \
-    modbusinfo/modbuspduinfo.cpp \
+    modbusmessages/modbusmessage.cpp \
     modbusrtuscanner.cpp \
     modbusscanner.cpp \
     modbustcpscanner.cpp \
@@ -127,13 +127,25 @@ HEADERS += \
     formmodsca.h \
     htmldelegate.h \
     mainwindow.h \
-    modbusinfo/modbuspduinfo.h \
     modbusclient.h \
     modbusdataunit.h \
     modbusexception.h \
     modbusfunction.h \
-    modbusinfo/readcoils.h \
+    modbusmessages/diagnostics.h \
+    modbusmessages/getcommeventcounter.h \
+    modbusmessages/getcommeventlog.h \
+    modbusmessages/modbusmessage.h \
+    modbusmessages/modbusmessages.h \
+    modbusmessages/readcoils.h \
     modbuslimits.h \
+    modbusmessages/readdiscreteinputs.h \
+    modbusmessages/readexceptionstatus.h \
+    modbusmessages/readholdingregisters.h \
+    modbusmessages/readinputregisters.h \
+    modbusmessages/writemultiplecoils.h \
+    modbusmessages/writemultipleregisters.h \
+    modbusmessages/writesinglecoil.h \
+    modbusmessages/writesingleregister.h \
     modbusrtuscanner.h \
     modbusscanner.h \
     modbussimulationparams.h \

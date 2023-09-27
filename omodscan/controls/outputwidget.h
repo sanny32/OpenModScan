@@ -7,7 +7,7 @@
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
-#include "modbuspduinfo.h"
+#include "modbusmessage.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
 
@@ -69,20 +69,21 @@ class TrafficModel : public QAbstractListModel
 
 public:
     explicit TrafficModel(OutputWidget* parent);
+    ~TrafficModel();
 
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
     void clear();
-    void append(const ModbusPduInfo* data);
+    void append(const ModbusMessage* data);
     void update(){
         emit dataChanged(index(0), index(_items.size() - 1));
     }
 
 private:
     OutputWidget* _parentWidget;
-    QVector<const ModbusPduInfo*> _items;
+    QVector<const ModbusMessage*> _items;
 };
 
 ///
@@ -156,7 +157,7 @@ private slots:
 private:
     void setUninitializedStatus();
     void captureString(const QString& s);
-    void showTrafficInfo(const ModbusPduInfo* data);
+    void showTrafficInfo(const QModelIndex& index);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 
 private:

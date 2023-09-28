@@ -94,7 +94,6 @@ public:
         rawData.push_back(_deviceId);
         rawData.push_back(_funcCode);
         rawData.push_back(_data);
-
         return formatByteArray(mode, rawData);
     }
 
@@ -136,5 +135,6 @@ private:
     const int _deviceId;
     const bool _request;
 };
+Q_DECLARE_METATYPE(const ModbusMessage*)
 
 #endif // MODBUSMESSAGE_H

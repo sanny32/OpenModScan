@@ -312,9 +312,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     connect(ui->logView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
             this, [&](const QItemSelection& sel) {
-                if(sel.indexes().isEmpty())
-                    ui->modbusMsg->clear();
-                else
+                if(!sel.indexes().isEmpty())
                     showModbusMessage(sel.indexes().first());
             });
 }

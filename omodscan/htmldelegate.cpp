@@ -41,6 +41,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     QTextDocument doc;
     doc.setHtml(opt.text);
+    doc.setDocumentMargin(0);
     doc.setDefaultFont(opt.font);
     doc.setDefaultTextOption(textOption);
     doc.setTextWidth(opt.rect.width());
@@ -81,6 +82,7 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
     QTextDocument doc;
     doc.setHtml(opt.text);
+    doc.setDocumentMargin(0);
     doc.setDefaultFont(opt.font);
     doc.setTextWidth(opt.rect.width());
 

@@ -34,7 +34,7 @@ private:
     void deleteItems();
 
 private:
-    int _rowLimit = 3600;
+    int _rowLimit = 60;
     ModbusLogWidget* _parentWidget;
     QQueue<const ModbusMessage*> _items;
 };

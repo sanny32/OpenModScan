@@ -128,7 +128,7 @@
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <widget class="QListView" name="logView">
+         <widget class="ModbusLogWidget" name="logView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -193,6 +193,11 @@
    <class>ModbusMessageWidget</class>
    <extends>QListWidget</extends>
    <header>modbusmessagewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ModbusLogWidget</class>
+   <extends>QListView</extends>
+   <header>modbuslogwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

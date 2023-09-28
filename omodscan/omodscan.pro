@@ -36,6 +36,7 @@ SOURCES += \
     controls/functioncodecombobox.cpp \
     controls/ipaddresslineedit.cpp \
     controls/mainstatusbar.cpp \
+    controls/modbuslogwidget.cpp \
     controls/modbusmessagewidget.cpp \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
@@ -95,6 +96,7 @@ HEADERS += \
     controls/functioncodecombobox.h \
     controls/ipaddresslineedit.h \
     controls/mainstatusbar.h \
+    controls/modbuslogwidget.h \
     controls/modbusmessagewidget.h \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \

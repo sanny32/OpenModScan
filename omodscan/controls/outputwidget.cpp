@@ -285,103 +285,6 @@ QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 ad
 }
 
 ///
-/// \brief TrafficModel::TrafficModel
-/// \param parent
-///
-TrafficModel::TrafficModel(OutputWidget* parent)
-    : QAbstractListModel(parent)
-    ,_parentWidget(parent)
-{
-}
-
-///
-/// \brief TrafficModel::~TrafficModel
-///
-TrafficModel::~TrafficModel()
-{
-    for(auto&& i : _items)
-    {
-        delete i;
-    }
-}
-
-///
-/// \brief TrafficModel::columnCount
-/// \param parent
-/// \return
-///
-int TrafficModel::columnCount(const QModelIndex&) const
-{
-    return 3;
-}
-
-///
-/// \brief TrafficModel::rowCount
-/// \param parent
-/// \return
-///
-int TrafficModel::rowCount(const QModelIndex&) const
-{
-    return _items.size();
-}
-
-///
-/// \brief TrafficModel::data
-/// \param index
-/// \param role
-/// \return
-///
-QVariant TrafficModel::data(const QModelIndex& index, int role) const
-{
-    if(!index.isValid() || index.row() >= rowCount())
-        return QVariant();
-
-    const auto& item = _items.at(index.row());
-    switch(role)
-    {
-        case Qt::DisplayRole:
-            return QString("<b>%1</b> %2 %3").arg(item->timestamp().toString(Qt::ISODateWithMs),
-                                              (item->isRequest()? "&rarr;" : "&larr;"),
-                                              item->toString(_parentWidget->dataDisplayMode()));
-
-
-        case Qt::UserRole:
-            return QVariant::fromValue(item);
-    }
-
-    return QVariant();
-}
-
-///
-/// \brief TrafficModel::clear
-///
-void TrafficModel::clear()
-{
-    beginResetModel();
-
-    for(auto&& i : _items)
-    {
-        delete i;
-    }
-    _items.clear();
-
-    endResetModel();
-}
-
-///
-/// \brief TrafficModel::append
-/// \param data
-///
-void TrafficModel::append(const ModbusMessage* data)
-{
-    if(data == nullptr) return;
-
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    _items.push_back(data);
-    endInsertRows();
-}
-
-///
 /// \brief OutputWidget::OutputWidget
 /// \param parent
 ///
@@ -393,12 +296,10 @@ OutputWidget::OutputWidget(QWidget *parent) :
    ,_dataDisplayMode(DataDisplayMode::Binary)
    ,_byteOrder(ByteOrder::LittleEndian)
    ,_listModel(new OutputListModel(this))
-   ,_trafficModel(new TrafficModel(this))
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setModel(_listModel.get());
-    ui->logView->setModel(_trafficModel.get());
     ui->labelStatus->setAutoFillBackground(true);
 
     setAutoFillBackground(true);
@@ -408,23 +309,14 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setStatusColor(Qt::red);
     setUninitializedStatus();
 
-    ui->logView->setItemDelegate(new HtmlDelegate(this));
-    ui->modbusMsg->setItemDelegate(new HtmlDelegate(this));
-
     connect(ui->logView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
             this, [&](const QItemSelection& sel) {
                 if(sel.indexes().isEmpty())
                     ui->modbusMsg->clear();
                 else
-                    showTrafficInfo(sel.indexes().first());
+                    showModbusMessage(sel.indexes().first());
             });
-
-    connect(_trafficModel.get(), &TrafficModel::rowsInserted,
-        this, [&](const QModelIndex&, int first, int last) {
-            const auto index = _trafficModel->index(first);
-            ui->logView->scrollTo(index);
-        });
 }
 
 ///
@@ -679,7 +571,7 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 ///
 void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
 {
-    updateTrafficWidget(true, server, request);
+    updateLogView(true, server, request);
 }
 
 ///
@@ -689,7 +581,7 @@ void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
 ///
 void OutputWidget::updateTraffic(const QModbusResponse& response, int server)
 {
-    updateTrafficWidget(false, server, response);
+    updateLogView(false, server, response);
 }
 
 ///
@@ -790,10 +682,10 @@ DataDisplayMode OutputWidget::dataDisplayMode() const
 void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
+    ui->logView->setDataDisplayMode(mode);
     ui->modbusMsg->setDataDisplayMode(mode);
 
     _listModel->update();
-    _trafficModel->update();
 }
 
 ///
@@ -906,28 +798,21 @@ void OutputWidget::captureString(const QString& s)
 }
 
 ///
-/// \brief OutputWidget::showTrafficInfo
+/// \brief OutputWidget::showModbusMessage
 /// \param index
 ///
-void OutputWidget::showTrafficInfo(const QModelIndex& index)
+void OutputWidget::showModbusMessage(const QModelIndex& index)
 {
-    if(index.isValid())
-    {
-       const auto msg = _trafficModel->data(index, Qt::UserRole).value<const ModbusMessage*>();
-       ui->modbusMsg->setModbusMessage(msg);
-    }
-    else
-    {
-       ui->modbusMsg->clear();
-    }
+    const auto msg = ui->logView->itemAt(index);
+    ui->modbusMsg->setModbusMessage(msg);
 }
 
 ///
-/// \brief OutputWidget::updateTrafficWidget
+/// \brief OutputWidget::updateLogView
 /// \param request
 /// \param pdu
 ///
-void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPdu& pdu)
+void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu)
 {
-    _trafficModel->append(ModbusMessage::create(pdu, QDateTime::currentDateTime(), server, request));
+    ui->logView->addItem(pdu, QDateTime::currentDateTime(), server, request);
 }

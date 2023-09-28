@@ -1,4 +1,5 @@
 #include "formatutils.h"
+#include "htmldelegate.h"
 #include "modbusmessagewidget.h"
 #include "modbusmessages.h"
 
@@ -10,6 +11,7 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     : QListWidget(parent)
     ,_msg(nullptr)
 {
+    setItemDelegate(new HtmlDelegate(this));
 }
 
 ///

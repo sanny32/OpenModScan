@@ -61,32 +61,6 @@ private:
 };
 
 ///
-/// \brief The TrafficModel class
-///
-class TrafficModel : public QAbstractListModel
-{
-    Q_OBJECT
-
-public:
-    explicit TrafficModel(OutputWidget* parent);
-    ~TrafficModel();
-
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-
-    void clear();
-    void append(const ModbusMessage* data);
-    void update(){
-        emit dataChanged(index(0), index(_items.size() - 1));
-    }
-
-private:
-    OutputWidget* _parentWidget;
-    QVector<const ModbusMessage*> _items;
-};
-
-///
 /// \brief The OutputWidget class
 ///
 class OutputWidget : public QWidget
@@ -157,8 +131,8 @@ private slots:
 private:
     void setUninitializedStatus();
     void captureString(const QString& s);
-    void showTrafficInfo(const QModelIndex& index);
-    void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
+    void showModbusMessage(const QModelIndex& index);
+    void updateLogView(bool request, int server, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;
@@ -172,7 +146,6 @@ private:
     QFile _fileCapture;
     AddressDescriptionMap _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
-    QSharedPointer<TrafficModel> _trafficModel;
 };
 
 #endif // OUTPUTWIDGET_H

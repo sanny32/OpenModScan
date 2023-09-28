@@ -163,7 +163,7 @@
            <bool>true</bool>
           </property>
          </widget>
-         <widget class="QListWidget" name="trafficInfo">
+         <widget class="ModbusMessageWidget" name="modbusMsg">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -188,6 +188,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ModbusMessageWidget</class>
+   <extends>QListWidget</extends>
+   <header>modbusmessagewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

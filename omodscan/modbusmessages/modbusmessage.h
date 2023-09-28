@@ -95,11 +95,17 @@ public:
         rawData.push_back(_funcCode);
         rawData.push_back(_data);
 
-        QStringList data;
-        for(auto&& c : rawData)
-                data += formatByteValue(mode, c);
+        return formatByteArray(mode, rawData);
+    }
 
-        return data.join(" ");
+    ///
+    /// \brief data
+    /// \param mode
+    /// \return
+    ///
+    QString data(DataDisplayMode mode) const
+    {
+        return formatByteArray(mode, _data);
     }
 
 protected:

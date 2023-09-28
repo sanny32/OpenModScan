@@ -36,8 +36,8 @@ inline QString formatByteValue(DataDisplayMode mode, uchar c)
 inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
 {
     QStringList values;
-    for(auto i = 0; i < ar.size(); i++)
-        values += formatByteValue(mode, ar[i]);
+    for(auto&& i : ar)
+        values += formatByteValue(mode, i);
 
     return values.join(" ");
 }

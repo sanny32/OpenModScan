@@ -270,8 +270,8 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::SwappedUnsignedLI:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                    numEdit = new NumericLineEdit(NumericLineEdit::UnsignedMode, ui->tableWidget);
-                    numEdit->setValue(makeULong(_data[idx + 1], _data[idx], _writeParams.Order));
+                numEdit = new NumericLineEdit(NumericLineEdit::UnsignedMode, ui->tableWidget);
+                numEdit->setValue(makeULong(_data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
 

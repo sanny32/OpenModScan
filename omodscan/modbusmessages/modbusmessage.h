@@ -14,6 +14,23 @@ class ModbusMessage
 {
 public:
     ///
+    /// \brief ModbusMessage
+    /// \param pdu
+    /// \param timestamp
+    /// \param deviceId
+    /// \param request
+    ///
+    ModbusMessage(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request)
+        :_data(pdu.data())
+        ,_funcCode(pdu.isException() ? (pdu.functionCode() | QModbusPdu::ExceptionByte) : pdu.functionCode())
+        ,_exceptionCode(pdu.exceptionCode())
+        ,_timestamp(timestamp)
+        ,_deviceId(deviceId)
+        ,_request(request)
+    {
+    }
+
+    ///
     /// \brief ~ModbusMessage
     ///
     virtual ~ModbusMessage() = default;
@@ -69,6 +86,27 @@ public:
     }
 
     ///
+    /// \brief pointType
+    /// \return
+    ///
+    QModbusDataUnit::RegisterType pointType() const {
+        switch(_funcCode)
+        {
+            case QModbusPdu::ReadCoils:
+                return QModbusDataUnit::Coils;
+            case QModbusPdu::ReadDiscreteInputs:
+                return QModbusDataUnit::DiscreteInputs;
+            case QModbusPdu::ReadHoldingRegisters:
+                return QModbusDataUnit::HoldingRegisters;
+            case QModbusPdu::ReadInputRegisters:
+                return QModbusDataUnit::InputRegisters;
+
+            default:
+                return QModbusDataUnit::Invalid;
+        }
+    }
+
+    ///
     /// \brief isException
     /// \return
     ///
@@ -98,31 +136,12 @@ public:
     }
 
     ///
-    /// \brief data
-    /// \param mode
+    /// \brief rawData
     /// \return
     ///
-    QString data(DataDisplayMode mode) const
+    QByteArray rawData() const
     {
-        return formatByteArray(mode, _data);
-    }
-
-protected:
-    ///
-    /// \brief ModbusMessage
-    /// \param pdu
-    /// \param timestamp
-    /// \param deviceId
-    /// \param request
-    ///
-    ModbusMessage(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request)
-        :_data(pdu.data())
-        ,_funcCode(pdu.isException() ? (pdu.functionCode() | QModbusPdu::ExceptionByte) : pdu.functionCode())
-        ,_exceptionCode(pdu.exceptionCode())
-        ,_timestamp(timestamp)
-        ,_deviceId(deviceId)
-        ,_request(request)
-    {
+        return _data;
     }
 
 protected:

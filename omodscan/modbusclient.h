@@ -35,7 +35,7 @@ public:
     void maskWriteRegister(const ModbusMaskWriteParams& params, int requestId);
 
 signals:
-    void modbusRequest(int requestId, const QModbusRequest& request);
+    void modbusRequest(int requestId, int deviceId, const QModbusRequest& request);
     void modbusReply(QModbusReply* reply);
     void modbusError(const QString& error, int requestId);
     void modbusConnectionError(const QString& error);

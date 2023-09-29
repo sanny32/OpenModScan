@@ -618,9 +618,10 @@ void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 ///
 /// \brief FormModSca::on_modbusRequest
 /// \param requestId
+/// \param deviceId
 /// \param request
 ///
-void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
+void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
 {
     if(requestId != _formId && requestId != 0)
     {
@@ -640,7 +641,6 @@ void FormModSca::on_modbusRequest(int requestId, const QModbusRequest& request)
         break;
     }
 
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
     ui->outputWidget->updateTraffic(request, deviceId);
 }
 

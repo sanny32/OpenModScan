@@ -164,7 +164,7 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
     const auto request = createReadRequest(dataUnit);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, server, request);
     if(auto reply = _modbusClient->sendReadRequest(dataUnit, server))
     {
         reply->setProperty("RequestId", requestId);
@@ -467,7 +467,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, params.Node, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
@@ -499,7 +499,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     }
 
     QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(params.Address - 1), params.AndMask, params.OrMask);
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, params.Node, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {

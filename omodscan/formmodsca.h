@@ -101,7 +101,7 @@ private slots:
     void on_modbusConnected(const ConnectionDetails& cd);
     void on_modbusDisconnected(const ConnectionDetails& cd);
     void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, const QModbusRequest& request);
+    void on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);

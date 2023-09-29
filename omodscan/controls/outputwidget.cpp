@@ -595,11 +595,11 @@ void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
 ///
 /// \brief OutputWidget::updateTraffic
 /// \param response
-/// \param server
+/// \param deviceId
 ///
-void OutputWidget::updateTraffic(const QModbusResponse& response, int server)
+void OutputWidget::updateTraffic(const QModbusResponse& response, int deviceId)
 {
-    updateLogView(false, server, response);
+    updateLogView(false, deviceId, response);
 }
 
 ///

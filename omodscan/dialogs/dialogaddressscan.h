@@ -6,6 +6,7 @@
 #include <QPrinter>
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
+#include "modbusmessage.h"
 #include "modbusdataunit.h"
 #include "modbusclient.h"
 #include "displaydefinition.h"
@@ -51,50 +52,77 @@ private:
 };
 
 ///
-/// \brief The LogViewItem class
+/// \brief The LogViewModel class
 ///
-struct LogViewItem
-{
-    quint16 PointAddress = 0;
-    QString Text;
-    bool IsRequest = false;
-    bool IsValid = false;
-};
-Q_DECLARE_METATYPE(LogViewItem)
-
-///
-/// \brief The LogViewItemModel class
-///
-class LogViewItemModel : public QAbstractListModel
+class LogViewModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
-    explicit LogViewItemModel(QVector<LogViewItem>& items, QObject* parent = nullptr);
+    explicit LogViewModel(QObject* parent = nullptr);
+    ~LogViewModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
-    void update(){
+    void append(quint16 addr, const ModbusMessage* msg) {
+        if(msg != nullptr)
+        {
+            beginInsertRows(QModelIndex(), rowCount(), rowCount());
+            _items.push_back({ addr, msg });
+            endInsertRows();
+        }
+    }
+
+    void clear() {
         beginResetModel();
+        deleteItems();
+        endResetModel();
+    }
+
+    void setHexView(bool on) {
+        beginResetModel();
+        _hexView = on;
         endResetModel();
     }
 
 private:
-    QVector<LogViewItem>& _items;
+    void deleteItems();
+
+private:
+    struct LogViewItem{
+        quint16 Addr;
+        const ModbusMessage* Msg;
+    };
+
+private:
+    bool _hexView = false;
+    QVector<LogViewItem> _items;
 };
 
 ///
-/// \brief The LogViewItemProxyModel class
+/// \brief The LogViewProxyModel class
 ///
-class LogViewItemProxyModel : public QSortFilterProxyModel
+class LogViewProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    explicit LogViewItemProxyModel(QObject* parent = nullptr);
+    explicit LogViewProxyModel(QObject* parent = nullptr);
 
-    void setShowValid(bool on){
+    void append(quint16 addr, const ModbusMessage* msg) {
+        ((LogViewModel*)sourceModel())->append(addr, msg);
+    }
+
+    void clear() {
+        ((LogViewModel*)sourceModel())->clear();
+    }
+
+    void setHexView(bool on) {
+        ((LogViewModel*)sourceModel())->setHexView(on);
+    }
+
+    void setShowValid(bool on) {
         beginResetModel();
         _showValid = on;
         endResetModel();
@@ -194,7 +222,7 @@ private slots:
     void on_awake();
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, const QModbusRequest& data);
+    void on_modbusRequest(int requestId, int deviceId, const QModbusRequest& data);
     void on_checkBoxHexView_toggled(bool);
     void on_checkBoxShowValid_toggled(bool);
     void on_comboBoxByteOrder_byteOrderChanged(ByteOrder);
@@ -215,7 +243,7 @@ private:
     void updateProgress();
     void updateTableView(int pointAddress, QVector<quint16> values);
 
-    void updateLogView(const QModbusRequest& request);
+    void updateLogView(int deviceId, const QModbusRequest& request);
     void updateLogView(const QModbusReply* reply);
 
     void exportPdf(const QString& filename);
@@ -231,9 +259,6 @@ private:
     quint64 _scanTime = 0;
     QTimer _scanTimer;
     ModbusClient& _modbusClient;
-    QVector<LogViewItem> _logItems;
-    QSharedPointer<LogViewItemModel> _logModel;
-    QSharedPointer<LogViewItemProxyModel> _proxyLogModel;
     QSharedPointer<TableViewItemModel> _viewModel;
 };
 

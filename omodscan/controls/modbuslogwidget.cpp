@@ -45,7 +45,7 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
             return QString("<b>%1</b> %2 %3").arg(item->timestamp().toString(Qt::ISODateWithMs),
-                                                  (item->isRequest()? "&rarr;" : "&larr;"),
+                                                  (item->isRequest()?  "&larr;" : "&rarr;"),
                                                   item->toString(_parentWidget->dataDisplayMode()));
 
         case Qt::UserRole:

@@ -135,7 +135,7 @@ private:
     void setUninitializedStatus();
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
-    void updateLogView(bool request, int server, const QModbusPdu& pdu);
+    void updateLogView(bool request, int deviceId, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;

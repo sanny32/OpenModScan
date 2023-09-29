@@ -1,80 +1,9 @@
 #include <QtCore>
 #include <QtWidgets>
 #include <QtPrintSupport>
-#include "byteorderutils.h"
 #include "modbuslimits.h"
 #include "dialogaddressscan.h"
 #include "ui_dialogaddressscan.h"
-
-///
-/// \brief formatAddress
-/// \param pointType
-/// \param address
-/// \return
-///
-QString formatAddress(QModbusDataUnit::RegisterType pointType, int address)
-{
-    QString prefix;
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-            prefix = "0";
-        break;
-        case QModbusDataUnit::DiscreteInputs:
-            prefix = "1";
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-            prefix = "4";
-        break;
-        case QModbusDataUnit::InputRegisters:
-            prefix = "3";
-        break;
-        default:
-        break;
-    }
-
-    return prefix + QStringLiteral("%1").arg(address, 4, 10, QLatin1Char('0'));
-}
-
-///
-/// \brief formatValue
-/// \param pointType
-/// \param value
-/// \param mode
-/// \param order
-/// \return
-///
-QString formatValue(QModbusDataUnit::RegisterType pointType, quint16 value, DataDisplayMode mode, ByteOrder order)
-{
-    QString result;
-    value = toByteOrderValue(value, order);
-
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            result = QString("%1").arg(value);
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-        case QModbusDataUnit::InputRegisters:
-        {
-            switch(mode)
-            {
-                case DataDisplayMode::Hex:
-                    result = QStringLiteral("%1H").arg(value, 4, 16, QLatin1Char('0'));
-                break;
-
-                default:
-                    result = QString("%1").arg(value);
-                break;
-            }
-        }
-        break;
-        default:
-        break;
-    }
-    return result.toUpper();
-}
 
 ///
 /// \brief TableViewItemModel::TableViewItemModel
@@ -125,12 +54,17 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
     switch(role)
     {
         case Qt::ToolTipRole:
-            return formatAddress(_data.registerType(), _data.startAddress() + idx);
+            return formatAddress(_data.registerType(), _data.startAddress() + idx, false);
 
         case Qt::DisplayRole:
         {
-            const auto mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
-            return _data.hasValue(idx) ? formatValue(_data.registerType(), _data.value(idx), mode, _byteOrder) : "-";
+            QVariant outValue;
+            const auto value = _data.value(idx);
+            const auto pointType = _data.registerType();
+            auto result = _hexView ? formatHexValue(pointType, value, _byteOrder, outValue) :
+                                    formatDecimalValue(pointType, value, _byteOrder, outValue);
+
+            return _data.hasValue(idx) ? result.remove('<').remove('>') : "-";
         }
 
         case Qt::TextAlignmentRole:
@@ -207,7 +141,7 @@ QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation
                     const auto pointAddress = _data.startAddress();
                     const auto addressFrom = pointAddress + section * _columns;
                     const auto addressTo = pointAddress + qMin<quint16>(length - 1, (section + 1) * _columns - 1);
-                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom), formatAddress(pointType, addressTo));
+                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom, false), formatAddress(pointType, addressTo, false));
                 }
             }
         break;
@@ -232,33 +166,39 @@ Qt::ItemFlags TableViewItemModel::flags(const QModelIndex &index) const
 }
 
 ///
-/// \brief LogViewItemModel::LogViewItemModel
-/// \param items
+/// \brief LogViewModel::LogViewModel
 /// \param parent
 ///
-LogViewItemModel::LogViewItemModel(QVector<LogViewItem>& items, QObject* parent)
+LogViewModel::LogViewModel(QObject* parent)
     : QAbstractListModel(parent)
-    ,_items(items)
 {
 }
 
 ///
-/// \brief LogViewItemModel::rowCount
+/// \brief LogViewModel::~LogViewModel
+///
+LogViewModel::~LogViewModel()
+{
+    void deleteItems();
+}
+
+///
+/// \brief LogViewModel::rowCount
 /// \param parent
 /// \return
 ///
-int LogViewItemModel::rowCount(const QModelIndex&) const
+int LogViewModel::rowCount(const QModelIndex&) const
 {
     return _items.size();
 }
 
 ///
-/// \brief LogViewItemModel::data
+/// \brief LogViewModel::data
 /// \param index
 /// \param role
 /// \return
 ///
-QVariant LogViewItemModel::data(const QModelIndex& index, int role) const
+QVariant LogViewModel::data(const QModelIndex& index, int role) const
 {
     if(!index.isValid() ||
        index.row() < 0  ||
@@ -271,13 +211,15 @@ QVariant LogViewItemModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
         case Qt::DisplayRole:
-            return item.Text;
+        {
+            const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
+            return QString("[%1] %2 [%3]").arg(formatAddress(item.Msg->pointType(), item.Addr, false),
+                                               item.Msg->isRequest() ? "<<" : ">>",
+                                               item.Msg->toString(mode));
+        }
 
         case Qt::BackgroundRole:
-            return item.IsRequest ? QVariant() : QColor(0xDCDCDC);
-
-        case Qt::TextAlignmentRole:
-            return Qt::AlignVCenter;
+            return item.Msg->isRequest() ? QVariant() : QColor(0xDCDCDC);
 
         case Qt::UserRole:
             return QVariant::fromValue(item);
@@ -287,26 +229,37 @@ QVariant LogViewItemModel::data(const QModelIndex& index, int role) const
 }
 
 ///
-/// \brief LogViewItemProxyModel::LogViewItemProxyModel
+/// \brief LogViewModel::deleteItems
+///
+void LogViewModel::deleteItems()
+{
+    for(auto&& i : _items)
+            delete i.Msg;
+
+    _items.clear();
+}
+
+///
+/// \brief LogViewProxyModel::LogViewProxyModel
 /// \param parent
 ///
-LogViewItemProxyModel::LogViewItemProxyModel(QObject* parent)
+LogViewProxyModel::LogViewProxyModel(QObject* parent)
     : QSortFilterProxyModel(parent)
     ,_showValid(false)
 {
 }
 
 ///
-/// \brief LogViewItemProxyModel::filterAcceptsRow
+/// \brief LogViewProxyModel::filterAcceptsRow
 /// \param source_row
 /// \param source_parent
 /// \return
 ///
-bool LogViewItemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool LogViewProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     const auto index = sourceModel()->index(source_row, 0, source_parent);
-    const auto item = sourceModel()->data(index, Qt::UserRole).value<LogViewItem>();
-    return _showValid ? item.IsValid && !item.IsRequest : true;
+    const auto msg = sourceModel()->data(index, Qt::UserRole).value<const ModbusMessage*>();
+    return _showValid ? msg->isValid() && !msg->isRequest() && !msg->isException() : true;
 }
 
 ///
@@ -339,12 +292,18 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
     ui->comboBoxByteOrder->setCurrentByteOrder(order);
 
+    auto proxyLogModel = new LogViewProxyModel(this);
+    proxyLogModel->setSourceModel(new LogViewModel(this));
+    proxyLogModel->setShowValid(ui->checkBoxShowValid->isChecked());
+    ui->logView->setModel(proxyLogModel);
+
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
 
     connect(&_scanTimer, &QTimer::timeout, this, &DialogAddressScan::on_timeout);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogAddressScan::on_modbusReply);
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &DialogAddressScan::on_modbusRequest);
+    connect(proxyLogModel->sourceModel(), &LogViewModel::rowsInserted, ui->logView, &QListView::scrollToBottom);
 
     clearTableView();
 }
@@ -403,6 +362,7 @@ void DialogAddressScan::on_checkBoxHexView_toggled(bool on)
         return;
 
     _viewModel->setHexView(on);
+    ((LogViewProxyModel*)ui->logView->model())->setHexView(on);
 }
 
 ///
@@ -410,11 +370,8 @@ void DialogAddressScan::on_checkBoxHexView_toggled(bool on)
 /// \param on
 ///
 void DialogAddressScan::on_checkBoxShowValid_toggled(bool on)
-{
-    if(!_proxyLogModel)
-        return;
-
-    _proxyLogModel->setShowValid(on);
+{  
+    ((LogViewProxyModel*)ui->logView->model())->setShowValid(on);
 }
 
 ///
@@ -432,16 +389,13 @@ void DialogAddressScan::on_comboBoxByteOrder_byteOrderChanged(ByteOrder order)
 ///
 /// \brief DialogAddressScan::on_modbusRequest
 /// \param requestId
+/// \param deviceId
 /// \param request
 ///
-void DialogAddressScan::on_modbusRequest(int requestId, const QModbusRequest& request)
+void DialogAddressScan::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
 {
-    if(requestId != -1)
-    {
-        return;
-    }
-
-    updateLogView(request);
+    if(requestId == -1)
+        updateLogView(deviceId, request);
 }
 
 ///
@@ -585,12 +539,8 @@ void DialogAddressScan::clearTableView()
 ///
 void DialogAddressScan::clearLogView()
 {
-    _logItems.clear();
-    _logModel = QSharedPointer<LogViewItemModel>(new LogViewItemModel(_logItems, this));
-    _proxyLogModel = QSharedPointer<LogViewItemProxyModel>(new LogViewItemProxyModel(this));
-    _proxyLogModel->setSourceModel(_logModel.get());
-    _proxyLogModel->setShowValid(ui->checkBoxShowValid->isChecked());
-    ui->logView->setModel(_proxyLogModel.get());
+    auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
+    proxyLogModel->clear();
 }
 
 ///
@@ -645,36 +595,16 @@ void DialogAddressScan::updateTableView(int pointAddress, QVector<quint16> value
 
 ///
 /// \brief DialogAddressScan::updateLogView
+/// \param deviceId
 /// \param request
 ///
-void DialogAddressScan::updateLogView(const QModbusRequest& request)
+void DialogAddressScan::updateLogView(int deviceId, const QModbusRequest& request)
 {
-    const auto deviceId = ui->lineEditSlaveAddress->value<int>();
-    const auto pointType = ui->comboBoxPointType->currentPointType();
-
     quint16 pointAddress;
     request.decodeData(&pointAddress);
-    const auto address = formatAddress(pointType, pointAddress + 1);
 
-    QByteArray rawData;
-    rawData.push_back(deviceId);
-    rawData.push_back(request.functionCode() | ( request.isException() ? QModbusPdu::ExceptionByte : 0));
-    rawData.push_back(request.data());
-
-    QStringList textData;
-    for(auto&& c : rawData)
-        textData.append(QString("%1").arg(QString::number((uchar)c), 3, '0'));
-
-    LogViewItem item;
-    item.IsRequest = true;
-    item.IsValid = true;
-    item.PointAddress = pointAddress;
-    item.Text = QString("[%1] << [%2]").arg(address, textData.join(' '));
-
-    _logItems.push_back(item);
-    _logModel->update();
-
-    ui->logView->scrollTo(_proxyLogModel->index(_logItems.size() - 1, 0), QAbstractItemView::PositionAtBottom);
+    auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
+    proxyLogModel->append(pointAddress, ModbusMessage::create(request, QDateTime::currentDateTime(), deviceId, true));
 }
 
 ///
@@ -686,31 +616,12 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
     if(!reply)
         return;
 
-    const auto deviceId = ui->lineEditSlaveAddress->value<int>();
-    const auto pointType = ui->comboBoxPointType->currentPointType();
+    const auto deviceId = reply->serverAddress();
     const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + 1;
-    const auto address = formatAddress(pointType, pointAddress);
     const auto pdu = reply->rawResult();
 
-    QByteArray rawData;
-    rawData.push_back(deviceId);
-    rawData.push_back(pdu.functionCode() | ( pdu.isException() ? QModbusPdu::ExceptionByte : 0));
-    rawData.push_back(pdu.data());
-
-    QStringList textData;
-    for(auto&& c : rawData)
-        textData.append(QString("%1").arg(QString::number((uchar)c), 3, '0'));
-
-    LogViewItem item;
-    item.IsRequest = false;
-    item.IsValid = (reply->error() == QModbusDevice::NoError);
-    item.PointAddress = pointAddress;
-    item.Text = QString("[%1] >> [%2]").arg(address, textData.join(' '));
-
-    _logItems.push_back(item);
-    _logModel->update();
-
-    ui->logView->scrollTo(_proxyLogModel->index(_logItems.size() - 1, 0), QAbstractItemView::PositionAtBottom);
+    auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
+    proxyLogModel->append(pointAddress, ModbusMessage::create(pdu, QDateTime::currentDateTime(), deviceId, false));
 }
 
 ///

@@ -347,7 +347,7 @@ void ModbusMessageWidget::update()
         break;
 
         default:
-            addItem(tr("<b>Data:</b> %1").arg(_msg->data(_dataDisplayMode)));
+            addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, _msg->rawData())));
         break;
     }
 }

@@ -65,11 +65,11 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
-    void append(quint16 addr, const ModbusMessage* msg) {
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
         if(msg != nullptr)
         {
             beginInsertRows(QModelIndex(), rowCount(), rowCount());
-            _items.push_back({ addr, msg });
+            _items.push_back({ addr, type, msg });
             endInsertRows();
         }
     }
@@ -92,6 +92,7 @@ private:
 private:
     struct LogViewItem{
         quint16 Addr;
+        QModbusDataUnit::RegisterType Type;
         const ModbusMessage* Msg;
     };
 
@@ -110,16 +111,19 @@ class LogViewProxyModel : public QSortFilterProxyModel
 public:
     explicit LogViewProxyModel(QObject* parent = nullptr);
 
-    void append(quint16 addr, const ModbusMessage* msg) {
-        ((LogViewModel*)sourceModel())->append(addr, msg);
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
+        if(sourceModel())
+            ((LogViewModel*)sourceModel())->append(addr, type, msg);
     }
 
     void clear() {
-        ((LogViewModel*)sourceModel())->clear();
+        if(sourceModel())
+            ((LogViewModel*)sourceModel())->clear();
     }
 
     void setHexView(bool on) {
-        ((LogViewModel*)sourceModel())->setHexView(on);
+        if(sourceModel())
+            ((LogViewModel*)sourceModel())->setHexView(on);
     }
 
     void setShowValid(bool on) {

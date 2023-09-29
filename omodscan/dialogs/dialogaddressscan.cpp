@@ -213,7 +213,7 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
         case Qt::DisplayRole:
         {
             const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
-            return QString("[%1] %2 [%3]").arg(formatAddress(item.Msg->pointType(), item.Addr, false),
+            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, item.Addr, false),
                                                item.Msg->isRequest() ? "<<" : ">>",
                                                item.Msg->toString(mode));
         }
@@ -222,7 +222,7 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
             return item.Msg->isRequest() ? QVariant() : QColor(0xDCDCDC);
 
         case Qt::UserRole:
-            return QVariant::fromValue(item);
+            return QVariant::fromValue(item.Msg);
     }
 
     return QVariant();
@@ -295,6 +295,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     auto proxyLogModel = new LogViewProxyModel(this);
     proxyLogModel->setSourceModel(new LogViewModel(this));
     proxyLogModel->setShowValid(ui->checkBoxShowValid->isChecked());
+    proxyLogModel->setHexView(ui->checkBoxHexView->isChecked());
     ui->logView->setModel(proxyLogModel);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
@@ -604,7 +605,8 @@ void DialogAddressScan::updateLogView(int deviceId, const QModbusRequest& reques
     request.decodeData(&pointAddress);
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-    proxyLogModel->append(pointAddress, ModbusMessage::create(request, QDateTime::currentDateTime(), deviceId, true));
+    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(),
+                          ModbusMessage::create(request, QDateTime::currentDateTime(), deviceId, true));
 }
 
 ///
@@ -621,7 +623,8 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
     const auto pdu = reply->rawResult();
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-    proxyLogModel->append(pointAddress, ModbusMessage::create(pdu, QDateTime::currentDateTime(), deviceId, false));
+    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(),
+                          ModbusMessage::create(pdu, QDateTime::currentDateTime(), deviceId, false));
 }
 
 ///

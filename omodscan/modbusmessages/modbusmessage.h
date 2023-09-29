@@ -86,27 +86,6 @@ public:
     }
 
     ///
-    /// \brief pointType
-    /// \return
-    ///
-    QModbusDataUnit::RegisterType pointType() const {
-        switch(_funcCode)
-        {
-            case QModbusPdu::ReadCoils:
-                return QModbusDataUnit::Coils;
-            case QModbusPdu::ReadDiscreteInputs:
-                return QModbusDataUnit::DiscreteInputs;
-            case QModbusPdu::ReadHoldingRegisters:
-                return QModbusDataUnit::HoldingRegisters;
-            case QModbusPdu::ReadInputRegisters:
-                return QModbusDataUnit::InputRegisters;
-
-            default:
-                return QModbusDataUnit::Invalid;
-        }
-    }
-
-    ///
     /// \brief isException
     /// \return
     ///

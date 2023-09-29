@@ -15,6 +15,7 @@ struct DisplayDefinition
     quint16 PointAddress = 1;
     QModbusDataUnit::RegisterType PointType = QModbusDataUnit::Coils;
     quint16 Length = 50;
+    quint16 LogViewLimit = 30;
 
     void normalize()
     {
@@ -23,6 +24,7 @@ struct DisplayDefinition
         PointAddress = qMax<quint16>(ModbusLimits::addressRange().from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
         Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
+        LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
     }
 };
 Q_DECLARE_METATYPE(DisplayDefinition)
@@ -34,6 +36,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/PointAddress",  dd.PointAddress);
     out.setValue("DisplayDefinition/PointType",     dd.PointType);
     out.setValue("DisplayDefinition/Length",        dd.Length);
+    out.setValue("DisplayDefinition/LogViewLimit",  dd.LogViewLimit);
 
     return out;
 }
@@ -51,6 +54,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.PointAddress = in.value("DisplayDefinition/PointAddress", 1).toUInt();
     dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType", 1).toUInt();
     dd.Length = in.value("DisplayDefinition/Length", 50).toUInt();
+    dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
 
     dd.normalize();
     return in;

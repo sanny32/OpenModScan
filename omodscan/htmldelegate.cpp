@@ -84,7 +84,9 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
     doc.setHtml(opt.text);
     doc.setDocumentMargin(0);
     doc.setDefaultFont(opt.font);
-    doc.setTextWidth(opt.rect.width());
+
+    if(opt.features & QStyleOptionViewItem::WrapText)
+        doc.setTextWidth(opt.rect.width());
 
     return QSize(doc.idealWidth(), doc.size().height());
 }

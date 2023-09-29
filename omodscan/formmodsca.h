@@ -98,6 +98,8 @@ protected:
 
 private slots:
     void on_timeout();
+    void on_modbusConnected(const ConnectionDetails& cd);
+    void on_modbusDisconnected(const ConnectionDetails& cd);
     void on_modbusReply(QModbusReply* reply);
     void on_modbusRequest(int requestId, const QModbusRequest& request);
     void on_lineEditAddress_valueChanged(const QVariant&);
@@ -112,6 +114,7 @@ private slots:
     void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, QVariant value);
 
 private:
+    void beginUpdate();
     bool isValidReply(const QModbusReply* reply);
 
 private:
@@ -234,6 +237,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.PointType;
     out << dd.PointAddress;
     out << dd.Length;
+    out << dd.LogViewLimit;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -251,6 +255,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
 inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
 {
     if(!frm) return in;
+    const auto ver = frm->property("Version").value<QVersionNumber>();
 
     bool isMaximized;
     in >> isMaximized;
@@ -285,8 +290,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     in >> dd.PointType;
     in >> dd.PointAddress;
     in >> dd.Length;
-
-    const auto ver = frm->property("Version").value<QVersionNumber>();
+    if(ver >= QVersionNumber(1, 4))
+    {
+        in >> dd.LogViewLimit;
+    }
 
     ByteOrder byteOrder = ByteOrder::LittleEndian;
     ModbusSimulationMap simulationMap;

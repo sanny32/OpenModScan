@@ -19,12 +19,12 @@ public:
         return _code & QModbusPdu::ExceptionByte;
     }
 
-    operator int()
+    operator int() const
     {
         return _code;
     }
 
-    operator QString()
+    operator QString() const
     {
         QString name;
         switch(_code & ~QModbusPdu::ExceptionByte)

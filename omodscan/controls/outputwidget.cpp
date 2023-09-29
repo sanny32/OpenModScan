@@ -359,6 +359,8 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
     _descriptionMap.insert(descriptionMap());
     _displayDefinition = dd;
 
+    setLogViewLimit(dd.LogViewLimit);
+
     _listModel->clear();
 
     for(auto&& key : simulations.keys())
@@ -497,6 +499,24 @@ void OutputWidget::setFont(const QFont& font)
     ui->labelStatus->setFont(font);
     ui->logView->setFont(font);
     ui->modbusMsg->setFont(font);
+}
+
+///
+/// \brief OutputWidget::logViewLimit
+/// \return
+///
+int OutputWidget::logViewLimit() const
+{
+    return ui->logView->rowLimit();
+}
+
+///
+/// \brief OutputWidget::setLogViewLimit
+/// \param l
+///
+void OutputWidget::setLogViewLimit(int l)
+{
+    ui->logView->setRowLimit(l);
 }
 
 ///

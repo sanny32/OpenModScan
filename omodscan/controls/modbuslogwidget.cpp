@@ -47,10 +47,6 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
             return QString("<b>%1</b> %2 %3").arg(item->timestamp().toString(Qt::ISODateWithMs),
                                                   (item->isRequest()? "&rarr;" : "&larr;"),
                                                   item->toString(_parentWidget->dataDisplayMode()));
-            /*return QString("%1 %2 %3").arg(item->timestamp().toString(Qt::ISODateWithMs),
-                                              (item->isRequest()? ">>" : "<<"),
-                                              item->toString(_parentWidget->dataDisplayMode()));*/
-
 
         case Qt::UserRole:
             return QVariant::fromValue(item);
@@ -77,7 +73,7 @@ void ModbusLogModel::append(const ModbusMessage* data)
 {
     if(data == nullptr) return;
 
-    if(rowCount() >= _rowLimit)
+    while(rowCount() >= _rowLimit)
     {
         delete _items.first();
         _items.removeFirst();
@@ -129,7 +125,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
 
     connect(model(), &ModbusLogModel::rowsInserted,
             this, [&]{
-        scrollToBottom();
+        //scrollToBottom();
         setCurrentIndex(QModelIndex());
     });
 }

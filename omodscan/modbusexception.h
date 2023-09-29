@@ -14,12 +14,12 @@ public:
     {
     }
 
-    operator int()
+    operator int() const
     {
         return _code;
     }
 
-    operator QString()
+    operator QString() const
     {
         QString desc;
         switch (_code)

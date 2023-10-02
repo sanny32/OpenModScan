@@ -85,6 +85,6 @@ const ModbusMessage* ModbusMessage::create(const QModbusPdu& pdu, const QDateTim
             else return new ReadFifoQueueResponse(pdu, timestamp, deviceId);
 
         default:
-            return nullptr;
+            return new ModbusMessage(pdu, timestamp, deviceId, request);
     }
 }

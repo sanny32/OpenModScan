@@ -689,7 +689,12 @@ void MainWindow::on_actionPresetRegs_triggered()
 ///
 void MainWindow::on_actionMaskWrite_triggered()
 {
-    ModbusMaskWriteParams params = { 1, 1, 0xFFFF, 0};
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    ModbusMaskWriteParams params = { dd.DeviceId, dd.PointAddress, 0xFFFF, 0};
+
     DialogMaskWriteRegiter dlg(params, this);
     if(dlg.exec() == QDialog::Accepted)
     {

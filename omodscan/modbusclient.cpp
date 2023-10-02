@@ -629,6 +629,10 @@ void ModbusClient::on_writeReply()
         break;
 
         case QModbusRequest::MaskWriteRegister:
+        #if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+            if(reply->error() == QModbusDevice::InvalidResponseError)
+            break;
+        #endif
             onError(tr("Mask Register Write Failure"), requestId);
         break;
 

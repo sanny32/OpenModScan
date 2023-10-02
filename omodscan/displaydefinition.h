@@ -19,7 +19,7 @@ struct DisplayDefinition
 
     void normalize()
     {
-        ScanRate = qBound(20U, ScanRate, 10000U);
+        ScanRate = qBound(20U, ScanRate, 3600000U);
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
         PointAddress = qMax<quint16>(ModbusLimits::addressRange().from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);

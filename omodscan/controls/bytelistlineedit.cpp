@@ -50,7 +50,7 @@ void ByteListLineEdit::setValue(const QByteArray& value)
             QStringList text;
             for(auto&& v : value)
                 text.push_back(QString::number((quint8)v));
-            QLineEdit::setText(text.join(", "));
+            QLineEdit::setText(text.join(' '));
             QLineEdit::setCursorPosition(0);
         }
         break;
@@ -60,7 +60,7 @@ void ByteListLineEdit::setValue(const QByteArray& value)
             QStringList text;
             for(auto&& v : value)
                 text.push_back(QString("%1").arg((quint8)v, 2, 16, QLatin1Char('0')));
-            QLineEdit::setText(text.join(", ").toUpper());
+            QLineEdit::setText(text.join(' ').toUpper());
             QLineEdit::setCursorPosition(0);
         }
         break;
@@ -94,11 +94,11 @@ void ByteListLineEdit::setInputMode(InputMode mode)
     switch(mode)
     {
         case DecMode:
-            setValidator(new QRegularExpressionValidator(QRegularExpression("(?:[0-9]{1,2}[,]{0,1})*"), this));
+            setValidator(new QRegularExpressionValidator(QRegularExpression("(?:[0-9]{1,2}[\\s]{0,1})*"), this));
         break;
 
         case HexMode:
-            setValidator(new QRegularExpressionValidator(QRegularExpression("(?:[0-9a-fA-F]{1,2}[,]{0,1})*"), this));
+            setValidator(new QRegularExpressionValidator(QRegularExpression("(?:[0-9a-fA-F]{1,2}[\\s]{0,1})*"), this));
         break;
     }
     setValue(_value);
@@ -143,7 +143,7 @@ void ByteListLineEdit::on_textChanged(const QString& text)
     {
         case DecMode:
         {
-            for(auto&& s : text.split(','))
+            for(auto&& s : text.split(' '))
             {
                 bool ok;
                 const quint8 v = s.trimmed().toUInt(&ok);
@@ -154,7 +154,7 @@ void ByteListLineEdit::on_textChanged(const QString& text)
 
         case HexMode:
         {
-            for(auto&& s : text.split(','))
+            for(auto&& s : text.split(' '))
             {
                 bool ok;
                 const quint8 v = s.trimmed().toUInt(&ok, 16);
@@ -181,7 +181,7 @@ void ByteListLineEdit::updateValue()
     {
         case DecMode:
         {
-            for(auto&& s : text().split(','))
+            for(auto&& s : text().split(' '))
             {
                 bool ok;
                 const quint8 v = s.trimmed().toUInt(&ok);
@@ -195,7 +195,7 @@ void ByteListLineEdit::updateValue()
 
         case HexMode:
         {
-            for(auto&& s : text().split(','))
+            for(auto&& s : text().split(' '))
             {
                 bool ok;
                 const quint8 v = s.trimmed().toUInt(&ok, 16);

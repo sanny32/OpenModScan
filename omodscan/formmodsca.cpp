@@ -546,7 +546,8 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
     if(!reply) return;
 
     const auto requestId = reply->property("RequestId").toInt();
-    if(_formId != requestId && requestId != 0)
+    if((_formId != requestId && requestId != 0) ||
+        reply->serverAddress() != ui->lineEditDeviceId->value<int>())
     {
         return;
     }
@@ -623,7 +624,8 @@ void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 ///
 void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
 {
-    if(requestId != _formId && requestId != 0)
+    if((requestId != _formId && requestId != 0) ||
+        deviceId != ui->lineEditDeviceId->value<int>())
     {
         return;
     }

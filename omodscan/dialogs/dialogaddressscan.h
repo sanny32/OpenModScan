@@ -66,12 +66,10 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 
     void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
-        if(msg != nullptr)
-        {
-            beginInsertRows(QModelIndex(), rowCount(), rowCount());
-            _items.push_back({ addr, type, msg });
-            endInsertRows();
-        }
+        if(msg == nullptr) return;
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        _items.push_back({ addr, type, msg });
+        endInsertRows();
     }
 
     void clear() {

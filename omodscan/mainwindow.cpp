@@ -634,7 +634,7 @@ void MainWindow::on_actionForceCoils_triggered()
     params.Node = presetParams.SlaveAddress;
     params.Address = presetParams.PointAddress;
 
-    if(dd.PointType == QModbusDataUnit::Coils)
+    if(dd.PointType == QModbusDataUnit::Coils && dd.DeviceId == params.Node)
     {
         params.Value = QVariant::fromValue(frm->data());
     }
@@ -668,7 +668,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.DisplayMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
 
-    if(dd.PointType == QModbusDataUnit::HoldingRegisters)
+    if(dd.PointType == QModbusDataUnit::HoldingRegisters && dd.DeviceId == params.Node)
     {
         params.Value = QVariant::fromValue(frm->data());
     }

@@ -4,6 +4,9 @@
 #include <QValidator>
 #include <QObject>
 
+///
+/// \brief The QUIntValidator class
+///
 class QUIntValidator : public QValidator
 {
     Q_OBJECT

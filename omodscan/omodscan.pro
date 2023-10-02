@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.5.2
+VERSION = 1.6.0
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -21,6 +21,7 @@ win32:RC_ICONS += res/omodscan.ico
 
 INCLUDEPATH += controls \
                dialogs \
+               modbusmessages \
 
 SOURCES += \
     controls/booleancombobox.cpp \
@@ -35,6 +36,8 @@ SOURCES += \
     controls/functioncodecombobox.cpp \
     controls/ipaddresslineedit.cpp \
     controls/mainstatusbar.cpp \
+    controls/modbuslogwidget.cpp \
+    controls/modbusmessagewidget.cpp \
     controls/numericlineedit.cpp \
     controls/paritytypecombobox.cpp \
     controls/simulationmodecombobox.cpp \
@@ -63,10 +66,12 @@ SOURCES += \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
     formmodsca.cpp \
+    htmldelegate.cpp \
     main.cpp \
     mainwindow.cpp \
     modbusclient.cpp \
     modbusdataunit.cpp \
+    modbusmessages/modbusmessage.cpp \
     modbusrtuscanner.cpp \
     modbusscanner.cpp \
     modbustcpscanner.cpp \
@@ -91,6 +96,8 @@ HEADERS += \
     controls/functioncodecombobox.h \
     controls/ipaddresslineedit.h \
     controls/mainstatusbar.h \
+    controls/modbuslogwidget.h \
+    controls/modbusmessagewidget.h \
     controls/numericlineedit.h \
     controls/paritytypecombobox.h \
     controls/simulationmodecombobox.h \
@@ -120,18 +127,41 @@ HEADERS += \
     dialogs/dialogwriteholdingregisterbits.h \
     displaydefinition.h \
     enums.h \
-    floatutils.h \
+    formatutils.h \
     formmodsca.h \
+    htmldelegate.h \
     mainwindow.h \
     modbusclient.h \
     modbusdataunit.h \
     modbusexception.h \
+    modbusfunction.h \
+    modbusmessages/diagnostics.h \
+    modbusmessages/getcommeventcounter.h \
+    modbusmessages/getcommeventlog.h \
+    modbusmessages/maskwriteregister.h \
+    modbusmessages/modbusmessage.h \
+    modbusmessages/modbusmessages.h \
+    modbusmessages/readcoils.h \
     modbuslimits.h \
+    modbusmessages/readdiscreteinputs.h \
+    modbusmessages/readexceptionstatus.h \
+    modbusmessages/readfifoqueue.h \
+    modbusmessages/readfilerecord.h \
+    modbusmessages/readholdingregisters.h \
+    modbusmessages/readinputregisters.h \
+    modbusmessages/readwritemultipleregisters.h \
+    modbusmessages/reportserverid.h \
+    modbusmessages/writefilerecord.h \
+    modbusmessages/writemultiplecoils.h \
+    modbusmessages/writemultipleregisters.h \
+    modbusmessages/writesinglecoil.h \
+    modbusmessages/writesingleregister.h \
     modbusrtuscanner.h \
     modbusscanner.h \
     modbussimulationparams.h \
     modbustcpscanner.h \
     modbuswriteparams.h \
+    numericutils.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
     qrange.h \

@@ -1,6 +1,7 @@
 #include <QtMath>
 #include <QRandomGenerator>
-#include "floatutils.h"
+#include "formatutils.h"
+#include "numericutils.h"
 #include "numericlineedit.h"
 #include "dialogforcemultipleregisters.h"
 #include "ui_dialogforcemultipleregisters.h"
@@ -21,8 +22,9 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: %1")).arg(params.Address, 5, 10, QLatin1Char('0')));
-    ui->labelLength->setText(QString(tr("Length: %1")).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, _hexView)));
+    ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
@@ -270,8 +272,8 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::SwappedUnsignedLI:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                    numEdit = new NumericLineEdit(NumericLineEdit::UnsignedMode, ui->tableWidget);
-                    numEdit->setValue(makeULong(_data[idx + 1], _data[idx], _writeParams.Order));
+                numEdit = new NumericLineEdit(NumericLineEdit::UnsignedMode, ui->tableWidget);
+                numEdit->setValue(makeULong(_data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
 
@@ -313,7 +315,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         numEdit->setFrame(false);
         numEdit->setMaximumWidth(80);
         numEdit->setAlignment(Qt::AlignCenter);
-        numEdit->setToolTip(QString("%1").arg(_writeParams.Address + idx, 5, 10, QLatin1Char('0')));
+        numEdit->setToolTip(formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + idx, _hexView));
     }
 
     return numEdit;
@@ -354,8 +356,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 5, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 5, 10, QLatin1Char('0'));
+        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _hexView);
+        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexView);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)

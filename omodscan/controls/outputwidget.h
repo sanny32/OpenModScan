@@ -3,10 +3,12 @@
 
 #include <QFile>
 #include <QWidget>
+#include <QDateTime>
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
-#include <datasimulator.h>
+#include "modbusmessage.h"
+#include "datasimulator.h"
 #include "displaydefinition.h"
 
 namespace Ui {
@@ -103,6 +105,9 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
+    int logViewLimit() const;
+    void setLogViewLimit(int l);
+
     void setStatus(const QString& status);
 
     void paint(const QRect& rc, QPainter& painter);
@@ -129,7 +134,8 @@ private slots:
 private:
     void setUninitializedStatus();
     void captureString(const QString& s);
-    void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
+    void showModbusMessage(const QModelIndex& index);
+    void updateLogView(bool request, int deviceId, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;

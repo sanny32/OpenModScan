@@ -1,5 +1,5 @@
 #include <QModbusTcpClient>
-#include "floatutils.h"
+#include "numericutils.h"
 #include "modbusexception.h"
 #include "modbusclient.h"
 
@@ -164,7 +164,7 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
     const auto request = createReadRequest(dataUnit);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, server, request);
     if(auto reply = _modbusClient->sendReadRequest(dataUnit, server))
     {
         reply->setProperty("RequestId", requestId);
@@ -467,7 +467,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, params.Node, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
@@ -499,7 +499,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     }
 
     QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(params.Address - 1), params.AndMask, params.OrMask);
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, params.Node, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
@@ -607,7 +607,10 @@ void ModbusClient::on_writeReply()
     auto onError = [this, reply, raw](const QString& errorDesc, int requestId)
     {
         if (reply->error() == QModbusDevice::ProtocolError)
-            emit modbusError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())), requestId);
+        {
+            ModbusException ex(raw.exceptionCode());
+            emit modbusError(QString("%1. %2 (0x%3)").arg(errorDesc, ex, QString::number(ex, 16)), requestId);
+        }
         else if(reply->error() != QModbusDevice::NoError)
             emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);
     };

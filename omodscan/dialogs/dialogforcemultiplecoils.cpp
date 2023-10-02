@@ -1,5 +1,6 @@
 #include <QtMath>
 #include <QLineEdit>
+#include "formatutils.h"
 #include "dialogforcemultiplecoils.h"
 #include "ui_dialogforcemultiplecoils.h"
 
@@ -18,8 +19,9 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, in
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: %1")).arg(params.Address, 5, 10, QLatin1Char('0')));
-    ui->labelLength->setText(QString(tr("Length: %1")).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::Coils, params.Address, false)));
+    ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
@@ -107,8 +109,8 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 5, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 5, 10, QLatin1Char('0'));
+        const auto addressFrom = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + i * columns, false);
+        const auto addressTo = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), false);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
@@ -119,7 +121,7 @@ void DialogForceMultipleCoils::updateTableWidget()
                 auto item = new QTableWidgetItem(QString::number(_data[idx]));
                 item->setData(Qt::UserRole, idx);
                 item->setTextAlignment(Qt::AlignCenter);
-                item->setToolTip(QString("%1").arg(_writeParams.Address + idx, 5, 10, QLatin1Char('0')));
+                item->setToolTip(formatAddress(QModbusDataUnit::Coils,_writeParams.Address + idx, false));
                 ui->tableWidget->setItem(i, j, item);
             }
             else

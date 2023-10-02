@@ -7,14 +7,10 @@
 
 ///
 /// \brief TableViewItemModel::TableViewItemModel
-/// \param data
-/// \param columns
 /// \param parent
 ///
-TableViewItemModel::TableViewItemModel(const ModbusDataUnit& data, int columns, QObject* parent)
+TableViewItemModel::TableViewItemModel(QObject* parent)
     : QAbstractTableModel(parent)
-    ,_columns(columns)
-    ,_data(data)
 {
 }
 
@@ -280,6 +276,13 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
                    Qt::WindowCloseButtonHint |
                    Qt::WindowMaximizeButtonHint);
 
+    auto viewModel = new TableViewItemModel(this);
+    ui->tableView->setModel(viewModel);
+
+    auto proxyLogModel = new LogViewProxyModel(this);
+    proxyLogModel->setSourceModel(new LogViewModel(this));
+    ui->logView->setModel(proxyLogModel);
+
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditStartAddress->setPaddingZeroes(true);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange());
@@ -291,12 +294,6 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->tabWidget->setCurrentIndex(0);
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
     ui->comboBoxByteOrder->setCurrentByteOrder(order);
-
-    auto proxyLogModel = new LogViewProxyModel(this);
-    proxyLogModel->setSourceModel(new LogViewModel(this));
-    proxyLogModel->setShowValid(ui->checkBoxShowValid->isChecked());
-    proxyLogModel->setHexView(ui->checkBoxHexView->isChecked());
-    ui->logView->setModel(proxyLogModel);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
@@ -358,11 +355,8 @@ void DialogAddressScan::on_timeout()
 /// \param on
 ///
 void DialogAddressScan::on_checkBoxHexView_toggled(bool on)
-{
-    if(!_viewModel)
-        return;
-
-    _viewModel->setHexView(on);
+{  
+    ((TableViewItemModel*)ui->tableView->model())->setHexView(on);
     ((LogViewProxyModel*)ui->logView->model())->setHexView(on);
 }
 
@@ -381,10 +375,7 @@ void DialogAddressScan::on_checkBoxShowValid_toggled(bool on)
 ///
 void DialogAddressScan::on_comboBoxByteOrder_byteOrderChanged(ByteOrder order)
 {
-    if(!_viewModel)
-        return;
-
-    _viewModel->setByteOrder(order);
+    ((TableViewItemModel*)ui->tableView->model())->setByteOrder(order);
 }
 
 ///
@@ -524,10 +515,7 @@ void DialogAddressScan::clearTableView()
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
 
     ModbusDataUnit data(pointType, pointAddress, length);
-    _viewModel = QSharedPointer<TableViewItemModel>(new TableViewItemModel(data, 10, this));
-    _viewModel->setHexView(ui->checkBoxHexView->isChecked());
-    _viewModel->setByteOrder(ui->comboBoxByteOrder->currentByteOrder());
-    ui->tableView->setModel(_viewModel.get());
+    ((TableViewItemModel*)ui->tableView->model())->reset(data);
 
     ui->tableView->resizeColumnsToContents();
     ui->tableView->horizontalHeader()->setMinimumSectionSize(80);
@@ -579,15 +567,15 @@ void DialogAddressScan::updateProgress()
 ///
 void DialogAddressScan::updateTableView(int pointAddress, QVector<quint16> values)
 {
-    if(!_viewModel) return;
-    for(int i = 0; i < _viewModel->rowCount(); i++)
+    auto model = ui->tableView->model();
+    for(int i = 0; i < model->rowCount(); i++)
     {
-        for(int j = 0; j < _viewModel->columnCount(); j++)
+        for(int j = 0; j < model->columnCount(); j++)
         {
-            const auto index = _viewModel->index(i, j);
-            if(_viewModel->data(index, Qt::UserRole).toInt() == pointAddress)
+            const auto index = model->index(i, j);
+            if(model->data(index, Qt::UserRole).toInt() == pointAddress)
             {
-                _viewModel->setData(index, QVariant::fromValue(values), Qt::DisplayRole);
+                model->setData(index, QVariant::fromValue(values), Qt::DisplayRole);
                 return;
             }
         }
@@ -633,7 +621,7 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
 ///
 void DialogAddressScan::exportPdf(const QString& filename)
 {
-    PdfExporter exporter(_viewModel.get(),
+    PdfExporter exporter(ui->tableView->model(),
                          ui->lineEditStartAddress->text(),
                          ui->lineEditLength->text(),
                          ui->lineEditSlaveAddress->text(),
@@ -650,7 +638,7 @@ void DialogAddressScan::exportPdf(const QString& filename)
 ///
 void DialogAddressScan::exportCsv(const QString& filename)
 {
-    CsvExporter exporter(_viewModel.get(),
+    CsvExporter exporter(ui->tableView->model(),
                          ui->lineEditStartAddress->text(),
                          ui->lineEditLength->text(),
                          ui->lineEditSlaveAddress->text(),
@@ -670,7 +658,7 @@ void DialogAddressScan::exportCsv(const QString& filename)
 /// \param pointType
 /// \param parent
 ///
-PdfExporter::PdfExporter(QAbstractTableModel* model,
+PdfExporter::PdfExporter(QAbstractItemModel* model,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
@@ -906,7 +894,7 @@ void PdfExporter::paintVLine(int top, int bottom, QPainter& painter)
 /// \param regsOnQuery
 /// \param parent
 ///
-CsvExporter::CsvExporter(QAbstractTableModel* model,
+CsvExporter::CsvExporter(QAbstractItemModel* model,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,

@@ -23,7 +23,7 @@ class TableViewItemModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit TableViewItemModel(const ModbusDataUnit& data, int columns, QObject* parent = nullptr);
+    explicit TableViewItemModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -31,6 +31,13 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+    void reset(const ModbusDataUnit& data, int columns = 10){
+        beginResetModel();
+        _columns = columns;
+        _data = data;
+        endResetModel();
+    }
 
     void setHexView(bool on){
         beginResetModel();
@@ -45,7 +52,7 @@ public:
     }
 
 private:
-    int _columns;
+    int _columns = 10;
     ModbusDataUnit _data;
     bool _hexView = false;
     ByteOrder _byteOrder = ByteOrder::LittleEndian;
@@ -145,7 +152,7 @@ class PdfExporter : public QObject
     Q_OBJECT
 
 public:
-    explicit PdfExporter(QAbstractTableModel* model,
+    explicit PdfExporter(QAbstractItemModel* model,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
@@ -171,7 +178,7 @@ private:
     const int _cy = 4;
     const int _cx = 10;
     QRect _pageRect;
-    QAbstractTableModel* _model;
+    QAbstractItemModel* _model;
     const QString _startAddress;
     const QString _length;
     const QString _deviceId;
@@ -188,7 +195,7 @@ class CsvExporter: public QObject
     Q_OBJECT
 
 public:
-    explicit CsvExporter(QAbstractTableModel* model,
+    explicit CsvExporter(QAbstractItemModel* model,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
@@ -198,7 +205,7 @@ public:
     void exportCsv(const QString& filename);
 
 private:
-    QAbstractTableModel* _model;
+    QAbstractItemModel* _model;
     const QString _startAddress;
     const QString _length;
     const QString _deviceId;
@@ -261,7 +268,6 @@ private:
     quint64 _scanTime = 0;
     QTimer _scanTimer;
     ModbusClient& _modbusClient;
-    QSharedPointer<TableViewItemModel> _viewModel;
 };
 
 #endif // DIALOGADDRESSSCAN_H

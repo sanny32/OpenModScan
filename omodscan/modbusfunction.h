@@ -59,6 +59,7 @@ public:
 
             case QModbusPdu::Diagnostics:
                 name = "DIAGNOSTICS";
+                break;
 
             case QModbusPdu::GetCommEventCounter:
                 name = "GET COMM EVENT CNT";

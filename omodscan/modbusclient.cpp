@@ -601,9 +601,20 @@ void ModbusClient::on_writeReply()
     auto reply = qobject_cast<QModbusReply*>(sender());
     if (!reply) return;
 
+    const auto raw  = reply->rawResult();
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+    if(raw.functionCode() == QModbusRequest::MaskWriteRegister &&
+       reply->error() == QModbusDevice::InvalidResponseError)
+    {
+        reply->blockSignals(true);
+        reply->setError(QModbusDevice::NoError, QString());
+        reply->blockSignals(false);
+    }
+#endif
+
     emit modbusReply(reply);
 
-    const auto raw  = reply->rawResult();
     auto onError = [this, reply, raw](const QString& errorDesc, int requestId)
     {
         if (reply->error() == QModbusDevice::ProtocolError)
@@ -629,10 +640,6 @@ void ModbusClient::on_writeReply()
         break;
 
         case QModbusRequest::MaskWriteRegister:
-        #if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
-            if(reply->error() == QModbusDevice::InvalidResponseError)
-            break;
-        #endif
             onError(tr("Mask Register Write Failure"), requestId);
         break;
 

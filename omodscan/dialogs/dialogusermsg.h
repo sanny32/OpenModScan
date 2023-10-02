@@ -15,7 +15,7 @@ class DialogUserMsg : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogUserMsg(quint8 slaveAddres, DataDisplayMode mode, ModbusClient& client, QWidget *parent = nullptr);
+    explicit DialogUserMsg(quint8 slaveAddres, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent = nullptr);
     ~DialogUserMsg();
 
     void accept() override;

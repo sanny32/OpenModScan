@@ -713,7 +713,31 @@ void MainWindow::on_actionUserMsg_triggered()
     const auto dd = frm->displayDefinition();
     const auto mode = frm->dataDisplayMode();
 
-    DialogUserMsg dlg(dd.DeviceId, mode, _modbusClient, this);
+    QModbusPdu::FunctionCode func;
+    switch(dd.PointType)
+    {
+        case QModbusDataUnit::Coils:
+            func = QModbusPdu::ReadCoils;
+        break;
+
+        case QModbusDataUnit::DiscreteInputs:
+            func = QModbusPdu::ReadDiscreteInputs;
+        break;
+
+        case QModbusDataUnit::HoldingRegisters:
+            func = QModbusPdu::ReadHoldingRegisters;
+        break;
+
+        case QModbusDataUnit::InputRegisters:
+            func = QModbusPdu::ReadInputRegisters;
+        break;
+
+        default:
+            func = QModbusPdu::Invalid;
+        break;
+    }
+
+    DialogUserMsg dlg(dd.DeviceId, func, mode, _modbusClient, this);
     dlg.exec();
 }
 

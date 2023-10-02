@@ -129,6 +129,7 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
         return;
     }
 
+    emit modbusRequest(requestId, server, request);
     if(auto reply = _modbusClient->sendRawRequest(request, server))
     {
         reply->setProperty("RequestId", requestId);

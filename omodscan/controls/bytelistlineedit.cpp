@@ -50,7 +50,7 @@ void ByteListLineEdit::setValue(const QByteArray& value)
             QStringList text;
             for(auto&& v : value)
                 text.push_back(QString::number((quint8)v));
-            QLineEdit::setText(text.join(','));
+            QLineEdit::setText(text.join(", "));
             QLineEdit::setCursorPosition(0);
         }
         break;
@@ -60,7 +60,7 @@ void ByteListLineEdit::setValue(const QByteArray& value)
             QStringList text;
             for(auto&& v : value)
                 text.push_back(QString("%1").arg((quint8)v, 2, 16, QLatin1Char('0')));
-            QLineEdit::setText(text.join(',').toUpper());
+            QLineEdit::setText(text.join(", ").toUpper());
             QLineEdit::setCursorPosition(0);
         }
         break;
@@ -146,7 +146,7 @@ void ByteListLineEdit::on_textChanged(const QString& text)
             for(auto&& s : text.split(','))
             {
                 bool ok;
-                const quint8 v = s.toUInt(&ok);
+                const quint8 v = s.trimmed().toUInt(&ok);
                 if(ok) value.push_back(v);
             }
         }
@@ -157,7 +157,7 @@ void ByteListLineEdit::on_textChanged(const QString& text)
             for(auto&& s : text.split(','))
             {
                 bool ok;
-                const quint8 v = s.toUInt(&ok, 16);
+                const quint8 v = s.trimmed().toUInt(&ok, 16);
                 if(ok) value.push_back(v);
             }
         }
@@ -184,7 +184,7 @@ void ByteListLineEdit::updateValue()
             for(auto&& s : text().split(','))
             {
                 bool ok;
-                const quint8 v = s.toUInt(&ok);
+                const quint8 v = s.trimmed().toUInt(&ok);
                 if(ok) value.push_back(v);
             }
 
@@ -198,7 +198,7 @@ void ByteListLineEdit::updateValue()
             for(auto&& s : text().split(','))
             {
                 bool ok;
-                const quint8 v = s.toUInt(&ok, 16);
+                const quint8 v = s.trimmed().toUInt(&ok, 16);
                 if(ok) value.push_back(v);
             }
 

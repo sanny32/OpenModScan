@@ -134,13 +134,26 @@ DisplayDefinition FormModSca::displayDefinition() const
 void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
 {
     _timer.setInterval(dd.ScanRate);
+
+    ui->lineEditDeviceId->blockSignals(true);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
+    ui->lineEditDeviceId->blockSignals(false);
+
+    ui->lineEditAddress->blockSignals(true);
     ui->lineEditAddress->setValue(dd.PointAddress);
+    ui->lineEditAddress->blockSignals(false);
+
+    ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setValue(dd.Length);
+    ui->lineEditLength->blockSignals(false);
+
+    ui->comboBoxModbusPointType->blockSignals(true);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
+    ui->comboBoxModbusPointType->blockSignals(false);
 
     ui->outputWidget->setStatus(tr("Data Uninitialized"));
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(dd.DeviceId));
+
     beginUpdate();
 }
 

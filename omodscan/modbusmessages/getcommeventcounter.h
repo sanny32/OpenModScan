@@ -41,6 +41,14 @@ public:
     }
 
     ///
+    /// \brief isValid
+    /// \return
+    ///
+    bool isValid() const override {
+        return ModbusMessage::isValid() && _data.size() == 4;
+    }
+
+    ///
     /// \brief status
     /// \return
     ///

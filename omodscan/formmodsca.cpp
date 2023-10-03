@@ -513,7 +513,7 @@ void FormModSca::beginUpdate()
 /// \param reply
 /// \return
 ///
-bool FormModSca::isValidReply(const QModbusReply* reply)
+bool FormModSca::isValidReply(const QModbusReply* reply) const
 {
     const auto dd = displayDefinition();
     const auto data = reply->result();
@@ -538,6 +538,33 @@ bool FormModSca::isValidReply(const QModbusReply* reply)
 }
 
 ///
+/// \brief FormModSca::on_modbusRequest
+/// \param requestId
+/// \param deviceId
+/// \param request
+///
+void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
+{
+    if(requestId != _formId)
+        return;
+
+    switch(request.functionCode())
+    {
+        case QModbusPdu::ReadCoils:
+        case QModbusPdu::ReadDiscreteInputs:
+        case QModbusPdu::ReadHoldingRegisters:
+        case QModbusPdu::ReadInputRegisters:
+            ui->statisticWidget->increaseNumberOfPolls();
+        break;
+
+        default:
+        break;
+    }
+
+    ui->outputWidget->updateTraffic(request, deviceId);
+}
+
+///
 /// \brief FormModSca::on_modbusReply
 /// \param reply
 ///
@@ -546,15 +573,13 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
     if(!reply) return;
 
     const auto requestId = reply->property("RequestId").toInt();
-    if((_formId != requestId && requestId != 0) ||
-        reply->serverAddress() != ui->lineEditDeviceId->value<int>())
-    {
+    if(requestId != _formId)
         return;
-    }
 
     const auto data = reply->result();
     const auto response = reply->rawResult();
     const bool hasError = reply->error() != QModbusDevice::NoError;
+    const bool hasProtocolError = reply->error() == QModbusDevice::ProtocolError;
 
     switch(response.functionCode())
     {
@@ -562,11 +587,13 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
         case QModbusRequest::ReadDiscreteInputs:
         case QModbusRequest::ReadInputRegisters:
         case QModbusRequest::ReadHoldingRegisters:
-            ui->outputWidget->updateTraffic(response, reply->serverAddress());
+            if(!hasError || hasProtocolError)
+                ui->outputWidget->updateTraffic(response, reply->serverAddress());
         break;
 
         default:
-            ui->outputWidget->updateTraffic(response, reply->serverAddress());
+            if(!hasError || hasProtocolError)
+                ui->outputWidget->updateTraffic(response, reply->serverAddress());
             if(!hasError) beginUpdate();
         return;
     }
@@ -584,7 +611,7 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
             ui->statisticWidget->increaseValidSlaveResponses();
         }
     }
-    else if (reply->error() == QModbusDevice::ProtocolError)
+    else if (hasProtocolError)
     {
         const auto ex = ModbusException(response.exceptionCode());
         const auto errorString = QString("%1 (%2)").arg(ex, formatByteValue(DataDisplayMode::Hex, ex));
@@ -614,36 +641,6 @@ void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
     _timer.stop();
     ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
-}
-
-///
-/// \brief FormModSca::on_modbusRequest
-/// \param requestId
-/// \param deviceId
-/// \param request
-///
-void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
-{
-    if((requestId != _formId && requestId != 0) ||
-        deviceId != ui->lineEditDeviceId->value<int>())
-    {
-        return;
-    }
-
-    switch(request.functionCode())
-    {
-        case QModbusPdu::ReadCoils:
-        case QModbusPdu::ReadDiscreteInputs:
-        case QModbusPdu::ReadHoldingRegisters:
-        case QModbusPdu::ReadInputRegisters:
-            ui->statisticWidget->increaseNumberOfPolls();
-        break;
-
-        default:
-        break;
-    }
-
-    ui->outputWidget->updateTraffic(request, deviceId);
 }
 
 ///

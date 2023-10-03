@@ -22,6 +22,14 @@ public:
     }
 
     ///
+    /// \brief isValid
+    /// \return
+    ///
+    bool isValid() const override {
+        return ModbusMessage::isValid() && _data.size() > 9;
+    }
+
+    ///
     /// \brief readStartAddress
     /// \return
     ///
@@ -86,6 +94,14 @@ public:
         :ModbusMessage(pdu, timestamp, deviceId, false)
     {
         Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadWriteMultipleRegisters);
+    }
+
+    ///
+    /// \brief isValid
+    /// \return
+    ///
+    bool isValid() const override {
+        return ModbusMessage::isValid() && _data.size() > 1;
     }
 
     ///

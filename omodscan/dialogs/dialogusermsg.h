@@ -2,7 +2,7 @@
 #define DIALOGUSERMSG_H
 
 #include <QModbusRequest>
-#include "qfixedsizedialog.h"
+#include <QDialog>
 #include "modbusclient.h"
 #include "enums.h"
 
@@ -10,7 +10,7 @@ namespace Ui {
 class DialogUserMsg;
 }
 
-class DialogUserMsg : public QFixedSizeDialog
+class DialogUserMsg : public QDialog
 {
     Q_OBJECT
 

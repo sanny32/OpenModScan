@@ -14,6 +14,11 @@ public:
     {
     }
 
+    bool isValid() const
+    {
+        return _code >= 1 && _code <= 0x2B;
+    }
+
     bool isException() const
     {
         return _code & QModbusPdu::ExceptionByte;

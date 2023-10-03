@@ -23,6 +23,14 @@ public:
     }
 
     ///
+    /// \brief isValid
+    /// \return
+    ///
+    bool isValid() const override {
+        return ModbusMessage::isValid() && _data.size() == 4;
+    }
+
+    ///
     /// \brief startAddress
     /// \return
     ///
@@ -55,6 +63,14 @@ public:
         :ModbusMessage(pdu, timestamp, deviceId, false)
     {
         Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadCoils);
+    }
+
+    ///
+    /// \brief isValid
+    /// \return
+    ///
+    bool isValid() const override {
+        return ModbusMessage::isValid() && _data.size() > 1;
     }
 
     ///

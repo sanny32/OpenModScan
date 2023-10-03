@@ -1,4 +1,5 @@
 #include <QRegularExpressionValidator>
+#include "formatutils.h"
 #include "bytelistlineedit.h"
 
 ///
@@ -47,20 +48,14 @@ void ByteListLineEdit::setValue(const QByteArray& value)
     {
         case DecMode:
         {
-            QStringList text;
-            for(auto&& v : value)
-                text.push_back(QString::number((quint8)v));
-            QLineEdit::setText(text.join(' '));
+            QLineEdit::setText(formatByteArray(DataDisplayMode::Decimal, value));
             QLineEdit::setCursorPosition(0);
         }
         break;
 
         case HexMode:
         {
-            QStringList text;
-            for(auto&& v : value)
-                text.push_back(QString("%1").arg((quint8)v, 2, 16, QLatin1Char('0')));
-            QLineEdit::setText(text.join(' ').toUpper());
+            QLineEdit::setText(formatByteArray(DataDisplayMode::Hex, value));
             QLineEdit::setCursorPosition(0);
         }
         break;

@@ -22,6 +22,15 @@ public:
     }
 
     ///
+    /// \brief isValid
+    /// \return
+    ///
+    bool isValid() const override {
+        return ModbusMessage::isValid() && _data.size() > 2;
+    }
+
+
+    ///
     /// \brief subfunc
     /// \return
     ///
@@ -54,6 +63,14 @@ public:
         :ModbusMessage(pdu, timestamp, deviceId, false)
     {
         Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::Diagnostics);
+    }
+
+    ///
+    /// \brief isValid
+    /// \return
+    ///
+    bool isValid() const override {
+        return ModbusMessage::isValid() && _data.size() > 2;
     }
 
     ///

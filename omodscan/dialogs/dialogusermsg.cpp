@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDialogButtonBox>
+#include "modbusmessage.h"
 #include "modbuslimits.h"
 #include "dialogusermsg.h"
 #include "ui_dialogusermsg.h"
@@ -15,7 +16,7 @@
 /// \param parent
 ///
 DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent) :
-      QFixedSizeDialog(parent)
+      QDialog(parent)
     , ui(new Ui::DialogUserMsg)
     ,_modbusClient(client)
 {
@@ -25,6 +26,7 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
     ui->lineEditSlaveAddress->setValue(slaveAddress);
     ui->lineEditFunction->setInputRange(0, 255);
     ui->lineEditFunction->setValue(func);
+    ui->responseInfo->setShowTimestamp(false);
 
     switch(mode)
     {
@@ -83,19 +85,24 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
 {
     if(!reply) return;
 
+    if(reply->error() != QModbusDevice::NoError &&
+        reply->error() != QModbusDevice::ProtocolError)
+    {
+        QMessageBox::warning(this, windowTitle(), reply->errorString());
+        return;
+    }
+
     if(0 != reply->property("RequestId").toInt())
     {
         return;
     }
 
-    const auto raw = reply->rawResult();
+    const auto response = reply->rawResult();
+    const auto msg = ModbusMessage::create(response, QDateTime::currentDateTime(), reply->serverAddress(), false);
 
-    QByteArray data;
-    data.push_back(reply->serverAddress());
-    data.push_back(raw.functionCode() | ( raw.isException() ? QModbusPdu::ExceptionByte : 0));
-    data.push_back(raw.data());
+    ui->lineEditResponse->setValue(*msg);
+    ui->responseInfo->setModbusMessage(msg);
 
-    ui->lineEditResponse->setValue(data);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
@@ -113,6 +120,7 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
         ui->lineEditFunction->setInputMode(NumericLineEdit::HexMode);
         ui->lineEditSendData->setInputMode(ByteListLineEdit::HexMode);
         ui->lineEditResponse->setInputMode(ByteListLineEdit::HexMode);
+        ui->responseInfo->setDataDisplayMode(DataDisplayMode::Hex);
     }
 }
 
@@ -130,5 +138,6 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
         ui->lineEditFunction->setInputMode(NumericLineEdit::DecMode);
         ui->lineEditSendData->setInputMode(ByteListLineEdit::DecMode);
         ui->lineEditResponse->setInputMode(ByteListLineEdit::DecMode);
+        ui->responseInfo->setDataDisplayMode(DataDisplayMode::Decimal);
     }
 }

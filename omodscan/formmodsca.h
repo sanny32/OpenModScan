@@ -115,7 +115,7 @@ private slots:
 
 private:
     void beginUpdate();
-    bool isValidReply(const QModbusReply* reply);
+    bool isValidReply(const QModbusReply* reply) const;
 
 private:
     Ui::FormModSca *ui;

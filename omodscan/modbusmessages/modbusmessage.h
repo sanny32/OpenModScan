@@ -27,6 +27,7 @@ public:
         ,_timestamp(timestamp)
         ,_deviceId(deviceId)
         ,_request(request)
+        ,_isValid(pdu.isValid())
     {
     }
 
@@ -50,7 +51,7 @@ public:
     /// \return
     ///
     virtual bool isValid() const {
-        return _deviceId >= 0 && !_data.isEmpty();
+        return _deviceId >= 0 && _isValid;
     }
 
     ///
@@ -107,11 +108,7 @@ public:
     /// \return
     ///
     QString toString(DataDisplayMode mode) const {
-        QByteArray rawData;
-        rawData.push_back(_deviceId);
-        rawData.push_back(_funcCode);
-        rawData.push_back(_data);
-        return formatByteArray(mode, rawData);
+        return formatByteArray(mode, *this);
     }
 
     ///
@@ -123,6 +120,17 @@ public:
         return _data;
     }
 
+    ///
+    /// \brief operator QByteArray
+    ///
+    operator QByteArray() const {
+        QByteArray data;
+        data.push_back(_deviceId);
+        data.push_back(_funcCode);
+        data.push_back(_data);
+        return data;
+    }
+
 protected:
     const QByteArray _data;
     const quint8 _funcCode;
@@ -132,6 +140,7 @@ private:
     const QDateTime _timestamp;
     const int _deviceId;
     const bool _request;
+    const bool _isValid;
 };
 Q_DECLARE_METATYPE(const ModbusMessage*)
 

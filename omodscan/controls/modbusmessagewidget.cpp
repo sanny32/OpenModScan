@@ -9,9 +9,11 @@
 ///
 ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     : QListWidget(parent)
+    ,_showTimestamp(true)
     ,_msg(nullptr)
 {
     setItemDelegate(new HtmlDelegate(this));
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 ///
@@ -43,6 +45,25 @@ void ModbusMessageWidget::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief ModbusMessageWidget::showTimestamp
+/// \return
+///
+bool ModbusMessageWidget::showTimestamp() const
+{
+    return _showTimestamp;
+}
+
+///
+/// \brief ModbusMessageWidget::setShowTimestamp
+/// \param on
+///
+void ModbusMessageWidget::setShowTimestamp(bool on)
+{
+    _showTimestamp = on;
+    update();
+}
+
+///
 /// \brief ModbusMessageWidget::modbusMessage
 /// \return
 ///
@@ -67,13 +88,20 @@ void ModbusMessageWidget::setModbusMessage(const ModbusMessage* msg)
 void ModbusMessageWidget::update()
 {
     QListWidget::clear();
+
     if(_msg == nullptr)
         return;
 
-    const auto function = QString("%1 (%2)").arg(formatByteValue(_dataDisplayMode, _msg->function()), _msg->function());
+    if(!_msg->isValid())
+    {
+        if(_msg->isRequest())
+            addItem(tr("<span style='color:red'>*** INVALID MODBUS REQUEST ***</span>"));
+        else if(!_msg->isException())
+            addItem(tr("<span style='color:red'>*** INVALID MODBUS RESPONSE ***</span>"));
+    }
 
     addItem(tr("<b>Type:</b> %1").arg(_msg->isRequest() ? tr("Tx Message") : tr("Rx Message")));
-    addItem(tr("<b>Timestamp:</b> %1").arg(_msg->timestamp().toString(Qt::ISODateWithMs)));
+    if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_msg->timestamp().toString(Qt::ISODateWithMs)));
     addItem(tr("<b>Device ID:</b> %1").arg(formatByteValue(_dataDisplayMode, _msg->deviceId())));
 
     if(_msg->isException())
@@ -84,6 +112,10 @@ void ModbusMessageWidget::update()
         return;
     }
 
+    const auto func = _msg->function();
+    const auto function = func.isValid() ?
+                              QString("%1 (%2)").arg(formatByteValue(_dataDisplayMode, func), func) :
+                              formatByteValue(_dataDisplayMode, func);
     addItem(tr("<b>Function Code:</b> %1").arg(function));
 
     switch(_msg->function())
@@ -92,14 +124,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const ReadCoilsRequest*>(_msg);
-                addItem(tr("<b>Start Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->startAddress())));
-                addItem(tr("<b>Length:</b> %1").arg(formatWordValue(_dataDisplayMode, req->length())));
+                const auto startAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
+                const auto length = req->isValid() ? formatWordValue(_dataDisplayMode, req->length()): "??";
+                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadCoilsResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Coil Status:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->coilStatus())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto coilStatus = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->coilStatus()) : "???";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Coil Status:</b> %1").arg(coilStatus));
             }
         break;
 
@@ -107,14 +143,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(_msg);
-                addItem(tr("<b>Start Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->startAddress())));
-                addItem(tr("<b>Length:</b> %1").arg(formatWordValue(_dataDisplayMode, req->length())));
+                const auto startAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
+                const auto length = req->isValid() ? formatWordValue(_dataDisplayMode, req->length()): "??";
+                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadDiscreteInputsResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Input Status:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->inputStatus())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto inputStatus = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->inputStatus()) : "???";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Input Status:</b> %1").arg(inputStatus));
             }
         break;
 
@@ -122,14 +162,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(_msg);
-                addItem(tr("<b>Start Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->startAddress())));
-                addItem(tr("<b>Length:</b> %1").arg(formatWordValue(_dataDisplayMode, req->length())));
+                const auto startAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
+                const auto length = req->isValid() ? formatWordValue(_dataDisplayMode, req->length()): "??";
+                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Register Value:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->registerValue())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto registerValue = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->registerValue()) : "???";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Register Value:</b> %1").arg(registerValue));
             }
         break;
 
@@ -137,14 +181,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const ReadInputRegistersRequest*>(_msg);
-                addItem(tr("<b>Start Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->startAddress())));
-                addItem(tr("<b>Length:</b> %1").arg(formatWordValue(_dataDisplayMode, req->length())));
+                const auto startAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
+                const auto length = req->isValid() ? formatWordValue(_dataDisplayMode, req->length()): "??";
+                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadInputRegistersResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Input Registers:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->registerValue())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto registerValue = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->registerValue()) : "???";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Input Registers:</b> %1").arg(registerValue));
             }
         break;
 
@@ -152,14 +200,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const WriteSingleCoilRequest*>(_msg);
-                addItem(tr("<b>Output Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->address())));
-                addItem(tr("<b>Output Value:</b> %1").arg(formatWordValue(_dataDisplayMode, req->value())));
+                const auto outputAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->address()) : "??";
+                const auto outputValue = req->isValid() ? formatWordValue(_dataDisplayMode, req->value()) : "??";
+                addItem(tr("<b>Output Address:</b> %1").arg(outputAddress));
+                addItem(tr("<b>Output Value:</b> %1").arg(outputValue));
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteSingleCoilResponse*>(_msg);
-                addItem(tr("<b>Output Address:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->address())));
-                addItem(tr("<b>Output Value:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->value())));
+                const auto outputAddress = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->address()) : "??";
+                const auto outputValue = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->value()) : "??";
+                addItem(tr("<b>Output Address:</b> %1").arg(outputAddress));
+                addItem(tr("<b>Output Value:</b> %1").arg(outputValue));
             }
         break;
 
@@ -167,14 +219,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(_msg);
-                addItem(tr("<b>Register Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->address())));
-                addItem(tr("<b>Register Value:</b> %1").arg(formatWordValue(_dataDisplayMode, req->value())));
+                const auto registerAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->address()) : "??";
+                const auto registerValue = req->isValid() ? formatWordValue(_dataDisplayMode, req->value()) : "??";
+                addItem(tr("<b>Register Address:</b> %1").arg(registerAddress));
+                addItem(tr("<b>Register Value:</b> %1").arg(registerValue));
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteSingleRegisterResponse*>(_msg);
-                addItem(tr("<b>Register Address:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->address())));
-                addItem(tr("<b>Register Value:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->value())));
+                const auto registerAddress = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->address()) : "??";
+                const auto registerValue = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->value()) : "??";
+                addItem(tr("<b>Register Address:</b> %1").arg(registerAddress));
+                addItem(tr("<b>Register Value:</b> %1").arg(registerValue));
             }
             break;
 
@@ -182,7 +238,8 @@ void ModbusMessageWidget::update()
             if(!_msg->isRequest())
             {
                 auto resp = reinterpret_cast<const ReadExceptionStatusResponse*>(_msg);
-                addItem(tr("<b>Output Data:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->outputData())));
+                const auto outputData = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->outputData()) : "?";
+                addItem(tr("<b>Output Data:</b> %1").arg(outputData));
             }
             break;
 
@@ -190,14 +247,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const DiagnosticsRequest*>(_msg);
-                addItem(tr("<b>Sub-function:</b> %1").arg(formatWordValue(_dataDisplayMode, req->subfunc())));
-                addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, req->data())));
+                const auto subFunc = req->isValid() ? formatWordValue(_dataDisplayMode, req->subfunc()) : "??";
+                const auto data = req->isValid() ? formatByteArray(_dataDisplayMode, req->data()) : "???";
+                addItem(tr("<b>Sub-function:</b> %1").arg(subFunc));
+                addItem(tr("<b>Data:</b> %1").arg(data));
             }
             else
             {
                 auto resp = reinterpret_cast<const DiagnosticsResponse*>(_msg);
-                addItem(tr("<b>Sub-function:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->subfunc())));
-                addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->data())));
+                const auto subFunc = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->subfunc()) : "??";
+                const auto data = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->data()) : "???";
+                addItem(tr("<b>Sub-function:</b> %1").arg(subFunc));
+                addItem(tr("<b>Data:</b> %1").arg(data));
             }
             break;
 
@@ -205,8 +266,10 @@ void ModbusMessageWidget::update()
             if(!_msg->isRequest())
             {
                 auto resp = reinterpret_cast<const GetCommEventCounterResponse*>(_msg);
-                addItem(tr("<b>Status:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->status())));
-                addItem(tr("<b>Event Count:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->eventCount())));
+                const auto status = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->status()) : "??";
+                const auto eventCount = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->eventCount()) : "??";
+                addItem(tr("<b>Status:</b> %1").arg(status));
+                addItem(tr("<b>Event Count:</b> %1").arg(eventCount));
             }
             break;
 
@@ -214,11 +277,16 @@ void ModbusMessageWidget::update()
             if(!_msg->isRequest())
             {
                 auto resp = reinterpret_cast<const GetCommEventLogResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Status:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->status())));
-                addItem(tr("<b>Event Count:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->eventCount())));
-                addItem(tr("<b>Message Count:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->messageCount())));
-                addItem(tr("<b>Events:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->events())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto status = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->status()) : "??";
+                const auto eventCount = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->eventCount()) : "??";
+                const auto messageCount = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->messageCount()) : "??";
+                const auto events = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->events()) : "???";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Status:</b> %1").arg(status));
+                addItem(tr("<b>Event Count:</b> %1").arg(eventCount));
+                addItem(tr("<b>Message Count:</b> %1").arg(messageCount));
+                addItem(tr("<b>Events:</b> %1").arg(events));
             }
             break;
 
@@ -226,16 +294,22 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(_msg);
-                addItem(tr("<b>Starting Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->startAddress())));
-                addItem(tr("<b>Quantity of Outputs:</b> %1").arg(formatWordValue(_dataDisplayMode, req->quantity())));
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, req->byteCount())));
-                addItem(tr("<b>Output Value:</b> %1").arg(formatByteArray(_dataDisplayMode, req->values())));
+                const auto startAddr = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
+                const auto quantity = req->isValid() ? formatWordValue(_dataDisplayMode, req->quantity()) : "??";
+                const auto byteCount = req->isValid() ? formatByteValue(_dataDisplayMode, req->byteCount()) : "?";
+                const auto values = req->isValid() ? formatByteArray(_dataDisplayMode, req->values()) : "???";
+                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Quantity of Outputs:</b> %1").arg(quantity));
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Output Value:</b> %1").arg(values));
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteMultipleCoilsResponse*>(_msg);
-                addItem(tr("<b>Starting Address:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->startAddress())));
-                addItem(tr("<b>Quantity of Outputs:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->quantity())));
+                const auto startAddr = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->startAddress()) : "??";
+                const auto quantity = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->quantity()) : "??";
+                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Quantity of Outputs:</b> %1").arg(quantity));
             }
             break;
 
@@ -243,16 +317,22 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(_msg);
-                addItem(tr("<b>Starting Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->startAddress())));
-                addItem(tr("<b>Quantity of Registers:</b> %1").arg(formatWordValue(_dataDisplayMode, req->quantity())));
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, req->byteCount())));
-                addItem(tr("<b>Registers Value:</b> %1").arg(formatByteArray(_dataDisplayMode, req->values())));
+                const auto startAddr = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
+                const auto quantity = req->isValid() ? formatWordValue(_dataDisplayMode, req->quantity()) : "??";
+                const auto byteCount = req->isValid() ? formatByteValue(_dataDisplayMode, req->byteCount()) : "?";
+                const auto values = req->isValid() ? formatByteArray(_dataDisplayMode, req->values()) : "???";
+                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Quantity of Registers:</b> %1").arg(quantity));
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Registers Value:</b> %1").arg(values));
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteMultipleRegistersResponse*>(_msg);
-                addItem(tr("<b>Starting Address:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->startAddress())));
-                addItem(tr("<b>Quantity of Registers:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->quantity())));
+                const auto startAddr = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->startAddress()) : "??";
+                const auto quantity = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->quantity()) : "??";
+                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Quantity of Registers:</b> %1").arg(quantity));
             }
         break;
 
@@ -260,8 +340,10 @@ void ModbusMessageWidget::update()
             if(!_msg->isRequest())
             {
                 auto resp = reinterpret_cast<const ReportServerIdResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->data())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto data = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->data()) : "?";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Data:</b> %1").arg(data));
             }
         break;
 
@@ -269,14 +351,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const ReadFileRecordRequest*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, req->byteCount())));
-                addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, req->data())));
+                const auto byteCount = req->isValid() ? formatByteValue(_dataDisplayMode, req->byteCount()) : "?";
+                const auto data = req->isValid() ? formatByteArray(_dataDisplayMode, req->data()) : "?";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Data:</b> %1").arg(data));
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadFileRecordResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->data())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto data = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->data()) : "?";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Data:</b> %1").arg(data));
             }
         break;
 
@@ -284,14 +370,18 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const WriteFileRecordRequest*>(_msg);
-                addItem(tr("<b>Request _msg Length:</b> %1").arg(formatByteValue(_dataDisplayMode, req->length())));
-                addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, req->data())));
+                const auto length = req->isValid() ? formatByteValue(_dataDisplayMode, req->length()) : "?";
+                const auto data = req->isValid() ? formatByteArray(_dataDisplayMode, req->data()) : "???";
+                addItem(tr("<b>Request Data Length:</b> %1").arg(length));
+                addItem(tr("<b>Data:</b> %1").arg(data));
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteFileRecordResponse*>(_msg);
-                addItem(tr("<b>Request _msg Length:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->length())));
-                addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->data())));
+                const auto length = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->length()) : "?";
+                const auto data = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->data()) : "???";
+                addItem(tr("<b>Response Data Length:</b> %1").arg(length));
+                addItem(tr("<b>Data:</b> %1").arg(data));
             }
         break;
 
@@ -299,16 +389,22 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(_msg);
-                addItem(tr("<b>Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->address())));
-                addItem(tr("<b>And Mask:</b> %1").arg(formatWordValue(_dataDisplayMode, req->andMask())));
-                addItem(tr("<b>Or Mask:</b> %1").arg(formatWordValue(_dataDisplayMode, req->orMask())));
+                const auto address = req->isValid() ? formatWordValue(_dataDisplayMode, req->address()) : "??";
+                const auto andMask = req->isValid() ? formatWordValue(_dataDisplayMode, req->andMask()) : "??";
+                const auto orMask = req->isValid() ? formatWordValue(_dataDisplayMode, req->orMask()) : "??";
+                addItem(tr("<b>Address:</b> %1").arg(address));
+                addItem(tr("<b>And Mask:</b> %1").arg(andMask));
+                addItem(tr("<b>Or Mask:</b> %1").arg(orMask));
             }
             else
             {
                 auto resp = reinterpret_cast<const MaskWriteRegisterResponse*>(_msg);
-                addItem(tr("<b>Address:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->address())));
-                addItem(tr("<b>And Mask:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->andMask())));
-                addItem(tr("<b>Or Mask:</b> %1").arg(formatWordValue(_dataDisplayMode, resp->orMask())));
+                const auto address = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->address()) : "??";
+                const auto andMask = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->andMask()) : "??";
+                const auto orMask = resp->isValid() ? formatWordValue(_dataDisplayMode, resp->orMask()) : "??";
+                addItem(tr("<b>Address:</b> %1").arg(address));
+                addItem(tr("<b>And Mask:</b> %1").arg(andMask));
+                addItem(tr("<b>Or Mask:</b> %1").arg(orMask));
             }
         break;
 
@@ -316,18 +412,26 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(_msg);
-                addItem(tr("<b>Read Starting Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->readStartAddress())));
-                addItem(tr("<b>Quantity to Read:</b> %1").arg(formatWordValue(_dataDisplayMode, req->readLength())));
-                addItem(tr("<b>Write Starting Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->writeStartAddress())));
-                addItem(tr("<b>Quantity to Write:</b> %1").arg(formatWordValue(_dataDisplayMode, req->writeLength())));
-                addItem(tr("<b>Write Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, req->writeByteCount())));
-                addItem(tr("<b>Write Registers Value:</b> %1").arg(formatByteArray(_dataDisplayMode, req->writeValues())));
+                const auto readStartAddr = req->isValid() ? formatWordValue(_dataDisplayMode, req->readStartAddress()) : "??";
+                const auto readLength = req->isValid() ? formatWordValue(_dataDisplayMode, req->readLength()) : "??";
+                const auto writeStartAddr = req->isValid() ? formatWordValue(_dataDisplayMode, req->writeStartAddress()) : "??";
+                const auto writeLength = req->isValid() ? formatWordValue(_dataDisplayMode, req->writeLength()) : "??";
+                const auto writeByteCount = req->isValid() ? formatByteValue(_dataDisplayMode, req->writeByteCount()) : "?";
+                const auto writeValues = req->isValid() ? formatByteArray(_dataDisplayMode, req->writeValues()) : "???";
+                addItem(tr("<b>Read Starting Address:</b> %1").arg(readStartAddr));
+                addItem(tr("<b>Quantity to Read:</b> %1").arg(readLength));
+                addItem(tr("<b>Write Starting Address:</b> %1").arg(writeStartAddr));
+                addItem(tr("<b>Quantity to Write:</b> %1").arg(writeLength));
+                addItem(tr("<b>Write Byte Count:</b> %1").arg(writeByteCount));
+                addItem(tr("<b>Write Registers Value:</b> %1").arg(writeValues));
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadWriteMultipleRegistersResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>Registers Value:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->values())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()): "?";
+                const auto values = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->values()) : "???";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>Registers Value:</b> %1").arg(values));
             }
         break;
 
@@ -335,19 +439,26 @@ void ModbusMessageWidget::update()
             if(_msg->isRequest())
             {
                 auto req = reinterpret_cast<const ReadFifoQueueRequest*>(_msg);
-                addItem(tr("<b>FIFO Point Address:</b> %1").arg(formatWordValue(_dataDisplayMode, req->fifoAddress())));
+                const auto fifoAddr = req->isValid() ? formatWordValue(_dataDisplayMode, req->fifoAddress()) : "??";
+                addItem(tr("<b>FIFO Point Address:</b> %1").arg(fifoAddr));
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadFifoQueueResponse*>(_msg);
-                addItem(tr("<b>Byte Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->byteCount())));
-                addItem(tr("<b>FIFO Count:</b> %1").arg(formatByteValue(_dataDisplayMode, resp->fifoCount())));
-                addItem(tr("<b>FIFO Value Register:</b> %1").arg(formatByteArray(_dataDisplayMode, resp->fifoValue())));
+                const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
+                const auto fifoCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->fifoCount()) : "?";
+                const auto fifoValue = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->fifoValue()) : "???";
+                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
+                addItem(tr("<b>FIFO Count:</b> %1").arg(fifoCount));
+                addItem(tr("<b>FIFO Value Register:</b> %1").arg(fifoValue));
             }
         break;
 
         default:
-            addItem(tr("<b>Data:</b> %1").arg(formatByteArray(_dataDisplayMode, _msg->rawData())));
+        {
+            const auto data = _msg->isValid() ? formatByteArray(_dataDisplayMode, _msg->rawData()) : "???";
+            addItem(tr("<b>Data:</b> %1").arg(data));
+        }
         break;
     }
 }

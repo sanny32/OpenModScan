@@ -21,11 +21,15 @@ public:
     const ModbusMessage* modbusMessage() const;
     void setModbusMessage(const ModbusMessage* msg);
 
+    bool showTimestamp() const;
+    void setShowTimestamp(bool on);
+
 private:
     void update();
 
 private:
     DataDisplayMode _dataDisplayMode;
+    bool _showTimestamp;
     const ModbusMessage* _msg;
 };
 

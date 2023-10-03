@@ -277,6 +277,7 @@ void MainWindow::on_actionNew_triggered()
         frm->setByteOrder(cur->byteOrder());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
+        frm->setDisplayDefinition(cur->displayDefinition());
 
         frm->setFont(cur->font());
         frm->setStatusColor(cur->statusColor());
@@ -936,6 +937,7 @@ void MainWindow::updateMenuWindow()
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
         wnd->setProperty("isActive", wnd == activeWnd);
+        wnd->widget()->setProperty("isActive", wnd == activeWnd);
     }
     _windowActionList->update();
 }
@@ -946,7 +948,10 @@ void MainWindow::updateMenuWindow()
 ///
 void MainWindow::windowActivate(QMdiSubWindow* wnd)
 {
-    if(wnd) ui->mdiArea->setActiveSubWindow(wnd);
+    if(wnd)
+    {
+        ui->mdiArea->setActiveSubWindow(wnd);
+    }
 }
 
 ///

@@ -34,7 +34,13 @@ public:
     explicit FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulator> simulator, MainWindow* parent);
     ~FormModSca();
 
-    int formId() const { return _formId; }
+    int formId() const {
+        return _formId;
+    }
+
+    bool isActive() const {
+        return property("isActive").toBool();
+    }
 
     QString filename() const;
     void setFilename(const QString& filename);
@@ -116,6 +122,9 @@ private slots:
 private:
     void beginUpdate();
     bool isValidReply(const QModbusReply* reply) const;
+
+    void logReply(const QModbusReply* reply);
+    void logRequest(int requestId, int deviceId, const QModbusRequest& request);
 
 private:
     Ui::FormModSca *ui;

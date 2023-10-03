@@ -85,15 +85,15 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
 {
     if(!reply) return;
 
+    if(0 != reply->property("RequestId").toInt())
+    {
+        return;
+    }
+
     if(reply->error() != QModbusDevice::NoError &&
         reply->error() != QModbusDevice::ProtocolError)
     {
         QMessageBox::warning(this, windowTitle(), reply->errorString());
-        return;
-    }
-
-    if(0 != reply->property("RequestId").toInt())
-    {
         return;
     }
 

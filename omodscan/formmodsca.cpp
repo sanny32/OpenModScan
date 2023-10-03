@@ -538,6 +538,20 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
 }
 
 ///
+/// \brief FormModSca::logRequest
+/// \param requestId
+/// \param deviceId
+/// \param request
+///
+void FormModSca::logRequest(int requestId, int deviceId, const QModbusRequest& request)
+{
+    if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
+        ui->outputWidget->updateTraffic(request, deviceId);
+    else if(requestId == 0 && isActive())
+        ui->outputWidget->updateTraffic(request, deviceId);
+}
+
+///
 /// \brief FormModSca::on_modbusRequest
 /// \param requestId
 /// \param deviceId
@@ -545,8 +559,7 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
 ///
 void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
 {
-    if(requestId != _formId)
-        return;
+   logRequest(requestId, deviceId, request);
 
     switch(request.functionCode())
     {
@@ -554,14 +567,36 @@ void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequ
         case QModbusPdu::ReadDiscreteInputs:
         case QModbusPdu::ReadHoldingRegisters:
         case QModbusPdu::ReadInputRegisters:
-            ui->statisticWidget->increaseNumberOfPolls();
+            if(requestId == _formId)
+                ui->statisticWidget->increaseNumberOfPolls();
         break;
 
         default:
         break;
     }
+}
 
-    ui->outputWidget->updateTraffic(request, deviceId);
+///
+/// \brief FormModSca::logReply
+/// \param reply
+///
+void FormModSca::logReply(const QModbusReply* reply)
+{
+    if(!reply) return;
+
+    if(reply->error() != QModbusDevice::NoError &&
+        reply->error() != QModbusDevice::ProtocolError)
+    {
+        return;
+    }
+
+    const auto deviceId = reply->serverAddress();
+    const auto requestId = reply->property("RequestId").toInt();
+
+    if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
+        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress());
+    else if(requestId == 0 && isActive())
+        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress());
 }
 
 ///
@@ -572,14 +607,10 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
 {
     if(!reply) return;
 
-    const auto requestId = reply->property("RequestId").toInt();
-    if(requestId != _formId)
-        return;
+    logReply(reply);
 
-    const auto data = reply->result();
     const auto response = reply->rawResult();
     const bool hasError = reply->error() != QModbusDevice::NoError;
-    const bool hasProtocolError = reply->error() == QModbusDevice::ProtocolError;
 
     switch(response.functionCode())
     {
@@ -587,16 +618,15 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
         case QModbusRequest::ReadDiscreteInputs:
         case QModbusRequest::ReadInputRegisters:
         case QModbusRequest::ReadHoldingRegisters:
-            if(!hasError || hasProtocolError)
-                ui->outputWidget->updateTraffic(response, reply->serverAddress());
         break;
 
         default:
-            if(!hasError || hasProtocolError)
-                ui->outputWidget->updateTraffic(response, reply->serverAddress());
             if(!hasError) beginUpdate();
-        return;
+        break;
     }
+
+    if(reply->property("RequestId").toInt() != _formId)
+    return;
 
     if (!hasError)
     {
@@ -606,12 +636,12 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
         }
         else
         {
-            ui->outputWidget->updateData(data);
+            ui->outputWidget->updateData(reply->result());
             ui->outputWidget->setStatus(QString());
             ui->statisticWidget->increaseValidSlaveResponses();
         }
     }
-    else if (hasProtocolError)
+    else if (reply->error() == QModbusDevice::ProtocolError)
     {
         const auto ex = ModbusException(response.exceptionCode());
         const auto errorString = QString("%1 (%2)").arg(ex, formatByteValue(DataDisplayMode::Hex, ex));

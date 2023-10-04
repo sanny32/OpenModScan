@@ -38,6 +38,7 @@ private slots:
 
 private:
     void update();
+    QString formatFuncCode(QModbusPdu::FunctionCode funcCode) const;
 
 private:
     InputMode _inputMode;

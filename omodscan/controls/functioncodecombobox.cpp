@@ -36,10 +36,10 @@ QModbusPdu::FunctionCode FunctionCodeComboBox::currentFunctionCode() const
 void FunctionCodeComboBox::setCurrentFunctionCode(QModbusPdu::FunctionCode funcCode)
 {
     _currentFunc = funcCode;
-    const auto mode = (_inputMode == InputMode::HexMode) ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
+
     const auto idx = findData(funcCode);
     if(idx != -1) setCurrentIndex(idx);
-    else setCurrentText(formatFuncCode(mode, funcCode));
+    else setCurrentText(formatFuncCode(funcCode));
 }
 
 ///
@@ -79,8 +79,7 @@ void FunctionCodeComboBox::setInputMode(FunctionCodeComboBox::InputMode mode)
 ///
 void FunctionCodeComboBox::addItem(QModbusPdu::FunctionCode funcCode)
 {
-    const auto mode = (_inputMode == InputMode::HexMode) ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
-    const auto code = formatFuncCode(mode, funcCode);
+    const auto code = formatFuncCode(funcCode);
     QComboBox::addItem(QString("%1: %2").arg(code, ModbusFunction(funcCode)), funcCode);
 }
 
@@ -106,20 +105,29 @@ void FunctionCodeComboBox::addAllItems()
 ///
 void FunctionCodeComboBox::update()
 {
-    const auto mode = (_inputMode == InputMode::HexMode) ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
-
     if(currentData(Qt::DisplayRole) != currentText())
     {
-        const auto code = formatFuncCode(mode, currentFunctionCode());
+        const auto code = formatFuncCode(currentFunctionCode());
         setCurrentText(code);
     }
 
     for (int i = 0; i < count(); i++)
     {
         const auto funcCode = itemData(i).value<QModbusPdu::FunctionCode>();
-        const auto code = formatFuncCode(mode, funcCode);
+        const auto code = formatFuncCode( funcCode);
         setItemText(i, QString("%1: %2").arg(code, ModbusFunction(funcCode)));
     }
+}
+
+///
+/// \brief FunctionCodeComboBox::formatFuncCode
+/// \param funcCode
+/// \return
+///
+QString FunctionCodeComboBox::formatFuncCode(QModbusPdu::FunctionCode funcCode) const
+{
+    const auto mode = (_inputMode == InputMode::HexMode) ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
+    return ::formatFuncCode(mode, funcCode);
 }
 
 ///

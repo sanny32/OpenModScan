@@ -3,10 +3,30 @@
 
 #include <QString>
 #include <QLocale>
+#include <QModbusPdu>
 #include <QModbusDataUnit>
 #include "enums.h"
 #include "numericutils.h"
 #include "byteorderutils.h"
+
+///
+/// \brief formatFuncCode
+/// \param mode
+/// \param c
+/// \return
+///
+inline QString formatFuncCode(DataDisplayMode mode, QModbusPdu::FunctionCode c)
+{
+    switch(mode)
+    {
+        case DataDisplayMode::Decimal:
+        case DataDisplayMode::Integer:
+            return QString("%1").arg(QString::number(c), 2, '0');
+
+        default:
+            return QString("%1").arg(QString::number(c, 16).toUpper(), 2, '0');
+    }
+}
 
 ///
 /// \brief formatByteValue

@@ -7,8 +7,7 @@
 SimulationModeComboBox::SimulationModeComboBox(QWidget *parent)
     : QComboBox(parent)
 {
-
-    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
+    connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &SimulationModeComboBox::on_currentIndexChanged);
 }
 
 ///

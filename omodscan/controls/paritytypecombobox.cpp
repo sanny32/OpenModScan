@@ -10,6 +10,8 @@ ParityTypeComboBox::ParityTypeComboBox(QWidget* parent)
     addItem(tr("ODD"), QSerialPort::OddParity);
     addItem(tr("EVEN"), QSerialPort::EvenParity);
     addItem(tr("NONE"), QSerialPort::NoParity);
+
+    connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ParityTypeComboBox::on_currentIndexChanged);
 }
 
 ///
@@ -29,4 +31,13 @@ void ParityTypeComboBox::setCurrentParity(QSerialPort::Parity parity)
 {
     const auto idx = findData(parity);
     setCurrentIndex(idx);
+}
+
+///
+/// \brief ParityTypeComboBox::on_currentIndexChanged
+/// \param index
+///
+void ParityTypeComboBox::on_currentIndexChanged(int index)
+{
+    emit parityTypeChanged(itemData(index).value<QSerialPort::Parity>());
 }

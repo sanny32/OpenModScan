@@ -1,4 +1,5 @@
 #include "modbusfunction.h"
+#include "formatutils.h"
 #include "functioncodecombobox.h"
 
 ///
@@ -6,9 +7,10 @@
 /// \param parent
 ///
 FunctionCodeComboBox::FunctionCodeComboBox(QWidget *parent)
-    :QComboBox(parent)
+    : QComboBox(parent)
+    ,_dataDisplayMode(DataDisplayMode::Decimal)
 {
-    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
+    connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &FunctionCodeComboBox::on_currentIndexChanged);
 }
 
 ///
@@ -31,14 +33,31 @@ void FunctionCodeComboBox::setCurrentFunctionCode(QModbusPdu::FunctionCode funcC
 }
 
 ///
+/// \brief FunctionCodeComboBox::dataDisplayMode
+/// \return
+///
+DataDisplayMode FunctionCodeComboBox::dataDisplayMode() const
+{
+    return _dataDisplayMode;
+}
+
+///
+/// \brief FunctionCodeComboBox::setDataDisplayMode
+/// \param mode
+///
+void FunctionCodeComboBox::setDataDisplayMode(DataDisplayMode mode)
+{
+    _dataDisplayMode = mode;
+}
+
+///
 /// \brief FunctionCodeComboBox::addItem
 /// \param funcCode
 ///
 void FunctionCodeComboBox::addItem(QModbusPdu::FunctionCode funcCode)
 {
-    ModbusFunction func(funcCode);
-    const auto code = QString("%1").arg(QString::number(func, 10), 2, '0');
-    QComboBox::addItem(QString("%1: %2").arg(code, func), funcCode);
+    const auto code = formatFuncCode(_dataDisplayMode, funcCode);
+    QComboBox::addItem(QString("%1: %2").arg(code, ModbusFunction(funcCode)), funcCode);
 }
 
 ///

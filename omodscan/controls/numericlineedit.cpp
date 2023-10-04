@@ -126,12 +126,14 @@ void NumericLineEdit::internalSetValue(QVariant value)
             if(_paddingZeroes)
             {
                 const auto text = QStringLiteral("%1").arg(value.toInt(), _paddingZeroWidth, 10, QLatin1Char('0'));
-                QLineEdit::setText(text);
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
             }
             else
             {
                 const auto text = QString::number(value.toInt());
-                QLineEdit::setText(text);
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
             }
         break;
 
@@ -139,12 +141,14 @@ void NumericLineEdit::internalSetValue(QVariant value)
             value = qBound(_minValue.toUInt(), value.toUInt(), _maxValue.toUInt());
             if(_paddingZeroes)
             {
-                    const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 10, QLatin1Char('0'));
+                const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 10, QLatin1Char('0'));
+                if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
             else
             {
-                    const auto text = QString::number(value.toUInt());
+                const auto text = QString::number(value.toUInt());
+                if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
         break;
@@ -153,24 +157,34 @@ void NumericLineEdit::internalSetValue(QVariant value)
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
             if(_paddingZeroes)
             {
-                const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 16, QLatin1Char('0'));
-                QLineEdit::setText(text.toUpper());
+                const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 16, QLatin1Char('0')).toUpper();
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
             }
             else
             {
-                const auto text = QString("%1").arg(value.toUInt(), -1, 16);
-                QLineEdit::setText(text.toUpper());
+                const auto text = QString("%1").arg(value.toUInt(), -1, 16).toUpper();
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
             }
         break;
 
         case FloatMode:
+        {
             value = qBound(_minValue.toFloat(), value.toFloat(), _maxValue.toFloat());
-            QLineEdit::setText(QLocale().toString(value.toFloat()));
+            const auto text = QLocale().toString(value.toFloat());
+            if(text != QLineEdit::text())
+                QLineEdit::setText(text);
+        }
         break;
 
         case DoubleMode:
+        {
             value = qBound(_minValue.toDouble(), value.toDouble(), _maxValue.toDouble());
-            QLineEdit::setText(QLocale().toString(value.toDouble()));
+            const auto text = QLocale().toString(value.toFloat());
+            if(text != QLineEdit::text())
+                QLineEdit::setText(text);
+        }
         break;
     }
 

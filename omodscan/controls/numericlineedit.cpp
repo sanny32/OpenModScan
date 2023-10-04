@@ -68,7 +68,7 @@ NumericLineEdit::InputMode NumericLineEdit::inputMode() const
 }
 
 ///
-/// \brief NumericLineEdit::setHexInput
+/// \brief NumericLineEdit::setInputMode
 /// \param on
 ///
 void NumericLineEdit::setInputMode(InputMode mode)

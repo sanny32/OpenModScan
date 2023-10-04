@@ -22,10 +22,14 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
 {
     ui->setupUi(this);
 
+    setWindowFlags(Qt::Dialog |
+                   Qt::CustomizeWindowHint |
+                   Qt::WindowTitleHint);
+
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveAddress->setValue(slaveAddress);
-    ui->lineEditFunction->setInputRange(0, 255);
-    ui->lineEditFunction->setValue(func);
+    ui->comboBoxFunction->addAllItems();
+    ui->comboBoxFunction->setCurrentFunctionCode(func);
     ui->responseInfo->setShowTimestamp(false);
 
     switch(mode)
@@ -39,7 +43,8 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
         break;
     }
 
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setText("Send");
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Send"));
+    ui->sendData->setFocus();
 
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogUserMsg::on_modbusReply);
 }
@@ -68,7 +73,7 @@ void DialogUserMsg::accept()
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     QModbusRequest request;
-    request.setFunctionCode(ui->lineEditFunction->value<QModbusPdu::FunctionCode>());
+    request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
     request.setData(ui->sendData->value());
 
     _modbusClient.sendRawRequest(request, ui->lineEditSlaveAddress->value<int>(), 0);
@@ -116,8 +121,7 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
     {
         ui->lineEditSlaveAddress->setPaddingZeroes(true);
         ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::HexMode);
-        ui->lineEditFunction->setPaddingZeroes(true);
-        ui->lineEditFunction->setInputMode(NumericLineEdit::HexMode);
+        ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::HexMode);
         ui->sendData->setInputMode(ByteListTextEdit::HexMode);
         ui->responseBuffer->setInputMode(ByteListTextEdit::HexMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::Hex);
@@ -134,8 +138,7 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
     {
         ui->lineEditSlaveAddress->setPaddingZeroes(false);
         ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::DecMode);
-        ui->lineEditFunction->setPaddingZeroes(false);
-        ui->lineEditFunction->setInputMode(NumericLineEdit::DecMode);
+        ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::DecMode);
         ui->sendData->setInputMode(ByteListTextEdit::DecMode);
         ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::Decimal);

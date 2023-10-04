@@ -57,11 +57,11 @@ DialogUserMsg::~DialogUserMsg()
 ///
 void DialogUserMsg::accept()
 {
-    ui->lineEditResponse->clear();
+    ui->responseBuffer->clear();
 
     if(_modbusClient.state() != QModbusDevice::ConnectedState)
     {
-        QMessageBox::warning(this, parentWidget()->windowTitle(), "Custom Cmd Write Failure");
+        QMessageBox::warning(this, windowTitle(), tr("No connection to device"));
         return;
     }
 
@@ -69,7 +69,7 @@ void DialogUserMsg::accept()
 
     QModbusRequest request;
     request.setFunctionCode(ui->lineEditFunction->value<QModbusPdu::FunctionCode>());
-    request.setData(ui->lineEditSendData->value());
+    request.setData(ui->sendData->value());
 
     _modbusClient.sendRawRequest(request, ui->lineEditSlaveAddress->value<int>(), 0);
 
@@ -100,7 +100,7 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
     const auto response = reply->rawResult();
     const auto msg = ModbusMessage::create(response, QDateTime::currentDateTime(), reply->serverAddress(), false);
 
-    ui->lineEditResponse->setValue(*msg);
+    ui->responseBuffer->setValue(*msg);
     ui->responseInfo->setModbusMessage(msg);
 
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
@@ -118,8 +118,8 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
         ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::HexMode);
         ui->lineEditFunction->setPaddingZeroes(true);
         ui->lineEditFunction->setInputMode(NumericLineEdit::HexMode);
-        ui->lineEditSendData->setInputMode(ByteListLineEdit::HexMode);
-        ui->lineEditResponse->setInputMode(ByteListLineEdit::HexMode);
+        ui->sendData->setInputMode(ByteListTextEdit::HexMode);
+        ui->responseBuffer->setInputMode(ByteListTextEdit::HexMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::Hex);
     }
 }
@@ -136,8 +136,8 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
         ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::DecMode);
         ui->lineEditFunction->setPaddingZeroes(false);
         ui->lineEditFunction->setInputMode(NumericLineEdit::DecMode);
-        ui->lineEditSendData->setInputMode(ByteListLineEdit::DecMode);
-        ui->lineEditResponse->setInputMode(ByteListLineEdit::DecMode);
+        ui->sendData->setInputMode(ByteListTextEdit::DecMode);
+        ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::Decimal);
     }
 }

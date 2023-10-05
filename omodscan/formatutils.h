@@ -363,7 +363,7 @@ inline QString formatAddress(QModbusDataUnit::RegisterType pointType, int addres
             break;
     }
 
-    return hexFormat ? QString("<0x%1>").arg(QString::number(address, 16).toUpper(), 4, '0') :
+    return hexFormat ? QString("0x%1").arg(QString::number(address, 16).toUpper(), 4, '0') :
                prefix + QStringLiteral("%1").arg(address, 4, 10, QLatin1Char('0'));
 }
 

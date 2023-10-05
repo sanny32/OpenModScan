@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
-        _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
+        _selectedPrinter = new QPrinter(defaultPrinter);
 
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
     connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete _selectedPrinter;
 }
 
 ///
@@ -348,10 +349,10 @@ void MainWindow::on_actionPrint_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    QPrintDialog dlg(_selectedPrinter.get(), this);
+    QPrintDialog dlg(_selectedPrinter, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        frm->print(_selectedPrinter.get());
+        frm->print(_selectedPrinter);
     }
 }
 
@@ -360,7 +361,7 @@ void MainWindow::on_actionPrint_triggered()
 ///
 void MainWindow::on_actionPrintSetup_triggered()
 {
-    DialogPrintSettings dlg(_selectedPrinter.get(), this);
+    DialogPrintSettings dlg(_selectedPrinter, this);
     dlg.exec();
 }
 

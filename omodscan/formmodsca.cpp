@@ -534,20 +534,18 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
 
     switch(response.functionCode())
     {
-        case QModbusRequest::ReadCoils:
-        case QModbusRequest::ReadDiscreteInputs:
+        case QModbusPdu::ReadCoils:
+        case QModbusPdu::ReadDiscreteInputs:
             return (data.startAddress() == dd.PointAddress - 1) && (data.valueCount() - dd.Length) < 8;
         break;
 
-        case QModbusRequest::ReadInputRegisters:
-        case QModbusRequest::ReadHoldingRegisters:
+        case QModbusPdu::ReadInputRegisters:
+        case QModbusPdu::ReadHoldingRegisters:
             return (data.valueCount() == dd.Length) && (data.startAddress() == dd.PointAddress - 1);
 
         default:
-            break;
+            return true;
     }
-
-    return false;
 }
 
 ///
@@ -635,7 +633,7 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
 
         default:
             if(!hasError) beginUpdate();
-        break;
+        return;
     }
 
     if(reply->property("RequestId").toInt() != _formId)

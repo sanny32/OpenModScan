@@ -143,6 +143,12 @@ void ByteListTextEdit::focusOutEvent(QFocusEvent* e)
 ///
 void ByteListTextEdit::keyPressEvent(QKeyEvent *e)
 {
+    if(!_validator)
+    {
+        QPlainTextEdit::keyPressEvent(e);
+        return;
+    }
+
     int pos = 0;
     auto text = toPlainText() + e->text();
     const auto state = _validator->validate(text, pos);

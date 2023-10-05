@@ -593,7 +593,7 @@ void DialogAddressScan::updateLogView(int deviceId, const QModbusRequest& reques
     request.decodeData(&pointAddress);
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(),
+    proxyLogModel->append(pointAddress + 1, ui->comboBoxPointType->currentPointType(),
                           ModbusMessage::create(request, QDateTime::currentDateTime(), deviceId, true));
 }
 

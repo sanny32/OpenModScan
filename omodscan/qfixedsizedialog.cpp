@@ -25,7 +25,7 @@ void QFixedSizeDialog::showEvent(QShowEvent* e)
 
     if(parentWidget() != nullptr)
     {
-        QRect parentRect(parentWidget()->mapToGlobal(QPoint(0, 0)), parentWidget()->size());
-        move(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, size(), parentRect).topLeft());
+        const auto rc = parentWidget()->frameGeometry();
+        move(rc.center() - rect().center());
     }
 }

@@ -1,4 +1,5 @@
 #include <QKeyEvent>
+#include <QLineEdit>
 #include "modbusfunction.h"
 #include "enums.h"
 #include "formatutils.h"
@@ -13,6 +14,7 @@
 FunctionCodeComboBox::FunctionCodeComboBox(QWidget *parent)
     : QComboBox(parent)
     ,_currentFunc(QModbusPdu::Invalid)
+    ,_validator(nullptr)
 {
     setInputMode(InputMode::DecMode);
 
@@ -57,16 +59,25 @@ FunctionCodeComboBox::InputMode FunctionCodeComboBox::inputMode() const
 ///
 void FunctionCodeComboBox::setInputMode(FunctionCodeComboBox::InputMode mode)
 {
+    if(!isEditable())
+        return;
+
     _inputMode = mode;
+
+    if(_validator)
+    {
+        delete _validator;
+        _validator = nullptr;
+    }
 
     switch(mode)
     {
         case DecMode:
-           // setValidator(new QUIntValidator(0, 255, this));
+            _validator = new QUIntValidator(0, 255, this);
         break;
 
         case HexMode:
-           // setValidator(new QHexValidator(0, 0xFF, this));
+           _validator = new QHexValidator(0, 0xFF, this);
         break;
     }
 
@@ -107,8 +118,9 @@ void FunctionCodeComboBox::update()
 {
     if(currentData(Qt::DisplayRole) != currentText())
     {
-        const auto code = formatFuncCode(currentFunctionCode());
-        setCurrentText(code);
+        const auto idx = findData(_currentFunc);
+        if(idx != -1) setCurrentIndex(idx);
+        else setCurrentText(formatFuncCode(_currentFunc));
     }
 
     for (int i = 0; i < count(); i++)
@@ -145,8 +157,11 @@ void FunctionCodeComboBox::on_currentIndexChanged(int index)
 ///
 void FunctionCodeComboBox::on_currentTextChanged(const QString& text)
 {
-     if(currentData(Qt::DisplayRole) == text)
-        _currentFunc = currentData().value<QModbusPdu::FunctionCode>();
+    const auto idx = findData(text, Qt::DisplayRole);
+    if(idx != -1)
+    {
+        _currentFunc = itemData(idx).value<QModbusPdu::FunctionCode>();
+    }
     else
     {
         bool ok;
@@ -175,4 +190,34 @@ void FunctionCodeComboBox::focusOutEvent(QFocusEvent* e)
 {
     update();
     QComboBox::focusOutEvent(e);
+}
+
+///
+/// \brief FunctionCodeComboBox::keyPressEvent
+/// \param e
+///
+void FunctionCodeComboBox::keyPressEvent(QKeyEvent* e)
+{
+    if(!_validator || !isEditable())
+    {
+        QComboBox::keyPressEvent(e);
+        return;
+    }
+
+    int pos = 0;
+    auto text = e->text();
+    const auto state = _validator->validate(text, pos);
+
+    if(state == QValidator::Acceptable ||
+        e->key() == Qt::Key_Backspace ||
+        e->key() == Qt::Key_Delete ||
+        e->matches(QKeySequence::Cut) ||
+        e->matches(QKeySequence::Copy) ||
+        e->matches(QKeySequence::Paste) ||
+        e->matches(QKeySequence::Undo) ||
+        e->matches(QKeySequence::Redo) ||
+        e->matches(QKeySequence::SelectAll))
+    {
+        QComboBox::keyPressEvent(e);
+    }
 }

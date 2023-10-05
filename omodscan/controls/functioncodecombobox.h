@@ -31,6 +31,7 @@ signals:
 
 protected:
     void focusOutEvent(QFocusEvent* e) override;
+    void keyPressEvent(QKeyEvent* e) override;
 
 private slots:
     void on_currentIndexChanged(int);
@@ -43,6 +44,7 @@ private:
 private:
     InputMode _inputMode;
     QModbusPdu::FunctionCode _currentFunc;
+    QValidator* _validator;
 };
 
 #endif // FUNCTIONCODECOMBOBOX_H

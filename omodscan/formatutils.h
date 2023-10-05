@@ -9,24 +9,6 @@
 #include "numericutils.h"
 #include "byteorderutils.h"
 
-///
-/// \brief formatFuncCode
-/// \param mode
-/// \param c
-/// \return
-///
-inline QString formatFuncCode(DataDisplayMode mode, QModbusPdu::FunctionCode c)
-{
-    switch(mode)
-    {
-        case DataDisplayMode::Decimal:
-        case DataDisplayMode::Integer:
-            return QString("%1").arg(QString::number(c), 2, '0');
-
-        default:
-            return QString("%1").arg(QString::number(c, 16).toUpper(), 2, '0');
-    }
-}
 
 ///
 /// \brief formatByteValue
@@ -43,7 +25,7 @@ inline QString formatByteValue(DataDisplayMode mode, uchar c)
             return QString("%1").arg(QString::number(c), 3, '0');
 
         default:
-            return QString("%1").arg(QString::number(c, 16).toUpper(), 2, '0');
+            return QString("0x%1").arg(QString::number(c, 16).toUpper(), 2, '0');
     }
 }
 
@@ -56,8 +38,18 @@ inline QString formatByteValue(DataDisplayMode mode, uchar c)
 inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
 {
     QStringList values;
-    for(auto&& i : ar)
-        values += formatByteValue(mode, i);
+    for(uchar i : ar)
+        switch(mode)
+        {
+            case DataDisplayMode::Decimal:
+            case DataDisplayMode::Integer:
+                values += QString("%1").arg(QString::number(i), 3, '0');
+            break;
+
+            default:
+                values += QString("%1").arg(QString::number(i, 16).toUpper(), 2, '0');
+            break;
+        }
 
     return values.join(" ");
 }
@@ -77,7 +69,7 @@ inline QString formatWordValue(DataDisplayMode mode, quint16 v)
             return QString("%1").arg(QString::number(v), 3, '0');
 
         default:
-            return QString("%1").arg(QString::number(v, 16).toUpper(), 2, '0');
+            return QString("0x%1").arg(QString::number(v, 16).toUpper(), 2, '0');
     }
 }
 
@@ -95,16 +87,16 @@ inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint1
 
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        result = QString("<%1>").arg(value);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-        result = QStringLiteral("<%1>").arg(value, 16, 2, QLatin1Char('0'));
-        break;
-    default:
-        break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString("<%1>").arg(value);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QStringLiteral("<%1>").arg(value, 16, 2, QLatin1Char('0'));
+            break;
+        default:
+            break;
     }
     outValue = value;
     return result;
@@ -124,16 +116,16 @@ inline QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint
 
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        result = QStringLiteral("<%1>").arg(value, 1, 10, QLatin1Char('0'));
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-        result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char('0'));
-        break;
-    default:
-        break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QStringLiteral("<%1>").arg(value, 1, 10, QLatin1Char('0'));
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char('0'));
+            break;
+        default:
+            break;
     }
     outValue = value;
     return result;
@@ -153,16 +145,16 @@ inline QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint1
 
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        result = QString("<%1>").arg(value);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-        result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char(' '));
-        break;
-    default:
-        break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString("<%1>").arg(value);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char(' '));
+            break;
+        default:
+            break;
     }
     outValue = value;
     return result;
@@ -182,19 +174,19 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
 
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        result = QString("<%1>").arg(value);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-        result = QStringLiteral("<%1H>").arg(value, 4, 16, QLatin1Char('0'));
-        break;
-    default:
-        break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString("<%1>").arg(value);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            result = QString("<0x%1>").arg(QString::number(value, 16).toUpper(), 4, '0');
+            break;
+        default:
+            break;
     }
     outValue = value;
-    return result.toUpper();
+    return result;
 }
 
 ///
@@ -212,23 +204,23 @@ inline QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16
     QString result;
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
 
-        const float value = makeFloat(value1, value2, order);
-        outValue = value;
-        result = QLocale().toString(value);
-    }
-    break;
-    default:
+            const float value = makeFloat(value1, value2, order);
+            outValue = value;
+            result = QLocale().toString(value);
+        }
         break;
+        default:
+            break;
     }
     return result;
 }
@@ -248,23 +240,23 @@ inline QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 
     QString result;
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
 
-        const qint32 value = makeLong(value1, value2, order);
-        outValue = value;
-        result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
-    }
-    break;
-    default:
+            const qint32 value = makeLong(value1, value2, order);
+            outValue = value;
+            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
+        }
         break;
+        default:
+            break;
     }
     return result;
 }
@@ -284,23 +276,23 @@ inline QString formatUnsignedLongValue(QModbusDataUnit::RegisterType pointType, 
     QString result;
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
 
-        const quint32 value = makeULong(value1, value2, order);
-        outValue = value;
-        result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
-    }
-    break;
-    default:
+            const quint32 value = makeULong(value1, value2, order);
+            outValue = value;
+            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
+        }
         break;
+        default:
+            break;
     }
     return result;
 }
@@ -322,23 +314,23 @@ inline QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint1
     QString result;
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
 
-        const double value = makeDouble(value1, value2, value3, value4, order);
-        outValue = value;
-        result = QLocale().toString(value, 'g', 16);
-    }
-    break;
-    default:
+            const double value = makeDouble(value1, value2, value3, value4, order);
+            outValue = value;
+            result = QLocale().toString(value, 'g', 16);
+        }
         break;
+        default:
+            break;
     }
     return result;
 }
@@ -355,23 +347,23 @@ inline QString formatAddress(QModbusDataUnit::RegisterType pointType, int addres
     QString prefix;
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-        prefix = "0";
-        break;
-    case QModbusDataUnit::DiscreteInputs:
-        prefix = "1";
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-        prefix = "4";
-        break;
-    case QModbusDataUnit::InputRegisters:
-        prefix = "3";
-        break;
-    default:
-        break;
+        case QModbusDataUnit::Coils:
+            prefix = "0";
+            break;
+        case QModbusDataUnit::DiscreteInputs:
+            prefix = "1";
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+            prefix = "4";
+            break;
+        case QModbusDataUnit::InputRegisters:
+            prefix = "3";
+            break;
+        default:
+            break;
     }
 
-    return hexFormat ? QStringLiteral("%1H").arg(address, 4, 16, QLatin1Char('0')) :
+    return hexFormat ? QString("<0x%1>").arg(QString::number(address, 16).toUpper(), 4, '0') :
                prefix + QStringLiteral("%1").arg(address, 4, 10, QLatin1Char('0'));
 }
 

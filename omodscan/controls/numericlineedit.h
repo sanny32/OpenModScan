@@ -59,7 +59,9 @@ signals:
     void rangeChanged(const QVariant& bottom, const QVariant& top);
 
 protected:
+    void focusInEvent(QFocusEvent*) override;
     void focusOutEvent(QFocusEvent*) override;
+    void keyPressEvent(QKeyEvent*) override;
 
 private slots:
     void on_editingFinished();

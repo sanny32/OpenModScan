@@ -119,8 +119,6 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
 {
     if(checked)
     {
-        ui->lineEditSlaveAddress->setPaddingZeroes(true);
-        ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::HexMode);
         ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::HexMode);
         ui->sendData->setInputMode(ByteListTextEdit::HexMode);
         ui->responseBuffer->setInputMode(ByteListTextEdit::HexMode);
@@ -136,8 +134,6 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
 {
     if(checked)
     {
-        ui->lineEditSlaveAddress->setPaddingZeroes(false);
-        ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::DecMode);
         ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::DecMode);
         ui->sendData->setInputMode(ByteListTextEdit::DecMode);
         ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);

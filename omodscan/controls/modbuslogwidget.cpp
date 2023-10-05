@@ -139,6 +139,25 @@ void ModbusLogWidget::clear()
 }
 
 ///
+/// \brief ModbusLogWidget::rowCount
+/// \return
+///
+int ModbusLogWidget::rowCount() const
+{
+    return model()->rowCount();
+}
+
+///
+/// \brief ModbusLogWidget::index
+/// \param row
+/// \return
+///
+QModelIndex ModbusLogWidget::index(int row)
+{
+    return model()->index(row, 0);
+}
+
+///
 /// \brief ModbusLogWidget::addItem
 /// \param pdu
 /// \param timestamp

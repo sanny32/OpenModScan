@@ -49,6 +49,10 @@ public:
     explicit ModbusLogWidget(QWidget* parent = nullptr);
 
     void clear();
+
+    int rowCount() const;
+    QModelIndex index(int row);
+
     void addItem(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request);
     const ModbusMessage* itemAt(const QModelIndex& index);
 

@@ -533,10 +533,7 @@ void OutputWidget::setStatus(const QString& status)
     {
         const auto info = QString("** %1 **").arg(status);
         if(info != ui->labelStatus->text())
-        {
             ui->labelStatus->setText(info);
-            captureString(info);
-        }
     }
 }
 
@@ -608,14 +605,6 @@ void OutputWidget::updateTraffic(const QModbusResponse& response, int deviceId)
 void OutputWidget::updateData(const QModbusDataUnit& data)
 {
     _listModel->updateData(data);
-
-    if(captureMode() == CaptureMode::TextCapture)
-    {
-        QStringList capstr;
-        for(int i = 0; i < _listModel->rowCount(); i++)
-            capstr.push_back(_listModel->data(_listModel->index(i), CaptureRole).toString());
-        captureString(capstr.join(' '));
-    }
 }
 
 ///
@@ -809,9 +798,7 @@ void OutputWidget::captureString(const QString& s)
     if(_fileCapture.isOpen())
     {
        QTextStream stream(&_fileCapture);
-       stream << QDateTime::currentDateTime().toString(Qt::ISODateWithMs) << " " <<
-              formatAddress(_displayDefinition.PointType, _displayDefinition.PointAddress, false) << " "
-              << s << "\n";
+       stream << s << "\n";
     }
 }
 
@@ -833,4 +820,19 @@ void OutputWidget::showModbusMessage(const QModelIndex& index)
 void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu)
 {
     ui->logView->addItem(pdu, QDateTime::currentDateTime(), server, request);
+
+    if(captureMode() == CaptureMode::TextCapture)
+    {
+        const auto idx = ui->logView->index(ui->logView->rowCount() - 1);
+        const auto msg = ui->logView->itemAt(idx);
+
+        if(msg != nullptr)
+        {
+            const auto str = QString("%1 %2 %3").arg(
+                    msg->timestamp().toString(Qt::ISODateWithMs),
+                    (msg->isRequest()?  "<<" : ">>"),
+                    msg->toString(DataDisplayMode::Hex));
+            captureString(str);
+        }
+    }
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>707</width>
-    <height>863</height>
+    <height>810</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -204,15 +204,28 @@
          <property name="title">
           <string>Address Range</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_12">
-          <item>
+         <layout class="QFormLayout" name="formLayout_4">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="formAlignment">
+           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+          </property>
+          <item row="0" column="0">
            <widget class="QLabel" name="labelIPAddressFrom">
             <property name="text">
              <string>from</string>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelIPAddressTo">
+            <property name="text">
+             <string>to</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
            <widget class="IpAddressLineEdit" name="lineEditIPAddressFrom">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -226,16 +239,15 @@
               <height>25</height>
              </size>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="labelIPAddressTo">
-            <property name="text">
-             <string>to</string>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
             </property>
            </widget>
           </item>
-          <item>
+          <item row="2" column="1">
            <widget class="IpAddressLineEdit" name="lineEditIPAddressTo">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -247,6 +259,12 @@
              <size>
               <width>0</width>
               <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
              </size>
             </property>
            </widget>
@@ -285,6 +303,12 @@
           <string>Port Range</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="formAlignment">
+           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+          </property>
           <item row="0" column="1">
            <widget class="QSpinBox" name="spinBoxPortFrom">
             <property name="sizePolicy">
@@ -356,7 +380,7 @@
         <widget class="QPushButton" name="pushButtonScan">
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>152</width>
            <height>60</height>
           </size>
          </property>
@@ -559,6 +583,9 @@ font-weight: bold;</string>
           <string>Device Id</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
+          <property name="labelAlignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
           <property name="formAlignment">
            <set>Qt::AlignHCenter|Qt::AlignTop</set>
           </property>

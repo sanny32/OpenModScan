@@ -30,6 +30,7 @@ signals:
     void functionCodeChanged(QModbusPdu::FunctionCode funcCode);
 
 protected:
+    void focusInEvent(QFocusEvent* e) override;
     void focusOutEvent(QFocusEvent* e) override;
     void keyPressEvent(QKeyEvent* e) override;
 

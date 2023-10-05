@@ -200,6 +200,9 @@
            <verstretch>3</verstretch>
           </sizepolicy>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -232,6 +235,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>FunctionCodeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>functioncodecombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
    <header>numericlineedit.h</header>
@@ -245,11 +253,6 @@
    <class>ByteListTextEdit</class>
    <extends>QPlainTextEdit</extends>
    <header>bytelisttextedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>FunctionCodeComboBox</class>
-   <extends>QComboBox</extends>
-   <header>functioncodecombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

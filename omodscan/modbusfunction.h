@@ -14,9 +14,20 @@ public:
     {
     }
 
+    static QVector<QModbusPdu::FunctionCode> validCodes() {
+        static const QVector<QModbusPdu::FunctionCode> codes = {
+            QModbusPdu::ReadCoils, QModbusPdu::ReadDiscreteInputs, QModbusPdu::ReadHoldingRegisters, QModbusPdu::ReadInputRegisters,
+            QModbusPdu::WriteSingleCoil, QModbusPdu::WriteSingleRegister, QModbusPdu::ReadExceptionStatus, QModbusPdu::Diagnostics,
+            QModbusPdu::GetCommEventCounter, QModbusPdu::GetCommEventLog, QModbusPdu::WriteMultipleCoils, QModbusPdu::WriteMultipleRegisters,
+            QModbusPdu::ReportServerId, QModbusPdu::ReadFileRecord, QModbusPdu::WriteFileRecord, QModbusPdu::MaskWriteRegister,
+            QModbusPdu::ReadWriteMultipleRegisters, QModbusPdu::ReadFifoQueue, QModbusPdu::EncapsulatedInterfaceTransport
+        };
+        return codes;
+    }
+
     bool isValid() const
     {
-        return _code >= 1 && _code <= 0x2B;
+        return validCodes().contains(_code);
     }
 
     bool isException() const

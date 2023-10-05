@@ -28,7 +28,7 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
 
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveAddress->setValue(slaveAddress);
-    ui->comboBoxFunction->addAllItems();
+    ui->comboBoxFunction->addItems(ModbusFunction::validCodes());
     ui->comboBoxFunction->setCurrentFunctionCode(func);
     ui->responseInfo->setShowTimestamp(false);
 

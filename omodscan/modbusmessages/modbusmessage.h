@@ -91,7 +91,7 @@ public:
     /// \return
     ///
     bool isException() const {
-        return _funcCode & QModbusPdu::ExceptionByte;
+        return !isRequest() && (_funcCode & QModbusPdu::ExceptionByte);
     }
 
     ///

@@ -103,19 +103,12 @@ void FunctionCodeComboBox::addItem(QModbusPdu::FunctionCode funcCode)
 }
 
 ///
-/// \brief FunctionCodeComboBox::addAllItems
+/// \brief FunctionCodeComboBox::addItems
+/// \param funcCodes
 ///
-void FunctionCodeComboBox::addAllItems()
+void FunctionCodeComboBox::addItems(const QVector<QModbusPdu::FunctionCode>& funcCodes)
 {
-    static const auto items = {
-        QModbusPdu::ReadCoils, QModbusPdu::ReadDiscreteInputs, QModbusPdu::ReadHoldingRegisters, QModbusPdu::ReadInputRegisters,
-        QModbusPdu::WriteSingleCoil, QModbusPdu::WriteSingleRegister, QModbusPdu::ReadExceptionStatus, QModbusPdu::Diagnostics,
-        QModbusPdu::GetCommEventCounter, QModbusPdu::GetCommEventLog, QModbusPdu::WriteMultipleCoils, QModbusPdu::WriteMultipleRegisters,
-        QModbusPdu::ReportServerId, QModbusPdu::ReadFileRecord, QModbusPdu::WriteFileRecord, QModbusPdu::MaskWriteRegister,
-        QModbusPdu::ReadWriteMultipleRegisters, QModbusPdu::ReadFifoQueue, QModbusPdu::EncapsulatedInterfaceTransport
-    };
-
-    for(auto&& item : items)
+    for(auto&& item : funcCodes)
         addItem(item);
 }
 

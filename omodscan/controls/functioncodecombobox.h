@@ -24,7 +24,7 @@ public:
     void setInputMode(InputMode mode);
 
     void addItem(QModbusPdu::FunctionCode funcCode);
-    void addAllItems();
+    void addItems(const QVector<QModbusPdu::FunctionCode>& funcCodes);
 
 signals:
     void functionCodeChanged(QModbusPdu::FunctionCode funcCode);

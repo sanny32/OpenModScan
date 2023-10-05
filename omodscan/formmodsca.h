@@ -31,7 +31,7 @@ class FormModSca : public QWidget
 public:
     static QVersionNumber VERSION;
 
-    explicit FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulator> simulator, MainWindow* parent);
+    explicit FormModSca(int id, ModbusClient& client, DataSimulator* simulator, MainWindow* parent);
     ~FormModSca();
 
     int formId() const {
@@ -134,7 +134,7 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusClient& _modbusClient;
-    QSharedPointer<DataSimulator> _dataSimulator;
+    DataSimulator* _dataSimulator;
 };
 
 ///

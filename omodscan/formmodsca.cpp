@@ -19,7 +19,7 @@ QVersionNumber FormModSca::VERSION = QVersionNumber(1, 4);
 /// \param ver
 /// \param parent
 ///
-FormModSca::FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulator> simulator, MainWindow* parent)
+FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, MainWindow* parent)
     : QWidget(parent)
     , ui(new Ui::FormModSca)
     ,_formId(id)
@@ -56,9 +56,9 @@ FormModSca::FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulato
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &FormModSca::on_modbusDisconnected);
     connect(&_timer, &QTimer::timeout, this, &FormModSca::on_timeout);
 
-    connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSca::on_simulationStarted);
-    connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSca::on_simulationStopped);
-    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSca::on_dataSimulated);
+    connect(_dataSimulator, &DataSimulator::simulationStarted, this, &FormModSca::on_simulationStarted);
+    connect(_dataSimulator, &DataSimulator::simulationStopped, this, &FormModSca::on_simulationStopped);
+    connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormModSca::on_dataSimulated);
 }
 
 ///

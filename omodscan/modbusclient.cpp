@@ -1,15 +1,16 @@
 #include <QModbusTcpClient>
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QModbusRtuSerialMaster>
+typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
+#else
+#include <QModbusRtuSerialClient>
+#endif
+
+#include "formatutils.h"
 #include "numericutils.h"
 #include "modbusexception.h"
 #include "modbusclient.h"
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    #include <QModbusRtuSerialMaster>
-    typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
-#else
-    #include <QModbusRtuSerialClient>
-#endif
-
 
 ///
 /// \brief ModbusClient::ModbusClient
@@ -621,7 +622,7 @@ void ModbusClient::on_writeReply()
         if (reply->error() == QModbusDevice::ProtocolError)
         {
             ModbusException ex(raw.exceptionCode());
-            emit modbusError(QString("%1. %2 (0x%3)").arg(errorDesc, ex, QString::number(ex, 16)), requestId);
+            emit modbusError(QString("%1. %2 (0x%3)").arg(errorDesc, ex, formatByteValue(DataDisplayMode::Hex, ex)), requestId);
         }
         else if(reply->error() != QModbusDevice::NoError)
             emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);

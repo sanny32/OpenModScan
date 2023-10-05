@@ -62,7 +62,11 @@ public:
     int rowLimit() const;
     void setRowLimit(int val);
 
+    bool autoscroll() const;
+    void setAutoscroll(bool on);
+
 private:
+    bool _autoscroll;
     DataDisplayMode _dataDisplayMode;
 };
 

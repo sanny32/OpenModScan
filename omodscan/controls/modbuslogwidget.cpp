@@ -119,13 +119,14 @@ void ModbusLogModel::deleteItems()
 ///
 ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
+    , _autoscroll(false)
 {
     setItemDelegate(new HtmlDelegate(this));
     setModel(new ModbusLogModel(this));
 
     connect(model(), &ModbusLogModel::rowsInserted,
             this, [&]{
-        //scrollToBottom();
+        if(_autoscroll) scrollToBottom();
         setCurrentIndex(QModelIndex());
     });
 }
@@ -135,7 +136,8 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
 ///
 void ModbusLogWidget::clear()
 {
-    ((ModbusLogModel*)model())->clear();
+    if(model())
+        ((ModbusLogModel*)model())->clear();
 }
 
 ///
@@ -144,7 +146,7 @@ void ModbusLogWidget::clear()
 ///
 int ModbusLogWidget::rowCount() const
 {
-    return model()->rowCount();
+    return model() ? model()->rowCount() : 0;
 }
 
 ///
@@ -154,7 +156,7 @@ int ModbusLogWidget::rowCount() const
 ///
 QModelIndex ModbusLogWidget::index(int row)
 {
-    return model()->index(row, 0);
+    return model() ? model()->index(row, 0) : QModelIndex();
 }
 
 ///
@@ -166,7 +168,8 @@ QModelIndex ModbusLogWidget::index(int row)
 ///
 void ModbusLogWidget::addItem(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request)
 {
-    ((ModbusLogModel*)model())->append(ModbusMessage::create(pdu, timestamp, deviceId, request));
+    if(model())
+        ((ModbusLogModel*)model())->append(ModbusMessage::create(pdu, timestamp, deviceId, request));
 }
 
 ///
@@ -179,7 +182,9 @@ const ModbusMessage* ModbusLogWidget::itemAt(const QModelIndex& index)
     if(!index.isValid())
         return nullptr;
 
-    return model()->data(index, Qt::UserRole).value<const ModbusMessage*>();
+    return model() ?
+               model()->data(index, Qt::UserRole).value<const ModbusMessage*>() :
+               nullptr;
 }
 
 ///
@@ -198,7 +203,9 @@ DataDisplayMode ModbusLogWidget::dataDisplayMode() const
 void ModbusLogWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
-    ((ModbusLogModel*)model())->update();
+
+    if(model())
+        ((ModbusLogModel*)model())->update();
 }
 
 ///
@@ -207,7 +214,7 @@ void ModbusLogWidget::setDataDisplayMode(DataDisplayMode mode)
 ///
 int ModbusLogWidget::rowLimit() const
 {
-    return ((ModbusLogModel*)model())->rowLimit();
+    return model() ? ((ModbusLogModel*)model())->rowLimit() : 0;
 }
 
 ///
@@ -216,5 +223,24 @@ int ModbusLogWidget::rowLimit() const
 ///
 void ModbusLogWidget::setRowLimit(int val)
 {
-    ((ModbusLogModel*)model())->setRowLimit(val);
+    if(model())
+        ((ModbusLogModel*)model())->setRowLimit(val);
+}
+
+///
+/// \brief ModbusLogWidget::autoscroll
+/// \return
+///
+bool ModbusLogWidget::autoscroll() const
+{
+    return _autoscroll;
+}
+
+///
+/// \brief ModbusLogWidget::setAutoscroll
+/// \param on
+///
+void ModbusLogWidget::setAutoscroll(bool on)
+{
+    _autoscroll = on;
 }

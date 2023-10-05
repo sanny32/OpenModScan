@@ -1,4 +1,4 @@
-#include <QDebug>
+#include <QKeyEvent>
 #include <float.h>
 #include <QIntValidator>
 #include "qhexvalidator.h"
@@ -154,19 +154,22 @@ void NumericLineEdit::internalSetValue(QVariant value)
         break;
 
         case HexMode:
+        {
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
+            const QString prefix = (hasFocus() ? "" : "0x");
             if(_paddingZeroes)
             {
-                const auto text = QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 16, QLatin1Char('0')).toUpper();
+                const auto text = prefix + QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 16, QLatin1Char('0')).toUpper();
                 if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
             else
             {
-                const auto text = QString("%1").arg(value.toUInt(), -1, 16).toUpper();
+                const auto text = prefix + QString("%1").arg(value.toUInt(), -1, 16).toUpper();
                 if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
+        }
         break;
 
         case FloatMode:
@@ -250,13 +253,32 @@ void NumericLineEdit::updateValue()
 }
 
 ///
-/// \brief NumberLineEdit::focusOutEvent
-/// \param event
+/// \brief NumericLineEdit::focusInEvent
+/// \param e
 ///
-void NumericLineEdit::focusOutEvent(QFocusEvent* event)
+void NumericLineEdit::focusInEvent(QFocusEvent* e)
 {
     updateValue();
-    QLineEdit::focusOutEvent(event);
+    QLineEdit::focusInEvent(e);
+}
+
+///
+/// \brief NumberLineEdit::focusOutEvent
+/// \param e
+///
+void NumericLineEdit::focusOutEvent(QFocusEvent* e)
+{
+    updateValue();
+    QLineEdit::focusOutEvent(e);
+}
+
+///
+/// \brief NumericLineEdit::keyPressEvent
+/// \param e
+///
+void NumericLineEdit::keyPressEvent(QKeyEvent* e)
+{
+    QLineEdit::keyPressEvent(e);
 }
 
 ///
@@ -357,7 +379,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         {
             const int nums = QString::number(top.toUInt(), 16).length();
             _paddingZeroWidth = qMax(1, nums);
-            setMaxLength(qMax(1, nums));
+            setMaxLength(qMax(1, nums + 2));
             setValidator(new QHexValidator(bottom.toUInt(), top.toUInt(), this));
         }
         break;

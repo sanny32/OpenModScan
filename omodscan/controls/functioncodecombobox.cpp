@@ -1,8 +1,6 @@
 #include <QKeyEvent>
 #include <QLineEdit>
 #include "modbusfunction.h"
-#include "enums.h"
-#include "formatutils.h"
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
 #include "functioncodecombobox.h"
@@ -81,6 +79,16 @@ void FunctionCodeComboBox::setInputMode(FunctionCodeComboBox::InputMode mode)
         break;
     }
 
+    blockSignals(true);
+    lineEdit()->blockSignals(true);
+    for (int i = 0; i < count(); i++)
+    {
+        const auto funcCode = itemData(i).value<QModbusPdu::FunctionCode>();
+        setItemText(i, QString("%1: %2").arg(formatFuncCode(funcCode), ModbusFunction(funcCode)));
+    }
+    blockSignals(false);
+    lineEdit()->blockSignals(false);
+
     update();
 }
 
@@ -116,19 +124,11 @@ void FunctionCodeComboBox::addAllItems()
 ///
 void FunctionCodeComboBox::update()
 {
-    if(currentData(Qt::DisplayRole) != currentText())
-    {
-        const auto idx = findData(_currentFunc);
-        if(idx != -1) setCurrentIndex(idx);
-        else setCurrentText(formatFuncCode(_currentFunc));
-    }
-
-    for (int i = 0; i < count(); i++)
-    {
-        const auto funcCode = itemData(i).value<QModbusPdu::FunctionCode>();
-        const auto code = formatFuncCode( funcCode);
-        setItemText(i, QString("%1: %2").arg(code, ModbusFunction(funcCode)));
-    }
+    const auto idx = findData(_currentFunc, Qt::UserRole);
+    if(idx != -1)
+        setCurrentIndex(idx);
+    else
+        setCurrentText(formatFuncCode(_currentFunc));
 }
 
 ///
@@ -138,8 +138,17 @@ void FunctionCodeComboBox::update()
 ///
 QString FunctionCodeComboBox::formatFuncCode(QModbusPdu::FunctionCode funcCode) const
 {
-    const auto mode = (_inputMode == InputMode::HexMode) ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
-    return ::formatFuncCode(mode, funcCode);
+    switch(_inputMode)
+    {
+        case DecMode:
+            return QString("%1").arg(QString::number(funcCode), 2, '0');
+
+        case HexMode:
+            return (isEditable() && hasFocus() ? "" : "0x") + QString("%1").arg(QString::number(funcCode, 16).toUpper(), 2, '0');
+
+        default:
+            return QString::number(funcCode);
+    }
 }
 
 ///
@@ -148,8 +157,11 @@ QString FunctionCodeComboBox::formatFuncCode(QModbusPdu::FunctionCode funcCode) 
 ///
 void FunctionCodeComboBox::on_currentIndexChanged(int index)
 {
-    _currentFunc = itemData(index).value<QModbusPdu::FunctionCode>();
-    emit functionCodeChanged(_currentFunc);
+    if(index >= 0)
+    {
+        _currentFunc = itemData(index).value<QModbusPdu::FunctionCode>();
+        emit functionCodeChanged(_currentFunc);
+    }
 }
 
 ///
@@ -171,15 +183,27 @@ void FunctionCodeComboBox::on_currentTextChanged(const QString& text)
         {
             case InputMode::DecMode:
                 func = text.toUInt(&ok);
-                break;
+            break;
 
             case InputMode::HexMode:
                 func = text.toUInt(&ok, 16);
-                break;
+            break;
         }
 
         _currentFunc = ok ? (QModbusPdu::FunctionCode)func : QModbusPdu::Invalid;
     }
+}
+
+///
+/// \brief FunctionCodeComboBox::focusInEvent
+/// \param e
+///
+void FunctionCodeComboBox::focusInEvent(QFocusEvent* e)
+{
+    if(isEditable())
+        setCurrentText(formatFuncCode(_currentFunc));
+
+    QComboBox::focusInEvent(e);
 }
 
 ///

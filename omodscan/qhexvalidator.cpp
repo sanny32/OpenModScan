@@ -9,6 +9,12 @@ QHexValidator::QHexValidator(QObject *parent)
 {
 }
 
+///
+/// \brief QHexValidator::QHexValidator
+/// \param bottom
+/// \param top
+/// \param parent
+///
 QHexValidator::QHexValidator(int bottom, int top, QObject* parent)
     : QIntValidator(bottom, top, parent)
 {

@@ -148,7 +148,7 @@ private:
 
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
-    QSharedPointer<QPrinter> _selectedPrinter;
-    QSharedPointer<DataSimulator> _dataSimulator;
+    QPrinter* _selectedPrinter;
+    DataSimulator* _dataSimulator;
 };
 #endif // MAINWINDOW_H

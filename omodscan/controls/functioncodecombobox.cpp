@@ -177,7 +177,7 @@ void FunctionCodeComboBox::on_currentTextChanged(const QString& text)
     else
     {
         bool ok;
-        quint8 func;
+        quint8 func = 0;
 
         switch(_inputMode)
         {

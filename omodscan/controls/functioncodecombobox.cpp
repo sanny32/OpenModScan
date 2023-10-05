@@ -57,10 +57,10 @@ FunctionCodeComboBox::InputMode FunctionCodeComboBox::inputMode() const
 ///
 void FunctionCodeComboBox::setInputMode(FunctionCodeComboBox::InputMode mode)
 {
+    _inputMode = mode;
+
     if(!isEditable())
         return;
-
-    _inputMode = mode;
 
     if(_validator)
     {

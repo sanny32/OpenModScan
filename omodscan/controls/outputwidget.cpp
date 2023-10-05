@@ -711,6 +711,8 @@ ByteOrder OutputWidget::byteOrder() const
 void OutputWidget::setByteOrder(ByteOrder order)
 {
     _byteOrder = order;
+    ui->modbusMsg->setByteOrder(order);
+
     _listModel->update();
 }
 

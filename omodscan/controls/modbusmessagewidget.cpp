@@ -9,8 +9,11 @@
 ///
 ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     : QListWidget(parent)
+    ,_byteOrder(ByteOrder::LittleEndian)
+    ,_dataDisplayMode(DataDisplayMode::Decimal)
     ,_showTimestamp(true)
     ,_msg(nullptr)
+
 {
     setItemDelegate(new HtmlDelegate(this));
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -41,6 +44,25 @@ DataDisplayMode ModbusMessageWidget::dataDisplayMode() const
 void ModbusMessageWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
+    update();
+}
+
+///
+/// \brief ModbusMessageWidget::byteOrder
+/// \return
+///
+ByteOrder ModbusMessageWidget::byteOrder() const
+{
+    return _byteOrder;
+}
+
+///
+/// \brief ModbusMessageWidget::setByteOrder
+/// \param order
+///
+void ModbusMessageWidget::setByteOrder(ByteOrder order)
+{
+    _byteOrder = order;
     update();
 }
 
@@ -171,7 +193,7 @@ void ModbusMessageWidget::update()
             {
                 auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_msg);
                 const auto byteCount = resp->isValid() ? formatByteValue(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto registerValue = resp->isValid() ? formatByteArray(_dataDisplayMode, resp->registerValue()) : "???";
+                const auto registerValue = resp->isValid() ? formatWordArray(_dataDisplayMode, resp->registerValue(), _byteOrder) : "???";
                 addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
                 addItem(tr("<b>Register Value:</b> %1").arg(registerValue));
             }

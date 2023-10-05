@@ -55,6 +55,35 @@ inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
 }
 
 ///
+/// \brief formatWordArray
+/// \param mode
+/// \param ar
+/// \param order
+/// \return
+///
+inline QString formatWordArray(DataDisplayMode mode, const QByteArray& ar, ByteOrder order)
+{
+    QStringList values;
+    for(int i = 0; i < ar.size(); i+=2)
+    {
+        const quint16 value = makeWord(ar[i+1], ar[i], order);
+        switch(mode)
+        {
+            case DataDisplayMode::Decimal:
+            case DataDisplayMode::Integer:
+                values += QString("%1").arg(QString::number(value), 5, '0');
+                break;
+
+            default:
+                values += QString("%1").arg(QString::number(value, 16).toUpper(), 4, '0');
+                break;
+        }
+    }
+
+    return values.join(" ");
+}
+
+///
 /// \brief formatWordValue
 /// \param mode
 /// \param v

@@ -135,6 +135,7 @@ private:
     QString _filename;
     ModbusClient& _modbusClient;
     DataSimulator* _dataSimulator;
+    MainWindow* _parent;
 };
 
 ///

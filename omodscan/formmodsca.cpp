@@ -27,6 +27,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ,_noSlaveResponsesCounter(0)
     ,_modbusClient(client)
     ,_dataSimulator(simulator)
+    ,_parent(parent)
 {
     Q_ASSERT(parent != nullptr);
     Q_ASSERT(simulator != nullptr);
@@ -748,7 +749,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         {
             ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
-            DialogWriteCoilRegister dlg(params, simParams, this);
+            DialogWriteCoilRegister dlg(params, simParams, _parent);
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
@@ -768,13 +769,13 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             ModbusWriteParams params = { node, addr, value, mode, byteOrder()};
             if(mode == DataDisplayMode::Binary)
             {
-                DialogWriteHoldingRegisterBits dlg(params, this);
+                DialogWriteHoldingRegisterBits dlg(params, _parent);
                 if(dlg.exec() == QDialog::Accepted)
                     _modbusClient.writeRegister(pointType, params, _formId);
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, simParams, mode, this);
+                DialogWriteHoldingRegister dlg(params, simParams, mode, _parent);
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:

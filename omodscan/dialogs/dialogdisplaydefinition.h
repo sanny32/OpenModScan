@@ -16,12 +16,17 @@ class DialogDisplayDefinition : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogDisplayDefinition(FormModSca* parent);
+    explicit DialogDisplayDefinition(DisplayDefinition dd, QWidget* parent);
     ~DialogDisplayDefinition();
+
+    DisplayDefinition displayDefinition() const {
+        return _displayDefinition;
+    }
 
     void accept() override;
 
 private:
+    DisplayDefinition _displayDefinition;
     Ui::DialogDisplayDefinition *ui;
 };
 

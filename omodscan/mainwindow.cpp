@@ -474,8 +474,9 @@ void MainWindow::on_actionDataDefinition_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    DialogDisplayDefinition dlg(frm);
-    dlg.exec();
+    DialogDisplayDefinition dlg(frm->displayDefinition(), this);
+    if(dlg.exec() == QDialog::Accepted)
+        frm->setDisplayDefinition(dlg.displayDefinition());
 }
 
 ///

@@ -18,8 +18,8 @@ inline quint16 makeWord(quint8 lo, quint8 hi, ByteOrder order)
         quint16 asUint16;
     } v;
 
-    v.asUint8[0] = toByteOrderValue(lo, order);
-    v.asUint8[1] = toByteOrderValue(hi, order);
+    v.asUint8[0] = (order == ByteOrder::LittleEndian) ? lo : hi;
+    v.asUint8[1] = (order == ByteOrder::LittleEndian) ? hi : lo;
 
     return v.asUint16;
 }

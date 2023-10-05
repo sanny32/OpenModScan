@@ -18,6 +18,9 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    ByteOrder byteOrder() const;
+    void setByteOrder(ByteOrder order);
+
     const ModbusMessage* modbusMessage() const;
     void setModbusMessage(const ModbusMessage* msg);
 
@@ -28,6 +31,7 @@ private:
     void update();
 
 private:
+    ByteOrder _byteOrder;
     DataDisplayMode _dataDisplayMode;
     bool _showTimestamp;
     const ModbusMessage* _msg;

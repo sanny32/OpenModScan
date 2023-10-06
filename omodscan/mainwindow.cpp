@@ -11,6 +11,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
+#include "dialogmsgparser.h"
 #include "dialogaddressscan.h"
 #include "dialogmodbusscanner.h"
 #include "dialogwindowsmanager.h"
@@ -741,6 +742,15 @@ void MainWindow::on_actionUserMsg_triggered()
     }
 
     DialogUserMsg dlg(dd.DeviceId, func, mode, _modbusClient, this);
+    dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_actionMsgParser_triggered
+///
+void MainWindow::on_actionMsgParser_triggered()
+{
+    DialogMsgParser dlg(this);
     dlg.exec();
 }
 

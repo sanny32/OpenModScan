@@ -46,7 +46,7 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
     datasimulator.cpp \
-    dialogmsgparser.cpp \
+    dialogs/dialogmsgparser.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogaddressscan.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -107,7 +107,7 @@ HEADERS += \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
     datasimulator.h \
-    dialogmsgparser.h \
+    dialogs/dialogmsgparser.h \
     dialogs/dialogabout.h \
     dialogs/dialogaddressscan.h \
     dialogs/dialogautosimulation.h \
@@ -174,7 +174,7 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
-    dialogmsgparser.ui \
+    dialogs/dialogmsgparser.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogaddressscan.ui \
     dialogs/dialogautosimulation.ui \

@@ -47,6 +47,15 @@ public:
     static const ModbusMessage* create(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request);
 
     ///
+    /// \brief parse
+    /// \param data
+    /// \param withDeviceId
+    /// \param request
+    /// \return
+    ///
+    static const ModbusMessage* parse(const QByteArray& data, bool withDeviceId, bool request);
+
+    ///
     /// \brief isValid
     /// \return
     ///

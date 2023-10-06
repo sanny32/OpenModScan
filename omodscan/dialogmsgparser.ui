@@ -21,7 +21,7 @@
      </property>
      <widget class="QWidget" name="tabPdu">
       <attribute name="title">
-       <string>PDU</string>
+       <string>Modbus PDU</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -70,6 +70,9 @@
             <verstretch>1</verstretch>
            </sizepolicy>
           </property>
+          <property name="placeholderText">
+           <string>Enter bytes value  separated by spaces</string>
+          </property>
          </widget>
          <widget class="ModbusMessageWidget" name="pduInfo">
           <property name="sizePolicy">
@@ -85,7 +88,7 @@
      </widget>
      <widget class="QWidget" name="tabAdu">
       <attribute name="title">
-       <string>ADU</string>
+       <string>Modbus ADU</string>
       </attribute>
      </widget>
     </widget>

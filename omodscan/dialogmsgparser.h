@@ -15,6 +15,8 @@ public:
     explicit DialogMsgParser(QWidget *parent = nullptr);
     ~DialogMsgParser();
 
+    void accept() override;
+
 private:
     Ui::DialogMsgParser *ui;
 };

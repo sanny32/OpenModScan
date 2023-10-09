@@ -3,6 +3,7 @@
 
 #include <QDateTime>
 #include <QModbusPdu>
+#include "modbuslimits.h"
 #include "formatutils.h"
 #include "modbusfunction.h"
 #include "modbusexception.h"
@@ -60,7 +61,7 @@ public:
     /// \return
     ///
     virtual bool isValid() const {
-        return _deviceId >= 0 && _isValid;
+        return (_deviceId == 0 || ModbusLimits::slaveRange().contains(_deviceId)) && _isValid;
     }
 
     ///

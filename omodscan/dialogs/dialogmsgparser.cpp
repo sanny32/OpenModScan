@@ -1,13 +1,15 @@
 #include <QPushButton>
+#include <QAbstractEventDispatcher>
 #include "modbusmessage.h"
 #include "dialogmsgparser.h"
 #include "ui_dialogmsgparser.h"
 
 ///
 /// \brief DialogMsgParser::DialogMsgParser
+/// \param mode
 /// \param parent
 ///
-DialogMsgParser::DialogMsgParser(QWidget *parent)
+DialogMsgParser::DialogMsgParser(DataDisplayMode mode, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogMsgParser)
 {
@@ -17,8 +19,12 @@ DialogMsgParser::DialogMsgParser(QWidget *parent)
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->pduInfo->setShowTimestamp(false);
+    ui->info->setShowTimestamp(false);
     ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Parse"));
+    ui->hexView->setCheckState(mode == DataDisplayMode::Hex ? Qt::Checked : Qt::Unchecked);
+
+    auto dispatcher = QAbstractEventDispatcher::instance();
+    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogMsgParser::on_awake);
 }
 
 ///
@@ -30,13 +36,32 @@ DialogMsgParser::~DialogMsgParser()
 }
 
 ///
+/// \brief DialogMsgParser::on_awake
+///
+void DialogMsgParser::on_awake()
+{
+    ui->deviceIdIncluded->setVisible(ui->buttonPdu->isChecked());
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!ui->bytesData->isEmpty());
+}
+
+///
+/// \brief DialogMsgParser::on_hexView_toggled
+/// \param checked
+///
+void DialogMsgParser::on_hexView_toggled(bool checked)
+{
+    ui->bytesData->setInputMode(checked ? ByteListTextEdit::HexMode : ByteListTextEdit::DecMode);
+    ui->info->setDataDisplayMode(checked ? DataDisplayMode::Hex : DataDisplayMode::Decimal);
+}
+
+///
 /// \brief DialogMsgParser::accept
 ///
 void DialogMsgParser::accept()
 {
-    if(ui->pduInfo->modbusMessage())
-        delete ui->pduInfo->modbusMessage();
+    if(ui->info->modbusMessage())
+        delete ui->info->modbusMessage();
 
-    const auto msg = ModbusMessage::parse(ui->pduData->value(), ui->deviceIdIncluded->isChecked(), ui->pduRequest->isChecked());
-    ui->pduInfo->setModbusMessage(msg);
+    const auto msg = ModbusMessage::parse(ui->bytesData->value(), ui->deviceIdIncluded->isChecked(), ui->pduRequest->isChecked());
+    ui->info->setModbusMessage(msg);
 }

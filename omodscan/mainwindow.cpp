@@ -750,8 +750,12 @@ void MainWindow::on_actionUserMsg_triggered()
 ///
 void MainWindow::on_actionMsgParser_triggered()
 {
-    DialogMsgParser dlg(this);
-    dlg.exec();
+    auto frm = currentMdiChild();
+    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+
+    auto dlg = new DialogMsgParser(mode, this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
 }
 
 ///

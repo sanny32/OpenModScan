@@ -103,13 +103,15 @@ const ModbusMessage* ModbusMessage::parse(const QByteArray& data, bool withDevic
     if(withDeviceId)
     {
         pdu.setFunctionCode((QModbusPdu::FunctionCode)data[1]);
-        if(data.size() > 1) pdu.setData(data.right(data.size() - 1));
+        if(data.size() > 2) pdu.setData(data.right(data.size() - 2));
 
         return create(pdu, QDateTime::currentDateTime(), data[0], request);
     }
     else
     {
         pdu.setFunctionCode((QModbusPdu::FunctionCode)data[0]);
-        return create(pdu, QDateTime::currentDateTime(), -1, request);
+        if(data.size() > 1) pdu.setData(data.right(data.size() - 1));
+
+        return create(pdu, QDateTime::currentDateTime(), 0, request);
     }
 }

@@ -82,7 +82,7 @@ public:
     /// \param timestamp
     ///
     DiagnosticsResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+        : ModbusMessage(adu, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::Diagnostics);
     }

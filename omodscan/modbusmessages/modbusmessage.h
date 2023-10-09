@@ -236,7 +236,7 @@ protected:
         switch(_type)
         {
             case Adu:
-                return _data.size() - 7;
+                return _data.size() - 8;
 
             case Pdu:
                 return _data.size();
@@ -248,7 +248,7 @@ protected:
         switch(_type)
         {
             case Adu:
-                return _data[7 + idx];
+                return _data[8 + idx];
 
             case Pdu:
                 return _data[idx];
@@ -260,7 +260,7 @@ protected:
         switch(_type)
         {
             case Adu:
-                return _data.mid(idx + 7, len);
+                return _data.mid(idx + 8, len);
 
             case Pdu:
                 return _data.mid(idx, len);

@@ -188,7 +188,6 @@ const ModbusMessage* ModbusMessage::create(const QModbusAdu& adu, const QDateTim
 ///
 const ModbusMessage* ModbusMessage::parse(const QByteArray& data, Type type, QModbusAdu::Type protocol, bool request)
 {
-
     switch(type)
     {
         case Adu:

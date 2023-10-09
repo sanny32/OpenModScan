@@ -89,7 +89,7 @@ public:
     /// \param timestamp
     ///
     MaskWriteRegisterResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+        : ModbusMessage(adu, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
     }

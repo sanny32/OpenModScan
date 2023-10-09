@@ -18,14 +18,10 @@ public:
     /// \param type
     /// \param data
     ///
-    explicit QModbusAdu(Type type, const QByteArray &data)
-        : _type(type), _data(data)
+    explicit QModbusAdu(Type type, const QByteArray& data)
+        : _type(type)
     {
-        _pdu.setFunctionCode(QModbusPdu::FunctionCode(_data[1]));
-        if(_type == Rtu)
-            _pdu.setData(_data.mid(7, _data.size() - 9));
-        else
-            _pdu.setData(_data.mid(7, _data.size() - 7));
+        setData(data);
     }
 
     ///
@@ -46,14 +42,14 @@ public:
     /// \brief setData
     /// \param data
     ///
-    void setData(const QByteArray& data) { _data = data; }
+    void setData(const QByteArray& data) { _data = data; update(); }
 
     ///
     /// \brief transactionId
     /// \return
     ///
     quint16 transactionId() const {
-        return makeWord(_data[0], _data[1], ByteOrder::LittleEndian);
+        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
     }
 
     ///
@@ -61,7 +57,7 @@ public:
     /// \return
     ///
     quint16 protocolId() const {
-        return makeWord(_data[2], _data[3], ByteOrder::LittleEndian);
+        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
     }
 
     ///
@@ -69,7 +65,7 @@ public:
     /// \return
     ///
     quint16 length() const {
-        return makeWord(_data[4], _data[5], ByteOrder::LittleEndian);
+        return makeWord(_data[5], _data[4], ByteOrder::LittleEndian);
     }
 
     ///
@@ -127,6 +123,15 @@ public:
     }
 
 private:
+    void update()
+    {
+        _pdu.setFunctionCode(QModbusPdu::FunctionCode(_data[7]));
+        if(_type == Rtu)
+            _pdu.setData(_data.mid(8, _data.size() - 10));
+        else
+            _pdu.setData(_data.mid(8));
+    }
+
     inline static quint16 calculateCRC(const char *data, qint32 len){
         quint16 crc = 0xFFFF;
         while (len--) {
@@ -155,7 +160,7 @@ private:
     }
 
 private:
-    Type _type = Rtu;
+    Type _type;
     QByteArray _data;
     QModbusPdu _pdu;
 };

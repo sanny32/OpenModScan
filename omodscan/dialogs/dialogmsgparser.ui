@@ -98,7 +98,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="pduRequest">
+      <widget class="QCheckBox" name="rtu">
+       <property name="text">
+        <string>Modbus RTU</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="request">
        <property name="text">
         <string>Request</string>
        </property>

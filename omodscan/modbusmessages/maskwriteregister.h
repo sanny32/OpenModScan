@@ -18,7 +18,18 @@ public:
     MaskWriteRegisterRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         : ModbusMessage(pdu, timestamp, deviceId, true)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::MaskWriteRegister);
+        Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
+    }
+
+    ///
+    /// \brief MaskWriteRegisterRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    MaskWriteRegisterRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
     }
 
     ///
@@ -26,7 +37,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 6;
+        return ModbusMessage::isValid() && dataSize() == 6;
     }
 
     ///
@@ -34,7 +45,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -42,7 +53,7 @@ public:
     /// \return
     ///
     quint16 andMask() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -50,7 +61,7 @@ public:
     /// \return
     ///
     quint16 orMask() const {
-        return makeWord(_data[5], _data[4], ByteOrder::LittleEndian);
+        return makeWord(data(5), data(4), ByteOrder::LittleEndian);
     }
 };
 
@@ -69,7 +80,18 @@ public:
     MaskWriteRegisterResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         :ModbusMessage(pdu, timestamp, deviceId, false)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::MaskWriteRegister);
+        Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
+    }
+
+    ///
+    /// \brief MaskWriteRegisterResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    MaskWriteRegisterResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
     }
 
     ///
@@ -77,7 +99,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 6;
+        return ModbusMessage::isValid() && dataSize() == 6;
     }
 
     ///
@@ -85,7 +107,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -93,7 +115,7 @@ public:
     /// \return
     ///
     quint16 andMask() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -101,7 +123,7 @@ public:
     /// \return
     ///
     quint16 orMask() const {
-        return makeWord(_data[5], _data[4], ByteOrder::LittleEndian);
+        return makeWord(data(5), data(4), ByteOrder::LittleEndian);
     }
 };
 

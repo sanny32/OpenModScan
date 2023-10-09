@@ -124,6 +124,14 @@ void ModbusMessageWidget::update()
 
     addItem(tr("<b>Type:</b> %1").arg(_msg->isRequest() ? tr("Tx Message") : tr("Rx Message")));
     if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_msg->timestamp().toString(Qt::ISODateWithMs)));
+
+    if(_msg->type() == ModbusMessage::Adu)
+    {
+        addItem(tr("<b>Transaction ID:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->transactionId())));
+        addItem(tr("<b>Protocol ID:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->protocolId())));
+        addItem(tr("<b>Length:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->length())));
+    }
+
     addItem(tr("<b>Device ID:</b> %1").arg(formatByteValue(_dataDisplayMode, _msg->deviceId())));
 
     if(_msg->isException())

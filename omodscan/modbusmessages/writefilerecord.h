@@ -18,7 +18,18 @@ public:
     WriteFileRecordRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         : ModbusMessage(pdu, timestamp, deviceId, true)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteFileRecord);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
+    }
+
+    ///
+    /// \brief WriteFileRecordRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteFileRecordRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
 
     ///
@@ -26,7 +37,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 1;
+        return ModbusMessage::isValid() && dataSize() > 1;
     }
 
     ///
@@ -34,7 +45,7 @@ public:
     /// \return
     ///
     quint8 length() const {
-        return _data[0];
+        return ModbusMessage::data(0);
     }
 
     ///
@@ -42,7 +53,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  _data.right(_data.size() - 1);
+        return  slice(1);
     }
 };
 
@@ -61,7 +72,18 @@ public:
     WriteFileRecordResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         :ModbusMessage(pdu, timestamp, deviceId, false)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteFileRecord);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
+    }
+
+    ///
+    /// \brief WriteFileRecordResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteFileRecordResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
 
     ///
@@ -69,7 +91,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 1;
+        return ModbusMessage::isValid() && dataSize() > 1;
     }
 
     ///
@@ -77,7 +99,7 @@ public:
     /// \return
     ///
     quint8 length() const {
-        return _data[0];
+        return ModbusMessage::data(0);
     }
 
     ///
@@ -85,7 +107,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  _data.right(_data.size() - 1);
+        return  slice(1);
     }
 };
 

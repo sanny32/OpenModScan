@@ -18,7 +18,18 @@ public:
     WriteMultipleRegistersRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         : ModbusMessage(pdu, timestamp, deviceId, true)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteMultipleRegisters);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
+    }
+
+    ///
+    /// \brief WriteMultipleRegistersRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteMultipleRegistersRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }
 
     ///
@@ -26,7 +37,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 5;
+        return ModbusMessage::isValid() && dataSize() > 5;
     }
 
     ///
@@ -34,7 +45,7 @@ public:
     /// \return
     ///
     quint16 startAddress() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -42,7 +53,7 @@ public:
     /// \return
     ///
     quint16 quantity() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -50,7 +61,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return _data[4];
+        return data(4);
     }
 
     ///
@@ -58,7 +69,7 @@ public:
     /// \return
     ///
     QByteArray values() const {
-        return _data.right(_data.size() - 5);
+        return slice(5);
     }
 };
 
@@ -77,7 +88,18 @@ public:
     WriteMultipleRegistersResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         :ModbusMessage(pdu, timestamp, deviceId, false)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteMultipleRegisters);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
+    }
+
+    ///
+    /// \brief WriteMultipleRegistersResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteMultipleRegistersResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }
 
     ///
@@ -85,7 +107,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 4;
+        return ModbusMessage::isValid() && dataSize() == 4;
     }
 
     ///
@@ -93,7 +115,7 @@ public:
     /// \return
     ///
     quint16 startAddress() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -101,7 +123,7 @@ public:
     /// \return
     ///
     quint16 quantity() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 };
 

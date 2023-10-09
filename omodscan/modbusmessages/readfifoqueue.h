@@ -18,7 +18,18 @@ public:
     ReadFifoQueueRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         : ModbusMessage(pdu, timestamp, deviceId, true)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadFifoQueue);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
+    }
+
+    ///
+    /// \brief ReadFifoQueueRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadFifoQueueRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
 
     ///
@@ -26,7 +37,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 2;
+        return ModbusMessage::isValid() && dataSize() == 2;
     }
 
     ///
@@ -34,7 +45,7 @@ public:
     /// \return
     ///
     quint16 fifoAddress() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 };
 
@@ -53,7 +64,18 @@ public:
     ReadFifoQueueResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
         :ModbusMessage(pdu, timestamp, deviceId, false)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadFifoQueue);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
+    }
+
+    ///
+    /// \brief ReadFifoQueueResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadFifoQueueResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
 
     ///
@@ -61,7 +83,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 5;
+        return ModbusMessage::isValid() && dataSize() > 5;
     }
 
     ///
@@ -69,7 +91,7 @@ public:
     /// \return
     ///
     quint16 byteCount() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -77,7 +99,7 @@ public:
     /// \return
     ///
     quint16 fifoCount() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -85,7 +107,7 @@ public:
     /// \return
     ///
     QByteArray fifoValue() const {
-        return  _data.right(_data.size() - 4);
+        return  slice(4);
     }
 };
 

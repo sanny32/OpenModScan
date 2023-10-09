@@ -25,6 +25,25 @@ inline quint16 makeWord(quint8 lo, quint8 hi, ByteOrder order)
 }
 
 ///
+/// \brief breakWord
+/// \param value
+/// \param lo
+/// \param hi
+/// \param order
+///
+inline void breakWord(quint16 value, quint8& lo, quint8& hi, ByteOrder order)
+{
+    union {
+        quint8 asUint8[2];
+        quint16 asUint16;
+    } v;
+    v.asUint16 = value;
+
+    lo = (order == ByteOrder::LittleEndian) ? v.asUint8[0] : v.asUint8[1];
+    hi = (order == ByteOrder::LittleEndian) ? v.asUint8[1] : v.asUint8[0];
+}
+
+///
 /// \brief breakFloat
 /// \param value
 /// \param lo

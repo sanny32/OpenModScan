@@ -166,6 +166,7 @@ HEADERS += \
     numericutils.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
+    qmodbusadu.h \
     qrange.h \
     quintvalidator.h \
     recentfileactionlist.h \

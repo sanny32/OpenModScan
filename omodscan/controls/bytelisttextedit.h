@@ -30,6 +30,10 @@ public:
     QString text() const;
     void setText(const QString& text);
 
+    bool isEmpty() const {
+        return text().isEmpty();
+    }
+
 signals:
     void valueChanged(const QByteArray& value);
 

@@ -12,13 +12,26 @@ public:
     ///
     /// \brief ReportServerIdRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReportServerIdRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReportServerIdRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReportServerId);
+        Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
+    }
+
+    ///
+    /// \brief ReportServerIdRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReportServerIdRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
     }
 };
 
@@ -31,13 +44,26 @@ public:
     ///
     /// \brief ReportServerIdResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReportServerIdResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReportServerIdResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReportServerId);
+        Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
+    }
+
+    ///
+    /// \brief ReportServerIdResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReportServerIdResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
     }
 
     ///
@@ -45,7 +71,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 1;
+        return ModbusMessage::isValid() && dataSize() > 1;
     }
 
     ///
@@ -53,7 +79,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return _data[0];
+        return ModbusMessage::data(0);
     }
 
     ///
@@ -61,7 +87,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  _data.right(_data.size() - 1);
+        return  slice(1);
     }
 };
 

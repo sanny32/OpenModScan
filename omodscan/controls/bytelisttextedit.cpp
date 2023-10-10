@@ -156,6 +156,7 @@ void ByteListTextEdit::keyPressEvent(QKeyEvent *e)
     if(state == QValidator::Acceptable ||
         e->key() == Qt::Key_Backspace ||
         e->key() == Qt::Key_Delete ||
+        e->key() == Qt::Key_Space ||
         e->matches(QKeySequence::Cut) ||
         e->matches(QKeySequence::Copy) ||
         e->matches(QKeySequence::Paste) ||

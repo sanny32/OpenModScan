@@ -12,13 +12,26 @@ public:
     ///
     /// \brief ReadExceptionStatusRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadExceptionStatusRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReadExceptionStatusRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadExceptionStatus);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadExceptionStatus);
+    }
+
+    ///
+    /// \brief ReadExceptionStatusRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadExceptionStatusRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadExceptionStatus);
     }
 };
 
@@ -31,13 +44,26 @@ public:
     ///
     /// \brief ReadExceptionStatusResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadExceptionStatusResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReadExceptionStatusResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadExceptionStatus);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadExceptionStatus);
+    }
+
+    ///
+    /// \brief ReadExceptionStatusResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadExceptionStatusResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadExceptionStatus);
     }
 
     ///
@@ -45,7 +71,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 1;
+        return ModbusMessage::isValid() && dataSize() == 1;
     }
 
     ///
@@ -53,7 +79,7 @@ public:
     /// \return
     ///
     quint8 outputData() const {
-        return _data[0];
+        return data(0);
     }
 };
 

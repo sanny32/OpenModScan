@@ -12,13 +12,26 @@ public:
     ///
     /// \brief ReadHoldingRegistersRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadHoldingRegistersRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReadHoldingRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadHoldingRegisters);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
+    }
+
+    ///
+    /// \brief ReadHoldingRegistersRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadHoldingRegistersRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
     }
 
     ///
@@ -26,7 +39,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 4;
+        return ModbusMessage::isValid() &&
+               length() >= 1 && length() <= 0x7D;
     }
 
     ///
@@ -34,7 +48,7 @@ public:
     /// \return
     ///
     quint16 startAddress() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -42,7 +56,7 @@ public:
     /// \return
     ///
     quint16 length() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 };
 
@@ -55,13 +69,26 @@ public:
     ///
     /// \brief ReadHoldingRegistersResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadHoldingRegistersResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReadHoldingRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadHoldingRegisters);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
+    }
+
+    ///
+    /// \brief ReadHoldingRegistersResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadHoldingRegistersResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
     }
 
     ///
@@ -69,7 +96,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 1;
+        return ModbusMessage::isValid() &&
+               byteCount() > 0 &&
+               byteCount() == registerValue().size();
     }
 
     ///
@@ -77,7 +106,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return _data[0];
+        return data(0);
     }
 
     ///
@@ -85,7 +114,7 @@ public:
     /// \return
     ///
     QByteArray registerValue() const {
-        return _data.right(_data.size() - 1);
+        return slice(1);
     }
 };
 

@@ -76,6 +76,7 @@ private slots:
     void on_actionPresetRegs_triggered();
     void on_actionMaskWrite_triggered();
     void on_actionUserMsg_triggered();
+    void on_actionMsgParser_triggered();
     void on_actionAddressScan_triggered();
     void on_actionTextCapture_triggered();
     void on_actionCaptureOff_triggered();

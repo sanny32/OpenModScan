@@ -162,14 +162,20 @@ QModelIndex ModbusLogWidget::index(int row)
 ///
 /// \brief ModbusLogWidget::addItem
 /// \param pdu
-/// \param timestamp
 /// \param deviceId
+/// \param timestamp
 /// \param request
+/// \return
 ///
-void ModbusLogWidget::addItem(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request)
+const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, int deviceId, const QDateTime& timestamp, bool request)
 {
+    const ModbusMessage* msg = nullptr;
     if(model())
-        ((ModbusLogModel*)model())->append(ModbusMessage::create(pdu, timestamp, deviceId, request));
+    {
+        msg = ModbusMessage::create(pdu, (QModbusAdu::Type)-1, deviceId, timestamp, request);
+        ((ModbusLogModel*)model())->append(msg);
+    }
+    return msg;
 }
 
 ///
@@ -183,8 +189,8 @@ const ModbusMessage* ModbusLogWidget::itemAt(const QModelIndex& index)
         return nullptr;
 
     return model() ?
-               model()->data(index, Qt::UserRole).value<const ModbusMessage*>() :
-               nullptr;
+           model()->data(index, Qt::UserRole).value<const ModbusMessage*>() :
+           nullptr;
 }
 
 ///
@@ -204,8 +210,9 @@ void ModbusLogWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
 
-    if(model())
+    if(model()) {
         ((ModbusLogModel*)model())->update();
+    }
 }
 
 ///
@@ -223,8 +230,9 @@ int ModbusLogWidget::rowLimit() const
 ///
 void ModbusLogWidget::setRowLimit(int val)
 {
-    if(model())
+    if(model()) {
         ((ModbusLogModel*)model())->setRowLimit(val);
+    }
 }
 
 ///

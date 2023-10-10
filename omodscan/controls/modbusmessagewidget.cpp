@@ -122,8 +122,35 @@ void ModbusMessageWidget::update()
             addItem(tr("<span style='color:red'>*** INVALID MODBUS RESPONSE ***</span>"));
     }
 
+    auto addChecksum = [&]{
+        if(_msg->protocolType() == QModbusAdu::Rtu)
+        {
+            const auto checksum = formatWordValue(_dataDisplayMode, _msg->checksum());
+            if(_msg->matchingChecksum())
+            {
+                addItem(tr("<b>Checksum:</b> %1").arg(checksum));
+            }
+            else
+            {
+                const auto calcChecksum = formatWordValue(_dataDisplayMode, _msg->calcChecksum());
+                addItem(tr("<b>Checksum:</b> <span style='color:red'>%1</span> (Expected: %2)").arg(checksum, calcChecksum));
+            }
+        }
+    };
+
     addItem(tr("<b>Type:</b> %1").arg(_msg->isRequest() ? tr("Tx Message") : tr("Rx Message")));
     if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_msg->timestamp().toString(Qt::ISODateWithMs)));
+
+    if(_msg->type() == ModbusMessage::Adu)
+    {
+        const auto transactionId = _msg->isValid() ? formatWordValue(_dataDisplayMode, _msg->transactionId()) : "??";
+        const auto protocolId = _msg->isValid() ? formatWordValue(_dataDisplayMode, _msg->protocolId()): "??";
+        const auto length = _msg->isValid() ? formatWordValue(_dataDisplayMode, _msg->length()): "??";
+        addItem(tr("<b>Transaction ID:</b> %1").arg(transactionId));
+        addItem(tr("<b>Protocol ID:</b> %1").arg(protocolId));
+        addItem(tr("<b>Length:</b> %1").arg(length));
+    }
+
     addItem(tr("<b>Device ID:</b> %1").arg(formatByteValue(_dataDisplayMode, _msg->deviceId())));
 
     if(_msg->isException())
@@ -131,6 +158,7 @@ void ModbusMessageWidget::update()
         const auto exception = QString("%1 (%2)").arg(formatByteValue(_dataDisplayMode, _msg->exception()), _msg->exception());
         addItem(tr("<b>Error Code:</b> %1").arg(formatByteValue(_dataDisplayMode, _msg->function())));
         addItem(tr("<b>Exception Code:</b> %1").arg(exception));
+        addChecksum();
         return;
     }
 
@@ -483,4 +511,6 @@ void ModbusMessageWidget::update()
         }
         break;
     }
+
+    addChecksum();
 }

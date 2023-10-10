@@ -12,13 +12,26 @@ public:
     ///
     /// \brief WriteFileRecordRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    WriteFileRecordRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    WriteFileRecordRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteFileRecord);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
+    }
+
+    ///
+    /// \brief WriteFileRecordRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteFileRecordRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
 
     ///
@@ -26,7 +39,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 1;
+        return ModbusMessage::isValid() &&
+               length() >= 0x09 &&
+               length() <= 0xFB;
     }
 
     ///
@@ -34,7 +49,7 @@ public:
     /// \return
     ///
     quint8 length() const {
-        return _data[0];
+        return ModbusMessage::data(0);
     }
 
     ///
@@ -42,7 +57,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  _data.right(_data.size() - 1);
+        return  slice(1);
     }
 };
 
@@ -55,13 +70,26 @@ public:
     ///
     /// \brief WriteFileRecordResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    WriteFileRecordResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    WriteFileRecordResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteFileRecord);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
+    }
+
+    ///
+    /// \brief WriteFileRecordResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteFileRecordResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
 
     ///
@@ -69,7 +97,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 1;
+        return ModbusMessage::isValid() &&
+               length() >= 0x09 &&
+               length() <= 0xFB;
     }
 
     ///
@@ -77,7 +107,7 @@ public:
     /// \return
     ///
     quint8 length() const {
-        return _data[0];
+        return ModbusMessage::data(0);
     }
 
     ///
@@ -85,7 +115,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  _data.right(_data.size() - 1);
+        return  slice(1);
     }
 };
 

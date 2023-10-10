@@ -594,7 +594,7 @@ void DialogAddressScan::updateLogView(int deviceId, const QModbusRequest& reques
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
     proxyLogModel->append(pointAddress + 1, ui->comboBoxPointType->currentPointType(),
-                          ModbusMessage::create(request, QDateTime::currentDateTime(), deviceId, true));
+                          ModbusMessage::create(request, (QModbusAdu::Type)-1, deviceId, QDateTime::currentDateTime(), true));
 }
 
 ///
@@ -612,7 +612,7 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
     proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(),
-                          ModbusMessage::create(pdu, QDateTime::currentDateTime(), deviceId, false));
+                          ModbusMessage::create(pdu, (QModbusAdu::Type)-1, deviceId, QDateTime::currentDateTime(), false));
 }
 
 ///

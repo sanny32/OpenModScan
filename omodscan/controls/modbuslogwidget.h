@@ -53,7 +53,7 @@ public:
     int rowCount() const;
     QModelIndex index(int row);
 
-    void addItem(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request);
+    const ModbusMessage* addItem(const QModbusPdu& pdu,  int deviceId, const QDateTime& timestamp, bool request);
     const ModbusMessage* itemAt(const QModelIndex& index);
 
     DataDisplayMode dataDisplayMode() const;

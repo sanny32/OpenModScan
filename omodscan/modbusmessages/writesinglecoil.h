@@ -12,13 +12,26 @@ public:
     ///
     /// \brief WriteSingleCoilRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    WriteSingleCoilRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    WriteSingleCoilRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteSingleCoil);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteSingleCoil);
+    }
+
+    ///
+    /// \brief WriteSingleCoilRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteSingleCoilRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteSingleCoil);
     }
 
     ///
@@ -26,7 +39,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 4;
+        return ModbusMessage::isValid() &&
+               (value() == 0 || value() == 0xFF00);
     }
 
     ///
@@ -34,7 +48,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -42,7 +56,7 @@ public:
     /// \return
     ///
     quint16 value() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 };
 
@@ -55,13 +69,26 @@ public:
     ///
     /// \brief WriteSingleCoilResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    WriteSingleCoilResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    WriteSingleCoilResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::WriteSingleCoil);
+        Q_ASSERT(functionCode() == QModbusPdu::WriteSingleCoil);
+    }
+
+    ///
+    /// \brief WriteSingleCoilResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    WriteSingleCoilResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::WriteSingleCoil);
     }
 
     ///
@@ -69,7 +96,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 4;
+        return ModbusMessage::isValid() &&
+               (value() == 0 || value() == 0xFF00);
     }
 
     ///
@@ -77,7 +105,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -85,7 +113,7 @@ public:
     /// \return
     ///
     quint16 value() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 };
 

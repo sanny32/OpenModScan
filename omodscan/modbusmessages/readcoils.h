@@ -13,13 +13,26 @@ public:
     ///
     /// \brief ReadCoilsRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadCoilsRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReadCoilsRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadCoils);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadCoils);
+    }
+
+    ///
+    /// \brief ReadCoilsRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadCoilsRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadCoils);
     }
 
     ///
@@ -27,7 +40,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 4;
+        return ModbusMessage::isValid() &&
+               length() >= 1 && length() <= 0x7D0;
     }
 
     ///
@@ -35,7 +49,7 @@ public:
     /// \return
     ///
     quint16 startAddress() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -43,7 +57,7 @@ public:
     /// \return
     ///
     quint16 length() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 };
 
@@ -56,13 +70,26 @@ public:
     ///
     /// \brief ReadCoilsResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadCoilsResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReadCoilsResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadCoils);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadCoils);
+    }
+
+    ///
+    /// \brief ReadCoilsResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadCoilsResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadCoils);
     }
 
     ///
@@ -70,7 +97,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 1;
+        return ModbusMessage::isValid() &&
+               byteCount() > 0 &&
+               (byteCount() == coilStatus().size() || byteCount() == coilStatus().size() - 1);
     }
 
     ///
@@ -78,7 +107,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return _data[0];
+        return data(0);
     }
 
     ///
@@ -86,7 +115,7 @@ public:
     /// \return
     ///
     QByteArray coilStatus() const {
-        return _data.right(_data.size() - 1);
+        return slice(1);
     }
 };
 

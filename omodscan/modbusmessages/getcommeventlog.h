@@ -12,13 +12,26 @@ public:
     ///
     /// \brief GetCommEventLogRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    GetCommEventLogRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    GetCommEventLogRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::GetCommEventLog);
+        Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
+    }
+
+    ///
+    /// \brief GetCommEventLogRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    GetCommEventLogRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
 };
 
@@ -31,13 +44,26 @@ public:
     ///
     /// \brief GetCommEventLogResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    GetCommEventLogResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    GetCommEventLogResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::GetCommEventLog);
+        Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
+    }
+
+    ///
+    /// \brief GetCommEventLogResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    GetCommEventLogResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
 
     ///
@@ -45,7 +71,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 7;
+        return ModbusMessage::isValid() &&
+               byteCount() > 0 &&
+               byteCount() == events().size() - 6;
     }
 
     ///
@@ -53,7 +81,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return _data[0];
+        return data(0);
     }
 
     ///
@@ -61,7 +89,7 @@ public:
     /// \return
     ///
     quint16 status() const {
-        return makeWord(_data[2], _data[1], ByteOrder::LittleEndian);
+        return makeWord(data(2), data(1), ByteOrder::LittleEndian);
     }
 
     ///
@@ -69,7 +97,7 @@ public:
     /// \return
     ///
     quint16 eventCount() const {
-        return makeWord(_data[4], _data[3], ByteOrder::LittleEndian);
+        return makeWord(data(4), data(3), ByteOrder::LittleEndian);
     }
 
     ///
@@ -77,7 +105,7 @@ public:
     /// \return
     ///
     quint16 messageCount() const {
-        return makeWord(_data[6], _data[5], ByteOrder::LittleEndian);
+        return makeWord(data(6), data(5), ByteOrder::LittleEndian);
     }
 
     ///
@@ -85,7 +113,7 @@ public:
     /// \return
     ///
     QByteArray events() const {
-        return _data.right(_data.size() - 7);
+        return slice(7);
     }
 };
 

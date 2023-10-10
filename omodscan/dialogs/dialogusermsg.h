@@ -4,6 +4,7 @@
 #include <QModbusRequest>
 #include <QDialog>
 #include "modbusclient.h"
+#include "modbusmessage.h"
 #include "enums.h"
 
 namespace Ui {
@@ -27,6 +28,7 @@ private slots:
 
 private:
     Ui::DialogUserMsg *ui;
+    const ModbusMessage* _mm;
     ModbusClient& _modbusClient;
 };
 

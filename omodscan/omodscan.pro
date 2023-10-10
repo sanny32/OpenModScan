@@ -46,6 +46,7 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/pointtypecombobox.cpp \
     datasimulator.cpp \
+    dialogs/dialogmsgparser.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogaddressscan.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -106,6 +107,7 @@ HEADERS += \
     controls/outputwidget.h \
     controls/pointtypecombobox.h \
     datasimulator.h \
+    dialogs/dialogmsgparser.h \
     dialogs/dialogabout.h \
     dialogs/dialogaddressscan.h \
     dialogs/dialogautosimulation.h \
@@ -164,6 +166,7 @@ HEADERS += \
     numericutils.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
+    qmodbusadu.h \
     qrange.h \
     quintvalidator.h \
     recentfileactionlist.h \
@@ -172,6 +175,7 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
+    dialogs/dialogmsgparser.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogaddressscan.ui \
     dialogs/dialogautosimulation.ui \

@@ -12,13 +12,26 @@ public:
     ///
     /// \brief ReadFifoQueueRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadFifoQueueRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReadFifoQueueRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadFifoQueue);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
+    }
+
+    ///
+    /// \brief ReadFifoQueueRequest
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadFifoQueueRequest(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, true)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
 
     ///
@@ -26,7 +39,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() == 2;
+        return ModbusMessage::isValid() && dataSize() == 2;
     }
 
     ///
@@ -34,7 +47,7 @@ public:
     /// \return
     ///
     quint16 fifoAddress() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 };
 
@@ -47,13 +60,26 @@ public:
     ///
     /// \brief ReadFifoQueueResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
+    /// \param checksum
     ///
-    ReadFifoQueueResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReadFifoQueueResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
-        Q_ASSERT((_funcCode & ~QModbusPdu::ExceptionByte) == QModbusPdu::ReadFifoQueue);
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
+    }
+
+    ///
+    /// \brief ReadFifoQueueResponse
+    /// \param adu
+    /// \param timestamp
+    ///
+    ReadFifoQueueResponse(const QModbusAdu& adu, const QDateTime& timestamp)
+        : ModbusMessage(adu, timestamp, false)
+    {
+        Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
 
     ///
@@ -61,7 +87,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && _data.size() > 5;
+        return ModbusMessage::isValid() &&
+               fifoCount() <= 31 &&
+               fifoCount() == fifoValue().size();
     }
 
     ///
@@ -69,7 +97,7 @@ public:
     /// \return
     ///
     quint16 byteCount() const {
-        return makeWord(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -77,7 +105,7 @@ public:
     /// \return
     ///
     quint16 fifoCount() const {
-        return makeWord(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -85,7 +113,7 @@ public:
     /// \return
     ///
     QByteArray fifoValue() const {
-        return  _data.right(_data.size() - 4);
+        return  slice(4);
     }
 };
 

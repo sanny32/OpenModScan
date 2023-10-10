@@ -34,7 +34,7 @@ private:
     ByteOrder _byteOrder;
     DataDisplayMode _dataDisplayMode;
     bool _showTimestamp;
-    const ModbusMessage* _msg;
+    const ModbusMessage* _mm;
 };
 
 #endif // MODBUSMESSAGEWIDGET_H

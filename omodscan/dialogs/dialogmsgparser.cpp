@@ -41,7 +41,6 @@ DialogMsgParser::~DialogMsgParser()
 ///
 void DialogMsgParser::on_awake()
 {
-    //ui->rtu->setVisible(ui->buttonAdu->isChecked());
     ui->deviceIdIncluded->setVisible(ui->buttonPdu->isChecked());
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!ui->bytesData->isEmpty());
 }
@@ -61,9 +60,9 @@ void DialogMsgParser::on_hexView_toggled(bool checked)
 ///
 void DialogMsgParser::accept()
 {
-    if(_mm) delete _mm;
-
     auto data = ui->bytesData->value();
+    if(data.isEmpty()) return;
+
     ModbusMessage::Type type = ModbusMessage::Adu;
     auto protocol = QModbusAdu::Tcp;
     int checksum = 0;
@@ -85,6 +84,7 @@ void DialogMsgParser::accept()
         data = data.left(data.size() - 2);
     }
 
+    if(_mm) delete _mm;
     _mm = ModbusMessage::parse(data, type, protocol, ui->request->isChecked(), checksum);
     ui->info->setModbusMessage(_mm);
 }

@@ -279,7 +279,7 @@ protected:
         switch(_type)
         {
             case Adu:
-                return _data.size() - 8;
+                return qMax(0, _data.size() - 8);
 
             case Pdu:
                 return _data.size();
@@ -291,10 +291,10 @@ protected:
         switch(_type)
         {
             case Adu:
-                return _data[8 + idx];
+                return idx < _data.size() - 8 ? _data.at(8 + idx) : 0;
 
             case Pdu:
-                return _data[idx];
+                return idx < _data.size() ? _data.at(idx) : 0;
         }
         return 0;
     }

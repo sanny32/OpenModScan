@@ -53,7 +53,7 @@ public:
     void setData(const QByteArray& data) {
         _data = data;
 
-        _pdu.setFunctionCode(QModbusPdu::FunctionCode(_data[7]));
+        _pdu.setFunctionCode(QModbusPdu::FunctionCode((quint8)_data[7]));
         if(_type == Rtu)
             _pdu.setData(_data.mid(8, _data.size() - 10));
         else

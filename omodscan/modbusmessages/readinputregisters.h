@@ -15,9 +15,10 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
+    /// \param checksum
     ///
-    ReadInputRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    ReadInputRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadInputRegisters);
     }
@@ -71,9 +72,10 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
+    /// \param checksum
     ///
-    ReadInputRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    ReadInputRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadInputRegisters);
     }

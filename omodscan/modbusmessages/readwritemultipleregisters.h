@@ -15,9 +15,10 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
+    /// \param checksum
     ///
-    ReadWriteMultipleRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    ReadWriteMultipleRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }
@@ -106,9 +107,10 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
+    /// \param checksum
     ///
-    ReadWriteMultipleRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    ReadWriteMultipleRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }

@@ -16,9 +16,10 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
+    /// \param checksum
     ///
-    ReadCoilsRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    ReadCoilsRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadCoils);
     }
@@ -72,9 +73,10 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
+    /// \param checksum
     ///
-    ReadCoilsResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    ReadCoilsResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadCoils);
     }

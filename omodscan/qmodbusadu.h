@@ -37,7 +37,7 @@ public:
     /// \return
     ///
     bool isValid() const {
-        return _data.size() > 6 && matchingChecksum() && _pdu.isValid();
+        return matchingChecksum() && _pdu.isValid() && length() == _pdu.size();
     }
 
     ///
@@ -127,17 +127,25 @@ public:
     }
 
     ///
-    /// \brief matchingChecksum
+    /// \brief calcChecksum
     /// \return
     ///
-    bool matchingChecksum() const {
+    quint16 calcChecksum() const {
         if(_type == Rtu)
         {
             const auto size = _data.size() - 2; // two bytes, CRC
             const auto data = _data.left(size);
-            return QModbusAdu::calculateCRC(data, size) == checksum();
+            return QModbusAdu::calculateCRC(data, size);
         }
-        return true;
+        return 0;
+    }
+
+    ///
+    /// \brief matchingChecksum
+    /// \return
+    ///
+    bool matchingChecksum() const {
+        return checksum() == calcChecksum();
     }
 
     inline static quint16 calculateCRC(const char* data, qint32 len){

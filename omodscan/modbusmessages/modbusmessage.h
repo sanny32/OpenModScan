@@ -26,8 +26,9 @@ public:
     /// \param deviceId
     /// \param timestamp
     /// \param request
+    /// \param checksum
     ///
-    explicit ModbusMessage(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, bool request)
+    explicit ModbusMessage(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, bool request, int checksum)
         :_type(Type::Pdu)
         ,_protocol(protocol)
         ,_data(pdu.data())
@@ -40,7 +41,8 @@ public:
         ,_deviceId(deviceId)
         ,_request(request)
         ,_isValid(pdu.isValid())
-        ,_checksum(calcCRC(pdu, deviceId))
+        ,_checksum((protocol == QModbusAdu::Rtu) ? checksum : 0)
+        ,_calcChecksum((protocol == QModbusAdu::Rtu) ? calcCRC(pdu, deviceId) : 0)
     {
     }
 
@@ -64,6 +66,7 @@ public:
         ,_request(request)
         ,_isValid(adu.isValid())
         ,_checksum(adu.checksum())
+        ,_calcChecksum(adu.calcChecksum())
     {
     }
 
@@ -81,7 +84,7 @@ public:
     /// \param request
     /// \return
     ///
-    static const ModbusMessage* create(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, bool request);
+    static const ModbusMessage* create(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, bool request, int checksum = 0);
 
     ///
     /// \brief create
@@ -98,9 +101,10 @@ public:
     /// \param type
     /// \param protocol
     /// \param request
+    /// \param checksum
     /// \return
     ///
-    static const ModbusMessage* parse(const QByteArray& data, Type type, QModbusAdu::Type protocol, bool request);
+    static const ModbusMessage* parse(const QByteArray& data, Type type, QModbusAdu::Type protocol, bool request, int checksum = 0);
 
     ///
     /// \brief type
@@ -147,7 +151,8 @@ public:
     /// \return
     ///
     virtual bool isValid() const {
-        return (_deviceId == 0 || ModbusLimits::slaveRange().contains(_deviceId)) && _isValid;
+        return (_deviceId == 0 || ModbusLimits::slaveRange().contains(_deviceId)) &&
+               matchingChecksum() && _isValid;
     }
 
     ///
@@ -233,6 +238,22 @@ public:
     }
 
     ///
+    /// \brief calcChecksum
+    /// \return
+    ///
+    int calcChecksum() const {
+        return _calcChecksum;
+    }
+
+    ///
+    /// \brief matchingChecksum
+    /// \return
+    ///
+    bool matchingChecksum() const {
+        return _calcChecksum == _checksum;
+    }
+
+    ///
     /// \brief operator QByteArray
     ///
     operator QByteArray() const {
@@ -299,7 +320,7 @@ private:
         data.push_back(deviceId);
         data.push_back(pdu.functionCode());
         data.push_back(pdu.data());
-        qDebug() << formatByteArray(DataDisplayMode::Hex, data);
+
         return QModbusAdu::calculateCRC(data, data.length());
     }
 
@@ -317,6 +338,7 @@ private:
     const bool _request;
     const bool _isValid;
     const int _checksum;
+    const int _calcChecksum;
 };
 Q_DECLARE_METATYPE(const ModbusMessage*)
 

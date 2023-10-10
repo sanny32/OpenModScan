@@ -125,7 +125,16 @@ void ModbusMessageWidget::update()
     auto addChecksum = [&]{
         if(_msg->protocolType() == QModbusAdu::Rtu)
         {
-            addItem(tr("<b>Checksum:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->checksum())));
+            const auto checksum = formatWordValue(_dataDisplayMode, _msg->checksum());
+            if(_msg->matchingChecksum())
+            {
+                addItem(tr("<b>Checksum:</b> %1").arg(checksum));
+            }
+            else
+            {
+                const auto calcChecksum = formatWordValue(_dataDisplayMode, _msg->calcChecksum());
+                addItem(tr("<b>Checksum:</b> <span style='color:red'>%1</span> (Expected: %2)").arg(checksum, calcChecksum));
+            }
         }
     };
 
@@ -134,9 +143,12 @@ void ModbusMessageWidget::update()
 
     if(_msg->type() == ModbusMessage::Adu)
     {
-        addItem(tr("<b>Transaction ID:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->transactionId())));
-        addItem(tr("<b>Protocol ID:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->protocolId())));
-        addItem(tr("<b>Length:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->length())));
+        const auto transactionId = _msg->isValid() ? formatWordValue(_dataDisplayMode, _msg->transactionId()) : "??";
+        const auto protocolId = _msg->isValid() ? formatWordValue(_dataDisplayMode, _msg->protocolId()): "??";
+        const auto length = _msg->isValid() ? formatWordValue(_dataDisplayMode, _msg->length()): "??";
+        addItem(tr("<b>Transaction ID:</b> %1").arg(transactionId));
+        addItem(tr("<b>Protocol ID:</b> %1").arg(protocolId));
+        addItem(tr("<b>Length:</b> %1").arg(length));
     }
 
     addItem(tr("<b>Device ID:</b> %1").arg(formatByteValue(_dataDisplayMode, _msg->deviceId())));

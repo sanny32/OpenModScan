@@ -65,14 +65,26 @@ void DialogMsgParser::accept()
 
     auto data = ui->bytesData->value();
     ModbusMessage::Type type = ModbusMessage::Adu;
-    const auto protocol = ui->checksum->isChecked() ? QModbusAdu::Rtu : QModbusAdu::Tcp;
+    auto protocol = QModbusAdu::Tcp;
+    int checksum = 0;
 
     if(ui->buttonPdu->isChecked())
     {
         type = ModbusMessage::Pdu;
-        if(!ui->deviceIdIncluded->isChecked()) data.push_front('\0');
     }
 
-    _mm = ModbusMessage::parse(data, type, protocol, ui->request->isChecked());
+    if(!ui->deviceIdIncluded->isChecked())
+    {
+        data.push_front('\0');
+    }
+
+    if(ui->checksumIncluded->isChecked())
+    {
+        protocol = QModbusAdu::Rtu;
+        checksum = makeWord(data[data.size() - 1], data[data.size() - 2], ByteOrder::LittleEndian);
+        data = data.left(data.size() - 2);
+    }
+
+    _mm = ModbusMessage::parse(data, type, protocol, ui->request->isChecked(), checksum);
     ui->info->setModbusMessage(_mm);
 }

@@ -75,7 +75,7 @@ inline QString formatWordArray(DataDisplayMode mode, const QByteArray& ar, ByteO
                 break;
 
             default:
-                values += QString("%1").arg(QString::number(value, 16).toUpper(), 4, '0');
+                values += QString("0x%1").arg(QString::number(value, 16).toUpper(), 4, '0');
                 break;
         }
     }

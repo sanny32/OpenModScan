@@ -18,6 +18,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="buttonPdu">
+       <property name="styleSheet">
+        <string notr="true">padding: 4px;</string>
+       </property>
        <property name="text">
         <string>PDU Message</string>
        </property>
@@ -33,10 +36,30 @@
        <property name="autoDefault">
         <bool>false</bool>
        </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="buttonAdu">
+       <property name="styleSheet">
+        <string notr="true">padding: 4px;</string>
+       </property>
        <property name="text">
         <string>ADU Message</string>
        </property>
@@ -48,6 +71,9 @@
        </property>
        <property name="autoDefault">
         <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

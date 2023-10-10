@@ -824,7 +824,8 @@ void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu
     auto msg = ui->logView->addItem(pdu, server, QDateTime::currentDateTime(), request);
     if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
-        const auto str = QString("%1 %2 %3").arg(
+        const auto str = QString("%1: %2 %3 %4").arg(
+                (msg->isRequest()?  "Tx" : "Rx"),
                 msg->timestamp().toString(Qt::ISODateWithMs),
                 (msg->isRequest()?  "<<" : ">>"),
                 msg->toString(DataDisplayMode::Hex));

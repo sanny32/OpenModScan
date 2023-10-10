@@ -478,6 +478,7 @@ void OutputWidget::setStatusColor(const QColor& clr)
     auto pal = ui->labelStatus->palette();
     pal.setColor(QPalette::WindowText, clr);
     ui->labelStatus->setPalette(pal);
+    ui->modbusMsg->setStatusColor(clr);
 }
 
 ///

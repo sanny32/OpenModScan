@@ -9,6 +9,7 @@
 ///
 ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     : QListWidget(parent)
+    ,_statusClr(Qt::red)
     ,_byteOrder(ByteOrder::LittleEndian)
     ,_dataDisplayMode(DataDisplayMode::Decimal)
     ,_showTimestamp(true)
@@ -86,6 +87,16 @@ void ModbusMessageWidget::setShowTimestamp(bool on)
 }
 
 ///
+/// \brief ModbusMessageWidget::setStatusColor
+/// \param clr
+///
+void ModbusMessageWidget::setStatusColor(const QColor& clr)
+{
+    _statusClr = clr;
+    update();
+}
+
+///
 /// \brief ModbusMessageWidget::modbusMessage
 /// \return
 ///
@@ -117,9 +128,9 @@ void ModbusMessageWidget::update()
     if(!_mm->isValid())
     {
         if(_mm->isRequest())
-            addItem(tr("<span style='color:red'>*** INVALID MODBUS REQUEST ***</span>"));
+            addItem(tr("<span style='color:%1'>*** INVALID MODBUS REQUEST ***</span>").arg(_statusClr.name()));
         else if(!_mm->isException())
-            addItem(tr("<span style='color:red'>*** INVALID MODBUS RESPONSE ***</span>"));
+            addItem(tr("<span style='color:%1'>*** INVALID MODBUS RESPONSE ***</span>").arg(_statusClr.name()));
     }
 
     auto addChecksum = [&]{
@@ -133,7 +144,7 @@ void ModbusMessageWidget::update()
             else
             {
                 const auto calcChecksum = formatWordValue(_dataDisplayMode, _mm->calcChecksum());
-                addItem(tr("<b>Checksum:</b> <span style='color:red'>%1</span> (Expected: %2)").arg(checksum, calcChecksum));
+                addItem(tr("<b>Checksum:</b> <span style='color:%3'>%1</span> (Expected: %2)").arg(checksum, calcChecksum, _statusClr.name()));
             }
         }
     };

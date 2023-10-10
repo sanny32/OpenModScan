@@ -27,10 +27,13 @@ public:
     bool showTimestamp() const;
     void setShowTimestamp(bool on);
 
+    void setStatusColor(const QColor& clr);
+
 private:
     void update();
 
 private:
+    QColor _statusClr;
     ByteOrder _byteOrder;
     DataDisplayMode _dataDisplayMode;
     bool _showTimestamp;

@@ -149,6 +149,12 @@ void ByteListTextEdit::keyPressEvent(QKeyEvent *e)
         return;
     }
 
+    if(e->key() == Qt::Key_Enter ||
+       e->key() == Qt::Key_Return)
+    {
+        return;
+    }
+
     int pos = 0;
     auto text = toPlainText() + e->text();
     const auto state = _validator->validate(text, pos);

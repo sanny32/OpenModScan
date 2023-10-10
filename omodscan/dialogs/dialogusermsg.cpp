@@ -2,7 +2,6 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDialogButtonBox>
-#include "modbusmessage.h"
 #include "modbuslimits.h"
 #include "dialogusermsg.h"
 #include "ui_dialogusermsg.h"
@@ -15,9 +14,10 @@
 /// \param client
 /// \param parent
 ///
-DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent) :
-      QDialog(parent)
+DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
+    : QDialog(parent)
     , ui(new Ui::DialogUserMsg)
+    ,_mm(nullptr)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
@@ -55,6 +55,7 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
 DialogUserMsg::~DialogUserMsg()
 {
     delete ui;
+    if(_mm) delete _mm;
 }
 
 ///
@@ -102,11 +103,11 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
         return;
     }
 
-    const auto response = reply->rawResult();
-    const auto msg = ModbusMessage::create(response, QDateTime::currentDateTime(), reply->serverAddress(), false);
+    if(_mm) delete _mm;
+    _mm = ModbusMessage::create(reply->rawResult(), QModbusAdu::Tcp, reply->serverAddress(), QDateTime::currentDateTime(), false);
 
-    ui->responseBuffer->setValue(*msg);
-    ui->responseInfo->setModbusMessage(msg);
+    ui->responseBuffer->setValue(*_mm);
+    ui->responseInfo->setModbusMessage(_mm);
 
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }

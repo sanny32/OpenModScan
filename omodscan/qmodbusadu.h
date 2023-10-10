@@ -25,6 +25,14 @@ public:
     }
 
     ///
+    /// \brief type
+    /// \return
+    ///
+    Type type() const {
+        return _type;
+    }
+
+    ///
     /// \brief isValid
     /// \return
     ///
@@ -42,7 +50,15 @@ public:
     /// \brief setData
     /// \param data
     ///
-    void setData(const QByteArray& data) { _data = data; update(); }
+    void setData(const QByteArray& data) {
+        _data = data;
+
+        _pdu.setFunctionCode(QModbusPdu::FunctionCode(_data[7]));
+        if(_type == Rtu)
+            _pdu.setData(_data.mid(8, _data.size() - 10));
+        else
+            _pdu.setData(_data.mid(8));
+    }
 
     ///
     /// \brief transactionId
@@ -105,7 +121,9 @@ public:
     /// \return
     ///
     quint16 checksum() const {
-        return _type == Rtu ? quint16(quint8(_data[_data.size() - 2]) << 8 | quint8(_data[_data.size() - 1])) : quint16(0);
+        return _type == Rtu ?
+                   makeWord(_data[_data.size() - 1], _data[_data.size() - 2], ByteOrder::LittleEndian) :
+                   quint16(0);
     }
 
     ///
@@ -122,17 +140,7 @@ public:
         return true;
     }
 
-private:
-    void update()
-    {
-        _pdu.setFunctionCode(QModbusPdu::FunctionCode(_data[7]));
-        if(_type == Rtu)
-            _pdu.setData(_data.mid(8, _data.size() - 10));
-        else
-            _pdu.setData(_data.mid(8));
-    }
-
-    inline static quint16 calculateCRC(const char *data, qint32 len){
+    inline static quint16 calculateCRC(const char* data, qint32 len){
         quint16 crc = 0xFFFF;
         while (len--) {
             const quint8 c = *data++;
@@ -150,6 +158,7 @@ private:
         return (crc >> 8) | (crc << 8); // swap bytes
     }
 
+private:
     inline static quint16 crc_reflect(quint16 data, qint32 len){
         quint16 ret = data & 0x01;
         for (qint32 i = 1; i < len; i++) {

@@ -12,11 +12,12 @@ public:
     ///
     /// \brief GetCommEventLogRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    GetCommEventLogRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    GetCommEventLogRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
@@ -42,11 +43,12 @@ public:
     ///
     /// \brief GetCommEventLogResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    GetCommEventLogResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    GetCommEventLogResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
@@ -67,7 +69,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() > 7;
+        return ModbusMessage::isValid() &&
+               byteCount() > 0 &&
+               byteCount() == events().size() - 6;
     }
 
     ///

@@ -122,6 +122,13 @@ void ModbusMessageWidget::update()
             addItem(tr("<span style='color:red'>*** INVALID MODBUS RESPONSE ***</span>"));
     }
 
+    auto addChecksum = [&]{
+        if(_msg->protocolType() == QModbusAdu::Rtu)
+        {
+            addItem(tr("<b>Checksum:</b> %1").arg(formatWordValue(_dataDisplayMode, _msg->checksum())));
+        }
+    };
+
     addItem(tr("<b>Type:</b> %1").arg(_msg->isRequest() ? tr("Tx Message") : tr("Rx Message")));
     if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_msg->timestamp().toString(Qt::ISODateWithMs)));
 
@@ -139,6 +146,7 @@ void ModbusMessageWidget::update()
         const auto exception = QString("%1 (%2)").arg(formatByteValue(_dataDisplayMode, _msg->exception()), _msg->exception());
         addItem(tr("<b>Error Code:</b> %1").arg(formatByteValue(_dataDisplayMode, _msg->function())));
         addItem(tr("<b>Exception Code:</b> %1").arg(exception));
+        addChecksum();
         return;
     }
 
@@ -491,4 +499,6 @@ void ModbusMessageWidget::update()
         }
         break;
     }
+
+    addChecksum();
 }

@@ -12,11 +12,12 @@ public:
     ///
     /// \brief ReadFileRecordRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    ReadFileRecordRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReadFileRecordRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }
@@ -37,7 +38,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() > 1;
+        return ModbusMessage::isValid() &&
+               byteCount() >= 0x07 && byteCount() <= 0xF5;
     }
 
     ///
@@ -66,11 +68,12 @@ public:
     ///
     /// \brief ReadFileRecordResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    ReadFileRecordResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReadFileRecordResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }
@@ -91,7 +94,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() > 1;
+        return ModbusMessage::isValid() &&
+               byteCount() >= 0x07 && byteCount() <= 0xF5;;
     }
 
     ///

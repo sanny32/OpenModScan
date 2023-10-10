@@ -12,11 +12,12 @@ public:
     ///
     /// \brief ReadDiscreteInputsRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    ReadDiscreteInputsRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReadDiscreteInputsRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadDiscreteInputs);
     }
@@ -37,7 +38,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() == 4;
+        return ModbusMessage::isValid() &&
+               length() >= 1 && length() <= 0x7D0;
     }
 
     ///
@@ -66,11 +68,12 @@ public:
     ///
     /// \brief ReadDiscreteInputsResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    ReadDiscreteInputsResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReadDiscreteInputsResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadDiscreteInputs);
     }
@@ -91,7 +94,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() > 1;
+        return ModbusMessage::isValid() &&
+               byteCount() > 0 &&
+               (byteCount() == inputStatus().size() || byteCount() == inputStatus().size() - 1);
     }
 
     ///

@@ -821,20 +821,13 @@ void OutputWidget::showModbusMessage(const QModelIndex& index)
 ///
 void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu)
 {
-    ui->logView->addItem(pdu, QDateTime::currentDateTime(), server, request);
-
-    if(captureMode() == CaptureMode::TextCapture)
+    auto msg = ui->logView->addItem(pdu, server, QDateTime::currentDateTime(), request);
+    if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
-        const auto idx = ui->logView->index(ui->logView->rowCount() - 1);
-        const auto msg = ui->logView->itemAt(idx);
-
-        if(msg != nullptr)
-        {
-            const auto str = QString("%1 %2 %3").arg(
-                    msg->timestamp().toString(Qt::ISODateWithMs),
-                    (msg->isRequest()?  "<<" : ">>"),
-                    msg->toString(DataDisplayMode::Hex));
-            captureString(str);
-        }
+        const auto str = QString("%1 %2 %3").arg(
+                msg->timestamp().toString(Qt::ISODateWithMs),
+                (msg->isRequest()?  "<<" : ">>"),
+                msg->toString(DataDisplayMode::Hex));
+        captureString(str);
     }
 }

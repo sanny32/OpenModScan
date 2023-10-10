@@ -1,6 +1,5 @@
 #include <QPushButton>
 #include <QAbstractEventDispatcher>
-#include "modbusmessage.h"
 #include "dialogmsgparser.h"
 #include "ui_dialogmsgparser.h"
 
@@ -12,6 +11,7 @@
 DialogMsgParser::DialogMsgParser(DataDisplayMode mode, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogMsgParser)
+    ,_mm(nullptr)
 {
     ui->setupUi(this);
 
@@ -33,6 +33,7 @@ DialogMsgParser::DialogMsgParser(DataDisplayMode mode, QWidget *parent)
 DialogMsgParser::~DialogMsgParser()
 {
     delete ui;
+    if(_mm) delete _mm;
 }
 
 ///
@@ -40,7 +41,7 @@ DialogMsgParser::~DialogMsgParser()
 ///
 void DialogMsgParser::on_awake()
 {
-    ui->rtu->setVisible(ui->buttonAdu->isChecked());
+    //ui->rtu->setVisible(ui->buttonAdu->isChecked());
     ui->deviceIdIncluded->setVisible(ui->buttonPdu->isChecked());
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!ui->bytesData->isEmpty());
 }
@@ -60,22 +61,18 @@ void DialogMsgParser::on_hexView_toggled(bool checked)
 ///
 void DialogMsgParser::accept()
 {
-    if(ui->info->modbusMessage())
-        delete ui->info->modbusMessage();
+    if(_mm) delete _mm;
 
-    const ModbusMessage* msg = nullptr;
+    auto data = ui->bytesData->value();
+    ModbusMessage::Type type = ModbusMessage::Adu;
+    const auto protocol = ui->checksum->isChecked() ? QModbusAdu::Rtu : QModbusAdu::Tcp;
+
     if(ui->buttonPdu->isChecked())
     {
-        auto data = ui->bytesData->value();
+        type = ModbusMessage::Pdu;
         if(!ui->deviceIdIncluded->isChecked()) data.push_front('\0');
-        msg = ModbusMessage::parse(data, ModbusMessage::Pdu, QModbusAdu::Tcp, ui->request->isChecked());
-    }
-    else if(ui->buttonAdu->isChecked())
-    {
-        auto data = ui->bytesData->value();
-        const auto protocol = ui->rtu->isChecked() ? QModbusAdu::Rtu : QModbusAdu::Tcp;
-        msg = ModbusMessage::parse(data, ModbusMessage::Adu, protocol, ui->request->isChecked());
     }
 
-    ui->info->setModbusMessage(msg);
+    _mm = ModbusMessage::parse(data, type, protocol, ui->request->isChecked());
+    ui->info->setModbusMessage(_mm);
 }

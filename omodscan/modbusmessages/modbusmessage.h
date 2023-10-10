@@ -22,12 +22,14 @@ public:
     ///
     /// \brief ModbusMessage
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     /// \param request
     ///
-    explicit ModbusMessage(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request)
+    explicit ModbusMessage(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, bool request)
         :_type(Type::Pdu)
+        ,_protocol(protocol)
         ,_data(pdu.data())
         ,_funcCode(pdu.isException() ? (pdu.functionCode() | QModbusPdu::ExceptionByte) : pdu.functionCode())
         ,_exceptionCode(pdu.exceptionCode())
@@ -38,6 +40,7 @@ public:
         ,_deviceId(deviceId)
         ,_request(request)
         ,_isValid(pdu.isValid())
+        ,_checksum(calcCRC(pdu, deviceId))
     {
     }
 
@@ -49,6 +52,7 @@ public:
     ///
     explicit ModbusMessage(const QModbusAdu& adu, const QDateTime& timestamp, bool request)
         :_type(Type::Adu)
+        ,_protocol(adu.type())
         ,_data(adu.data())
         ,_funcCode(adu.isException() ? (adu.functionCode() | QModbusPdu::ExceptionByte) : adu.functionCode())
         ,_exceptionCode(adu.exceptionCode())
@@ -59,6 +63,7 @@ public:
         ,_deviceId(adu.serverAddress())
         ,_request(request)
         ,_isValid(adu.isValid())
+        ,_checksum(adu.checksum())
     {
     }
 
@@ -70,12 +75,13 @@ public:
     ///
     /// \brief create
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     /// \param request
     /// \return
     ///
-    static const ModbusMessage* create(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId, bool request);
+    static const ModbusMessage* create(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, bool request);
 
     ///
     /// \brief create
@@ -118,6 +124,14 @@ public:
     ///
     int protocolId() const {
         return _protocolId;
+    }
+
+    ///
+    /// \brief protocolType
+    /// \return
+    ///
+    QModbusAdu::Type protocolType() const {
+        return _protocol;
     }
 
     ///
@@ -211,6 +225,14 @@ public:
     }
 
     ///
+    /// \brief checksum
+    /// \return
+    ///
+    int checksum() const {
+        return _checksum;
+    }
+
+    ///
     /// \brief operator QByteArray
     ///
     operator QByteArray() const {
@@ -269,7 +291,21 @@ protected:
     }
 
 private:
+    int calcCRC(const QModbusPdu& pdu, int deviceId) {
+        if(_protocol != QModbusAdu::Rtu)
+            return 0;
+
+        QByteArray data;
+        data.push_back(deviceId);
+        data.push_back(pdu.functionCode());
+        data.push_back(pdu.data());
+        qDebug() << formatByteArray(DataDisplayMode::Hex, data);
+        return QModbusAdu::calculateCRC(data, data.length());
+    }
+
+private:
     const Type _type;
+    QModbusAdu::Type _protocol;
     const QByteArray _data;
     const quint8 _funcCode;
     const quint8 _exceptionCode;
@@ -280,6 +316,7 @@ private:
     const int _deviceId;
     const bool _request;
     const bool _isValid;
+    const int _checksum;
 };
 Q_DECLARE_METATYPE(const ModbusMessage*)
 

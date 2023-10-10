@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "enums.h"
+#include "modbusmessage.h"
 
 namespace Ui {
 class DialogMsgParser;
@@ -27,6 +28,7 @@ private slots:
 
 private:
     Ui::DialogMsgParser *ui;
+    const ModbusMessage* _mm;
 };
 
 #endif // DIALOGMSGPARSER_H

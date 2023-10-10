@@ -98,13 +98,6 @@
       </spacer>
      </item>
      <item>
-      <widget class="QCheckBox" name="rtu">
-       <property name="text">
-        <string>Modbus RTU</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QCheckBox" name="request">
        <property name="text">
         <string>Request</string>
@@ -114,10 +107,17 @@
      <item>
       <widget class="QCheckBox" name="deviceIdIncluded">
        <property name="text">
-        <string>Device Id Included</string>
+        <string>Device Id included</string>
        </property>
        <property name="checked">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checksum">
+       <property name="text">
+        <string>Checksum included</string>
        </property>
       </widget>
      </item>

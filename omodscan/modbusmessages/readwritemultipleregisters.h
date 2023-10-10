@@ -12,11 +12,12 @@ public:
     ///
     /// \brief ReadWriteMultipleRegistersRequest
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    ReadWriteMultipleRegistersRequest(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        : ModbusMessage(pdu, timestamp, deviceId, true)
+    ReadWriteMultipleRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }
@@ -37,7 +38,11 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() > 9;
+        return ModbusMessage::isValid() &&
+               readLength() >= 1 && readLength() <= 0x7D &&
+               writeLength() >= 1 && writeLength() <= 0x79 &&
+               writeByteCount() > 0 &&
+               writeByteCount() == writeValues().size();
     }
 
     ///
@@ -98,11 +103,12 @@ public:
     ///
     /// \brief ReadWriteMultipleRegistersResponse
     /// \param pdu
-    /// \param timestamp
+    /// \param protocol
     /// \param deviceId
+    /// \param timestamp
     ///
-    ReadWriteMultipleRegistersResponse(const QModbusPdu& pdu, const QDateTime& timestamp, int deviceId)
-        :ModbusMessage(pdu, timestamp, deviceId, false)
+    ReadWriteMultipleRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }
@@ -123,7 +129,9 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() > 1;
+        return ModbusMessage::isValid() &&
+               byteCount() > 0 &&
+               byteCount() == values().size();
     }
 
     ///

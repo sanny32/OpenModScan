@@ -3,7 +3,6 @@
 #include <QTextStream>
 #include <QInputDialog>
 #include "formatutils.h"
-#include "htmldelegate.h"
 #include "outputwidget.h"
 #include "modbusmessages.h"
 #include "ui_outputwidget.h"

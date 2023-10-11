@@ -40,6 +40,7 @@ signals:
 protected:
     void focusOutEvent(QFocusEvent* e) override;
     void keyPressEvent(QKeyEvent* e) override;
+    bool canInsertFromMimeData(const QMimeData* source) const override;
     void insertFromMimeData(const QMimeData* source) override;
 
 private slots:
@@ -47,7 +48,6 @@ private slots:
 
 private:
     void updateValue();
-    void updateValidator();
 
 private:
     InputMode _inputMode;

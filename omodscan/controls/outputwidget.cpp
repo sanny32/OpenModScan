@@ -532,7 +532,7 @@ void OutputWidget::setStatus(const QString& status)
     }
     else
     {
-        const auto info = QString("** %1 **").arg(status);
+        const auto info = QString("*** %1 ***").arg(status);
         if(info != ui->labelStatus->text())
             ui->labelStatus->setText(info);
     }

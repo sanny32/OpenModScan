@@ -56,6 +56,12 @@
        </item>
        <item row="1" column="1">
         <widget class="FunctionCodeComboBox" name="comboBoxFunction">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="contextMenuPolicy">
           <enum>Qt::NoContextMenu</enum>
          </property>
@@ -85,7 +91,7 @@
      <item>
       <widget class="QGroupBox" name="groupBoxShowData">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -115,9 +121,6 @@
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -235,16 +238,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>FunctionCodeComboBox</class>
-   <extends>QComboBox</extends>
-   <header>functioncodecombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>NumericLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>numericlineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>ModbusMessageWidget</class>
    <extends>QListWidget</extends>
    <header>modbusmessagewidget.h</header>
@@ -253,6 +246,16 @@
    <class>ByteListTextEdit</class>
    <extends>QPlainTextEdit</extends>
    <header>bytelisttextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FunctionCodeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>functioncodecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumericLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>numericlineedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

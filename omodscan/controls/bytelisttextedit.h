@@ -40,12 +40,14 @@ signals:
 protected:
     void focusOutEvent(QFocusEvent* e) override;
     void keyPressEvent(QKeyEvent* e) override;
+    void insertFromMimeData(const QMimeData* source) override;
 
 private slots:
     void on_textChanged();
 
 private:
     void updateValue();
+    void updateValidator();
 
 private:
     InputMode _inputMode;

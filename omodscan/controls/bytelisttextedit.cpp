@@ -1,4 +1,5 @@
 #include <QRegularExpressionValidator>
+#include <QMimeData>
 #include "formatutils.h"
 #include "bytelisttextedit.h"
 
@@ -86,25 +87,7 @@ ByteListTextEdit::InputMode ByteListTextEdit::inputMode() const
 void ByteListTextEdit::setInputMode(InputMode mode)
 {
     _inputMode = mode;
-
-    if(_validator)
-    {
-        delete _validator;
-        _validator = nullptr;
-    }
-
-    const auto sep = (_separator == ' ')? "\\s" : QString(_separator);
-    switch(mode)
-    {
-        case DecMode:
-            _validator =new QRegularExpressionValidator(QRegularExpression("(?:[0-9]{1,2}[" + sep + "]{0,1})*"), this);
-        break;
-
-        case HexMode:
-            _validator = new QRegularExpressionValidator(QRegularExpression("(?:[0-9a-fA-F]{1,2}[" + sep + "]{0,1})*"), this);
-        break;
-    }
-
+    updateValidator();
     setValue(_value);
 }
 
@@ -175,12 +158,25 @@ void ByteListTextEdit::keyPressEvent(QKeyEvent *e)
 }
 
 ///
+/// \brief ByteListTextEdit::insertFromMimeData
+/// \param source
+///
+void ByteListTextEdit::insertFromMimeData(const QMimeData* source)
+{
+    int pos = 0;
+    auto text = source->text().trimmed();
+    const auto state = _validator->validate(text, pos);
+
+    if(state == QValidator::Acceptable)
+        QPlainTextEdit::insertFromMimeData(source);
+}
+
+///
 /// \brief ByteListTextEdit::on_textChanged
 ///
 void ByteListTextEdit::on_textChanged()
 {
     QByteArray value;
-
     switch(_inputMode)
     {
         case DecMode:
@@ -247,6 +243,30 @@ void ByteListTextEdit::updateValue()
             if(!value.isEmpty()) setValue(value);
             else setValue(_value);
         }
+        break;
+    }
+}
+
+///
+/// \brief ByteListTextEdit::updateValidator
+///
+void ByteListTextEdit::updateValidator()
+{
+    if(_validator)
+    {
+        delete _validator;
+        _validator = nullptr;
+    }
+
+    const auto sep = (_separator == ' ')? "\\s" : QString(_separator);
+    switch(_inputMode)
+    {
+        case DecMode:
+            _validator =new QRegularExpressionValidator(QRegularExpression("(?:[0-9]{1,2}[" + sep + "]{0,1})*"), this);
+        break;
+
+        case HexMode:
+            _validator = new QRegularExpressionValidator(QRegularExpression("(?:[0-9a-fA-F]{1,2}[" + sep + "]{0,1})*"), this);
         break;
     }
 }

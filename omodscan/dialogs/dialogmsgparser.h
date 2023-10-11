@@ -25,6 +25,7 @@ public:
 private slots:
     void on_awake();
     void on_hexView_toggled(bool);
+    void on_bytesData_valueChanged(const QByteArray& value);
 
 private:
     Ui::DialogMsgParser *ui;

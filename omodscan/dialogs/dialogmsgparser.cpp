@@ -56,6 +56,25 @@ void DialogMsgParser::on_hexView_toggled(bool checked)
 }
 
 ///
+/// \brief DialogMsgParser::on_bytesData_valueChanged
+/// \param value
+///
+void DialogMsgParser::on_bytesData_valueChanged(const QByteArray& value)
+{
+    if(value.size() < 3)
+    {
+        if(value.isEmpty())
+            ui->info->clear();
+
+        return;
+    }
+
+    const auto data = value.left(value.size() - 2);
+    const int checksum = makeWord(value[value.size() - 1], value[value.size() - 2], ByteOrder::LittleEndian);
+    ui->checksumIncluded->setChecked(QModbusAdu::calculateCRC(data, data.size()) == checksum);
+}
+
+///
 /// \brief DialogMsgParser::accept
 ///
 void DialogMsgParser::accept()

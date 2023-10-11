@@ -2,7 +2,7 @@
 #define DIALOGDISPLAYDEFINITION_H
 
 #include "qfixedsizedialog.h"
-#include "formmodsca.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class DialogDisplayDefinition;

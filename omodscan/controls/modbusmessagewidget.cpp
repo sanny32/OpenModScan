@@ -14,7 +14,6 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     ,_dataDisplayMode(DataDisplayMode::Decimal)
     ,_showTimestamp(true)
     ,_mm(nullptr)
-
 {
     setItemDelegate(new HtmlDelegate(this));
     setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -149,7 +148,7 @@ void ModbusMessageWidget::update()
         }
     };
 
-    addItem(tr("<b>Type:</b> %1").arg(_mm->isRequest() ? tr("Tx Message") : tr("Rx Message")));
+    addItem(tr("<b>Type:</b> %1").arg(_mm->isRequest() ? tr("Request (Tx)") : tr("Response (Rx)")));
     if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_mm->timestamp().toString(Qt::ISODateWithMs)));
 
     if(_mm->type() == ModbusMessage::Adu)

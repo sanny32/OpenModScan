@@ -10,7 +10,7 @@
 /// \param parent
 ///
 HtmlDelegate::HtmlDelegate(QObject* parent)
-    :QStyledItemDelegate(parent)
+    : QStyledItemDelegate(parent)
 {
 }
 
@@ -41,7 +41,7 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
 
     QTextDocument doc;
     doc.setHtml(opt.text);
-    doc.setDocumentMargin(0);
+    doc.setDocumentMargin(2);
     doc.setDefaultFont(opt.font);
     doc.setDefaultTextOption(textOption);
     doc.setTextWidth(opt.rect.width());
@@ -82,7 +82,7 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
     QTextDocument doc;
     doc.setHtml(opt.text);
-    doc.setDocumentMargin(0);
+    doc.setDocumentMargin(2);
     doc.setDefaultFont(opt.font);
 
     if(opt.features & QStyleOptionViewItem::WrapText)

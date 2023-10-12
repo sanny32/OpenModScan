@@ -38,7 +38,7 @@ Modbus Logging
 
 - Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
   
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/056de3b1-026b-498b-914c-4d1e565067bb)
+  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/768a9c69-0201-4c1e-bad5-4fa9b24d9553)
 
 - Modbus Message Parser
 

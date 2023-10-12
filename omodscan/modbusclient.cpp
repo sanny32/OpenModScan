@@ -1,15 +1,16 @@
 #include <QModbusTcpClient>
-#include "floatutils.h"
-#include "modbusexception.h"
-#include "modbusclient.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    #include <QModbusRtuSerialMaster>
-    typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
+#include <QModbusRtuSerialMaster>
+typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
 #else
-    #include <QModbusRtuSerialClient>
+#include <QModbusRtuSerialClient>
 #endif
 
+#include "formatutils.h"
+#include "numericutils.h"
+#include "modbusexception.h"
+#include "modbusclient.h"
 
 ///
 /// \brief ModbusClient::ModbusClient
@@ -129,6 +130,7 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
         return;
     }
 
+    emit modbusRequest(requestId, server, request);
     if(auto reply = _modbusClient->sendRawRequest(request, server))
     {
         reply->setProperty("RequestId", requestId);
@@ -164,7 +166,7 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
     const auto request = createReadRequest(dataUnit);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, server, request);
     if(auto reply = _modbusClient->sendReadRequest(dataUnit, server))
     {
         reply->setProperty("RequestId", requestId);
@@ -467,7 +469,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, params.Node, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
@@ -499,7 +501,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     }
 
     QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(params.Address - 1), params.AndMask, params.OrMask);
-    emit modbusRequest(requestId, request);
+    emit modbusRequest(requestId, params.Node, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
@@ -601,13 +603,27 @@ void ModbusClient::on_writeReply()
     auto reply = qobject_cast<QModbusReply*>(sender());
     if (!reply) return;
 
+    const auto raw  = reply->rawResult();
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+    if(raw.functionCode() == QModbusRequest::MaskWriteRegister &&
+       reply->error() == QModbusDevice::InvalidResponseError)
+    {
+        reply->blockSignals(true);
+        reply->setError(QModbusDevice::NoError, QString());
+        reply->blockSignals(false);
+    }
+#endif
+
     emit modbusReply(reply);
 
-    const auto raw  = reply->rawResult();
     auto onError = [this, reply, raw](const QString& errorDesc, int requestId)
     {
         if (reply->error() == QModbusDevice::ProtocolError)
-            emit modbusError(QString("%1. %2").arg(errorDesc, ModbusException(raw.exceptionCode())), requestId);
+        {
+            ModbusException ex(raw.exceptionCode());
+            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatByteValue(DataDisplayMode::Hex, ex)), requestId);
+        }
         else if(reply->error() != QModbusDevice::NoError)
             emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);
     };

@@ -11,6 +11,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogusermsg.h"
+#include "dialogmsgparser.h"
 #include "dialogaddressscan.h"
 #include "dialogmodbusscanner.h"
 #include "dialogwindowsmanager.h"
@@ -48,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
-        _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
+        _selectedPrinter = new QPrinter(defaultPrinter);
 
     _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
     connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
@@ -75,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete _selectedPrinter;
 }
 
 ///
@@ -277,6 +279,7 @@ void MainWindow::on_actionNew_triggered()
         frm->setByteOrder(cur->byteOrder());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
+        frm->setDisplayDefinition(cur->displayDefinition());
 
         frm->setFont(cur->font());
         frm->setStatusColor(cur->statusColor());
@@ -347,10 +350,10 @@ void MainWindow::on_actionPrint_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    QPrintDialog dlg(_selectedPrinter.get(), this);
+    QPrintDialog dlg(_selectedPrinter, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        frm->print(_selectedPrinter.get());
+        frm->print(_selectedPrinter);
     }
 }
 
@@ -359,7 +362,7 @@ void MainWindow::on_actionPrint_triggered()
 ///
 void MainWindow::on_actionPrintSetup_triggered()
 {
-    DialogPrintSettings dlg(_selectedPrinter.get(), this);
+    DialogPrintSettings dlg(_selectedPrinter, this);
     dlg.exec();
 }
 
@@ -472,8 +475,9 @@ void MainWindow::on_actionDataDefinition_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    DialogDisplayDefinition dlg(frm);
-    dlg.exec();
+    DialogDisplayDefinition dlg(frm->displayDefinition(), this);
+    if(dlg.exec() == QDialog::Accepted)
+        frm->setDisplayDefinition(dlg.displayDefinition());
 }
 
 ///
@@ -634,7 +638,9 @@ void MainWindow::on_actionForceCoils_triggered()
     params.Node = presetParams.SlaveAddress;
     params.Address = presetParams.PointAddress;
 
-    if(dd.PointType == QModbusDataUnit::Coils)
+    if(dd.PointType == QModbusDataUnit::Coils &&
+       dd.DeviceId == params.Node &&
+       dd.PointAddress == params.Address)
     {
         params.Value = QVariant::fromValue(frm->data());
     }
@@ -668,7 +674,9 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.DisplayMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
 
-    if(dd.PointType == QModbusDataUnit::HoldingRegisters)
+    if(dd.PointType == QModbusDataUnit::HoldingRegisters &&
+       dd.DeviceId == params.Node &&
+       dd.PointAddress == params.Address)
     {
         params.Value = QVariant::fromValue(frm->data());
     }
@@ -685,7 +693,12 @@ void MainWindow::on_actionPresetRegs_triggered()
 ///
 void MainWindow::on_actionMaskWrite_triggered()
 {
-    ModbusMaskWriteParams params = { 1, 1, 0xFFFF, 0};
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    ModbusMaskWriteParams params = { dd.DeviceId, dd.PointAddress, 0xFFFF, 0};
+
     DialogMaskWriteRegiter dlg(params, this);
     if(dlg.exec() == QDialog::Accepted)
     {
@@ -704,8 +717,45 @@ void MainWindow::on_actionUserMsg_triggered()
     const auto dd = frm->displayDefinition();
     const auto mode = frm->dataDisplayMode();
 
-    DialogUserMsg dlg(dd.DeviceId, mode, _modbusClient, this);
+    QModbusPdu::FunctionCode func;
+    switch(dd.PointType)
+    {
+        case QModbusDataUnit::Coils:
+            func = QModbusPdu::ReadCoils;
+        break;
+
+        case QModbusDataUnit::DiscreteInputs:
+            func = QModbusPdu::ReadDiscreteInputs;
+        break;
+
+        case QModbusDataUnit::HoldingRegisters:
+            func = QModbusPdu::ReadHoldingRegisters;
+        break;
+
+        case QModbusDataUnit::InputRegisters:
+            func = QModbusPdu::ReadInputRegisters;
+        break;
+
+        default:
+            func = QModbusPdu::Invalid;
+        break;
+    }
+
+    DialogUserMsg dlg(dd.DeviceId, func, mode, _modbusClient, this);
     dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_actionMsgParser_triggered
+///
+void MainWindow::on_actionMsgParser_triggered()
+{
+    auto frm = currentMdiChild();
+    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+
+    auto dlg = new DialogMsgParser(mode, this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
 }
 
 ///
@@ -902,6 +952,7 @@ void MainWindow::updateMenuWindow()
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
         wnd->setProperty("isActive", wnd == activeWnd);
+        wnd->widget()->setProperty("isActive", wnd == activeWnd);
     }
     _windowActionList->update();
 }
@@ -912,7 +963,10 @@ void MainWindow::updateMenuWindow()
 ///
 void MainWindow::windowActivate(QMdiSubWindow* wnd)
 {
-    if(wnd) ui->mdiArea->setActiveSubWindow(wnd);
+    if(wnd)
+    {
+        ui->mdiArea->setActiveSubWindow(wnd);
+    }
 }
 
 ///

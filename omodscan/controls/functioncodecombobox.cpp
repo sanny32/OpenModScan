@@ -1,3 +1,8 @@
+#include <QKeyEvent>
+#include <QLineEdit>
+#include "modbusfunction.h"
+#include "qhexvalidator.h"
+#include "quintvalidator.h"
 #include "functioncodecombobox.h"
 
 ///
@@ -5,9 +10,14 @@
 /// \param parent
 ///
 FunctionCodeComboBox::FunctionCodeComboBox(QWidget *parent)
-    :QComboBox(parent)
+    : QComboBox(parent)
+    ,_currentFunc(QModbusPdu::Invalid)
+    ,_validator(nullptr)
 {
-    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
+    setInputMode(InputMode::DecMode);
+
+    connect(this, &QComboBox::currentTextChanged, this, &FunctionCodeComboBox::on_currentTextChanged);
+    connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &FunctionCodeComboBox::on_currentIndexChanged);
 }
 
 ///
@@ -16,7 +26,7 @@ FunctionCodeComboBox::FunctionCodeComboBox(QWidget *parent)
 ///
 QModbusPdu::FunctionCode FunctionCodeComboBox::currentFunctionCode() const
 {
-    return currentData().value<QModbusPdu::FunctionCode>();
+    return _currentFunc;
 }
 
 ///
@@ -25,8 +35,61 @@ QModbusPdu::FunctionCode FunctionCodeComboBox::currentFunctionCode() const
 ///
 void FunctionCodeComboBox::setCurrentFunctionCode(QModbusPdu::FunctionCode funcCode)
 {
+    _currentFunc = funcCode;
+
     const auto idx = findData(funcCode);
-    setCurrentIndex(idx);
+    if(idx != -1) setCurrentIndex(idx);
+    else setCurrentText(formatFuncCode(funcCode));
+}
+
+///
+/// \brief FunctionCodeComboBox::inputMode
+/// \return
+///
+FunctionCodeComboBox::InputMode FunctionCodeComboBox::inputMode() const
+{
+    return _inputMode;
+}
+
+///
+/// \brief FunctionCodeComboBox::setInputMode
+/// \param on
+///
+void FunctionCodeComboBox::setInputMode(FunctionCodeComboBox::InputMode mode)
+{
+    _inputMode = mode;
+
+    if(!isEditable())
+        return;
+
+    if(_validator)
+    {
+        delete _validator;
+        _validator = nullptr;
+    }
+
+    switch(mode)
+    {
+        case DecMode:
+            _validator = new QUIntValidator(0, 255, this);
+        break;
+
+        case HexMode:
+           _validator = new QHexValidator(0, 0xFF, this);
+        break;
+    }
+
+    blockSignals(true);
+    lineEdit()->blockSignals(true);
+    for (int i = 0; i < count(); i++)
+    {
+        const auto funcCode = itemData(i).value<QModbusPdu::FunctionCode>();
+        setItemText(i, QString("%1: %2").arg(formatFuncCode(funcCode), ModbusFunction(funcCode)));
+    }
+    blockSignals(false);
+    lineEdit()->blockSignals(false);
+
+    update();
 }
 
 ///
@@ -35,86 +98,49 @@ void FunctionCodeComboBox::setCurrentFunctionCode(QModbusPdu::FunctionCode funcC
 ///
 void FunctionCodeComboBox::addItem(QModbusPdu::FunctionCode funcCode)
 {
-    switch(funcCode)
+    const auto code = formatFuncCode(funcCode);
+    QComboBox::addItem(QString("%1: %2").arg(code, ModbusFunction(funcCode)), funcCode);
+}
+
+///
+/// \brief FunctionCodeComboBox::addItems
+/// \param funcCodes
+///
+void FunctionCodeComboBox::addItems(const QVector<QModbusPdu::FunctionCode>& funcCodes)
+{
+    for(auto&& item : funcCodes)
+        addItem(item);
+}
+
+///
+/// \brief FunctionCodeComboBox::update
+///
+void FunctionCodeComboBox::update()
+{
+    const auto idx = findData(_currentFunc, Qt::UserRole);
+    if(idx != -1)
+        setCurrentIndex(idx);
+    else
+        setCurrentText(formatFuncCode(_currentFunc));
+}
+
+///
+/// \brief FunctionCodeComboBox::formatFuncCode
+/// \param funcCode
+/// \return
+///
+QString FunctionCodeComboBox::formatFuncCode(QModbusPdu::FunctionCode funcCode) const
+{
+    switch(_inputMode)
     {
-        case QModbusPdu::ReadCoils:
-            QComboBox::addItem("01: READ COILS", QModbusPdu::ReadCoils);
-        break;
+        case DecMode:
+            return QString("%1").arg(QString::number(funcCode), 2, '0');
 
-        case QModbusPdu::ReadDiscreteInputs:
-            QComboBox::addItem("02: READ INPUTS", QModbusPdu::ReadDiscreteInputs);
-        break;
-
-        case QModbusPdu::ReadHoldingRegisters:
-            QComboBox::addItem("03: READ HOLDING REGS", QModbusPdu::ReadHoldingRegisters);
-        break;
-
-        case QModbusPdu::ReadInputRegisters:
-            QComboBox::addItem("04: READ INPUT REGS", QModbusPdu::ReadInputRegisters);
-        break;
-
-        case QModbusPdu::WriteSingleCoil:
-            QComboBox::addItem("05: WRITE SINGLE COIL", QModbusPdu::WriteSingleCoil);
-        break;
-
-        case QModbusPdu::WriteSingleRegister:
-            QComboBox::addItem("06: WRITE SINGLE REG", QModbusPdu::WriteSingleRegister);
-        break;
-
-        case QModbusPdu::ReadExceptionStatus:
-            QComboBox::addItem("07: READ EXCEPTION STAT", QModbusPdu::ReadExceptionStatus);
-        break;
-
-        case QModbusPdu::Diagnostics:
-            QComboBox::addItem("08: DIAGNOSTICS", QModbusPdu::Diagnostics);
-        break;
-
-        case QModbusPdu::GetCommEventCounter:
-            QComboBox::addItem("11: GET COMM EVENT CNT", QModbusPdu::GetCommEventCounter);
-        break;
-
-        case QModbusPdu::GetCommEventLog:
-            QComboBox::addItem("12: GET COMM EVENT LOG", QModbusPdu::GetCommEventLog);
-        break;
-
-        case QModbusPdu::WriteMultipleCoils:
-            QComboBox::addItem("15: WRITE MULT COILS", QModbusPdu::WriteMultipleCoils);
-        break;
-
-        case QModbusPdu::WriteMultipleRegisters:
-            QComboBox::addItem("16: WRITE MULT REGS", QModbusPdu::WriteMultipleRegisters);
-        break;
-
-        case QModbusPdu::ReportServerId:
-            QComboBox::addItem("17: REPORT SLAVE ID", QModbusPdu::ReportServerId);
-        break;
-
-        case QModbusPdu::ReadFileRecord:
-            QComboBox::addItem("20: READ FILE RECORD", QModbusPdu::ReadFileRecord);
-        break;
-
-        case QModbusPdu::WriteFileRecord:
-            QComboBox::addItem("21: WRITE FILE RECORD", QModbusPdu::WriteFileRecord);
-        break;
-
-        case QModbusPdu::MaskWriteRegister:
-            QComboBox::addItem("22: MASK WRITE REG", QModbusPdu::MaskWriteRegister);
-        break;
-
-        case QModbusPdu::ReadWriteMultipleRegisters:
-            QComboBox::addItem("23: READ WRITE MULT REGS", QModbusPdu::ReadWriteMultipleRegisters);
-        break;
-
-        case QModbusPdu::ReadFifoQueue:
-            QComboBox::addItem("24: READ FIFO QUEUE", QModbusPdu::ReadFifoQueue);
-        break;
-
-        case QModbusPdu::EncapsulatedInterfaceTransport:
-            QComboBox::addItem("43: ENC IFACE TRANSPORT", QModbusPdu::EncapsulatedInterfaceTransport);
-        break;
+        case HexMode:
+            return (isEditable() && hasFocus() ? "" : "0x") + QString("%1").arg(QString::number(funcCode, 16).toUpper(), 2, '0');
 
         default:
-        break;
+            return QString::number(funcCode);
     }
 }
 
@@ -124,5 +150,91 @@ void FunctionCodeComboBox::addItem(QModbusPdu::FunctionCode funcCode)
 ///
 void FunctionCodeComboBox::on_currentIndexChanged(int index)
 {
-    emit functionCodeChanged(itemData(index).value<QModbusPdu::FunctionCode>());
+    if(index >= 0)
+    {
+        _currentFunc = itemData(index).value<QModbusPdu::FunctionCode>();
+        emit functionCodeChanged(_currentFunc);
+    }
+}
+
+///
+/// \brief FunctionCodeComboBox::on_currentTextChanged
+///
+void FunctionCodeComboBox::on_currentTextChanged(const QString& text)
+{
+    const auto idx = findData(text, Qt::DisplayRole);
+    if(idx != -1)
+    {
+        _currentFunc = itemData(idx).value<QModbusPdu::FunctionCode>();
+    }
+    else
+    {
+        bool ok;
+        quint8 func = 0;
+
+        switch(_inputMode)
+        {
+            case InputMode::DecMode:
+                func = text.toUInt(&ok);
+            break;
+
+            case InputMode::HexMode:
+                func = text.toUInt(&ok, 16);
+            break;
+        }
+
+        _currentFunc = ok ? (QModbusPdu::FunctionCode)func : QModbusPdu::Invalid;
+    }
+}
+
+///
+/// \brief FunctionCodeComboBox::focusInEvent
+/// \param e
+///
+void FunctionCodeComboBox::focusInEvent(QFocusEvent* e)
+{
+    if(isEditable())
+        setCurrentText(formatFuncCode(_currentFunc));
+
+    QComboBox::focusInEvent(e);
+}
+
+///
+/// \brief FunctionCodeComboBox::focusOutEvent
+/// \param e
+///
+void FunctionCodeComboBox::focusOutEvent(QFocusEvent* e)
+{
+    update();
+    QComboBox::focusOutEvent(e);
+}
+
+///
+/// \brief FunctionCodeComboBox::keyPressEvent
+/// \param e
+///
+void FunctionCodeComboBox::keyPressEvent(QKeyEvent* e)
+{
+    if(!_validator || !isEditable())
+    {
+        QComboBox::keyPressEvent(e);
+        return;
+    }
+
+    int pos = 0;
+    auto text = e->text();
+    const auto state = _validator->validate(text, pos);
+
+    if(state == QValidator::Acceptable ||
+        e->key() == Qt::Key_Backspace ||
+        e->key() == Qt::Key_Delete ||
+        e->matches(QKeySequence::Cut) ||
+        e->matches(QKeySequence::Copy) ||
+        e->matches(QKeySequence::Paste) ||
+        e->matches(QKeySequence::Undo) ||
+        e->matches(QKeySequence::Redo) ||
+        e->matches(QKeySequence::SelectAll))
+    {
+        QComboBox::keyPressEvent(e);
+    }
 }

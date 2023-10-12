@@ -2,31 +2,35 @@
 #define DIALOGUSERMSG_H
 
 #include <QModbusRequest>
-#include "qfixedsizedialog.h"
+#include <QDialog>
 #include "modbusclient.h"
+#include "modbusmessage.h"
 #include "enums.h"
 
 namespace Ui {
 class DialogUserMsg;
 }
 
-class DialogUserMsg : public QFixedSizeDialog
+class DialogUserMsg : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogUserMsg(quint8 slaveAddres, DataDisplayMode mode, ModbusClient& client, QWidget *parent = nullptr);
+    explicit DialogUserMsg(quint8 slaveAddres, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent = nullptr);
     ~DialogUserMsg();
 
-    void accept() override;
+protected:
+    void changeEvent(QEvent* event) override;
 
 private slots:
     void on_modbusReply(QModbusReply* reply);
     void on_radioButtonHex_clicked(bool checked);
     void on_radioButtonDecimal_clicked(bool checked);
+    void on_pushButtonSend_clicked();
 
 private:
     Ui::DialogUserMsg *ui;
+    const ModbusMessage* _mm;
     ModbusClient& _modbusClient;
 };
 

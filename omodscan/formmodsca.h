@@ -31,10 +31,16 @@ class FormModSca : public QWidget
 public:
     static QVersionNumber VERSION;
 
-    explicit FormModSca(int id, ModbusClient& client, QSharedPointer<DataSimulator> simulator, MainWindow* parent);
+    explicit FormModSca(int id, ModbusClient& client, DataSimulator* simulator, MainWindow* parent);
     ~FormModSca();
 
-    int formId() const { return _formId; }
+    int formId() const {
+        return _formId;
+    }
+
+    bool isActive() const {
+        return property("isActive").toBool();
+    }
 
     QString filename() const;
     void setFilename(const QString& filename);
@@ -98,8 +104,10 @@ protected:
 
 private slots:
     void on_timeout();
+    void on_modbusConnected(const ConnectionDetails& cd);
+    void on_modbusDisconnected(const ConnectionDetails& cd);
     void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, const QModbusRequest& request);
+    void on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -112,7 +120,11 @@ private slots:
     void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, QVariant value);
 
 private:
-    bool isValidReply(const QModbusReply* reply);
+    void beginUpdate();
+    bool isValidReply(const QModbusReply* reply) const;
+
+    void logReply(const QModbusReply* reply);
+    void logRequest(int requestId, int deviceId, const QModbusRequest& request);
 
 private:
     Ui::FormModSca *ui;
@@ -122,7 +134,8 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusClient& _modbusClient;
-    QSharedPointer<DataSimulator> _dataSimulator;
+    DataSimulator* _dataSimulator;
+    MainWindow* _parent;
 };
 
 ///
@@ -234,6 +247,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.PointType;
     out << dd.PointAddress;
     out << dd.Length;
+    out << dd.LogViewLimit;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -251,6 +265,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
 inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
 {
     if(!frm) return in;
+    const auto ver = frm->property("Version").value<QVersionNumber>();
 
     bool isMaximized;
     in >> isMaximized;
@@ -285,8 +300,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     in >> dd.PointType;
     in >> dd.PointAddress;
     in >> dd.Length;
-
-    const auto ver = frm->property("Version").value<QVersionNumber>();
+    if(ver >= QVersionNumber(1, 4))
+    {
+        in >> dd.LogViewLimit;
+    }
 
     ByteOrder byteOrder = ByteOrder::LittleEndian;
     ModbusSimulationMap simulationMap;

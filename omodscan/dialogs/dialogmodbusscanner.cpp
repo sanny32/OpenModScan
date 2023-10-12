@@ -135,7 +135,7 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxSubnetMask->setEnabled(!inProgress);
     ui->groupBoxRequest->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
-    ui->pushButtonScan->setEnabled(ui->comboBoxSerial->count() > 0);
+    ui->pushButtonScan->setEnabled((rtuScanning && ui->comboBoxSerial->count() > 0) || !rtuScanning);
     ui->pushButtonScan->setText(inProgress ? tr("Stop Scan") : tr("Start Scan"));
 }
 

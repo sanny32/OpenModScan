@@ -6,6 +6,7 @@
 #include <QPrinter>
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
+#include "modbusmessage.h"
 #include "modbusdataunit.h"
 #include "modbusclient.h"
 #include "displaydefinition.h"
@@ -22,7 +23,7 @@ class TableViewItemModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit TableViewItemModel(const ModbusDataUnit& data, int columns, QObject* parent = nullptr);
+    explicit TableViewItemModel(QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -30,6 +31,13 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+    void reset(const ModbusDataUnit& data, int columns = 10){
+        beginResetModel();
+        _columns = columns;
+        _data = data;
+        endResetModel();
+    }
 
     void setHexView(bool on){
         beginResetModel();
@@ -44,57 +52,86 @@ public:
     }
 
 private:
-    int _columns;
+    int _columns = 10;
     ModbusDataUnit _data;
     bool _hexView = false;
     ByteOrder _byteOrder = ByteOrder::LittleEndian;
 };
 
 ///
-/// \brief The LogViewItem class
+/// \brief The LogViewModel class
 ///
-struct LogViewItem
-{
-    quint16 PointAddress = 0;
-    QString Text;
-    bool IsRequest = false;
-    bool IsValid = false;
-};
-Q_DECLARE_METATYPE(LogViewItem)
-
-///
-/// \brief The LogViewItemModel class
-///
-class LogViewItemModel : public QAbstractListModel
+class LogViewModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
-    explicit LogViewItemModel(QVector<LogViewItem>& items, QObject* parent = nullptr);
+    explicit LogViewModel(QObject* parent = nullptr);
+    ~LogViewModel();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
-    void update(){
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
+        if(msg == nullptr) return;
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        _items.push_back({ addr, type, msg });
+        endInsertRows();
+    }
+
+    void clear() {
         beginResetModel();
+        deleteItems();
+        endResetModel();
+    }
+
+    void setHexView(bool on) {
+        beginResetModel();
+        _hexView = on;
         endResetModel();
     }
 
 private:
-    QVector<LogViewItem>& _items;
+    void deleteItems();
+
+private:
+    struct LogViewItem{
+        quint16 Addr;
+        QModbusDataUnit::RegisterType Type;
+        const ModbusMessage* Msg;
+    };
+
+private:
+    bool _hexView = false;
+    QVector<LogViewItem> _items;
 };
 
 ///
-/// \brief The LogViewItemProxyModel class
+/// \brief The LogViewProxyModel class
 ///
-class LogViewItemProxyModel : public QSortFilterProxyModel
+class LogViewProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    explicit LogViewItemProxyModel(QObject* parent = nullptr);
+    explicit LogViewProxyModel(QObject* parent = nullptr);
 
-    void setShowValid(bool on){
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
+        if(sourceModel())
+            ((LogViewModel*)sourceModel())->append(addr, type, msg);
+    }
+
+    void clear() {
+        if(sourceModel())
+            ((LogViewModel*)sourceModel())->clear();
+    }
+
+    void setHexView(bool on) {
+        if(sourceModel())
+            ((LogViewModel*)sourceModel())->setHexView(on);
+    }
+
+    void setShowValid(bool on) {
         beginResetModel();
         _showValid = on;
         endResetModel();
@@ -115,7 +152,7 @@ class PdfExporter : public QObject
     Q_OBJECT
 
 public:
-    explicit PdfExporter(QAbstractTableModel* model,
+    explicit PdfExporter(QAbstractItemModel* model,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
@@ -141,7 +178,7 @@ private:
     const int _cy = 4;
     const int _cx = 10;
     QRect _pageRect;
-    QAbstractTableModel* _model;
+    QAbstractItemModel* _model;
     const QString _startAddress;
     const QString _length;
     const QString _deviceId;
@@ -158,7 +195,7 @@ class CsvExporter: public QObject
     Q_OBJECT
 
 public:
-    explicit CsvExporter(QAbstractTableModel* model,
+    explicit CsvExporter(QAbstractItemModel* model,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
@@ -168,7 +205,7 @@ public:
     void exportCsv(const QString& filename);
 
 private:
-    QAbstractTableModel* _model;
+    QAbstractItemModel* _model;
     const QString _startAddress;
     const QString _length;
     const QString _deviceId;
@@ -194,7 +231,7 @@ private slots:
     void on_awake();
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, const QModbusRequest& data);
+    void on_modbusRequest(int requestId, int deviceId, const QModbusRequest& data);
     void on_checkBoxHexView_toggled(bool);
     void on_checkBoxShowValid_toggled(bool);
     void on_comboBoxByteOrder_byteOrderChanged(ByteOrder);
@@ -215,7 +252,7 @@ private:
     void updateProgress();
     void updateTableView(int pointAddress, QVector<quint16> values);
 
-    void updateLogView(const QModbusRequest& request);
+    void updateLogView(int deviceId, const QModbusRequest& request);
     void updateLogView(const QModbusReply* reply);
 
     void exportPdf(const QString& filename);
@@ -231,10 +268,6 @@ private:
     quint64 _scanTime = 0;
     QTimer _scanTimer;
     ModbusClient& _modbusClient;
-    QVector<LogViewItem> _logItems;
-    QSharedPointer<LogViewItemModel> _logModel;
-    QSharedPointer<LogViewItemProxyModel> _proxyLogModel;
-    QSharedPointer<TableViewItemModel> _viewModel;
 };
 
 #endif // DIALOGADDRESSSCAN_H

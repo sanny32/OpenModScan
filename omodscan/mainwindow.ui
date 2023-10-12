@@ -127,6 +127,7 @@
      <addaction name="actionMaskWrite"/>
      <addaction name="separator"/>
      <addaction name="actionUserMsg"/>
+     <addaction name="actionMsgParser"/>
      <addaction name="actionAddressScan"/>
     </widget>
     <addaction name="actionDataDefinition"/>
@@ -753,6 +754,17 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Shift+5</string>
+   </property>
+  </action>
+  <action name="actionMsgParser">
+   <property name="text">
+    <string>Msg Parser</string>
+   </property>
+   <property name="toolTip">
+    <string>Msg Parser</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">F9</string>
    </property>
   </action>
  </widget>

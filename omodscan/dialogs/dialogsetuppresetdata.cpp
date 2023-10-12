@@ -16,7 +16,6 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     ui->setupUi(this);
     ui->lineEditSlaveDevice->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditNumberOfPoints->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditSlaveDevice->setValue(params.SlaveAddress);
     ui->lineEditAddress->setValue(params.PointAddress);
     ui->lineEditNumberOfPoints->setValue(params.Length);
@@ -25,9 +24,11 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     {
         case QModbusDataUnit::Coils:
             setWindowTitle("15: FORCE MULTIPLE COILS");
+            ui->lineEditNumberOfPoints->setInputRange(1, 1968);
         break;
         case QModbusDataUnit::HoldingRegisters:
             setWindowTitle("16: FORCE MULTIPLE REGISTERS");
+            ui->lineEditNumberOfPoints->setInputRange(1, 123);
         break;
         default:
         break;

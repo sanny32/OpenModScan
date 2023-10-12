@@ -2,7 +2,7 @@
 #define DIALOGDISPLAYDEFINITION_H
 
 #include "qfixedsizedialog.h"
-#include "formmodsca.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class DialogDisplayDefinition;
@@ -16,12 +16,17 @@ class DialogDisplayDefinition : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogDisplayDefinition(FormModSca* parent);
+    explicit DialogDisplayDefinition(DisplayDefinition dd, QWidget* parent);
     ~DialogDisplayDefinition();
+
+    DisplayDefinition displayDefinition() const {
+        return _displayDefinition;
+    }
 
     void accept() override;
 
 private:
+    DisplayDefinition _displayDefinition;
     Ui::DialogDisplayDefinition *ui;
 };
 

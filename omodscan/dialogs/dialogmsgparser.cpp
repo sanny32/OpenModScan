@@ -20,7 +20,6 @@ DialogMsgParser::DialogMsgParser(DataDisplayMode mode, QWidget *parent)
                    Qt::WindowTitleHint);
 
     ui->info->setShowTimestamp(false);
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Parse"));
     ui->hexView->setCheckState(mode == DataDisplayMode::Hex ? Qt::Checked : Qt::Unchecked);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
@@ -37,12 +36,26 @@ DialogMsgParser::~DialogMsgParser()
 }
 
 ///
+/// \brief DialogMsgParser::changeEvent
+/// \param event
+///
+void DialogMsgParser::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogMsgParser::on_awake
 ///
 void DialogMsgParser::on_awake()
 {
     ui->deviceIdIncluded->setVisible(ui->buttonPdu->isChecked());
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!ui->bytesData->isEmpty());
+    ui->pushButtonParse->setEnabled(!ui->bytesData->isEmpty());
 }
 
 ///
@@ -75,9 +88,9 @@ void DialogMsgParser::on_bytesData_valueChanged(const QByteArray& value)
 }
 
 ///
-/// \brief DialogMsgParser::accept
+/// \brief DialogMsgParser::on_pushButtonParse_clicked
 ///
-void DialogMsgParser::accept()
+void DialogMsgParser::on_pushButtonParse_clicked()
 {
     auto data = ui->bytesData->value();
     if(data.isEmpty()) return;

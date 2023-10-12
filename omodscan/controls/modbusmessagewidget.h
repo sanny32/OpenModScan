@@ -29,6 +29,9 @@ public:
 
     void setStatusColor(const QColor& clr);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private:
     void update();
 

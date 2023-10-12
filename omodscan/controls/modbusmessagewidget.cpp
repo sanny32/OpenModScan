@@ -1,3 +1,4 @@
+#include <QEvent>
 #include "formatutils.h"
 #include "htmldelegate.h"
 #include "modbusmessagewidget.h"
@@ -17,6 +18,19 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
 {
     setItemDelegate(new HtmlDelegate(this));
     setEditTriggers(QAbstractItemView::NoEditTriggers);
+}
+
+///
+/// \brief ModbusMessageWidget::changeEvent
+/// \param event
+///
+void ModbusMessageWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        update();
+    }
+    QListWidget::changeEvent(event);
 }
 
 ///

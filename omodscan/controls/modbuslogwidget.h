@@ -65,6 +65,9 @@ public:
     bool autoscroll() const;
     void setAutoscroll(bool on);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private:
     bool _autoscroll;
     DataDisplayMode _dataDisplayMode;

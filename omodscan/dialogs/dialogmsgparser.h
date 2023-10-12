@@ -20,12 +20,14 @@ public:
     explicit DialogMsgParser(DataDisplayMode mode, QWidget *parent = nullptr);
     ~DialogMsgParser();
 
-    void accept() override;
+protected:
+    void changeEvent(QEvent* event) override;
 
 private slots:
     void on_awake();
     void on_hexView_toggled(bool);
     void on_bytesData_valueChanged(const QByteArray& value);
+    void on_pushButtonParse_clicked();
 
 private:
     Ui::DialogMsgParser *ui;

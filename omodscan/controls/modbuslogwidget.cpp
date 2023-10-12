@@ -1,3 +1,4 @@
+#include <QEvent>
 #include "htmldelegate.h"
 #include "modbuslogwidget.h"
 
@@ -129,6 +130,19 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
         if(_autoscroll) scrollToBottom();
         setCurrentIndex(QModelIndex());
     });
+}
+
+///
+/// \brief ModbusLogWidget::changeEvent
+/// \param event
+///
+void ModbusLogWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        update();
+    }
+    QListView::changeEvent(event);
 }
 
 ///

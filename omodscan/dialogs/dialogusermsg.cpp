@@ -43,9 +43,7 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
         break;
     }
 
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Send"));
     ui->sendData->setFocus();
-
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogUserMsg::on_modbusReply);
 }
 
@@ -59,11 +57,26 @@ DialogUserMsg::~DialogUserMsg()
 }
 
 ///
-/// \brief DialogUserMsg::accept
+/// \brief DialogUserMsg::changeEvent
+/// \param event
 ///
-void DialogUserMsg::accept()
+void DialogUserMsg::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+
+    QDialog::changeEvent(event);
+}
+
+///
+/// \brief DialogUserMsg::on_pushButtonSend_clicked
+///
+void DialogUserMsg::on_pushButtonSend_clicked()
 {
     ui->responseBuffer->clear();
+    ui->responseInfo->clear();
 
     if(_modbusClient.state() != QModbusDevice::ConnectedState)
     {
@@ -71,7 +84,7 @@ void DialogUserMsg::accept()
         return;
     }
 
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+    ui->pushButtonSend->setEnabled(false);
 
     QModbusRequest request;
     request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
@@ -80,7 +93,7 @@ void DialogUserMsg::accept()
     _modbusClient.sendRawRequest(request, ui->lineEditSlaveAddress->value<int>(), 0);
 
     const auto timeout = _modbusClient.timeout() * _modbusClient.numberOfRetries();
-    QTimer::singleShot(timeout, this, [&] { ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true); });
+    QTimer::singleShot(timeout, this, [&] { ui->pushButtonSend->setEnabled(true); });
 }
 
 ///
@@ -109,7 +122,7 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
     ui->responseBuffer->setValue(*_mm);
     ui->responseInfo->setModbusMessage(_mm);
 
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    ui->pushButtonSend->setEnabled(true);
 }
 
 ///

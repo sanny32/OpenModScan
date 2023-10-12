@@ -764,7 +764,7 @@
     <string>Msg Parser</string>
    </property>
    <property name="shortcut">
-    <string>F9</string>
+    <string notr="true">F9</string>
    </property>
   </action>
  </widget>

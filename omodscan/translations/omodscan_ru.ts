@@ -881,12 +881,12 @@
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="130"/>
         <source>Device Id included</source>
-        <translation>Устройство</translation>
+        <translation>Содержит номер устройства</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="140"/>
         <source>Checksum included</source>
-        <translation>Контрольная сумма</translation>
+        <translation>Содержит контрольную сумму</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="159"/>

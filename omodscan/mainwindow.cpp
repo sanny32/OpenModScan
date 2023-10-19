@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_autoStart(false)
+    ,_selectedPrinter(nullptr)
     ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
@@ -76,7 +77,9 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete _selectedPrinter;
+
+    if(_selectedPrinter != nullptr)
+        delete _selectedPrinter;
 }
 
 ///

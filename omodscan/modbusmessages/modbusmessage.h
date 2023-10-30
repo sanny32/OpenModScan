@@ -318,7 +318,7 @@ private:
 
         QByteArray data;
         data.push_back(deviceId);
-        data.push_back(pdu.functionCode());
+        data.push_back(pdu.isException() ? (pdu.functionCode() | QModbusPdu::ExceptionByte) : pdu.functionCode());
         data.push_back(pdu.data());
 
         return QModbusAdu::calculateCRC(data, data.length());

@@ -2,6 +2,7 @@
 #define MODBUSCLIENT_H
 
 #include <QModbusClient>
+#include "modbusmessage.h"
 #include "connectiondetails.h"
 #include "modbuswriteparams.h"
 
@@ -22,6 +23,10 @@ public:
 
     bool isValid() const;
     QModbusDevice::State state() const;
+
+    ConnectionType connectionType() const {
+        return _connectionType;
+    }
 
     int timeout() const;
     void setTimeout(int newTimeout);
@@ -51,6 +56,7 @@ private slots:
 
 private:
     QModbusClient* _modbusClient;
+    ConnectionType _connectionType;
 };
 
 #endif // MODBUSCLIENT_H

@@ -117,7 +117,8 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
     }
 
     if(_mm) delete _mm;
-    _mm = ModbusMessage::create(reply->rawResult(), QModbusAdu::Tcp, reply->serverAddress(), QDateTime::currentDateTime(), false);
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
+    _mm = ModbusMessage::create(reply->rawResult(), protocol, reply->serverAddress(), QDateTime::currentDateTime(), false);
 
     ui->responseBuffer->setValue(*_mm);
     ui->responseInfo->setModbusMessage(_mm);

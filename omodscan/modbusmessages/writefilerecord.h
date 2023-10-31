@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    WriteFileRecordRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    WriteFileRecordRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
 
     ///
     /// \brief WriteFileRecordRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    WriteFileRecordRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    WriteFileRecordRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
@@ -49,7 +49,7 @@ public:
     /// \return
     ///
     quint8 length() const {
-        return ModbusMessage::data(0);
+        return ModbusMessage::at(0);
     }
 
     ///
@@ -57,7 +57,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  slice(1);
+        return  ModbusMessage::data(1);
     }
 };
 
@@ -73,21 +73,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    WriteFileRecordResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    WriteFileRecordResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
 
     ///
     /// \brief WriteFileRecordResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    WriteFileRecordResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    WriteFileRecordResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteFileRecord);
     }
@@ -107,7 +107,7 @@ public:
     /// \return
     ///
     quint8 length() const {
-        return ModbusMessage::data(0);
+        return ModbusMessage::at(0);
     }
 
     ///
@@ -115,7 +115,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  slice(1);
+        return  ModbusMessage::data(1);
     }
 };
 

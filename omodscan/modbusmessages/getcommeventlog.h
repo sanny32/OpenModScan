@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    GetCommEventLogRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    GetCommEventLogRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
 
     ///
     /// \brief GetCommEventLogRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    GetCommEventLogRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    GetCommEventLogRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
@@ -47,21 +47,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    GetCommEventLogResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    GetCommEventLogResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
 
     ///
     /// \brief GetCommEventLogResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    GetCommEventLogResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    GetCommEventLogResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventLog);
     }
@@ -81,7 +81,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return data(0);
+        return at(0);
     }
 
     ///
@@ -89,7 +89,7 @@ public:
     /// \return
     ///
     quint16 status() const {
-        return makeWord(data(2), data(1), ByteOrder::LittleEndian);
+        return makeWord(at(2), at(1), ByteOrder::LittleEndian);
     }
 
     ///
@@ -97,7 +97,7 @@ public:
     /// \return
     ///
     quint16 eventCount() const {
-        return makeWord(data(4), data(3), ByteOrder::LittleEndian);
+        return makeWord(at(4), at(3), ByteOrder::LittleEndian);
     }
 
     ///
@@ -105,7 +105,7 @@ public:
     /// \return
     ///
     quint16 messageCount() const {
-        return makeWord(data(6), data(5), ByteOrder::LittleEndian);
+        return makeWord(at(6), at(5), ByteOrder::LittleEndian);
     }
 
     ///
@@ -113,7 +113,7 @@ public:
     /// \return
     ///
     QByteArray events() const {
-        return slice(7);
+        return data(7);
     }
 };
 

@@ -17,12 +17,12 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QPushButton" name="buttonPdu">
+      <widget class="QPushButton" name="buttonRtu">
        <property name="styleSheet">
         <string notr="true">padding: 4px;</string>
        </property>
        <property name="text">
-        <string>PDU Message</string>
+        <string>RTU Message</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -56,12 +56,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="buttonAdu">
+      <widget class="QPushButton" name="buttonTcp">
        <property name="styleSheet">
         <string notr="true">padding: 4px;</string>
        </property>
        <property name="text">
-        <string>ADU Message</string>
+        <string>TCP Message</string>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -121,23 +121,6 @@
       <widget class="QCheckBox" name="request">
        <property name="text">
         <string>Request</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="deviceIdIncluded">
-       <property name="text">
-        <string>Device Id included</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="checksumIncluded">
-       <property name="text">
-        <string>Checksum included</string>
        </property>
       </widget>
      </item>

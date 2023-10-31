@@ -19,6 +19,7 @@ typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
 ModbusClient::ModbusClient(QObject *parent)
     : QObject{parent}
     ,_modbusClient(nullptr)
+    ,_connectionType(ConnectionType::Serial)
 {
 }
 
@@ -77,6 +78,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
 
     if(_modbusClient)
     {
+        _connectionType = cd.Type;
         connect(_modbusClient, &QModbusDevice::stateChanged, this, &ModbusClient::on_stateChanged);
         connect(_modbusClient, &QModbusDevice::errorOccurred, this, &ModbusClient::on_errorOccurred);
         _modbusClient->connectDevice();

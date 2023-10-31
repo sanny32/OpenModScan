@@ -6,9 +6,10 @@
 ///
 /// \brief DialogMsgParser::DialogMsgParser
 /// \param mode
+/// \param protocol
 /// \param parent
 ///
-DialogMsgParser::DialogMsgParser(DataDisplayMode mode, QWidget *parent)
+DialogMsgParser::DialogMsgParser(DataDisplayMode mode, ModbusMessage::ProtocolType protocol, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogMsgParser)
     ,_mm(nullptr)
@@ -21,6 +22,8 @@ DialogMsgParser::DialogMsgParser(DataDisplayMode mode, QWidget *parent)
 
     ui->info->setShowTimestamp(false);
     ui->hexView->setCheckState(mode == DataDisplayMode::Hex ? Qt::Checked : Qt::Unchecked);
+    ui->buttonRtu->setChecked(protocol == ModbusMessage::Rtu);
+    ui->buttonTcp->setChecked(protocol == ModbusMessage::Tcp);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogMsgParser::on_awake);
@@ -54,7 +57,6 @@ void DialogMsgParser::changeEvent(QEvent* event)
 ///
 void DialogMsgParser::on_awake()
 {
-    ui->deviceIdIncluded->setVisible(ui->buttonPdu->isChecked());
     ui->pushButtonParse->setEnabled(!ui->bytesData->isEmpty());
 }
 
@@ -81,10 +83,6 @@ void DialogMsgParser::on_bytesData_valueChanged(const QByteArray& value)
 
         return;
     }
-
-    const auto data = value.left(value.size() - 2);
-    const int checksum = makeWord(value[value.size() - 1], value[value.size() - 2], ByteOrder::LittleEndian);
-    ui->checksumIncluded->setChecked(QModbusAdu::calculateCRC(data, data.size()) == checksum);
 }
 
 ///
@@ -95,28 +93,11 @@ void DialogMsgParser::on_pushButtonParse_clicked()
     auto data = ui->bytesData->value();
     if(data.isEmpty()) return;
 
-    ModbusMessage::Type type = ModbusMessage::Adu;
-    auto protocol = QModbusAdu::Tcp;
-    int checksum = 0;
-
-    if(ui->buttonPdu->isChecked())
-    {
-        type = ModbusMessage::Pdu;
-    }
-
-    if(!ui->deviceIdIncluded->isChecked())
-    {
-        data.push_front('\0');
-    }
-
-    if(ui->checksumIncluded->isChecked())
-    {
-        protocol = QModbusAdu::Rtu;
-        checksum = makeWord(data[data.size() - 1], data[data.size() - 2], ByteOrder::LittleEndian);
-        data = data.left(data.size() - 2);
-    }
+    auto protocol = ModbusMessage::Rtu;
+    if(ui->buttonTcp->isChecked())
+        protocol = ModbusMessage::Tcp;
 
     if(_mm) delete _mm;
-    _mm = ModbusMessage::parse(data, type, protocol, ui->request->isChecked(), checksum);
+    _mm = ModbusMessage::create(data, protocol, QDateTime::currentDateTime(), ui->request->isChecked());
     ui->info->setModbusMessage(_mm);
 }

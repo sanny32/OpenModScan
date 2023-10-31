@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    MaskWriteRegisterRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    MaskWriteRegisterRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
     }
 
     ///
     /// \brief MaskWriteRegisterRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    MaskWriteRegisterRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    MaskWriteRegisterRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
     }
@@ -47,7 +47,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -55,7 +55,7 @@ public:
     /// \return
     ///
     quint16 andMask() const {
-        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
+        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -63,7 +63,7 @@ public:
     /// \return
     ///
     quint16 orMask() const {
-        return makeWord(data(5), data(4), ByteOrder::LittleEndian);
+        return makeWord(at(5), at(4), ByteOrder::LittleEndian);
     }
 };
 
@@ -79,21 +79,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    MaskWriteRegisterResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    MaskWriteRegisterResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
     }
 
     ///
     /// \brief MaskWriteRegisterResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    MaskWriteRegisterResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    MaskWriteRegisterResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::MaskWriteRegister);
     }
@@ -111,7 +111,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -119,7 +119,7 @@ public:
     /// \return
     ///
     quint16 andMask() const {
-        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
+        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -127,7 +127,7 @@ public:
     /// \return
     ///
     quint16 orMask() const {
-        return makeWord(data(5), data(4), ByteOrder::LittleEndian);
+        return makeWord(at(5), at(4), ByteOrder::LittleEndian);
     }
 };
 

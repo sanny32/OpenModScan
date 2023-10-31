@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    DiagnosticsRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    DiagnosticsRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::Diagnostics);
     }
 
     ///
     /// \brief DiagnosticsRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    DiagnosticsRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    DiagnosticsRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::Diagnostics);
     }
@@ -48,7 +48,7 @@ public:
     /// \return
     ///
     quint16 subfunc() const {
-        return makeWord(ModbusMessage::data(1), ModbusMessage::data(0), ByteOrder::LittleEndian);
+        return makeWord(ModbusMessage::at(1), ModbusMessage::at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -56,7 +56,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return slice(2);
+        return ModbusMessage::data(2);
     }
 };
 
@@ -72,21 +72,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    DiagnosticsResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId,  const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    DiagnosticsResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::Diagnostics);
     }
 
     ///
     /// \brief DiagnosticsResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    DiagnosticsResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    DiagnosticsResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::Diagnostics);
     }
@@ -104,7 +104,7 @@ public:
     /// \return
     ///
     quint16 subfunc() const {
-        return makeWord(ModbusMessage::data(1), ModbusMessage::data(0), ByteOrder::LittleEndian);
+        return makeWord(ModbusMessage::at(1), ModbusMessage::at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -112,7 +112,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return slice(2);
+        return ModbusMessage::data(2);
     }
 };
 

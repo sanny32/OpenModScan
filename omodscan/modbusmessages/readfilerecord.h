@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadFileRecordRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    ReadFileRecordRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }
 
     ///
     /// \brief ReadFileRecordRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadFileRecordRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    ReadFileRecordRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }
@@ -48,7 +48,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return ModbusMessage::data(0);
+        return ModbusMessage::at(0);
     }
 
     ///
@@ -56,7 +56,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  slice(1);
+        return  ModbusMessage::data(1);
     }
 };
 
@@ -72,21 +72,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadFileRecordResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    ReadFileRecordResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }
 
     ///
     /// \brief ReadFileRecordResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadFileRecordResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    ReadFileRecordResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }
@@ -105,7 +105,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return ModbusMessage::data(0);
+        return ModbusMessage::at(0);
     }
 
     ///
@@ -113,7 +113,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  slice(1);
+        return  ModbusMessage::data(1);
     }
 };
 

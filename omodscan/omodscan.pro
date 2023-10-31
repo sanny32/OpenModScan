@@ -167,6 +167,8 @@ HEADERS += \
     qfixedsizedialog.h \
     qhexvalidator.h \
     qmodbusadu.h \
+    qmodbusadurtu.h \
+    qmodbusadutcp.h \
     qrange.h \
     quintvalidator.h \
     recentfileactionlist.h \

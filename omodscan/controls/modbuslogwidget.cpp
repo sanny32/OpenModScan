@@ -176,17 +176,18 @@ QModelIndex ModbusLogWidget::index(int row)
 ///
 /// \brief ModbusLogWidget::addItem
 /// \param pdu
+/// \param protocol
 /// \param deviceId
 /// \param timestamp
 /// \param request
 /// \return
 ///
-const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, int deviceId, const QDateTime& timestamp, bool request)
+const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request)
 {
     const ModbusMessage* msg = nullptr;
     if(model())
     {
-        msg = ModbusMessage::create(pdu, (QModbusAdu::Type)-1, deviceId, timestamp, request);
+        msg = ModbusMessage::create(pdu, protocol, deviceId, timestamp, request);
         ((ModbusLogModel*)model())->append(msg);
     }
     return msg;

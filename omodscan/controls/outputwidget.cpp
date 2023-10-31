@@ -351,13 +351,15 @@ QVector<quint16> OutputWidget::data() const
 ///
 /// \brief OutputWidget::setup
 /// \param dd
+/// \param protocol
 /// \param simulations
 ///
-void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap& simulations)
+void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap& simulations)
 {
     _descriptionMap.insert(descriptionMap());
     _displayDefinition = dd;
 
+    setProtocol(protocol);
     setLogViewLimit(dd.LogViewLimit);
 
     _listModel->clear();
@@ -369,6 +371,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
         setDescription(key.first, key.second, _descriptionMap[key]);
 
     _listModel->update();
+
 }
 
 ///
@@ -696,6 +699,24 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief OutputWidget::protocol
+/// \return
+///
+ModbusMessage::ProtocolType OutputWidget::protocol() const
+{
+    return _protocol;
+}
+
+///
+/// \brief OutputWidget::setProtocol
+/// \param type
+///
+void OutputWidget::setProtocol(ModbusMessage::ProtocolType type)
+{
+    _protocol = type;
+}
+
+///
 /// \brief OutputWidget::byteOrder
 /// \return
 ///
@@ -821,7 +842,7 @@ void OutputWidget::showModbusMessage(const QModelIndex& index)
 ///
 void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu)
 {
-    auto msg = ui->logView->addItem(pdu, server, QDateTime::currentDateTime(), request);
+    auto msg = ui->logView->addItem(pdu, _protocol, server, QDateTime::currentDateTime(), request);
     if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
         const auto str = QString("%1: %2 %3 %4").arg(

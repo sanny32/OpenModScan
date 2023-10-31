@@ -75,13 +75,16 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd, const ModbusSimulationMap& simulations);
+    void setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap& simulations);
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
 
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
+
+    ModbusMessage::ProtocolType protocol() const;
+    void setProtocol(ModbusMessage::ProtocolType type);
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -144,6 +147,7 @@ private:
     bool _displayHexAddresses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
+    ModbusMessage::ProtocolType _protocol;
     ByteOrder _byteOrder;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;

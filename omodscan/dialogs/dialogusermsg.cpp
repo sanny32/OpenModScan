@@ -120,6 +120,9 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
     _mm = ModbusMessage::create(reply->rawResult(), protocol, reply->serverAddress(), QDateTime::currentDateTime(), false);
 
+    if(protocol == ModbusMessage::Tcp)
+        ((QModbusAduTcp*)_mm->adu())->setTransactionId(reply->property("TransactionId").toInt());
+
     ui->responseBuffer->setValue(*_mm);
     ui->responseInfo->setModbusMessage(_mm);
 

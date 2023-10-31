@@ -556,25 +556,27 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
 /// \brief FormModSca::logRequest
 /// \param requestId
 /// \param deviceId
+/// \param transactionId
 /// \param request
 ///
-void FormModSca::logRequest(int requestId, int deviceId, const QModbusRequest& request)
+void FormModSca::logRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
 {
     if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
-        ui->outputWidget->updateTraffic(request, deviceId);
+        ui->outputWidget->updateTraffic(request, deviceId, transactionId);
     else if(requestId == 0 && isActive())
-        ui->outputWidget->updateTraffic(request, deviceId);
+        ui->outputWidget->updateTraffic(request, deviceId, transactionId);
 }
 
 ///
 /// \brief FormModSca::on_modbusRequest
 /// \param requestId
 /// \param deviceId
+/// \param transactionId
 /// \param request
 ///
-void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
+void FormModSca::on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
 {
-   logRequest(requestId, deviceId, request);
+   logRequest(requestId, deviceId, transactionId, request);
 
     switch(request.functionCode())
     {
@@ -607,11 +609,12 @@ void FormModSca::logReply(const QModbusReply* reply)
 
     const auto deviceId = reply->serverAddress();
     const auto requestId = reply->property("RequestId").toInt();
+    const auto transactionId = reply->property("TransactionId").toInt();
 
     if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
-        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress());
+        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress(), transactionId);
     else if(requestId == 0 && isActive())
-        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress());
+        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress(), transactionId);
 }
 
 ///

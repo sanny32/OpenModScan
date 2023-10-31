@@ -152,7 +152,6 @@ void ModbusLogWidget::clear()
 {
     if(model())
         ((ModbusLogModel*)model())->clear();
-    _transactionId = 0;
 }
 
 ///
@@ -179,21 +178,19 @@ QModelIndex ModbusLogWidget::index(int row)
 /// \param pdu
 /// \param protocol
 /// \param deviceId
+/// \param transactionId
 /// \param timestamp
 /// \param request
 /// \return
 ///
-const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request)
+const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
 {
     const ModbusMessage* msg = nullptr;
     if(model())
     {
         msg = ModbusMessage::create(pdu, protocol, deviceId, timestamp, request);
         if(protocol == ModbusMessage::Tcp)
-        {
-            const auto id = request ? ++_transactionId : _transactionId;
-            ((QModbusAduTcp*)msg->adu())->setTransactionId(id);
-        }
+            ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
 
         ((ModbusLogModel*)model())->append(msg);
     }

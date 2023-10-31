@@ -117,8 +117,8 @@ public:
 
     void paint(const QRect& rc, QPainter& painter);
 
-    void updateTraffic(const QModbusRequest& request, int server);
-    void updateTraffic(const QModbusResponse& response, int server);
+    void updateTraffic(const QModbusRequest& request, int server, int transactionId);
+    void updateTraffic(const QModbusResponse& response, int server, int transactionId);
     void updateData(const QModbusDataUnit& data);
 
     AddressDescriptionMap descriptionMap() const;
@@ -140,7 +140,7 @@ private:
     void setUninitializedStatus();
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
-    void updateLogView(bool request, int deviceId, const QModbusPdu& pdu);
+    void updateLogView(bool request, int deviceId, int transactionId, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;

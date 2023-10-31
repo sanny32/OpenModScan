@@ -382,12 +382,13 @@ void DialogAddressScan::on_comboBoxByteOrder_byteOrderChanged(ByteOrder order)
 /// \brief DialogAddressScan::on_modbusRequest
 /// \param requestId
 /// \param deviceId
+/// \param transactionId
 /// \param request
 ///
-void DialogAddressScan::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
+void DialogAddressScan::on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
 {
     if(requestId == -1)
-        updateLogView(deviceId, request);
+        updateLogView(deviceId, transactionId, request);
 }
 
 ///
@@ -585,17 +586,23 @@ void DialogAddressScan::updateTableView(int pointAddress, QVector<quint16> value
 ///
 /// \brief DialogAddressScan::updateLogView
 /// \param deviceId
+/// \param transactionId
 /// \param request
 ///
-void DialogAddressScan::updateLogView(int deviceId, const QModbusRequest& request)
+void DialogAddressScan::updateLogView(int deviceId, int transactionId, const QModbusRequest& request)
 {
     quint16 pointAddress;
     request.decodeData(&pointAddress);
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
+
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
-    proxyLogModel->append(pointAddress + 1, ui->comboBoxPointType->currentPointType(),
-                          ModbusMessage::create(request, protocol, deviceId, QDateTime::currentDateTime(), true));
+    auto msg = ModbusMessage::create(request, protocol, deviceId, QDateTime::currentDateTime(), true);
+
+    if(protocol == ModbusMessage::Tcp)
+        ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
+
+    proxyLogModel->append(pointAddress + 1, ui->comboBoxPointType->currentPointType(), msg);
 }
 
 ///
@@ -609,12 +616,18 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
 
     const auto deviceId = reply->serverAddress();
     const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + 1;
+    const auto transactionId = reply->property("TransactionId").toInt();
     const auto pdu = reply->rawResult();
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
+
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
-    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(),
-                          ModbusMessage::create(pdu, protocol, deviceId, QDateTime::currentDateTime(), false));
+    auto msg = ModbusMessage::create(pdu, protocol, deviceId, QDateTime::currentDateTime(), false);
+
+    if(protocol == ModbusMessage::Tcp)
+        ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
+
+    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(), msg);
 }
 
 ///

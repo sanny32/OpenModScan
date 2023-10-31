@@ -2,7 +2,6 @@
 #define MODBUSCLIENT_H
 
 #include <QModbusClient>
-#include "modbusmessage.h"
 #include "connectiondetails.h"
 #include "modbuswriteparams.h"
 
@@ -40,7 +39,7 @@ public:
     void maskWriteRegister(const ModbusMaskWriteParams& params, int requestId);
 
 signals:
-    void modbusRequest(int requestId, int deviceId, const QModbusRequest& request);
+    void modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request);
     void modbusReply(QModbusReply* reply);
     void modbusError(const QString& error, int requestId);
     void modbusConnectionError(const QString& error);
@@ -55,6 +54,7 @@ private slots:
     void on_stateChanged(QModbusDevice::State state);
 
 private:
+    int _transactionId = -1;
     QModbusClient* _modbusClient;
     ConnectionType _connectionType;
 };

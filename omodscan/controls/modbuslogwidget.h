@@ -53,7 +53,7 @@ public:
     int rowCount() const;
     QModelIndex index(int row);
 
-    const ModbusMessage* addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request);
+    const ModbusMessage* addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request);
     const ModbusMessage* itemAt(const QModelIndex& index);
 
     DataDisplayMode dataDisplayMode() const;
@@ -70,7 +70,6 @@ protected:
 
 private:
     bool _autoscroll;
-    quint16 _transactionId = 0;
     DataDisplayMode _dataDisplayMode;
 };
 

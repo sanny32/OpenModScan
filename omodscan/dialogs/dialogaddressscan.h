@@ -231,7 +231,7 @@ private slots:
     void on_awake();
     void on_timeout();
     void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, int deviceId, const QModbusRequest& data);
+    void on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& data);
     void on_checkBoxHexView_toggled(bool);
     void on_checkBoxShowValid_toggled(bool);
     void on_comboBoxByteOrder_byteOrderChanged(ByteOrder);
@@ -252,7 +252,7 @@ private:
     void updateProgress();
     void updateTableView(int pointAddress, QVector<quint16> values);
 
-    void updateLogView(int deviceId, const QModbusRequest& request);
+    void updateLogView(int deviceId, int transactionId, const QModbusRequest& request);
     void updateLogView(const QModbusReply* reply);
 
     void exportPdf(const QString& filename);

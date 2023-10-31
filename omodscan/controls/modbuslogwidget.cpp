@@ -152,6 +152,7 @@ void ModbusLogWidget::clear()
 {
     if(model())
         ((ModbusLogModel*)model())->clear();
+    _transactionId = 0;
 }
 
 ///
@@ -188,6 +189,12 @@ const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessa
     if(model())
     {
         msg = ModbusMessage::create(pdu, protocol, deviceId, timestamp, request);
+        if(protocol == ModbusMessage::Tcp)
+        {
+            const auto id = request ? ++_transactionId : _transactionId;
+            ((QModbusAduTcp*)msg->adu())->setTransactionId(id);
+        }
+
         ((ModbusLogModel*)model())->append(msg);
     }
     return msg;

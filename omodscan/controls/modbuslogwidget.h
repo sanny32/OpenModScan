@@ -70,6 +70,7 @@ protected:
 
 private:
     bool _autoscroll;
+    quint16 _transactionId = 0;
     DataDisplayMode _dataDisplayMode;
 };
 

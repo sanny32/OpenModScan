@@ -523,6 +523,14 @@ void OutputWidget::setLogViewLimit(int l)
 }
 
 ///
+/// \brief OutputWidget::clearLogView
+///
+void OutputWidget::clearLogView()
+{
+    ui->logView->clear();
+}
+
+///
 /// \brief OutputWidget::setStatus
 /// \param status
 ///

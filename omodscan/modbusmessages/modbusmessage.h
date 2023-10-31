@@ -61,6 +61,7 @@ public:
                 dataStream.writeRawData(pdu.data(), pdu.dataSize());
 
                 _adu = new QModbusAduTcp(data);
+                qDebug() << _adu->isValid() << formatByteArray(DataDisplayMode::Hex, data);
             }
             break;
         }

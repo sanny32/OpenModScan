@@ -111,6 +111,8 @@ public:
     int logViewLimit() const;
     void setLogViewLimit(int l);
 
+    void clearLogView();
+
     void setStatus(const QString& status);
 
     void paint(const QRect& rc, QPainter& painter);

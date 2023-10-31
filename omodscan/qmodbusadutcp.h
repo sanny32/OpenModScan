@@ -43,6 +43,14 @@ public:
     }
 
     ///
+    /// \brief setTransactionId
+    /// \param id
+    ///
+    void setTransactionId(quint16 id) {
+        breakWord(id, (quint8&)_data[1], (quint8&)_data[0], ByteOrder::LittleEndian);
+    }
+
+    ///
     /// \brief protocolId
     /// \return
     ///

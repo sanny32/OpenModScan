@@ -169,9 +169,9 @@ void ModbusMessageWidget::update()
     if(_mm->protocolType() == ModbusMessage::Tcp)
     {
         auto adu = reinterpret_cast<const QModbusAduTcp*>(_mm->adu());
-        const auto transactionId = _mm->isValid() ? formatWordValue(_dataDisplayMode, adu->transactionId()) : "??";
-        const auto protocolId = _mm->isValid() ? formatWordValue(_dataDisplayMode, adu->protocolId()): "??";
-        const auto length = _mm->isValid() ? formatWordValue(_dataDisplayMode, adu->length()): "??";
+        const auto transactionId = adu->isValid() ? formatWordValue(_dataDisplayMode, adu->transactionId()) : "??";
+        const auto protocolId = adu->isValid() ? formatWordValue(_dataDisplayMode, adu->protocolId()): "??";
+        const auto length = adu->isValid() ? formatWordValue(_dataDisplayMode, adu->length()): "??";
         addItem(tr("<b>Transaction ID:</b> %1").arg(transactionId));
         addItem(tr("<b>Protocol ID:</b> %1").arg(protocolId));
         addItem(tr("<b>Length:</b> %1").arg(length));
@@ -199,7 +199,7 @@ void ModbusMessageWidget::update()
         case QModbusPdu::ReadCoils:
         if(_mm->isRequest())
             {
-            auto req = reinterpret_cast<const ReadCoilsRequest*>(_mm);
+                auto req = reinterpret_cast<const ReadCoilsRequest*>(_mm);
                 const auto startAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatWordValue(_dataDisplayMode, req->length()): "??";
                 addItem(tr("<b>Start Address:</b> %1").arg(startAddress));

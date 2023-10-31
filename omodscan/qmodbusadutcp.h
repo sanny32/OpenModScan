@@ -47,7 +47,9 @@ public:
     /// \param id
     ///
     void setTransactionId(quint16 id) {
-        breakWord(id, (quint8&)_data[1], (quint8&)_data[0], ByteOrder::LittleEndian);
+        quint8 lo,hi;
+        breakWord(id, lo, hi, ByteOrder::LittleEndian);
+        _data[1] = lo; _data[0] = hi;
     }
 
     ///

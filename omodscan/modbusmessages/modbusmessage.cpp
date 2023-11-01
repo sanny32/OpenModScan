@@ -101,7 +101,7 @@ const ModbusMessage* ModbusMessage::create(const QModbusPdu& pdu, ProtocolType p
 ///
 const ModbusMessage* ModbusMessage::create(const QByteArray& data, ProtocolType protocol,  const QDateTime& timestamp, bool request)
 {
-    QModbusPdu::FunctionCode fc;
+    QModbusPdu::FunctionCode fc = QModbusPdu::Invalid;
     switch(protocol)
     {
         case Rtu:

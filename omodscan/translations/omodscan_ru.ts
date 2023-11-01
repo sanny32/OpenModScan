@@ -735,23 +735,28 @@
         <translation>Таймаут ответа</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="791"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="793"/>
         <source>msec</source>
         <translation>мсек</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="838"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="815"/>
+        <source>Retry On Timeout</source>
+        <translation>Повторить по таймауту</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="862"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scan Results:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Результаты:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="845"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="869"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="252"/>
         <source>PORT: Device Id (serial port settings)</source>
         <translation>Порт: Узел (параметры порта)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="867"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="891"/>
         <source>Clear Results</source>
         <translation>Очистить результаты</translation>
     </message>

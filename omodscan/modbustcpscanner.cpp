@@ -106,7 +106,7 @@ void ModbusTcpScanner::connectDevice(const ConnectionDetails& cd)
             sendRequest(modbusClient, _params.DeviceIds.from());
         });
     modbusClient->disconnectDevice();
-    modbusClient->setNumberOfRetries(0);
+    modbusClient->setNumberOfRetries(_params.RetryOnTimeout ? 1 : 0);
     modbusClient->setTimeout(_params.Timeout);
     modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
     modbusClient->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);

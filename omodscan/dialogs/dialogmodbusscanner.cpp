@@ -494,6 +494,7 @@ const ScanParams DialogModbusScanner::createSerialParams() const
 
     params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();
+    params.RetryOnTimeout = ui->checkBoxRetryOnTimeout->isChecked();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
 
     return params;
@@ -557,6 +558,7 @@ const ScanParams DialogModbusScanner::createTcpParams() const
 
     params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();
+    params.RetryOnTimeout = ui->checkBoxRetryOnTimeout->isChecked();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
 
     return params;

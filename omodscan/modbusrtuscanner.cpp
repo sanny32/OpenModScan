@@ -71,7 +71,7 @@ void ModbusRtuScanner::on_stateChanged(QModbusDevice::State state)
 void ModbusRtuScanner::connectDevice(const ConnectionDetails& cd)
 {
     _modbusClient->disconnectDevice();
-    _modbusClient->setNumberOfRetries(0);
+    _modbusClient->setNumberOfRetries(_params.RetryOnTimeout ? 1 : 0);
     _modbusClient->setTimeout(_params.Timeout);
     _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
     _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);

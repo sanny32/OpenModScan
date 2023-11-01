@@ -9,6 +9,7 @@
 struct ScanParams
 {
     int Timeout = 1000;
+    bool RetryOnTimeout = false;
     QRange<int> DeviceIds = {1, 10};
     QModbusRequest Request;
     QList<ConnectionDetails> ConnParams;

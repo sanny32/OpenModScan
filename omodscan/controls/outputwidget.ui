@@ -135,7 +135,7 @@
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
+            <verstretch>3</verstretch>
            </sizepolicy>
           </property>
           <property name="autoScroll">
@@ -170,7 +170,7 @@
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
+            <verstretch>2</verstretch>
            </sizepolicy>
           </property>
           <property name="focusPolicy">

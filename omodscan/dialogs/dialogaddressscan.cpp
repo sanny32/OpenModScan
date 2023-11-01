@@ -50,7 +50,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
     switch(role)
     {
         case Qt::ToolTipRole:
-            return formatAddress(_data.registerType(), _data.startAddress() + idx, false);
+            return formatAddress(_data.registerType(), _data.startAddress() + idx + 1, false);
 
         case Qt::DisplayRole:
         {
@@ -70,7 +70,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             return _data.hasValue(idx) ? QVariant() : parentWidget->palette().color(QPalette::Disabled, QPalette::Base);
 
         case Qt::UserRole:
-            return _data.startAddress() + idx;
+            return _data.startAddress() + idx + 1;
     }
 
     return QVariant();
@@ -134,7 +134,7 @@ QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation
                 {
                     const auto length = _data.valueCount();
                     const auto pointType = _data.registerType();
-                    const auto pointAddress = _data.startAddress();
+                    const auto pointAddress = _data.startAddress() + 1;
                     const auto addressFrom = pointAddress + section * _columns;
                     const auto addressTo = pointAddress + qMin<quint16>(length - 1, (section + 1) * _columns - 1);
                     return QString("%1-%2").arg(formatAddress(pointType, addressFrom, false), formatAddress(pointType, addressTo, false));
@@ -410,10 +410,15 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     if (reply->error() == QModbusDevice::NoError)
         updateTableView(reply->result().startAddress() + 1, reply->result().values());
 
-    if(ui->lineEditLength->value<int>() < _requestCount)
+    if(_requestCount > ui->lineEditLength->value<int>()
+                       + ui->spinBoxRegsOnQuery->value())
+    {
         stopScan();
+    }
     else
+    {
         sendReadRequest();
+    }
 }
 
 ///
@@ -497,7 +502,7 @@ void DialogAddressScan::sendReadRequest()
     const auto count = ui->spinBoxRegsOnQuery->value();
     const auto address = pointAddress - 1 + _requestCount;
 
-    if(address >= ModbusLimits::addressRange().to())
+    if(address > ModbusLimits::addressRange().to())
         stopScan();
     else
     {
@@ -515,7 +520,7 @@ void DialogAddressScan::clearTableView()
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
 
-    ModbusDataUnit data(pointType, pointAddress, length);
+    ModbusDataUnit data(pointType, pointAddress - 1, length);
     ((TableViewItemModel*)ui->tableView->model())->reset(data);
 
     ui->tableView->resizeColumnsToContents();

@@ -147,7 +147,23 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
                        reply->error() != QModbusDevice::ConnectionError &&
                        reply->error() != QModbusDevice::ReplyAbortedError)
                     {
-                        emit found(cd, deviceId, reply->error() == QModbusDevice::ProtocolError);
+                        if(reply->error() == QModbusDevice::ProtocolError)
+                        {
+                            switch(reply->rawResult().exceptionCode())
+                            {
+                                case QModbusPdu::GatewayPathUnavailable:
+                                case QModbusPdu::GatewayTargetDeviceFailedToRespond:
+                                break;
+
+                                default:
+                                    emit found(cd, deviceId, false);
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            emit found(cd, deviceId, false);
+                        }
                     }
                     reply->deleteLater();
 

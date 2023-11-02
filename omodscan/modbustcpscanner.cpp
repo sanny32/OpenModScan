@@ -143,11 +143,12 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
         {
             connect(reply, &QModbusReply::finished, this, [this, client, reply, deviceId, cd]()
                 {
-                    if(reply->error() != QModbusDevice::TimeoutError &&
-                       reply->error() != QModbusDevice::ConnectionError &&
-                       reply->error() != QModbusDevice::ReplyAbortedError)
+                    const auto error = reply->error();
+                    if(error != QModbusDevice::TimeoutError &&
+                       error != QModbusDevice::ConnectionError &&
+                       error != QModbusDevice::ReplyAbortedError)
                     {
-                        if(reply->error() == QModbusDevice::ProtocolError)
+                        if(error == QModbusDevice::ProtocolError)
                         {
                             switch(reply->rawResult().exceptionCode())
                             {
@@ -167,7 +168,10 @@ void ModbusTcpScanner::sendRequest(QModbusTcpClient* client, int deviceId)
                     }
                     reply->deleteLater();
 
-                    sendRequest(client, deviceId + 1);
+                    if(error == QModbusDevice::TimeoutError)
+                        sendRequest(client, deviceId + 1);
+                    else
+                        QTimer::singleShot(_params.Timeout, [this, client, deviceId] { sendRequest(client, deviceId + 1); });
                 });
         }
         else

@@ -893,7 +893,7 @@
         <widget class="QPushButton" name="pushButtonScan">
          <property name="minimumSize">
           <size>
-           <width>156</width>
+           <width>160</width>
            <height>60</height>
           </size>
          </property>

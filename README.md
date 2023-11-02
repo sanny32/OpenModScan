@@ -28,7 +28,7 @@ Registers
 
 Modbus Logging
 
-![image](https://github.com/sanny32/OpenModScan/assets/13627951/de14b977-08ba-460c-814c-7affd0d88f91)
+![image](https://github.com/sanny32/OpenModScan/assets/13627951/b3e43b25-ea7b-4beb-96c9-c7b9d6a65a03)
 
     
 ## Extended Featues
@@ -38,15 +38,15 @@ Modbus Logging
 
 - Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
   
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/768a9c69-0201-4c1e-bad5-4fa9b24d9553)
+  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/cd35c0c4-ca9c-41fe-872c-1c2bb2286fc7)
 
 - Modbus Message Parser
 
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/86a82340-015e-4ee9-a483-b5ab83527cc1)
+  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/4f05f38e-d739-4c49-8bc3-f12e7b74d8ab)
 
 - Modbus User Message
   
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/5ee959a2-9c5c-4ffe-8056-d6205e3b5aa3)
+  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/1aba6329-873c-4ff2-8db8-939245a50722)
 
 ## Building
   Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.

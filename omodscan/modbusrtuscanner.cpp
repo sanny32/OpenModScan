@@ -119,7 +119,23 @@ void ModbusRtuScanner::sendRequest(int deviceId)
                         reply->error() != QModbusDevice::ConnectionError &&
                         reply->error() != QModbusDevice::ReplyAbortedError)
                     {
-                        emit found(*_iterator, deviceId, false);
+                        if(reply->error() == QModbusDevice::ProtocolError)
+                        {
+                            switch(reply->rawResult().exceptionCode())
+                            {
+                                case QModbusPdu::GatewayPathUnavailable:
+                                case QModbusPdu::GatewayTargetDeviceFailedToRespond:
+                                break;
+
+                                default:
+                                    emit found(*_iterator, deviceId, false);
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            emit found(*_iterator, deviceId, false);
+                        }
                     }
                     reply->deleteLater();
 

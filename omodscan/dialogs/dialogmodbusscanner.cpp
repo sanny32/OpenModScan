@@ -49,9 +49,12 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
     , ui(new Ui::DialogModbusScanner)
     ,_rtuFuncCode(QModbusPdu::ReportServerId)
     ,_tcpFuncCode(QModbusPdu::ReadHoldingRegisters)
+    ,_iconStart(":/res/iconScanStart.png")
+    ,_iconStop(":/res/iconScanStop.png")
 {
     ui->setupUi(this);
     ui->progressBar->setAlignment(Qt::AlignCenter);
+    ui->pushButtonScan->setIcon(_iconStart);
 
     ui->radioButtonTCP->click();
     for(auto&& port: QSerialPortInfo::availablePorts())
@@ -311,6 +314,7 @@ void DialogModbusScanner::startScan()
     }
 
     _scanner->startScan();
+    ui->pushButtonScan->setIcon(_iconStop);
 }
 
 ///
@@ -593,6 +597,7 @@ const QModbusRequest DialogModbusScanner::createModbusRequest() const
 ///
 void DialogModbusScanner::on_scanFinished()
 {
+    ui->pushButtonScan->setIcon(_iconStart);
 }
 
 ///

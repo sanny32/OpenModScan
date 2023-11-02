@@ -63,6 +63,8 @@ private:
     QModbusPdu::FunctionCode _rtuFuncCode;
     QModbusPdu::FunctionCode _tcpFuncCode;
     QScopedPointer<ModbusScanner> _scanner;
+    QIcon _iconStart;
+    QIcon _iconStop;
 };
 
 #endif // DIALOGMODBUSSCANNER_H

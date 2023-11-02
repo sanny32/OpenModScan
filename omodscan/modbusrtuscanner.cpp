@@ -119,7 +119,7 @@ void ModbusRtuScanner::sendRequest(int deviceId)
                         reply->error() != QModbusDevice::ConnectionError &&
                         reply->error() != QModbusDevice::ReplyAbortedError)
                     {
-                        emit found(*_iterator, deviceId, reply->error() == QModbusDevice::ProtocolError);
+                        emit found(*_iterator, deviceId, false);
                     }
                     reply->deleteLater();
 

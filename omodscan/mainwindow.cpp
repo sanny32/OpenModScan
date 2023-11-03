@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_autoStart(false)
+    ,_selectedPrinter(nullptr)
     ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
@@ -76,7 +77,9 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete _selectedPrinter;
+
+    if(_selectedPrinter != nullptr)
+        delete _selectedPrinter;
 }
 
 ///
@@ -752,8 +755,9 @@ void MainWindow::on_actionMsgParser_triggered()
 {
     auto frm = currentMdiChild();
     const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
 
-    auto dlg = new DialogMsgParser(mode, this);
+    auto dlg = new DialogMsgParser(mode, protocol, this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }

@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadHoldingRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    ReadHoldingRegistersRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
     }
 
     ///
     /// \brief ReadHoldingRegistersRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadHoldingRegistersRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    ReadHoldingRegistersRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
     }
@@ -48,7 +48,7 @@ public:
     /// \return
     ///
     quint16 startAddress() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -56,7 +56,7 @@ public:
     /// \return
     ///
     quint16 length() const {
-        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
+        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
     }
 };
 
@@ -72,21 +72,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadHoldingRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    ReadHoldingRegistersResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
     }
 
     ///
     /// \brief ReadHoldingRegistersResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadHoldingRegistersResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    ReadHoldingRegistersResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadHoldingRegisters);
     }
@@ -106,7 +106,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return data(0);
+        return at(0);
     }
 
     ///
@@ -114,7 +114,7 @@ public:
     /// \return
     ///
     QByteArray registerValue() const {
-        return slice(1);
+        return data(1);
     }
 };
 

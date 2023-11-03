@@ -32,5 +32,8 @@
         <file>res/actionSwappedLI.png</file>
         <file>res/actionSwappedUnsignedLI.png</file>
         <file>res/actionUnsignedLI.png</file>
+        <file>res/iconScanStart.png</file>
+        <file>res/iconScanStop.png</file>
+        <file>res/iconClear.png</file>
     </qresource>
 </RCC>

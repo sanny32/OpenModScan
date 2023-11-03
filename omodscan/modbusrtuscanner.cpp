@@ -71,7 +71,7 @@ void ModbusRtuScanner::on_stateChanged(QModbusDevice::State state)
 void ModbusRtuScanner::connectDevice(const ConnectionDetails& cd)
 {
     _modbusClient->disconnectDevice();
-    _modbusClient->setNumberOfRetries(0);
+    _modbusClient->setNumberOfRetries(_params.RetryOnTimeout ? 1 : 0);
     _modbusClient->setTimeout(_params.Timeout);
     _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
     _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
@@ -115,15 +115,35 @@ void ModbusRtuScanner::sendRequest(int deviceId)
         {
             connect(reply, &QModbusReply::finished, this, [this, reply, deviceId]()
                 {
-                    if(reply->error() != QModbusDevice::TimeoutError &&
-                        reply->error() != QModbusDevice::ConnectionError &&
-                        reply->error() != QModbusDevice::ReplyAbortedError)
+                    const auto error = reply->error();
+                    if(error != QModbusDevice::TimeoutError &&
+                        error != QModbusDevice::ConnectionError &&
+                        error != QModbusDevice::ReplyAbortedError)
                     {
-                        emit found(*_iterator, deviceId, reply->error() == QModbusDevice::ProtocolError);
+                        if(error == QModbusDevice::ProtocolError)
+                        {
+                            switch(reply->rawResult().exceptionCode())
+                            {
+                                case QModbusPdu::GatewayPathUnavailable:
+                                case QModbusPdu::GatewayTargetDeviceFailedToRespond:
+                                break;
+
+                                default:
+                                    emit found(*_iterator, deviceId, false);
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            emit found(*_iterator, deviceId, false);
+                        }
                     }
                     reply->deleteLater();
 
-                    sendRequest(deviceId + 1);
+                    if(error == QModbusDevice::TimeoutError)
+                        sendRequest(deviceId + 1);
+                    else
+                        QTimer::singleShot(_params.Timeout, [this, deviceId] { sendRequest(deviceId + 1); });
                 },
                 Qt::QueuedConnection);
         }

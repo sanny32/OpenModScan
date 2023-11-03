@@ -48,7 +48,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->lineEditDeviceId->setValue(1);
 
     const auto dd = displayDefinition();
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(dd.DeviceId));
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
 
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
@@ -153,7 +154,9 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(false);
 
     ui->outputWidget->setStatus(tr("Data Uninitialized"));
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(dd.DeviceId));
+
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
 
     beginUpdate();
 }
@@ -553,25 +556,27 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
 /// \brief FormModSca::logRequest
 /// \param requestId
 /// \param deviceId
+/// \param transactionId
 /// \param request
 ///
-void FormModSca::logRequest(int requestId, int deviceId, const QModbusRequest& request)
+void FormModSca::logRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
 {
     if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
-        ui->outputWidget->updateTraffic(request, deviceId);
+        ui->outputWidget->updateTraffic(request, deviceId, transactionId);
     else if(requestId == 0 && isActive())
-        ui->outputWidget->updateTraffic(request, deviceId);
+        ui->outputWidget->updateTraffic(request, deviceId, transactionId);
 }
 
 ///
 /// \brief FormModSca::on_modbusRequest
 /// \param requestId
 /// \param deviceId
+/// \param transactionId
 /// \param request
 ///
-void FormModSca::on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request)
+void FormModSca::on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
 {
-   logRequest(requestId, deviceId, request);
+   logRequest(requestId, deviceId, transactionId, request);
 
     switch(request.functionCode())
     {
@@ -604,11 +609,12 @@ void FormModSca::logReply(const QModbusReply* reply)
 
     const auto deviceId = reply->serverAddress();
     const auto requestId = reply->property("RequestId").toInt();
+    const auto transactionId = reply->property("TransactionId").toInt();
 
     if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
-        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress());
+        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress(), transactionId);
     else if(requestId == 0 && isActive())
-        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress());
+        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress(), transactionId);
 }
 
 ///
@@ -673,6 +679,10 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
 ///
 void FormModSca::on_modbusConnected(const ConnectionDetails&)
 {
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    ui->outputWidget->setProtocol(protocol);
+    ui->outputWidget->clearLogView();
+
     beginUpdate();
 }
 
@@ -691,7 +701,8 @@ void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap(deviceId));
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
     beginUpdate();
 }
 
@@ -701,7 +712,8 @@ void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap(deviceId));
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
     beginUpdate();
 }
 
@@ -711,7 +723,8 @@ void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
 void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap(deviceId));
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
     beginUpdate();
 }
 
@@ -721,7 +734,8 @@ void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
 void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->setup(displayDefinition(), _dataSimulator->simulationMap(deviceId));
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
     beginUpdate();
 }
 

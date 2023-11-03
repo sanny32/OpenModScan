@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReportServerIdRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    ReportServerIdRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
     }
 
     ///
     /// \brief ReportServerIdRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReportServerIdRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    ReportServerIdRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
     }
@@ -47,21 +47,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReportServerIdResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    ReportServerIdResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
     }
 
     ///
     /// \brief ReportServerIdResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReportServerIdResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    ReportServerIdResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReportServerId);
     }
@@ -79,7 +79,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return ModbusMessage::data(0);
+        return ModbusMessage::at(0);
     }
 
     ///
@@ -87,7 +87,7 @@ public:
     /// \return
     ///
     QByteArray data() const {
-        return  slice(1);
+        return  ModbusMessage::data(1);
     }
 };
 

@@ -19,6 +19,7 @@ typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
 ModbusClient::ModbusClient(QObject *parent)
     : QObject{parent}
     ,_modbusClient(nullptr)
+    ,_connectionType(ConnectionType::Serial)
 {
 }
 
@@ -77,6 +78,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
 
     if(_modbusClient)
     {
+        _connectionType = cd.Type;
         connect(_modbusClient, &QModbusDevice::stateChanged, this, &ModbusClient::on_stateChanged);
         connect(_modbusClient, &QModbusDevice::errorOccurred, this, &ModbusClient::on_errorOccurred);
         _modbusClient->connectDevice();
@@ -130,10 +132,11 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
         return;
     }
 
-    emit modbusRequest(requestId, server, request);
+    emit modbusRequest(requestId, server, ++_transactionId, request);
     if(auto reply = _modbusClient->sendRawRequest(request, server))
     {
         reply->setProperty("RequestId", requestId);
+        reply->setProperty("TransactionId", _transactionId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_readReply);
@@ -166,10 +169,11 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
     const auto request = createReadRequest(dataUnit);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, server, request);
+    emit modbusRequest(requestId, server, ++_transactionId, request);
     if(auto reply = _modbusClient->sendReadRequest(dataUnit, server))
     {
         reply->setProperty("RequestId", requestId);
+        reply->setProperty("TransactionId", _transactionId);
         reply->setProperty("RequestData", QVariant::fromValue(dataUnit));
         if (!reply->isFinished())
         {
@@ -469,11 +473,11 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, params.Node, request);
-
+    emit modbusRequest(requestId, params.Node, ++_transactionId, request);
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
         reply->setProperty("RequestId", requestId);
+        reply->setProperty("TransactionId", _transactionId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_writeReply);
@@ -501,11 +505,12 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     }
 
     QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(params.Address - 1), params.AndMask, params.OrMask);
-    emit modbusRequest(requestId, params.Node, request);
+    emit modbusRequest(requestId, params.Node, ++_transactionId, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
     {
         reply->setProperty("RequestId", requestId);
+        reply->setProperty("TransactionId", _transactionId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_writeReply);
@@ -693,6 +698,7 @@ void ModbusClient::on_stateChanged(QModbusDevice::State state)
                 }
             }
 
+            _transactionId = -1;
             emit modbusConnected(cd);
         }
         break;

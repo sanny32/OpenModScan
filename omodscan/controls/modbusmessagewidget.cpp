@@ -1,8 +1,8 @@
 #include <QEvent>
 #include "formatutils.h"
 #include "htmldelegate.h"
-#include "modbusmessagewidget.h"
 #include "modbusmessages.h"
+#include "modbusmessagewidget.h"
 
 ///
 /// \brief ModbusMessageWidget::ModbusMessageWidget
@@ -147,16 +147,17 @@ void ModbusMessageWidget::update()
     }
 
     auto addChecksum = [&]{
-        if(_mm->protocolType() == QModbusAdu::Rtu)
+        if(_mm->protocolType() == ModbusMessage::Rtu)
         {
-            const auto checksum = formatWordValue(_dataDisplayMode, _mm->checksum());
-            if(_mm->matchingChecksum())
+            auto adu = reinterpret_cast<const QModbusAduRtu*>(_mm->adu());
+            const auto checksum = formatWordValue(_dataDisplayMode, adu->checksum());
+            if(adu->matchingChecksum())
             {
                 addItem(tr("<b>Checksum:</b> %1").arg(checksum));
             }
             else
             {
-                const auto calcChecksum = formatWordValue(_dataDisplayMode, _mm->calcChecksum());
+                const auto calcChecksum = formatWordValue(_dataDisplayMode, adu->calcChecksum());
                 addItem(tr("<b>Checksum:</b> <span style='color:%3'>%1</span> (Expected: %2)").arg(checksum, calcChecksum, _statusClr.name()));
             }
         }
@@ -165,11 +166,12 @@ void ModbusMessageWidget::update()
     addItem(tr("<b>Type:</b> %1").arg(_mm->isRequest() ? tr("Request (Tx)") : tr("Response (Rx)")));
     if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_mm->timestamp().toString(Qt::ISODateWithMs)));
 
-    if(_mm->type() == ModbusMessage::Adu)
+    if(_mm->protocolType() == ModbusMessage::Tcp)
     {
-        const auto transactionId = _mm->isValid() ? formatWordValue(_dataDisplayMode, _mm->transactionId()) : "??";
-        const auto protocolId = _mm->isValid() ? formatWordValue(_dataDisplayMode, _mm->protocolId()): "??";
-        const auto length = _mm->isValid() ? formatWordValue(_dataDisplayMode, _mm->length()): "??";
+        auto adu = reinterpret_cast<const QModbusAduTcp*>(_mm->adu());
+        const auto transactionId = adu->isValid() ? formatWordValue(_dataDisplayMode, adu->transactionId()) : "??";
+        const auto protocolId = adu->isValid() ? formatWordValue(_dataDisplayMode, adu->protocolId()): "??";
+        const auto length = adu->isValid() ? formatWordValue(_dataDisplayMode, adu->length()): "??";
         addItem(tr("<b>Transaction ID:</b> %1").arg(transactionId));
         addItem(tr("<b>Protocol ID:</b> %1").arg(protocolId));
         addItem(tr("<b>Length:</b> %1").arg(length));
@@ -197,7 +199,7 @@ void ModbusMessageWidget::update()
         case QModbusPdu::ReadCoils:
         if(_mm->isRequest())
             {
-            auto req = reinterpret_cast<const ReadCoilsRequest*>(_mm);
+                auto req = reinterpret_cast<const ReadCoilsRequest*>(_mm);
                 const auto startAddress = req->isValid() ? formatWordValue(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatWordValue(_dataDisplayMode, req->length()): "??";
                 addItem(tr("<b>Start Address:</b> %1").arg(startAddress));

@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadWriteMultipleRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    ReadWriteMultipleRegistersRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }
 
     ///
     /// \brief ReadWriteMultipleRegistersRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadWriteMultipleRegistersRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    ReadWriteMultipleRegistersRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }
@@ -51,7 +51,7 @@ public:
     /// \return
     ///
     quint16 readStartAddress() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -59,7 +59,7 @@ public:
     /// \return
     ///
     quint16 readLength() const {
-        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
+        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -67,7 +67,7 @@ public:
     /// \return
     ///
     quint16 writeStartAddress() const {
-        return makeWord(data(5), data(4), ByteOrder::LittleEndian);
+        return makeWord(at(5), at(4), ByteOrder::LittleEndian);
     }
 
     ///
@@ -75,7 +75,7 @@ public:
     /// \return
     ///
     quint16 writeLength() const {
-        return makeWord(data(7), data(6), ByteOrder::LittleEndian);
+        return makeWord(at(7), at(6), ByteOrder::LittleEndian);
     }
 
     ///
@@ -83,7 +83,7 @@ public:
     /// \return
     ///
     quint8 writeByteCount() const {
-        return data(8);
+        return at(8);
     }
 
     ///
@@ -91,7 +91,7 @@ public:
     /// \return
     ///
     QByteArray writeValues() const {
-        return slice(9);
+        return data(9);
     }
 };
 
@@ -107,21 +107,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadWriteMultipleRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    ReadWriteMultipleRegistersResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }
 
     ///
     /// \brief ReadWriteMultipleRegistersResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadWriteMultipleRegistersResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    ReadWriteMultipleRegistersResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadWriteMultipleRegisters);
     }
@@ -141,7 +141,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return data(0);
+        return at(0);
     }
 
     ///
@@ -149,7 +149,7 @@ public:
     /// \return
     ///
     QByteArray values() const {
-        return slice(1);
+        return data(1);
     }
 };
 

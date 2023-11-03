@@ -17,7 +17,7 @@ class DialogMsgParser : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogMsgParser(DataDisplayMode mode, QWidget *parent = nullptr);
+    explicit DialogMsgParser(DataDisplayMode mode, ModbusMessage::ProtocolType protocol, QWidget *parent = nullptr);
     ~DialogMsgParser();
 
 protected:

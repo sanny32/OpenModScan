@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadFifoQueueRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    ReadFifoQueueRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
 
     ///
     /// \brief ReadFifoQueueRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadFifoQueueRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    ReadFifoQueueRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
@@ -47,7 +47,7 @@ public:
     /// \return
     ///
     quint16 fifoAddress() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 };
 
@@ -63,21 +63,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    ReadFifoQueueResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    ReadFifoQueueResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
 
     ///
     /// \brief ReadFifoQueueResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    ReadFifoQueueResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    ReadFifoQueueResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFifoQueue);
     }
@@ -97,7 +97,7 @@ public:
     /// \return
     ///
     quint16 byteCount() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -105,7 +105,7 @@ public:
     /// \return
     ///
     quint16 fifoCount() const {
-        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
+        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -113,7 +113,7 @@ public:
     /// \return
     ///
     QByteArray fifoValue() const {
-        return  slice(4);
+        return  data(4);
     }
 };
 

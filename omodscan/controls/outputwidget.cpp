@@ -351,13 +351,15 @@ QVector<quint16> OutputWidget::data() const
 ///
 /// \brief OutputWidget::setup
 /// \param dd
+/// \param protocol
 /// \param simulations
 ///
-void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap& simulations)
+void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap& simulations)
 {
     _descriptionMap.insert(descriptionMap());
     _displayDefinition = dd;
 
+    setProtocol(protocol);
     setLogViewLimit(dd.LogViewLimit);
 
     _listModel->clear();
@@ -369,6 +371,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
         setDescription(key.first, key.second, _descriptionMap[key]);
 
     _listModel->update();
+
 }
 
 ///
@@ -520,6 +523,14 @@ void OutputWidget::setLogViewLimit(int l)
 }
 
 ///
+/// \brief OutputWidget::clearLogView
+///
+void OutputWidget::clearLogView()
+{
+    ui->logView->clear();
+}
+
+///
 /// \brief OutputWidget::setStatus
 /// \param status
 ///
@@ -582,21 +593,23 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 ///
 /// \brief OutputWidget::updateTraffic
 /// \param request
-/// \param server
+/// \param deviceId
+/// \param transactionId
 ///
-void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
+void OutputWidget::updateTraffic(const QModbusRequest& request, int deviceId, int transactionId)
 {
-    updateLogView(true, server, request);
+    updateLogView(true, deviceId, transactionId, request);
 }
 
 ///
 /// \brief OutputWidget::updateTraffic
 /// \param response
 /// \param deviceId
+/// \param transactionId
 ///
-void OutputWidget::updateTraffic(const QModbusResponse& response, int deviceId)
+void OutputWidget::updateTraffic(const QModbusResponse& response, int deviceId, int transactionId)
 {
-    updateLogView(false, deviceId, response);
+    updateLogView(false, deviceId, transactionId, response);
 }
 
 ///
@@ -693,6 +706,24 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
     ui->modbusMsg->setDataDisplayMode(mode);
 
     _listModel->update();
+}
+
+///
+/// \brief OutputWidget::protocol
+/// \return
+///
+ModbusMessage::ProtocolType OutputWidget::protocol() const
+{
+    return _protocol;
+}
+
+///
+/// \brief OutputWidget::setProtocol
+/// \param type
+///
+void OutputWidget::setProtocol(ModbusMessage::ProtocolType type)
+{
+    _protocol = type;
 }
 
 ///
@@ -817,11 +848,13 @@ void OutputWidget::showModbusMessage(const QModelIndex& index)
 ///
 /// \brief OutputWidget::updateLogView
 /// \param request
+/// \param server
+/// \param transactionId
 /// \param pdu
 ///
-void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu)
+void OutputWidget::updateLogView(bool request, int server, int transactionId, const QModbusPdu& pdu)
 {
-    auto msg = ui->logView->addItem(pdu, server, QDateTime::currentDateTime(), request);
+    auto msg = ui->logView->addItem(pdu, _protocol, server, transactionId, QDateTime::currentDateTime(), request);
     if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
         const auto str = QString("%1: %2 %3 %4").arg(

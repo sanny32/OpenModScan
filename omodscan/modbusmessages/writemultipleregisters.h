@@ -15,21 +15,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    WriteMultipleRegistersRequest(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true, checksum)
+    WriteMultipleRegistersRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }
 
     ///
     /// \brief WriteMultipleRegistersRequest
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    WriteMultipleRegistersRequest(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, true)
+    WriteMultipleRegistersRequest(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }
@@ -49,7 +49,7 @@ public:
     /// \return
     ///
     quint16 startAddress() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -57,7 +57,7 @@ public:
     /// \return
     ///
     quint16 quantity() const {
-        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
+        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -65,7 +65,7 @@ public:
     /// \return
     ///
     quint8 byteCount() const {
-        return data(4);
+        return at(4);
     }
 
     ///
@@ -73,7 +73,7 @@ public:
     /// \return
     ///
     QByteArray values() const {
-        return slice(5);
+        return data(5);
     }
 };
 
@@ -89,21 +89,21 @@ public:
     /// \param protocol
     /// \param deviceId
     /// \param timestamp
-    /// \param checksum
     ///
-    WriteMultipleRegistersResponse(const QModbusPdu& pdu, QModbusAdu::Type protocol, int deviceId, const QDateTime& timestamp, int checksum)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false, checksum)
+    WriteMultipleRegistersResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }
 
     ///
     /// \brief WriteMultipleRegistersResponse
-    /// \param adu
+    /// \param data
+    /// \param protocol
     /// \param timestamp
     ///
-    WriteMultipleRegistersResponse(const QModbusAdu& adu, const QDateTime& timestamp)
-        : ModbusMessage(adu, timestamp, false)
+    WriteMultipleRegistersResponse(const QByteArray& data, ProtocolType protocol, const QDateTime& timestamp)
+        : ModbusMessage(data, protocol, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }
@@ -121,7 +121,7 @@ public:
     /// \return
     ///
     quint16 startAddress() const {
-        return makeWord(data(1), data(0), ByteOrder::LittleEndian);
+        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -129,7 +129,7 @@ public:
     /// \return
     ///
     quint16 quantity() const {
-        return makeWord(data(3), data(2), ByteOrder::LittleEndian);
+        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
     }
 };
 

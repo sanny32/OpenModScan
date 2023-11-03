@@ -75,13 +75,16 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd, const ModbusSimulationMap& simulations);
+    void setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap& simulations);
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
 
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
+
+    ModbusMessage::ProtocolType protocol() const;
+    void setProtocol(ModbusMessage::ProtocolType type);
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -108,12 +111,14 @@ public:
     int logViewLimit() const;
     void setLogViewLimit(int l);
 
+    void clearLogView();
+
     void setStatus(const QString& status);
 
     void paint(const QRect& rc, QPainter& painter);
 
-    void updateTraffic(const QModbusRequest& request, int server);
-    void updateTraffic(const QModbusResponse& response, int server);
+    void updateTraffic(const QModbusRequest& request, int server, int transactionId);
+    void updateTraffic(const QModbusResponse& response, int server, int transactionId);
     void updateData(const QModbusDataUnit& data);
 
     AddressDescriptionMap descriptionMap() const;
@@ -135,7 +140,7 @@ private:
     void setUninitializedStatus();
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
-    void updateLogView(bool request, int deviceId, const QModbusPdu& pdu);
+    void updateLogView(bool request, int deviceId, int transactionId, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;
@@ -144,6 +149,7 @@ private:
     bool _displayHexAddresses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
+    ModbusMessage::ProtocolType _protocol;
     ByteOrder _byteOrder;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;

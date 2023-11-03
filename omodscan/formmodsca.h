@@ -107,7 +107,7 @@ private slots:
     void on_modbusConnected(const ConnectionDetails& cd);
     void on_modbusDisconnected(const ConnectionDetails& cd);
     void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, int deviceId, const QModbusRequest& request);
+    void on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -124,7 +124,7 @@ private:
     bool isValidReply(const QModbusReply* reply) const;
 
     void logReply(const QModbusReply* reply);
-    void logRequest(int requestId, int deviceId, const QModbusRequest& request);
+    void logRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request);
 
 private:
     Ui::FormModSca *ui;

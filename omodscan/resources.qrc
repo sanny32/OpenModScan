@@ -8,7 +8,7 @@
         <file>res/actionDisconnect.png</file>
         <file>res/actionFloatingPt.png</file>
         <file>res/actionHex.png</file>
-        <file>res/actionInteger.png</file>
+        <file>res/actionInt16.png</file>
         <file>res/actionNew.png</file>
         <file>res/actionOpen.png</file>
         <file>res/actionPrint.png</file>
@@ -17,7 +17,7 @@
         <file>res/actionShowTraffic.png</file>
         <file>res/actionSwappedDbl.png</file>
         <file>res/actionSwappedFP.png</file>
-        <file>res/actionUnsignedDecimal.png</file>
+        <file>res/actionUInt16.png</file>
         <file>res/omodscan.png</file>
         <file>res/iconAbout.png</file>
         <file>res/iconLandscape.png</file>
@@ -28,12 +28,16 @@
         <file>res/actionLittleEndian.png</file>
         <file>res/pointGreen.png</file>
         <file>res/pointEmpty.png</file>
-        <file>res/actionLongInteger.png</file>
-        <file>res/actionSwappedLI.png</file>
-        <file>res/actionSwappedUnsignedLI.png</file>
-        <file>res/actionUnsignedLI.png</file>
+        <file>res/actionInt32.png</file>
+        <file>res/actionSwappedInt32.png</file>
+        <file>res/actionSwappedUInt32.png</file>
+        <file>res/actionUInt32.png</file>
         <file>res/iconScanStart.png</file>
         <file>res/iconScanStop.png</file>
         <file>res/iconClear.png</file>
+        <file>res/actionInt64.png</file>
+        <file>res/actionUInt64.png</file>
+        <file>res/actionSwappedInt64.png</file>
+        <file>res/actionSwappedUInt64.png</file>
     </qresource>
 </RCC>

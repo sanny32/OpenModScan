@@ -208,7 +208,7 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
         {
-            const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
+            const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16;
             return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, item.Addr, false),
                                                item.Msg->isRequest() ? "<<" : ">>",
                                                item.Msg->toString(mode));

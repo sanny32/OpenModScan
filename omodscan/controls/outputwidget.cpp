@@ -207,11 +207,11 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 itemData.ValueStr = formatBinaryValue(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Decimal:
+            case DataDisplayMode::UInt16:
                 itemData.ValueStr = formatDecimalValue(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Integer:
+            case DataDisplayMode::Int16:
                 itemData.ValueStr = formatIntegerValue(pointType, value, byteOrder, itemData.Value);
             break;
 
@@ -239,23 +239,23 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                                            byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::LongInteger:
+            case DataDisplayMode::Int32:
                 itemData.ValueStr = formatLongValue(pointType, value, _lastData.value(i+1), byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::SwappedLI:
+            case DataDisplayMode::SwappedInt32:
                 itemData.ValueStr = formatLongValue(pointType, _lastData.value(i+1), value, byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
 
             break;
 
-            case DataDisplayMode::UnsignedLongInteger:
+            case DataDisplayMode::UInt32:
                 itemData.ValueStr = formatUnsignedLongValue(pointType, value, _lastData.value(i+1), byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::SwappedUnsignedLI:
+            case DataDisplayMode::SwappedUInt32:
                 itemData.ValueStr = formatUnsignedLongValue(pointType, _lastData.value(i+1), value, byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
@@ -783,10 +783,10 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
             {
                 case DataDisplayMode::FloatingPt:
                 case DataDisplayMode::SwappedFP:
-                case DataDisplayMode::LongInteger:
-                case DataDisplayMode::SwappedLI:
-                case DataDisplayMode::UnsignedLongInteger:
-                case DataDisplayMode::SwappedUnsignedLI:
+                case DataDisplayMode::Int32:
+                case DataDisplayMode::SwappedInt32:
+                case DataDisplayMode::UInt32:
+                case DataDisplayMode::SwappedUInt32:
                     if(index.row() % 2)
                         idx = _listModel->index(index.row() - 1);
                 break;

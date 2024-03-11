@@ -12,7 +12,7 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     : QListWidget(parent)
     ,_statusClr(Qt::red)
     ,_byteOrder(ByteOrder::LittleEndian)
-    ,_dataDisplayMode(DataDisplayMode::Decimal)
+    ,_dataDisplayMode(DataDisplayMode::UInt16)
     ,_showTimestamp(true)
     ,_mm(nullptr)
 {

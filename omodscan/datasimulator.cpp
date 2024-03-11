@@ -202,19 +202,19 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
             switch(mode)
             {
                 case DataDisplayMode::Binary:
-                case DataDisplayMode::Integer:
-                case DataDisplayMode::Decimal:
+                case DataDisplayMode::Int16:
+                case DataDisplayMode::UInt16:
                 case DataDisplayMode::Hex:
                     value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
                 break;
 
-                case DataDisplayMode::LongInteger:
-                case DataDisplayMode::SwappedLI:
+                case DataDisplayMode::Int32:
+                case DataDisplayMode::SwappedInt32:
                     value = generateRandom<qint32>(params.Range);
                 break;
 
-                case DataDisplayMode::UnsignedLongInteger:
-                case DataDisplayMode::SwappedUnsignedLI:
+                case DataDisplayMode::UInt32:
+                case DataDisplayMode::SwappedUInt32:
                     value = generateRandom<quint32>(params.Range);
                 break;
 
@@ -258,23 +258,23 @@ void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::R
     auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
     switch(mode)
     {
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             value = incrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::Binary:
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
         case DataDisplayMode::Hex:
             value = incrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::LongInteger:
-        case DataDisplayMode::SwappedLI:
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
             value = incrementValue<qint32>(value.toInt(),  params.Step, params.Range);
         break;
 
-        case DataDisplayMode::UnsignedLongInteger:
-        case DataDisplayMode::SwappedUnsignedLI:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
             value = incrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
         break;
 
@@ -314,23 +314,23 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
     auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
     switch(mode)
     {
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             value = decrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::Binary:
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
         case DataDisplayMode::Hex:
             value = decrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::LongInteger:
-        case DataDisplayMode::SwappedLI:
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
             value = decrementValue<qint32>(value.toInt(),  params.Step, params.Range);
             break;
 
-        case DataDisplayMode::UnsignedLongInteger:
-        case DataDisplayMode::SwappedUnsignedLI:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
             value = decrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
         break;
 

@@ -67,9 +67,9 @@ void ByteListTextEdit::setValue(const QByteArray& value)
     {
         case DecMode:
         {
-            const auto text = formatByteArray(DataDisplayMode::Decimal, value);
+            const auto text = formatByteArray(DataDisplayMode::UInt16, value);
             if(text != toPlainText())
-                setPlainText(formatByteArray(DataDisplayMode::Decimal, value));
+                setPlainText(formatByteArray(DataDisplayMode::UInt16, value));
         }
         break;
 

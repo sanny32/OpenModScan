@@ -20,8 +20,8 @@ inline QString formatByteValue(DataDisplayMode mode, quint8 c)
 {
     switch(mode)
     {
-        case DataDisplayMode::Decimal:
-        case DataDisplayMode::Integer:
+    case DataDisplayMode::UInt16:
+        case DataDisplayMode::Int16:
             return QString("%1").arg(QString::number(c), 3, '0');
 
         default:
@@ -41,8 +41,8 @@ inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
     for(quint8 i : ar)
         switch(mode)
         {
-            case DataDisplayMode::Decimal:
-            case DataDisplayMode::Integer:
+        case DataDisplayMode::UInt16:
+            case DataDisplayMode::Int16:
                 values += QString("%1").arg(QString::number(i), 3, '0');
             break;
 
@@ -69,8 +69,8 @@ inline QString formatWordArray(DataDisplayMode mode, const QByteArray& ar, ByteO
         const quint16 value = makeWord(ar[i+1], ar[i], order);
         switch(mode)
         {
-            case DataDisplayMode::Decimal:
-            case DataDisplayMode::Integer:
+        case DataDisplayMode::UInt16:
+            case DataDisplayMode::Int16:
                 values += QString("%1").arg(QString::number(value), 5, '0');
                 break;
 
@@ -93,8 +93,8 @@ inline QString formatWordValue(DataDisplayMode mode, quint16 v)
 {
     switch(mode)
     {
-        case DataDisplayMode::Decimal:
-        case DataDisplayMode::Integer:
+    case DataDisplayMode::UInt16:
+        case DataDisplayMode::Int16:
             return QString("%1").arg(QString::number(v), 5, '0');
 
         default:

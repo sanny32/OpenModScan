@@ -28,12 +28,12 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         case DataDisplayMode::Binary:
         break;
 
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             ui->lineEditValue->setInputRange(SHRT_MIN, SHRT_MAX);
             ui->lineEditValue->setValue(params.Value.toInt());
         break;
@@ -60,14 +60,14 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setValue(params.Value.toDouble());
         break;
 
-        case DataDisplayMode::LongInteger:
-        case DataDisplayMode::SwappedLI:
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
             ui->lineEditValue->setInputRange(INT_MIN, INT_MAX);
             ui->lineEditValue->setValue(params.Value.toInt());
         break;
 
-        case DataDisplayMode::UnsignedLongInteger:
-        case DataDisplayMode::SwappedUnsignedLI:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
             ui->lineEditValue->setInputRange(0U, UINT_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::UnsignedMode);
             ui->lineEditValue->setValue(params.Value.toUInt());

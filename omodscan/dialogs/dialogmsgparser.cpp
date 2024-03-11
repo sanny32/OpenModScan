@@ -67,7 +67,7 @@ void DialogMsgParser::on_awake()
 void DialogMsgParser::on_hexView_toggled(bool checked)
 {
     ui->bytesData->setInputMode(checked ? ByteListTextEdit::HexMode : ByteListTextEdit::DecMode);
-    ui->info->setDataDisplayMode(checked ? DataDisplayMode::Hex : DataDisplayMode::Decimal);
+    ui->info->setDataDisplayMode(checked ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
 }
 
 ///

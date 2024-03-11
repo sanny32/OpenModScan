@@ -412,8 +412,8 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                 switch(params.DisplayMode)
                 {
                     case DataDisplayMode::Binary:
-                    case DataDisplayMode::Decimal:
-                    case DataDisplayMode::Integer:
+                    case DataDisplayMode::UInt16:
+                    case DataDisplayMode::Int16:
                     case DataDisplayMode::Hex:
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toUInt(), params.Order);
                     break;
@@ -430,13 +430,13 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), params.Order, true);
                     break;
 
-                    case DataDisplayMode::LongInteger:
-                    case DataDisplayMode::UnsignedLongInteger:
+                    case DataDisplayMode::Int32:
+                    case DataDisplayMode::UInt32:
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, false);
                     break;
 
-                    case DataDisplayMode::SwappedLI:
-                    case DataDisplayMode::SwappedUnsignedLI:
+                    case DataDisplayMode::SwappedInt32:
+                    case DataDisplayMode::SwappedUInt32:
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, true);
                     break;
                 }

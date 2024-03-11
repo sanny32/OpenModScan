@@ -227,6 +227,16 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
                 case DataDisplayMode::SwappedDbl:
                    value = generateRandom<double>(params.Range);
                 break;
+
+                case DataDisplayMode::Int64:
+                case DataDisplayMode::SwappedInt64:
+                    value = generateRandom<qint64>(params.Range);
+                break;
+
+                case DataDisplayMode::UInt64:
+                case DataDisplayMode::SwappedUInt64:
+                    value = generateRandom<quint64>(params.Range);
+                break;
             }
         break;
 
@@ -287,6 +297,16 @@ void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::R
         case DataDisplayMode::SwappedDbl:
             value = incrementValue<double>(value.toDouble(), params.Step, params.Range);
         break;
+
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+            value = incrementValue<qint64>(value.toLongLong(), params.Step, params.Range);
+        break;
+
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            value = incrementValue<quint64>(value.toULongLong(), params.Step, params.Range);
+        break;
     }
 
     if(value.isValid())
@@ -342,6 +362,16 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
             value = decrementValue<double>(value.toDouble(), params.Step, params.Range);
+        break;
+
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+            value = decrementValue<qint64>(value.toLongLong(), params.Step, params.Range);
+        break;
+
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            value = decrementValue<quint64>(value.toULongLong(), params.Step, params.Range);
         break;
     }
 

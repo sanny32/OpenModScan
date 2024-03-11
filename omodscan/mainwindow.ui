@@ -432,7 +432,7 @@
     <string>Binary</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+1</string>
+    <string>Ctrl+1</string>
    </property>
   </action>
   <action name="actionHex">
@@ -447,7 +447,7 @@
     <string>Hex</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+6</string>
+    <string>Ctrl+2</string>
    </property>
   </action>
   <action name="actionUInt16">
@@ -462,7 +462,7 @@
     <string>Unsigned 16-bit Intger</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+2</string>
+    <string>Ctrl+4</string>
    </property>
   </action>
   <action name="actionInt16">
@@ -492,7 +492,7 @@
     <string>Floating Pt</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+7</string>
+    <string>Ctrl+9</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -507,7 +507,7 @@
     <string>Swapped FP</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Shift+7</string>
+    <string>Ctrl+Alt+9</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -522,7 +522,7 @@
     <string>Dbl Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+8</string>
+    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -537,7 +537,7 @@
     <string>Swapped Dbl</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Shift+8</string>
+    <string>Ctrl+Alt+0</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -719,7 +719,7 @@
     <string>32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+4</string>
+    <string>Ctrl+5</string>
    </property>
   </action>
   <action name="actionSwappedInt32">
@@ -737,7 +737,7 @@
     <string>Swapped 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+4</string>
+    <string>Ctrl+Alt+5</string>
    </property>
   </action>
   <action name="actionUInt32">
@@ -752,7 +752,7 @@
     <string>Unsigned 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+5</string>
+    <string>Ctrl+6</string>
    </property>
   </action>
   <action name="actionSwappedUInt32">
@@ -770,7 +770,7 @@
     <string>Swapped Unsigned 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+5</string>
+    <string>Ctrl+Alt+6</string>
    </property>
   </action>
   <action name="actionMsgParser">
@@ -795,6 +795,9 @@
    <property name="text">
     <string>64-bit Integer</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+7</string>
+   </property>
   </action>
   <action name="actionSwappedInt64">
    <property name="checkable">
@@ -806,6 +809,9 @@
    </property>
    <property name="text">
     <string>Swapped 64-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+7</string>
    </property>
   </action>
   <action name="actionUInt64">
@@ -819,6 +825,9 @@
    <property name="text">
     <string>Unsigned 64-bit Integer</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+8</string>
+   </property>
   </action>
   <action name="actionSwappedUInt64">
    <property name="checkable">
@@ -830,6 +839,9 @@
    </property>
    <property name="text">
     <string>Swapped Unsigned 64-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+8</string>
    </property>
   </action>
  </widget>

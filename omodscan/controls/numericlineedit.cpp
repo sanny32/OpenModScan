@@ -86,7 +86,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
             break;
 
             case UInt32Mode:
-                _minValue = 0U;
+                _minValue = 0;
                 _maxValue = UINT_MAX;
             break;
 
@@ -101,13 +101,13 @@ void NumericLineEdit::setInputMode(InputMode mode)
             break;
 
             case Int64Mode:
-                _minValue = INT64_MIN;
-                _maxValue = INT64_MAX;
+                _minValue = QVariant::fromValue(INT64_MIN);
+                _maxValue = QVariant::fromValue(INT64_MAX);
             break;
 
             case UInt64Mode:
-                _minValue = (quint64)0;
-                _maxValue = UINT64_MAX;
+                _minValue = 0;
+                _maxValue = QVariant::fromValue(UINT64_MAX);
             break;
 
         }

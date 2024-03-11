@@ -82,7 +82,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
-            ui->lineEditValue->setInputRange((quint64)0, UINT64_MAX);
+            ui->lineEditValue->setInputRange<quint64>(0, UINT64_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(params.Value.toULongLong());
             break;

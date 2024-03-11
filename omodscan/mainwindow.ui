@@ -109,6 +109,10 @@
      <addaction name="actionSwappedLI"/>
      <addaction name="actionUnsignedLongInteger"/>
      <addaction name="actionSwappedUnsignedLI"/>
+     <addaction name="action64_bit_Integer"/>
+     <addaction name="actionSwapped_64_bit_Integer"/>
+     <addaction name="actionUnsigned_64_bit_Integer"/>
+     <addaction name="actionSwapped_Unsigned_64_bit_Integer"/>
      <addaction name="actionHex"/>
      <addaction name="actionFloatingPt"/>
      <addaction name="actionSwappedFP"/>
@@ -442,7 +446,7 @@
      <normaloff>:/res/actionUnsignedDecimal.png</normaloff>:/res/actionUnsignedDecimal.png</iconset>
    </property>
    <property name="text">
-    <string>Unsigned Decimal</string>
+    <string>Unsigned 16-bit Intger</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+2</string>
@@ -457,7 +461,7 @@
      <normaloff>:/res/actionInteger.png</normaloff>:/res/actionInteger.png</iconset>
    </property>
    <property name="text">
-    <string>Integer</string>
+    <string>16-bit Integer</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+3</string>
@@ -699,7 +703,7 @@
      <normaloff>:/res/actionLongInteger.png</normaloff>:/res/actionLongInteger.png</iconset>
    </property>
    <property name="text">
-    <string>Long Integer</string>
+    <string>32-bit Integer</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+4</string>
@@ -714,7 +718,7 @@
      <normaloff>:/res/actionSwappedLI.png</normaloff>:/res/actionSwappedLI.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped LI</string>
+    <string>Swapped 32-bit Integer</string>
    </property>
    <property name="toolTip">
     <string>Swapped Long Integer</string>
@@ -732,7 +736,7 @@
      <normaloff>:/res/actionUnsignedLI.png</normaloff>:/res/actionUnsignedLI.png</iconset>
    </property>
    <property name="text">
-    <string>Unsigned Long Integer</string>
+    <string>Unsigned 32-bit Integer</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+5</string>
@@ -747,7 +751,7 @@
      <normaloff>:/res/actionSwappedUnsignedLI.png</normaloff>:/res/actionSwappedUnsignedLI.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Unsigned LI</string>
+    <string>Swapped Unsigned 32-bit Integer</string>
    </property>
    <property name="toolTip">
     <string>Swapped Unsigned Long Integer</string>
@@ -765,6 +769,26 @@
    </property>
    <property name="shortcut">
     <string notr="true">F9</string>
+   </property>
+  </action>
+  <action name="action64_bit_Integer">
+   <property name="text">
+    <string>64-bit Integer</string>
+   </property>
+  </action>
+  <action name="actionSwapped_64_bit_Integer">
+   <property name="text">
+    <string>Swapped 64-bit Integer</string>
+   </property>
+  </action>
+  <action name="actionUnsigned_64_bit_Integer">
+   <property name="text">
+    <string>Unsigned 64-bit Integer</string>
+   </property>
+  </action>
+  <action name="actionSwapped_Unsigned_64_bit_Integer">
+   <property name="text">
+    <string>Swapped Unsigned 64-bit Integer</string>
    </property>
   </action>
  </widget>

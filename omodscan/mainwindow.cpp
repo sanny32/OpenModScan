@@ -212,9 +212,9 @@ void MainWindow::on_awake()
         ui->actionUnsignedDecimal->setChecked(ddm == DataDisplayMode::Decimal);
         ui->actionInteger->setChecked(ddm == DataDisplayMode::Integer);
         ui->actionLongInteger->setChecked(ddm == DataDisplayMode::LongInteger);
-        ui->actionSwappedLI->setChecked(ddm == DataDisplayMode::SwappedLI);
-        ui->actionUnsignedLongInteger->setChecked(ddm == DataDisplayMode::UnsignedLongInteger);
-        ui->actionSwappedUnsignedLI->setChecked(ddm == DataDisplayMode::SwappedUnsignedLI);
+        ui->actionSwapped32->setChecked(ddm == DataDisplayMode::SwappedLI);
+        ui->actionUnsigned32->setChecked(ddm == DataDisplayMode::UnsignedLongInteger);
+        ui->actionSwappedU32->setChecked(ddm == DataDisplayMode::SwappedUnsignedLI);
         ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
         ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);

@@ -489,7 +489,10 @@
      <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
    </property>
    <property name="text">
-    <string>Floating Pt</string>
+    <string>Float</string>
+   </property>
+   <property name="toolTip">
+    <string>Float</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+9</string>
@@ -504,7 +507,10 @@
      <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped FP</string>
+    <string>Swapped Float</string>
+   </property>
+   <property name="toolTip">
+    <string>Swapped Float</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+9</string>
@@ -519,7 +525,10 @@
      <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
    </property>
    <property name="text">
-    <string>Dbl Float</string>
+    <string>Double</string>
+   </property>
+   <property name="toolTip">
+    <string>Double</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+0</string>
@@ -534,7 +543,10 @@
      <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Dbl</string>
+    <string>Swapped Double</string>
+   </property>
+   <property name="toolTip">
+    <string>Swapped Double</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+0</string>

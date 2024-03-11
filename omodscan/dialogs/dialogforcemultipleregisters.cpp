@@ -397,7 +397,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
     if(numEdit)
     {
         numEdit->setFrame(false);
-        numEdit->setMaximumWidth(150);
+        numEdit->setFixedWidth(150);
         numEdit->setAlignment(Qt::AlignCenter);
         numEdit->setToolTip(formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + idx, _hexView));
     }
@@ -414,7 +414,7 @@ QLineEdit* DialogForceMultipleRegisters::createLineEdit()
     auto lineEdit = new QLineEdit(ui->tableWidget);
     lineEdit->setText("-");
     lineEdit->setFrame(false);
-    lineEdit->setMaximumWidth(150);
+    lineEdit->setFixedWidth(150);
     lineEdit->setEnabled(false);
     lineEdit->setAlignment(Qt::AlignCenter);
     return lineEdit;
@@ -425,7 +425,7 @@ QLineEdit* DialogForceMultipleRegisters::createLineEdit()
 ///
 void DialogForceMultipleRegisters::updateTableWidget()
 {
-    const int columns = 6;
+    const int columns = 5;
     const auto length = _data.length();
 
     ui->tableWidget->clear();

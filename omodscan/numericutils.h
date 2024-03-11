@@ -94,6 +94,43 @@ inline void breakUInt32(quint32 value, quint16& lo, quint16& hi, ByteOrder order
 }
 
 ///
+/// \brief breakInt64
+/// \param value
+/// \param lolo
+/// \param lohi
+/// \param hilo
+/// \param hihi
+/// \param order
+///
+inline void breakInt64(qint64 value, quint16& lolo, quint16& lohi, quint16& hilo, quint16& hihi, ByteOrder order)
+{
+    union {
+        quint16 asUint16[4];
+        qint64 asInt64;
+    } v;
+    v.asInt64 = value;
+
+    lolo = toByteOrderValue(v.asUint16[0], order);
+    lohi = toByteOrderValue(v.asUint16[1], order);
+    hilo = toByteOrderValue(v.asUint16[2], order);
+    hihi = toByteOrderValue(v.asUint16[3], order);
+}
+
+///
+/// \brief breakUInt64
+/// \param value
+/// \param lolo
+/// \param lohi
+/// \param hilo
+/// \param hihi
+/// \param order
+///
+inline void breakUInt64(quint64 value, quint16& lolo, quint16& lohi, quint16& hilo, quint16& hihi, ByteOrder order)
+{
+     breakInt64((qint64)value, lolo, lohi, hilo, hihi, order);
+}
+
+///
 /// \brief breakDouble
 /// \param value
 /// \param lolo

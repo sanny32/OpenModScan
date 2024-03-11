@@ -69,9 +69,24 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
             ui->lineEditValue->setInputRange(0U, UINT_MAX);
-            ui->lineEditValue->setInputMode(NumericLineEdit::UnsignedMode);
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
+
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+            ui->lineEditValue->setInputRange(INT64_MIN, INT64_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
+            ui->lineEditValue->setValue(params.Value.toLongLong());
+        break;
+
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            ui->lineEditValue->setInputRange((quint64)0, UINT64_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
+            ui->lineEditValue->setValue(params.Value.toULongLong());
+            break;
+
     }
     ui->buttonBox->setFocus();
 }

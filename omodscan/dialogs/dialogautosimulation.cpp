@@ -53,11 +53,11 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
             ui->lineEditStepValue->setInputRange(1U, UINT_MAX - 1);
-            ui->lineEditStepValue->setInputMode(NumericLineEdit::UnsignedMode);
+            ui->lineEditStepValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditLowLimit->setInputRange(0U, UINT_MAX);
-            ui->lineEditLowLimit->setInputMode(NumericLineEdit::UnsignedMode);
+            ui->lineEditLowLimit->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditHighLimit->setInputRange(0U, UINT_MAX);
-            ui->lineEditHighLimit->setInputMode(NumericLineEdit::UnsignedMode);
+            ui->lineEditHighLimit->setInputMode(NumericLineEdit::UInt32Mode);
         break;
 
         case DataDisplayMode::Hex:

@@ -85,6 +85,26 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
             ui->lineEditLowLimit->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditHighLimit->setInputMode(NumericLineEdit::DoubleMode);
         break;
+
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+            ui->lineEditStepValue->setInputRange((qint64)1, INT64_MAX - 1);
+            ui->lineEditStepValue->setInputMode(NumericLineEdit::Int64Mode);
+            ui->lineEditLowLimit->setInputRange(INT64_MIN, INT64_MAX);
+            ui->lineEditHighLimit->setInputRange(INT64_MIN, INT64_MAX);
+            ui->lineEditLowLimit->setInputMode(NumericLineEdit::Int64Mode);
+            ui->lineEditHighLimit->setInputMode(NumericLineEdit::Int64Mode);
+        break;
+
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            ui->lineEditStepValue->setInputRange((quint64)1, UINT64_MAX - 1);
+            ui->lineEditStepValue->setInputMode(NumericLineEdit::UInt64Mode);
+            ui->lineEditLowLimit->setInputRange((quint64)0, UINT64_MAX);
+            ui->lineEditHighLimit->setInputRange((quint64)0, UINT64_MAX);
+            ui->lineEditLowLimit->setInputMode(NumericLineEdit::UInt64Mode);
+            ui->lineEditHighLimit->setInputMode(NumericLineEdit::UInt64Mode);
+        break;
     }
 
     updateLimits();

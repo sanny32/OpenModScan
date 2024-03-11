@@ -322,9 +322,9 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, qint32 value
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
 
     if(swapped)
-        breakLong(value, values[1], values[0], order);
+        breakInt32(value, values[1], values[0], order);
     else
-        breakLong(value, values[0], values[1], order);
+        breakInt32(value, values[0], values[1], order);
 
     data.setValues(values);
     return data;
@@ -627,7 +627,7 @@ void ModbusClient::on_writeReply()
         if (reply->error() == QModbusDevice::ProtocolError)
         {
             ModbusException ex(raw.exceptionCode());
-            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatByteValue(DataDisplayMode::Hex, ex)), requestId);
+            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatUInt8Value(DataDisplayMode::Hex, ex)), requestId);
         }
         else if(reply->error() != QModbusDevice::NoError)
             emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);

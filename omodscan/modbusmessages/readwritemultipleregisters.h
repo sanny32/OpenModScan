@@ -51,7 +51,7 @@ public:
     /// \return
     ///
     quint16 readStartAddress() const {
-        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
+        return makeUInt16(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -59,7 +59,7 @@ public:
     /// \return
     ///
     quint16 readLength() const {
-        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
+        return makeUInt16(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -67,7 +67,7 @@ public:
     /// \return
     ///
     quint16 writeStartAddress() const {
-        return makeWord(at(5), at(4), ByteOrder::LittleEndian);
+        return makeUInt16(at(5), at(4), ByteOrder::LittleEndian);
     }
 
     ///
@@ -75,7 +75,7 @@ public:
     /// \return
     ///
     quint16 writeLength() const {
-        return makeWord(at(7), at(6), ByteOrder::LittleEndian);
+        return makeUInt16(at(7), at(6), ByteOrder::LittleEndian);
     }
 
     ///

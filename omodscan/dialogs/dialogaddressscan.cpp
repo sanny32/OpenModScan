@@ -58,7 +58,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             const auto value = _data.value(idx);
             const auto pointType = _data.registerType();
             auto result = _hexView ? formatHexValue(pointType, value, _byteOrder, outValue) :
-                                    formatDecimalValue(pointType, value, _byteOrder, outValue);
+                                    formatUInt16Value(pointType, value, _byteOrder, outValue);
 
             return _data.hasValue(idx) ? result.remove('<').remove('>') : "-";
         }

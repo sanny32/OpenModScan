@@ -215,6 +215,10 @@ void MainWindow::on_awake()
         ui->actionSwappedInt32->setChecked(ddm == DataDisplayMode::SwappedInt32);
         ui->actionUInt32->setChecked(ddm == DataDisplayMode::UInt32);
         ui->actionSwappedUInt32->setChecked(ddm == DataDisplayMode::SwappedUInt32);
+        ui->actionInt64->setChecked(ddm == DataDisplayMode::Int64);
+        ui->actionSwappedInt64->setChecked(ddm == DataDisplayMode::SwappedInt64);
+        ui->actionUInt64->setChecked(ddm == DataDisplayMode::UInt64);
+        ui->actionSwappedUInt64->setChecked(ddm == DataDisplayMode::SwappedUInt64);
         ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
         ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
@@ -549,9 +553,44 @@ void MainWindow::on_actionUInt32_triggered()
     updateDataDisplayMode(DataDisplayMode::UInt32);
 }
 
+///
+/// \brief MainWindow::on_actionSwappedUInt32_triggered
+///
 void MainWindow::on_actionSwappedUInt32_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::SwappedUInt32);
+}
+
+///
+/// \brief MainWindow::on_actionInt64_triggered
+///
+void MainWindow::on_actionInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::Int64);
+}
+
+///
+/// \brief MainWindow::on_actionSwappedInt64_triggered
+///
+void MainWindow::on_actionSwappedInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::SwappedInt64);
+}
+
+///
+/// \brief MainWindow::on_actionUInt64_triggered
+///
+void MainWindow::on_actionUInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::UInt64);
+}
+
+///
+/// \brief MainWindow::on_actionSwappedUInt64_triggered
+///
+void MainWindow::on_actionSwappedUInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::SwappedUInt64);
 }
 
 ///

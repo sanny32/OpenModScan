@@ -205,7 +205,7 @@ public:
     /// \return
     ///
     QString toString(DataDisplayMode mode) const {
-        return formatByteArray(mode, *this);
+        return formatUInt8Array(mode, *this);
     }
 
     ///

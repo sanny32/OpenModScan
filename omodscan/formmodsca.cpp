@@ -662,7 +662,7 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
     else if (reply->error() == QModbusDevice::ProtocolError)
     {
         const auto ex = ModbusException(response.exceptionCode());
-        const auto errorString = QString("%1 (%2)").arg(ex, formatByteValue(DataDisplayMode::Hex, ex));
+        const auto errorString = QString("%1 (%2)").arg(ex, formatUInt8Value(DataDisplayMode::Hex, ex));
         ui->outputWidget->setStatus(errorString);
     }
     else

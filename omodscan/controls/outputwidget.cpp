@@ -208,11 +208,11 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
 
             case DataDisplayMode::UInt16:
-                itemData.ValueStr = formatDecimalValue(pointType, value, byteOrder, itemData.Value);
+                itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, itemData.Value);
             break;
 
             case DataDisplayMode::Int16:
-                itemData.ValueStr = formatIntegerValue(pointType, value, byteOrder, itemData.Value);
+                itemData.ValueStr = formatInt16Value(pointType, value, byteOrder, itemData.Value);
             break;
 
             case DataDisplayMode::Hex:
@@ -240,25 +240,46 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
 
             case DataDisplayMode::Int32:
-                itemData.ValueStr = formatLongValue(pointType, value, _lastData.value(i+1), byteOrder,
+                itemData.ValueStr = formatInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedInt32:
-                itemData.ValueStr = formatLongValue(pointType, _lastData.value(i+1), value, byteOrder,
+                itemData.ValueStr = formatInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
 
             break;
 
             case DataDisplayMode::UInt32:
-                itemData.ValueStr = formatUnsignedLongValue(pointType, value, _lastData.value(i+1), byteOrder,
+                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedUInt32:
-                itemData.ValueStr = formatUnsignedLongValue(pointType, _lastData.value(i+1), value, byteOrder,
+                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
+
+            case DataDisplayMode::Int64:
+                itemData.ValueStr = formatInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
+
+            case DataDisplayMode::SwappedInt64:
+                itemData.ValueStr = formatInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                                                     byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+
+                break;
+
+            case DataDisplayMode::UInt64:
+                itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
+
+            case DataDisplayMode::SwappedUInt64:
+                itemData.ValueStr = formatUInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
         }
     }
 

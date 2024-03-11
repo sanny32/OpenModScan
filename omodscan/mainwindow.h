@@ -64,6 +64,10 @@ private slots:
     void on_actionSwappedInt32_triggered();
     void on_actionUInt32_triggered();
     void on_actionSwappedUInt32_triggered();
+    void on_actionInt64_triggered();
+    void on_actionSwappedInt64_triggered();
+    void on_actionUInt64_triggered();
+    void on_actionSwappedUInt64_triggered();
     void on_actionHex_triggered();
     void on_actionFloatingPt_triggered();
     void on_actionSwappedFP_triggered();

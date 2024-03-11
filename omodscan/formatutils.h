@@ -11,12 +11,12 @@
 
 
 ///
-/// \brief formatByteValue
+/// \brief formatUInt8Value
 /// \param mode
 /// \param c
 /// \return
 ///
-inline QString formatByteValue(DataDisplayMode mode, quint8 c)
+inline QString formatUInt8Value(DataDisplayMode mode, quint8 c)
 {
     switch(mode)
     {
@@ -30,12 +30,12 @@ inline QString formatByteValue(DataDisplayMode mode, quint8 c)
 }
 
 ///
-/// \brief formatByteArray
+/// \brief formatUInt8Array
 /// \param mode
 /// \param ar
 /// \return
 ///
-inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
+inline QString formatUInt8Array(DataDisplayMode mode, const QByteArray& ar)
 {
     QStringList values;
     for(quint8 i : ar)
@@ -55,18 +55,18 @@ inline QString formatByteArray(DataDisplayMode mode, const QByteArray& ar)
 }
 
 ///
-/// \brief formatWordArray
+/// \brief formatUInt16Array
 /// \param mode
 /// \param ar
 /// \param order
 /// \return
 ///
-inline QString formatWordArray(DataDisplayMode mode, const QByteArray& ar, ByteOrder order)
+inline QString formatUInt16Array(DataDisplayMode mode, const QByteArray& ar, ByteOrder order)
 {
     QStringList values;
     for(int i = 0; i < ar.size(); i+=2)
     {
-        const quint16 value = makeWord(ar[i+1], ar[i], order);
+        const quint16 value = makeUInt16(ar[i+1], ar[i], order);
         switch(mode)
         {
         case DataDisplayMode::UInt16:
@@ -84,12 +84,12 @@ inline QString formatWordArray(DataDisplayMode mode, const QByteArray& ar, ByteO
 }
 
 ///
-/// \brief formatWordValue
+/// \brief formatUInt16Value
 /// \param mode
 /// \param v
 /// \return
 ///
-inline QString formatWordValue(DataDisplayMode mode, quint16 v)
+inline QString formatUInt16Value(DataDisplayMode mode, quint16 v)
 {
     switch(mode)
     {
@@ -132,13 +132,13 @@ inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint1
 }
 
 ///
-/// \brief formatDecimalValue
+/// \brief formatUInt16Value
 /// \param pointType
 /// \param value
 /// \param outValue
 /// \return
 ///
-inline QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
+inline QString formatUInt16Value(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
     value = toByteOrderValue(value, order);
@@ -161,13 +161,13 @@ inline QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint
 }
 
 ///
-/// \brief formatIntegerValue
+/// \brief formatInt16Value
 /// \param pointType
 /// \param value
 /// \param outValue
 /// \return
 ///
-inline QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value, ByteOrder order, QVariant& outValue)
+inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
     value = toByteOrderValue(value, order);
@@ -255,7 +255,7 @@ inline QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16
 }
 
 ///
-/// \brief formatLongValue
+/// \brief formatInt32Value
 /// \param pointType
 /// \param value1
 /// \param value2
@@ -264,7 +264,7 @@ inline QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16
 /// \param outValue
 /// \return
 ///
-inline QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
+inline QString formatInt32Value(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -279,9 +279,9 @@ inline QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 
         {
             if(flag) break;
 
-            const qint32 value = makeLong(value1, value2, order);
+            const qint32 value = makeInt32(value1, value2, order);
             outValue = value;
-            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
+            result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
         }
         break;
         default:
@@ -291,7 +291,7 @@ inline QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 
 }
 
 ///
-/// \brief formatUnsignedLongValue
+/// \brief formatUInt32Value
 /// \param pointType
 /// \param value1
 /// \param value2
@@ -300,7 +300,7 @@ inline QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 
 /// \param outValue
 /// \return
 ///
-inline QString formatUnsignedLongValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
+inline QString formatUInt32Value(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -315,9 +315,9 @@ inline QString formatUnsignedLongValue(QModbusDataUnit::RegisterType pointType, 
         {
             if(flag) break;
 
-            const quint32 value = makeULong(value1, value2, order);
+            const quint32 value = makeUInt32(value1, value2, order);
             outValue = value;
-            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
+            result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
         }
         break;
         default:
@@ -356,6 +356,82 @@ inline QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint1
             const double value = makeDouble(value1, value2, value3, value4, order);
             outValue = value;
             result = QLocale().toString(value, 'g', 16);
+        }
+        break;
+        default:
+            break;
+    }
+    return result;
+}
+
+///
+/// \brief formatInt64Value
+/// \param pointType
+/// \param value1
+/// \param value2
+/// \param value3
+/// \param value4
+/// \param order
+/// \param flag
+/// \param outValue
+/// \return
+///
+inline QString formatInt64Value(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, quint16 value3, quint16 value4, ByteOrder order, bool flag, QVariant& outValue)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
+
+            const qint64 value = makeInt64(value1, value2, value3, value4, order);
+            outValue = value;
+            result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
+        }
+        break;
+        default:
+            break;
+    }
+    return result;
+}
+
+///
+/// \brief formatUInt64Value
+/// \param pointType
+/// \param value1
+/// \param value2
+/// \param value3
+/// \param value4
+/// \param order
+/// \param flag
+/// \param outValue
+/// \return
+///
+inline QString formatUInt64Value(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, quint16 value3, quint16 value4, ByteOrder order, bool flag, QVariant& outValue)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
+
+            const quint64 value = makeUInt64(value1, value2, value3, value4, order);
+            outValue = value;
+            result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
         }
         break;
         default:

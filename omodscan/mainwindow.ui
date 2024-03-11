@@ -103,8 +103,9 @@
      <addaction name="actionShowTraffic"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
-     <addaction name="actionUInt16"/>
+     <addaction name="actionHex"/>
      <addaction name="actionInt16"/>
+     <addaction name="actionUInt16"/>
      <addaction name="actionInt32"/>
      <addaction name="actionSwappedInt32"/>
      <addaction name="actionUInt32"/>
@@ -113,7 +114,6 @@
      <addaction name="actionSwappedInt64"/>
      <addaction name="actionUInt64"/>
      <addaction name="actionSwappedUInt64"/>
-     <addaction name="actionHex"/>
      <addaction name="actionFloatingPt"/>
      <addaction name="actionSwappedFP"/>
      <addaction name="actionDblFloat"/>

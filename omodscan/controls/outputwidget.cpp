@@ -586,10 +586,12 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 
     int cx = rc.left();
     int cy = rcStatus.bottom();
+    int maxWidth = 0;
     for(int i = 0; i < _listModel->rowCount(); ++i)
     {
         const auto text = _listModel->data(_listModel->index(i), Qt::DisplayRole).toString().trimmed();
         auto rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
+        maxWidth = qMax(maxWidth, rcItem.width());
 
         if(rcItem.right() > rc.right()) break;
         else if(rcItem.bottom() < rc.bottom())
@@ -599,7 +601,7 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
         else
         {
             cy = rcStatus.bottom();
-            cx = rcItem.right() + 10;
+            cx = rcItem.left() + maxWidth + 10;
 
             rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
             if(rcItem.right() > rc.right()) break;

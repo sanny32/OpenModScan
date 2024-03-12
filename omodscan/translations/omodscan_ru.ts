@@ -577,186 +577,186 @@
         <translation>MODBUS Сканер</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="28"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="478"/>
         <source>Baud Rate</source>
         <translation>Скорость</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="157"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="619"/>
         <source>Connection</source>
         <translation>Подключение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="186"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="654"/>
         <source>Serial port</source>
         <translation>Порт подключения</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="205"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="682"/>
         <source>Address Range</source>
         <translation>Диапазон IP адресов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="217"/>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="340"/>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="595"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="160"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="703"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="841"/>
         <source>from</source>
         <translation>с</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="224"/>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="347"/>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="624"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="189"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="710"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="848"/>
         <source>to</source>
         <translation>по</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="278"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="764"/>
         <source>Subnet Mask</source>
         <translation>Маска подсети</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="303"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="795"/>
         <source>Port Range</source>
         <translation>Диапазон портов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="392"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="139"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="893"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="142"/>
         <source>Start Scan</source>
         <translation>Сканировать</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="401"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="908"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scanning:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Сканирование:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="408"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="915"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="415"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="922"/>
         <source>Port: </source>
         <translation>Порт: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="422"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="929"/>
         <source>Baud Rate: </source>
         <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="429"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="936"/>
         <source>Data Bits: </source>
         <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="436"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="943"/>
         <source>Parity: </source>
         <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="443"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="950"/>
         <source>Stop Bits: </source>
         <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="450"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="957"/>
         <source>Device Id: </source>
         <translation>Узел: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="475"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="982"/>
         <source>Scan Time</source>
         <translation>Вермя сканирования</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="498"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="27"/>
         <source>Data Bits</source>
         <translation>Биты данных</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="524"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="62"/>
         <source>Parity</source>
         <translation>Четность</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="530"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="77"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="22"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="540"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="87"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="28"/>
         <source>Odd</source>
         <translation>Нечет</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="547"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="94"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="25"/>
         <source>Even</source>
         <translation>Чёт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="557"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="104"/>
         <source>Stop Bits</source>
         <translation>Стоповые биты</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="583"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="139"/>
         <source>Device Id</source>
         <translation>Узел</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="659"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="224"/>
         <source>Modbus Request</source>
         <translation>Запрос Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="677"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="239"/>
         <source>Function</source>
         <translation>Функция</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="684"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="257"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="713"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="286"/>
         <source>Length</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="754"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="326"/>
         <source>Response Timeout</source>
         <translation>Таймаут ответа</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="793"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="371"/>
         <source>msec</source>
         <translation>мсек</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="815"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="380"/>
         <source>Retry On Timeout</source>
         <translation>Повторить по таймауту</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="862"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="397"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scan Results:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Результаты:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="869"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="252"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="404"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="255"/>
         <source>PORT: Device Id (serial port settings)</source>
         <translation>Порт: Узел (параметры порта)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="891"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="426"/>
         <source>Clear Results</source>
         <translation>Очистить результаты</translation>
     </message>
@@ -771,87 +771,87 @@
         <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="139"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="142"/>
         <source>Stop Scan</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="271"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="274"/>
         <source>Address: port (Device Id)</source>
         <translation>Адрес: порт (Узел)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="309"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="312"/>
         <source>Clear previous scan results?</source>
         <translation>Очистить результаты предыдущего сканирования?</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="341"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="345"/>
         <source>Baud Rate:</source>
         <translation>Скорость бит/с:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="342"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="346"/>
         <source>Data Bits:</source>
         <translation>Биты данных:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="343"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="347"/>
         <source>Parity:</source>
         <translation>Четность:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="344"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="348"/>
         <source>Stop Bits:</source>
         <translation>Стоповые биты:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="345"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="349"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="346"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="350"/>
         <source>Port:</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="347"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="351"/>
         <source>Device Id:</source>
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="416"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="420"/>
         <source>Baud Rate: %1</source>
         <translation>Скорость бит/с: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="417"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="421"/>
         <source>Data Bits: %1</source>
         <translation>Биты данных: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="418"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="422"/>
         <source>Parity: %1</source>
         <translation>Четность: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="419"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="423"/>
         <source>Stop Bits: %1</source>
         <translation>Стоповые биты: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="423"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="427"/>
         <source>Address: %1</source>
         <translation>Адрес: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="424"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="428"/>
         <source>Port: %1</source>
         <translation>Порт: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="427"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="431"/>
         <source>Device Id: %1</source>
         <translation>Узел: %1</translation>
     </message>
@@ -1275,12 +1275,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>Значение: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="180"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="174"/>
         <source>Auto Simulation</source>
         <translation>Симуляция</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="43"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="64"/>
         <source>Value, (HEX): </source>
         <translation>Значение, (Шестн): </translation>
     </message>
@@ -1498,353 +1498,417 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="97"/>
-        <location filename="../mainwindow.ui" line="679"/>
+        <location filename="../mainwindow.ui" line="708"/>
         <source>Byte Order</source>
-        <translation>Порядок байтов</translation>
+        <translation>Порядок байт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="123"/>
+        <location filename="../mainwindow.ui" line="127"/>
         <source>Extended</source>
         <translation>Расширенные параметры</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="144"/>
+        <location filename="../mainwindow.ui" line="148"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="148"/>
+        <location filename="../mainwindow.ui" line="152"/>
         <source>Config</source>
         <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="152"/>
+        <location filename="../mainwindow.ui" line="156"/>
         <source>Colors</source>
         <translation>Цвета</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="163"/>
+        <location filename="../mainwindow.ui" line="167"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="177"/>
+        <location filename="../mainwindow.ui" line="181"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="186"/>
+        <location filename="../mainwindow.ui" line="190"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="200"/>
-        <location filename="../mainwindow.ui" line="574"/>
+        <location filename="../mainwindow.ui" line="204"/>
+        <location filename="../mainwindow.ui" line="603"/>
         <source>Toolbar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="224"/>
+        <location filename="../mainwindow.ui" line="228"/>
         <source>Display Bar</source>
         <translation>Панель отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="257"/>
+        <location filename="../mainwindow.ui" line="274"/>
         <source>New</source>
         <translation>Новый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="269"/>
+        <location filename="../mainwindow.ui" line="286"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="277"/>
+        <location filename="../mainwindow.ui" line="294"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="286"/>
+        <location filename="../mainwindow.ui" line="303"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="294"/>
+        <location filename="../mainwindow.ui" line="311"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="303"/>
+        <location filename="../mainwindow.ui" line="320"/>
         <source>Print...</source>
         <translation>Печать...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="311"/>
+        <location filename="../mainwindow.ui" line="328"/>
         <source>Print Setup...</source>
         <translation>Настройка печати...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="316"/>
+        <location filename="../mainwindow.ui" line="333"/>
         <source>Recent File</source>
         <translation>Последние файлы</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="321"/>
+        <location filename="../mainwindow.ui" line="338"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="326"/>
+        <location filename="../mainwindow.ui" line="343"/>
         <source>Connect</source>
         <translation>Подключиться</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="338"/>
+        <location filename="../mainwindow.ui" line="355"/>
         <source>Disconnect</source>
         <translation>Отключиться</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="346"/>
+        <location filename="../mainwindow.ui" line="363"/>
         <source>Enable</source>
         <translation>Вкл</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="351"/>
+        <location filename="../mainwindow.ui" line="368"/>
         <source>Disable</source>
         <translation>Выкл</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="356"/>
+        <location filename="../mainwindow.ui" line="373"/>
         <source>Save Config</source>
         <translation>Сохранить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="361"/>
+        <location filename="../mainwindow.ui" line="378"/>
         <source>Restore Now</source>
         <translation>Восстановить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="370"/>
+        <location filename="../mainwindow.ui" line="387"/>
         <source>Quick Connect</source>
         <translation>Быстрое подключение</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="379"/>
+        <location filename="../mainwindow.ui" line="396"/>
         <source>Data Definition</source>
         <translation>Настройки отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="391"/>
+        <location filename="../mainwindow.ui" line="408"/>
         <source>Show Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="403"/>
+        <location filename="../mainwindow.ui" line="420"/>
         <source>Show Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="415"/>
+        <location filename="../mainwindow.ui" line="432"/>
         <source>Binary</source>
         <translation>Двоичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="430"/>
+        <location filename="../mainwindow.ui" line="447"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="445"/>
+        <location filename="../mainwindow.ui" line="731"/>
+        <source>32-bit Integer</source>
+        <translation>32-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="746"/>
+        <location filename="../mainwindow.ui" line="749"/>
+        <source>Swapped 32-bit Integer</source>
+        <translation>Перевернутое 32-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="764"/>
+        <source>Unsigned 32-bit Integer</source>
+        <translation>Беззнаковое 32-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="779"/>
+        <location filename="../mainwindow.ui" line="782"/>
+        <source>Swapped Unsigned 32-bit Integer</source>
+        <translation>Перевернутое беззнаковое 32-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="808"/>
+        <source>64-bit Integer</source>
+        <translation>64-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="823"/>
+        <source>Swapped 64-bit Integer</source>
+        <translation>Перевернутое 64-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="838"/>
+        <source>Unsigned 64-bit Integer</source>
+        <translation>Беззнаковое 64-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="853"/>
+        <source>Swapped Unsigned 64-bit Integer</source>
+        <translation>Перевернутое беззнаковое 64-бит целое</translation>
+    </message>
+    <message>
         <source>Unsigned Decimal</source>
-        <translation>Беззнаковый десятичный</translation>
+        <translation type="vanished">Беззнаковый десятичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="460"/>
         <source>Integer</source>
-        <translation>Целый</translation>
+        <translation type="vanished">Целый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="475"/>
         <source>Floating Pt</source>
-        <translation>С плавающей точкой</translation>
+        <translation type="vanished">С плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="490"/>
         <source>Swapped FP</source>
-        <translation>Перевернутое с плавающей точкой</translation>
+        <translation type="vanished">Перевернутое с плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="505"/>
         <source>Dbl Float</source>
-        <translation>Двойной точности</translation>
+        <translation type="vanished">Двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="520"/>
         <source>Swapped Dbl</source>
-        <translation>Перевернутое двойной точности</translation>
+        <translation type="vanished">Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="531"/>
+        <location filename="../mainwindow.ui" line="560"/>
         <source>Hex Addresses</source>
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="536"/>
+        <location filename="../mainwindow.ui" line="565"/>
         <source>Force Coils</source>
         <translation>Предустановка coils</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="541"/>
+        <location filename="../mainwindow.ui" line="570"/>
         <source>Preset Regs</source>
         <translation>Предустановка регистров</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="546"/>
+        <location filename="../mainwindow.ui" line="575"/>
         <source>Mask Write</source>
         <translation>Запись по маске</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="551"/>
+        <location filename="../mainwindow.ui" line="580"/>
         <source>User Msg</source>
         <translation>Пользовательская команда</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="556"/>
+        <location filename="../mainwindow.ui" line="585"/>
         <source>Text Capture</source>
         <translation>Захват в файл</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="561"/>
+        <location filename="../mainwindow.ui" line="590"/>
         <source>Capture Off</source>
         <translation>Остановить захват</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="566"/>
+        <location filename="../mainwindow.ui" line="595"/>
         <source>Reset Ctrs</source>
         <translation>Сброс счетчиков</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="582"/>
+        <location filename="../mainwindow.ui" line="611"/>
         <source>Status Bar</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="590"/>
+        <location filename="../mainwindow.ui" line="619"/>
         <source>Dsiplay Bar</source>
         <translation>Панель отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="595"/>
+        <location filename="../mainwindow.ui" line="624"/>
         <source>Background</source>
         <translation>Задний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="600"/>
+        <location filename="../mainwindow.ui" line="629"/>
         <source>Foreground</source>
         <translation>Передний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="605"/>
+        <location filename="../mainwindow.ui" line="634"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="610"/>
+        <location filename="../mainwindow.ui" line="639"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="615"/>
+        <location filename="../mainwindow.ui" line="644"/>
         <source>Cascade</source>
         <translation>Каскадно</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="620"/>
+        <location filename="../mainwindow.ui" line="649"/>
         <source>Tile</source>
         <translation>Замостить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="684"/>
-        <location filename="../mainwindow.ui" line="687"/>
+        <location filename="../mainwindow.ui" line="713"/>
+        <location filename="../mainwindow.ui" line="716"/>
         <source>MODBUS Scanner</source>
         <translation>Cканер MODBUS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="702"/>
         <source>Long Integer</source>
-        <translation>Длинное целое</translation>
+        <translation type="vanished">Длинное целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="717"/>
         <source>Swapped LI</source>
-        <translation>Перевернутое ДЦ</translation>
+        <translation type="vanished">Перевернутое ДЦ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="720"/>
         <source>Swapped Long Integer</source>
-        <translation>Перевернутое длинное целое</translation>
+        <translation type="vanished">Перевернутое длинное целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="735"/>
         <source>Unsigned Long Integer</source>
-        <translation>Беззнаковое длинное целое</translation>
+        <translation type="vanished">Беззнаковое длинное целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="750"/>
         <source>Swapped Unsigned LI</source>
-        <translation>Перевернутое беззнаковое ДЦ</translation>
+        <translation type="vanished">Перевернутое беззнаковое ДЦ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="753"/>
         <source>Swapped Unsigned Long Integer</source>
-        <translation>Перевернутое беззнаковое длинное целое</translation>
+        <translation type="vanished">Перевернутое беззнаковое длинное целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="761"/>
-        <location filename="../mainwindow.ui" line="764"/>
+        <location filename="../mainwindow.ui" line="790"/>
+        <location filename="../mainwindow.ui" line="793"/>
         <source>Msg Parser</source>
         <translation>Анализатор сообщений</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="629"/>
+        <location filename="../mainwindow.ui" line="658"/>
         <source>About Open ModScan...</source>
         <translation>О программе Open ModScan...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="634"/>
+        <location filename="../mainwindow.ui" line="462"/>
+        <source>Unsigned 16-bit Intger</source>
+        <translation>Беззнаковое 16-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="477"/>
+        <source>16-bit Integer</source>
+        <translation>16-бит целое</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="492"/>
+        <location filename="../mainwindow.ui" line="495"/>
+        <source>Float</source>
+        <translation>С плавающей точкой</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="510"/>
+        <location filename="../mainwindow.ui" line="513"/>
+        <source>Swapped Float</source>
+        <translation>Перевернутое с плавающей точкой</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="528"/>
+        <location filename="../mainwindow.ui" line="531"/>
+        <source>Double</source>
+        <translation>Двойной точности</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="546"/>
+        <location filename="../mainwindow.ui" line="549"/>
+        <source>Swapped Double</source>
+        <translation>Перевернутое двойной точности</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="663"/>
         <source>Windows...</source>
         <translation>Окна...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="642"/>
+        <location filename="../mainwindow.ui" line="671"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="650"/>
+        <location filename="../mainwindow.ui" line="679"/>
         <source>Русский</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="655"/>
+        <location filename="../mainwindow.ui" line="684"/>
         <source>Address scan</source>
         <translation>Сканирование адресов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="301"/>
-        <location filename="../mainwindow.cpp" line="340"/>
-        <location filename="../mainwindow.cpp" line="430"/>
-        <location filename="../mainwindow.cpp" line="441"/>
+        <location filename="../mainwindow.cpp" line="305"/>
+        <location filename="../mainwindow.cpp" line="344"/>
+        <location filename="../mainwindow.cpp" line="434"/>
+        <location filename="../mainwindow.cpp" line="445"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="990"/>
+        <location filename="../mainwindow.cpp" line="1029"/>
         <source>%1 was not found</source>
         <translation>%1 не найден</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="991"/>
+        <location filename="../mainwindow.cpp" line="1030"/>
         <source>Failed to open %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
@@ -1857,29 +1921,29 @@ Valid Slave Responses: %2</source>
         <translation>Некорректный запрос Modbus</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="457"/>
-        <location filename="../modbusclient.cpp" line="641"/>
+        <location filename="../modbusclient.cpp" line="489"/>
+        <location filename="../modbusclient.cpp" line="673"/>
         <source>Coil Write Failure</source>
         <translation>Ошибка записи в Coil регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="461"/>
-        <location filename="../modbusclient.cpp" line="646"/>
+        <location filename="../modbusclient.cpp" line="493"/>
+        <location filename="../modbusclient.cpp" line="678"/>
         <source>Register Write Failure</source>
         <translation>Ошибка записи в регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="503"/>
+        <location filename="../modbusclient.cpp" line="535"/>
         <source>Mask Write Register Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="650"/>
+        <location filename="../modbusclient.cpp" line="682"/>
         <source>Mask Register Write Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="668"/>
+        <location filename="../modbusclient.cpp" line="700"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -2178,12 +2242,12 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="760"/>
+        <location filename="../controls/outputwidget.cpp" line="783"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="822"/>
+        <location filename="../controls/outputwidget.cpp" line="845"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>

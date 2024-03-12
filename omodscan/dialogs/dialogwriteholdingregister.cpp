@@ -25,17 +25,23 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
     if(simParams.Mode != SimulationMode::No)
     {
-        ui->pushButtonSimulation->setIcon(QIcon(":/res/pointGreen.png"));
-        ui->pushButtonSimulation->setStyleSheet("text-align:left;");
-        ui->pushButtonSimulation->setLayout(new QGridLayout);
+        QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
+        iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
+        iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
         QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
         textLabel->setAlignment(Qt::AlignCenter);
         textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
+        auto layout = new QHBoxLayout(ui->pushButtonSimulation);
+        layout->setContentsMargins(4,0,4,0);
+        layout->addWidget(iconLabel);
+        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+        layout->addWidget(textLabel);
+        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+
         ui->pushButtonSimulation->setText(QString());
-        ui->pushButtonSimulation->layout()->setContentsMargins(4,0,4,0);
-        ui->pushButtonSimulation->layout()->addWidget(textLabel);
+        ui->pushButtonSimulation->setLayout(layout);
     }
 
     switch(mode)

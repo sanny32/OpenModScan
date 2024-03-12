@@ -207,12 +207,12 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 itemData.ValueStr = formatBinaryValue(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Decimal:
-                itemData.ValueStr = formatDecimalValue(pointType, value, byteOrder, itemData.Value);
+            case DataDisplayMode::UInt16:
+                itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Integer:
-                itemData.ValueStr = formatIntegerValue(pointType, value, byteOrder, itemData.Value);
+            case DataDisplayMode::Int16:
+                itemData.ValueStr = formatInt16Value(pointType, value, byteOrder, itemData.Value);
             break;
 
             case DataDisplayMode::Hex:
@@ -239,26 +239,47 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                                            byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::LongInteger:
-                itemData.ValueStr = formatLongValue(pointType, value, _lastData.value(i+1), byteOrder,
+            case DataDisplayMode::Int32:
+                itemData.ValueStr = formatInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::SwappedLI:
-                itemData.ValueStr = formatLongValue(pointType, _lastData.value(i+1), value, byteOrder,
+            case DataDisplayMode::SwappedInt32:
+                itemData.ValueStr = formatInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
 
             break;
 
-            case DataDisplayMode::UnsignedLongInteger:
-                itemData.ValueStr = formatUnsignedLongValue(pointType, value, _lastData.value(i+1), byteOrder,
+            case DataDisplayMode::UInt32:
+                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::SwappedUnsignedLI:
-                itemData.ValueStr = formatUnsignedLongValue(pointType, _lastData.value(i+1), value, byteOrder,
+            case DataDisplayMode::SwappedUInt32:
+                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
+
+            case DataDisplayMode::Int64:
+                itemData.ValueStr = formatInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
+
+            case DataDisplayMode::SwappedInt64:
+                itemData.ValueStr = formatInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                                                     byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+
+                break;
+
+            case DataDisplayMode::UInt64:
+                itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
+
+            case DataDisplayMode::SwappedUInt64:
+                itemData.ValueStr = formatUInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
         }
     }
 
@@ -565,10 +586,12 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 
     int cx = rc.left();
     int cy = rcStatus.bottom();
+    int maxWidth = 0;
     for(int i = 0; i < _listModel->rowCount(); ++i)
     {
         const auto text = _listModel->data(_listModel->index(i), Qt::DisplayRole).toString().trimmed();
         auto rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
+        maxWidth = qMax(maxWidth, rcItem.width());
 
         if(rcItem.right() > rc.right()) break;
         else if(rcItem.bottom() < rc.bottom())
@@ -578,7 +601,7 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
         else
         {
             cy = rcStatus.bottom();
-            cx = rcItem.right() + 10;
+            cx = rcItem.left() + maxWidth + 10;
 
             rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
             if(rcItem.right() > rc.right()) break;
@@ -783,10 +806,10 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
             {
                 case DataDisplayMode::FloatingPt:
                 case DataDisplayMode::SwappedFP:
-                case DataDisplayMode::LongInteger:
-                case DataDisplayMode::SwappedLI:
-                case DataDisplayMode::UnsignedLongInteger:
-                case DataDisplayMode::SwappedUnsignedLI:
+                case DataDisplayMode::Int32:
+                case DataDisplayMode::SwappedInt32:
+                case DataDisplayMode::UInt32:
+                case DataDisplayMode::SwappedUInt32:
                     if(index.row() % 2)
                         idx = _listModel->index(index.row() - 1);
                 break;

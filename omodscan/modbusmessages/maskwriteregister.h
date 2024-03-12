@@ -47,7 +47,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
+        return makeUInt16(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -55,7 +55,7 @@ public:
     /// \return
     ///
     quint16 andMask() const {
-        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
+        return makeUInt16(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -63,7 +63,7 @@ public:
     /// \return
     ///
     quint16 orMask() const {
-        return makeWord(at(5), at(4), ByteOrder::LittleEndian);
+        return makeUInt16(at(5), at(4), ByteOrder::LittleEndian);
     }
 };
 
@@ -111,7 +111,7 @@ public:
     /// \return
     ///
     quint16 address() const {
-        return makeWord(at(1), at(0), ByteOrder::LittleEndian);
+        return makeUInt16(at(1), at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -119,7 +119,7 @@ public:
     /// \return
     ///
     quint16 andMask() const {
-        return makeWord(at(3), at(2), ByteOrder::LittleEndian);
+        return makeUInt16(at(3), at(2), ByteOrder::LittleEndian);
     }
 
     ///
@@ -127,7 +127,7 @@ public:
     /// \return
     ///
     quint16 orMask() const {
-        return makeWord(at(5), at(4), ByteOrder::LittleEndian);
+        return makeUInt16(at(5), at(4), ByteOrder::LittleEndian);
     }
 };
 

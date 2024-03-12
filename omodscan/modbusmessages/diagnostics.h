@@ -48,7 +48,7 @@ public:
     /// \return
     ///
     quint16 subfunc() const {
-        return makeWord(ModbusMessage::at(1), ModbusMessage::at(0), ByteOrder::LittleEndian);
+        return makeUInt16(ModbusMessage::at(1), ModbusMessage::at(0), ByteOrder::LittleEndian);
     }
 
     ///
@@ -104,7 +104,7 @@ public:
     /// \return
     ///
     quint16 subfunc() const {
-        return makeWord(ModbusMessage::at(1), ModbusMessage::at(0), ByteOrder::LittleEndian);
+        return makeUInt16(ModbusMessage::at(1), ModbusMessage::at(0), ByteOrder::LittleEndian);
     }
 
     ///

@@ -47,7 +47,7 @@ public:
     /// \return
     ///
     quint16 checksum() const {
-        return makeWord(_data[_data.size() - 1], _data[_data.size() - 2], ByteOrder::LittleEndian);
+        return makeUInt16(_data[_data.size() - 1], _data[_data.size() - 2], ByteOrder::LittleEndian);
     }
 
     ///

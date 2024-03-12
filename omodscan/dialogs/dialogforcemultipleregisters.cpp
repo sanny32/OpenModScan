@@ -59,43 +59,43 @@ void DialogForceMultipleRegisters::accept()
             {
                 case DataDisplayMode::Binary:
                 case DataDisplayMode::Hex:
-                case DataDisplayMode::Decimal:
-                case DataDisplayMode::Integer:
+                case DataDisplayMode::UInt16:
+                case DataDisplayMode::Int16:
                 {
                     auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
                     _data[idx] = toByteOrderValue(numEdit->value<quint16>(), _writeParams.Order);
                 }
                 break;
 
-                case DataDisplayMode::LongInteger:
+                case DataDisplayMode::Int32:
                     if(!(idx % 2) && (idx + 1 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakLong(numEdit->value<qint32>(), _data[idx], _data[idx + 1], _writeParams.Order);
+                        breakInt32(numEdit->value<qint32>(), _data[idx], _data[idx + 1], _writeParams.Order);
                     }
                 break;
 
-                case DataDisplayMode::SwappedLI:
+                case DataDisplayMode::SwappedInt32:
                     if(!(idx % 2) && (idx + 1 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakLong(numEdit->value<qint32>(), _data[idx + 1], _data[idx], _writeParams.Order);
+                        breakInt32(numEdit->value<qint32>(), _data[idx + 1], _data[idx], _writeParams.Order);
                     }
                 break;
 
-                case DataDisplayMode::UnsignedLongInteger:
+                case DataDisplayMode::UInt32:
                     if(!(idx % 2) && (idx + 1 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakULong(numEdit->value<quint32>(), _data[idx], _data[idx + 1], _writeParams.Order);
+                        breakUInt32(numEdit->value<quint32>(), _data[idx], _data[idx + 1], _writeParams.Order);
                     }
                 break;
 
-                case DataDisplayMode::SwappedUnsignedLI:
+                case DataDisplayMode::SwappedUInt32:
                     if(!(idx % 2) && (idx + 1 < _data.size()))
                     {
                         auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
-                        breakULong(numEdit->value<quint32>(), _data[idx + 1], _data[idx], _writeParams.Order);
+                        breakUInt32(numEdit->value<quint32>(), _data[idx + 1], _data[idx], _writeParams.Order);
                     }
                 break;
 
@@ -130,6 +130,38 @@ void DialogForceMultipleRegisters::accept()
                         breakDouble(numEdit->value<double>(), _data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order);
                     }
                 break;
+
+                case DataDisplayMode::Int64:
+                    if(!(idx % 4) && (idx + 3 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakInt64(numEdit->value<qint64>(), _data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3], _writeParams.Order);
+                    }
+                break;
+
+                case DataDisplayMode::SwappedInt64:
+                    if(!(idx % 4) && (idx + 3 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakInt64(numEdit->value<qint64>(), _data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order);
+                    }
+                break;
+
+                case DataDisplayMode::UInt64:
+                    if(!(idx % 4) && (idx + 3 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakUInt64(numEdit->value<quint64>(), _data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3], _writeParams.Order);
+                    }
+                break;
+
+                case DataDisplayMode::SwappedUInt64:
+                    if(!(idx % 4) && (idx + 3 < _data.size()))
+                    {
+                        auto numEdit = (NumericLineEdit*)ui->tableWidget->cellWidget(i, j);
+                        breakUInt64(numEdit->value<quint64>(), _data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order);
+                    }
+                break;
             }
         }
     }
@@ -162,32 +194,32 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
         {
             case DataDisplayMode::Binary:
             case DataDisplayMode::Hex:
-            case DataDisplayMode::Decimal:
+            case DataDisplayMode::UInt16:
                 _data[i] = QRandomGenerator::global()->bounded(0, USHRT_MAX);
             break;
 
-            case DataDisplayMode::Integer:
+            case DataDisplayMode::Int16:
                 _data[i] = QRandomGenerator::global()->bounded(SHRT_MIN, SHRT_MAX);
             break;
 
-            case DataDisplayMode::LongInteger:
+            case DataDisplayMode::Int32:
                 if(!(i % 2) && (i + 1 < _data.size()))
-                    breakLong(QRandomGenerator::global()->bounded(INT_MIN, INT_MAX), _data[i], _data[i + 1], _writeParams.Order);
+                    breakInt32(QRandomGenerator::global()->bounded(INT_MIN, INT_MAX), _data[i], _data[i + 1], _writeParams.Order);
             break;
 
-            case DataDisplayMode::SwappedLI:
+            case DataDisplayMode::SwappedInt32:
                 if(!(i % 2) && (i + 1 < _data.size()))
-                    breakLong(QRandomGenerator::global()->bounded(INT_MIN, INT_MAX), _data[i + 1], _data[i], _writeParams.Order);
+                    breakInt32(QRandomGenerator::global()->bounded(INT_MIN, INT_MAX), _data[i + 1], _data[i], _writeParams.Order);
             break;
 
-            case DataDisplayMode::UnsignedLongInteger:
+            case DataDisplayMode::UInt32:
                 if(!(i % 2) && (i + 1 < _data.size()))
-                    breakULong(QRandomGenerator::global()->bounded(0U, UINT_MAX), _data[i], _data[i + 1], _writeParams.Order);
+                    breakUInt32(QRandomGenerator::global()->bounded(0U, UINT_MAX), _data[i], _data[i + 1], _writeParams.Order);
             break;
 
-            case DataDisplayMode::SwappedUnsignedLI:
+            case DataDisplayMode::SwappedUInt32:
                 if(!(i % 2) && (i + 1 < _data.size()))
-                    breakULong(QRandomGenerator::global()->bounded(0U, UINT_MAX), _data[i + 1], _data[i], _writeParams.Order);
+                    breakUInt32(QRandomGenerator::global()->bounded(0U, UINT_MAX), _data[i + 1], _data[i], _writeParams.Order);
             break;
 
             case DataDisplayMode::FloatingPt:
@@ -208,6 +240,26 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
             case DataDisplayMode::SwappedDbl:
                 if(!(i % 4) && (i + 3 < _data.size()))
                     breakDouble(QRandomGenerator::global()->bounded(100.), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::Int64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakInt64((qint64)QRandomGenerator::global()->generate64(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakInt64((qint64)QRandomGenerator::global()->generate64(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::UInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakUInt64(QRandomGenerator::global()->generate64(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedUInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakUInt64(QRandomGenerator::global()->generate64(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
             break;
         }
     }
@@ -233,47 +285,47 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
-        case DataDisplayMode::Decimal:
-            numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
+        case DataDisplayMode::UInt16:
+            numEdit = new NumericLineEdit(NumericLineEdit::Int32Mode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
-        case DataDisplayMode::Integer:
-            numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
+        case DataDisplayMode::Int16:
+            numEdit = new NumericLineEdit(NumericLineEdit::Int32Mode, ui->tableWidget);
             numEdit->setInputRange(SHRT_MIN, SHRT_MAX);
             numEdit->setValue((qint16)toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
-        case DataDisplayMode::LongInteger:
+        case DataDisplayMode::Int32:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
-                numEdit->setValue(makeLong(_data[idx], _data[idx + 1], _writeParams.Order));
+                numEdit = new NumericLineEdit(NumericLineEdit::Int32Mode, ui->tableWidget);
+                numEdit->setValue(makeInt32(_data[idx], _data[idx + 1], _writeParams.Order));
             }
         break;
 
-        case DataDisplayMode::SwappedLI:
+        case DataDisplayMode::SwappedInt32:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                numEdit = new NumericLineEdit(NumericLineEdit::DecMode, ui->tableWidget);
-                numEdit->setValue(makeLong(_data[idx + 1], _data[idx], _writeParams.Order));
+                numEdit = new NumericLineEdit(NumericLineEdit::Int32Mode, ui->tableWidget);
+                numEdit->setValue(makeInt32(_data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
 
-        case DataDisplayMode::UnsignedLongInteger:
+        case DataDisplayMode::UInt32:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                numEdit = new NumericLineEdit(NumericLineEdit::UnsignedMode, ui->tableWidget);
-                numEdit->setValue(makeULong(_data[idx], _data[idx + 1], _writeParams.Order));
+                numEdit = new NumericLineEdit(NumericLineEdit::UInt32Mode, ui->tableWidget);
+                numEdit->setValue(makeUInt32(_data[idx], _data[idx + 1], _writeParams.Order));
             }
         break;
 
-        case DataDisplayMode::SwappedUnsignedLI:
+        case DataDisplayMode::SwappedUInt32:
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
-                numEdit = new NumericLineEdit(NumericLineEdit::UnsignedMode, ui->tableWidget);
-                numEdit->setValue(makeULong(_data[idx + 1], _data[idx], _writeParams.Order));
+                numEdit = new NumericLineEdit(NumericLineEdit::UInt32Mode, ui->tableWidget);
+                numEdit->setValue(makeUInt32(_data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
 
@@ -308,12 +360,44 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
                 numEdit->setValue(makeDouble(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
+
+        case DataDisplayMode::Int64:
+            if(!(idx % 4) && (idx + 3 < _data.size()))
+            {
+                numEdit = new NumericLineEdit(NumericLineEdit::Int64Mode, ui->tableWidget);
+                numEdit->setValue(makeInt64(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3], _writeParams.Order));
+            }
+        break;
+
+        case DataDisplayMode::SwappedInt64:
+            if(!(idx % 4) && (idx + 3 < _data.size()))
+            {
+                numEdit = new NumericLineEdit(NumericLineEdit::Int64Mode, ui->tableWidget);
+                numEdit->setValue(makeInt64(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order));
+            }
+        break;
+
+        case DataDisplayMode::UInt64:
+            if(!(idx % 4) && (idx + 3 < _data.size()))
+            {
+                numEdit = new NumericLineEdit(NumericLineEdit::UInt64Mode, ui->tableWidget);
+                numEdit->setValue(makeUInt64(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3], _writeParams.Order));
+            }
+        break;
+
+        case DataDisplayMode::SwappedUInt64:
+            if(!(idx % 4) && (idx + 3 < _data.size()))
+            {
+                numEdit = new NumericLineEdit(NumericLineEdit::UInt64Mode, ui->tableWidget);
+                numEdit->setValue(makeUInt64(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order));
+            }
+        break;
     }
 
     if(numEdit)
     {
         numEdit->setFrame(false);
-        numEdit->setMaximumWidth(80);
+        numEdit->setFixedWidth(150);
         numEdit->setAlignment(Qt::AlignCenter);
         numEdit->setToolTip(formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + idx, _hexView));
     }
@@ -330,7 +414,7 @@ QLineEdit* DialogForceMultipleRegisters::createLineEdit()
     auto lineEdit = new QLineEdit(ui->tableWidget);
     lineEdit->setText("-");
     lineEdit->setFrame(false);
-    lineEdit->setMaximumWidth(80);
+    lineEdit->setFixedWidth(150);
     lineEdit->setEnabled(false);
     lineEdit->setAlignment(Qt::AlignCenter);
     return lineEdit;
@@ -341,7 +425,7 @@ QLineEdit* DialogForceMultipleRegisters::createLineEdit()
 ///
 void DialogForceMultipleRegisters::updateTableWidget()
 {
-    const int columns = 8;
+    const int columns = 5;
     const auto length = _data.length();
 
     ui->tableWidget->clear();

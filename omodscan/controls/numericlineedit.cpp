@@ -109,7 +109,6 @@ void NumericLineEdit::setInputMode(InputMode mode)
                 _minValue = 0;
                 _maxValue = QVariant::fromValue(UINT64_MAX);
             break;
-
         }
     }
     emit rangeChanged(_minValue, _maxValue);

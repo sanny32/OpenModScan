@@ -106,8 +106,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setInputRange<quint64>(0, UINT64_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(params.Value.toULongLong());
-            break;
-
+        break;
     }
     ui->buttonBox->setFocus();
 }

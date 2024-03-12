@@ -816,6 +816,10 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 
                 case DataDisplayMode::DblFloat:
                 case DataDisplayMode::SwappedDbl:
+                case DataDisplayMode::Int64:
+                case DataDisplayMode::SwappedInt64:
+                case DataDisplayMode::UInt64:
+                case DataDisplayMode::SwappedUInt64:
                     if(index.row() % 4)
                        idx = _listModel->index(index.row() - index.row() % 4);
                 break;

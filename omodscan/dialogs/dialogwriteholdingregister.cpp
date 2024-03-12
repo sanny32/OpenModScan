@@ -23,6 +23,21 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
+    if(simParams.Mode != SimulationMode::No)
+    {
+        ui->pushButtonSimulation->setIcon(QIcon(":/res/pointGreen.png"));
+        ui->pushButtonSimulation->setStyleSheet("text-align:left;");
+        ui->pushButtonSimulation->setLayout(new QGridLayout);
+
+        QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
+        textLabel->setAlignment(Qt::AlignCenter);
+        textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+        ui->pushButtonSimulation->setText(QString());
+        ui->pushButtonSimulation->layout()->setContentsMargins(4,0,4,0);
+        ui->pushButtonSimulation->layout()->addWidget(textLabel);
+    }
+
     switch(mode)
     {
         case DataDisplayMode::Binary:

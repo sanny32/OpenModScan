@@ -393,7 +393,7 @@ inline QString formatInt64Value(QModbusDataUnit::RegisterType pointType, quint16
 
             const qint64 value = makeInt64(value1, value2, value3, value4, order);
             outValue = value;
-            result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
+            result = QString("<%1>").arg(value, 20, 10, QLatin1Char(' '));
         }
         break;
         default:
@@ -431,7 +431,7 @@ inline QString formatUInt64Value(QModbusDataUnit::RegisterType pointType, quint1
 
             const quint64 value = makeUInt64(value1, value2, value3, value4, order);
             outValue = value;
-            result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
+            result = QString("<%1>").arg(value, 20, 10, QLatin1Char('0'));
         }
         break;
         default:

@@ -1,10 +1,12 @@
 # Open ModScan
 Open ModScan is a free implimentation of modbus master (client) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://github.com/sanny32/OpenModScan/assets/13627951/aa912ece-4b76-44b4-9523-5b0b0156a64b)
+![image](https://github.com/sanny32/OpenModScan/assets/13627951/c2df0ea1-0f27-4d4b-8cc0-b6268caf8f11)
 
 
-![image](https://github.com/sanny32/OpenModScan/assets/13627951/77bee5d8-09a8-4845-8d64-02b7bf3cf592)
+
+![image](https://github.com/sanny32/OpenModScan/assets/13627951/2e24982e-3b32-4434-928e-6518505e48ae)
+
 
 
 ## Features
@@ -28,7 +30,8 @@ Registers
 
 Modbus Logging
 
-![image](https://github.com/sanny32/OpenModScan/assets/13627951/b3e43b25-ea7b-4beb-96c9-c7b9d6a65a03)
+![image](https://github.com/sanny32/OpenModScan/assets/13627951/69de27f0-b09b-4587-8493-6d1908610735)
+
 
     
 ## Extended Featues
@@ -52,7 +55,7 @@ Modbus Logging
   Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
   
 ## MIT License
-Copyright 2023 Alexandr Ananev [mail@ananev.org]
+Copyright 2024 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

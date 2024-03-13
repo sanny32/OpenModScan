@@ -103,13 +103,17 @@
      <addaction name="actionShowTraffic"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
-     <addaction name="actionUnsignedDecimal"/>
-     <addaction name="actionInteger"/>
-     <addaction name="actionLongInteger"/>
-     <addaction name="actionSwappedLI"/>
-     <addaction name="actionUnsignedLongInteger"/>
-     <addaction name="actionSwappedUnsignedLI"/>
      <addaction name="actionHex"/>
+     <addaction name="actionInt16"/>
+     <addaction name="actionUInt16"/>
+     <addaction name="actionInt32"/>
+     <addaction name="actionSwappedInt32"/>
+     <addaction name="actionUInt32"/>
+     <addaction name="actionSwappedUInt32"/>
+     <addaction name="actionInt64"/>
+     <addaction name="actionSwappedInt64"/>
+     <addaction name="actionUInt64"/>
+     <addaction name="actionSwappedUInt64"/>
      <addaction name="actionFloatingPt"/>
      <addaction name="actionSwappedFP"/>
      <addaction name="actionDblFloat"/>
@@ -223,6 +227,12 @@
    <property name="windowTitle">
     <string>Display Bar</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -230,15 +240,22 @@
     <bool>true</bool>
    </attribute>
    <addaction name="actionBinary"/>
-   <addaction name="actionUnsignedDecimal"/>
-   <addaction name="actionInteger"/>
    <addaction name="actionHex"/>
    <addaction name="separator"/>
-   <addaction name="actionLongInteger"/>
-   <addaction name="actionSwappedLI"/>
+   <addaction name="actionInt16"/>
+   <addaction name="actionUInt16"/>
    <addaction name="separator"/>
-   <addaction name="actionUnsignedLongInteger"/>
-   <addaction name="actionSwappedUnsignedLI"/>
+   <addaction name="actionInt32"/>
+   <addaction name="actionSwappedInt32"/>
+   <addaction name="separator"/>
+   <addaction name="actionUInt32"/>
+   <addaction name="actionSwappedUInt32"/>
+   <addaction name="separator"/>
+   <addaction name="actionInt64"/>
+   <addaction name="actionSwappedInt64"/>
+   <addaction name="separator"/>
+   <addaction name="actionUInt64"/>
+   <addaction name="actionSwappedUInt64"/>
    <addaction name="separator"/>
    <addaction name="actionFloatingPt"/>
    <addaction name="actionSwappedFP"/>
@@ -430,34 +447,34 @@
     <string>Hex</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+6</string>
-   </property>
-  </action>
-  <action name="actionUnsignedDecimal">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUnsignedDecimal.png</normaloff>:/res/actionUnsignedDecimal.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned Decimal</string>
-   </property>
-   <property name="shortcut">
     <string notr="true">Ctrl+2</string>
    </property>
   </action>
-  <action name="actionInteger">
+  <action name="actionUInt16">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInteger.png</normaloff>:/res/actionInteger.png</iconset>
+     <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
    </property>
    <property name="text">
-    <string>Integer</string>
+    <string>Unsigned 16-bit Intger</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+4</string>
+   </property>
+  </action>
+  <action name="actionInt16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
+   </property>
+   <property name="text">
+    <string>16-bit Integer</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+3</string>
@@ -472,10 +489,13 @@
      <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
    </property>
    <property name="text">
-    <string>Floating Pt</string>
+    <string>Float</string>
+   </property>
+   <property name="toolTip">
+    <string>Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+7</string>
+    <string notr="true">Ctrl+9</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -487,10 +507,13 @@
      <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped FP</string>
+    <string>Swapped Float</string>
+   </property>
+   <property name="toolTip">
+    <string>Swapped Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Shift+7</string>
+    <string notr="true">Ctrl+Alt+9</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -502,10 +525,13 @@
      <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
    </property>
    <property name="text">
-    <string>Dbl Float</string>
+    <string>Double</string>
+   </property>
+   <property name="toolTip">
+    <string>Double</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+8</string>
+    <string notr="true">Ctrl+0</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -517,10 +543,13 @@
      <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Dbl</string>
+    <string>Swapped Double</string>
+   </property>
+   <property name="toolTip">
+    <string>Swapped Double</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Shift+8</string>
+    <string notr="true">Ctrl+Alt+0</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -690,70 +719,70 @@
     <string notr="true">F3</string>
    </property>
   </action>
-  <action name="actionLongInteger">
+  <action name="actionInt32">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionLongInteger.png</normaloff>:/res/actionLongInteger.png</iconset>
+     <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
    </property>
    <property name="text">
-    <string>Long Integer</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+4</string>
-   </property>
-  </action>
-  <action name="actionSwappedLI">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedLI.png</normaloff>:/res/actionSwappedLI.png</iconset>
-   </property>
-   <property name="text">
-    <string>Swapped LI</string>
-   </property>
-   <property name="toolTip">
-    <string>Swapped Long Integer</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+Shift+4</string>
-   </property>
-  </action>
-  <action name="actionUnsignedLongInteger">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUnsignedLI.png</normaloff>:/res/actionUnsignedLI.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned Long Integer</string>
+    <string>32-bit Integer</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+5</string>
    </property>
   </action>
-  <action name="actionSwappedUnsignedLI">
+  <action name="actionSwappedInt32">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedUnsignedLI.png</normaloff>:/res/actionSwappedUnsignedLI.png</iconset>
+     <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Unsigned LI</string>
+    <string>Swapped 32-bit Integer</string>
    </property>
    <property name="toolTip">
-    <string>Swapped Unsigned Long Integer</string>
+    <string>Swapped 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Shift+5</string>
+    <string notr="true">Ctrl+Alt+5</string>
+   </property>
+  </action>
+  <action name="actionUInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 32-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+6</string>
+   </property>
+  </action>
+  <action name="actionSwappedUInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swapped Unsigned 32-bit Integer</string>
+   </property>
+   <property name="toolTip">
+    <string>Swapped Unsigned 32-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+6</string>
    </property>
   </action>
   <action name="actionMsgParser">
@@ -765,6 +794,66 @@
    </property>
    <property name="shortcut">
     <string notr="true">F9</string>
+   </property>
+  </action>
+  <action name="actionInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>64-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+7</string>
+   </property>
+  </action>
+  <action name="actionSwappedInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swapped 64-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+7</string>
+   </property>
+  </action>
+  <action name="actionUInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 64-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+8</string>
+   </property>
+  </action>
+  <action name="actionSwappedUInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swapped Unsigned 64-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+8</string>
    </property>
   </action>
  </widget>

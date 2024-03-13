@@ -13,11 +13,13 @@ class NumericLineEdit : public QLineEdit
 public:
     enum InputMode
     {
-        DecMode = 0,
-        UnsignedMode,
+        Int32Mode = 0,
+        UInt32Mode,
         HexMode,
         FloatMode,
-        DoubleMode
+        DoubleMode,
+        Int64Mode,
+        UInt64Mode
     };
 
     explicit NumericLineEdit(QWidget* parent = nullptr);

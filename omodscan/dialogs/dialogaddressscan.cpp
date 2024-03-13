@@ -58,7 +58,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             const auto value = _data.value(idx);
             const auto pointType = _data.registerType();
             auto result = _hexView ? formatHexValue(pointType, value, _byteOrder, outValue) :
-                                    formatDecimalValue(pointType, value, _byteOrder, outValue);
+                                    formatUInt16Value(pointType, value, _byteOrder, outValue);
 
             return _data.hasValue(idx) ? result.remove('<').remove('>') : "-";
         }
@@ -208,7 +208,7 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
         {
-            const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::Decimal;
+            const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16;
             return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, item.Addr, false),
                                                item.Msg->isRequest() ? "<<" : ">>",
                                                item.Msg->toString(mode));

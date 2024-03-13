@@ -155,6 +155,6 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
         ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::DecMode);
         ui->sendData->setInputMode(ByteListTextEdit::DecMode);
         ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
-        ui->responseInfo->setDataDisplayMode(DataDisplayMode::Decimal);
+        ui->responseInfo->setDataDisplayMode(DataDisplayMode::UInt16);
     }
 }

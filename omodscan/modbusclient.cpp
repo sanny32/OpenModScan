@@ -322,9 +322,31 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, qint32 value
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
 
     if(swapped)
-        breakLong(value, values[1], values[0], order);
+        breakInt32(value, values[1], values[0], order);
     else
-        breakLong(value, values[0], values[1], order);
+        breakInt32(value, values[0], values[1], order);
+
+    data.setValues(values);
+    return data;
+}
+
+///
+/// \brief createHoldingRegistersDataUnit
+/// \param newStartAddress
+/// \param value
+/// \param order
+/// \param swapped
+/// \return
+///
+QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, qint64 value, ByteOrder order, bool swapped)
+{
+    QVector<quint16> values(4);
+    auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 4);
+
+    if(swapped)
+        breakInt64(value, values[3], values[2], values[1], values[0], order);
+    else
+        breakInt64(value, values[0], values[1], values[2], values[3], order);
 
     data.setValues(values);
     return data;
@@ -412,8 +434,8 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                 switch(params.DisplayMode)
                 {
                     case DataDisplayMode::Binary:
-                    case DataDisplayMode::Decimal:
-                    case DataDisplayMode::Integer:
+                    case DataDisplayMode::UInt16:
+                    case DataDisplayMode::Int16:
                     case DataDisplayMode::Hex:
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toUInt(), params.Order);
                     break;
@@ -430,14 +452,24 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), params.Order, true);
                     break;
 
-                    case DataDisplayMode::LongInteger:
-                    case DataDisplayMode::UnsignedLongInteger:
+                    case DataDisplayMode::Int32:
+                    case DataDisplayMode::UInt32:
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, false);
                     break;
 
-                    case DataDisplayMode::SwappedLI:
-                    case DataDisplayMode::SwappedUnsignedLI:
+                    case DataDisplayMode::SwappedInt32:
+                    case DataDisplayMode::SwappedUInt32:
                         data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, true);
+                    break;
+
+                    case DataDisplayMode::Int64:
+                    case DataDisplayMode::UInt64:
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toLongLong(), params.Order, false);
+                    break;
+
+                    case DataDisplayMode::SwappedInt64:
+                    case DataDisplayMode::SwappedUInt64:
+                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toLongLong(), params.Order, true);
                     break;
                 }
             break;
@@ -627,7 +659,7 @@ void ModbusClient::on_writeReply()
         if (reply->error() == QModbusDevice::ProtocolError)
         {
             ModbusException ex(raw.exceptionCode());
-            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatByteValue(DataDisplayMode::Hex, ex)), requestId);
+            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatUInt8Value(DataDisplayMode::Hex, ex)), requestId);
         }
         else if(reply->error() != QModbusDevice::NoError)
             emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);

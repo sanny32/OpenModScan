@@ -3,6 +3,7 @@
 #include <QIntValidator>
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
+#include "qint64validator.h"
 #include "numericlineedit.h"
 
 ///
@@ -14,7 +15,7 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
     ,_paddingZeroes(false)
     ,_paddingZeroWidth(0)
 {
-    setInputMode(DecMode);
+    setInputMode(Int32Mode);
     setValue(0);
 
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
@@ -78,14 +79,14 @@ void NumericLineEdit::setInputMode(InputMode mode)
     {
         switch(mode)
         {
-            case DecMode:
+            case Int32Mode:
             case HexMode:
                 _minValue = INT_MIN;
                 _maxValue = INT_MAX;
             break;
 
-            case UnsignedMode:
-                _minValue = 0U;
+            case UInt32Mode:
+                _minValue = 0;
                 _maxValue = UINT_MAX;
             break;
 
@@ -97,6 +98,16 @@ void NumericLineEdit::setInputMode(InputMode mode)
             case DoubleMode:
                 _minValue = -DBL_MAX;
                 _maxValue = DBL_MAX;
+            break;
+
+            case Int64Mode:
+                _minValue = QVariant::fromValue(INT64_MIN);
+                _maxValue = QVariant::fromValue(INT64_MAX);
+            break;
+
+            case UInt64Mode:
+                _minValue = 0;
+                _maxValue = QVariant::fromValue(UINT64_MAX);
             break;
         }
     }
@@ -121,7 +132,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
 {
     switch(_inputMode)
     {
-        case DecMode:
+        case Int32Mode:
             value = qBound(_minValue.toInt(), value.toInt(), _maxValue.toInt());
             if(_paddingZeroes)
             {
@@ -137,7 +148,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
             }
         break;
 
-        case UnsignedMode:
+        case UInt32Mode:
             value = qBound(_minValue.toUInt(), value.toUInt(), _maxValue.toUInt());
             if(_paddingZeroes)
             {
@@ -189,6 +200,42 @@ void NumericLineEdit::internalSetValue(QVariant value)
                 QLineEdit::setText(text);
         }
         break;
+
+        case Int64Mode:
+        {
+            value = qBound(_minValue.toLongLong(), value.toLongLong(), _maxValue.toLongLong());
+            if(_paddingZeroes)
+            {
+                const auto text = QStringLiteral("%1").arg(value.toLongLong(), _paddingZeroWidth, 10, QLatin1Char('0'));
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
+            }
+            else
+            {
+                const auto text = QString::number(value.toLongLong());
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
+            }
+        }
+        break;
+
+        case UInt64Mode:
+        {
+            value = qBound(_minValue.toULongLong(), value.toULongLong(), _maxValue.toULongLong());
+            if(_paddingZeroes)
+            {
+                const auto text = QStringLiteral("%1").arg(value.toULongLong(), _paddingZeroWidth, 10, QLatin1Char('0'));
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
+            }
+            else
+            {
+                const auto text = QString::number(value.toULongLong());
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
+            }
+        }
+        break;
     }
 
     if(value != _value)
@@ -205,7 +252,7 @@ void NumericLineEdit::updateValue()
 {
     switch(_inputMode)
     {
-        case DecMode:
+        case Int32Mode:
         {
             bool ok;
             const auto value = text().toInt(&ok);
@@ -214,7 +261,7 @@ void NumericLineEdit::updateValue()
         }
         break;
 
-        case UnsignedMode:
+        case UInt32Mode:
         {
             bool ok;
             const auto value = text().toUInt(&ok);
@@ -245,6 +292,24 @@ void NumericLineEdit::updateValue()
         {
             bool ok;
             const auto value = QLocale().toDouble(text(), &ok);
+            if(ok) internalSetValue(value);
+            else internalSetValue(_value);
+        }
+        break;
+
+        case Int64Mode:
+        {
+            bool ok;
+            const auto value = text().toLongLong(&ok);
+            if(ok) internalSetValue(value);
+            else internalSetValue(_value);
+        }
+        break;
+
+        case UInt64Mode:
+        {
+            bool ok;
+            const auto value = text().toULongLong(&ok);
             if(ok) internalSetValue(value);
             else internalSetValue(_value);
         }
@@ -297,7 +362,7 @@ void NumericLineEdit::on_textChanged(const QString& text)
     QVariant value;
     switch(_inputMode)
     {
-        case DecMode:
+        case Int32Mode:
         {
             bool ok;
             const auto valueInt = text.toInt(&ok);
@@ -305,11 +370,11 @@ void NumericLineEdit::on_textChanged(const QString& text)
         }
         break;
 
-        case UnsignedMode:
+        case UInt32Mode:
         {
             bool ok;
-            const auto valueInt = text.toUInt(&ok);
-            if(ok) value = qBound(_minValue.toUInt(), valueInt, _maxValue.toUInt());
+            const auto valueUInt = text.toUInt(&ok);
+            if(ok) value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
         }
         break;
 
@@ -336,6 +401,22 @@ void NumericLineEdit::on_textChanged(const QString& text)
             if(ok) value = qBound(_minValue.toDouble(), valueDouble, _maxValue.toDouble());
         }
         break;
+
+        case Int64Mode:
+        {
+            bool ok;
+            const auto valueLongLong = text.toLongLong(&ok);
+            if(ok) value = qBound(_minValue.toLongLong(), valueLongLong, _maxValue.toLongLong());
+        }
+        break;
+
+        case UInt64Mode:
+        {
+            bool ok;
+            const auto valueULongLong = text.toULongLong(&ok);
+            if(ok) value = qBound(_minValue.toULongLong(), valueULongLong, _maxValue.toULongLong());
+        }
+        break;
     }
 
     if(value.isValid() && value != _value)
@@ -356,7 +437,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
     setValidator(nullptr);
     switch(_inputMode)
     {
-        case DecMode:
+        case Int32Mode:
         {
             const int nums = QString::number(top.toInt()).length();
             _paddingZeroWidth = qMax(1, nums);
@@ -366,7 +447,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         }
         break;
 
-        case UnsignedMode:
+        case UInt32Mode:
         {
             const int nums = QString::number(top.toUInt()).length();
             _paddingZeroWidth = qMax(1, nums);
@@ -388,6 +469,24 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         case DoubleMode:
             setMaxLength(INT16_MAX);
             setValidator(new QDoubleValidator(bottom.toDouble(), top.toDouble(), 6, this));
+        break;
+
+        case Int64Mode:
+        {
+            const int nums = QString::number(top.toLongLong()).length();
+            _paddingZeroWidth = qMax(1, nums);
+            setMaxLength(qMax(1, nums));
+            setValidator(new QInt64Validator(bottom.toLongLong(), top.toLongLong(), this));
+        }
+        break;
+
+        case UInt64Mode:
+        {
+            const int nums = QString::number(top.toULongLong()).length();
+            _paddingZeroWidth = qMax(1, nums);
+            setMaxLength(qMax(1, nums));
+            setValidator(new QUIntValidator(bottom.toULongLong(), top.toULongLong(), this));
+        }
         break;
     }
     internalSetValue(_value);

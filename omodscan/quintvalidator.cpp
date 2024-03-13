@@ -17,7 +17,7 @@ QUIntValidator::QUIntValidator(QObject *parent)
 /// \param top
 /// \param parent
 ///
-QUIntValidator::QUIntValidator(uint bottom, uint top, QObject *parent)
+QUIntValidator::QUIntValidator(quint64 bottom, quint64 top, QObject *parent)
     : QValidator(parent)
     ,_bottom(bottom)
     ,_top(top)
@@ -32,7 +32,7 @@ QUIntValidator::QUIntValidator(uint bottom, uint top, QObject *parent)
 QValidator::State QUIntValidator::validate(QString& input, int &) const
 {
     bool ok = false;
-    const auto value = input.toUInt(&ok, 10);
+    const auto value = input.toULongLong(&ok, 10);
 
     if (ok && value >=_bottom && value <=_top )
     {

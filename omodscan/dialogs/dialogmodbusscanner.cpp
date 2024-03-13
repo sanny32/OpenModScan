@@ -306,6 +306,7 @@ void DialogModbusScanner::startScan()
 
     clearScanTime();
     clearProgress();
+    ui->progressBar->setValue(0);
 
     if(ui->listWidget->count() > 0)
     {
@@ -341,7 +342,6 @@ void DialogModbusScanner::clearScanTime()
 ///
 void DialogModbusScanner::clearProgress()
 {
-    ui->progressBar->setValue(0);
     ui->labelSpeed->setText(QString(tr("Baud Rate:")));
     ui->labelDataBits->setText(QString(tr("Data Bits:")));
     ui->labelParity->setText(QString(tr("Parity:")));
@@ -598,6 +598,7 @@ const QModbusRequest DialogModbusScanner::createModbusRequest() const
 void DialogModbusScanner::on_scanFinished()
 {
     ui->pushButtonScan->setIcon(_iconStart);
+    clearProgress();
 }
 
 ///

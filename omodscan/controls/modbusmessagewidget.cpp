@@ -176,7 +176,7 @@ void ModbusMessageWidget::update()
         addItem(tr("<b>Protocol ID:</b> %1").arg(protocolId));
         addItem(tr("<b>Length:</b> %1").arg(length));
     }
-
+    
     addItem(tr("<b>Device ID:</b> %1").arg(formatUInt8Value(_dataDisplayMode, _mm->deviceId())));
 
     if(_mm->isException())
@@ -193,6 +193,7 @@ void ModbusMessageWidget::update()
                               QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, func), func) :
                               formatUInt8Value(_dataDisplayMode, func);
     addItem(tr("<b>Function Code:</b> %1").arg(function));
+    const auto addrBase = tr("(0-based)");
 
     switch(_mm->function())
     {
@@ -200,9 +201,9 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadCoilsRequest*>(_mm);
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
                 addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
@@ -219,9 +220,9 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(_mm);
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
                 addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
@@ -238,9 +239,9 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(_mm);
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
                 addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
@@ -257,9 +258,9 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadInputRegistersRequest*>(_mm);
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1").arg(startAddress));
+                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
                 addItem(tr("<b>Length:</b> %1").arg(length));
             }
             else
@@ -276,9 +277,9 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteSingleCoilRequest*>(_mm);
-                const auto outputAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) : "??";
+            const auto outputAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) : "??";
                 const auto outputValue = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->value()) : "??";
-                addItem(tr("<b>Output Address:</b> %1").arg(outputAddress));
+                addItem(tr("<b>Output Address:</b> %1 %2").arg(outputAddress, addrBase));
                 addItem(tr("<b>Output Value:</b> %1").arg(outputValue));
             }
             else
@@ -286,7 +287,7 @@ void ModbusMessageWidget::update()
                 auto resp = reinterpret_cast<const WriteSingleCoilResponse*>(_mm);
                 const auto outputAddress = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->address()) : "??";
                 const auto outputValue = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->value()) : "??";
-                addItem(tr("<b>Output Address:</b> %1").arg(outputAddress));
+                addItem(tr("<b>Output Address:</b> %1 %2").arg(outputAddress, addrBase));
                 addItem(tr("<b>Output Value:</b> %1").arg(outputValue));
             }
         break;
@@ -295,9 +296,9 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(_mm);
-                const auto registerAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) : "??";
+            const auto registerAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) : "??";
                 const auto registerValue = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->value()) : "??";
-                addItem(tr("<b>Register Address:</b> %1").arg(registerAddress));
+                addItem(tr("<b>Register Address:</b> %1 %2").arg(registerAddress, addrBase));
                 addItem(tr("<b>Register Value:</b> %1").arg(registerValue));
             }
             else
@@ -305,7 +306,7 @@ void ModbusMessageWidget::update()
                 auto resp = reinterpret_cast<const WriteSingleRegisterResponse*>(_mm);
                 const auto registerAddress = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->address()) : "??";
                 const auto registerValue = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->value()) : "??";
-                addItem(tr("<b>Register Address:</b> %1").arg(registerAddress));
+                addItem(tr("<b>Register Address:</b> %1 %2").arg(registerAddress, addrBase));
                 addItem(tr("<b>Register Value:</b> %1").arg(registerValue));
             }
             break;
@@ -374,7 +375,7 @@ void ModbusMessageWidget::update()
                 const auto quantity = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->quantity()) : "??";
                 const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->byteCount()) : "?";
                 const auto values = req->isValid() ? formatUInt8Array(_dataDisplayMode, req->values()) : "???";
-                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Starting Address:</b> %1 %2").arg(startAddr, addrBase));
                 addItem(tr("<b>Quantity of Outputs:</b> %1").arg(quantity));
                 addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
                 addItem(tr("<b>Output Value:</b> %1").arg(values));
@@ -384,7 +385,7 @@ void ModbusMessageWidget::update()
                 auto resp = reinterpret_cast<const WriteMultipleCoilsResponse*>(_mm);
                 const auto startAddr = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->startAddress()) : "??";
                 const auto quantity = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->quantity()) : "??";
-                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Starting Address:</b> %1 %2").arg(startAddr, addrBase));
                 addItem(tr("<b>Quantity of Outputs:</b> %1").arg(quantity));
             }
             break;
@@ -397,7 +398,7 @@ void ModbusMessageWidget::update()
                 const auto quantity = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->quantity()) : "??";
                 const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->byteCount()) : "?";
                 const auto values = req->isValid() ? formatUInt16Array(_dataDisplayMode, req->values(), _byteOrder) : "???";
-                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Starting Address:</b> %1 %2").arg(startAddr, addrBase));
                 addItem(tr("<b>Quantity of Registers:</b> %1").arg(quantity));
                 addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
                 addItem(tr("<b>Registers Value:</b> %1").arg(values));
@@ -407,7 +408,7 @@ void ModbusMessageWidget::update()
                 auto resp = reinterpret_cast<const WriteMultipleRegistersResponse*>(_mm);
                 const auto startAddr = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->startAddress()) : "??";
                 const auto quantity = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->quantity()) : "??";
-                addItem(tr("<b>Starting Address:</b> %1").arg(startAddr));
+                addItem(tr("<b>Starting Address:</b> %1 %2").arg(startAddr, addrBase));
                 addItem(tr("<b>Quantity of Registers:</b> %1").arg(quantity));
             }
         break;
@@ -416,7 +417,7 @@ void ModbusMessageWidget::update()
         if(!_mm->isRequest())
             {
                 auto resp = reinterpret_cast<const ReportServerIdResponse*>(_mm);
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
+            const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
                 const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->data()) : "?";
                 addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
                 addItem(tr("<b>Data:</b> %1").arg(data));
@@ -427,7 +428,7 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadFileRecordRequest*>(_mm);
-                const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->byteCount()) : "?";
+            const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->byteCount()) : "?";
                 const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, req->data()) : "?";
                 addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
                 addItem(tr("<b>Data:</b> %1").arg(data));
@@ -446,7 +447,7 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteFileRecordRequest*>(_mm);
-                const auto length = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->length()) : "?";
+            const auto length = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->length()) : "?";
                 const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, req->data()) : "???";
                 addItem(tr("<b>Request Data Length:</b> %1").arg(length));
                 addItem(tr("<b>Data:</b> %1").arg(data));
@@ -465,10 +466,10 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(_mm);
-                const auto address = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) : "??";
+            const auto address = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) : "??";
                 const auto andMask = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->andMask()) : "??";
-                const auto orMask = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->orMask()) : "??";
-                addItem(tr("<b>Address:</b> %1").arg(address));
+            const auto orMask = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->orMask()) : "??";
+                addItem(tr("<b>Address:</b> %1 %2").arg(address, addrBase));
                 addItem(tr("<b>And Mask:</b> %1").arg(andMask));
                 addItem(tr("<b>Or Mask:</b> %1").arg(orMask));
             }
@@ -478,7 +479,7 @@ void ModbusMessageWidget::update()
                 const auto address = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->address()) : "??";
                 const auto andMask = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->andMask()) : "??";
                 const auto orMask = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->orMask()) : "??";
-                addItem(tr("<b>Address:</b> %1").arg(address));
+                addItem(tr("<b>Address:</b> %1 %2").arg(address, addrBase));
                 addItem(tr("<b>And Mask:</b> %1").arg(andMask));
                 addItem(tr("<b>Or Mask:</b> %1").arg(orMask));
             }
@@ -488,15 +489,15 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(_mm);
-                const auto readStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->readStartAddress()) : "??";
+            const auto readStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->readStartAddress()) : "??";
                 const auto readLength = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->readLength()) : "??";
-                const auto writeStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->writeStartAddress()) : "??";
+            const auto writeStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->writeStartAddress()) : "??";
                 const auto writeLength = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->writeLength()) : "??";
                 const auto writeByteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->writeByteCount()) : "?";
                 const auto writeValues = req->isValid() ? formatUInt16Array(_dataDisplayMode, req->writeValues(), _byteOrder) : "???";
-                addItem(tr("<b>Read Starting Address:</b> %1").arg(readStartAddr));
+                addItem(tr("<b>Read Starting Address:</b> %1 %2").arg(readStartAddr, addrBase));
                 addItem(tr("<b>Quantity to Read:</b> %1").arg(readLength));
-                addItem(tr("<b>Write Starting Address:</b> %1").arg(writeStartAddr));
+                addItem(tr("<b>Write Starting Address:</b> %1 %2").arg(writeStartAddr, addrBase));
                 addItem(tr("<b>Quantity to Write:</b> %1").arg(writeLength));
                 addItem(tr("<b>Write Byte Count:</b> %1").arg(writeByteCount));
                 addItem(tr("<b>Write Registers Value:</b> %1").arg(writeValues));
@@ -515,8 +516,8 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadFifoQueueRequest*>(_mm);
-                const auto fifoAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->fifoAddress()) : "??";
-                addItem(tr("<b>FIFO Point Address:</b> %1").arg(fifoAddr));
+            const auto fifoAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->fifoAddress()) : "??";
+                addItem(tr("<b>FIFO Point Address:</b> %1 %2").arg(fifoAddr, addrBase));
             }
             else
             {

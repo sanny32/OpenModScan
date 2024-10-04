@@ -34,5 +34,12 @@ int NumericComboBox::currentValue() const
 void NumericComboBox::setCurrentValue(int value)
 {
     const auto idx = findText(QString::number(value));
-    setCurrentIndex(idx);
+    if(idx != -1)
+    {
+        setCurrentIndex(idx);
+    }
+    else if(isEditable())
+    {
+        setCurrentText(QString::number(value));
+    }
 }

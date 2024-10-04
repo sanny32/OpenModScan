@@ -102,7 +102,7 @@ struct SerialConnectionParams
 
     void normalize()
     {
-        BaudRate = qBound(QSerialPort::Baud1200, BaudRate, QSerialPort::Baud115200);
+        BaudRate = qMax(QSerialPort::Baud1200, BaudRate);
         WordLength = qBound(QSerialPort::Data5, WordLength, QSerialPort::Data8);
         Parity = qBound(QSerialPort::NoParity, Parity, QSerialPort::MarkParity);
         FlowControl = qBound(QSerialPort::NoFlowControl, FlowControl, QSerialPort::SoftwareControl);

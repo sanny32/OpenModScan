@@ -68,7 +68,7 @@ void DialogConnectionDetails::accept()
     else
     {
         _connectionDetails.SerialParams.PortName = ui->comboBoxConnectUsing->currentPortName();
-        _connectionDetails.SerialParams.BaudRate = (QSerialPort::BaudRate)ui->comboBoxBaudRate->currentValue();
+        _connectionDetails.SerialParams.BaudRate = qMax(QSerialPort::Baud1200, (QSerialPort::BaudRate)ui->comboBoxBaudRate->currentValue());
         _connectionDetails.SerialParams.WordLength = (QSerialPort::DataBits)ui->comboBoxWordLength->currentValue();
         _connectionDetails.SerialParams.Parity = ui->comboBoxParity->currentParity();
         _connectionDetails.SerialParams.StopBits = (QSerialPort::StopBits)ui->comboBoxStopBits->currentValue();

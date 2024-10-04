@@ -4,8 +4,7 @@ Open ModScan is a free implimentation of modbus master (client) utility for modb
 ![image](https://github.com/sanny32/OpenModScan/assets/13627951/c2df0ea1-0f27-4d4b-8cc0-b6268caf8f11)
 
 
-
-![image](https://github.com/sanny32/OpenModScan/assets/13627951/2e24982e-3b32-4434-928e-6518505e48ae)
+![image](https://github.com/user-attachments/assets/aeae5869-b0a1-469f-9e30-3e68a85b23e1)
 
 
 

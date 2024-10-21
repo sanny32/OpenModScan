@@ -59,6 +59,9 @@
          <property name="spacing">
           <number>15</number>
          </property>
+         <property name="bottomMargin">
+          <number>5</number>
+         </property>
          <item>
           <widget class="QFrame" name="frame_5">
            <property name="frameShape">

@@ -59,10 +59,10 @@ void DialogDisplayDefinition::accept()
 /// \brief DialogDisplayDefinition::on_comboBoxAddressBase_currentIndexChanged
 /// \param index
 ///
-void DialogDisplayDefinition::on_comboBoxAddressBase_currentIndexChanged(int index)
+void DialogDisplayDefinition::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 {
     const auto addr = ui->lineEditPointAddress->value<int>();
 
-    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(index == 0));
-    ui->lineEditPointAddress->setValue(index ? qMax(1, addr + 1) : qMax(0, addr - 1));
+    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(base == AddressBase::Base0));
+    ui->lineEditPointAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
 }

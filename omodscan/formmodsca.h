@@ -111,6 +111,7 @@ private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
+    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);

@@ -24,6 +24,7 @@ INCLUDEPATH += controls \
                modbusmessages \
 
 SOURCES += \
+    controls/addressbasecombobox.cpp \
     controls/booleancombobox.cpp \
     controls/bytelisttextedit.cpp \
     controls/byteordercombobox.cpp \
@@ -86,6 +87,7 @@ SOURCES += \
 HEADERS += \
     byteorderutils.h \
     connectiondetails.h \
+    controls/addressbasecombobox.h \
     controls/booleancombobox.h \
     controls/bytelisttextedit.h \
     controls/byteordercombobox.h \

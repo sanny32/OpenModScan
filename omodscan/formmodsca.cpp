@@ -48,6 +48,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->lineEditDeviceId->setValue(1);
 
     const auto dd = displayDefinition();
+    ui->comboBoxAddressBase->setCurrentIndex(dd.ZeroBasedAddress ? 0 : 1);
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
@@ -141,6 +142,10 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditDeviceId->blockSignals(true);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditDeviceId->blockSignals(false);
+
+    ui->comboBoxAddressBase->blockSignals(true);
+    ui->comboBoxAddressBase->setCurrentIndex(dd.ZeroBasedAddress ? 0 : 1);
+    ui->comboBoxAddressBase->blockSignals(false);
 
     ui->lineEditAddress->blockSignals(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
@@ -731,6 +736,18 @@ void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
     beginUpdate();
+}
+
+///
+/// \brief FormModSca:on_comboBoxAddressBase_addressBaseChanged
+/// \param index
+///
+void FormModSca::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
+{
+    auto dd = displayDefinition();
+    dd.PointAddress = (base == AddressBase::Base1 ? qMax(1, dd.PointAddress + 1) : qMax(0, dd.PointAddress - 1));
+    dd.ZeroBasedAddress = (base == AddressBase::Base0);
+    setDisplayDefinition(dd);
 }
 
 ///

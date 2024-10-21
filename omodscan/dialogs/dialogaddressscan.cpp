@@ -50,7 +50,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
     switch(role)
     {
         case Qt::ToolTipRole:
-            return formatAddress(_data.registerType(), _data.startAddress() + idx + 1, false);
+            return formatAddress(_data.registerType(), getAddress(idx), false);
 
         case Qt::DisplayRole:
         {
@@ -70,7 +70,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             return _data.hasValue(idx) ? QVariant() : parentWidget->palette().color(QPalette::Disabled, QPalette::Base);
 
         case Qt::UserRole:
-            return _data.startAddress() + idx + 1;
+            return getAddress(idx);
     }
 
     return QVariant();
@@ -134,7 +134,7 @@ QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation
                 {
                     const auto length = _data.valueCount();
                     const auto pointType = _data.registerType();
-                    const auto pointAddress = _data.startAddress() + 1;
+                    const auto pointAddress = getAddress(0);
                     const auto addressFrom = pointAddress + section * _columns;
                     const auto addressTo = pointAddress + qMin<quint16>(length - 1, (section + 1) * _columns - 1);
                     return QString("%1-%2").arg(formatAddress(pointType, addressFrom, false), formatAddress(pointType, addressTo, false));
@@ -159,6 +159,34 @@ Qt::ItemFlags TableViewItemModel::flags(const QModelIndex &index) const
     }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+///
+/// \brief TableViewItemModel::addressBse
+/// \return
+///
+AddressBase TableViewItemModel::addressBse() const
+{
+    return _addressBase;
+}
+
+///
+/// \brief TableViewItemModel::setAddressBase
+/// \param base
+///
+void TableViewItemModel::setAddressBase(AddressBase base)
+{
+    _addressBase = base;
+}
+
+///
+/// \brief TableViewItemModel::getAddress
+/// \param idx
+/// \return
+///
+int TableViewItemModel::getAddress(int idx) const
+{
+    return _data.startAddress() + idx + (_addressBase == AddressBase::Base0 ? 0 : 1);
 }
 
 ///
@@ -409,7 +437,7 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     updateLogView(reply);
 
     if (reply->error() == QModbusDevice::NoError)
-        updateTableView(reply->result().startAddress() + 1, reply->result().values());
+        updateTableView(reply->result().startAddress() + (_dd.ZeroBasedAddress ? 0 : 1), reply->result().values());
 
     if(_requestCount > ui->lineEditLength->value<int>()
                        + ui->spinBoxRegsOnQuery->value())
@@ -524,6 +552,7 @@ void DialogAddressScan::clearTableView()
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
 
     ModbusDataUnit data(pointType, _dd.ZeroBasedAddress ? pointAddress : pointAddress - 1, length);
+    ((TableViewItemModel*)ui->tableView->model())->setAddressBase(_dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ((TableViewItemModel*)ui->tableView->model())->reset(data);
 
     ui->tableView->resizeColumnsToContents();
@@ -623,7 +652,7 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
         return;
 
     const auto deviceId = reply->serverAddress();
-    const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + 1;
+    const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + (_dd.ZeroBasedAddress ? 0 : 1);
     const auto transactionId = reply->property("TransactionId").toInt();
     const auto pdu = reply->rawResult();
 

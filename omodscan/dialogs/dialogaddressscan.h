@@ -32,6 +32,9 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+    AddressBase addressBse() const;
+    void setAddressBase(AddressBase base);
+
     void reset(const ModbusDataUnit& data, int columns = 10){
         beginResetModel();
         _columns = columns;
@@ -52,9 +55,13 @@ public:
     }
 
 private:
+    int getAddress(int idx) const;
+
+private:
     int _columns = 10;
     ModbusDataUnit _data;
     bool _hexView = false;
+    AddressBase _addressBase = AddressBase::Base1;
     ByteOrder _byteOrder = ByteOrder::LittleEndian;
 };
 
@@ -267,7 +274,7 @@ private:
     bool _finished = false;
     quint64 _scanTime = 0;
     QTimer _scanTimer;
-    const DisplayDefinition& _dd;
+    DisplayDefinition _dd;
     ModbusClient& _modbusClient;
 };
 

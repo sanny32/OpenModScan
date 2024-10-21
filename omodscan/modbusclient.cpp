@@ -406,16 +406,18 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, const QVecto
 void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId)
 {
     QModbusDataUnit data;
+    const auto addr = params.ZeroBasedAddress ? params.Address : params.Address - 1;
+
     if(params.Value.userType() == qMetaTypeId<QVector<quint16>>())
     {
         switch (pointType)
         {
             case QModbusDataUnit::Coils:
-                data = createCoilsDataUnit(params.Address - 1, params.Value.value<QVector<quint16>>());
+                data = createCoilsDataUnit(addr, params.Value.value<QVector<quint16>>());
             break;
 
             case QModbusDataUnit::HoldingRegisters:
-                data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.value<QVector<quint16>>(), params.Order);
+                data = createHoldingRegistersDataUnit(addr, params.Value.value<QVector<quint16>>(), params.Order);
             break;
 
             default:
@@ -427,7 +429,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
         switch (pointType)
         {
             case QModbusDataUnit::Coils:
-                data = createCoilsDataUnit(params.Address - 1, params.Value.toBool());
+                data = createCoilsDataUnit(addr, params.Value.toBool());
             break;
 
             case QModbusDataUnit::HoldingRegisters:
@@ -437,39 +439,39 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                     case DataDisplayMode::UInt16:
                     case DataDisplayMode::Int16:
                     case DataDisplayMode::Hex:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toUInt(), params.Order);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toUInt(), params.Order);
                     break;
                     case DataDisplayMode::FloatingPt:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toFloat(), params.Order, false);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toFloat(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedFP:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toFloat(), params.Order, true);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toFloat(), params.Order, true);
                     break;
                     case DataDisplayMode::DblFloat:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), params.Order, false);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toDouble(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedDbl:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toDouble(), params.Order, true);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toDouble(), params.Order, true);
                     break;
 
                     case DataDisplayMode::Int32:
                     case DataDisplayMode::UInt32:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, false);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toInt(), params.Order, false);
                     break;
 
                     case DataDisplayMode::SwappedInt32:
                     case DataDisplayMode::SwappedUInt32:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toInt(), params.Order, true);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toInt(), params.Order, true);
                     break;
 
                     case DataDisplayMode::Int64:
                     case DataDisplayMode::UInt64:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toLongLong(), params.Order, false);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toLongLong(), params.Order, false);
                     break;
 
                     case DataDisplayMode::SwappedInt64:
                     case DataDisplayMode::SwappedUInt64:
-                        data = createHoldingRegistersDataUnit(params.Address - 1, params.Value.toLongLong(), params.Order, true);
+                        data = createHoldingRegistersDataUnit(addr, params.Value.toLongLong(), params.Order, true);
                     break;
                 }
             break;
@@ -536,7 +538,8 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
         return;
     }
 
-    QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(params.Address - 1), params.AndMask, params.OrMask);
+    const auto addr = params.ZeroBasedAddress ? params.Address : params.Address - 1;
+    QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(addr), params.AndMask, params.OrMask);
     emit modbusRequest(requestId, params.Node, ++_transactionId, request);
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.Node))

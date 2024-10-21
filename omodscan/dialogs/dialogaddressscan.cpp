@@ -269,6 +269,7 @@ bool LogViewProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sour
 DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMode mode, ByteOrder order, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogAddressScan)
+    ,_dd(dd)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
@@ -285,7 +286,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditStartAddress->setPaddingZeroes(true);
-    ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange());
+    ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLength->setInputRange(1, 65530);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
@@ -500,10 +501,12 @@ void DialogAddressScan::sendReadRequest()
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
     const auto count = ui->spinBoxRegsOnQuery->value();
-    const auto address = pointAddress - 1 + _requestCount;
+    const auto address = (_dd.ZeroBasedAddress ? pointAddress : pointAddress - 1) + _requestCount;
 
     if(address > ModbusLimits::addressRange().to())
+    {
         stopScan();
+    }
     else
     {
         _requestCount += count;
@@ -520,7 +523,7 @@ void DialogAddressScan::clearTableView()
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
 
-    ModbusDataUnit data(pointType, pointAddress - 1, length);
+    ModbusDataUnit data(pointType, _dd.ZeroBasedAddress ? pointAddress : pointAddress - 1, length);
     ((TableViewItemModel*)ui->tableView->model())->reset(data);
 
     ui->tableView->resizeColumnsToContents();

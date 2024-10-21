@@ -267,6 +267,7 @@ private:
     bool _finished = false;
     quint64 _scanTime = 0;
     QTimer _scanTimer;
+    const DisplayDefinition& _dd;
     ModbusClient& _modbusClient;
 };
 

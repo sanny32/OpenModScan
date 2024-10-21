@@ -248,6 +248,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.PointAddress;
     out << dd.Length;
     out << dd.LogViewLimit;
+    out << dd.ZeroBasedAddress;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -303,6 +304,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     if(ver >= QVersionNumber(1, 4))
     {
         in >> dd.LogViewLimit;
+    }
+    if(ver >= QVersionNumber(1, 5))
+    {
+        in >> dd.ZeroBasedAddress;
     }
 
     ByteOrder byteOrder = ByteOrder::LittleEndian;

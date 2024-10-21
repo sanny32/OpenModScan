@@ -10,7 +10,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 4);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 5);
 
 ///
 /// \brief FormModSca::FormModSca
@@ -125,6 +125,7 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
+    dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
 
     return dd;
 }
@@ -142,6 +143,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditDeviceId->blockSignals(false);
 
     ui->lineEditAddress->blockSignals(true);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditAddress->blockSignals(false);
 
@@ -504,7 +506,8 @@ void FormModSca::on_timeout()
             }
         }
 
-        _modbusClient.sendReadRequest(dd.PointType, dd.PointAddress - 1, dd.Length, dd.DeviceId, _formId);
+        const auto addr = dd.ZeroBasedAddress ? dd.PointAddress : dd.PointAddress - 1;
+        _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
     }
 }
 
@@ -517,8 +520,9 @@ void FormModSca::beginUpdate()
         return;
 
     const auto dd = displayDefinition();
-    if(dd.PointAddress + dd.Length - 1 <= ModbusLimits::addressRange().to())
-        _modbusClient.sendReadRequest(dd.PointType, dd.PointAddress - 1, dd.Length, dd.DeviceId, _formId);
+    const auto addr = dd.ZeroBasedAddress ? dd.PointAddress : dd.PointAddress - 1;
+    if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to())
+        _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
     else
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
@@ -535,17 +539,18 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
     const auto dd = displayDefinition();
     const auto data = reply->result();
     const auto response = reply->rawResult();
+    const auto addr = dd.ZeroBasedAddress ? dd.PointAddress : dd.PointAddress - 1;
 
     switch(response.functionCode())
     {
         case QModbusPdu::ReadCoils:
         case QModbusPdu::ReadDiscreteInputs:
-            return (data.startAddress() == dd.PointAddress - 1) && (data.valueCount() - dd.Length) < 8;
+            return (data.startAddress() == addr) && (data.valueCount() - dd.Length) < 8;
         break;
 
         case QModbusPdu::ReadInputRegisters:
         case QModbusPdu::ReadHoldingRegisters:
-            return (data.valueCount() == dd.Length) && (data.startAddress() == dd.PointAddress - 1);
+            return (data.valueCount() == dd.Length) && (data.startAddress() == addr);
 
         default:
             return true;
@@ -756,13 +761,14 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const quint32 node = ui->lineEditDeviceId->value<int>();
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+    const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     auto simParams = _dataSimulator->simulationParams(pointType, addr, deviceId);
 
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
         {
-            ModbusWriteParams params = { node, addr, value, mode, byteOrder() };
+            ModbusWriteParams params = { node, addr, value, mode, byteOrder(), zeroBasedAddress };
             DialogWriteCoilRegister dlg(params, simParams, _parent);
             switch(dlg.exec())
             {
@@ -780,7 +786,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { node, addr, value, mode, byteOrder()};
+            ModbusWriteParams params = { node, addr, value, mode, byteOrder(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, _parent);

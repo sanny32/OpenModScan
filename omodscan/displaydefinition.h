@@ -16,12 +16,13 @@ struct DisplayDefinition
     QModbusDataUnit::RegisterType PointType = QModbusDataUnit::Coils;
     quint16 Length = 50;
     quint16 LogViewLimit = 30;
+    bool ZeroBasedAddress = false;
 
     void normalize()
     {
         ScanRate = qBound(20U, ScanRate, 3600000U);
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
-        PointAddress = qMax<quint16>(ModbusLimits::addressRange().from(), PointAddress);
+        PointAddress = qMax<quint16>(ModbusLimits::addressRange(ZeroBasedAddress).from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
         Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
         LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
@@ -31,12 +32,13 @@ Q_DECLARE_METATYPE(DisplayDefinition)
 
 inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 {
-    out.setValue("DisplayDefinition/ScanRate",      dd.ScanRate);
-    out.setValue("DisplayDefinition/DeviceId",      dd.DeviceId);
-    out.setValue("DisplayDefinition/PointAddress",  dd.PointAddress);
-    out.setValue("DisplayDefinition/PointType",     dd.PointType);
-    out.setValue("DisplayDefinition/Length",        dd.Length);
-    out.setValue("DisplayDefinition/LogViewLimit",  dd.LogViewLimit);
+    out.setValue("DisplayDefinition/ScanRate",          dd.ScanRate);
+    out.setValue("DisplayDefinition/DeviceId",          dd.DeviceId);
+    out.setValue("DisplayDefinition/PointAddress",      dd.PointAddress);
+    out.setValue("DisplayDefinition/PointType",         dd.PointType);
+    out.setValue("DisplayDefinition/Length",            dd.Length);
+    out.setValue("DisplayDefinition/LogViewLimit",      dd.LogViewLimit);
+    out.setValue("DisplayDefinition/ZeroBasedAddress",  dd.ZeroBasedAddress);
 
     return out;
 }
@@ -55,6 +57,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType", 1).toUInt();
     dd.Length = in.value("DisplayDefinition/Length", 50).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
+    dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
 
     dd.normalize();
     return in;

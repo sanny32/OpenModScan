@@ -25,6 +25,9 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_comboBoxAddressBase_currentIndexChanged(int index);
+
 private:
     DisplayDefinition _displayDefinition;
     Ui::DialogDisplayDefinition *ui;

@@ -367,29 +367,24 @@ void FormModSca::print(QPrinter* printer)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
 
-    const auto textDevId = QString(tr("Device Id: %1")).arg(ui->lineEditDeviceId->text());
-    auto rcDevId = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textDevId);
-
-    const auto textAddrLen = QString(tr("Address: %1\nLength: %2")).arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
+    const auto textAddrLen = QString(tr("Address Base: %1\nStart Address: %2\nLength: %3")).arg(ui->comboBoxAddressBase->currentText(),
+                                                                                                ui->lineEditAddress->text(), ui->lineEditLength->text());
     auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
 
-    const auto textType = QString(tr("MODBUS Point Type:\n%1")).arg(ui->comboBoxModbusPointType->currentText());
-    auto rcType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textType);
+    const auto textDevIdType = QString(tr("Device Id: %1\nMODBUS Point Type:\n%2")).arg(ui->lineEditDeviceId->text(), ui->comboBoxModbusPointType->currentText());
+    auto rcDevIdType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevIdType);
 
     const auto textStat = QString(tr("Number of Polls: %1\nValid Slave Responses: %2")).arg(QString::number(ui->statisticWidget->numberOfPolls()),
                                                                                         QString::number(ui->statisticWidget->validSlaveResposes()));
     auto rcStat = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textStat);
 
     rcTime.moveTopRight({ pageRect.right(), 10 });
-    rcDevId.moveLeft(rcAddrLen.right() + 40);
-    rcAddrLen.moveTop(rcDevId.bottom() + 10);
-    rcType.moveTopLeft({ rcDevId.left(), rcAddrLen.top() });
-    rcStat.moveLeft(rcType.right() + 40);
+    rcDevIdType.moveTopLeft({ rcAddrLen.right() + 40, rcAddrLen.top()});
+    rcStat.moveLeft(rcDevIdType.right() + 40);
 
     painter.drawText(rcTime, Qt::TextSingleLine, textTime);
-    painter.drawText(rcDevId, Qt::TextSingleLine, textDevId);
     painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
-    painter.drawText(rcType, Qt::TextWordWrap, textType);
+    painter.drawText(rcDevIdType, Qt::TextWordWrap, textDevIdType);
     painter.drawText(rcStat, Qt::TextWordWrap, textStat);
     painter.drawRect(rcStat.adjusted(-2, -2, 40, 2));
 

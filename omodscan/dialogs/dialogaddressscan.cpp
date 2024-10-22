@@ -237,7 +237,8 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
         case Qt::DisplayRole:
         {
             const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16;
-            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, item.Addr, false),
+            const auto addr = item.Addr + (_addressBase == AddressBase::Base1 ? 1 : 0);
+            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, addr, false),
                                                item.Msg->isRequest() ? "<<" : ">>",
                                                item.Msg->toString(mode));
         }
@@ -250,6 +251,24 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
     }
 
     return QVariant();
+}
+
+///
+/// \brief LogViewModel::addressBse
+/// \return
+///
+AddressBase LogViewModel::addressBse() const
+{
+    return _addressBase;
+}
+
+///
+/// \brief LogViewModel::setAddressBase
+/// \param base
+///
+void LogViewModel::setAddressBase(AddressBase base)
+{
+    _addressBase = base;
 }
 
 ///
@@ -297,7 +316,6 @@ bool LogViewProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sour
 DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMode mode, ByteOrder order, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogAddressScan)
-    ,_dd(dd)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
@@ -313,16 +331,18 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->logView->setModel(proxyLogModel);
 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
+    ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->lineEditStartAddress->setPaddingZeroes(true);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditLength->setInputRange(1, 65530);
+    ui->lineEditLength->setInputRange(2, 65530);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(999);
     ui->tabWidget->setCurrentIndex(0);
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
     ui->comboBoxByteOrder->setCurrentByteOrder(order);
+    ui->info->setShowTimestamp(false);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
@@ -387,6 +407,7 @@ void DialogAddressScan::on_checkBoxHexView_toggled(bool on)
 {  
     ((TableViewItemModel*)ui->tableView->model())->setHexView(on);
     ((LogViewProxyModel*)ui->logView->model())->setHexView(on);
+    ui->info->setDataDisplayMode(on ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
 }
 
 ///
@@ -399,12 +420,84 @@ void DialogAddressScan::on_checkBoxShowValid_toggled(bool on)
 }
 
 ///
+/// \brief DialogAddressScan::on_lineEditStartAddress_valueChanged
+/// \param value
+///
+void DialogAddressScan::on_lineEditStartAddress_valueChanged(const QVariant& value)
+{
+    Q_UNUSED(value)
+
+    clearTableView();
+    clearLogView();
+}
+
+///
+/// \brief DialogAddressScan::on_lineEditLength_valueChanged
+/// \param value
+///
+void DialogAddressScan::on_lineEditLength_valueChanged(const QVariant& value)
+{
+    Q_UNUSED(value)
+
+    clearTableView();
+    clearLogView();
+}
+
+///
+/// \brief DialogAddressScan::on_comboBoxPointType_pointTypeChanged
+/// \param pointType
+///
+void DialogAddressScan::on_comboBoxPointType_pointTypeChanged(QModbusDataUnit::RegisterType pointType)
+{
+    Q_UNUSED(pointType)
+
+    clearTableView();
+    clearLogView();
+}
+
+///
+/// \brief DialogAddressScan::on_comboBoxAddressBase_addressBaseChanged
+/// \param base
+///
+void DialogAddressScan::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
+{
+    const auto addr = ui->lineEditStartAddress->value<int>();
+
+    ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(base == AddressBase::Base0));
+    ui->lineEditStartAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
+
+    ((TableViewItemModel*)ui->tableView->model())->setAddressBase(base);
+    ((LogViewProxyModel*)ui->logView->model())->setAddressBase(base);
+
+    clearTableView();
+    clearLogView();
+}
+
+///
 /// \brief DialogAddressScan::on_comboBoxByteOrder_byteOrderChanged
 /// \param order
 ///
 void DialogAddressScan::on_comboBoxByteOrder_byteOrderChanged(ByteOrder order)
 {
+    ui->info->setByteOrder(order);
     ((TableViewItemModel*)ui->tableView->model())->setByteOrder(order);
+}
+
+///
+/// \brief DialogAddressScan::on_logView_clicked
+/// \param index
+///
+void DialogAddressScan::on_logView_clicked(const QModelIndex &index)
+{
+    if(!index.isValid())
+    {
+        ui->info->clear();
+        return;
+    }
+
+    auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
+    auto msg = proxyLogModel->data(index, Qt::UserRole).value<const ModbusMessage*>();
+    ui->info->setModbusMessage(msg);
 }
 
 ///
@@ -437,7 +530,7 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     updateLogView(reply);
 
     if (reply->error() == QModbusDevice::NoError)
-        updateTableView(reply->result().startAddress() + (_dd.ZeroBasedAddress ? 0 : 1), reply->result().values());
+        updateTableView(reply->result().startAddress(), reply->result().values());
 
     if(_requestCount > ui->lineEditLength->value<int>()
                        + ui->spinBoxRegsOnQuery->value())
@@ -529,7 +622,8 @@ void DialogAddressScan::sendReadRequest()
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
     const auto count = ui->spinBoxRegsOnQuery->value();
-    const auto address = (_dd.ZeroBasedAddress ? pointAddress : pointAddress - 1) + _requestCount;
+    const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
+    const auto address = (addressBase == AddressBase::Base0 ? pointAddress : pointAddress - 1) + _requestCount;
 
     if(address > ModbusLimits::addressRange().to())
     {
@@ -550,9 +644,9 @@ void DialogAddressScan::clearTableView()
     const auto length = ui->lineEditLength->value<int>();
     const auto pointType = ui->comboBoxPointType->currentPointType();
     const auto pointAddress = ui->lineEditStartAddress->value<int>();
+    const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
 
-    ModbusDataUnit data(pointType, _dd.ZeroBasedAddress ? pointAddress : pointAddress - 1, length);
-    ((TableViewItemModel*)ui->tableView->model())->setAddressBase(_dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    ModbusDataUnit data(pointType, addressBase == AddressBase::Base0 ? pointAddress : pointAddress - 1, length);
     ((TableViewItemModel*)ui->tableView->model())->reset(data);
 
     ui->tableView->resizeColumnsToContents();
@@ -566,8 +660,8 @@ void DialogAddressScan::clearTableView()
 ///
 void DialogAddressScan::clearLogView()
 {
-    auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-    proxyLogModel->clear();
+    ui->info->clear();
+    ((LogViewProxyModel*)ui->logView->model())->clear();
 }
 
 ///
@@ -606,6 +700,10 @@ void DialogAddressScan::updateProgress()
 void DialogAddressScan::updateTableView(int pointAddress, QVector<quint16> values)
 {
     auto model = ui->tableView->model();
+
+    const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
+    pointAddress += (addressBase == AddressBase::Base0 ? 0 : 1);
+
     for(int i = 0; i < model->rowCount(); i++)
     {
         for(int j = 0; j < model->columnCount(); j++)
@@ -639,7 +737,10 @@ void DialogAddressScan::updateLogView(int deviceId, int transactionId, const QMo
     if(protocol == ModbusMessage::Tcp)
         ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
 
-    proxyLogModel->append(pointAddress + 1, ui->comboBoxPointType->currentPointType(), msg);
+    const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
+    pointAddress += (addressBase == AddressBase::Base0 ? 0 : 1);
+
+    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(), msg);
 }
 
 ///
@@ -652,7 +753,8 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
         return;
 
     const auto deviceId = reply->serverAddress();
-    const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + (_dd.ZeroBasedAddress ? 0 : 1);
+    const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
+    const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + (addressBase == AddressBase::Base0 ? 0 : 1);
     const auto transactionId = reply->property("TransactionId").toInt();
     const auto pdu = reply->rawResult();
 
@@ -674,11 +776,13 @@ void DialogAddressScan::updateLogView(const QModbusReply* reply)
 void DialogAddressScan::exportPdf(const QString& filename)
 {
     PdfExporter exporter(ui->tableView->model(),
+                         ui->comboBoxAddressBase->currentText(),
                          ui->lineEditStartAddress->text(),
                          ui->lineEditLength->text(),
                          ui->lineEditSlaveAddress->text(),
                          ui->comboBoxPointType->currentText(),
                          ui->spinBoxRegsOnQuery->text(),
+                         ui->comboBoxByteOrder->currentText(),
                          this);
 
     exporter.exportPdf(filename);
@@ -691,11 +795,13 @@ void DialogAddressScan::exportPdf(const QString& filename)
 void DialogAddressScan::exportCsv(const QString& filename)
 {
     CsvExporter exporter(ui->tableView->model(),
+                         ui->comboBoxAddressBase->currentText(),
                          ui->lineEditStartAddress->text(),
                          ui->lineEditLength->text(),
                          ui->lineEditSlaveAddress->text(),
                          ui->comboBoxPointType->currentText(),
                          ui->spinBoxRegsOnQuery->text(),
+                         ui->comboBoxByteOrder->currentText(),
                          this);
 
     exporter.exportCsv(filename);
@@ -704,26 +810,32 @@ void DialogAddressScan::exportCsv(const QString& filename)
 ///
 /// \brief PdfExporter::PdfExporter
 /// \param model
+/// \param addressBase
 /// \param startAddress
 /// \param length
 /// \param devId
 /// \param pointType
+/// \param regsOnQuery
 /// \param parent
 ///
 PdfExporter::PdfExporter(QAbstractItemModel* model,
+                         const QString& addressBase,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
                          const QString& pointType,
                          const QString& regsOnQuery,
+                         const QString& byteOrder,
                          QObject* parent)
     : QObject(parent)
     ,_model(model)
+    ,_addressBase(addressBase)
     ,_startAddress(startAddress)
     ,_length(length)
     ,_deviceId(devId)
     ,_pointType(pointType)
     ,_regsOnQuery(regsOnQuery)
+    ,_byteOrder(byteOrder)
 {
     _printer = QSharedPointer<QPrinter>(new QPrinter(QPrinter::PrinterResolution));
     _printer->setOutputFormat(QPrinter::PdfFormat);
@@ -806,18 +918,23 @@ void PdfExporter::paintPageHeader(int& yPos, QPainter& painter)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(_pageRect, Qt::TextSingleLine, textTime);
 
-    const auto text1 = QString(tr("Device Id: %1\tLength: %2\nPoint Type: [%3]")).arg(_deviceId, _length, _pointType);
+    const auto text1 = QString(tr("Address Base: %1\nStart Address: %2")).arg(_addressBase, _startAddress);
     auto rc1 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text1);
 
-    const auto text2 = QString(tr("Start Address: %1\nRegisters on Query: %2")).arg(_startAddress, _regsOnQuery);
+    const auto text2 = QString(tr("Device Id: %1\t\tLength: %2\nPoint Type: [%3]")).arg(_deviceId, _length, _pointType);
     auto rc2 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text2);
 
+    const auto text3 = QString(tr("Registers on Query: %1\nByte Order: %2")).arg(_regsOnQuery, _byteOrder);
+    auto rc3 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text3);
+
     rcTime.moveTopRight({ _pageRect.right(), 10 });
-    rc1.moveLeft(rc2.right() + 40);
+    rc2.moveLeft(rc1.right() + 40);
+    rc3.moveLeft(rc2.right() + 40);
 
     painter.drawText(rcTime, Qt::TextSingleLine, textTime);
-    painter.drawText(rc2, Qt::TextWordWrap, text2);
     painter.drawText(rc1, Qt::TextWordWrap, text1);
+    painter.drawText(rc2, Qt::TextWordWrap, text2);
+    painter.drawText(rc3, Qt::TextWordWrap, text3);
 
     yPos += qMax(rc1.height(), rc2.height()) + 20;
 }
@@ -829,10 +946,10 @@ void PdfExporter::paintPageHeader(int& yPos, QPainter& painter)
 void PdfExporter::paintPageFooter(QPainter& painter)
 {
     const auto textNumber = QString::number(_pageNumber);
-    auto rc = painter.boundingRect(_pageRect, Qt::TextSingleLine, textNumber);
+    auto rcNumber = painter.boundingRect(_pageRect, Qt::TextSingleLine, textNumber);
 
-    rc.moveTopRight({ _pageRect.right(), _pageRect.bottom() + 10 });
-    painter.drawText(rc, Qt::TextSingleLine, textNumber);
+    rcNumber.moveTopRight({ _pageRect.right(), _pageRect.bottom() + 10 });
+    painter.drawText(rcNumber, Qt::TextSingleLine, textNumber);
 }
 
 ///
@@ -947,19 +1064,23 @@ void PdfExporter::paintVLine(int top, int bottom, QPainter& painter)
 /// \param parent
 ///
 CsvExporter::CsvExporter(QAbstractItemModel* model,
+                         const QString& addressBase,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
                          const QString& pointType,
                          const QString& regsOnQuery,
+                         const QString& byteOrder,
                          QObject* parent)
     : QObject(parent)
     ,_model(model)
+    ,_addressBase(addressBase)
     ,_startAddress(startAddress)
     ,_length(length)
     ,_deviceId(devId)
     ,_pointType(pointType)
     ,_regsOnQuery(regsOnQuery)
+    ,_byteOrder(byteOrder)
 {
 }
 
@@ -977,10 +1098,10 @@ void CsvExporter::exportCsv(const QString& filename)
     ts.setGenerateByteOrderMark(true);
 
     const char* delim = ";";
-    const auto header = QString("%2%1%3%1%4%1%5%1%6").arg(delim, tr("Device Id"), tr("Start Address"), tr("Length"), tr("Point Type"), tr("Registers on Query"));
+    const auto header = QString("%2%1%3%1%4%1%5%1%6%1%7%1%8").arg(delim, tr("Address Base"), tr("Start Address"), tr("Device Id"), tr("Length"), tr("Point Type"), tr("Registers on Query"), tr("Byte Order"));
     ts << header << "\n";
 
-    const auto headerData = QString("%2%1%3%1%4%1%5%1%6").arg(delim, _deviceId, _startAddress, _length, _pointType, _regsOnQuery);
+    const auto headerData = QString("%2%1%3%1%4%1%5%1%6%1%7%1%8").arg(delim, _addressBase, _startAddress, _deviceId, _length, _pointType, _regsOnQuery, _byteOrder);
     ts << headerData << "\n";
 
     ts << "\n";

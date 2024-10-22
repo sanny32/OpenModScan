@@ -29,7 +29,14 @@ AddressBase AddressBaseComboBox::currentAddressBase() const
 void AddressBaseComboBox::setCurrentAddressBase(AddressBase base)
 {
     const auto idx = findData(QVariant::fromValue(base));
-    setCurrentIndex(idx);
+    if(idx == currentIndex())
+    {
+        emit currentIndexChanged(idx);
+    }
+    else if(idx != -1)
+    {
+        setCurrentIndex(idx);
+    }
 }
 
 ///

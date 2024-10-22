@@ -53,6 +53,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
 
+    connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
+
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &FormModSca::on_modbusConnected);

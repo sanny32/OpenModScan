@@ -4,6 +4,7 @@
 #include <QHostInfo>
 #include <QNetworkInterface>
 #include <QAbstractEventDispatcher>
+#include "modbuslimits.h"
 #include "modbusrtuscanner.h"
 #include "modbustcpscanner.h"
 #include "dialogmodbusscanner.h"
@@ -83,6 +84,7 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
     ui->comboBoxFunction->addItem(QModbusPdu::ReadInputRegisters);
     ui->comboBoxFunction->addItem(QModbusPdu::ReportServerId);
     ui->comboBoxFunction->setCurrentFunctionCode(QModbusPdu::ReadHoldingRegisters);
+    ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
@@ -139,7 +141,7 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxRequest->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
     ui->pushButtonScan->setEnabled((rtuScanning && ui->comboBoxSerial->count() > 0) || !rtuScanning);
-    ui->pushButtonScan->setText(inProgress ? tr("Stop Scan") : tr("Start Scan"));
+    ui->pushButtonScan->setText(inProgress ? tr("Stop") : tr("Start"));
 }
 
 ///
@@ -191,6 +193,18 @@ void DialogModbusScanner::on_comboBoxFunction_functionCodeChanged(QModbusPdu::Fu
 
     ui->spinBoxAddress->setEnabled(funcCode != QModbusPdu::ReportServerId);
     ui->spinBoxLength->setEnabled(funcCode != QModbusPdu::ReportServerId);
+    ui->comboBoxAddressBase->setEnabled(funcCode != QModbusPdu::ReportServerId);
+}
+
+///
+/// \brief DialogModbusScanner::on_comboBoxAddressBase_addressBaseChanged
+/// \param base
+///
+void DialogModbusScanner::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
+{
+    const auto addr = ui->spinBoxAddress->value();
+    ui->spinBoxAddress->setMinimum(ModbusLimits::addressRange(base == AddressBase::Base0).from());
+    ui->spinBoxAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
 }
 
 ///
@@ -577,18 +591,21 @@ const QModbusRequest DialogModbusScanner::createModbusRequest() const
     switch(ui->comboBoxFunction->currentFunctionCode())
     {
         case QModbusPdu::ReportServerId:
-        return QModbusRequest(QModbusPdu::ReportServerId);
+            return QModbusRequest(QModbusPdu::ReportServerId);
 
         case QModbusPdu::ReadCoils:
         case QModbusPdu::ReadDiscreteInputs:
         case QModbusPdu::ReadHoldingRegisters:
         case QModbusPdu::ReadInputRegisters:
-        return QModbusRequest(ui->comboBoxFunction->currentFunctionCode(),
-                              quint16(ui->spinBoxAddress->value() - 1),
+        {
+            const auto base = ui->comboBoxAddressBase->currentAddressBase();
+            return QModbusRequest(ui->comboBoxFunction->currentFunctionCode(),
+                              quint16(ui->spinBoxAddress->value() - (base == AddressBase::Base0 ? 0 : 1)),
                               quint16(ui->spinBoxLength->value()));
+        }
 
         default:
-        return QModbusRequest();
+            return QModbusRequest();
     }
 }
 

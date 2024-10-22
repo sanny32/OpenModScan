@@ -21,7 +21,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditLogLimit->setInputRange(4, 1000);
 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
-    ui->comboBoxAddressBase->setCurrentIndex(dd.ZeroBasedAddress ? 0 : 1);
+    ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->lineEditScanRate->setValue(dd.ScanRate);
     ui->lineEditPointAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);

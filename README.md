@@ -1,10 +1,10 @@
 # Open ModScan
 Open ModScan is a free implimentation of modbus master (client) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://github.com/sanny32/OpenModScan/assets/13627951/c2df0ea1-0f27-4d4b-8cc0-b6268caf8f11)
+![image](https://github.com/user-attachments/assets/71563b34-3d85-404b-9d36-03ad5da76684)
 
 
-![image](https://github.com/user-attachments/assets/aeae5869-b0a1-469f-9e30-3e68a85b23e1)
+![image](https://github.com/user-attachments/assets/1a7f45f9-66a8-4591-975f-4ea3b623ac31)
 
 
 
@@ -27,20 +27,19 @@ Registers
     0x10 - Write Multiple Registers
     0x16 - Mask Write Register
 
-Modbus Logging
+## Modbus Logging
 
-![image](https://github.com/sanny32/OpenModScan/assets/13627951/69de27f0-b09b-4587-8493-6d1908610735)
-
+![image](https://github.com/user-attachments/assets/1cc38a65-7631-4122-b975-6a01781131e4)
 
     
 ## Extended Featues
 - Modbus Address Scan
   
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/8989fbde-09f1-435c-a9a7-31e27a0ec576)
+  ![image](https://github.com/user-attachments/assets/dfbe062f-d696-4e38-a75f-d5d53182df58)
 
 - Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
   
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/cd35c0c4-ca9c-41fe-872c-1c2bb2286fc7)
+  ![image](https://github.com/user-attachments/assets/17d5f43d-c341-455d-a9b8-67db50a35699)
 
 - Modbus Message Parser
 

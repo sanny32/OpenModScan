@@ -50,7 +50,7 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.Length = ui->lineEditLength->value<int>();
     _displayDefinition.ScanRate = ui->lineEditScanRate->value<int>();
     _displayDefinition.LogViewLimit = ui->lineEditLogLimit->value<int>();
-    _displayDefinition.ZeroBasedAddress = ui->comboBoxAddressBase->currentIndex() == 0;
+    _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
 
     QFixedSizeDialog::accept();
 }

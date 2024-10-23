@@ -654,8 +654,8 @@ AddressDescriptionMap OutputWidget::descriptionMap() const
     for(int i = 0; i < _listModel->rowCount(); i++)
     {
         const auto desc = _listModel->data(_listModel->index(i), DescriptionRole).toString();
-        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt();
-        descriptionMap[{_displayDefinition.PointType, addr - (_displayDefinition.ZeroBasedAddress ? 0 : 1)}] = desc;
+        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
+        descriptionMap[{_displayDefinition.PointType, addr }] = desc;
     }
     return descriptionMap;
 }

@@ -58,7 +58,8 @@ private:
         quint16 Address;
         quint8 DeviceId;
         bool operator<(const SimulationKey& key) const{
-            return Type < key.Type && Address < key.Address && DeviceId < key.DeviceId;
+            return Type < key.Type || (!(Type < key.Type) && (Address < key.Address)) ||
+                   (!(Type < key.Type) && !(Address < key.Address) && (DeviceId < key.DeviceId));
         }
     };
 

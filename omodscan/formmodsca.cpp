@@ -779,7 +779,6 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     auto simParams = _dataSimulator->simulationParams(pointType, simAddr, deviceId);
-    qDebug() << "sim addr:" << simAddr << "sim mode:" << (int)simParams.Mode;
 
     switch(pointType)
     {

@@ -404,7 +404,7 @@ void FormModSca::print(QPrinter* printer)
 ModbusSimulationMap FormModSca::simulationMap() const
 {
     const auto dd = displayDefinition();
-    const auto startAddr = dd.PointAddress - 1;
+    const auto startAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     const auto endAddr = startAddr + dd.Length;
 
     ModbusSimulationMap result;
@@ -498,7 +498,8 @@ void FormModSca::on_timeout()
         return;
 
     const auto dd = displayDefinition();
-    if(dd.PointAddress + dd.Length - 1 <= ModbusLimits::addressRange().to())
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to())
     {
         if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
         {
@@ -509,7 +510,6 @@ void FormModSca::on_timeout()
             }
         }
 
-        const auto addr = dd.ZeroBasedAddress ? dd.PointAddress : dd.PointAddress - 1;
         _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
     }
 }
@@ -523,7 +523,7 @@ void FormModSca::beginUpdate()
         return;
 
     const auto dd = displayDefinition();
-    const auto addr = dd.ZeroBasedAddress ? dd.PointAddress : dd.PointAddress - 1;
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ?  0 : 1);
     if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to())
         _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
     else
@@ -542,7 +542,7 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
     const auto dd = displayDefinition();
     const auto data = reply->result();
     const auto response = reply->rawResult();
-    const auto addr = dd.ZeroBasedAddress ? dd.PointAddress : dd.PointAddress - 1;
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
 
     switch(response.functionCode())
     {

@@ -297,7 +297,8 @@ QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 ad
     if(_parentWidget->_displayDefinition.PointType != type)
         return QModelIndex();
 
-    const int row = addr - _parentWidget->_displayDefinition.PointAddress;
+    const auto dd =  _parentWidget->_displayDefinition;
+    const int row = addr - (dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
     if(row >= 0 && row < rowCount())
         return index(row);
 
@@ -654,7 +655,7 @@ AddressDescriptionMap OutputWidget::descriptionMap() const
     {
         const auto desc = _listModel->data(_listModel->index(i), DescriptionRole).toString();
         const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt();
-        descriptionMap[{_displayDefinition.PointType, addr}] = desc;
+        descriptionMap[{_displayDefinition.PointType, addr - (_displayDefinition.ZeroBasedAddress ? 0 : 1)}] = desc;
     }
     return descriptionMap;
 }

@@ -19,6 +19,9 @@ public:
 signals:
     void addressBaseChanged(AddressBase base);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_currentIndexChanged(int);
 };

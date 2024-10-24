@@ -1,3 +1,4 @@
+#include <QEvent>
 #include "addressbasecombobox.h"
 
 ///
@@ -11,6 +12,32 @@ AddressBaseComboBox::AddressBaseComboBox(QWidget* parent)
     addItem(tr("1-based"), QVariant::fromValue(AddressBase::Base1));
 
     connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &AddressBaseComboBox::on_currentIndexChanged);
+}
+
+///
+/// \brief AddressBaseComboBox::changeEvent
+/// \param event
+///
+void AddressBaseComboBox::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        for(int i = 0; i < count(); i++)
+        {
+            switch(itemData(i).value<AddressBase>())
+            {
+            case AddressBase::Base0:
+                setItemText(i, tr("0-based"));
+                break;
+
+            case AddressBase::Base1:
+                setItemText(i, tr("1-based"));
+                break;
+            }
+        }
+    }
+
+    QComboBox::changeEvent(event);
 }
 
 ///

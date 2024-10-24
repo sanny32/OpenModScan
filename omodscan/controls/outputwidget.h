@@ -111,8 +111,6 @@ public:
     int logViewLimit() const;
     void setLogViewLimit(int l);
 
-    void clearLogView();
-
     void setStatus(const QString& status);
 
     void paint(const QRect& rc, QPainter& painter);
@@ -125,6 +123,9 @@ public:
     void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     void setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+
+public slots:
+    void clearLogView();
 
 signals:
     void itemDoubleClicked(quint16 address, const QVariant& value);

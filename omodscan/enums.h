@@ -5,6 +5,40 @@
 #include <QSettings>
 
 ///
+/// \brief The AddressBase enum
+///
+enum class AddressBase
+{
+    Base0 = 0,
+    Base1
+};
+Q_DECLARE_METATYPE(AddressBase);
+
+///
+/// \brief operator <<
+/// \param out
+/// \param params
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const AddressBase& base)
+{
+    out.setValue("AddressBase", (uint)base);
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param params
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, AddressBase& base)
+{
+    base = (AddressBase)in.value("AddressBase").toUInt();
+    return in;
+}
+
+///
 /// \brief The DisplayMode enum
 ///
 enum class DisplayMode

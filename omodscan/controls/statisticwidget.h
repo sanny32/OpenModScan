@@ -28,6 +28,7 @@ public:
 signals:
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
+    void ctrsReseted();
 
 protected:
     void changeEvent(QEvent* event) override;

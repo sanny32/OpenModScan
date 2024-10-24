@@ -38,6 +38,7 @@ private slots:
     void on_progress(const ConnectionDetails& cd, int deviceId, int progress);
 
     void on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode funcCode);
+    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
     void on_lineEditIPAddressFrom_editingFinished();
     void on_lineEditSubnetMask_editingFinished();

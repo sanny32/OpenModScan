@@ -46,7 +46,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
         break;
     }
 
-    _simulationMap[{ type, addr, deviceId}] = { mode, params, value };
+    _simulationMap.insert({ type, addr, deviceId}, { mode, params, value });
     resumeSimulations();
 
     emit simulationStarted(type, addr, deviceId);

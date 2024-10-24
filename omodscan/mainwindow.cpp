@@ -669,7 +669,7 @@ void MainWindow::on_actionForceCoils_triggered()
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length };
+    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
 
     {
         DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, this);
@@ -679,6 +679,7 @@ void MainWindow::on_actionForceCoils_triggered()
     ModbusWriteParams params;
     params.Node = presetParams.SlaveAddress;
     params.Address = presetParams.PointAddress;
+    params.ZeroBasedAddress = dd.ZeroBasedAddress;
 
     if(dd.PointType == QModbusDataUnit::Coils &&
        dd.DeviceId == params.Node &&
@@ -703,7 +704,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length };
+    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
 
     {
         DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, this);
@@ -715,6 +716,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.Address = presetParams.PointAddress;
     params.DisplayMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
+    params.ZeroBasedAddress = dd.ZeroBasedAddress;
 
     if(dd.PointType == QModbusDataUnit::HoldingRegisters &&
        dd.DeviceId == params.Node &&
@@ -739,7 +741,7 @@ void MainWindow::on_actionMaskWrite_triggered()
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    ModbusMaskWriteParams params = { dd.DeviceId, dd.PointAddress, 0xFFFF, 0};
+    ModbusMaskWriteParams params = { dd.DeviceId, dd.PointAddress, 0xFFFF, 0, dd.ZeroBasedAddress};
 
     DialogMaskWriteRegiter dlg(params, this);
     if(dlg.exec() == QDialog::Accepted)

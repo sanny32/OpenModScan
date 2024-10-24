@@ -32,6 +32,9 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+    AddressBase addressBse() const;
+    void setAddressBase(AddressBase base);
+
     void reset(const ModbusDataUnit& data, int columns = 10){
         beginResetModel();
         _columns = columns;
@@ -52,9 +55,13 @@ public:
     }
 
 private:
+    int getAddress(int idx) const;
+
+private:
     int _columns = 10;
     ModbusDataUnit _data;
     bool _hexView = false;
+    AddressBase _addressBase = AddressBase::Base1;
     ByteOrder _byteOrder = ByteOrder::LittleEndian;
 };
 
@@ -71,6 +78,9 @@ public:
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
+
+    AddressBase addressBse() const;
+    void setAddressBase(AddressBase base);
 
     void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
         if(msg == nullptr) return;
@@ -103,6 +113,7 @@ private:
 
 private:
     bool _hexView = false;
+    AddressBase _addressBase = AddressBase::Base1;
     QVector<LogViewItem> _items;
 };
 
@@ -124,6 +135,11 @@ public:
     void clear() {
         if(sourceModel())
             ((LogViewModel*)sourceModel())->clear();
+    }
+
+    void setAddressBase(AddressBase base) {
+        if(sourceModel())
+            ((LogViewModel*)sourceModel())->setAddressBase(base);
     }
 
     void setHexView(bool on) {
@@ -153,11 +169,13 @@ class PdfExporter : public QObject
 
 public:
     explicit PdfExporter(QAbstractItemModel* model,
+                         const QString& addressBase,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
                          const QString& pointType,
                          const QString& regsOnQuery,
+                         const QString& byteOrder,
                          QObject* parent = nullptr);
     void exportPdf(const QString& filename);
 
@@ -179,11 +197,13 @@ private:
     const int _cx = 10;
     QRect _pageRect;
     QAbstractItemModel* _model;
+    const QString _addressBase;
     const QString _startAddress;
     const QString _length;
     const QString _deviceId;
     const QString _pointType;
     const QString _regsOnQuery;
+    const QString _byteOrder;
     QSharedPointer<QPrinter> _printer;
 };
 
@@ -196,21 +216,25 @@ class CsvExporter: public QObject
 
 public:
     explicit CsvExporter(QAbstractItemModel* model,
+                         const QString& addressBase,
                          const QString& startAddress,
                          const QString& length,
                          const QString& devId,
                          const QString& pointType,
                          const QString& regsOnQuery,
+                         const QString& byteOrder,
                          QObject* parent = nullptr);
     void exportCsv(const QString& filename);
 
 private:
     QAbstractItemModel* _model;
+    const QString _addressBase;
     const QString _startAddress;
     const QString _length;
     const QString _deviceId;
     const QString _pointType;
     const QString _regsOnQuery;
+    const QString _byteOrder;
 };
 
 ///
@@ -234,7 +258,12 @@ private slots:
     void on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& data);
     void on_checkBoxHexView_toggled(bool);
     void on_checkBoxShowValid_toggled(bool);
+    void on_lineEditStartAddress_valueChanged(const QVariant& value);
+    void on_lineEditLength_valueChanged(const QVariant& value);
+    void on_comboBoxPointType_pointTypeChanged(QModbusDataUnit::RegisterType pointType);
+    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxByteOrder_byteOrderChanged(ByteOrder);
+    void on_logView_clicked(const QModelIndex &index);
     void on_pushButtonScan_clicked();
     void on_pushButtonExport_clicked();
 

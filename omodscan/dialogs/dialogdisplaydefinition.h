@@ -1,6 +1,7 @@
 #ifndef DIALOGDISPLAYDEFINITION_H
 #define DIALOGDISPLAYDEFINITION_H
 
+#include "enums.h"
 #include "qfixedsizedialog.h"
 #include "displaydefinition.h"
 
@@ -24,6 +25,9 @@ public:
     }
 
     void accept() override;
+
+private slots:
+    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
 
 private:
     DisplayDefinition _displayDefinition;

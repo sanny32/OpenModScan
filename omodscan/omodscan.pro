@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.7.1
+VERSION = 1.8.0
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -24,6 +24,7 @@ INCLUDEPATH += controls \
                modbusmessages \
 
 SOURCES += \
+    controls/addressbasecombobox.cpp \
     controls/booleancombobox.cpp \
     controls/bytelisttextedit.cpp \
     controls/byteordercombobox.cpp \
@@ -86,6 +87,7 @@ SOURCES += \
 HEADERS += \
     byteorderutils.h \
     connectiondetails.h \
+    controls/addressbasecombobox.h \
     controls/booleancombobox.h \
     controls/bytelisttextedit.h \
     controls/byteordercombobox.h \

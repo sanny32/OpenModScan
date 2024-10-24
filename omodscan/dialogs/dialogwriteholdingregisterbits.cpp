@@ -15,11 +15,11 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
 {
     ui->setupUi(this);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
-    quint16 value = params.Value.toUInt();
+    const quint16 value = params.Value.toUInt();
     for (int i = 0; i < 16; i++)
     {
         auto ctrl = findChild<QCheckBox*>(QString("checkBox%1").arg(i));

@@ -78,6 +78,7 @@ void StatisticWidget::resetCtrs()
 void StatisticWidget::on_pushButtonResetCtrs_clicked()
 {
     resetCtrs();
+    emit ctrsReseted();
 }
 
 ///

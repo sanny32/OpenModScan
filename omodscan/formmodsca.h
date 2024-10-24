@@ -111,6 +111,7 @@ private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
+    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
@@ -248,6 +249,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.PointAddress;
     out << dd.Length;
     out << dd.LogViewLimit;
+    out << dd.ZeroBasedAddress;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -303,6 +305,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     if(ver >= QVersionNumber(1, 4))
     {
         in >> dd.LogViewLimit;
+    }
+    if(ver >= QVersionNumber(1, 5))
+    {
+        in >> dd.ZeroBasedAddress;
     }
 
     ByteOrder byteOrder = ByteOrder::LittleEndian;

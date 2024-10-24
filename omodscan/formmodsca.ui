@@ -103,7 +103,7 @@
               </property>
               <property name="maximumSize">
                <size>
-                <width>80</width>
+                <width>90</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -155,7 +155,7 @@
               </property>
               <property name="maximumSize">
                <size>
-                <width>80</width>
+                <width>90</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -414,6 +414,11 @@
    <header>pointtypecombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>AddressBaseComboBox</class>
+   <extends>QComboBox</extends>
+   <header>addressbasecombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>OutputWidget</class>
    <extends>QWidget</extends>
    <header>outputwidget.h</header>
@@ -424,11 +429,6 @@
    <extends>QWidget</extends>
    <header>statisticwidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>AddressBaseComboBox</class>
-   <extends>QComboBox</extends>
-   <header>addressbasecombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

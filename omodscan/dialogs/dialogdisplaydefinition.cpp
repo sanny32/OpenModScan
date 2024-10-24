@@ -20,8 +20,8 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLogLimit->setInputRange(4, 1000);
 
-    ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditScanRate->setValue(dd.ScanRate);
     ui->lineEditPointAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);

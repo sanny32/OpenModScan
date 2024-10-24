@@ -38,8 +38,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     _timer.setInterval(1000);
 
     ui->lineEditAddress->setPaddingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditAddress->setValue(1);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setValue(0);
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(50);

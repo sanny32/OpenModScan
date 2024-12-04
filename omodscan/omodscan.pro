@@ -176,6 +176,7 @@ HEADERS += \
     qrange.h \
     quintvalidator.h \
     recentfileactionlist.h \
+    serialportutils.h \
     windowactionlist.h
 
 FORMS += \

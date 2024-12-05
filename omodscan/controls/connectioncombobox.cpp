@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <QSerialPortInfo>
+#include "serialportutils.h"
 #include "connectioncombobox.h"
 
 ///
@@ -21,11 +21,10 @@ ConnectionComboBox::ConnectionComboBox(QWidget* parent)
 {
     addItem(tr("Remote TCP/IP Server"), ConnectionType::Tcp, QString());
 
-    QStringList ports;
-    for(auto&& port: QSerialPortInfo::availablePorts())
+    for(auto&& port: getAvailableSerialPorts())
     {
-        const auto text = QString(tr("Direct Connection to %1")).arg(port.portName());
-        addItem(text, ConnectionType::Serial, port.portName());
+        const auto text = QString(tr("Direct Connection to %1")).arg(port);
+        addItem(text, ConnectionType::Serial, port);
     }
 }
 

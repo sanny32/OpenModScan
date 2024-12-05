@@ -5,6 +5,7 @@
 #include <QNetworkInterface>
 #include <QAbstractEventDispatcher>
 #include "modbuslimits.h"
+#include "serialportutils.h"
 #include "modbusrtuscanner.h"
 #include "modbustcpscanner.h"
 #include "dialogmodbusscanner.h"
@@ -58,8 +59,7 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
     ui->pushButtonScan->setIcon(_iconStart);
 
     ui->radioButtonTCP->click();
-    for(auto&& port: QSerialPortInfo::availablePorts())
-        ui->comboBoxSerial->addItem(port.portName());
+    ui->comboBoxSerial->addItems(getAvailableSerialPorts());
 
     QHostAddress address, mask;
     for(auto&& eth : QNetworkInterface::allInterfaces()) {

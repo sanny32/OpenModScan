@@ -441,7 +441,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         {
             const int nums = QString::number(top.toInt()).length();
             _paddingZeroWidth = qMax(1, nums);
-            setMaxLength(qMax(1, nums));
+            setMaxLength(qMax(2, nums + 1));
             setValidator(new QIntValidator(bottom.toInt(), top.toInt(), this));
 
         }
@@ -475,7 +475,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         {
             const int nums = QString::number(top.toLongLong()).length();
             _paddingZeroWidth = qMax(1, nums);
-            setMaxLength(qMax(1, nums));
+            setMaxLength(qMax(2, nums + 1));
             setValidator(new QInt64Validator(bottom.toLongLong(), top.toLongLong(), this));
         }
         break;

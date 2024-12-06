@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.8.1
+VERSION = 1.8.2
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -210,4 +210,5 @@ RESOURCES += \
     resources.qrc
 
 TRANSLATIONS += \
-    translations/omodscan_ru.ts
+    translations/omodscan_ru.ts \
+    translations/omodscan_cn.ts

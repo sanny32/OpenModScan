@@ -4,12 +4,14 @@
 <context>
     <name>AddressBaseComboBox</name>
     <message>
-        <location filename="../controls/addressbasecombobox.cpp" line="10"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="11"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="30"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../controls/addressbasecombobox.cpp" line="11"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="12"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
@@ -35,7 +37,7 @@
         <translation>远程 TCP/IP 服务器</translation>
     </message>
     <message>
-        <location filename="../controls/connectioncombobox.cpp" line="27"/>
+        <location filename="../controls/connectioncombobox.cpp" line="26"/>
         <source>Direct Connection to %1</source>
         <translation>直接连接到 %1</translation>
     </message>
@@ -704,19 +706,19 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="77"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="23"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="24"/>
         <source>None</source>
         <translation>无校验</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="87"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="29"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="30"/>
         <source>Odd</source>
         <translation>奇校验</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="94"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="26"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="27"/>
         <source>Even</source>
         <translation>偶校验</translation>
     </message>
@@ -787,12 +789,12 @@
         <translation>扫描</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="32"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="33"/>
         <source>Space</source>
         <translation>0校验</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="35"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="36"/>
         <source>Mark</source>
         <translation>1校验</translation>
     </message>
@@ -1556,7 +1558,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="97"/>
-        <location filename="../mainwindow.ui" line="708"/>
+        <location filename="../mainwindow.ui" line="715"/>
         <source>Byte Order</source>
         <translation>字节顺序</translation>
     </message>
@@ -1586,172 +1588,177 @@ Valid Slave Responses: %2</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="181"/>
+        <location filename="../mainwindow.ui" line="182"/>
         <source>Window</source>
         <translation>窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="190"/>
+        <location filename="../mainwindow.ui" line="191"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="204"/>
-        <location filename="../mainwindow.ui" line="603"/>
+        <location filename="../mainwindow.ui" line="205"/>
+        <location filename="../mainwindow.ui" line="604"/>
         <source>Toolbar</source>
         <translation>工具栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="228"/>
+        <location filename="../mainwindow.ui" line="229"/>
         <source>Display Bar</source>
         <translation>格式栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="274"/>
+        <location filename="../mainwindow.ui" line="275"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="286"/>
+        <location filename="../mainwindow.ui" line="287"/>
         <source>Open...</source>
         <translation>打开…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="294"/>
+        <location filename="../mainwindow.ui" line="295"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="303"/>
+        <location filename="../mainwindow.ui" line="304"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="311"/>
+        <location filename="../mainwindow.ui" line="312"/>
         <source>Save As...</source>
         <translation>保存为…</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="320"/>
+        <location filename="../mainwindow.ui" line="321"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="328"/>
+        <location filename="../mainwindow.ui" line="329"/>
         <source>Print Setup...</source>
         <translation>打印设置...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="333"/>
+        <location filename="../mainwindow.ui" line="334"/>
         <source>Recent File</source>
         <translation>最近文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="338"/>
+        <location filename="../mainwindow.ui" line="339"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="343"/>
+        <location filename="../mainwindow.ui" line="344"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="355"/>
+        <location filename="../mainwindow.ui" line="356"/>
         <source>Disconnect</source>
         <translation>断开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="363"/>
+        <location filename="../mainwindow.ui" line="364"/>
         <source>Enable</source>
         <translation>启用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="368"/>
+        <location filename="../mainwindow.ui" line="369"/>
         <source>Disable</source>
         <translation>禁用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="373"/>
+        <location filename="../mainwindow.ui" line="374"/>
         <source>Save Config</source>
         <translation>保存配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="378"/>
+        <location filename="../mainwindow.ui" line="379"/>
         <source>Restore Now</source>
         <translation>恢复配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="387"/>
+        <location filename="../mainwindow.ui" line="388"/>
         <source>Quick Connect</source>
         <translation>快速连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="396"/>
+        <location filename="../mainwindow.ui" line="397"/>
         <source>Data Definition</source>
         <translation>数据格式</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="408"/>
+        <location filename="../mainwindow.ui" line="409"/>
         <source>Show Data</source>
         <translation>显示数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="420"/>
+        <location filename="../mainwindow.ui" line="421"/>
         <source>Show Traffic</source>
         <translation>显示流量</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="432"/>
+        <location filename="../mainwindow.ui" line="433"/>
         <source>Binary</source>
         <translation>二进制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="447"/>
+        <location filename="../mainwindow.ui" line="448"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="731"/>
+        <location filename="../mainwindow.ui" line="738"/>
         <source>32-bit Integer</source>
         <translation>32位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="746"/>
-        <location filename="../mainwindow.ui" line="749"/>
+        <location filename="../mainwindow.ui" line="753"/>
+        <location filename="../mainwindow.ui" line="756"/>
         <source>Swapped 32-bit Integer</source>
         <translation>32位整数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="764"/>
+        <location filename="../mainwindow.ui" line="771"/>
         <source>Unsigned 32-bit Integer</source>
         <translation>无符号32位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="779"/>
-        <location filename="../mainwindow.ui" line="782"/>
+        <location filename="../mainwindow.ui" line="786"/>
+        <location filename="../mainwindow.ui" line="789"/>
         <source>Swapped Unsigned 32-bit Integer</source>
         <translation>无符号32位整数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="808"/>
+        <location filename="../mainwindow.ui" line="815"/>
         <source>64-bit Integer</source>
         <translation>64位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="823"/>
+        <location filename="../mainwindow.ui" line="830"/>
         <source>Swapped 64-bit Integer</source>
         <translation>64位整数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="838"/>
+        <location filename="../mainwindow.ui" line="845"/>
         <source>Unsigned 64-bit Integer</source>
         <translation>无符号64位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="853"/>
+        <location filename="../mainwindow.ui" line="860"/>
         <source>Swapped Unsigned 64-bit Integer</source>
         <translation>无符号64位整数（字节交换）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="868"/>
+        <source>中文</source>
+        <translation></translation>
     </message>
     <message>
         <source>Unsigned Decimal</source>
@@ -1778,88 +1785,88 @@ Valid Slave Responses: %2</source>
         <translation type="vanished">Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="560"/>
+        <location filename="../mainwindow.ui" line="561"/>
         <source>Hex Addresses</source>
         <translation>十六进制地址</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="565"/>
+        <location filename="../mainwindow.ui" line="566"/>
         <source>Force Coils</source>
         <translation>强制线圈状态</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="570"/>
+        <location filename="../mainwindow.ui" line="571"/>
         <source>Preset Regs</source>
         <translation>预设寄存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="575"/>
+        <location filename="../mainwindow.ui" line="576"/>
         <source>Mask Write</source>
         <translation>掩码写入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="580"/>
+        <location filename="../mainwindow.ui" line="581"/>
         <source>User Msg</source>
         <translation>用户消息</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="585"/>
+        <location filename="../mainwindow.ui" line="586"/>
         <source>Text Capture</source>
         <translation>文本捕获</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="590"/>
+        <location filename="../mainwindow.ui" line="591"/>
         <source>Capture Off</source>
         <translation>捕获关闭</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="595"/>
+        <location filename="../mainwindow.ui" line="596"/>
         <source>Reset Ctrs</source>
         <translation>重置计数器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="611"/>
+        <location filename="../mainwindow.ui" line="612"/>
         <source>Status Bar</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="619"/>
+        <location filename="../mainwindow.ui" line="620"/>
         <source>Dsiplay Bar</source>
         <translation>格式栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="624"/>
+        <location filename="../mainwindow.ui" line="625"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="629"/>
+        <location filename="../mainwindow.ui" line="630"/>
         <source>Foreground</source>
         <translation>前景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="634"/>
+        <location filename="../mainwindow.ui" line="635"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="639"/>
+        <location filename="../mainwindow.ui" line="640"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="644"/>
+        <location filename="../mainwindow.ui" line="645"/>
         <source>Cascade</source>
         <translation>层叠</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="649"/>
+        <location filename="../mainwindow.ui" line="650"/>
         <source>Tile</source>
         <translation>平铺</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="713"/>
-        <location filename="../mainwindow.ui" line="716"/>
+        <location filename="../mainwindow.ui" line="720"/>
+        <location filename="../mainwindow.ui" line="723"/>
         <source>MODBUS Scanner</source>
         <translation>MODBUS 扫描器</translation>
     </message>
@@ -1888,67 +1895,67 @@ Valid Slave Responses: %2</source>
         <translation type="vanished">Перевернутое беззнаковое длинное целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="790"/>
-        <location filename="../mainwindow.ui" line="793"/>
+        <location filename="../mainwindow.ui" line="797"/>
+        <location filename="../mainwindow.ui" line="800"/>
         <source>Msg Parser</source>
         <translation>消息解析器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="658"/>
+        <location filename="../mainwindow.ui" line="659"/>
         <source>About Open ModScan...</source>
         <translation>关于 Open ModScan...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="462"/>
+        <location filename="../mainwindow.ui" line="463"/>
         <source>Unsigned 16-bit Intger</source>
         <translation>无符号16位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="477"/>
+        <location filename="../mainwindow.ui" line="478"/>
         <source>16-bit Integer</source>
         <translation>16位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="492"/>
-        <location filename="../mainwindow.ui" line="495"/>
+        <location filename="../mainwindow.ui" line="493"/>
+        <location filename="../mainwindow.ui" line="496"/>
         <source>Float</source>
         <translation>浮点数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="510"/>
-        <location filename="../mainwindow.ui" line="513"/>
+        <location filename="../mainwindow.ui" line="511"/>
+        <location filename="../mainwindow.ui" line="514"/>
         <source>Swapped Float</source>
         <translation>浮点数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="528"/>
-        <location filename="../mainwindow.ui" line="531"/>
+        <location filename="../mainwindow.ui" line="529"/>
+        <location filename="../mainwindow.ui" line="532"/>
         <source>Double</source>
         <translation>双精度浮点数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="546"/>
-        <location filename="../mainwindow.ui" line="549"/>
+        <location filename="../mainwindow.ui" line="547"/>
+        <location filename="../mainwindow.ui" line="550"/>
         <source>Swapped Double</source>
         <translation>双精度浮点数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="663"/>
+        <location filename="../mainwindow.ui" line="664"/>
         <source>Windows...</source>
         <translation>窗口...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="671"/>
+        <location filename="../mainwindow.ui" line="672"/>
         <source>English</source>
-        <translation>英语</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="679"/>
+        <location filename="../mainwindow.ui" line="683"/>
         <source>Русский</source>
-        <translation>俄语</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="684"/>
+        <location filename="../mainwindow.ui" line="691"/>
         <source>Address scan</source>
         <translation>地址扫描</translation>
     </message>
@@ -1961,12 +1968,12 @@ Valid Slave Responses: %2</source>
         <translation>所有文件(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1031"/>
+        <location filename="../mainwindow.cpp" line="1039"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1032"/>
+        <location filename="../mainwindow.cpp" line="1040"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>

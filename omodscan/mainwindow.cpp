@@ -955,6 +955,14 @@ void MainWindow::on_actionRussian_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionChinese_triggered
+///
+void MainWindow::on_actionChinese_triggered()
+{
+    setLanguage("cn");
+}
+
+///
 /// \brief MainWindow::on_actionCascade_triggered
 ///
 void MainWindow::on_actionCascade_triggered()

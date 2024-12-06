@@ -39,5 +39,6 @@
         <file>res/actionUInt64.png</file>
         <file>res/actionSwappedInt64.png</file>
         <file>res/actionSwappedUInt64.png</file>
+        <file>translations/omodscan_cn.qm</file>
     </qresource>
 </RCC>

@@ -864,6 +864,9 @@
    </property>
   </action>
   <action name="actionChinese">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>中文</string>
    </property>

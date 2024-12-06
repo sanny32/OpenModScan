@@ -204,6 +204,7 @@ void MainWindow::on_awake()
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
+    ui->actionChinese->setChecked(_lang == "cn");
 
     if(frm != nullptr)
     {

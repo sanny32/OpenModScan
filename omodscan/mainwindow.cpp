@@ -204,6 +204,7 @@ void MainWindow::on_awake()
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
+    ui->actionChinese->setChecked(_lang == "cn");
 
     if(frm != nullptr)
     {
@@ -952,6 +953,14 @@ void MainWindow::on_actionEnglish_triggered()
 void MainWindow::on_actionRussian_triggered()
 {
    setLanguage("ru");
+}
+
+///
+/// \brief MainWindow::on_actionChinese_triggered
+///
+void MainWindow::on_actionChinese_triggered()
+{
+    setLanguage("cn");
 }
 
 ///

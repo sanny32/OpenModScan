@@ -168,6 +168,7 @@
      </property>
      <addaction name="actionEnglish"/>
      <addaction name="actionRussian"/>
+     <addaction name="actionChinese"/>
     </widget>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
@@ -670,6 +671,9 @@
    <property name="text">
     <string>English</string>
    </property>
+   <property name="iconText">
+    <string notr="true">English</string>
+   </property>
   </action>
   <action name="actionRussian">
    <property name="checkable">
@@ -677,6 +681,9 @@
    </property>
    <property name="text">
     <string>Русский</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">Русский</string>
    </property>
   </action>
   <action name="actionAddressScan">
@@ -854,6 +861,17 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+8</string>
+   </property>
+  </action>
+  <action name="actionChinese">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>中文</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">中文</string>
    </property>
   </action>
  </widget>

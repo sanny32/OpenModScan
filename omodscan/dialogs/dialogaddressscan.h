@@ -260,12 +260,14 @@ private slots:
     void on_checkBoxShowValid_toggled(bool);
     void on_lineEditStartAddress_valueChanged(const QVariant& value);
     void on_lineEditLength_valueChanged(const QVariant& value);
+    void on_lineEditToFind_valueChanged(const QVariant& value);
     void on_comboBoxPointType_pointTypeChanged(QModbusDataUnit::RegisterType pointType);
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxByteOrder_byteOrderChanged(ByteOrder);
     void on_logView_clicked(const QModelIndex &index);
     void on_pushButtonScan_clicked();
     void on_pushButtonExport_clicked();
+    void on_pushButtonFind_clicked();
 
 private:
     void startScan();

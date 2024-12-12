@@ -67,10 +67,15 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             return Qt::AlignCenter;
 
         case Qt::BackgroundRole:
-            return _data.hasValue(idx) ? QVariant() : parentWidget->palette().color(QPalette::Disabled, QPalette::Base);
+            return _data.hasValue(idx) ?
+                       QVariant() :
+                       parentWidget->palette().color(QPalette::Disabled, QPalette::Base);
 
         case Qt::UserRole:
             return getAddress(idx);
+
+        case Qt::UserRole + 1:
+            return  _data.hasValue(idx) ? _data.value(idx) : QVariant();
     }
 
     return QVariant();
@@ -85,27 +90,34 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
 ///
 bool TableViewItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (!index.isValid() || role != Qt::DisplayRole)
+    if (!index.isValid())
     {
         return false;
     }
 
-    const auto idx = index.row() * _columns + index.column();
-    if(value.userType() == qMetaTypeId<QVector<quint16>>())
+    switch(role)
     {
-        const auto values = value.value<QVector<quint16>>();
-        for(int i = 0; i < values.size(); i++)
-            _data.setValue(idx + i, values.at(i));
+        case Qt::DisplayRole:
+        {
+            const auto idx = index.row() * _columns + index.column();
+            if(value.userType() == qMetaTypeId<QVector<quint16>>())
+            {
+                const auto values = value.value<QVector<quint16>>();
+                for(int i = 0; i < values.size(); i++)
+                    _data.setValue(idx + i, values.at(i));
 
-        emit dataChanged(index, this->index(rowCount() - 1, columnCount() - 1), QVector<int>() << Qt::DisplayRole);
-    }
-    else
-    {
-        _data.setValue(idx, value.toUInt());
-        emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+                emit dataChanged(index, this->index(rowCount() - 1, columnCount() - 1), QVector<int>() << role);
+            }
+            else
+            {
+                _data.setValue(idx, value.toUInt());
+                emit dataChanged(index, index, QVector<int>() << role);
+            }
+        }
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 ///
@@ -388,6 +400,7 @@ void DialogAddressScan::on_awake()
     ui->pushButtonExport->setEnabled(_finished);
     ui->progressBar->setVisible(_scanning);
     ui->pushButtonScan->setText(_scanning ? tr("Stop") : tr("Scan"));
+    ui->pushButtonFind->setEnabled(ui->tableView->model()->rowCount() > 0);
 }
 
 ///
@@ -408,6 +421,7 @@ void DialogAddressScan::on_checkBoxHexView_toggled(bool on)
     ((TableViewItemModel*)ui->tableView->model())->setHexView(on);
     ((LogViewProxyModel*)ui->logView->model())->setHexView(on);
     ui->info->setDataDisplayMode(on ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
+    ui->lineEditToFind->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
 }
 
 ///
@@ -441,6 +455,15 @@ void DialogAddressScan::on_lineEditLength_valueChanged(const QVariant& value)
 
     clearTableView();
     clearLogView();
+}
+
+///
+/// \brief DialogAddressScan::on_lineEditToFind_valueChanged
+/// \param value
+///
+void DialogAddressScan::on_lineEditToFind_valueChanged(const QVariant& value)
+{
+    ui->tableView->selectionModel()->clearSelection();
 }
 
 ///
@@ -572,6 +595,58 @@ void DialogAddressScan::on_pushButtonExport_clicked()
         exportPdf(filename);
     else if(filename.endsWith(".csv", Qt::CaseInsensitive))
         exportCsv(filename);
+}
+
+///
+/// \brief DialogAddressScan::on_pushButtonFind_clicked
+///
+void DialogAddressScan::on_pushButtonFind_clicked()
+{
+    const auto valueToFind = ui->lineEditToFind->value<int>();
+    auto model = ((TableViewItemModel*)ui->tableView->model());
+    auto selectionModel = ui->tableView->selectionModel();
+
+    if(!selectionModel->hasSelection())
+    {
+        for(int i = 0; i < model->rowCount(); i++)
+        {
+            for(int j = 0; j < model->columnCount(); j++)
+            {
+                const auto index = model->index(i,j);
+
+                bool ok;
+                const auto value = model->data(index, Qt::UserRole + 1).toInt(&ok);
+                if(!ok) continue;
+
+                if(value == valueToFind)
+                {
+                    selectionModel->select(index, QItemSelectionModel::Select);
+                }
+            }
+        }
+    }
+
+    bool found = false;
+    const auto currentIndex = ui->tableView->currentIndex();
+    const auto selectedIndexes = selectionModel->selectedIndexes();
+    const auto  i = currentIndex.row() * model->columnCount() + currentIndex.column();
+    for(auto&& index : selectedIndexes)
+    {
+        const int j = index.row() * model->columnCount() + index.column();
+        if(j > i) {
+            found = true;
+            ui->tableView->scrollTo(index);
+            ui->tableView->setCurrentIndex(index);
+            break;
+        }
+    }
+    if(!found && !selectedIndexes.isEmpty()) {
+        ui->tableView->scrollTo(model->index(0,0));
+        ui->tableView->scrollTo(selectedIndexes.first());
+        ui->tableView->setCurrentIndex(selectedIndexes.first());
+    }
+
+    ui->tableView->setFocus();
 }
 
 ///

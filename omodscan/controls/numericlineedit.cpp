@@ -74,8 +74,7 @@ NumericLineEdit::InputMode NumericLineEdit::inputMode() const
 ///
 void NumericLineEdit::setInputMode(InputMode mode)
 {
-    _inputMode = mode;
-    if(!_minValue.isValid() || !_maxValue.isValid())
+    if(!_minValue.isValid() || !_maxValue.isValid() || mode != _inputMode)
     {
         switch(mode)
         {
@@ -86,7 +85,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
             break;
 
             case UInt32Mode:
-                _minValue = 0;
+                _minValue = 0U;
                 _maxValue = UINT_MAX;
             break;
 
@@ -111,6 +110,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
             break;
         }
     }
+    _inputMode = mode;
     emit rangeChanged(_minValue, _maxValue);
 }
 

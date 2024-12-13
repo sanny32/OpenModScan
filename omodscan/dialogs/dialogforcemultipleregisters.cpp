@@ -26,6 +26,56 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
     ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
 
+    switch(_writeParams.DisplayMode)
+    {
+        case DataDisplayMode::Hex:
+            ui->lineEditValue->setPaddingZeroes(true);
+            ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+        break;
+
+        case DataDisplayMode::Int16:
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
+            ui->lineEditValue->setInputRange(SHRT_MIN, SHRT_MAX);
+        break;
+
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
+        break;
+
+        case DataDisplayMode::Binary:
+        case DataDisplayMode::UInt16:
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+        break;
+
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
+        break;
+
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
+        break;
+
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
+        break;
+
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+            ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
+        break;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+            ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
+        break;
+    }
+
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
 
@@ -262,6 +312,19 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
                     breakUInt64(QRandomGenerator::global()->generate64(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
             break;
         }
+    }
+
+    updateTableWidget();
+}
+
+///
+/// \brief DialogForceMultipleRegisters::on_pushButtonValue_clicked
+///
+void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
+{
+    for(auto& v : _data)
+    {
+        v = ui->lineEditValue->value<int>();
     }
 
     updateTableWidget();

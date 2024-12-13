@@ -322,10 +322,82 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 ///
 void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
 {
-    for(auto& v : _data)
+    for(int i = 0; i < _data.size(); i++)
     {
-        v = ui->lineEditValue->value<int>();
+        switch(_writeParams.DisplayMode)
+        {
+            case DataDisplayMode::Hex:
+            case DataDisplayMode::Binary:
+            case DataDisplayMode::UInt16:
+                _data[i] = ui->lineEditValue->value<quint16>();
+            break;
+
+            case DataDisplayMode::Int16:
+                _data[i] = ui->lineEditValue->value<qint16>();
+            break;
+
+            case DataDisplayMode::Int32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakInt32(ui->lineEditValue->value<qint32>(), _data[i], _data[i + 1], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedInt32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakInt32(ui->lineEditValue->value<qint32>(), _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::UInt32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakUInt32(ui->lineEditValue->value<quint32>(), _data[i], _data[i + 1], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedUInt32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakUInt32(ui->lineEditValue->value<quint32>(), _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::Int64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakInt64(ui->lineEditValue->value<qint64>(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakInt64(ui->lineEditValue->value<qint64>(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::UInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakUInt64(ui->lineEditValue->value<quint64>(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedUInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakUInt64(ui->lineEditValue->value<quint64>(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::FloatingPt:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakFloat(ui->lineEditValue->value<float>(), _data[i], _data[i + 1], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedFP:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakFloat(ui->lineEditValue->value<float>(), _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::DblFloat:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakDouble(ui->lineEditValue->value<double>(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedDbl:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakDouble(ui->lineEditValue->value<double>(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+        }
     }
+
 
     updateTableWidget();
 }

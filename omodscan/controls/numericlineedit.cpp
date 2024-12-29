@@ -78,8 +78,11 @@ void NumericLineEdit::setInputMode(InputMode mode)
     {
         switch(mode)
         {
-            case Int32Mode:
             case HexMode:
+                _minValue = (ushort)0;
+                _maxValue = USHRT_MAX;
+            break;
+            case Int32Mode:            
                 _minValue = INT_MIN;
                 _maxValue = INT_MAX;
             break;

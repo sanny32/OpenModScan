@@ -250,7 +250,7 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
             for(auto&& cb : bytes)
             {
                 const QChar c(cb);
-                if(std::isprint(cb) && cb != 13)
+                if(c.isPrint() && cb != 13)
                     chars.append(c);
                 else
                     chars.append(QString("\\x%1").arg(QString::number(cb, 16).toUpper(), 2, '0'));

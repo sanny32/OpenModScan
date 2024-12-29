@@ -219,6 +219,53 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
 }
 
 ///
+/// \brief formatAsciiValue
+/// \param pointType
+/// \param value
+/// \param order
+/// \param outValue
+/// \return
+///
+inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
+{
+    QString result;
+    value = toByteOrderValue(value, order);
+
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString("<%1>").arg(value);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            quint8 lo, hi;
+            breakUInt16(value, lo, hi, ByteOrder::LittleEndian);
+
+            QList<quint8> bytes;
+            bytes << hi << lo;
+
+            QStringList chars;
+            for(auto&& cb : bytes)
+            {
+                const QChar c(cb);
+                if(std::isprint(cb) && cb != 13)
+                    chars.append(c);
+                else
+                    chars.append(QString("\\x%1").arg(QString::number(cb, 16).toUpper(), 2, '0'));
+            }
+            result = QString("%1").arg(chars.join(' '));
+        }
+        break;
+        default:
+        break;
+    }
+    outValue = value;
+    return result;
+}
+
+///
 /// \brief formatFloatValue
 /// \param pointType
 /// \param value1

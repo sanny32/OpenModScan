@@ -42,7 +42,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -104,6 +104,7 @@
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionHex"/>
+     <addaction name="actionAscii"/>
      <addaction name="actionInt16"/>
      <addaction name="actionUInt16"/>
      <addaction name="actionInt32"/>
@@ -242,6 +243,7 @@
    </attribute>
    <addaction name="actionBinary"/>
    <addaction name="actionHex"/>
+   <addaction name="actionAscii"/>
    <addaction name="separator"/>
    <addaction name="actionInt16"/>
    <addaction name="actionUInt16"/>
@@ -872,6 +874,18 @@
    </property>
    <property name="iconText">
     <string notr="true">中文</string>
+   </property>
+  </action>
+  <action name="actionAscii">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionAscii.png</normaloff>:/res/actionAscii.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ascii</string>
    </property>
   </action>
  </widget>

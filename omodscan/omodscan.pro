@@ -1,5 +1,9 @@
 QT += core gui widgets network printsupport serialbus serialport
 
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += core5compat
+}
+
 CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target

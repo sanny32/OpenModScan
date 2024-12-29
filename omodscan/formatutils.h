@@ -5,6 +5,7 @@
 #include <QLocale>
 #include <QModbusPdu>
 #include <QModbusDataUnit>
+#include <QTextCodec>
 #include "enums.h"
 #include "numericutils.h"
 #include "byteorderutils.h"
@@ -240,34 +241,21 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
         {
-            static const QMap<quint8, QString> __non_printable_ascii = {
-                {0x00, "NULL"}, {0x01, "SOH"}, {0x02, "STX"}, {0x03, "ETX"},
-                {0x04, "EOT"},  {0x05, "ENQ"}, {0x06, "ACK"}, {0x07, "BEL"},
-                {0x08, "BS"},   {0x09, "TAB"}, {0x0A, "LF"},  {0x0B, "VT"},
-                {0x0C, "FF"},   {0x0D, "CR"},  {0x0E, "SO"},  {0x0F, "SI"},
-                {0x10, "DLE"},  {0x11, "DC1"}, {0x12, "DC2"}, {0x13, "DC3"},
-                {0x14, "DC4"},  {0x15, "NAK"}, {0x16, "SYN"}, {0x17, "ETB"},
-                {0x18, "CAN"},  {0x19, "EM"},  {0x1A, "SUB"}, {0x1B, "ESC"},
-                {0x1C, "FS"},   {0x1D, "GS"},  {0x1E, "RS"},  {0x1F, "US"},
-                {0x7F, "DEL"}
-            };
-
             quint8 lo, hi;
             breakUInt16(value, lo, hi, ByteOrder::LittleEndian);
 
-            QList<quint8> bytes;
-            bytes << hi << lo;
+            QByteArray bytes;
+            bytes.append(hi);
+            bytes.append(lo);
+            auto codec = QTextCodec::codecForLocale();
 
             QStringList chars;
-            for(auto&& cb : bytes)
+            for(auto&& c: codec->toUnicode(bytes))
             {
-                const QChar c(cb);
                 if(c.isPrint() && !c.isSpace())
                     chars.append(c);
-                /*else if(__non_printable_ascii.contains(cb))
-                    chars.append(QString("[%1]").arg(__non_printable_ascii[cb]));*/
                 else
-                    chars.append(QString("\\x%1").arg(QString::number(cb, 16).toUpper(), 2, '0'));
+                    chars.append(QString("\\x%1").arg(QString::number(c.toLatin1(), 16).toUpper(), 2, '0'));
             }
             result = QString("%1").arg(chars.join(' '));
         }

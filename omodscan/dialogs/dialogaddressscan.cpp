@@ -463,6 +463,8 @@ void DialogAddressScan::on_lineEditLength_valueChanged(const QVariant& value)
 ///
 void DialogAddressScan::on_lineEditToFind_valueChanged(const QVariant& value)
 {
+    Q_UNUSED(value)
+
     ui->tableView->selectionModel()->clearSelection();
 }
 

@@ -219,6 +219,14 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
     return result;
 }
 
+inline void appendByte(QByteArray& ar, quint8 b)
+{
+    if(QChar::isPrint(b) && !QChar::isSpace(b))
+        ar.append(b);
+    else
+        ar.append(QString("\\x%1").arg(QString::number(b, 16).toUpper(), 2, '0').toLocal8Bit());
+}
+
 ///
 /// \brief formatAsciiValue
 /// \param pointType
@@ -244,20 +252,21 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
             quint8 lo, hi;
             breakUInt16(value, lo, hi, ByteOrder::LittleEndian);
 
-            QByteArray bytes;
-            bytes.append(hi);
-            bytes.append(lo);
-            auto codec = QTextCodec::codecForLocale();
-
-            QStringList chars;
-            for(auto&& c: codec->toUnicode(bytes))
-            {
-                if(c.isPrint() && !c.isSpace())
-                    chars.append(c);
+            static const auto __append = [](QByteArray& ar, quint8 b) {
+                if(QChar::isPrint(b) && !QChar::isSpace(b))
+                    ar.append(b);
                 else
-                    chars.append(QString("\\x%1").arg(QString::number(c.toLatin1(), 16).toUpper(), 2, '0'));
-            }
-            result = QString("%1").arg(chars.join(' '));
+                    ar.append(QString("\\x%1").arg(QString::number(b, 16).toUpper(), 2, '0').toLocal8Bit());
+            };
+
+            QByteArray bytes;
+            __append(bytes, hi);
+            bytes.append(32);
+            __append(bytes, lo);
+
+            auto codec = QTextCodec::codecForLocale();
+            result = codec->toUnicode(bytes);
+
         }
         break;
         default:

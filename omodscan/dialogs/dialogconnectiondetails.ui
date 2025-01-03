@@ -103,7 +103,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="IpAddressLineEdit" name="lineEditIPAddress">
+          <widget class="QLineEdit" name="lineEditIPAddress">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -489,11 +489,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>IpAddressLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>ipaddresslineedit.h</header>
-  </customwidget>
   <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>

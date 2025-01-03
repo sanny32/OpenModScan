@@ -56,18 +56,27 @@ void DialogConnectionDetails::accept()
     _connectionDetails.Type = ui->comboBoxConnectUsing->currentConnectionType();
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
-        QHostInfo::lookupHost(ui->lineEditIPAddress->text(), this, [this](const QHostInfo &host)
+        if(!QHostAddress(ui->lineEditIPAddress->text()).isNull())
         {
-            if (host.error() != QHostInfo::NoError)
-            {
-                QMessageBox::warning(this, parentWidget()->windowTitle(), tr("Lookup host failed: ") + host.errorString());
-                return;
-            }
-
             _connectionDetails.TcpParams.IPAddress = ui->lineEditIPAddress->text();
             _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value<int>();
             QFixedSizeDialog::accept();
-        });
+        }
+        else
+        {
+            QHostInfo::lookupHost(ui->lineEditIPAddress->text(), this, [this](const QHostInfo &host)
+            {
+                if (host.error() != QHostInfo::NoError)
+                {
+                    QMessageBox::warning(this, parentWidget()->windowTitle(), tr("Lookup host failed: ") + host.errorString());
+                    return;
+                }
+
+                _connectionDetails.TcpParams.IPAddress = ui->lineEditIPAddress->text();
+                _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value<int>();
+                QFixedSizeDialog::accept();
+            });
+        }
     }
     else
     {

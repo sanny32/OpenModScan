@@ -1,3 +1,4 @@
+#include <QHostInfo>
 #include <QMessageBox>
 #include "dialogprotocolselections.h"
 #include "dialogconnectiondetails.h"
@@ -55,15 +56,18 @@ void DialogConnectionDetails::accept()
     _connectionDetails.Type = ui->comboBoxConnectUsing->currentConnectionType();
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
-        const auto ipAddr = QHostAddress(ui->lineEditIPAddress->text());
-        if(ipAddr.isNull())
+        QHostInfo::lookupHost(ui->lineEditIPAddress->text(), this, [this](const QHostInfo &host)
         {
-            QMessageBox::warning(this, parentWidget()->windowTitle(), "Invalid IP Address");
-            return;
-        }
+            if (host.error() != QHostInfo::NoError)
+            {
+                QMessageBox::warning(this, parentWidget()->windowTitle(), tr("Lookup host failed: ") + host.errorString());
+                return;
+            }
 
-        _connectionDetails.TcpParams.IPAddress = ipAddr.toString();
-        _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value<int>();
+            _connectionDetails.TcpParams.IPAddress = ui->lineEditIPAddress->text();
+            _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value<int>();
+            QFixedSizeDialog::accept();
+        });
     }
     else
     {
@@ -75,9 +79,8 @@ void DialogConnectionDetails::accept()
         _connectionDetails.SerialParams.FlowControl = ui->comboBoxFlowControl->currentFlowControl();
         _connectionDetails.SerialParams.SetDTR = ui->comboBoxDTRControl->currentValue();
         _connectionDetails.SerialParams.SetRTS = ui->comboBoxRTSControl->currentValue();
+        QFixedSizeDialog::accept();
     }
-
-    QFixedSizeDialog::accept();
 }
 
 ///

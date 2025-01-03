@@ -242,7 +242,7 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
         case QModbusDataUnit::InputRegisters:
         {
             quint8 lo, hi;
-            breakUInt16(value, lo, hi, order);
+            breakUInt16(value, lo, hi, ByteOrder::LittleEndian);
 
             static const auto __append = [](QByteArray& ar, quint8 b) {
                 if(QChar::isPrint(b) && !QChar::isSpace(b))
@@ -258,7 +258,6 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
 
             auto codec = QTextCodec::codecForLocale();
             result = codec->toUnicode(bytes);
-
         }
         break;
         default:

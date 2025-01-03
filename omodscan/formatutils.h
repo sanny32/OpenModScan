@@ -5,6 +5,7 @@
 #include <QLocale>
 #include <QModbusPdu>
 #include <QModbusDataUnit>
+#include <QTextCodec>
 #include "enums.h"
 #include "numericutils.h"
 #include "byteorderutils.h"
@@ -213,6 +214,54 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
             break;
         default:
             break;
+    }
+    outValue = value;
+    return result;
+}
+
+///
+/// \brief formatAsciiValue
+/// \param pointType
+/// \param value
+/// \param order
+/// \param outValue
+/// \return
+///
+inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
+{
+    QString result;
+    value = toByteOrderValue(value, order);
+
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString("<%1>").arg(value);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            quint8 lo, hi;
+            breakUInt16(value, lo, hi, ByteOrder::LittleEndian);
+
+            static const auto __append = [](QByteArray& ar, quint8 b) {
+                if(QChar::isPrint(b) && !QChar::isSpace(b))
+                    ar.append(b);
+                else
+                    ar.append(QString("\\x%1").arg(QString::number(b, 16).toUpper(), 2, '0').toLocal8Bit());
+            };
+
+            QByteArray bytes;
+            __append(bytes, hi);
+            bytes.append(32);
+            __append(bytes, lo);
+
+            auto codec = QTextCodec::codecForLocale();
+            result = codec->toUnicode(bytes);
+        }
+        break;
+        default:
+        break;
     }
     outValue = value;
     return result;

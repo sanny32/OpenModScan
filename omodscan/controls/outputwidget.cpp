@@ -219,6 +219,10 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 itemData.ValueStr = formatHexValue(pointType, value, byteOrder, itemData.Value);
             break;
 
+            case DataDisplayMode::Ascii:
+                itemData.ValueStr = formatAsciiValue(pointType, value, byteOrder, itemData.Value);
+            break;
+
             case DataDisplayMode::FloatingPt:
                 itemData.ValueStr = formatFloatValue(pointType, value, _lastData.value(i+1), byteOrder,
                                           (i%2) || (i+1>=rowCount()), itemData.Value);

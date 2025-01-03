@@ -67,6 +67,15 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
+        case DataDisplayMode::Ascii:
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+            ui->labelValue->setText(tr("Value, (HEX): "));
+            ui->lineEditValue->setPaddingZeroes(true);
+            ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
+            ui->lineEditValue->setValue(params.Value.toUInt());
+            ui->pushButtonSimulation->setEnabled(false);
+        break;
+
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
             ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);

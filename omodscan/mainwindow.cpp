@@ -221,6 +221,7 @@ void MainWindow::on_awake()
         ui->actionUInt64->setChecked(ddm == DataDisplayMode::UInt64);
         ui->actionSwappedUInt64->setChecked(ddm == DataDisplayMode::SwappedUInt64);
         ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
+        ui->actionAscii->setChecked(ddm == DataDisplayMode::Ascii);
         ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
@@ -600,6 +601,14 @@ void MainWindow::on_actionSwappedUInt64_triggered()
 void MainWindow::on_actionHex_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::Hex);
+}
+
+///
+/// \brief MainWindow::on_actionAscii_triggered
+///
+void MainWindow::on_actionAscii_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::Ascii);
 }
 
 ///

@@ -29,6 +29,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     switch(_writeParams.DisplayMode)
     {
         case DataDisplayMode::Hex:
+        case DataDisplayMode::Ascii:
             ui->lineEditValue->setPaddingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
@@ -109,6 +110,7 @@ void DialogForceMultipleRegisters::accept()
             {
                 case DataDisplayMode::Binary:
                 case DataDisplayMode::Hex:
+                case DataDisplayMode::Ascii:
                 case DataDisplayMode::UInt16:
                 case DataDisplayMode::Int16:
                 {
@@ -244,6 +246,7 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
         {
             case DataDisplayMode::Binary:
             case DataDisplayMode::Hex:
+            case DataDisplayMode::Ascii:
             case DataDisplayMode::UInt16:
                 _data[i] = QRandomGenerator::global()->bounded(0, USHRT_MAX);
             break;
@@ -327,6 +330,7 @@ void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
         switch(_writeParams.DisplayMode)
         {
             case DataDisplayMode::Hex:
+            case DataDisplayMode::Ascii:
             case DataDisplayMode::Binary:
             case DataDisplayMode::UInt16:
                 _data[i] = ui->lineEditValue->value<quint16>();
@@ -414,6 +418,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
     {
         case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:
+        case DataDisplayMode::Ascii:
             numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setPaddingZeroes(true);

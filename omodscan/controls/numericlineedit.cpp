@@ -1,5 +1,5 @@
-#include <QKeyEvent>
 #include <float.h>
+#include <QKeyEvent>
 #include <QIntValidator>
 #include "qhexvalidator.h"
 #include "quintvalidator.h"

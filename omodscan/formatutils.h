@@ -219,14 +219,6 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
     return result;
 }
 
-inline void appendByte(QByteArray& ar, quint8 b)
-{
-    if(QChar::isPrint(b) && !QChar::isSpace(b))
-        ar.append(b);
-    else
-        ar.append(QString("\\x%1").arg(QString::number(b, 16).toUpper(), 2, '0').toLocal8Bit());
-}
-
 ///
 /// \brief formatAsciiValue
 /// \param pointType
@@ -250,7 +242,7 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
         case QModbusDataUnit::InputRegisters:
         {
             quint8 lo, hi;
-            breakUInt16(value, lo, hi, ByteOrder::LittleEndian);
+            breakUInt16(value, lo, hi, order);
 
             static const auto __append = [](QByteArray& ar, quint8 b) {
                 if(QChar::isPrint(b) && !QChar::isSpace(b))

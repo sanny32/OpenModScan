@@ -5,9 +5,8 @@
 #include <QLocale>
 #include <QModbusPdu>
 #include <QModbusDataUnit>
-#include <QTextCodec>
 #include "enums.h"
-#include "numericutils.h"
+#include "asciiutils.h"
 #include "byteorderutils.h"
 
 
@@ -240,28 +239,10 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
-        {
-            quint8 lo, hi;
-            breakUInt16(value, lo, hi, ByteOrder::LittleEndian);
-
-            static const auto __append = [](QByteArray& ar, quint8 b) {
-                if(QChar::isPrint(b) && !QChar::isSpace(b))
-                    ar.append(b);
-                else
-                    ar.append(QString("\\x%1").arg(QString::number(b, 16).toUpper(), 2, '0').toLocal8Bit());
-            };
-
-            QByteArray bytes;
-            __append(bytes, hi);
-            bytes.append(32);
-            __append(bytes, lo);
-
-            auto codec = QTextCodec::codecForLocale();
-            result = codec->toUnicode(bytes);
-        }
-        break;
+            result = printAscii(toAscii(value, ByteOrder::LittleEndian));
+            break;
         default:
-        break;
+            break;
     }
     outValue = value;
     return result;

@@ -89,6 +89,7 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
+    asciiutils.h \
     byteorderutils.h \
     connectiondetails.h \
     controls/addressbasecombobox.h \

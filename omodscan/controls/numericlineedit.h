@@ -19,7 +19,8 @@ public:
         FloatMode,
         DoubleMode,
         Int64Mode,
-        UInt64Mode
+        UInt64Mode,
+        AsciiMode
     };
 
     explicit NumericLineEdit(QWidget* parent = nullptr);

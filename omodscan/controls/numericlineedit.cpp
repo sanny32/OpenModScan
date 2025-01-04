@@ -1,6 +1,7 @@
 #include <float.h>
 #include <QKeyEvent>
 #include <QIntValidator>
+#include "asciiutils.h"
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
 #include "qint64validator.h"
@@ -79,6 +80,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
         switch(mode)
         {
             case HexMode:
+            case AsciiMode:
                 _minValue = (ushort)0;
                 _maxValue = USHRT_MAX;
             break;
@@ -187,6 +189,15 @@ void NumericLineEdit::internalSetValue(QVariant value)
         }
         break;
 
+        case AsciiMode:
+        {
+            value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
+            const auto text = printAscii(toAscii(value.value<quint16>(), ByteOrder::LittleEndian));
+            if(text != QLineEdit::text())
+                QLineEdit::setText(text);
+        }
+        break;
+
         case FloatMode:
         {
             value = qBound(_minValue.toFloat(), value.toFloat(), _maxValue.toFloat());
@@ -280,6 +291,13 @@ void NumericLineEdit::updateValue()
             const auto value = text().toUInt(&ok, 16);
             if(ok) internalSetValue(value);
             else internalSetValue(_value);
+        }
+        break;
+
+        case AsciiMode:
+        {
+            const auto value = fromAscii(text().toLocal8Bit(), ByteOrder::LittleEndian);
+            internalSetValue(value);
         }
         break;
 
@@ -390,6 +408,13 @@ void NumericLineEdit::on_textChanged(const QString& text)
         }
         break;
 
+        case AsciiMode:
+        {
+            const auto valueUInt = fromAscii(text.toLocal8Bit(), ByteOrder::LittleEndian);
+            value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
+        }
+        break;
+
         case FloatMode:
         {
             bool ok;
@@ -467,6 +492,10 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             setMaxLength(qMax(1, nums + 2));
             setValidator(new QHexValidator(bottom.toUInt(), top.toUInt(), this));
         }
+        break;
+
+        case AsciiMode:
+            setMaxLength(2);
         break;
 
         case FloatMode:

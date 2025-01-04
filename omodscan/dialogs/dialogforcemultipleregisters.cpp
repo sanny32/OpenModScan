@@ -28,10 +28,14 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
     switch(_writeParams.DisplayMode)
     {
-        case DataDisplayMode::Hex:
-        case DataDisplayMode::Ascii:
+        case DataDisplayMode::Hex:       
             ui->lineEditValue->setPaddingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+        break;
+
+        case DataDisplayMode::Ascii:
+            ui->lineEditValue->setInputMode(NumericLineEdit::AsciiMode);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
         break;
 
@@ -418,10 +422,15 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
     {
         case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:
-        case DataDisplayMode::Ascii:
             numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setPaddingZeroes(true);
+            numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
+        break;
+
+        case DataDisplayMode::Ascii:
+            numEdit = new NumericLineEdit(NumericLineEdit::AsciiMode, ui->tableWidget);
+            numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 

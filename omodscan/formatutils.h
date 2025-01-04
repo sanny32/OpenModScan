@@ -239,7 +239,7 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
-            result = QString("<%1>").arg(printAscii(toAscii(value, ByteOrder::LittleEndian)));
+            result = QString("<%1>").arg(printableAscii(uint16ToAscii(value)));
             break;
         default:
             break;

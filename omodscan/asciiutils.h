@@ -7,12 +7,12 @@
 #include "numericutils.h"
 
 ///
-/// \brief toAscii
+/// \brief uint16ToAscii
 /// \param value
 /// \param order
 /// \return
 ///
-inline QByteArray toAscii(quint16 value, ByteOrder order)
+inline QByteArray uint16ToAscii(quint16 value, ByteOrder order = ByteOrder::LittleEndian)
 {
     quint8 lo, hi;
     breakUInt16(value, lo, hi, order);
@@ -25,12 +25,12 @@ inline QByteArray toAscii(quint16 value, ByteOrder order)
 }
 
 ///
-/// \brief fromAscii
+/// \brief uint16FromAscii
 /// \param ascii
 /// \param order
 /// \return
 ///
-inline quint16 fromAscii(const QByteArray& ascii, ByteOrder order)
+inline quint16 uint16FromAscii(const QByteArray& ascii, ByteOrder order = ByteOrder::LittleEndian)
 {
     if(ascii.length() == 2)
         return makeUInt16((quint8)ascii[1], (quint8)ascii[0], order);
@@ -39,12 +39,12 @@ inline quint16 fromAscii(const QByteArray& ascii, ByteOrder order)
 }
 
 ///
-/// \brief printAscii
+/// \brief printableAscii
 /// \param data
 /// \param sep
 /// \return
 ///
-inline QString printAscii(const QByteArray& ascii, const QChar& sep = QChar())
+inline QString printableAscii(const QByteArray& ascii, const QChar& sep = QChar())
 {
     QByteArray result;
     for(auto&& c : ascii)

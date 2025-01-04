@@ -192,7 +192,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case AsciiMode:
         {
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
-            const auto text = printAscii(toAscii(value.value<quint16>(), ByteOrder::LittleEndian));
+            const auto text = printableAscii(uint16ToAscii(value.value<quint16>()));
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }
@@ -296,7 +296,7 @@ void NumericLineEdit::updateValue()
 
         case AsciiMode:
         {
-            const auto value = fromAscii(text().toLocal8Bit(), ByteOrder::LittleEndian);
+            const auto value = uint16FromAscii(text().toLocal8Bit());
             internalSetValue(value);
         }
         break;
@@ -410,7 +410,7 @@ void NumericLineEdit::on_textChanged(const QString& text)
 
         case AsciiMode:
         {
-            const auto valueUInt = fromAscii(text.toLocal8Bit(), ByteOrder::LittleEndian);
+            const auto valueUInt = uint16FromAscii(text.toLocal8Bit());
             value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
         }
         break;

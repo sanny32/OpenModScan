@@ -1,6 +1,7 @@
 #ifndef ASCIIUTILS_H
 #define ASCIIUTILS_H
 
+#include <QLocale>
 #include <QByteArray>
 #include <QTextCodec>
 #include "numericutils.h"
@@ -24,27 +25,41 @@ inline QByteArray toAscii(quint16 value, ByteOrder order)
 }
 
 ///
+/// \brief fromAscii
+/// \param ascii
+/// \param order
+/// \return
+///
+inline quint16 fromAscii(const QByteArray& ascii, ByteOrder order)
+{
+    if(ascii.length() == 2)
+        return makeUInt16((quint8)ascii[1], (quint8)ascii[0], order);
+    else
+        return 0;
+}
+
+///
 /// \brief printAscii
 /// \param data
 /// \param sep
 /// \return
 ///
-inline QString printAscii(const QByteArray& ascii, const QChar& sep = ' ')
+inline QString printAscii(const QByteArray& ascii, const QChar& sep = QChar())
 {
     QByteArray result;
     for(auto&& c : ascii)
     {
         const quint8 b = c;
-        if(QChar::isPrint(b) && !QChar::isSpace(b))
+        if(b > 32)
             result.append(b);
         else
-            result.append(QString("\\x%1").arg(QString::number(b, 16).toUpper(), 2, '0').toLocal8Bit());
+            result.append('?');
 
-        result.append(sep.toLatin1());
+        if(sep.isPrint())
+            result.append(sep.toLatin1());
     }
 
-    const auto codec = QTextCodec::codecForLocale();
-    return codec->toUnicode(result);
+    return QString::fromLocal8Bit(result);
 }
 
 #endif // ASCIIUTILS_H

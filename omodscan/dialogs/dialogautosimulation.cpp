@@ -66,6 +66,12 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
             ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
         break;
 
+        case DataDisplayMode::Ascii:
+            ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
+            ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);
+            ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
+        break;
+
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
             ui->lineEditStepValue->setInputRange((float)1, FLT_MAX - 1);

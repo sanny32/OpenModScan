@@ -410,7 +410,7 @@ void NumericLineEdit::on_textChanged(const QString& text)
 
         case AsciiMode:
         {
-            const auto valueUInt = uint16FromAscii(text.toLocal8Bit());
+            const uint valueUInt = uint16FromAscii(text.toLocal8Bit());
             value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
         }
         break;

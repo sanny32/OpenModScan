@@ -121,6 +121,14 @@ void NumericLineEdit::setInputMode(InputMode mode)
 }
 
 ///
+/// \brief NumericLineEdit::codepage
+///
+QString NumericLineEdit::codepage() const
+{
+    return _codepage;
+}
+
+///
 /// \brief NumericLineEdit::setCodepage
 /// \param name
 ///
@@ -305,7 +313,8 @@ void NumericLineEdit::updateValue()
 
         case AnsiMode:
         {
-            const auto value = uint16FromAnsi(text().toLocal8Bit());
+            auto codec = QTextCodec::codecForName(_codepage.toUtf8());
+            const auto value = uint16FromAnsi(codec->fromUnicode(text()));
             internalSetValue(value);
         }
         break;

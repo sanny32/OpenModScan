@@ -55,7 +55,9 @@ public:
     InputMode inputMode() const;
     void setInputMode(InputMode mode);
 
+    QString codepage() const;
     void setCodepage(const QString& name);
+
     void setText(const QString& text);
 
 signals:

@@ -41,8 +41,6 @@ public:
     void update();
     void updateData(const QModbusDataUnit& data);
 
-    void setCodepage(const QString& codepage);
-
     QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
@@ -60,7 +58,6 @@ private:
     QIcon _iconPointGreen;
     QIcon _iconPointEmpty;
     QMap<int, ItemData> _mapItems;
-    QString _codepage;
 };
 
 ///
@@ -91,6 +88,9 @@ public:
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
+
+    QString codepage() const;
+    void setCodepage(const QString& name);
 
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
@@ -155,6 +155,7 @@ private:
     DataDisplayMode _dataDisplayMode;
     ModbusMessage::ProtocolType _protocol;
     ByteOrder _byteOrder;
+    QString _codepage;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
     AddressDescriptionMap _descriptionMap;

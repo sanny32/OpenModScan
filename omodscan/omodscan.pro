@@ -33,6 +33,7 @@ SOURCES += \
     controls/bytelisttextedit.cpp \
     controls/byteordercombobox.cpp \
     controls/clickablelabel.cpp \
+    controls/codepagecombobox.cpp \
     controls/connectioncombobox.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
@@ -97,6 +98,7 @@ HEADERS += \
     controls/bytelisttextedit.h \
     controls/byteordercombobox.h \
     controls/clickablelabel.h \
+    controls/codepagecombobox.h \
     controls/connectioncombobox.h \
     controls/customframe.h \
     controls/customlineedit.h \

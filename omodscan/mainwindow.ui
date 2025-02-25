@@ -243,6 +243,7 @@
    </attribute>
    <addaction name="actionBinary"/>
    <addaction name="actionHex"/>
+   <addaction name="separator"/>
    <addaction name="actionAnsi"/>
    <addaction name="separator"/>
    <addaction name="actionInt16"/>

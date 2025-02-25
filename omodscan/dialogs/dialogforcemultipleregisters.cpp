@@ -36,6 +36,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
         case DataDisplayMode::Ansi:
             ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
+            ui->lineEditValue->setCodepage(params.Codepage);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
         break;
 
@@ -431,6 +432,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::Ansi:
             numEdit = new NumericLineEdit(NumericLineEdit::AnsiMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
+            numEdit->setCodepage(_writeParams.Codepage);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 

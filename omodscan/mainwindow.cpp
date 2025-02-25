@@ -16,6 +16,7 @@
 #include "dialogmodbusscanner.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
+#include "codepagecombobox.h"
 #include "mainstatusbar.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -40,6 +41,16 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
+
+    auto codepageComboBox = new CodepageComboBox(this);
+    connect(codepageComboBox, &CodepageComboBox::codepageChanged, this, &MainWindow::on_codepageChanged);
+
+    _actionSetupCodepage = new QWidgetAction(this);
+    _actionSetupCodepage->setDefaultWidget(codepageComboBox);
+
+    const QList<QAction*> actions = ui->toolBarDisplay->actions();
+    const int i = actions.indexOf(ui->actionAnsi);
+    ui->toolBarDisplay->insertAction(actions[i+1], _actionSetupCodepage);
 
     auto menuByteOrder = new QMenu(this);
     menuByteOrder->addAction(ui->actionLittleEndian);
@@ -183,6 +194,16 @@ void MainWindow::on_awake()
     ui->actionBinary->setEnabled(frm != nullptr);
     ui->actionUInt16->setEnabled(frm != nullptr);
     ui->actionInt16->setEnabled(frm != nullptr);
+    ui->actionInt32->setEnabled(frm != nullptr);
+    ui->actionSwappedInt32->setEnabled(frm != nullptr);
+    ui->actionUInt32->setEnabled(frm != nullptr);
+    ui->actionSwappedUInt32->setEnabled(frm != nullptr);
+    ui->actionInt64->setEnabled(frm != nullptr);
+    ui->actionSwappedInt64->setEnabled(frm != nullptr);
+    ui->actionUInt64->setEnabled(frm != nullptr);
+    ui->actionSwappedUInt64->setEnabled(frm != nullptr);
+    ui->actionHex->setEnabled(frm != nullptr);
+    ui->actionAnsi->setEnabled(frm != nullptr);
     ui->actionHex->setEnabled(frm != nullptr);
     ui->actionFloatingPt->setEnabled(frm != nullptr);
     ui->actionSwappedFP->setEnabled(frm != nullptr);
@@ -237,6 +258,8 @@ void MainWindow::on_awake()
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
     }
+
+    _actionSetupCodepage->setEnabled(ui->actionAnsi->isChecked());
 }
 
 ///
@@ -277,6 +300,19 @@ void MainWindow::on_modbusDisconnected(const ConnectionDetails&)
 }
 
 ///
+/// \brief MainWindow::on_codepageChanged
+/// \param codepage
+///
+void MainWindow::on_codepageChanged(const QString& codepage)
+{
+    auto frm = currentMdiChild();
+    if(frm != nullptr)
+    {
+        frm->setCodepage(codepage);
+    }
+}
+
+///
 /// \brief MainWindow::on_actionNew_triggered
 ///
 void MainWindow::on_actionNew_triggered()
@@ -286,6 +322,7 @@ void MainWindow::on_actionNew_triggered()
 
     if(cur) {
         frm->setByteOrder(cur->byteOrder());
+        frm->setCodepage(cur->codepage());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
         frm->setDisplayDefinition(cur->displayDefinition());
@@ -726,6 +763,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.Address = presetParams.PointAddress;
     params.DisplayMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
+    params.Codepage = frm->codepage();
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
 
     if(dd.PointType == QModbusDataUnit::HoldingRegisters &&
@@ -1090,7 +1128,7 @@ FormModSca* MainWindow::createMdiChild(int id)
         windowActivate(wnd);
     });
 
-    auto updateIcons = [this](ByteOrder order)
+    auto updateByteOrderIcons = [this](ByteOrder order)
     {
         switch(order){
         case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
@@ -1098,15 +1136,28 @@ FormModSca* MainWindow::createMdiChild(int id)
         }
     };
 
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons](Qt::WindowStates, Qt::WindowStates newState)
+    auto updateCodepage = [this](const QString& name)
     {
-        if(newState == Qt::WindowActive)
-            updateIcons(frm->byteOrder());
+        auto cmb = qobject_cast<CodepageComboBox*>(_actionSetupCodepage->defaultWidget());
+        cmb->setCurrentCodepage(name);
+    };
+
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateByteOrderIcons, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
+    {
+        if(newState == Qt::WindowActive) {
+            updateByteOrderIcons(frm->byteOrder());
+            updateCodepage(frm->codepage());
+        }
     });
 
-    connect(frm, &FormModSca::byteOrderChanged, this, [updateIcons](ByteOrder order)
+    connect(frm, &FormModSca::byteOrderChanged, this, [updateByteOrderIcons](ByteOrder order)
     {
-        updateIcons(order);
+        updateByteOrderIcons(order);
+    });
+
+    connect(frm, &FormModSca::codepageChanged, this, [updateCodepage](const QString& name)
+    {
+        updateCodepage(name);
     });
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)

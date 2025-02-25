@@ -42,11 +42,11 @@ inline quint16 uint16FromAnsi(const QByteArray& ansi, ByteOrder order = ByteOrde
 ///
 /// \brief printableAnsi
 /// \param ansi
-/// \param codecName
+/// \param codepage
 /// \param sep
 /// \return
 ///
-inline QString printableAnsi(const QByteArray& ansi, const QString& codecName, const QChar& sep = QChar())
+inline QString printableAnsi(const QByteArray& ansi, const QString& codepage, const QChar& sep = QChar())
 {
     QByteArray result;
     for(auto&& c : ansi)
@@ -61,7 +61,7 @@ inline QString printableAnsi(const QByteArray& ansi, const QString& codecName, c
             result.append(sep.toLatin1());
     }
 
-    auto codec = QTextCodec::codecForName(codecName.toUtf8());
+    auto codec = QTextCodec::codecForName(codepage.toUtf8());
     return codec ? codec->toUnicode(result) : QString::fromLocal8Bit(result);
 }
 

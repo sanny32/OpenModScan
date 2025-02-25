@@ -121,6 +121,15 @@ void NumericLineEdit::setInputMode(InputMode mode)
 }
 
 ///
+/// \brief NumericLineEdit::setCodepage
+/// \param name
+///
+void NumericLineEdit::setCodepage(const QString& name)
+{
+    _codepage = name;
+}
+
+///
 /// \brief NumericLineEdit::setText
 /// \param text
 ///
@@ -192,7 +201,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case AnsiMode:
         {
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
-            const auto text = printableAnsi(uint16ToAnsi(value.value<quint16>()));
+            const auto text = printableAnsi(uint16ToAnsi(value.value<quint16>()), _codepage);
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }

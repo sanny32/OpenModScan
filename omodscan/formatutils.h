@@ -223,10 +223,11 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
 /// \param pointType
 /// \param value
 /// \param order
+/// \param codepage
 /// \param outValue
 /// \return
 ///
-inline QString formatAnsiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
+inline QString formatAnsiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, const QString& codepage, QVariant& outValue)
 {
     QString result;
     value = toByteOrderValue(value, order);
@@ -239,7 +240,7 @@ inline QString formatAnsiValue(QModbusDataUnit::RegisterType pointType, quint16 
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
-            result = QString("<%1>").arg(printableAnsi(uint16ToAnsi(value)));
+            result = QString("<%1>").arg(printableAnsi(uint16ToAnsi(value), codepage));
             break;
         default:
             break;

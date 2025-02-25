@@ -31,27 +31,28 @@ inline QByteArray uint16ToAnsi(quint16 value, ByteOrder order = ByteOrder::Littl
 /// \param order
 /// \return
 ///
-inline quint16 uint16FromAnsi(const QByteArray& Ansi, ByteOrder order = ByteOrder::LittleEndian)
+inline quint16 uint16FromAnsi(const QByteArray& ansi, ByteOrder order = ByteOrder::LittleEndian)
 {
-    if(Ansi.length() == 2)
-        return makeUInt16((quint8)Ansi[1], (quint8)Ansi[0], order);
+    if(ansi.length() == 2)
+        return makeUInt16((quint8)ansi[1], (quint8)ansi[0], order);
     else
         return 0;
 }
 
 ///
 /// \brief printableAnsi
-/// \param data
+/// \param ansi
+/// \param codecName
 /// \param sep
 /// \return
 ///
-inline QString printableAnsi(const QByteArray& Ansi, const QChar& sep = QChar())
+inline QString printableAnsi(const QByteArray& ansi, const QString& codecName, const QChar& sep = QChar())
 {
     QByteArray result;
-    for(auto&& c : Ansi)
+    for(auto&& c : ansi)
     {
         const quint8 b = c;
-        if(b > 32)
+        if(b >= 32)
             result.append(b);
         else
             result.append('?');
@@ -60,7 +61,8 @@ inline QString printableAnsi(const QByteArray& Ansi, const QChar& sep = QChar())
             result.append(sep.toLatin1());
     }
 
-    return QString::fromLocal8Bit(result);
+    auto codec = QTextCodec::codecForName(codecName.toUtf8());
+    return codec ? codec->toUnicode(result) : QString::fromLocal8Bit(result);
 }
 
 #endif // ANSIUTILS_H

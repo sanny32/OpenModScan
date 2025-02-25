@@ -220,7 +220,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
 
             case DataDisplayMode::Ansi:
-                itemData.ValueStr = formatAnsiValue(pointType, value, byteOrder, itemData.Value);
+                itemData.ValueStr = formatAnsiValue(pointType, value, byteOrder, _codepage, itemData.Value);
             break;
 
             case DataDisplayMode::FloatingPt:
@@ -288,6 +288,15 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
     }
 
     emit dataChanged(index(0), index(rowCount() - 1), QVector<int>() << Qt::DisplayRole);
+}
+
+///
+/// \brief OutputListModel::setCodepage
+/// \param codepage
+///
+void OutputListModel::setCodepage(const QString& codepage)
+{
+    _codepage = codepage;
 }
 
 ///

@@ -55,6 +55,7 @@ public:
     InputMode inputMode() const;
     void setInputMode(InputMode mode);
 
+    void setCodepage(const QString& name);
     void setText(const QString& text);
 
 signals:
@@ -82,6 +83,7 @@ private:
     InputMode _inputMode;
     bool _paddingZeroes;
     int _paddingZeroWidth;
+    QString _codepage;
 };
 
 #endif // NUMERICLINEEDIT_H

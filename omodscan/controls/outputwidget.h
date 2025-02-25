@@ -41,6 +41,8 @@ public:
     void update();
     void updateData(const QModbusDataUnit& data);
 
+    void setCodepage(const QString& codepage);
+
     QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
@@ -58,6 +60,7 @@ private:
     QIcon _iconPointGreen;
     QIcon _iconPointEmpty;
     QMap<int, ItemData> _mapItems;
+    QString _codepage;
 };
 
 ///

@@ -34,8 +34,8 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
         break;
 
-        case DataDisplayMode::Ascii:
-            ui->lineEditValue->setInputMode(NumericLineEdit::AsciiMode);
+        case DataDisplayMode::Ansi:
+            ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
         break;
 
@@ -114,7 +114,7 @@ void DialogForceMultipleRegisters::accept()
             {
                 case DataDisplayMode::Binary:
                 case DataDisplayMode::Hex:
-                case DataDisplayMode::Ascii:
+                case DataDisplayMode::Ansi:
                 case DataDisplayMode::UInt16:
                 case DataDisplayMode::Int16:
                 {
@@ -250,7 +250,7 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
         {
             case DataDisplayMode::Binary:
             case DataDisplayMode::Hex:
-            case DataDisplayMode::Ascii:
+            case DataDisplayMode::Ansi:
             case DataDisplayMode::UInt16:
                 _data[i] = QRandomGenerator::global()->bounded(0, USHRT_MAX);
             break;
@@ -334,7 +334,7 @@ void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
         switch(_writeParams.DisplayMode)
         {
             case DataDisplayMode::Hex:
-            case DataDisplayMode::Ascii:
+            case DataDisplayMode::Ansi:
             case DataDisplayMode::Binary:
             case DataDisplayMode::UInt16:
                 _data[i] = ui->lineEditValue->value<quint16>();
@@ -428,8 +428,8 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
-        case DataDisplayMode::Ascii:
-            numEdit = new NumericLineEdit(NumericLineEdit::AsciiMode, ui->tableWidget);
+        case DataDisplayMode::Ansi:
+            numEdit = new NumericLineEdit(NumericLineEdit::AnsiMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;

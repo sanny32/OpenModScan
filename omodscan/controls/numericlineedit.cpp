@@ -1,7 +1,7 @@
 #include <float.h>
 #include <QKeyEvent>
 #include <QIntValidator>
-#include "asciiutils.h"
+#include "ansiutils.h"
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
 #include "qint64validator.h"
@@ -80,7 +80,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
         switch(mode)
         {
             case HexMode:
-            case AsciiMode:
+            case AnsiMode:
                 _minValue = (ushort)0;
                 _maxValue = USHRT_MAX;
             break;
@@ -189,10 +189,10 @@ void NumericLineEdit::internalSetValue(QVariant value)
         }
         break;
 
-        case AsciiMode:
+        case AnsiMode:
         {
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
-            const auto text = printableAscii(uint16ToAscii(value.value<quint16>()));
+            const auto text = printableAnsi(uint16ToAnsi(value.value<quint16>()));
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }
@@ -294,9 +294,9 @@ void NumericLineEdit::updateValue()
         }
         break;
 
-        case AsciiMode:
+        case AnsiMode:
         {
-            const auto value = uint16FromAscii(text().toLocal8Bit());
+            const auto value = uint16FromAnsi(text().toLocal8Bit());
             internalSetValue(value);
         }
         break;
@@ -408,9 +408,9 @@ void NumericLineEdit::on_textChanged(const QString& text)
         }
         break;
 
-        case AsciiMode:
+        case AnsiMode:
         {
-            const uint valueUInt = uint16FromAscii(text.toLocal8Bit());
+            const uint valueUInt = uint16FromAnsi(text.toLocal8Bit());
             value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
         }
         break;
@@ -494,7 +494,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         }
         break;
 
-        case AsciiMode:
+        case AnsiMode:
             setMaxLength(2);
         break;
 

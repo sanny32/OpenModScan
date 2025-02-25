@@ -67,9 +67,9 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
-        case DataDisplayMode::Ascii:
+        case DataDisplayMode::Ansi:
             ui->labelValue->setText(tr("Value, (ASCII): "));
-            ui->lineEditValue->setInputMode(NumericLineEdit::AsciiMode);
+            ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 

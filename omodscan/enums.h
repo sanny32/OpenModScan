@@ -93,7 +93,7 @@ enum class DataDisplayMode
     SwappedInt64,
     UInt64,
     SwappedUInt64,
-    Ascii
+    Ansi
 };
 Q_DECLARE_METATYPE(DataDisplayMode);
 

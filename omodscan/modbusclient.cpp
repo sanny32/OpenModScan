@@ -439,7 +439,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
                     case DataDisplayMode::UInt16:
                     case DataDisplayMode::Int16:
                     case DataDisplayMode::Hex:
-                    case DataDisplayMode::Ascii:
+                    case DataDisplayMode::Ansi:
                         data = createHoldingRegistersDataUnit(addr, params.Value.toUInt(), params.Order);
                     break;
                     case DataDisplayMode::FloatingPt:

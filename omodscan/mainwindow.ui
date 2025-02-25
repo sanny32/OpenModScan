@@ -42,7 +42,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -104,7 +104,7 @@
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionHex"/>
-     <addaction name="actionAscii"/>
+     <addaction name="actionAnsi"/>
      <addaction name="actionInt16"/>
      <addaction name="actionUInt16"/>
      <addaction name="actionInt32"/>
@@ -243,7 +243,7 @@
    </attribute>
    <addaction name="actionBinary"/>
    <addaction name="actionHex"/>
-   <addaction name="actionAscii"/>
+   <addaction name="actionAnsi"/>
    <addaction name="separator"/>
    <addaction name="actionInt16"/>
    <addaction name="actionUInt16"/>
@@ -876,16 +876,16 @@
     <string notr="true">中文</string>
    </property>
   </action>
-  <action name="actionAscii">
+  <action name="actionAnsi">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionAscii.png</normaloff>:/res/actionAscii.png</iconset>
+     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
    </property>
    <property name="text">
-    <string>Ascii</string>
+    <string>ANSI</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+3</string>

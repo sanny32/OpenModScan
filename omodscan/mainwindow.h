@@ -69,7 +69,7 @@ private slots:
     void on_actionUInt64_triggered();
     void on_actionSwappedUInt64_triggered();
     void on_actionHex_triggered();
-    void on_actionAscii_triggered();
+    void on_actionAnsi_triggered();
     void on_actionFloatingPt_triggered();
     void on_actionSwappedFP_triggered();
     void on_actionDblFloat_triggered();

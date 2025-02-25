@@ -6,7 +6,7 @@
 #include <QModbusPdu>
 #include <QModbusDataUnit>
 #include "enums.h"
-#include "asciiutils.h"
+#include "ansiutils.h"
 #include "byteorderutils.h"
 
 
@@ -219,14 +219,14 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
 }
 
 ///
-/// \brief formatAsciiValue
+/// \brief formatAnsiValue
 /// \param pointType
 /// \param value
 /// \param order
 /// \param outValue
 /// \return
 ///
-inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
+inline QString formatAnsiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
     value = toByteOrderValue(value, order);
@@ -239,7 +239,7 @@ inline QString formatAsciiValue(QModbusDataUnit::RegisterType pointType, quint16
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
-            result = QString("<%1>").arg(printableAscii(uint16ToAscii(value)));
+            result = QString("<%1>").arg(printableAnsi(uint16ToAnsi(value)));
             break;
         default:
             break;

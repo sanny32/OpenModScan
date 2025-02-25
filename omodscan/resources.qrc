@@ -40,6 +40,6 @@
         <file>res/actionSwappedInt64.png</file>
         <file>res/actionSwappedUInt64.png</file>
         <file>translations/omodscan_cn.qm</file>
-        <file>res/actionAscii.png</file>
+        <file>res/actionAnsi.png</file>
     </qresource>
 </RCC>

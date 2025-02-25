@@ -1,18 +1,19 @@
-#ifndef ASCIIUTILS_H
-#define ASCIIUTILS_H
+#ifndef ANSIUTILS_H
+#define ANSIUTILS_H
 
 #include <QLocale>
 #include <QByteArray>
 #include <QTextCodec>
+#include <QDebug>
 #include "numericutils.h"
 
 ///
-/// \brief uint16ToAscii
+/// \brief uint16ToAnsi
 /// \param value
 /// \param order
 /// \return
 ///
-inline QByteArray uint16ToAscii(quint16 value, ByteOrder order = ByteOrder::LittleEndian)
+inline QByteArray uint16ToAnsi(quint16 value, ByteOrder order = ByteOrder::LittleEndian)
 {
     quint8 lo, hi;
     breakUInt16(value, lo, hi, order);
@@ -25,29 +26,29 @@ inline QByteArray uint16ToAscii(quint16 value, ByteOrder order = ByteOrder::Litt
 }
 
 ///
-/// \brief uint16FromAscii
-/// \param ascii
+/// \brief uint16FromAnsi
+/// \param Ansi
 /// \param order
 /// \return
 ///
-inline quint16 uint16FromAscii(const QByteArray& ascii, ByteOrder order = ByteOrder::LittleEndian)
+inline quint16 uint16FromAnsi(const QByteArray& Ansi, ByteOrder order = ByteOrder::LittleEndian)
 {
-    if(ascii.length() == 2)
-        return makeUInt16((quint8)ascii[1], (quint8)ascii[0], order);
+    if(Ansi.length() == 2)
+        return makeUInt16((quint8)Ansi[1], (quint8)Ansi[0], order);
     else
         return 0;
 }
 
 ///
-/// \brief printableAscii
+/// \brief printableAnsi
 /// \param data
 /// \param sep
 /// \return
 ///
-inline QString printableAscii(const QByteArray& ascii, const QChar& sep = QChar())
+inline QString printableAnsi(const QByteArray& Ansi, const QChar& sep = QChar())
 {
     QByteArray result;
-    for(auto&& c : ascii)
+    for(auto&& c : Ansi)
     {
         const quint8 b = c;
         if(b > 32)
@@ -62,4 +63,4 @@ inline QString printableAscii(const QByteArray& ascii, const QChar& sep = QChar(
     return QString::fromLocal8Bit(result);
 }
 
-#endif // ASCIIUTILS_H
+#endif // ANSIUTILS_H

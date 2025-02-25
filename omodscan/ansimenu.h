@@ -18,6 +18,9 @@ public:
 signals:
     void codepageSelected(const QString& name);
 
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+
 private:
     void resetState();
     void createSubMenu(QAction* a, const QStringList& encodings);

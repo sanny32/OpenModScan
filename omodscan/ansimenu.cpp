@@ -1,3 +1,4 @@
+#include <QMouseEvent>
 #include "ansimenu.h"
 
 ///
@@ -37,6 +38,18 @@ AnsiMenu::AnsiMenu(QWidget *parent)
     createSubMenu(_actionTurkish,           { "ISO 8859-3", "ISO 8859-9", "Windows-1254" });
     createSubMenu(_actionWesternEuropean,   { "ISO 8859-1", "ISO 8859-15", "Windows-1252" });
     createSubMenu(_actionVietnamese,        { "Windows-1258" });
+}
+
+///
+/// \brief AnsiMenu::mousePressEvent
+/// \param event
+///
+void AnsiMenu::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton && menuAction())
+        menuAction()->trigger();
+
+    QMenu::mousePressEvent(event);
 }
 
 ///

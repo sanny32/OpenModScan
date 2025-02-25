@@ -28,12 +28,12 @@ INCLUDEPATH += controls \
                modbusmessages \
 
 SOURCES += \
+    ansimenu.cpp \
     controls/addressbasecombobox.cpp \
     controls/booleancombobox.cpp \
     controls/bytelisttextedit.cpp \
     controls/byteordercombobox.cpp \
     controls/clickablelabel.cpp \
-    controls/codepagecombobox.cpp \
     controls/connectioncombobox.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
@@ -90,6 +90,7 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
+    ansimenu.h \
     ansiutils.h \
     byteorderutils.h \
     connectiondetails.h \
@@ -98,7 +99,6 @@ HEADERS += \
     controls/bytelisttextedit.h \
     controls/byteordercombobox.h \
     controls/clickablelabel.h \
-    controls/codepagecombobox.h \
     controls/connectioncombobox.h \
     controls/customframe.h \
     controls/customlineedit.h \

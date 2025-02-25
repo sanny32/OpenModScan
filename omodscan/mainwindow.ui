@@ -243,7 +243,6 @@
    </attribute>
    <addaction name="actionBinary"/>
    <addaction name="actionHex"/>
-   <addaction name="separator"/>
    <addaction name="actionAnsi"/>
    <addaction name="separator"/>
    <addaction name="actionInt16"/>
@@ -887,9 +886,6 @@
    </property>
    <property name="text">
     <string>ANSI</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+3</string>
    </property>
   </action>
  </widget>

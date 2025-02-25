@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QTranslator>
-#include <QWidgetAction>
+#include "ansimenu.h"
 #include "modbusclient.h"
 #include "formmodsca.h"
 #include "windowactionlist.h"
@@ -115,13 +115,13 @@ private slots:
     void on_modbusConnected(const ConnectionDetails& cd);
     void on_modbusDisconnected(const ConnectionDetails& cd);
 
-    void on_codepageChanged(const QString& codepage);
-
     void updateMenuWindow();
     void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);
+    void setCodepage(const QString& name);
 
 private:
+    void updateMenuAction(QAction* a);
     void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
 
@@ -156,7 +156,7 @@ private:
     ConnectionDetails _connParams;
     ModbusClient _modbusClient;
 
-    QWidgetAction* _actionSetupCodepage;
+    AnsiMenu* _ansiMenu;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QPrinter* _selectedPrinter;

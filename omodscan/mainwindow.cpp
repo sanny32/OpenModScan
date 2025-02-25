@@ -16,7 +16,6 @@
 #include "dialogmodbusscanner.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
-#include "codepagecombobox.h"
 #include "mainstatusbar.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -42,15 +41,10 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
 
-    auto codepageComboBox = new CodepageComboBox(this);
-    connect(codepageComboBox, &CodepageComboBox::codepageChanged, this, &MainWindow::on_codepageChanged);
-
-    _actionSetupCodepage = new QWidgetAction(this);
-    _actionSetupCodepage->setDefaultWidget(codepageComboBox);
-
-    const QList<QAction*> actions = ui->toolBarDisplay->actions();
-    const int i = actions.indexOf(ui->actionAnsi);
-    ui->toolBarDisplay->insertAction(actions[i+1], _actionSetupCodepage);
+    _ansiMenu = new AnsiMenu(this);
+    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
+    ui->actionAnsi->setMenu(_ansiMenu);
+    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionAnsi))->setPopupMode(QToolButton::DelayedPopup);
 
     auto menuByteOrder = new QMenu(this);
     menuByteOrder->addAction(ui->actionLittleEndian);
@@ -258,8 +252,6 @@ void MainWindow::on_awake()
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
     }
-
-    _actionSetupCodepage->setEnabled(ui->actionAnsi->isChecked());
 }
 
 ///
@@ -297,19 +289,6 @@ void MainWindow::on_modbusConnected(const ConnectionDetails&)
 void MainWindow::on_modbusDisconnected(const ConnectionDetails&)
 {
     _dataSimulator->pauseSimulations();
-}
-
-///
-/// \brief MainWindow::on_codepageChanged
-/// \param codepage
-///
-void MainWindow::on_codepageChanged(const QString& codepage)
-{
-    auto frm = currentMdiChild();
-    if(frm != nullptr)
-    {
-        frm->setCodepage(codepage);
-    }
 }
 
 ///
@@ -903,6 +882,18 @@ void MainWindow::on_actionResetCtrs_triggered()
 }
 
 ///
+/// \brief MainWindow::setCodepage
+/// \param name
+///
+void MainWindow::setCodepage(const QString& name)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->setCodepage(name);
+}
+
+///
 /// \brief MainWindow::on_actionToolbar_triggered
 ///
 void MainWindow::on_actionToolbar_triggered()
@@ -1138,8 +1129,7 @@ FormModSca* MainWindow::createMdiChild(int id)
 
     auto updateCodepage = [this](const QString& name)
     {
-        auto cmb = qobject_cast<CodepageComboBox*>(_actionSetupCodepage->defaultWidget());
-        cmb->setCurrentCodepage(name);
+        _ansiMenu->selectCodepage(name);
     };
 
     connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateByteOrderIcons, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)

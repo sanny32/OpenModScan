@@ -62,7 +62,7 @@ private:
     ModbusDataUnit _data;
     bool _hexView = false;
     AddressBase _addressBase = AddressBase::Base1;
-    ByteOrder _byteOrder = ByteOrder::LittleEndian;
+    ByteOrder _byteOrder = ByteOrder::Direct;
 };
 
 ///

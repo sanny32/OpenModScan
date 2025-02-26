@@ -4,6 +4,7 @@
 #include <QtGlobal>
 #include <QtEndian>
 #include "byteorderutils.h"
+#include "qdebug.h"
 
 ///
 /// \brief makeUInt16
@@ -18,8 +19,8 @@ inline quint16 makeUInt16(quint8 lo, quint8 hi, ByteOrder order)
         quint16 asUint16;
     } v;
 
-    v.asUint8[0] = (order == ByteOrder::LittleEndian) ? lo : hi;
-    v.asUint8[1] = (order == ByteOrder::LittleEndian) ? hi : lo;
+    v.asUint8[0] = (order == ByteOrder::Direct) ? lo : hi;
+    v.asUint8[1] = (order == ByteOrder::Direct) ? hi : lo;
 
     return v.asUint16;
 }
@@ -39,8 +40,8 @@ inline void breakUInt16(quint16 value, quint8& lo, quint8& hi, ByteOrder order)
     } v;
     v.asUint16 = value;
 
-    lo = (order == ByteOrder::LittleEndian) ? v.asUint8[0] : v.asUint8[1];
-    hi = (order == ByteOrder::LittleEndian) ? v.asUint8[1] : v.asUint8[0];
+    lo = (order == ByteOrder::Direct) ? v.asUint8[0] : v.asUint8[1];
+    hi = (order == ByteOrder::Direct) ? v.asUint8[1] : v.asUint8[0];
 }
 
 ///

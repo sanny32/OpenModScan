@@ -320,7 +320,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
    ,_displayHexAddresses(false)
    ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Binary)
-   ,_byteOrder(ByteOrder::LittleEndian)
+   ,_byteOrder(ByteOrder::Direct)
    ,_listModel(new OutputListModel(this))
 {
     ui->setupUi(this);

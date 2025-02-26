@@ -28,8 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
-    ,_icoBigEndian(":/res/actionBigEndian.png")
-    ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_autoStart(false)
     ,_selectedPrinter(nullptr)
@@ -45,13 +43,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
     ui->actionAnsi->setMenu(_ansiMenu);
     qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionAnsi))->setPopupMode(QToolButton::DelayedPopup);
-
-    auto menuByteOrder = new QMenu(this);
-    menuByteOrder->addAction(ui->actionLittleEndian);
-    menuByteOrder->addAction(ui->actionBigEndian);
-    ui->actionByteOrder->setMenu(menuByteOrder);
-    ui->actionByteOrder->setIcon(_icoLittleEndian);
-    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -203,7 +194,7 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
-    ui->actionByteOrder->setEnabled(frm != nullptr);
+    ui->actionSwapBytes->setEnabled(frm != nullptr);
 
     ui->actionForceCoils->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
@@ -243,8 +234,7 @@ void MainWindow::on_awake()
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
         const auto byteOrder = frm->byteOrder();
-        ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
-        ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
+        ui->actionSwapBytes->setChecked(byteOrder == ByteOrder::Swapped);
 
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
@@ -660,21 +650,21 @@ void MainWindow::on_actionSwappedDbl_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionLittleEndian_triggered
+/// \brief MainWindow::on_actionSwapBytes_triggered
 ///
-void MainWindow::on_actionLittleEndian_triggered()
+void MainWindow::on_actionSwapBytes_triggered()
 {
     auto frm = currentMdiChild();
-    if(frm) frm->setByteOrder(ByteOrder::LittleEndian);
-}
+    if(!frm) return;
 
-///
-/// \brief MainWindow::on_actionBigEndian_triggered
-///
-void MainWindow::on_actionBigEndian_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setByteOrder(ByteOrder::BigEndian);
+    switch (frm->byteOrder()) {
+        case ByteOrder::Swapped:
+            frm->setByteOrder(ByteOrder::Direct);
+        break;
+        case ByteOrder::Direct:
+            frm->setByteOrder(ByteOrder::Swapped);
+        break;
+    }
 }
 
 ///
@@ -838,7 +828,7 @@ void MainWindow::on_actionAddressScan_triggered()
     auto frm = currentMdiChild();
     const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
     const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::UInt16;
-    const auto order = frm ? frm->byteOrder() : ByteOrder::LittleEndian;
+    const auto order = frm ? frm->byteOrder() : ByteOrder::Direct;
 
     auto dlg = new DialogAddressScan(dd, mode, order, _modbusClient, this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -1119,30 +1109,16 @@ FormModSca* MainWindow::createMdiChild(int id)
         windowActivate(wnd);
     });
 
-    auto updateByteOrderIcons = [this](ByteOrder order)
-    {
-        switch(order){
-        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
-        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
-        }
-    };
-
     auto updateCodepage = [this](const QString& name)
     {
         _ansiMenu->selectCodepage(name);
     };
 
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateByteOrderIcons, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
     {
         if(newState == Qt::WindowActive) {
-            updateByteOrderIcons(frm->byteOrder());
             updateCodepage(frm->codepage());
         }
-    });
-
-    connect(frm, &FormModSca::byteOrderChanged, this, [updateByteOrderIcons](ByteOrder order)
-    {
-        updateByteOrderIcons(order);
     });
 
     connect(frm, &FormModSca::codepageChanged, this, [updateCodepage](const QString& name)

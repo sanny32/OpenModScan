@@ -13,7 +13,7 @@
 /// \param order
 /// \return
 ///
-inline QByteArray uint16ToAnsi(quint16 value, ByteOrder order = ByteOrder::LittleEndian)
+inline QByteArray uint16ToAnsi(quint16 value, ByteOrder order = ByteOrder::Direct)
 {
     quint8 lo, hi;
     breakUInt16(value, lo, hi, order);
@@ -31,7 +31,7 @@ inline QByteArray uint16ToAnsi(quint16 value, ByteOrder order = ByteOrder::Littl
 /// \param order
 /// \return
 ///
-inline quint16 uint16FromAnsi(const QByteArray& ansi, ByteOrder order = ByteOrder::LittleEndian)
+inline quint16 uint16FromAnsi(const QByteArray& ansi, ByteOrder order = ByteOrder::Direct)
 {
     if(ansi.length() == 2)
         return makeUInt16((quint8)ansi[1], (quint8)ansi[0], order);

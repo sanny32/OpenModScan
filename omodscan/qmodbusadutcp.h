@@ -39,7 +39,7 @@ public:
     /// \return
     ///
     quint16 transactionId() const {
-        return makeUInt16(_data[1], _data[0], ByteOrder::LittleEndian);
+        return makeUInt16(_data[1], _data[0], ByteOrder::Direct);
     }
 
     ///
@@ -48,7 +48,7 @@ public:
     ///
     void setTransactionId(quint16 id) {
         quint8 lo,hi;
-        breakUInt16(id, lo, hi, ByteOrder::LittleEndian);
+        breakUInt16(id, lo, hi, ByteOrder::Direct);
         _data[1] = lo; _data[0] = hi;
     }
 
@@ -57,7 +57,7 @@ public:
     /// \return
     ///
     quint16 protocolId() const {
-        return makeUInt16(_data[3], _data[2], ByteOrder::LittleEndian);
+        return makeUInt16(_data[3], _data[2], ByteOrder::Direct);
     }
 
     ///
@@ -65,7 +65,7 @@ public:
     /// \return
     ///
     quint16 length() const {
-        return makeUInt16(_data[5], _data[4], ByteOrder::LittleEndian);
+        return makeUInt16(_data[5], _data[4], ByteOrder::Direct);
     }
 
     ///

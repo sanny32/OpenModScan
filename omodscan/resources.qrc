@@ -24,8 +24,6 @@
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
         <file>translations/omodscan_ru.qm</file>
-        <file>res/actionBigEndian.png</file>
-        <file>res/actionLittleEndian.png</file>
         <file>res/pointGreen.png</file>
         <file>res/pointEmpty.png</file>
         <file>res/actionInt32.png</file>
@@ -41,5 +39,6 @@
         <file>res/actionSwappedUInt64.png</file>
         <file>translations/omodscan_cn.qm</file>
         <file>res/actionAnsi.png</file>
+        <file>res/actionByteOrder.png</file>
     </qresource>
 </RCC>

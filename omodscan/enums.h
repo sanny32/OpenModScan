@@ -126,8 +126,8 @@ inline QSettings& operator >>(QSettings& in, DataDisplayMode& mode)
 ///
 enum class ByteOrder
 {
-    LittleEndian = 0,
-    BigEndian
+    Direct = 0,
+    Swapped
 };
 Q_DECLARE_METATYPE(ByteOrder);
 

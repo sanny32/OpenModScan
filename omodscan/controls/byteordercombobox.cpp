@@ -7,8 +7,8 @@
 ByteOrderComboBox::ByteOrderComboBox(QWidget *parent)
     :QComboBox(parent)
 {
-    addItem("Little-Endian", QVariant::fromValue(ByteOrder::LittleEndian));
-    addItem("Big-Endian", QVariant::fromValue(ByteOrder::BigEndian));
+    addItem(tr("Direct"), QVariant::fromValue(ByteOrder::Direct));
+    addItem(tr("Swapped"), QVariant::fromValue(ByteOrder::Swapped));
 
     connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ByteOrderComboBox::on_currentIndexChanged);
 }

@@ -318,7 +318,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
         in >> dd.ZeroBasedAddress;
     }
 
-    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    ByteOrder byteOrder = ByteOrder::Direct;
     ModbusSimulationMap simulationMap;
     if(ver >= QVersionNumber(1, 1))
     {

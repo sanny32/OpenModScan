@@ -43,18 +43,18 @@ AnsiMenu::AnsiMenu(QWidget *parent)
 }
 
 ///
-/// \brief AnsiMenu::mousePressEvent
+/// \brief AnsiMenu::mouseReleaseEvent
 /// \param event
 ///
-void AnsiMenu::mousePressEvent(QMouseEvent* event)
+void AnsiMenu::mouseReleaseEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton && menuAction())
+    if (event->button() == Qt::LeftButton)
     {
         menuAction()->trigger();
         closeMenu();
     }
 
-    QMenu::mousePressEvent(event);
+    QMenu::mouseReleaseEvent(event);
 }
 
 ///
@@ -65,7 +65,7 @@ void AnsiMenu::closeMenu()
     for (auto&& widget : QApplication::topLevelWidgets())
     {
         auto menu = qobject_cast<QMenu*>(widget);
-        if (menu && menu->isVisible())
+        if (menu && menu->isVisible() && menu != this)
             menu->close();
     }
 }
@@ -89,6 +89,7 @@ void AnsiMenu::createSubMenu(QAction* a, const QStringList& encodings)
             a->setChecked(true);
             action->setChecked(true);
             emit codepageSelected(action->text());
+            menuAction()->trigger();
         });
     }
 

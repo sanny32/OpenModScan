@@ -22,6 +22,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
 
 private:
+    void closeMenu();
     void resetState();
     void createSubMenu(QAction* a, const QStringList& encodings);
 

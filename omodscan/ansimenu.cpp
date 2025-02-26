@@ -1,3 +1,5 @@
+#include <QTimer>
+#include <QApplication>
 #include <QMouseEvent>
 #include "ansimenu.h"
 
@@ -47,9 +49,25 @@ AnsiMenu::AnsiMenu(QWidget *parent)
 void AnsiMenu::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton && menuAction())
+    {
         menuAction()->trigger();
+        closeMenu();
+    }
 
     QMenu::mousePressEvent(event);
+}
+
+///
+/// \brief AnsiMenu::closeMenu
+///
+void AnsiMenu::closeMenu()
+{
+    for (auto&& widget : QApplication::topLevelWidgets())
+    {
+        auto menu = qobject_cast<QMenu*>(widget);
+        if (menu && menu->isVisible())
+            menu->close();
+    }
 }
 
 ///

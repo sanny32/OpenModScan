@@ -199,6 +199,15 @@
    <property name="windowTitle">
     <string>Toolbar</string>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -271,7 +280,7 @@
     <string>New</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+N</string>
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -283,7 +292,7 @@
     <string>Open...</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+O</string>
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionClose">
@@ -300,7 +309,7 @@
     <string>Save</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+S</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionSaveAs">
@@ -317,7 +326,7 @@
     <string>Print...</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+P</string>
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionPrintSetup">
@@ -653,6 +662,9 @@
    </property>
    <property name="text">
     <string>About Open ModScan...</string>
+   </property>
+   <property name="iconText">
+    <string>About</string>
    </property>
   </action>
   <action name="actionWindows">

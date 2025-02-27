@@ -6,6 +6,8 @@
 #include <QDateTime>
 #include <QListWidgetItem>
 #include <QModbusReply>
+#include <QPainter>
+#include <QStyledItemDelegate>
 #include "enums.h"
 #include "modbusmessage.h"
 #include "datasimulator.h"

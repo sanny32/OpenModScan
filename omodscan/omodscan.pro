@@ -216,4 +216,5 @@ RESOURCES += \
 
 TRANSLATIONS += \
     translations/omodscan_ru.ts \
-    translations/omodscan_cn.ts
+    translations/omodscan_cn.ts \
+    translations/omodscan_zh.ts

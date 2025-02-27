@@ -210,7 +210,8 @@ void MainWindow::on_awake()
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
-    ui->actionChinese->setChecked(_lang == "cn");
+    ui->actionChineseCn->setChecked(_lang == "cn");
+    ui->actionChineseZh->setChecked(_lang == "zh");
 
     if(frm != nullptr)
     {
@@ -984,11 +985,19 @@ void MainWindow::on_actionRussian_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionChinese_triggered
+/// \brief MainWindow::on_actionChineseCn_triggered
 ///
-void MainWindow::on_actionChinese_triggered()
+void MainWindow::on_actionChineseCn_triggered()
 {
     setLanguage("cn");
+}
+
+///
+/// \brief MainWindow::on_actionChineseZh_triggered
+///
+void MainWindow::on_actionChineseZh_triggered()
+{
+    setLanguage("zh");
 }
 
 ///

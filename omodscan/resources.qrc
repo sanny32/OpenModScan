@@ -40,5 +40,6 @@
         <file>res/actionNew.png</file>
         <file>res/actionOpen.png</file>
         <file>res/actionSaveAs.png</file>
+        <file>translations/omodscan_zh.qm</file>
     </qresource>
 </RCC>

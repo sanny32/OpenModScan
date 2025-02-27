@@ -49,7 +49,7 @@ Registers
   ![image](https://github.com/sanny32/OpenModScan/assets/13627951/1aba6329-873c-4ff2-8db8-939245a50722)
 
 ## Building
-  Building is available with cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
   
 ## MIT License
 Copyright 2024 Alexandr Ananev [mail@ananev.org]

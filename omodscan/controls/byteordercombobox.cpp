@@ -1,3 +1,4 @@
+#include <QEvent>
 #include "byteordercombobox.h"
 
 ///
@@ -11,6 +12,21 @@ ByteOrderComboBox::ByteOrderComboBox(QWidget *parent)
     addItem(tr("Swapped"), QVariant::fromValue(ByteOrder::Swapped));
 
     connect(this, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ByteOrderComboBox::on_currentIndexChanged);
+}
+
+///
+/// \brief ByteOrderComboBox::changeEvent
+/// \param event
+///
+void ByteOrderComboBox::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        setItemText(0, tr("Direct"));
+        setItemText(1, tr("Swapped"));
+    }
+
+    QComboBox::changeEvent(event);
 }
 
 ///

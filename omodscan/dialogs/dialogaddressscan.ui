@@ -420,6 +420,9 @@
              <height>25</height>
             </size>
            </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
+           </property>
           </widget>
          </item>
         </layout>
@@ -558,14 +561,14 @@
    <header>addressbasecombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>ByteOrderComboBox</class>
-   <extends>QComboBox</extends>
-   <header>byteordercombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ModbusMessageWidget</class>
    <extends>QListWidget</extends>
    <header>modbusmessagewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ByteOrderComboBox</class>
+   <extends>QComboBox</extends>
+   <header>byteordercombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

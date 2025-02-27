@@ -19,6 +19,7 @@ signals:
     void codepageSelected(const QString& name);
 
 protected:
+    void changeEvent(QEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:

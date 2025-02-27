@@ -43,6 +43,34 @@ AnsiMenu::AnsiMenu(QWidget *parent)
 }
 
 ///
+/// \brief AnsiMenu::changeEvent
+/// \param event
+///
+void AnsiMenu::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        _actionArabic->setText(tr("Arabic"));
+        _actionBaltic->setText(tr("Baltic"));
+        _actionCeltic->setText(tr("Celtic"));
+        _actionCyrillic->setText(tr("Cyrillic"));
+        _actionCentralEuropean->setText(tr("Central European"));
+        _actionChinese->setText(tr("Chinese"));
+        _actionEasternEuropean->setText(tr("Eastern European"));
+        _actionGreek->setText(tr("Greek"));
+        _actionHebrew->setText(tr("Hebrew"));
+        _actionJapanese->setText(tr("Japanese"));
+        _actionKorean->setText(tr("Korean"));
+        _actionThai->setText(tr("Thai"));
+        _actionTurkish->setText(tr("Turkish"));
+        _actionWesternEuropean->setText(tr("Western European"));
+        _actionVietnamese->setText(tr("Vietnamese"));
+    }
+
+    QMenu::changeEvent(event);
+}
+
+///
 /// \brief AnsiMenu::mouseReleaseEvent
 /// \param event
 ///

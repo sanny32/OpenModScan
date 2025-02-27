@@ -26,6 +26,7 @@ public:
 private slots:
     void on_pushButton0_clicked();
     void on_pushButtonRandom_clicked();
+    void on_pushButtonValue_clicked();
 
 private:
     void updateTableWidget();

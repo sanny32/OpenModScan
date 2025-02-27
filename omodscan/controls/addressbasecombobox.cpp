@@ -26,12 +26,12 @@ void AddressBaseComboBox::changeEvent(QEvent* event)
         {
             switch(itemData(i).value<AddressBase>())
             {
-            case AddressBase::Base0:
-                setItemText(i, tr("0-based"));
+                case AddressBase::Base0:
+                    setItemText(i, tr("0-based"));
                 break;
 
-            case AddressBase::Base1:
-                setItemText(i, tr("1-based"));
+                case AddressBase::Base1:
+                    setItemText(i, tr("1-based"));
                 break;
             }
         }

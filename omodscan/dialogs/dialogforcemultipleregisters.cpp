@@ -26,6 +26,62 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
     ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
 
+    switch(_writeParams.DisplayMode)
+    {
+        case DataDisplayMode::Hex:       
+            ui->lineEditValue->setPaddingZeroes(true);
+            ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+        break;
+
+        case DataDisplayMode::Ansi:
+            ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
+            ui->lineEditValue->setCodepage(params.Codepage);
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+        break;
+
+        case DataDisplayMode::Int16:
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
+            ui->lineEditValue->setInputRange(SHRT_MIN, SHRT_MAX);
+        break;
+
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
+        break;
+
+        case DataDisplayMode::Binary:
+        case DataDisplayMode::UInt16:
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+        break;
+
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
+        break;
+
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
+        break;
+
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
+        break;
+
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+            ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
+        break;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+            ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
+        break;
+    }
+
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
 
@@ -59,6 +115,7 @@ void DialogForceMultipleRegisters::accept()
             {
                 case DataDisplayMode::Binary:
                 case DataDisplayMode::Hex:
+                case DataDisplayMode::Ansi:
                 case DataDisplayMode::UInt16:
                 case DataDisplayMode::Int16:
                 {
@@ -194,6 +251,7 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
         {
             case DataDisplayMode::Binary:
             case DataDisplayMode::Hex:
+            case DataDisplayMode::Ansi:
             case DataDisplayMode::UInt16:
                 _data[i] = QRandomGenerator::global()->bounded(0, USHRT_MAX);
             break;
@@ -268,6 +326,92 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 }
 
 ///
+/// \brief DialogForceMultipleRegisters::on_pushButtonValue_clicked
+///
+void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
+{
+    for(int i = 0; i < _data.size(); i++)
+    {
+        switch(_writeParams.DisplayMode)
+        {
+            case DataDisplayMode::Hex:
+            case DataDisplayMode::Ansi:
+            case DataDisplayMode::Binary:
+            case DataDisplayMode::UInt16:
+                _data[i] = ui->lineEditValue->value<quint16>();
+            break;
+
+            case DataDisplayMode::Int16:
+                _data[i] = ui->lineEditValue->value<qint16>();
+            break;
+
+            case DataDisplayMode::Int32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakInt32(ui->lineEditValue->value<qint32>(), _data[i], _data[i + 1], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedInt32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakInt32(ui->lineEditValue->value<qint32>(), _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::UInt32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakUInt32(ui->lineEditValue->value<quint32>(), _data[i], _data[i + 1], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedUInt32:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakUInt32(ui->lineEditValue->value<quint32>(), _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::Int64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakInt64(ui->lineEditValue->value<qint64>(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakInt64(ui->lineEditValue->value<qint64>(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::UInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakUInt64(ui->lineEditValue->value<quint64>(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedUInt64:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakUInt64(ui->lineEditValue->value<quint64>(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::FloatingPt:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakFloat(ui->lineEditValue->value<float>(), _data[i], _data[i + 1], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedFP:
+                if(!(i % 2) && (i + 1 < _data.size()))
+                    breakFloat(ui->lineEditValue->value<float>(), _data[i + 1], _data[i], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::DblFloat:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakDouble(ui->lineEditValue->value<double>(), _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+            break;
+
+            case DataDisplayMode::SwappedDbl:
+                if(!(i % 4) && (i + 3 < _data.size()))
+                    breakDouble(ui->lineEditValue->value<double>(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+        }
+    }
+
+
+    updateTableWidget();
+}
+
+///
 /// \brief DialogForceMultipleRegisters::createNumEdit
 /// \param idx
 /// \return
@@ -282,6 +426,13 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setPaddingZeroes(true);
+            numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
+        break;
+
+        case DataDisplayMode::Ansi:
+            numEdit = new NumericLineEdit(NumericLineEdit::AnsiMode, ui->tableWidget);
+            numEdit->setInputRange(0, USHRT_MAX);
+            numEdit->setCodepage(_writeParams.Codepage);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 

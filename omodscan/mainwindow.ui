@@ -92,18 +92,12 @@
      <property name="title">
       <string>Display Options</string>
      </property>
-     <widget class="QMenu" name="menuByteOrder">
-      <property name="title">
-       <string>Byte Order</string>
-      </property>
-      <addaction name="actionLittleEndian"/>
-      <addaction name="actionBigEndian"/>
-     </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionHex"/>
+     <addaction name="actionAnsi"/>
      <addaction name="actionInt16"/>
      <addaction name="actionUInt16"/>
      <addaction name="actionInt32"/>
@@ -118,7 +112,8 @@
      <addaction name="actionSwappedFP"/>
      <addaction name="actionDblFloat"/>
      <addaction name="actionSwappedDbl"/>
-     <addaction name="menuByteOrder"/>
+     <addaction name="separator"/>
+     <addaction name="actionSwapBytes"/>
      <addaction name="separator"/>
      <addaction name="actionHexAddresses"/>
     </widget>
@@ -168,7 +163,8 @@
      </property>
      <addaction name="actionEnglish"/>
      <addaction name="actionRussian"/>
-     <addaction name="actionChinese"/>
+     <addaction name="actionChineseCn"/>
+     <addaction name="actionChineseZh"/>
     </widget>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
@@ -203,6 +199,15 @@
   <widget class="QToolBar" name="toolBarMain">
    <property name="windowTitle">
     <string>Toolbar</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -242,6 +247,7 @@
    </attribute>
    <addaction name="actionBinary"/>
    <addaction name="actionHex"/>
+   <addaction name="actionAnsi"/>
    <addaction name="separator"/>
    <addaction name="actionInt16"/>
    <addaction name="actionUInt16"/>
@@ -264,7 +270,7 @@
    <addaction name="actionDblFloat"/>
    <addaction name="actionSwappedDbl"/>
    <addaction name="separator"/>
-   <addaction name="actionByteOrder"/>
+   <addaction name="actionSwapBytes"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -463,7 +469,7 @@
     <string>Unsigned 16-bit Intger</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+4</string>
+    <string notr="true">Ctrl+5</string>
    </property>
   </action>
   <action name="actionInt16">
@@ -478,7 +484,7 @@
     <string>16-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+3</string>
+    <string notr="true">Ctrl+4</string>
    </property>
   </action>
   <action name="actionFloatingPt">
@@ -496,7 +502,7 @@
     <string>Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+9</string>
+    <string notr="true">Ctrl+0</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -514,7 +520,7 @@
     <string>Swapped Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+9</string>
+    <string notr="true">Ctrl+Alt+0</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -532,7 +538,7 @@
     <string>Double</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+0</string>
+    <string notr="true">Ctrl+-</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -550,7 +556,7 @@
     <string>Swapped Double</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+0</string>
+    <string notr="true">Ctrl+Alt+-</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -658,6 +664,9 @@
    <property name="text">
     <string>About Open ModScan...</string>
    </property>
+   <property name="iconText">
+    <string>About</string>
+   </property>
   </action>
   <action name="actionWindows">
    <property name="text">
@@ -694,25 +703,19 @@
     <string notr="true">F10</string>
    </property>
   </action>
-  <action name="actionLittleEndian">
+  <action name="actionSwapBytes">
    <property name="checkable">
     <bool>true</bool>
    </property>
-   <property name="text">
-    <string notr="true">Little-Endian</string>
-   </property>
-  </action>
-  <action name="actionBigEndian">
-   <property name="checkable">
-    <bool>true</bool>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionByteOrder.png</normaloff>:/res/actionByteOrder.png</iconset>
    </property>
    <property name="text">
-    <string notr="true">Big-Endian</string>
+    <string>Swap Bytes (0xAB → 0xBA)</string>
    </property>
-  </action>
-  <action name="actionByteOrder">
-   <property name="text">
-    <string>Byte Order</string>
+   <property name="toolTip">
+    <string>Swap Bytes (0xAB → 0xBA)</string>
    </property>
   </action>
   <action name="actionModbusScanner">
@@ -738,7 +741,7 @@
     <string>32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+5</string>
+    <string notr="true">Ctrl+6</string>
    </property>
   </action>
   <action name="actionSwappedInt32">
@@ -756,7 +759,7 @@
     <string>Swapped 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+5</string>
+    <string notr="true">Ctrl+Alt+6</string>
    </property>
   </action>
   <action name="actionUInt32">
@@ -771,7 +774,7 @@
     <string>Unsigned 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+6</string>
+    <string notr="true">Ctrl+7</string>
    </property>
   </action>
   <action name="actionSwappedUInt32">
@@ -789,7 +792,7 @@
     <string>Swapped Unsigned 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+6</string>
+    <string notr="true">Ctrl+Alt+7</string>
    </property>
   </action>
   <action name="actionMsgParser">
@@ -815,7 +818,7 @@
     <string>64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+7</string>
+    <string notr="true">Ctrl+8</string>
    </property>
   </action>
   <action name="actionSwappedInt64">
@@ -830,7 +833,7 @@
     <string>Swapped 64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+7</string>
+    <string notr="true">Ctrl+Alt+8</string>
    </property>
   </action>
   <action name="actionUInt64">
@@ -845,7 +848,7 @@
     <string>Unsigned 64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+8</string>
+    <string notr="true">Ctrl+9</string>
    </property>
   </action>
   <action name="actionSwappedUInt64">
@@ -860,10 +863,10 @@
     <string>Swapped Unsigned 64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+8</string>
+    <string notr="true">Ctrl+Alt+9</string>
    </property>
   </action>
-  <action name="actionChinese">
+  <action name="actionChineseCn">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -872,6 +875,26 @@
    </property>
    <property name="iconText">
     <string notr="true">中文</string>
+   </property>
+  </action>
+  <action name="actionAnsi">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
+   </property>
+   <property name="text">
+    <string>ANSI</string>
+   </property>
+  </action>
+  <action name="actionChineseZh">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>中國人</string>
    </property>
   </action>
  </widget>

@@ -1,10 +1,14 @@
 QT += core gui widgets network printsupport serialbus serialport
 
+greaterThan(QT_MAJOR_VERSION, 5) {
+    QT += core5compat
+}
+
 CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.8.2
+VERSION = 1.9.0
 
 QMAKE_TARGET_PRODUCT = "Open ModScan"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Master (Client) Utility"
@@ -24,13 +28,13 @@ INCLUDEPATH += controls \
                modbusmessages \
 
 SOURCES += \
+    ansimenu.cpp \
     controls/addressbasecombobox.cpp \
     controls/booleancombobox.cpp \
     controls/bytelisttextedit.cpp \
     controls/byteordercombobox.cpp \
     controls/clickablelabel.cpp \
     controls/connectioncombobox.cpp \
-    controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
     controls/formattedspinbox.cpp \
@@ -85,6 +89,8 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
+    ansimenu.h \
+    ansiutils.h \
     byteorderutils.h \
     connectiondetails.h \
     controls/addressbasecombobox.h \
@@ -93,7 +99,6 @@ HEADERS += \
     controls/byteordercombobox.h \
     controls/clickablelabel.h \
     controls/connectioncombobox.h \
-    controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
     controls/formattedspinbox.h \
@@ -211,4 +216,5 @@ RESOURCES += \
 
 TRANSLATIONS += \
     translations/omodscan_ru.ts \
-    translations/omodscan_cn.ts
+    translations/omodscan_cn.ts \
+    translations/omodscan_zh.ts

@@ -10,7 +10,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 5);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 6);
 
 ///
 /// \brief FormModSca::FormModSca
@@ -242,6 +242,25 @@ void FormModSca::setByteOrder(ByteOrder order)
 {
     ui->outputWidget->setByteOrder(order);
     emit byteOrderChanged(order);
+}
+
+///
+/// \brief FormModSca::codepage
+/// \return
+///
+QString FormModSca::codepage() const
+{
+    return ui->outputWidget->codepage();
+}
+
+///
+/// \brief FormModSca::setCodepage
+/// \param name
+///
+void FormModSca::setCodepage(const QString& name)
+{
+    ui->outputWidget->setCodepage(name);
+    emit codepageChanged(name);
 }
 
 ///
@@ -784,7 +803,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     {
         case QModbusDataUnit::Coils:
         {
-            ModbusWriteParams params = { node, addr, value, mode, byteOrder(), zeroBasedAddress };
+            ModbusWriteParams params = { node, addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             DialogWriteCoilRegister dlg(params, simParams, _parent);
             switch(dlg.exec())
             {
@@ -802,7 +821,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { node, addr, value, mode, byteOrder(), zeroBasedAddress };
+            ModbusWriteParams params = { node, addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, _parent);
@@ -899,7 +918,7 @@ void FormModSca::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::Registe
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     if(type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
     {
-        const ModbusWriteParams params = { dd.DeviceId, addr, value, mode, byteOrder(), true };
+        const ModbusWriteParams params = { dd.DeviceId, addr, value, mode, byteOrder(), codepage(), true };
         _modbusClient.writeRegister(type, params, formId());
     }
 }

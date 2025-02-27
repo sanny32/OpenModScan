@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTranslator>
+#include "ansimenu.h"
 #include "modbusclient.h"
 #include "formmodsca.h"
 #include "windowactionlist.h"
@@ -69,12 +70,12 @@ private slots:
     void on_actionUInt64_triggered();
     void on_actionSwappedUInt64_triggered();
     void on_actionHex_triggered();
+    void on_actionAnsi_triggered();
     void on_actionFloatingPt_triggered();
     void on_actionSwappedFP_triggered();
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
-    void on_actionLittleEndian_triggered();
-    void on_actionBigEndian_triggered();
+    void on_actionSwapBytes_triggered();
     void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
     void on_actionPresetRegs_triggered();
@@ -98,7 +99,8 @@ private slots:
     /* Language menu slots */
     void on_actionEnglish_triggered();
     void on_actionRussian_triggered();
-    void on_actionChinese_triggered();
+    void on_actionChineseCn_triggered();
+    void on_actionChineseZh_triggered();
 
     /* Window menu slots */
     void on_actionCascade_triggered();
@@ -116,8 +118,10 @@ private slots:
     void updateMenuWindow();
     void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);
+    void setCodepage(const QString& name);
 
 private:
+    void updateMenuAction(QAction* a);
     void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
 
@@ -142,9 +146,6 @@ private:
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
 
-    QIcon _icoBigEndian;
-    QIcon _icoLittleEndian;
-
 private:
     int _windowCounter;
     bool _autoStart;
@@ -152,6 +153,7 @@ private:
     ConnectionDetails _connParams;
     ModbusClient _modbusClient;
 
+    AnsiMenu* _ansiMenu;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QPrinter* _selectedPrinter;

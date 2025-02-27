@@ -28,9 +28,6 @@
    </property>
    <item>
     <widget class="QSplitter" name="splitter">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -171,7 +168,7 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line">
+          <widget class="Line" name="line1">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -321,7 +318,7 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line_2">
+          <widget class="Line" name="line2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>

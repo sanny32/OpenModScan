@@ -47,7 +47,7 @@ public:
     /// \return
     ///
     quint16 fifoAddress() const {
-        return makeUInt16(at(1), at(0), ByteOrder::LittleEndian);
+        return makeUInt16(at(1), at(0), ByteOrder::Direct);
     }
 };
 
@@ -97,7 +97,7 @@ public:
     /// \return
     ///
     quint16 byteCount() const {
-        return makeUInt16(at(1), at(0), ByteOrder::LittleEndian);
+        return makeUInt16(at(1), at(0), ByteOrder::Direct);
     }
 
     ///
@@ -105,7 +105,7 @@ public:
     /// \return
     ///
     quint16 fifoCount() const {
-        return makeUInt16(at(3), at(2), ByteOrder::LittleEndian);
+        return makeUInt16(at(3), at(2), ByteOrder::Direct);
     }
 
     ///

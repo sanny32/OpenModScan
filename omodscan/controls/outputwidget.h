@@ -6,6 +6,8 @@
 #include <QDateTime>
 #include <QListWidgetItem>
 #include <QModbusReply>
+#include <QPainter>
+#include <QStyledItemDelegate>
 #include "enums.h"
 #include "modbusmessage.h"
 #include "datasimulator.h"
@@ -89,6 +91,9 @@ public:
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
 
+    QString codepage() const;
+    void setCodepage(const QString& name);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -152,6 +157,7 @@ private:
     DataDisplayMode _dataDisplayMode;
     ModbusMessage::ProtocolType _protocol;
     ByteOrder _byteOrder;
+    QString _codepage;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
     AddressDescriptionMap _descriptionMap;

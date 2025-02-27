@@ -19,6 +19,9 @@ public:
 signals:
     void byteOrderChanged(ByteOrder order);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_currentIndexChanged(int);
 };

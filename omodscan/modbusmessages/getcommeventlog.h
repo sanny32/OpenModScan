@@ -89,7 +89,7 @@ public:
     /// \return
     ///
     quint16 status() const {
-        return makeUInt16(at(2), at(1), ByteOrder::LittleEndian);
+        return makeUInt16(at(2), at(1), ByteOrder::Direct);
     }
 
     ///
@@ -97,7 +97,7 @@ public:
     /// \return
     ///
     quint16 eventCount() const {
-        return makeUInt16(at(4), at(3), ByteOrder::LittleEndian);
+        return makeUInt16(at(4), at(3), ByteOrder::Direct);
     }
 
     ///
@@ -105,7 +105,7 @@ public:
     /// \return
     ///
     quint16 messageCount() const {
-        return makeUInt16(at(6), at(5), ByteOrder::LittleEndian);
+        return makeUInt16(at(6), at(5), ByteOrder::Direct);
     }
 
     ///

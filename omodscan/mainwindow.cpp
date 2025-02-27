@@ -28,8 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
-    ,_icoBigEndian(":/res/actionBigEndian.png")
-    ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_autoStart(false)
     ,_selectedPrinter(nullptr)
@@ -41,12 +39,10 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
 
-    auto menuByteOrder = new QMenu(this);
-    menuByteOrder->addAction(ui->actionLittleEndian);
-    menuByteOrder->addAction(ui->actionBigEndian);
-    ui->actionByteOrder->setMenu(menuByteOrder);
-    ui->actionByteOrder->setIcon(_icoLittleEndian);
-    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
+    _ansiMenu = new AnsiMenu(this);
+    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
+    ui->actionAnsi->setMenu(_ansiMenu);
+    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionAnsi))->setPopupMode(QToolButton::DelayedPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -183,12 +179,22 @@ void MainWindow::on_awake()
     ui->actionBinary->setEnabled(frm != nullptr);
     ui->actionUInt16->setEnabled(frm != nullptr);
     ui->actionInt16->setEnabled(frm != nullptr);
+    ui->actionInt32->setEnabled(frm != nullptr);
+    ui->actionSwappedInt32->setEnabled(frm != nullptr);
+    ui->actionUInt32->setEnabled(frm != nullptr);
+    ui->actionSwappedUInt32->setEnabled(frm != nullptr);
+    ui->actionInt64->setEnabled(frm != nullptr);
+    ui->actionSwappedInt64->setEnabled(frm != nullptr);
+    ui->actionUInt64->setEnabled(frm != nullptr);
+    ui->actionSwappedUInt64->setEnabled(frm != nullptr);
+    ui->actionHex->setEnabled(frm != nullptr);
+    ui->actionAnsi->setEnabled(frm != nullptr);
     ui->actionHex->setEnabled(frm != nullptr);
     ui->actionFloatingPt->setEnabled(frm != nullptr);
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
-    ui->actionByteOrder->setEnabled(frm != nullptr);
+    ui->actionSwapBytes->setEnabled(frm != nullptr);
 
     ui->actionForceCoils->setEnabled(state == QModbusDevice::ConnectedState);
     ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
@@ -204,7 +210,8 @@ void MainWindow::on_awake()
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
-    ui->actionChinese->setChecked(_lang == "cn");
+    ui->actionChineseCn->setChecked(_lang == "cn");
+    ui->actionChineseZh->setChecked(_lang == "zh");
 
     if(frm != nullptr)
     {
@@ -221,14 +228,14 @@ void MainWindow::on_awake()
         ui->actionUInt64->setChecked(ddm == DataDisplayMode::UInt64);
         ui->actionSwappedUInt64->setChecked(ddm == DataDisplayMode::SwappedUInt64);
         ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
+        ui->actionAnsi->setChecked(ddm == DataDisplayMode::Ansi);
         ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
         const auto byteOrder = frm->byteOrder();
-        ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
-        ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
+        ui->actionSwapBytes->setChecked(byteOrder == ByteOrder::Swapped);
 
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
@@ -285,6 +292,7 @@ void MainWindow::on_actionNew_triggered()
 
     if(cur) {
         frm->setByteOrder(cur->byteOrder());
+        frm->setCodepage(cur->codepage());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
         frm->setDisplayDefinition(cur->displayDefinition());
@@ -603,6 +611,14 @@ void MainWindow::on_actionHex_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionAnsi_triggered
+///
+void MainWindow::on_actionAnsi_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::Ansi);
+}
+
+///
 /// \brief MainWindow::on_actionFloatingPt_triggered
 ///
 void MainWindow::on_actionFloatingPt_triggered()
@@ -635,21 +651,21 @@ void MainWindow::on_actionSwappedDbl_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionLittleEndian_triggered
+/// \brief MainWindow::on_actionSwapBytes_triggered
 ///
-void MainWindow::on_actionLittleEndian_triggered()
+void MainWindow::on_actionSwapBytes_triggered()
 {
     auto frm = currentMdiChild();
-    if(frm) frm->setByteOrder(ByteOrder::LittleEndian);
-}
+    if(!frm) return;
 
-///
-/// \brief MainWindow::on_actionBigEndian_triggered
-///
-void MainWindow::on_actionBigEndian_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setByteOrder(ByteOrder::BigEndian);
+    switch (frm->byteOrder()) {
+        case ByteOrder::Swapped:
+            frm->setByteOrder(ByteOrder::Direct);
+        break;
+        case ByteOrder::Direct:
+            frm->setByteOrder(ByteOrder::Swapped);
+        break;
+    }
 }
 
 ///
@@ -717,6 +733,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.Address = presetParams.PointAddress;
     params.DisplayMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
+    params.Codepage = frm->codepage();
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
 
     if(dd.PointType == QModbusDataUnit::HoldingRegisters &&
@@ -812,7 +829,7 @@ void MainWindow::on_actionAddressScan_triggered()
     auto frm = currentMdiChild();
     const auto dd = frm ? frm->displayDefinition() : DisplayDefinition();
     const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::UInt16;
-    const auto order = frm ? frm->byteOrder() : ByteOrder::LittleEndian;
+    const auto order = frm ? frm->byteOrder() : ByteOrder::Direct;
 
     auto dlg = new DialogAddressScan(dd, mode, order, _modbusClient, this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -853,6 +870,18 @@ void MainWindow::on_actionResetCtrs_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->resetCtrs();
+}
+
+///
+/// \brief MainWindow::setCodepage
+/// \param name
+///
+void MainWindow::setCodepage(const QString& name)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->setCodepage(name);
 }
 
 ///
@@ -956,11 +985,19 @@ void MainWindow::on_actionRussian_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionChinese_triggered
+/// \brief MainWindow::on_actionChineseCn_triggered
 ///
-void MainWindow::on_actionChinese_triggered()
+void MainWindow::on_actionChineseCn_triggered()
 {
     setLanguage("cn");
+}
+
+///
+/// \brief MainWindow::on_actionChineseZh_triggered
+///
+void MainWindow::on_actionChineseZh_triggered()
+{
+    setLanguage("zh");
 }
 
 ///
@@ -1081,23 +1118,21 @@ FormModSca* MainWindow::createMdiChild(int id)
         windowActivate(wnd);
     });
 
-    auto updateIcons = [this](ByteOrder order)
+    auto updateCodepage = [this](const QString& name)
     {
-        switch(order){
-        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
-        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
-        }
+        _ansiMenu->selectCodepage(name);
     };
 
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons](Qt::WindowStates, Qt::WindowStates newState)
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
     {
-        if(newState == Qt::WindowActive)
-            updateIcons(frm->byteOrder());
+        if(newState == Qt::WindowActive) {
+            updateCodepage(frm->codepage());
+        }
     });
 
-    connect(frm, &FormModSca::byteOrderChanged, this, [updateIcons](ByteOrder order)
+    connect(frm, &FormModSca::codepageChanged, this, [updateCodepage](const QString& name)
     {
-        updateIcons(order);
+        updateCodepage(name);
     });
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)

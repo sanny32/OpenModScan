@@ -59,6 +59,9 @@ public:
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
 
+    QString codepage() const;
+    void setCodepage(const QString& name);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -96,6 +99,7 @@ public slots:
 signals:
     void showed();
     void byteOrderChanged(ByteOrder);
+    void codepageChanged(const QString&);
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
 
@@ -166,6 +170,7 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
     out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
+    out.setValue("Codepage", frm->codepage());
 
     return out;
 }
@@ -212,6 +217,7 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
+    frm->setCodepage(in.value("Codepage").toString());
 
     return in;
 }
@@ -254,6 +260,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << frm->byteOrder();
     out << frm->simulationMap();
     out << frm->descriptionMap();
+    out << frm->codepage();
 
     return out;
 }
@@ -311,7 +318,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
         in >> dd.ZeroBasedAddress;
     }
 
-    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    ByteOrder byteOrder = ByteOrder::Direct;
     ModbusSimulationMap simulationMap;
     if(ver >= QVersionNumber(1, 1))
     {
@@ -323,6 +330,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     if(ver >= QVersionNumber(1, 2))
     {
         in >> descriptionMap;
+    }
+
+    QString codepage;
+    if(ver >= QVersionNumber(1, 6))
+    {
+        in >> codepage;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -342,6 +355,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
+    frm->setCodepage(codepage);
 
     for(auto&& k : simulationMap.keys())
         frm->startSimulation(k.first, k.second,  simulationMap[k]);

@@ -229,7 +229,7 @@ set(TS_FILES
 )
 
 # Link libraries
-target_sources(omodscan PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${TS_FILES})
+target_sources(omodscan PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
 target_link_libraries(omodscan PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort)
 
 if(Qt6_FOUND)

@@ -110,7 +110,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setValue(params.Value.toULongLong());
         break;
     }
-    ui->buttonBox->setFocus();
+    ui->lineEditValue->setFocus();
 }
 
 ///

@@ -21,7 +21,6 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
     ui->lineEditAddress->setValue(params.Address);
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
-    ui->buttonBox->setFocus();
 
     if(simParams.Mode != SimulationMode::No)
     {
@@ -43,6 +42,11 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
         ui->pushButtonSimulation->setText(QString());
         ui->pushButtonSimulation->setLayout(layout);
     }
+
+    if(ui->radioButtonOff->isChecked())
+        ui->radioButtonOn->setFocus();
+    else
+        ui->radioButtonOff->setFocus();
 }
 
 ///

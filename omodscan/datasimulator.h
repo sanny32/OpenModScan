@@ -46,7 +46,7 @@ private:
 private:
     QTimer _timer;
     quint32 _elapsed;
-    const int _interval = 1000;
+    const int _interval = 1;
 
     struct SimulationParams {
         DataDisplayMode Mode;

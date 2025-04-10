@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+	<file>res/omodscan.ico</file>
         <file>res/actionAbout.png</file>
         <file>res/actionBinary.png</file>
         <file>res/actionConnect.png</file>

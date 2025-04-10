@@ -98,6 +98,7 @@ public slots:
 
 signals:
     void showed();
+    void pointTypeChanged(QModbusDataUnit::RegisterType);
     void byteOrderChanged(ByteOrder);
     void codepageChanged(const QString&);
     void numberOfPollsChanged(uint value);

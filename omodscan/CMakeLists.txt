@@ -12,9 +12,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find Qt6 or fallback to Qt5
-find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat QUIET)
+find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
 if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort QUIET)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
 endif()
 
 # Define target
@@ -222,10 +222,14 @@ set(UI_FILES
     mainwindow.ui
 )
 
-set(TS_FILES
+set(TRANSLATIONS
     translations/omodscan_ru.ts
     translations/omodscan_cn.ts
     translations/omodscan_zh.ts
+)
+
+qt_add_lupdate(omodscan
+    TS_FILES ${TRANSLATIONS}
 )
 
 # Link libraries

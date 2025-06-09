@@ -119,7 +119,7 @@ struct ModbusSimulationParams
     RandomSimulationParams RandomParams;
     IncrementSimulationParams IncrementParams;
     DecrementSimulationParams DecrementParams;
-    quint32 Interval = 1;
+    quint32 Interval = 1000;
 };
 Q_DECLARE_METATYPE(ModbusSimulationParams)
 

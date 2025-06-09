@@ -23,7 +23,7 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
     else
         ui->comboBoxSimulationType->setCurrentIndex(0);
 
-    ui->lineEditInterval->setInputRange(1, 60000);
+    ui->lineEditInterval->setInputRange(100, 6000000);
     ui->lineEditInterval->setValue(_params.Interval);
 
     switch(_displayMode)

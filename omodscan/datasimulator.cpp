@@ -141,7 +141,7 @@ void DataSimulator::on_timeout()
         const auto params = _simulationMap[key].Params;
         const auto interval = params.Interval;
 
-        if(_elapsed % interval) continue;
+        if((_elapsed * _interval) % interval) continue;
 
         switch(params.Mode)
         {

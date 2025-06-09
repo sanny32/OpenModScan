@@ -678,7 +678,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>English</string>
+    <string notr="true">English</string>
    </property>
    <property name="iconText">
     <string notr="true">English</string>
@@ -689,7 +689,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Русский</string>
+    <string notr="true">Русский</string>
    </property>
    <property name="iconText">
     <string notr="true">Русский</string>
@@ -871,7 +871,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>中文</string>
+    <string notr="true">中文</string>
    </property>
    <property name="iconText">
     <string notr="true">中文</string>
@@ -894,7 +894,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>中國人</string>
+    <string notr="true">中國人</string>
    </property>
   </action>
  </widget>

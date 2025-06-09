@@ -1817,19 +1817,9 @@ Valid Slave Responses: %2</source>
         <translation>無符號64位整數（位元組交換）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="874"/>
-        <source>中文</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="889"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="897"/>
-        <source>中國人</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="567"/>
@@ -1966,16 +1956,6 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="673"/>
         <source>Windows...</source>
         <translation>視窗...</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="681"/>
-        <source>English</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="692"/>
-        <source>Русский</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="700"/>

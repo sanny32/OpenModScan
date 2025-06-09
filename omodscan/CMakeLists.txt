@@ -222,14 +222,10 @@ set(UI_FILES
     mainwindow.ui
 )
 
-set(TRANSLATIONS
+set(TS_FILES
     translations/omodscan_ru.ts
     translations/omodscan_cn.ts
     translations/omodscan_zh.ts
-)
-
-qt_add_lupdate(omodscan
-    TS_FILES ${TRANSLATIONS}
 )
 
 # Link libraries
@@ -237,10 +233,28 @@ target_sources(omodscan PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} 
 target_link_libraries(omodscan PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort)
 
 if(Qt6_FOUND)
+    qt_add_lupdate(omodscan
+        TS_FILES ${TS_FILES}
+        SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
+        OUTPUT_DIR translations
+    )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
+else()
+    add_custom_command(
+        OUTPUT ${TS_FILES}
+        COMMAND ${Qt5_LUPDATE_EXECUTABLE}
+                ${SOURCES} ${HEADERS} ${UI_FILES}
+                -ts ${TS_FILES}
+        DEPENDS ${SOURCES} ${HEADERS} ${UI_FILES}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Updating translation files..."
+    )
+    add_custom_target(update_translations ALL DEPENDS ${TS_FILES})
+    add_dependencies(omodscan update_translations)
 endif()
 
 if(WIN32)
     target_sources(omodscan PRIVATE res/omodscan.ico)
     set_target_properties(omodscan PROPERTIES WIN32_EXECUTABLE ON)
 endif()
+

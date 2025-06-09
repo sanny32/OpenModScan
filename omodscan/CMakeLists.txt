@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(omodscan
-    VERSION 1.9.1
+    VERSION 1.9.2
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 

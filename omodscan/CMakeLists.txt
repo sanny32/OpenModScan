@@ -10,6 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(PRODUCT_NAME "Open ModScan")
 
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
@@ -21,7 +22,7 @@ endif()
 add_executable(omodscan)
 
 # Define compile definitions
-add_compile_definitions(APP_NAME="Open ModScan")
+add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 
@@ -260,7 +261,6 @@ if(WIN32)
     list(GET VERSION_LIST 2 VERSION_PATCH)
 
     set(EXECUTABLE_NAME "omodscan")
-    set(PRODUCT_NAME "Open ModScan")
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodscan.ico")
     set(RC_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/omodscan.rc.in")
     set(GENERATED_RC "${CMAKE_BINARY_DIR}/omodscan.rc")

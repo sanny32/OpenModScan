@@ -254,7 +254,20 @@ else()
 endif()
 
 if(WIN32)
-    target_sources(omodscan PRIVATE res/omodscan.ico)
+    string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
+    list(GET VERSION_LIST 0 VERSION_MAJOR)
+    list(GET VERSION_LIST 1 VERSION_MINOR)
+    list(GET VERSION_LIST 2 VERSION_PATCH)
+
+    set(EXECUTABLE_NAME "omodscan")
+    set(PRODUCT_NAME "Open ModScan")
+    set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodscan.ico")
+    set(RC_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/omodscan.rc.in")
+    set(GENERATED_RC "${CMAKE_BINARY_DIR}/omodscan.rc")
+
+    configure_file(${RC_TEMPLATE} ${GENERATED_RC} @ONLY)
+
+    target_sources(omodscan PRIVATE ${ICON_PATH} ${GENERATED_RC})
     set_target_properties(omodscan PROPERTIES WIN32_EXECUTABLE ON)
 endif()
 

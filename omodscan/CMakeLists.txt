@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(omodscan
-    VERSION 1.9.0
+    VERSION 1.9.1
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -12,9 +12,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find Qt6 or fallback to Qt5
-find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat QUIET)
+find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
 if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort QUIET)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
 endif()
 
 # Define target
@@ -228,6 +228,12 @@ set(TS_FILES
     translations/omodscan_zh.ts
 )
 
+qt_add_lupdate(omodscan
+    TS_FILES ${TS_FILES}
+    SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
+    OUTPUT_DIR translations
+)
+
 # Link libraries
 target_sources(omodscan PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
 target_link_libraries(omodscan PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort)
@@ -240,3 +246,4 @@ if(WIN32)
     target_sources(omodscan PRIVATE res/omodscan.ico)
     set_target_properties(omodscan PROPERTIES WIN32_EXECUTABLE ON)
 endif()
+

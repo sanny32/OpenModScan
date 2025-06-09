@@ -112,8 +112,6 @@ inline QString formatUInt16Value(DataDisplayMode mode, quint16 v)
 inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -122,6 +120,7 @@ inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint1
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QStringLiteral("<%1>").arg(value, 16, 2, QLatin1Char('0'));
             break;
         default:
@@ -141,8 +140,6 @@ inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint1
 inline QString formatUInt16Value(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -151,6 +148,7 @@ inline QString formatUInt16Value(QModbusDataUnit::RegisterType pointType, quint1
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char('0'));
             break;
         default:
@@ -170,8 +168,6 @@ inline QString formatUInt16Value(QModbusDataUnit::RegisterType pointType, quint1
 inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -180,6 +176,7 @@ inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char(' '));
             break;
         default:
@@ -199,8 +196,6 @@ inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 
 inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -209,6 +204,7 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QString("<0x%1>").arg(QString::number(value, 16).toUpper(), 4, '0');
             break;
         default:
@@ -230,8 +226,6 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
 inline QString formatAnsiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, const QString& codepage, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -240,6 +234,7 @@ inline QString formatAnsiValue(QModbusDataUnit::RegisterType pointType, quint16 
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QString("<%1>").arg(printableAnsi(uint16ToAnsi(value), codepage));
             break;
         default:

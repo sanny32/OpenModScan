@@ -1817,9 +1817,19 @@ Valid Slave Responses: %2</source>
         <translation>无符号64位整数（字节交换）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="874"/>
+        <source>中文</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="889"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="897"/>
+        <source>中國人</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="567"/>
@@ -1958,25 +1968,35 @@ Valid Slave Responses: %2</source>
         <translation>窗口...</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="681"/>
+        <source>English</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="692"/>
+        <source>Русский</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="700"/>
         <source>Address scan</source>
         <translation>地址扫描</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="314"/>
-        <location filename="../mainwindow.cpp" line="353"/>
-        <location filename="../mainwindow.cpp" line="443"/>
-        <location filename="../mainwindow.cpp" line="454"/>
+        <location filename="../mainwindow.cpp" line="333"/>
+        <location filename="../mainwindow.cpp" line="372"/>
+        <location filename="../mainwindow.cpp" line="462"/>
+        <location filename="../mainwindow.cpp" line="473"/>
         <source>All files (*)</source>
         <translation>所有文件(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1077"/>
+        <location filename="../mainwindow.cpp" line="1096"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1078"/>
+        <location filename="../mainwindow.cpp" line="1097"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>

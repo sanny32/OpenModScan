@@ -215,6 +215,25 @@ void MainWindow::on_awake()
 
     if(frm != nullptr)
     {
+        const auto dd = frm->displayDefinition();
+        ui->actionUInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionHex->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionAnsi->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionFloatingPt->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedFP->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionDblFloat->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedDbl->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwapBytes->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+
         const auto ddm = frm->dataDisplayMode();
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
         ui->actionUInt16->setChecked(ddm == DataDisplayMode::UInt16);
@@ -1133,6 +1152,30 @@ FormModSca* MainWindow::createMdiChild(int id)
     connect(frm, &FormModSca::codepageChanged, this, [updateCodepage](const QString& name)
     {
         updateCodepage(name);
+    });
+
+    connect(frm, &FormModSca::pointTypeChanged, this, [frm](QModbusDataUnit::RegisterType type)
+    {
+        switch(type)
+        {
+            case QModbusDataUnit::Coils:
+            case QModbusDataUnit::DiscreteInputs:
+                frm->setProperty("PrevDataDisplayMode", QVariant::fromValue(frm->dataDisplayMode()));
+                frm->setDataDisplayMode(DataDisplayMode::Binary);
+            break;
+
+            case QModbusDataUnit::HoldingRegisters:
+            case QModbusDataUnit::InputRegisters:
+            {
+                const auto mode = frm->property("PrevDataDisplayMode");
+                if(mode.isValid())
+                    frm->setDataDisplayMode(mode.value<DataDisplayMode>());
+            }
+            break;
+
+            default:
+                break;
+        }
     });
 
     connect(frm, &FormModSca::numberOfPollsChanged, this, [this](uint)

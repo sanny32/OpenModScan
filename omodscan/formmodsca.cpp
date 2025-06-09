@@ -769,13 +769,16 @@ void FormModSca::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 
 ///
 /// \brief FormModSca::on_comboBoxModbusPointType_pointTypeChanged
+/// \param type
 ///
-void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
+void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
     beginUpdate();
+
+    emit pointTypeChanged(type);
 }
 
 ///

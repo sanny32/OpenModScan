@@ -222,16 +222,14 @@ set(UI_FILES
     mainwindow.ui
 )
 
-set(TS_FILES
+set(TRANSLATIONS
     translations/omodscan_ru.ts
     translations/omodscan_cn.ts
     translations/omodscan_zh.ts
 )
 
 qt_add_lupdate(omodscan
-    TS_FILES ${TS_FILES}
-    SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
-    OUTPUT_DIR translations
+    TS_FILES ${TRANSLATIONS}
 )
 
 # Link libraries
@@ -246,4 +244,3 @@ if(WIN32)
     target_sources(omodscan PRIVATE res/omodscan.ico)
     set_target_properties(omodscan PROPERTIES WIN32_EXECUTABLE ON)
 endif()
-

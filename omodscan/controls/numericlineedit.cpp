@@ -314,6 +314,7 @@ void NumericLineEdit::updateValue()
         case AnsiMode:
         {
             auto codec = QTextCodec::codecForName(_codepage.toUtf8());
+            if(codec == nullptr) codec = QTextCodec::codecForLocale();
             const auto value = uint16FromAnsi(codec->fromUnicode(text()));
             internalSetValue(value);
         }

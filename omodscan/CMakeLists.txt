@@ -237,7 +237,6 @@ if(Qt6_FOUND)
     qt_add_lupdate(omodscan
         TS_FILES ${TS_FILES}
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
-        OUTPUT_DIR translations
     )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
 else()
@@ -251,7 +250,6 @@ else()
         COMMENT "Updating translation files..."
     )
     add_custom_target(update_translations ALL DEPENDS ${TS_FILES})
-    add_dependencies(omodscan update_translations)
 endif()
 
 if(WIN32)
@@ -271,3 +269,4 @@ if(WIN32)
     set_target_properties(omodscan PROPERTIES WIN32_EXECUTABLE ON)
 endif()
 
+add_dependencies(omodscan update_translations)

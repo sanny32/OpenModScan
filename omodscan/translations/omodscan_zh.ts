@@ -443,7 +443,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="66"/>
         <source>Exclude Virtual Serial Ports</source>
-        <translation type="unfinished"></translation>
+        <translation>排除虚拟串行端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="124"/>

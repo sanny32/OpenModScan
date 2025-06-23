@@ -443,7 +443,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="66"/>
         <source>Exclude Virtual Serial Ports</source>
-        <translation type="unfinished"></translation>
+        <translation>Исключить виртуальные последовательные порты</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="124"/>

@@ -98,6 +98,7 @@ void DialogConnectionDetails::accept()
 ///
 void DialogConnectionDetails::on_toolButtonExcludeVirtualPorts_toggled(bool checked)
 {
+    ui->toolButtonExcludeVirtualPorts->setChecked(checked);
     ui->comboBoxConnectUsing->setExcludeVirtuals(checked);
 }
 

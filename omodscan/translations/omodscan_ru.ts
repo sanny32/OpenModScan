@@ -441,62 +441,67 @@
         <translation>Подключение с помощью:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="118"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="66"/>
+        <source>Exclude Virtual Serial Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="124"/>
         <source>IP Address:</source>
         <translation>IP адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="138"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="144"/>
         <source>Service Port:</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="198"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="204"/>
         <source>Configuration</source>
         <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="230"/>
         <source>Baud Rate: </source>
         <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="287"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="293"/>
         <source>Word Length: </source>
         <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="317"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="323"/>
         <source>Parity: </source>
         <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="337"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="343"/>
         <source>Stop Bits: </source>
         <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="372"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="378"/>
         <source>Hardware Flow Control</source>
         <translation>Управление потоком</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="381"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="387"/>
         <source>Flow Control Mode: </source>
         <translation>Режим управления: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="401"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="407"/>
         <source>DTR Control: </source>
         <translation>Управление DTR: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="424"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="430"/>
         <source>RTS Control: </source>
         <translation>Управление RTS: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="474"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="480"/>
         <source>Protocol Selections</source>
         <translation>Настройки протокола</translation>
     </message>

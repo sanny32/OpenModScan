@@ -441,62 +441,67 @@
         <translation>使用连接：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="118"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="66"/>
+        <source>Exclude Virtual Serial Ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="124"/>
         <source>IP Address:</source>
         <translation>IP地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="138"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="144"/>
         <source>Service Port:</source>
         <translation>端口：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="198"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="204"/>
         <source>Configuration</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="230"/>
         <source>Baud Rate: </source>
         <translation>波特率： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="287"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="293"/>
         <source>Word Length: </source>
         <translation>数据位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="317"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="323"/>
         <source>Parity: </source>
         <translation>奇偶校验： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="337"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="343"/>
         <source>Stop Bits: </source>
         <translation>停止位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="372"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="378"/>
         <source>Hardware Flow Control</source>
         <translation>硬流控</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="381"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="387"/>
         <source>Flow Control Mode: </source>
         <translation>流控模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="401"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="407"/>
         <source>DTR Control: </source>
         <translation>DTR控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="424"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="430"/>
         <source>RTS Control: </source>
         <translation>RTS控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="474"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="480"/>
         <source>Protocol Selections</source>
         <translation>协议选择</translation>
     </message>

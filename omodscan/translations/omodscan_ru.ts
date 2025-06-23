@@ -506,7 +506,7 @@
         <translation>Настройки протокола</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.cpp" line="71"/>
+        <location filename="../dialogs/dialogconnectiondetails.cpp" line="75"/>
         <source>Lookup host failed: </source>
         <translation>Поиск хоста не удался: </translation>
     </message>

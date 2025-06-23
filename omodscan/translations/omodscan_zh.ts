@@ -506,7 +506,7 @@
         <translation>協定選擇</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.cpp" line="71"/>
+        <location filename="../dialogs/dialogconnectiondetails.cpp" line="75"/>
         <source>Lookup host failed: </source>
         <translation>尋找主機失敗： </translation>
     </message>

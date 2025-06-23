@@ -37,6 +37,10 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
         ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, cd.SerialParams.PortName);
     }
 
+#ifdef Q_OS_WIN
+    ui->toolButtonExcludeVirtualPorts->setHidden(true);
+#endif
+
     ui->buttonBox->setFocus();
 }
 

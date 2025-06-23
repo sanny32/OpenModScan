@@ -62,12 +62,18 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Exclude Virtual Serial Ports</string>
+         </property>
          <property name="text">
           <string/>
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
            <normaloff>:/res/serialPortFilter.png</normaloff>:/res/serialPortFilter.png</iconset>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

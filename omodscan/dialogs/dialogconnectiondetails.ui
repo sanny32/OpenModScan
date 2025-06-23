@@ -55,7 +55,24 @@
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_7">
+        <widget class="QToolButton" name="toolButtonExcludeVirtualPorts">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources.qrc">
+           <normaloff>:/res/serialPortFilter.png</normaloff>:/res/serialPortFilter.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -64,7 +81,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>120</width>
+           <width>40</width>
            <height>20</height>
           </size>
          </property>
@@ -520,7 +537,9 @@
    <header>booleancombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

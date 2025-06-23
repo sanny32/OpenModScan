@@ -93,6 +93,15 @@ void DialogConnectionDetails::accept()
 }
 
 ///
+/// \brief DialogConnectionDetails::on_toolButtonExcludeVirtualPorts_toggled
+/// \param checked
+///
+void DialogConnectionDetails::on_toolButtonExcludeVirtualPorts_toggled(bool checked)
+{
+    ui->comboBoxConnectUsing->setExcludeVirtuals(checked);
+}
+
+///
 /// \brief DialogConnectionDetails::on_pushButtonProtocolSelections_clicked
 ///
 void DialogConnectionDetails::on_pushButtonProtocolSelections_clicked()

@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-	<file>res/omodscan.ico</file>
+        <file>res/omodscan.ico</file>
         <file>res/actionAbout.png</file>
         <file>res/actionBinary.png</file>
         <file>res/actionConnect.png</file>
@@ -42,5 +42,6 @@
         <file>res/actionOpen.png</file>
         <file>res/actionSaveAs.png</file>
         <file>translations/omodscan_zh.qm</file>
+        <file>res/serialPortFilter.png</file>
     </qresource>
 </RCC>

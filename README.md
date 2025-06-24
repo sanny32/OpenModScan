@@ -50,6 +50,17 @@ Registers
 
 ## Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+
+## About supported operating systems
+
+The following operating systems are supported for OpenModScan.
+- Microsoft Windows 7 x86 and amd64 or later.
+- Ubuntu Linux 22.04 amd64 or later.
+- Fedora Linux 41 amd64 or later.
+- Alt Linux 11 amd64 or later.
+- Astra Linux 1.7 amd64 or later.
+- RedOS 8 amd64 or later.
+
   
 ## MIT License
 Copyright 2025 Alexandr Ananev [mail@ananev.org]

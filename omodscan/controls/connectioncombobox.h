@@ -13,6 +13,9 @@ class ConnectionComboBox : public QComboBox
 public:
     ConnectionComboBox(QWidget* parent = nullptr);
 
+    bool excludeVirtuals() const;
+    void setExcludeVirtuals(bool exclude);
+
     ConnectionType currentConnectionType() const;
     void setCurrentConnectionType(ConnectionType type, const QString& portName);
 
@@ -20,6 +23,9 @@ public:
 
 private:
     void addItem(const QString& text, ConnectionType type, const QString& portName);
+
+private:
+    bool _excludeVirtuals = false;
 };
 
 #endif // CONNECTIONCOMBOBOX_H

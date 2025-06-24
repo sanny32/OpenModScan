@@ -140,12 +140,12 @@
 <context>
     <name>ConnectionComboBox</name>
     <message>
-        <location filename="../controls/connectioncombobox.cpp" line="22"/>
+        <location filename="../controls/connectioncombobox.cpp" line="44"/>
         <source>Remote TCP/IP Server</source>
         <translation>Удаленный TCP/IP Сервер</translation>
     </message>
     <message>
-        <location filename="../controls/connectioncombobox.cpp" line="26"/>
+        <location filename="../controls/connectioncombobox.cpp" line="47"/>
         <source>Direct Connection to %1</source>
         <translation>Подключение к проту %1</translation>
     </message>
@@ -441,67 +441,72 @@
         <translation>Подключение с помощью:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="101"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="66"/>
+        <source>Exclude Virtual Serial Ports</source>
+        <translation>Исключить виртуальные последовательные порты</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="124"/>
         <source>IP Address:</source>
         <translation>IP адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="131"/>
         <source>Service Port:</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="181"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
         <source>Configuration</source>
         <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="207"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="227"/>
         <source>Baud Rate: </source>
         <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="270"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="290"/>
         <source>Word Length: </source>
         <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="300"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="320"/>
         <source>Parity: </source>
         <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="320"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="340"/>
         <source>Stop Bits: </source>
         <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="355"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="375"/>
         <source>Hardware Flow Control</source>
         <translation>Управление потоком</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="364"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="384"/>
         <source>Flow Control Mode: </source>
         <translation>Режим управления: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="384"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="404"/>
         <source>DTR Control: </source>
         <translation>Управление DTR: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="407"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="427"/>
         <source>RTS Control: </source>
         <translation>Управление RTS: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="457"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="477"/>
         <source>Protocol Selections</source>
         <translation>Настройки протокола</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.cpp" line="71"/>
+        <location filename="../dialogs/dialogconnectiondetails.cpp" line="79"/>
         <source>Lookup host failed: </source>
         <translation>Поиск хоста не удался: </translation>
     </message>

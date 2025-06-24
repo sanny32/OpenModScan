@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(omodscan
-    VERSION 1.9.1
+    VERSION 1.9.2
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -10,6 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(PRODUCT_NAME "Open ModScan")
 
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
@@ -18,10 +19,12 @@ if (NOT Qt6_FOUND)
 endif()
 
 # Define target
-add_executable(omodscan)
+add_executable(omodscan
+    controls/historycombobox.h controls/historycombobox.cpp
+    controls/hostscombobox.h controls/hostscombobox.cpp)
 
 # Define compile definitions
-add_compile_definitions(APP_NAME="Open ModScan")
+add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 
@@ -236,9 +239,9 @@ if(Qt6_FOUND)
     qt_add_lupdate(omodscan
         TS_FILES ${TS_FILES}
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
-        OUTPUT_DIR translations
     )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
+target_link_libraries(omodscan PRIVATE Qt6::Core)
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}
@@ -250,11 +253,23 @@ else()
         COMMENT "Updating translation files..."
     )
     add_custom_target(update_translations ALL DEPENDS ${TS_FILES})
-    add_dependencies(omodscan update_translations)
 endif()
 
 if(WIN32)
-    target_sources(omodscan PRIVATE res/omodscan.ico)
+    string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
+    list(GET VERSION_LIST 0 VERSION_MAJOR)
+    list(GET VERSION_LIST 1 VERSION_MINOR)
+    list(GET VERSION_LIST 2 VERSION_PATCH)
+
+    set(EXECUTABLE_NAME "omodscan")
+    set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodscan.ico")
+    set(RC_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/omodscan.rc.in")
+    set(GENERATED_RC "${CMAKE_BINARY_DIR}/omodscan.rc")
+
+    configure_file(${RC_TEMPLATE} ${GENERATED_RC} @ONLY)
+
+    target_sources(omodscan PRIVATE ${ICON_PATH} ${GENERATED_RC})
     set_target_properties(omodscan PROPERTIES WIN32_EXECUTABLE ON)
 endif()
 
+add_dependencies(omodscan update_translations)

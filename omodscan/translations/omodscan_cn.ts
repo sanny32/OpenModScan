@@ -140,12 +140,12 @@
 <context>
     <name>ConnectionComboBox</name>
     <message>
-        <location filename="../controls/connectioncombobox.cpp" line="22"/>
+        <location filename="../controls/connectioncombobox.cpp" line="44"/>
         <source>Remote TCP/IP Server</source>
         <translation>远程 TCP/IP 服务器</translation>
     </message>
     <message>
-        <location filename="../controls/connectioncombobox.cpp" line="26"/>
+        <location filename="../controls/connectioncombobox.cpp" line="47"/>
         <source>Direct Connection to %1</source>
         <translation>直接连接到 %1</translation>
     </message>
@@ -441,67 +441,72 @@
         <translation>使用连接：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="101"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="66"/>
+        <source>Exclude Virtual Serial Ports</source>
+        <translation>排除虛擬串行埠</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="124"/>
         <source>IP Address:</source>
         <translation>IP地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="131"/>
         <source>Service Port:</source>
         <translation>端口：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="181"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
         <source>Configuration</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="207"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="227"/>
         <source>Baud Rate: </source>
         <translation>波特率： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="270"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="290"/>
         <source>Word Length: </source>
         <translation>数据位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="300"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="320"/>
         <source>Parity: </source>
         <translation>奇偶校验： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="320"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="340"/>
         <source>Stop Bits: </source>
         <translation>停止位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="355"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="375"/>
         <source>Hardware Flow Control</source>
         <translation>硬流控</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="364"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="384"/>
         <source>Flow Control Mode: </source>
         <translation>流控模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="384"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="404"/>
         <source>DTR Control: </source>
         <translation>DTR控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="407"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="427"/>
         <source>RTS Control: </source>
         <translation>RTS控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="457"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="477"/>
         <source>Protocol Selections</source>
         <translation>协议选择</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.cpp" line="71"/>
+        <location filename="../dialogs/dialogconnectiondetails.cpp" line="79"/>
         <source>Lookup host failed: </source>
         <translation>查找主机失败： </translation>
     </message>

@@ -4,8 +4,7 @@ OpenModScan is a free and open-source Modbus Master (Client) utility supporting 
 ![image](https://github.com/user-attachments/assets/aaa2b5c8-9f47-4e17-803d-2af7d24fb0c7)
 
 
-![image](https://github.com/user-attachments/assets/2bfe852f-1cc2-433d-8917-70815228a1c3)
-
+![image](https://github.com/user-attachments/assets/19451264-2b0f-4821-897e-0cbee5831b14)
 
 ## Features
 
@@ -50,9 +49,20 @@ Registers
 
 ## Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+
+## About supported operating systems
+
+The following operating systems are supported for OpenModScan.
+- Microsoft Windows 7 x86 and amd64 or later.
+- Ubuntu Linux 22.04 amd64 or later.
+- Fedora Linux 41 amd64 or later.
+- Alt Linux 11 amd64 or later.
+- Astra Linux 1.7 amd64 or later.
+- RedOS 8 amd64 or later.
+
   
 ## MIT License
-Copyright 2024 Alexandr Ananev [mail@ananev.org]
+Copyright 2025 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

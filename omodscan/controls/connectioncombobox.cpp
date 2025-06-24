@@ -19,9 +19,30 @@ Q_DECLARE_METATYPE(ConnectionPort)
 ConnectionComboBox::ConnectionComboBox(QWidget* parent)
     :QComboBox(parent)
 {
-    addItem(tr("Remote TCP/IP Server"), ConnectionType::Tcp, QString());
+    setExcludeVirtuals(false);
+}
 
-    for(auto&& port: getAvailableSerialPorts())
+///
+/// \brief ConnectionComboBox::excludeVirtuals
+/// \return
+///
+bool ConnectionComboBox::excludeVirtuals() const
+{
+    return _excludeVirtuals;
+}
+
+///
+/// \brief ConnectionComboBox::setExcludeVirtuals
+/// \param exclude
+///
+void ConnectionComboBox::setExcludeVirtuals(bool exclude)
+{
+    _excludeVirtuals = exclude;
+
+    clear();
+
+    addItem(tr("Remote TCP/IP Server"), ConnectionType::Tcp, QString());
+    for(auto&& port: getAvailableSerialPorts(_excludeVirtuals))
     {
         const auto text = QString(tr("Direct Connection to %1")).arg(port);
         addItem(text, ConnectionType::Serial, port);

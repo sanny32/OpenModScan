@@ -39,6 +39,8 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
 
 #ifdef Q_OS_WIN
     ui->toolButtonExcludeVirtualPorts->setHidden(true);
+#else
+    ui->toolButtonExcludeVirtualPorts->setChecked(cd.ExcludeVirtualPorts);
 #endif
 
     ui->buttonBox->setFocus();
@@ -58,6 +60,7 @@ DialogConnectionDetails::~DialogConnectionDetails()
 void DialogConnectionDetails::accept()
 {
     _connectionDetails.Type = ui->comboBoxConnectUsing->currentConnectionType();
+    _connectionDetails.ExcludeVirtualPorts = ui->toolButtonExcludeVirtualPorts->isChecked();
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
         if(!QHostAddress(ui->lineEditIPAddress->text()).isNull())

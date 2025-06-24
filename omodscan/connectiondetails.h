@@ -311,9 +311,11 @@ struct ConnectionDetails
     TcpConnectionParams TcpParams;
     SerialConnectionParams SerialParams;
     ModbusProtocolSelections ModbusParams;
+    bool ExcludeVirtualPorts = false;
 
     bool operator==(const ConnectionDetails& cd) const{
         return Type == cd.Type &&
+               ExcludeVirtualPorts == cd.ExcludeVirtualPorts &&
                 ModbusParams == cd.ModbusParams &&
                 ((Type == ConnectionType::Tcp) ? TcpParams == cd.TcpParams: SerialParams == cd.SerialParams);
     }
@@ -361,6 +363,7 @@ inline QDataStream& operator >>(QDataStream& in, ConnectionDetails& params)
 inline QSettings& operator <<(QSettings& out, const ConnectionDetails& params)
 {
     out.setValue("ConnectionParams/Type", (uint)params.Type);
+    out.setValue("ConnectionParams/ExcludeVirtualPorts", params.ExcludeVirtualPorts);
     out << params.TcpParams;
     out << params.SerialParams;
     out << params.ModbusParams;
@@ -377,6 +380,7 @@ inline QSettings& operator <<(QSettings& out, const ConnectionDetails& params)
 inline QSettings& operator >>(QSettings& in, ConnectionDetails& params)
 {
     params.Type = (ConnectionType)in.value("ConnectionParams/Type", 0).toUInt();
+    params.ExcludeVirtualPorts = in.value("ConnectionParams/ExcludeVirtualPorts", false).toBool();
     in >> params.TcpParams;
     in >> params.SerialParams;
     in >> params.ModbusParams;

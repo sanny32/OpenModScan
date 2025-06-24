@@ -14,12 +14,15 @@ set(PRODUCT_NAME "Open ModScan")
 
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 if (NOT Qt6_FOUND)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
 endif()
 
 # Define target
-add_executable(omodscan)
+add_executable(omodscan
+    controls/historycombobox.h controls/historycombobox.cpp
+    controls/hostscombobox.h controls/hostscombobox.cpp)
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
@@ -239,6 +242,7 @@ if(Qt6_FOUND)
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
     )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
+target_link_libraries(omodscan PRIVATE Qt6::Core)
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}

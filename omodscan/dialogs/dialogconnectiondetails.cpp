@@ -18,7 +18,7 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     ui->lineEditServicePort->setInputRange(0, USHRT_MAX);
     ui->comboBoxConnectUsing->setCurrentIndex(-1);
     ui->comboBoxFlowControl->setCurrentIndex(-1);
-    ui->lineEditIPAddress->setText(cd.TcpParams.IPAddress);
+    ui->comboBoxIPAddress->setCurrentText(cd.TcpParams.IPAddress);
     ui->lineEditServicePort->setValue(cd.TcpParams.ServicePort);
     ui->comboBoxBaudRate->setCurrentValue(cd.SerialParams.BaudRate);
     ui->comboBoxWordLength->setCurrentValue(cd.SerialParams.WordLength);
@@ -63,15 +63,16 @@ void DialogConnectionDetails::accept()
     _connectionDetails.ExcludeVirtualPorts = ui->toolButtonExcludeVirtualPorts->isChecked();
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
-        if(!QHostAddress(ui->lineEditIPAddress->text()).isNull())
+        if(!QHostAddress(ui->comboBoxIPAddress->currentText()).isNull())
         {
-            _connectionDetails.TcpParams.IPAddress = ui->lineEditIPAddress->text();
+            _connectionDetails.TcpParams.IPAddress = ui->comboBoxIPAddress->currentText();
             _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value<int>();
+            ui->comboBoxIPAddress->saveHistory();
             QFixedSizeDialog::accept();
         }
         else
         {
-            QHostInfo::lookupHost(ui->lineEditIPAddress->text(), this, [this](const QHostInfo &host)
+            QHostInfo::lookupHost(ui->comboBoxIPAddress->currentText(), this, [this](const QHostInfo &host)
             {
                 if (host.error() != QHostInfo::NoError)
                 {
@@ -79,8 +80,9 @@ void DialogConnectionDetails::accept()
                     return;
                 }
 
-                _connectionDetails.TcpParams.IPAddress = ui->lineEditIPAddress->text();
+                _connectionDetails.TcpParams.IPAddress = ui->comboBoxIPAddress->currentText();
                 _connectionDetails.TcpParams.ServicePort = ui->lineEditServicePort->value<int>();
+                ui->comboBoxIPAddress->saveHistory();
                 QFixedSizeDialog::accept();
             });
         }
@@ -125,7 +127,7 @@ void DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged(int)
 {
     const auto ct = ui->comboBoxConnectUsing->currentConnectionType();
     const auto fc = ui->comboBoxFlowControl->currentFlowControl();
-    ui->lineEditIPAddress->setEnabled(ct == ConnectionType::Tcp);
+    ui->comboBoxIPAddress->setEnabled(ct == ConnectionType::Tcp);
     ui->lineEditServicePort->setEnabled(ct == ConnectionType::Tcp);
     ui->comboBoxBaudRate->setEnabled(ct == ConnectionType::Serial);
     ui->comboBoxParity->setEnabled(ct == ConnectionType::Serial);

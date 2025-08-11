@@ -149,7 +149,7 @@ QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation
                     const auto pointAddress = getAddress(0);
                     const auto addressFrom = pointAddress + section * _columns;
                     const auto addressTo = pointAddress + qMin<quint16>(length - 1, (section + 1) * _columns - 1);
-                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom, false), formatAddress(pointType, addressTo, false));
+                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom, _hexAddress), formatAddress(pointType, addressTo, _hexAddress));
                 }
             }
         break;
@@ -250,7 +250,7 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
         {
             const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16;
             const auto addr = item.Addr + (_addressBase == AddressBase::Base1 ? 1 : 0);
-            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, addr, false),
+            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, addr, _hexAddress),
                                                item.Msg->isRequest() ? "<<" : ">>",
                                                item.Msg->toString(mode));
         }
@@ -336,15 +336,21 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
                    Qt::WindowMaximizeButtonHint);
 
     auto viewModel = new TableViewItemModel(this);
-    ui->tableView->setModel(viewModel);
+    viewModel->setHexAddress(dd.HexAddress);
+
+    auto logModel = new LogViewModel(this);
+    logModel->setHexAddress(dd.HexAddress);
 
     auto proxyLogModel = new LogViewProxyModel(this);
-    proxyLogModel->setSourceModel(new LogViewModel(this));
+    proxyLogModel->setSourceModel(logModel);
+
+    ui->tableView->setModel(viewModel);
     ui->logView->setModel(proxyLogModel);
 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->lineEditStartAddress->setPaddingZeroes(true);
+    ui->lineEditStartAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLength->setInputRange(2, 65530);

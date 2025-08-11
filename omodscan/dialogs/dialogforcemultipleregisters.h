@@ -18,7 +18,7 @@ class DialogForceMultipleRegisters : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, int length, QWidget *parent = nullptr);
+    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent = nullptr);
     ~DialogForceMultipleRegisters();
 
     void accept() override;
@@ -37,7 +37,7 @@ private:
     Ui::DialogForceMultipleRegisters *ui;
     QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
-    bool _hexView = false;
+    bool _hexAddress = false;
 };
 
 #endif // DIALOGFORCEMULTIPLEREGISTERS_H

@@ -8,7 +8,7 @@
 /// \param params
 /// \param parent
 ///
-DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, QWidget *parent) :
+DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget *parent) :
     QFixedSizeDialog(parent),
     ui(new Ui::DialogWriteCoilRegister)
     ,_writeParams(params)
@@ -16,6 +16,7 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
 {
     ui->setupUi(this);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);

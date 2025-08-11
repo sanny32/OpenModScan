@@ -130,6 +130,7 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.Length = ui->lineEditLength->value<int>();
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.HexAddress = displayHexAddresses();
 
     return dd;
 }
@@ -214,6 +215,15 @@ bool FormModSca::displayHexAddresses() const
 void FormModSca::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
+
+    if(on)
+    {
+        ui->lineEditAddress->setInputMode(NumericLineEdit::HexMode);
+    }
+    else
+    {
+        ui->lineEditAddress->setInputMode(NumericLineEdit::Int32Mode);
+    }
 }
 
 ///
@@ -833,7 +843,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, simParams, mode, _parent);
+                DialogWriteHoldingRegister dlg(params, simParams, mode, displayHexAddresses(), _parent);
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:

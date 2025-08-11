@@ -481,7 +481,8 @@ void MainWindow::on_actionRestoreNow_triggered()
 ///
 void MainWindow::on_actionModbusScanner_triggered()
 {
-    auto dlg = new DialogModbusScanner(this);
+    auto frm = currentMdiChild();
+    auto dlg = new DialogModbusScanner(frm != nullptr ? frm->displayHexAddresses() : false, this);
     connect(dlg, &DialogModbusScanner::attemptToConnect, this,
     [this](const ConnectionDetails& cd, int deviceId)
     {
@@ -708,7 +709,7 @@ void MainWindow::on_actionForceCoils_triggered()
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
 
     {
-        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, this);
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, dd.HexAddress, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
 
@@ -724,7 +725,7 @@ void MainWindow::on_actionForceCoils_triggered()
         params.Value = QVariant::fromValue(frm->data());
     }
 
-    DialogForceMultipleCoils dlg(params, presetParams.Length, this);
+    DialogForceMultipleCoils dlg(params, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _modbusClient.writeRegister(QModbusDataUnit::Coils, params, 0);
@@ -743,7 +744,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
 
     {
-        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, this);
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, dd.HexAddress, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
 
@@ -762,7 +763,7 @@ void MainWindow::on_actionPresetRegs_triggered()
         params.Value = QVariant::fromValue(frm->data());
     }
 
-    DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
+    DialogForceMultipleRegisters dlg(params, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
@@ -780,7 +781,7 @@ void MainWindow::on_actionMaskWrite_triggered()
     const auto dd = frm->displayDefinition();
     ModbusMaskWriteParams params = { dd.DeviceId, dd.PointAddress, 0xFFFF, 0, dd.ZeroBasedAddress};
 
-    DialogMaskWriteRegiter dlg(params, this);
+    DialogMaskWriteRegiter dlg(params, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _modbusClient.maskWriteRegister(params, 0);

@@ -153,37 +153,37 @@
 <context>
     <name>CsvExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1178"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Device Id</source>
         <translation>裝置地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1178"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1178"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Length</source>
         <translation>長度</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1178"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Point Type</source>
         <translation>暫存器類型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1178"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Registers on Query</source>
         <translation>查詢中的暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1178"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Address Base</source>
         <translation>基地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1178"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Byte Order</source>
         <translation>位元組序</translation>
     </message>
@@ -285,7 +285,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="269"/>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="402"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="408"/>
         <source>Scan</source>
         <translation>掃描</translation>
     </message>
@@ -325,17 +325,17 @@
         <translation>僅顯示有效回應</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="402"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="408"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="587"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="593"/>
         <source>Pdf files (*.pdf);;CSV files (*.csv)</source>
         <translation>Pdf 檔案 (*.pdf);;CSV 檔案 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="664"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="670"/>
         <source>No connection to MODBUS device!</source>
         <translation>沒有連繫到 MODBUS 裝置！</translation>
     </message>
@@ -602,17 +602,17 @@
         <translation>長度： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="22"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="25"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="23"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="26"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>長度：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="24"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="27"/>
         <source>Slave Device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>從裝置：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -655,17 +655,17 @@
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="25"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="27"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="26"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="28"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>長度：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="27"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="29"/>
         <source>Slave Device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>從裝置：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -874,7 +874,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="424"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="269"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="271"/>
         <source>PORT: Device Id (serial port settings)</source>
         <translation>埠：裝置地址（串口設置）</translation>
     </message>
@@ -899,92 +899,92 @@
         <translation>1校驗</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="144"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="146"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="144"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="146"/>
         <source>Start</source>
         <translation>開始</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="288"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="290"/>
         <source>Address: port (Device Id)</source>
         <translation>地址：埠（裝置地址）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="327"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="329"/>
         <source>Clear previous scan results?</source>
         <translation>清除之前的掃描結果？</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="359"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="361"/>
         <source>Baud Rate:</source>
         <translation>波特率：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="360"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="362"/>
         <source>Data Bits:</source>
         <translation>數據位：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="361"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="363"/>
         <source>Parity:</source>
         <translation>奇偶校驗：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="362"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="364"/>
         <source>Stop Bits:</source>
         <translation>停止位：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="363"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="365"/>
         <source>Address:</source>
         <translation>地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="364"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="366"/>
         <source>Port:</source>
         <translation>埠：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="365"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="367"/>
         <source>Device Id:</source>
         <translation>裝置地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="434"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="436"/>
         <source>Baud Rate: %1</source>
         <translation>波特率：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="435"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="437"/>
         <source>Data Bits: %1</source>
         <translation>數據位：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="436"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="438"/>
         <source>Parity: %1</source>
         <translation>奇偶校驗：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="437"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="439"/>
         <source>Stop Bits: %1</source>
         <translation>停止位：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="441"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="443"/>
         <source>Address: %1</source>
         <translation>地址：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="442"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="444"/>
         <source>Port: %1</source>
         <translation>埠：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="445"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="447"/>
         <source>Device Id: %1</source>
         <translation>裝置地址：%1</translation>
     </message>
@@ -1396,12 +1396,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>自動模擬</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="64"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="66"/>
         <source>Value, (HEX): </source>
         <translation>值（十六進制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="71"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="73"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1475,12 +1475,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>暫存器類型</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="166"/>
+        <location filename="../formmodsca.cpp" line="167"/>
         <source>Data Uninitialized</source>
         <translation>數據未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="392"/>
+        <location filename="../formmodsca.cpp" line="402"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1489,7 +1489,7 @@ Length: %3</source>
 長度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="396"/>
+        <location filename="../formmodsca.cpp" line="406"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1498,29 +1498,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="399"/>
+        <location filename="../formmodsca.cpp" line="409"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>輪詢次數：%1
 有效的從站回應：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="549"/>
+        <location filename="../formmodsca.cpp" line="559"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="722"/>
+        <location filename="../formmodsca.cpp" line="732"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="528"/>
+        <location filename="../formmodsca.cpp" line="538"/>
         <source>No Responses from Slave Device</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="680"/>
+        <location filename="../formmodsca.cpp" line="690"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>
@@ -1976,12 +1976,12 @@ Valid Slave Responses: %2</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1096"/>
+        <location filename="../mainwindow.cpp" line="1097"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1097"/>
+        <location filename="../mainwindow.cpp" line="1098"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>
@@ -2351,26 +2351,26 @@ Valid Slave Responses: %2</source>
 <context>
     <name>PdfExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="945"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="951"/>
         <source>Error. Failed to write PDF file!</source>
         <translation>錯誤：儲存為PDF失敗！</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="998"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1004"/>
         <source>Address Base: %1
 Start Address: %2</source>
         <translation>基地址：%1
 起始地址：%2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1001"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1007"/>
         <source>Device Id: %1		Length: %2
 Point Type: [%3]</source>
         <translation>裝置地址%1		長度%2
 暫存器類型：[%3]</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1004"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1010"/>
         <source>Registers on Query: %1
 Byte Order: %2</source>
         <translation>要求中的暫存器：%1

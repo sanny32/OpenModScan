@@ -15,6 +15,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
 {
     ui->setupUi(this);
     ui->lineEditScanRate->setInputRange(20, 36000000);
+    ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());

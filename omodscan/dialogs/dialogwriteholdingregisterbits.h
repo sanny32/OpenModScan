@@ -13,7 +13,7 @@ class DialogWriteHoldingRegisterBits : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteHoldingRegisterBits(ModbusWriteParams& params, QWidget *parent = nullptr);
+    explicit DialogWriteHoldingRegisterBits(ModbusWriteParams& params, bool hexAddress, QWidget *parent = nullptr);
     ~DialogWriteHoldingRegisterBits();
 
     void accept() override;

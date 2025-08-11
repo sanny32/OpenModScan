@@ -17,6 +17,7 @@ struct DisplayDefinition
     quint16 Length = 50;
     quint16 LogViewLimit = 30;
     bool ZeroBasedAddress = false;
+    bool HexAddress = false;
 
     void normalize()
     {
@@ -39,6 +40,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/Length",            dd.Length);
     out.setValue("DisplayDefinition/LogViewLimit",      dd.LogViewLimit);
     out.setValue("DisplayDefinition/ZeroBasedAddress",  dd.ZeroBasedAddress);
+    out.setValue("DisplayDefinition/HexAddress",        dd.HexAddress);
 
     return out;
 }
@@ -58,6 +60,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.Length = in.value("DisplayDefinition/Length", 50).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
+    dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
 
     dd.normalize();
     return in;

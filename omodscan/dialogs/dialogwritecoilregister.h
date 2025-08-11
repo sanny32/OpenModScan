@@ -17,7 +17,7 @@ class DialogWriteCoilRegister : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, QWidget *parent = nullptr);
+    explicit DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget *parent = nullptr);
     ~DialogWriteCoilRegister();
 
     void accept() override;

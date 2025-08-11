@@ -6,15 +6,17 @@
 /// \brief DialogSetupPresetData::DialogSetupPresetData
 /// \param params
 /// \param pointType
+/// \param hexAddress
 /// \param parent
 ///
-DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, QWidget *parent) :
+DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, bool hexAddress, QWidget *parent) :
      QFixedSizeDialog(parent)
     , ui(new Ui::DialogSetupPresetData)
     ,_params(params)
 {
     ui->setupUi(this);
     ui->lineEditSlaveDevice->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditSlaveDevice->setValue(params.SlaveAddress);
     ui->lineEditAddress->setValue(params.PointAddress);

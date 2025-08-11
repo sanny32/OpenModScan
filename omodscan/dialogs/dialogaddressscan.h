@@ -48,6 +48,12 @@ public:
         endResetModel();
     }
 
+    void setHexAddress(bool on) {
+        beginResetModel();
+        _hexAddress = on;
+        endResetModel();
+    }
+
     void setByteOrder(ByteOrder order){
         beginResetModel();
         _byteOrder = order;
@@ -61,6 +67,7 @@ private:
     int _columns = 10;
     ModbusDataUnit _data;
     bool _hexView = false;
+    bool _hexAddress = false;
     AddressBase _addressBase = AddressBase::Base1;
     ByteOrder _byteOrder = ByteOrder::Direct;
 };
@@ -101,6 +108,12 @@ public:
         endResetModel();
     }
 
+    void setHexAddress(bool on) {
+        beginResetModel();
+        _hexAddress = on;
+        endResetModel();
+    }
+
 private:
     void deleteItems();
 
@@ -113,6 +126,7 @@ private:
 
 private:
     bool _hexView = false;
+    bool _hexAddress = false;
     AddressBase _addressBase = AddressBase::Base1;
     QVector<LogViewItem> _items;
 };

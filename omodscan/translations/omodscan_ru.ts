@@ -1481,7 +1481,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="402"/>
+        <location filename="../formmodsca.cpp" line="398"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1490,7 +1490,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="406"/>
+        <location filename="../formmodsca.cpp" line="402"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1499,29 +1499,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="409"/>
+        <location filename="../formmodsca.cpp" line="405"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="559"/>
+        <location filename="../formmodsca.cpp" line="555"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="732"/>
+        <location filename="../formmodsca.cpp" line="728"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="538"/>
+        <location filename="../formmodsca.cpp" line="534"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="690"/>
+        <location filename="../formmodsca.cpp" line="686"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>

@@ -1480,7 +1480,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>数据未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="402"/>
+        <location filename="../formmodsca.cpp" line="398"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1489,7 +1489,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="406"/>
+        <location filename="../formmodsca.cpp" line="402"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1498,29 +1498,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="409"/>
+        <location filename="../formmodsca.cpp" line="405"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>轮询次数：%1
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="559"/>
+        <location filename="../formmodsca.cpp" line="555"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>没有扫描：指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="732"/>
+        <location filename="../formmodsca.cpp" line="728"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="538"/>
+        <location filename="../formmodsca.cpp" line="534"/>
         <source>No Responses from Slave Device</source>
         <translation>从设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="690"/>
+        <location filename="../formmodsca.cpp" line="686"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>

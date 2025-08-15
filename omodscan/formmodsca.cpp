@@ -169,6 +169,8 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
 
+    setDisplayHexAddresses(dd.HexAddress);
+
     beginUpdate();
 }
 

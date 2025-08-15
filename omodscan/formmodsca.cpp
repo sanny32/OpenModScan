@@ -218,14 +218,8 @@ void FormModSca::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
 
-    if(on)
-    {
-        ui->lineEditAddress->setInputMode(NumericLineEdit::HexMode);
-    }
-    else
-    {
-        ui->lineEditAddress->setInputMode(NumericLineEdit::Int32Mode);
-    }
+    ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
 }
 
 ///

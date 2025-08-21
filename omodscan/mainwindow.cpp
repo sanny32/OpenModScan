@@ -1432,6 +1432,11 @@ void MainWindow::loadSettings()
     if(toolbarBreal) addToolBarBreak(toolbarArea);
     addToolBar(toolbarArea, ui->toolBarDisplay);
 
+    const auto extenedbarArea = (Qt::ToolBarArea)qBound(0, m.value("ExtendedBarArea", 0x4).toInt(), 0xf);
+    const auto extendedbarBreak = m.value("ExtendedBarBreak").toBool();
+    if(extendedbarBreak) addToolBarBreak(extenedbarArea);
+    addToolBar(extenedbarArea, ui->toolBarExtended);
+
     _autoStart = m.value("AutoStart").toBool();
     _fileAutoStart = m.value("StartUpFile").toString();
 
@@ -1477,6 +1482,8 @@ void MainWindow::saveSettings()
 
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
+    m.setValue("ExtendedBarArea", toolBarArea(ui->toolBarExtended));
+    m.setValue("ExtendedBarBreak", toolBarBreak(ui->toolBarExtended));
 
     m.setValue("AutoStart", _autoStart);
     m.setValue("StartUpFile", _fileAutoStart);

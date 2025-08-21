@@ -833,7 +833,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             ModbusWriteParams params = { node, addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
-                DialogWriteHoldingRegisterBits dlg(params, _parent);
+                DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), _parent);
                 if(dlg.exec() == QDialog::Accepted)
                     _modbusClient.writeRegister(pointType, params, _formId);
             }

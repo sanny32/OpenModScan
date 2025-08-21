@@ -120,9 +120,17 @@ inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint1
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+        {
             value = toByteOrderValue(value, order);
-            result = QStringLiteral("<%1>").arg(value, 16, 2, QLatin1Char('0'));
-            break;
+
+            const QString binStr = QStringLiteral("%1").arg(value, 16, 2, QLatin1Char('0'));
+            QStringList groups;
+            for (int i = 0; i < binStr.size(); i += 4)
+                groups << binStr.mid(i, 4);
+
+            result = QStringLiteral("<%1>").arg(groups.join(' '));
+        }
+        break;
         default:
             break;
     }

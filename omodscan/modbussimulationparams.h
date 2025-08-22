@@ -115,7 +115,10 @@ inline QDataStream& operator >>(QDataStream& in, DecrementSimulationParams& para
 ///
 struct ModbusSimulationParams
 {
-    SimulationMode Mode = SimulationMode::No;
+    ModbusSimulationParams(SimulationMode mode= SimulationMode::Off) {
+        Mode = mode;
+    }
+    SimulationMode Mode = SimulationMode::Off;
     RandomSimulationParams RandomParams;
     IncrementSimulationParams IncrementParams;
     DecrementSimulationParams DecrementParams;

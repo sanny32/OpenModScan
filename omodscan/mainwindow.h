@@ -169,5 +169,6 @@ private:
     quint32 _lastWriteSingleCoilAddress = 0;
     quint32 _lastWriteHoldingRegisterAddress = 0;
     quint32 _lastWriteHoldingRegisterBitsAddress = 0;
+    quint32 _lastMaskWriteRegisterAddress = 0;
 };
 #endif // MAINWINDOW_H

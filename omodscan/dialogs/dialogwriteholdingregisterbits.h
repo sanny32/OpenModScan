@@ -18,6 +18,12 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_lineEditAddress_valueChanged(const QVariant& value);
+
+private:
+    void setValue(const quint16 value);
+
 private:
     Ui::DialogWriteHoldingRegisterBits *ui;
     ModbusWriteParams& _writeParams;

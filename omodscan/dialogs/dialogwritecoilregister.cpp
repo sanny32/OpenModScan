@@ -22,9 +22,9 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
     ui->lineEditAddress->setValue(params.Address);
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
-    ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::No);
+    ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::Disabled);
 
-    if(simParams.Mode != SimulationMode::No)
+    if(simParams.Mode != SimulationMode::Off)
     {
         QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
         iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));

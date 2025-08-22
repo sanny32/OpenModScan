@@ -821,7 +821,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 break;
 
                 case 2:
-                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
+                    if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
                     else _dataSimulator->startSimulation(mode, pointType, simAddr, deviceId, simParams);
                 break;
             }
@@ -839,7 +839,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, simParams, mode, displayHexAddresses(), _parent);
+                DialogWriteHoldingRegister dlg(params, simParams, displayHexAddresses(), _parent);
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:
@@ -847,7 +847,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                     break;
 
                     case 2:
-                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
+                        if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
                         else _dataSimulator->startSimulation(mode, pointType, simAddr, deviceId, simParams);
                     break;
                 }

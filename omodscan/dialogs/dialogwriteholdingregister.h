@@ -18,7 +18,7 @@ class DialogWriteHoldingRegister : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteHoldingRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, DataDisplayMode mode, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogWriteHoldingRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget *parent = nullptr);
     ~DialogWriteHoldingRegister();
 
     void accept() override;

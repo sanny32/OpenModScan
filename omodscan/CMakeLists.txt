@@ -19,9 +19,7 @@ if (NOT Qt6_FOUND)
 endif()
 
 # Define target
-add_executable(omodscan
-    controls/historycombobox.h controls/historycombobox.cpp
-    controls/hostscombobox.h controls/hostscombobox.cpp)
+add_executable(omodscan)
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
@@ -49,6 +47,8 @@ set(SOURCES
     controls/flowcontroltypecombobox.cpp
     controls/formattedspinbox.cpp
     controls/functioncodecombobox.cpp
+    controls/historycombobox.cpp
+    controls/hostscombobox.cpp
     controls/ipaddresslineedit.cpp
     controls/mainstatusbar.cpp
     controls/modbuslogwidget.cpp
@@ -115,6 +115,8 @@ set(HEADERS
     controls/flowcontroltypecombobox.h
     controls/formattedspinbox.h
     controls/functioncodecombobox.h
+    controls/historycombobox.h
+    controls/hostscombobox.h
     controls/ipaddresslineedit.h
     controls/mainstatusbar.h
     controls/modbuslogwidget.h
@@ -194,6 +196,7 @@ set(HEADERS
     quintvalidator.h
     recentfileactionlist.h
     serialportutils.h
+    waitcursor.h
     windowactionlist.h
 )
 

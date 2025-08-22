@@ -1,5 +1,7 @@
 #include <QBitArray>
 #include "modbuslimits.h"
+#include "modbusclient.h"
+#include "waitcursor.h"
 #include "dialogwriteholdingregisterbits.h"
 #include "ui_dialogwriteholdingregisterbits.h"
 
@@ -21,12 +23,7 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
-    const quint16 value = params.Value.toUInt();
-    for (int i = 0; i < 16; i++)
-    {
-        auto ctrl = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
-        if(ctrl) ctrl->setChecked(value >> i & 1);
-    }
+    setValue(params.Value.toUInt());
     ui->buttonBox->setFocus();
 }
 
@@ -54,4 +51,32 @@ void DialogWriteHoldingRegisterBits::accept()
     _writeParams.Node = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
+}
+
+///
+/// \brief DialogWriteHoldingRegisterBits::on_lineEditAddress_valueChanged
+/// \param value
+///
+void DialogWriteHoldingRegisterBits::on_lineEditAddress_valueChanged(const QVariant& value)
+{
+    WaitCursor wait(this);
+
+    const quint32 address = value.toUInt();
+    ModbusClient* cli = _writeParams.ModbusClient;
+    if(cli != nullptr && cli->state() == QModbusDevice::ConnectedState) {
+        setValue(cli->readRegister(QModbusDataUnit::HoldingRegisters, address, ui->lineEditNode->value<int>()));
+    }
+}
+
+///
+/// \brief DialogWriteHoldingRegisterBits::setValue
+/// \param value
+///
+void DialogWriteHoldingRegisterBits::setValue(const quint16 value)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        auto ctrl = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
+        if(ctrl) ctrl->setChecked(value >> i & 1);
+    }
 }

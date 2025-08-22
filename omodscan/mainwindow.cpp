@@ -21,6 +21,7 @@
 #include "dialogabout.h"
 #include "mainstatusbar.h"
 #include "mainwindow.h"
+#include "waitcursor.h"
 #include "ui_mainwindow.h"
 
 ///
@@ -717,6 +718,8 @@ void MainWindow::on_actionHexAddresses_triggered()
 ///
 void MainWindow::on_actionWriteSingleCoil_triggered()
 {
+    WaitCursor wait(this);
+
     auto frm = currentMdiChild();
     if(!frm) return;
 
@@ -724,9 +727,9 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const bool value = false;
+    const quint16 value = _modbusClient.readRegister(dd.PointType, _lastWriteSingleCoilAddress, dd.DeviceId);
 
-    ModbusSimulationParams simParams;
+    ModbusSimulationParams simParams(SimulationMode::Disabled);
     ModbusWriteParams params = { dd.DeviceId, _lastWriteSingleCoilAddress, value, mode, byteOrder, codepage, dd.ZeroBasedAddress };
     DialogWriteCoilRegister dlg(params, simParams, frm->displayHexAddresses(), this);
 
@@ -750,6 +753,8 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
 ///
 void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
 {
+    WaitCursor wait(this);
+
     _actionWriteHoldingRegister = ui->actionWriteHoldingRegisterValue;
 
     auto frm = currentMdiChild();
@@ -759,11 +764,11 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const qint16 value = 0;
+    const quint16 value = _modbusClient.readRegister(dd.PointType, _lastWriteHoldingRegisterAddress, dd.DeviceId);
 
-    ModbusSimulationParams simParams;
+    ModbusSimulationParams simParams(SimulationMode::Disabled);
     ModbusWriteParams params = { dd.DeviceId, _lastWriteHoldingRegisterAddress, value, mode, byteOrder, codepage, dd.ZeroBasedAddress };
-    DialogWriteHoldingRegister dlg(params, simParams, mode, frm->displayHexAddresses(), this);
+    DialogWriteHoldingRegister dlg(params, simParams, frm->displayHexAddresses(), this);
 
     if(dlg.exec() == QDialog::Accepted)
     {
@@ -777,6 +782,8 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
 ///
 void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
 {
+    WaitCursor wait(this);
+
     _actionWriteHoldingRegister = ui->actionWriteHoldingRegisterBits;
 
     auto frm = currentMdiChild();
@@ -786,10 +793,9 @@ void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const qint16 value = 0;
+    const quint16 value = _modbusClient.readRegister(dd.PointType, _lastWriteHoldingRegisterBitsAddress, dd.DeviceId);
 
-    ModbusSimulationParams simParams;
-    ModbusWriteParams params = { dd.DeviceId, _lastWriteHoldingRegisterBitsAddress, value, mode, byteOrder, codepage, dd.ZeroBasedAddress };
+    ModbusWriteParams params = { dd.DeviceId, _lastWriteHoldingRegisterBitsAddress, value, mode, byteOrder, codepage, dd.ZeroBasedAddress, &_modbusClient };
     DialogWriteHoldingRegisterBits dlg(params, frm->displayHexAddresses(), this);
 
     if(dlg.exec() == QDialog::Accepted)
@@ -804,6 +810,8 @@ void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
 ///
 void MainWindow::on_actionForceCoils_triggered()
 {
+    WaitCursor wait(this);
+
     auto frm = currentMdiChild();
     if(!frm) return;
 
@@ -881,11 +889,12 @@ void MainWindow::on_actionMaskWrite_triggered()
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    ModbusMaskWriteParams params = { dd.DeviceId, dd.PointAddress, 0xFFFF, 0, dd.ZeroBasedAddress};
+    ModbusMaskWriteParams params = { dd.DeviceId, _lastMaskWriteRegisterAddress, 0xFFFF, 0, dd.ZeroBasedAddress};
 
     DialogMaskWriteRegiter dlg(params, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
+        _lastMaskWriteRegisterAddress = params.Address;
         _modbusClient.maskWriteRegister(params, 0);
     }
 }

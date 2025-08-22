@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>05: Write Single Coil</string>
+   <string notr="true">05: Write Single Coil</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

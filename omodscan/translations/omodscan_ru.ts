@@ -572,11 +572,6 @@
 <context>
     <name>DialogForceMultipleCoils</name>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
-        <source>15: WRITE MULTIPLE COILS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="43"/>
         <source>Slave Device: </source>
         <translation>Устройство: </translation>
@@ -645,11 +640,6 @@
         <translation>Установить в 0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
-        <source>16: WRITE MULTIPLE REGISTERS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="63"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
@@ -675,11 +665,6 @@
     <message>
         <source>Mask Write Register</source>
         <translation type="vanished">Запись в регистр по маске</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="14"/>
-        <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="38"/>
@@ -1342,11 +1327,6 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Запись в регистр Coil</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
-        <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="38"/>
         <source>Node: </source>
         <translation>Узел: </translation>
@@ -1384,11 +1364,6 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Запись в регистр</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
-        <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="35"/>
         <source>Node: </source>
         <translation>Узел: </translation>
@@ -1424,11 +1399,6 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <source>Write Register</source>
         <translation type="vanished">Запись в регистр</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="14"/>
-        <source>06: Write Holding Register Bits</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
@@ -1682,7 +1652,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="279"/>
         <source>Write Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Панель записи</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="301"/>
@@ -1792,38 +1762,23 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="596"/>
         <source>Write Multiple Coils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="599"/>
-        <source>15: Write Multiple Coils</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать регистры флагов</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="608"/>
         <source>Write Multiple Registers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="611"/>
-        <source>16: Write Multiple Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать регистры хранения</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="620"/>
         <source>Mask Write Register</source>
-        <translation type="unfinished">Запись в регистр по маске</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="623"/>
-        <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать регистр по маске</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="632"/>
         <location filename="../mainwindow.ui" line="635"/>
         <source>User Defined Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательское сообщение</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="716"/>
@@ -1887,33 +1842,22 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="950"/>
         <location filename="../mainwindow.ui" line="991"/>
         <source>Write Holding Register</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="953"/>
-        <location filename="../mainwindow.ui" line="994"/>
-        <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать регистр хранения</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="961"/>
         <source>Write Holding Register Bits</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать биты регистра хранения</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="964"/>
         <source>06: Write Holding Register Bits</source>
-        <translation type="unfinished"></translation>
+        <translation>06: Записать биты регистра хранения</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="976"/>
         <source>Write Single Coil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="979"/>
-        <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать регистр флагов</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="587"/>
@@ -1923,7 +1867,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="203"/>
         <source>Main Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Главная панель</translation>
     </message>
     <message>
         <source>Force Coils</source>

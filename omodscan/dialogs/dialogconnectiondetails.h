@@ -22,15 +22,20 @@ public:
     void accept() override;
 
 private slots:
-    void on_toolButtonExcludeVirtualPorts_toggled(bool checked);
     void on_pushButtonProtocolSelections_clicked();
     void on_comboBoxConnectUsing_currentIndexChanged(int);
     void on_comboBoxFlowControl_currentIndexChanged(int);
+    void on_comboBoxIPAddress_currentTextChanged(const QString&);
+    void on_checkBoxExcludeVirtualPorts_clicked();
+
+private:
+    void validate();
 
 private:
     Ui::DialogConnectionDetails *ui;
 
 private:
+    ConnectionType _connType;
     ConnectionDetails& _connectionDetails;
 };
 

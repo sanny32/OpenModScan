@@ -7,183 +7,206 @@
     <x>0</x>
     <y>0</y>
     <width>539</width>
-    <height>406</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Connection Details</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="leftMargin">
-      <number>30</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="labelConnectUsing">
-       <property name="text">
-        <string>Connect Using:</string>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string/>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QStackedWidget" name="connectionDetails">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="pageTcpConnection">
+             <layout class="QFormLayout" name="formLayout_5">
+              <property name="labelAlignment">
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelIPAddress">
+                <property name="text">
+                 <string>IP Address:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelServicePort">
+                <property name="text">
+                 <string>Service Port:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="NumericLineEdit" name="lineEditServicePort">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string notr="true">502</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="HostsComboBox" name="comboBoxIPAddress">
+                <property name="editable">
+                 <bool>true</bool>
+                </property>
+                <property name="currentText">
+                 <string notr="true">127.0.0.1</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="pageSerialConnection">
+             <layout class="QFormLayout" name="formLayout_6">
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelSerialPort">
+                <property name="text">
+                 <string>Serial Port:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="SerialPortComboBox" name="comboBoxSerialPort"/>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QCheckBox" name="checkBoxExcludeVirtualPorts">
+                <property name="text">
+                 <string>Exclude Virtual Serial Ports</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
-     <item>
+     <item row="0" column="2" rowspan="2">
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>100</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="0" rowspan="2">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>100</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+        <widget class="QLabel" name="labelConnectUsing">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
+         <property name="text">
+          <string>Connect Using:</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
        <item>
-        <widget class="ConnectionComboBox" name="comboBoxConnectUsing">
+        <widget class="QComboBox" name="comboBoxConnectUsing">
          <property name="minimumSize">
           <size>
            <width>0</width>
            <height>25</height>
           </size>
          </property>
+         <item>
+          <property name="text">
+           <string>Remote TCP/IP Server</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Direct Connection to Serial Port</string>
+          </property>
+         </item>
         </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="toolButtonExcludeVirtualPorts">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Exclude Virtual Serial Ports</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/res/serialPortFilter.png</normaloff>:/res/serialPortFilter.png</iconset>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>120</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>100</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QFormLayout" name="formLayout">
-         <property name="labelAlignment">
-          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelIPAddress">
-           <property name="text">
-            <string>IP Address:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="labelServicePort">
-           <property name="text">
-            <string>Service Port:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="NumericLineEdit" name="lineEditServicePort">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>60</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string notr="true">502</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="HostsComboBox" name="comboBoxIPAddress">
-           <property name="editable">
-            <bool>true</bool>
-           </property>
-           <property name="currentText">
-            <string notr="true">127.0.0.1</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>120</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </item>
@@ -520,11 +543,6 @@
    <header>numericcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>ConnectionComboBox</class>
-   <extends>QComboBox</extends>
-   <header>connectioncombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ParityTypeComboBox</class>
    <extends>QComboBox</extends>
    <header>paritytypecombobox.h</header>
@@ -544,10 +562,13 @@
    <extends>QComboBox</extends>
    <header>hostscombobox.h</header>
   </customwidget>
+  <customwidget>
+   <class>SerialPortComboBox</class>
+   <extends>QComboBox</extends>
+   <header>serialportcombobox.h</header>
+  </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

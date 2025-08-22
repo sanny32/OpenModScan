@@ -42,7 +42,7 @@ set(SOURCES
     controls/bytelisttextedit.cpp
     controls/byteordercombobox.cpp
     controls/clickablelabel.cpp
-    controls/connectioncombobox.cpp
+    controls/serialportcombobox.cpp
     controls/customlineedit.cpp
     controls/flowcontroltypecombobox.cpp
     controls/formattedspinbox.cpp
@@ -110,7 +110,7 @@ set(HEADERS
     controls/bytelisttextedit.h
     controls/byteordercombobox.h
     controls/clickablelabel.h
-    controls/connectioncombobox.h
+    controls/serialportcombobox.h
     controls/customlineedit.h
     controls/flowcontroltypecombobox.h
     controls/formattedspinbox.h

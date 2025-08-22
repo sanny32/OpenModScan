@@ -140,14 +140,12 @@
 <context>
     <name>ConnectionComboBox</name>
     <message>
-        <location filename="../controls/connectioncombobox.cpp" line="44"/>
         <source>Remote TCP/IP Server</source>
-        <translation>远程 TCP/IP 服务器</translation>
+        <translation type="vanished">远程 TCP/IP 服务器</translation>
     </message>
     <message>
-        <location filename="../controls/connectioncombobox.cpp" line="47"/>
         <source>Direct Connection to %1</source>
-        <translation>直接连接到 %1</translation>
+        <translation type="vanished">直接连接到 %1</translation>
     </message>
 </context>
 <context>
@@ -436,77 +434,92 @@
         <translation>连接详情</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="25"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="187"/>
         <source>Connect Using:</source>
         <translation>使用连接：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="66"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="131"/>
         <source>Exclude Virtual Serial Ports</source>
         <translation>排除虛擬串行埠</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="124"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="68"/>
         <source>IP Address:</source>
         <translation>IP地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="131"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
+        <source>Remote TCP/IP Server</source>
+        <translation type="unfinished">远程 TCP/IP 服务器</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="206"/>
+        <source>Direct Connection to Serial Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="75"/>
         <source>Service Port:</source>
         <translation>端口：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
+        <source>Serial Port:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
         <source>Configuration</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="227"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="250"/>
         <source>Baud Rate: </source>
         <translation>波特率： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="290"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="313"/>
         <source>Word Length: </source>
         <translation>数据位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="320"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="343"/>
         <source>Parity: </source>
         <translation>奇偶校验： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="340"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="363"/>
         <source>Stop Bits: </source>
         <translation>停止位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="375"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="398"/>
         <source>Hardware Flow Control</source>
         <translation>硬流控</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="384"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="407"/>
         <source>Flow Control Mode: </source>
         <translation>流控模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="404"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="427"/>
         <source>DTR Control: </source>
         <translation>DTR控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="427"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="450"/>
         <source>RTS Control: </source>
         <translation>RTS控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="477"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="500"/>
         <source>Protocol Selections</source>
         <translation>协议选择</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.cpp" line="79"/>
+        <location filename="../dialogs/dialogconnectiondetails.cpp" line="75"/>
         <source>Lookup host failed: </source>
         <translation>查找主机失败： </translation>
     </message>

@@ -288,9 +288,6 @@ void LogViewModel::setAddressBase(AddressBase base)
 ///
 void LogViewModel::deleteItems()
 {
-    for(auto&& i : _items)
-            delete i.Msg;
-
     _items.clear();
 }
 
@@ -527,7 +524,7 @@ void DialogAddressScan::on_logView_clicked(const QModelIndex &index)
     }
 
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-    auto msg = proxyLogModel->data(index, Qt::UserRole).value<const ModbusMessage*>();
+    auto msg = proxyLogModel->data(index, Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
     ui->info->setModbusMessage(msg);
 }
 

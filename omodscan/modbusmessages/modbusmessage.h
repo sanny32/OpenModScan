@@ -106,7 +106,7 @@ public:
     /// \param request
     /// \return
     ///
-    static const ModbusMessage* create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request);
+    static QSharedPointer<const ModbusMessage> create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request);
 
     ///
     /// \brief create
@@ -116,7 +116,7 @@ public:
     /// \param request
     /// \return
     ///
-    static const ModbusMessage* create(const QByteArray& data, ProtocolType protocol,  const QDateTime& timestamp, bool request);
+    static QSharedPointer<const ModbusMessage> create(const QByteArray& data, ProtocolType protocol,  const QDateTime& timestamp, bool request);
 
 
     ///

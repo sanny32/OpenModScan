@@ -89,7 +89,7 @@ public:
     AddressBase addressBse() const;
     void setAddressBase(AddressBase base);
 
-    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, QSharedPointer<const ModbusMessage> msg) {
         if(msg == nullptr) return;
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         _items.push_back({ addr, type, msg });
@@ -121,7 +121,7 @@ private:
     struct LogViewItem{
         quint16 Addr;
         QModbusDataUnit::RegisterType Type;
-        const ModbusMessage* Msg;
+        QSharedPointer<const ModbusMessage> Msg;
     };
 
 private:
@@ -141,7 +141,7 @@ class LogViewProxyModel : public QSortFilterProxyModel
 public:
     explicit LogViewProxyModel(QObject* parent = nullptr);
 
-    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, QSharedPointer<const ModbusMessage> msg) {
         if(sourceModel())
             ((LogViewModel*)sourceModel())->append(addr, type, msg);
     }

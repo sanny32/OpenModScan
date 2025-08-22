@@ -70,13 +70,12 @@ void ModbusLogModel::clear()
 /// \brief ModbusLogModel::append
 /// \param data
 ///
-void ModbusLogModel::append(const ModbusMessage* data)
+void ModbusLogModel::append(QSharedPointer<const ModbusMessage> data)
 {
     if(data == nullptr) return;
 
     while(rowCount() >= _rowLimit)
     {
-        delete _items.first();
         _items.removeFirst();
     }
 
@@ -108,9 +107,6 @@ void ModbusLogModel::setRowLimit(int val)
 ///
 void ModbusLogModel::deleteItems()
 {
-    for(auto&& i : _items)
-        delete i;
-
     _items.clear();
 }
 
@@ -183,9 +179,9 @@ QModelIndex ModbusLogWidget::index(int row)
 /// \param request
 /// \return
 ///
-const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
+QSharedPointer<const ModbusMessage> ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
 {
-    const ModbusMessage* msg = nullptr;
+    QSharedPointer<const ModbusMessage> msg;
     if(model())
     {
         msg = ModbusMessage::create(pdu, protocol, deviceId, timestamp, request);
@@ -202,13 +198,13 @@ const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessa
 /// \param index
 /// \return
 ///
-const ModbusMessage* ModbusLogWidget::itemAt(const QModelIndex& index)
+QSharedPointer<const ModbusMessage> ModbusLogWidget::itemAt(const QModelIndex& index)
 {
     if(!index.isValid())
         return nullptr;
 
     return model() ?
-           model()->data(index, Qt::UserRole).value<const ModbusMessage*>() :
+           model()->data(index, Qt::UserRole).value<QSharedPointer<const ModbusMessage>>() :
            nullptr;
 }
 

@@ -17,7 +17,6 @@
 DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogUserMsg)
-    ,_mm(nullptr)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
@@ -53,7 +52,6 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
 DialogUserMsg::~DialogUserMsg()
 {
     delete ui;
-    if(_mm) delete _mm;
 }
 
 ///
@@ -116,14 +114,13 @@ void DialogUserMsg::on_modbusReply(QModbusReply* reply)
         return;
     }
 
-    if(_mm) delete _mm;
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
     _mm = ModbusMessage::create(reply->rawResult(), protocol, reply->serverAddress(), QDateTime::currentDateTime(), false);
 
     if(protocol == ModbusMessage::Tcp)
         ((QModbusAduTcp*)_mm->adu())->setTransactionId(reply->property("TransactionId").toInt());
 
-    ui->responseBuffer->setValue(*_mm);
+    ui->responseBuffer->setValue(*_mm.get());
     ui->responseInfo->setModbusMessage(_mm);
 
     ui->pushButtonSend->setEnabled(true);

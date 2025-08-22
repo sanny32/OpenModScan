@@ -41,7 +41,7 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
     if(!index.isValid() || index.row() >= rowCount())
         return QVariant();
 
-    const auto& item = _items.at(index.row());
+    const auto item = _items.at(index.row());
     switch(role)
     {
         case Qt::DisplayRole:

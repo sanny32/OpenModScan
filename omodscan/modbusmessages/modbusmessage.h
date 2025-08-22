@@ -244,6 +244,6 @@ private:
     const bool _request;
     const QDateTime _timestamp;
 };
-Q_DECLARE_METATYPE(const ModbusMessage*)
+Q_DECLARE_METATYPE(QSharedPointer<const ModbusMessage>)
 
 #endif // MODBUSMESSAGE_H

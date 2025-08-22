@@ -310,7 +310,7 @@ LogViewProxyModel::LogViewProxyModel(QObject* parent)
 bool LogViewProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     const auto index = sourceModel()->index(source_row, 0, source_parent);
-    const auto msg = sourceModel()->data(index, Qt::UserRole).value<const ModbusMessage*>();
+    const auto msg = sourceModel()->data(index, Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
     return _showValid ? msg->isValid() && !msg->isRequest() && !msg->isException() : true;
 }
 

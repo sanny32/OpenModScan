@@ -24,6 +24,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
+    ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::No);
 
     if(simParams.Mode != SimulationMode::No)
     {

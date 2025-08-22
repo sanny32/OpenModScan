@@ -47,5 +47,7 @@
         <file>res/actionPresetRegs.png</file>
         <file>res/actionMaskWrite.png</file>
         <file>res/actionUserMsg.png</file>
+        <file>res/actionWriteHoldingRegister.png</file>
+        <file>res/actionWriteSingleCoil.png</file>
     </qresource>
 </RCC>

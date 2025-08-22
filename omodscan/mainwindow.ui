@@ -123,9 +123,10 @@
      </property>
      <addaction name="actionForceCoils"/>
      <addaction name="actionPresetRegs"/>
-     <addaction name="actionMaskWrite"/>
      <addaction name="separator"/>
+     <addaction name="actionMaskWrite"/>
      <addaction name="actionUserMsg"/>
+     <addaction name="separator"/>
      <addaction name="actionMsgParser"/>
      <addaction name="actionAddressScan"/>
     </widget>
@@ -284,8 +285,8 @@
    </attribute>
    <addaction name="actionForceCoils"/>
    <addaction name="actionPresetRegs"/>
-   <addaction name="actionMaskWrite"/>
    <addaction name="separator"/>
+   <addaction name="actionMaskWrite"/>
    <addaction name="actionUserMsg"/>
   </widget>
   <action name="actionNew">

@@ -975,6 +975,9 @@
    <property name="text">
     <string>Write Single Coil</string>
    </property>
+   <property name="toolTip">
+    <string>05: Write Single Coil</string>
+   </property>
    <property name="menuRole">
     <enum>QAction::NoRole</enum>
    </property>

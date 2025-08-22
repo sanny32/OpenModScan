@@ -1892,13 +1892,13 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="950"/>
-        <location filename="../mainwindow.ui" line="988"/>
+        <location filename="../mainwindow.ui" line="991"/>
         <source>Write Holding Register</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="953"/>
-        <location filename="../mainwindow.ui" line="991"/>
+        <location filename="../mainwindow.ui" line="994"/>
         <source>06: Write Holding Register</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1915,6 +1915,11 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="976"/>
         <source>Write Single Coil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="979"/>
+        <source>05: Write Single Coil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

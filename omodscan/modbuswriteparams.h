@@ -18,7 +18,7 @@ struct ModbusWriteParams
     ByteOrder Order;
     QString Codepage;
     bool ZeroBasedAddress;
-    ModbusClient* ModbusClient = nullptr;
+    ModbusClient* Client = nullptr;
 };
 
 ///

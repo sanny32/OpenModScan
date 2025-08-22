@@ -62,7 +62,7 @@ void DialogWriteHoldingRegisterBits::on_lineEditAddress_valueChanged(const QVari
     WaitCursor wait(this);
 
     const quint32 address = value.toUInt();
-    ModbusClient* cli = _writeParams.ModbusClient;
+    ModbusClient* cli = _writeParams.Client;
     if(cli != nullptr && cli->state() == QModbusDevice::ConnectedState) {
         setValue(cli->readRegister(QModbusDataUnit::HoldingRegisters, address, ui->lineEditNode->value<int>()));
     }

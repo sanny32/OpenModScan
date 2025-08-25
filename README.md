@@ -3,7 +3,8 @@ OpenModScan is a free and open-source Modbus Master (Client) utility supporting 
 
 <img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/137433d4-d2fd-484a-bb07-c0e9457f66dc" />
 
-<img width="1291" height="755" alt="image" src="https://github.com/user-attachments/assets/ac44a108-5c7b-4c9e-90d6-a1da225f1d3e" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/3e0ea476-ac6c-4c46-a686-544dddd87825" />
+
 
 
 ## Features

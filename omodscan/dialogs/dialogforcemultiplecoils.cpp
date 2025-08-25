@@ -7,19 +7,22 @@
 ///
 /// \brief DialogForceMultipleCoils::DialogForceMultipleCoils
 /// \param params
+/// \param length
+/// \param hexAddress
 /// \param parent
 ///
-DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, int length, QWidget *parent) :
+DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent) :
       QDialog(parent)
     , ui(new Ui::DialogForceMultipleCoils)
     ,_writeParams(params)
+    ,_hexAddress(hexAddress)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::Coils, params.Address, false)));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::Coils, params.Address, _hexAddress)));
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
     ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
 
@@ -109,8 +112,8 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + i * columns, false);
-        const auto addressTo = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), false);
+        const auto addressFrom = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + i * columns, _hexAddress);
+        const auto addressTo = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexAddress);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
@@ -121,7 +124,7 @@ void DialogForceMultipleCoils::updateTableWidget()
                 auto item = new QTableWidgetItem(QString::number(_data[idx]));
                 item->setData(Qt::UserRole, idx);
                 item->setTextAlignment(Qt::AlignCenter);
-                item->setToolTip(formatAddress(QModbusDataUnit::Coils,_writeParams.Address + idx, false));
+                item->setToolTip(formatAddress(QModbusDataUnit::Coils,_writeParams.Address + idx, _hexAddress));
                 ui->tableWidget->setItem(i, j, item);
             }
             else

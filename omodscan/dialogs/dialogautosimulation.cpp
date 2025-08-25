@@ -15,10 +15,10 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
     ,_displayMode(mode)
 {
     ui->setupUi(this);
-    ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::No);
+    ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::Off);
     ui->comboBoxSimulationType->setup(QModbusDataUnit::HoldingRegisters);
 
-    if(_params.Mode != SimulationMode::No)
+    if(_params.Mode != SimulationMode::Off)
         ui->comboBoxSimulationType->setCurrentSimulationMode(_params.Mode);
     else
         ui->comboBoxSimulationType->setCurrentIndex(0);
@@ -161,7 +161,7 @@ void DialogAutoSimulation::accept()
     }
     else
     {
-        _params.Mode = SimulationMode::No;
+        _params.Mode = SimulationMode::Off;
     }
 
     QFixedSizeDialog::accept();

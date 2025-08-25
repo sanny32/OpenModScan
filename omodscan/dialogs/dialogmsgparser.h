@@ -31,7 +31,7 @@ private slots:
 
 private:
     Ui::DialogMsgParser *ui;
-    const ModbusMessage* _mm;
+    QSharedPointer<const ModbusMessage> _mm;
 };
 
 #endif // DIALOGMSGPARSER_H

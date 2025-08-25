@@ -8,7 +8,7 @@
 /// \param params
 /// \param parent
 ///
-DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, QWidget *parent) :
+DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget *parent) :
     QFixedSizeDialog(parent),
     ui(new Ui::DialogWriteCoilRegister)
     ,_writeParams(params)
@@ -16,13 +16,15 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
 {
     ui->setupUi(this);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
+    ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::Disabled);
 
-    if(simParams.Mode != SimulationMode::No)
+    if(simParams.Mode != SimulationMode::Off)
     {
         QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
         iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));

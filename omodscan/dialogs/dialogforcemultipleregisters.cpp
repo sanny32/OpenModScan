@@ -10,19 +10,21 @@
 /// \brief DialogForceMultipleRegisters::DialogForceMultipleRegisters
 /// \param params
 /// \param length
+/// \param hexAddress
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, int length, QWidget *parent) :
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent) :
       QDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
+    ,_hexAddress(hexAddress)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, _hexView)));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, _hexAddress)));
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
     ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
 
@@ -550,7 +552,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         numEdit->setFrame(false);
         numEdit->setFixedWidth(150);
         numEdit->setAlignment(Qt::AlignCenter);
-        numEdit->setToolTip(formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + idx, _hexView));
+        numEdit->setToolTip(formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + idx, _hexAddress));
     }
 
     return numEdit;
@@ -591,8 +593,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _hexView);
-        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexView);
+        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _hexAddress);
+        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexAddress);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)

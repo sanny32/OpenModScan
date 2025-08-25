@@ -13,7 +13,7 @@ class DialogMaskWriteRegiter : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogMaskWriteRegiter(ModbusMaskWriteParams& params, QWidget *parent = nullptr);
+    explicit DialogMaskWriteRegiter(ModbusMaskWriteParams& params, bool hexAddress, QWidget *parent = nullptr);
     ~DialogMaskWriteRegiter();
 
     void accept() override;

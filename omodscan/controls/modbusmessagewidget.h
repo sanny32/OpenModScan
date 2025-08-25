@@ -21,8 +21,8 @@ public:
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
 
-    const ModbusMessage* modbusMessage() const;
-    void setModbusMessage(const ModbusMessage* msg);
+    QSharedPointer<const ModbusMessage> modbusMessage() const;
+    void setModbusMessage(QSharedPointer<const ModbusMessage> msg);
 
     bool showTimestamp() const;
     void setShowTimestamp(bool on);
@@ -40,7 +40,7 @@ private:
     ByteOrder _byteOrder;
     DataDisplayMode _dataDisplayMode;
     bool _showTimestamp;
-    const ModbusMessage* _mm;
+    QSharedPointer<const ModbusMessage> _mm;
 };
 
 #endif // MODBUSMESSAGEWIDGET_H

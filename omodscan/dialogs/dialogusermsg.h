@@ -30,7 +30,7 @@ private slots:
 
 private:
     Ui::DialogUserMsg *ui;
-    const ModbusMessage* _mm;
+    QSharedPointer<const ModbusMessage> _mm;
     ModbusClient& _modbusClient;
 };
 

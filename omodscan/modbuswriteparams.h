@@ -4,6 +4,8 @@
 #include <QVariant>
 #include "enums.h"
 
+class ModbusClient;
+
 ///
 /// \brief The ModbusWriteParams class
 ///
@@ -16,6 +18,7 @@ struct ModbusWriteParams
     ByteOrder Order;
     QString Codepage;
     bool ZeroBasedAddress;
+    ModbusClient* Client = nullptr;
 };
 
 ///

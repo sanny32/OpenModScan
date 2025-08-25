@@ -1,10 +1,11 @@
 # OpenModScan
 OpenModScan is a free and open-source Modbus Master (Client) utility supporting both Modbus-TCP and Modbus-RTU protocols.
 
-![image](https://github.com/user-attachments/assets/aaa2b5c8-9f47-4e17-803d-2af7d24fb0c7)
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/137433d4-d2fd-484a-bb07-c0e9457f66dc" />
+
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/3e0ea476-ac6c-4c46-a686-544dddd87825" />
 
 
-![image](https://github.com/user-attachments/assets/19451264-2b0f-4821-897e-0cbee5831b14)
 
 ## Features
 
@@ -27,7 +28,7 @@ Registers
 
 ## Modbus Logging
 
-![image](https://github.com/user-attachments/assets/8d24e149-e6db-47e1-a3d2-b2d5ed207ed4)
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/de6c8836-8011-43ee-b691-f9a91c6d0679" />
 
     
 ## Extended Featues

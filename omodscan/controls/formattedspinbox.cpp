@@ -17,5 +17,7 @@ FormattedSpinBox::FormattedSpinBox(QWidget* parent)
 QString FormattedSpinBox::textFromValue(int val) const
 {
     const int nums = qMax(1, QString::number(maximum()).length());
-    return  QStringLiteral("%1").arg(val, nums, 10, QLatin1Char('0'));
+    const bool hexValue = (displayIntegerBase() == 16);
+    return hexValue ? "0x" + QStringLiteral("%1").arg(val, 0, 16).toUpper():
+        QStringLiteral("%1").arg(val, nums, displayIntegerBase(), QLatin1Char('0'));
 }

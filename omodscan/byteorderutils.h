@@ -15,10 +15,10 @@ inline T toByteOrderValue(T value, ByteOrder order)
 {
     switch(order)
     {
-        case ByteOrder::Direct:
+        case ByteOrder::Swapped:
             return qToBigEndian<T>(value);
 
-        case ByteOrder::Swapped:
+        case ByteOrder::Direct:
             return qToLittleEndian<T>(value);
     }
 

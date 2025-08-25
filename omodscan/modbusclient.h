@@ -35,6 +35,7 @@ public:
 
     void sendRawRequest(const QModbusRequest& request, int server, int requestId);
     void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId);
+    quint16 readRegister(QModbusDataUnit::RegisterType pointType, int address, int server);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId);
     void maskWriteRegister(const ModbusMaskWriteParams& params, int requestId);
 

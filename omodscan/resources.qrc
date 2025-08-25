@@ -43,5 +43,11 @@
         <file>res/actionSaveAs.png</file>
         <file>translations/omodscan_zh.qm</file>
         <file>res/serialPortFilter.png</file>
+        <file>res/actionForceCoils.png</file>
+        <file>res/actionPresetRegs.png</file>
+        <file>res/actionMaskWrite.png</file>
+        <file>res/actionUserMsg.png</file>
+        <file>res/actionWriteHoldingRegister.png</file>
+        <file>res/actionWriteSingleCoil.png</file>
     </qresource>
 </RCC>

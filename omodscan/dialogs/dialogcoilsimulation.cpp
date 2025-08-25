@@ -13,10 +13,10 @@ DialogCoilSimulation::DialogCoilSimulation(ModbusSimulationParams& params, QWidg
     ,_params(params)
 {
     ui->setupUi(this);
-    ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::No);
+    ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::Off);
     ui->comboBoxSimulationType->setup(QModbusDataUnit::Coils);
 
-    if(_params.Mode != SimulationMode::No)
+    if(_params.Mode != SimulationMode::Off)
         ui->comboBoxSimulationType->setCurrentSimulationMode(_params.Mode);
     else
         ui->comboBoxSimulationType->setCurrentIndex(0);
@@ -49,7 +49,7 @@ void DialogCoilSimulation::accept()
     }
     else
     {
-        _params.Mode = SimulationMode::No;
+        _params.Mode = SimulationMode::Off;
     }
     QFixedSizeDialog::accept();
 }

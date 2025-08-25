@@ -22,7 +22,7 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 
     void clear();
-    void append(const ModbusMessage* data);
+    void append(QSharedPointer<const ModbusMessage> data);
     void update(){
         emit dataChanged(index(0), index(_items.size() - 1));
     }
@@ -36,7 +36,7 @@ private:
 private:
     int _rowLimit = 30;
     ModbusLogWidget* _parentWidget;
-    QQueue<const ModbusMessage*> _items;
+    QQueue<QSharedPointer<const ModbusMessage>> _items;
 };
 
 ///
@@ -53,8 +53,8 @@ public:
     int rowCount() const;
     QModelIndex index(int row);
 
-    const ModbusMessage* addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request);
-    const ModbusMessage* itemAt(const QModelIndex& index);
+    QSharedPointer<const ModbusMessage> addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request);
+    QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
 
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);

@@ -6,15 +6,17 @@
 /// \brief DialogSetupPresetData::DialogSetupPresetData
 /// \param params
 /// \param pointType
+/// \param hexAddress
 /// \param parent
 ///
-DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, QWidget *parent) :
+DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, bool hexAddress, QWidget *parent) :
      QFixedSizeDialog(parent)
     , ui(new Ui::DialogSetupPresetData)
     ,_params(params)
 {
     ui->setupUi(this);
     ui->lineEditSlaveDevice->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditSlaveDevice->setValue(params.SlaveAddress);
     ui->lineEditAddress->setValue(params.PointAddress);
@@ -23,11 +25,11 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
-            setWindowTitle("15: FORCE MULTIPLE COILS");
+            setWindowTitle("15: WRITE MULTIPLE COILS");
             ui->lineEditNumberOfPoints->setInputRange(1, 1968);
         break;
         case QModbusDataUnit::HoldingRegisters:
-            setWindowTitle("16: FORCE MULTIPLE REGISTERS");
+            setWindowTitle("16: WRITE MULTIPLE REGISTERS");
             ui->lineEditNumberOfPoints->setInputRange(1, 123);
         break;
         default:

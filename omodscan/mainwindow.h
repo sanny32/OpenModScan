@@ -77,15 +77,21 @@ private slots:
     void on_actionSwappedDbl_triggered();
     void on_actionSwapBytes_triggered();
     void on_actionHexAddresses_triggered();
-    void on_actionForceCoils_triggered();
-    void on_actionPresetRegs_triggered();
-    void on_actionMaskWrite_triggered();
-    void on_actionUserMsg_triggered();
     void on_actionMsgParser_triggered();
     void on_actionAddressScan_triggered();
     void on_actionTextCapture_triggered();
     void on_actionCaptureOff_triggered();
     void on_actionResetCtrs_triggered();
+
+    /* Write slots */
+    void on_actionWriteSingleCoil_triggered();
+    void on_actionWriteHoldingRegister_triggered();
+    void on_actionWriteHoldingRegisterValue_triggered();
+    void on_actionWriteHoldingRegisterBits_triggered();
+    void on_actionForceCoils_triggered();
+    void on_actionPresetRegs_triggered();
+    void on_actionMaskWrite_triggered();
+    void on_actionUserMsg_triggered();
 
     /* View menu slots */
     void on_actionToolbar_triggered();
@@ -154,9 +160,15 @@ private:
     ModbusClient _modbusClient;
 
     AnsiMenu* _ansiMenu;
+    QAction* _actionWriteHoldingRegister;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QPrinter* _selectedPrinter;
     DataSimulator* _dataSimulator;
+
+    quint32 _lastWriteSingleCoilAddress = 0;
+    quint32 _lastWriteHoldingRegisterAddress = 0;
+    quint32 _lastWriteHoldingRegisterBitsAddress = 0;
+    quint32 _lastMaskWriteRegisterAddress = 0;
 };
 #endif // MAINWINDOW_H

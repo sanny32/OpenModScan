@@ -19,7 +19,7 @@ class DialogModbusScanner : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogModbusScanner(QWidget *parent = nullptr);
+    explicit DialogModbusScanner(bool hexAddress, QWidget *parent = nullptr);
     ~DialogModbusScanner();
 
 protected:

@@ -6,13 +6,14 @@
 /// \brief DialogMaskWriteRegiter::DialogMaskWriteRegiter
 /// \param parent
 ///
-DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, QWidget *parent) :
+DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, bool hexAddress, QWidget *parent) :
       QFixedSizeDialog(parent)
     , ui(new Ui::DialogMaskWriteRegiter)
     ,_writeParams(params)
 {
     ui->setupUi(this);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);

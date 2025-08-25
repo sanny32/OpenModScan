@@ -43,10 +43,11 @@ inline QString Parity_toString(QSerialPort::Parity parity)
 }
 
 ///
-/// \brief DialogRtuScanner::DialogRtuScanner
+/// \brief DialogModbusScanner::DialogModbusScanner
+/// \param hexAddress
 /// \param parent
 ///
-DialogModbusScanner::DialogModbusScanner(QWidget *parent)
+DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
     : QFixedSizeDialog(parent)
     , ui(new Ui::DialogModbusScanner)
     ,_rtuFuncCode(QModbusPdu::ReportServerId)
@@ -85,6 +86,7 @@ DialogModbusScanner::DialogModbusScanner(QWidget *parent)
     ui->comboBoxFunction->addItem(QModbusPdu::ReportServerId);
     ui->comboBoxFunction->setCurrentFunctionCode(QModbusPdu::ReadHoldingRegisters);
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
+    ui->spinBoxAddress->setDisplayIntegerBase(hexAddress ? 16 : 10);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);

@@ -12,6 +12,7 @@
 DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget *parent) :
     QFixedSizeDialog(parent)
     , ui(new Ui::DialogConnectionDetails)
+    ,_connType(cd.Type)
     ,_connectionDetails(cd)
 {
     ui->setupUi(this);
@@ -30,19 +31,14 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
 
     if(cd.Type == ConnectionType::Tcp)
     {
-        ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, QString());
+        ui->comboBoxConnectUsing->setCurrentIndex(0);
     }
     else
     {
-        ui->comboBoxConnectUsing->setCurrentConnectionType(cd.Type, cd.SerialParams.PortName);
+        ui->comboBoxConnectUsing->setCurrentIndex(1);
     }
 
-#ifdef Q_OS_WIN
-    ui->toolButtonExcludeVirtualPorts->setHidden(true);
-#else
-    ui->toolButtonExcludeVirtualPorts->setChecked(cd.ExcludeVirtualPorts);
-#endif
-
+    ui->checkBoxExcludeVirtualPorts->setChecked(cd.ExcludeVirtualPorts);
     ui->buttonBox->setFocus();
 }
 
@@ -59,8 +55,8 @@ DialogConnectionDetails::~DialogConnectionDetails()
 ///
 void DialogConnectionDetails::accept()
 {
-    _connectionDetails.Type = ui->comboBoxConnectUsing->currentConnectionType();
-    _connectionDetails.ExcludeVirtualPorts = ui->toolButtonExcludeVirtualPorts->isChecked();
+    _connectionDetails.Type = _connType;
+    _connectionDetails.ExcludeVirtualPorts = ui->checkBoxExcludeVirtualPorts->isChecked();
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
         if(!QHostAddress(ui->comboBoxIPAddress->currentText()).isNull())
@@ -89,7 +85,7 @@ void DialogConnectionDetails::accept()
     }
     else
     {
-        _connectionDetails.SerialParams.PortName = ui->comboBoxConnectUsing->currentPortName();
+        _connectionDetails.SerialParams.PortName = ui->comboBoxSerialPort->currentPortName();
         _connectionDetails.SerialParams.BaudRate = qMax(QSerialPort::Baud1200, (QSerialPort::BaudRate)ui->comboBoxBaudRate->currentValue());
         _connectionDetails.SerialParams.WordLength = (QSerialPort::DataBits)ui->comboBoxWordLength->currentValue();
         _connectionDetails.SerialParams.Parity = ui->comboBoxParity->currentParity();
@@ -101,14 +97,34 @@ void DialogConnectionDetails::accept()
     }
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
 ///
-/// \brief DialogConnectionDetails::on_toolButtonExcludeVirtualPorts_toggled
-/// \param checked
+/// \brief DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_checkStateChanged
+/// \param state
 ///
-void DialogConnectionDetails::on_toolButtonExcludeVirtualPorts_toggled(bool checked)
+void DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_checkStateChanged(Qt::CheckState state)
 {
-    ui->toolButtonExcludeVirtualPorts->setChecked(checked);
-    ui->comboBoxConnectUsing->setExcludeVirtuals(checked);
+    ui->comboBoxSerialPort->setExcludeVirtuals(state == Qt::Checked);
+    validate();
+}
+#else
+///
+/// \brief DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_stateChanged
+/// \param state
+///
+void DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_stateChanged(int state)
+{
+    ui->comboBoxSerialPort->setExcludeVirtuals(state == Qt::Checked);
+    validate();
+}
+#endif
+
+///
+/// \brief DialogConnectionDetails::on_comboBoxIPAddress_currentTextChanged
+///
+void DialogConnectionDetails::on_comboBoxIPAddress_currentTextChanged(const QString&)
+{
+    validate();
 }
 
 ///
@@ -123,19 +139,23 @@ void DialogConnectionDetails::on_pushButtonProtocolSelections_clicked()
 ///
 /// \brief DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged
 ///
-void DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged(int)
-{
-    const auto ct = ui->comboBoxConnectUsing->currentConnectionType();
+void DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged(int index)
+{   
+    _connType = (index == 0) ? ConnectionType::Tcp : ConnectionType::Serial;
+    ui->comboBoxIPAddress->setEnabled(_connType == ConnectionType::Tcp);
+    ui->lineEditServicePort->setEnabled(_connType == ConnectionType::Tcp);
+    ui->comboBoxBaudRate->setEnabled(_connType == ConnectionType::Serial);
+    ui->comboBoxParity->setEnabled(_connType == ConnectionType::Serial);
+    ui->comboBoxStopBits->setEnabled(_connType == ConnectionType::Serial);
+    ui->comboBoxWordLength->setEnabled(_connType == ConnectionType::Serial);
+    ui->comboBoxFlowControl->setEnabled(_connType == ConnectionType::Serial);
+    ui->comboBoxDTRControl->setEnabled(_connType == ConnectionType::Serial);
+
     const auto fc = ui->comboBoxFlowControl->currentFlowControl();
-    ui->comboBoxIPAddress->setEnabled(ct == ConnectionType::Tcp);
-    ui->lineEditServicePort->setEnabled(ct == ConnectionType::Tcp);
-    ui->comboBoxBaudRate->setEnabled(ct == ConnectionType::Serial);
-    ui->comboBoxParity->setEnabled(ct == ConnectionType::Serial);
-    ui->comboBoxStopBits->setEnabled(ct == ConnectionType::Serial);
-    ui->comboBoxWordLength->setEnabled(ct == ConnectionType::Serial);
-    ui->comboBoxFlowControl->setEnabled(ct == ConnectionType::Serial);
-    ui->comboBoxDTRControl->setEnabled(ct == ConnectionType::Serial);
-    ui->comboBoxRTSControl->setEnabled(ct == ConnectionType::Serial && fc != QSerialPort::HardwareControl);
+    ui->comboBoxRTSControl->setEnabled(_connType == ConnectionType::Serial && fc != QSerialPort::HardwareControl);
+
+    ui->connectionDetails->setCurrentIndex(index);
+    validate();
 }
 
 ///
@@ -143,8 +163,25 @@ void DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged(int)
 ///
 void DialogConnectionDetails::on_comboBoxFlowControl_currentIndexChanged(int)
 {
-    const auto ct = ui->comboBoxConnectUsing->currentConnectionType();
     const auto fc = ui->comboBoxFlowControl->currentFlowControl();
-    ui->comboBoxDTRControl->setEnabled(ct == ConnectionType::Serial);
-    ui->comboBoxRTSControl->setEnabled(ct == ConnectionType::Serial && fc != QSerialPort::HardwareControl);
+    ui->comboBoxDTRControl->setEnabled(_connType == ConnectionType::Serial);
+    ui->comboBoxRTSControl->setEnabled(_connType == ConnectionType::Serial && fc != QSerialPort::HardwareControl);
+}
+
+///
+/// \brief DialogConnectionDetails::validate
+///
+void DialogConnectionDetails::validate()
+{
+    switch(_connType)
+    {
+        case ConnectionType::Tcp:
+            ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!ui->comboBoxIPAddress->currentText().isEmpty());
+        break;
+
+        case ConnectionType::Serial:
+            ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(ui->comboBoxSerialPort->count() > 0);
+        break;
+    }
+
 }

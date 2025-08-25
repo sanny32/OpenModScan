@@ -14,7 +14,7 @@ class DialogForceMultipleCoils : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleCoils(ModbusWriteParams& params, int length, QWidget *parent = nullptr);
+    explicit DialogForceMultipleCoils(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent = nullptr);
     ~DialogForceMultipleCoils();
 
     void accept() override;
@@ -31,6 +31,7 @@ private:
     Ui::DialogForceMultipleCoils *ui;
     QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
+    bool _hexAddress;
 };
 
 #endif // DIALOGFORCEMULTIPLECOILS_H

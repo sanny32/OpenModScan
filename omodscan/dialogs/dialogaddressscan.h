@@ -48,6 +48,12 @@ public:
         endResetModel();
     }
 
+    void setHexAddress(bool on) {
+        beginResetModel();
+        _hexAddress = on;
+        endResetModel();
+    }
+
     void setByteOrder(ByteOrder order){
         beginResetModel();
         _byteOrder = order;
@@ -61,6 +67,7 @@ private:
     int _columns = 10;
     ModbusDataUnit _data;
     bool _hexView = false;
+    bool _hexAddress = false;
     AddressBase _addressBase = AddressBase::Base1;
     ByteOrder _byteOrder = ByteOrder::Direct;
 };
@@ -82,7 +89,7 @@ public:
     AddressBase addressBse() const;
     void setAddressBase(AddressBase base);
 
-    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, QSharedPointer<const ModbusMessage> msg) {
         if(msg == nullptr) return;
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         _items.push_back({ addr, type, msg });
@@ -101,6 +108,12 @@ public:
         endResetModel();
     }
 
+    void setHexAddress(bool on) {
+        beginResetModel();
+        _hexAddress = on;
+        endResetModel();
+    }
+
 private:
     void deleteItems();
 
@@ -108,11 +121,12 @@ private:
     struct LogViewItem{
         quint16 Addr;
         QModbusDataUnit::RegisterType Type;
-        const ModbusMessage* Msg;
+        QSharedPointer<const ModbusMessage> Msg;
     };
 
 private:
     bool _hexView = false;
+    bool _hexAddress = false;
     AddressBase _addressBase = AddressBase::Base1;
     QVector<LogViewItem> _items;
 };
@@ -127,7 +141,7 @@ class LogViewProxyModel : public QSortFilterProxyModel
 public:
     explicit LogViewProxyModel(QObject* parent = nullptr);
 
-    void append(quint16 addr, QModbusDataUnit::RegisterType type, const ModbusMessage* msg) {
+    void append(quint16 addr, QModbusDataUnit::RegisterType type, QSharedPointer<const ModbusMessage> msg) {
         if(sourceModel())
             ((LogViewModel*)sourceModel())->append(addr, type, msg);
     }

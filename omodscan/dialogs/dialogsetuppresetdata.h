@@ -24,7 +24,7 @@ class DialogSetupPresetData : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogSetupPresetData(SetupPresetParams& params, QModbusDataUnit::RegisterType pointType, QWidget *parent = nullptr);
+    explicit DialogSetupPresetData(SetupPresetParams& params, QModbusDataUnit::RegisterType pointType, bool hexAddress, QWidget *parent = nullptr);
     ~DialogSetupPresetData();
 
     void accept() override;

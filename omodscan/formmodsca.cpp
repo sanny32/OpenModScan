@@ -130,6 +130,7 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.Length = ui->lineEditLength->value<int>();
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.HexAddress = displayHexAddresses();
 
     return dd;
 }
@@ -167,6 +168,8 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
 
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
+
+    setDisplayHexAddresses(dd.HexAddress);
 
     beginUpdate();
 }
@@ -214,6 +217,9 @@ bool FormModSca::displayHexAddresses() const
 void FormModSca::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
+
+    ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
 }
 
 ///
@@ -807,7 +813,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         {
             ModbusWriteParams params = { node, addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
-            DialogWriteCoilRegister dlg(params, simParams, _parent);
+            DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
@@ -815,7 +821,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 break;
 
                 case 2:
-                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
+                    if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
                     else _dataSimulator->startSimulation(mode, pointType, simAddr, deviceId, simParams);
                 break;
             }
@@ -827,13 +833,13 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             ModbusWriteParams params = { node, addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
-                DialogWriteHoldingRegisterBits dlg(params, _parent);
+                DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), _parent);
                 if(dlg.exec() == QDialog::Accepted)
                     _modbusClient.writeRegister(pointType, params, _formId);
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, simParams, mode, _parent);
+                DialogWriteHoldingRegister dlg(params, simParams, displayHexAddresses(), _parent);
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:
@@ -841,7 +847,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                     break;
 
                     case 2:
-                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
+                        if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
                         else _dataSimulator->startSimulation(mode, pointType, simAddr, deviceId, simParams);
                     break;
                 }

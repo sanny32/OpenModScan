@@ -190,7 +190,8 @@ Q_DECLARE_METATYPE(CaptureMode);
 ///
 enum class SimulationMode
 {
-    No = 0,
+    Disabled = 0,
+    Off,
     Random,
     Increment,
     Decrement,

@@ -1,3 +1,5 @@
+#include <QTimer>
+#include <QEventLoop>
 #include <QModbusTcpClient>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -184,6 +186,49 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
             delete reply; // broadcast replies return immediately
         }
     }
+}
+
+///
+/// \brief ModbusClient::readRegister
+/// \param pointType
+/// \param address
+/// \param server
+/// \return
+///
+quint16 ModbusClient::readRegister(QModbusDataUnit::RegisterType pointType, int address, int server)
+{
+    if(_modbusClient == nullptr || state() != QModbusDevice::ConnectedState)
+    {
+        return 0;
+    }
+
+    const QModbusDataUnit dataUnit(pointType, address, 1);
+    const auto request = createReadRequest(dataUnit);
+    if(!request.isValid()) return 0;
+
+    auto reply = _modbusClient->sendReadRequest(dataUnit, server);
+    if(!reply) return 0;
+
+    QEventLoop loop;
+    QTimer timer;
+
+    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    QObject::connect(reply, &QModbusReply::finished, &loop, &QEventLoop::quit);
+
+    timer.setSingleShot(true);
+    timer.start(timeout());
+
+    loop.exec();
+    if (!timer.isActive())
+    {
+        reply->deleteLater();
+        return 0;
+    }
+
+    const auto result = reply->result();
+    reply->deleteLater();
+
+    return result.value(0);
 }
 
 ///

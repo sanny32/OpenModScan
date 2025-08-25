@@ -97,15 +97,27 @@ void DialogConnectionDetails::accept()
     }
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
 ///
-/// \brief DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_clicked
-/// \param checked
+/// \brief DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_checkStateChanged
+/// \param state
 ///
-void DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_clicked()
+void DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_checkStateChanged(Qt::CheckState state)
 {
-    ui->comboBoxSerialPort->setExcludeVirtuals(ui->checkBoxExcludeVirtualPorts->isChecked());
+    ui->comboBoxSerialPort->setExcludeVirtuals(state == Qt::Checked);
     validate();
 }
+#else
+///
+/// \brief DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_stateChanged
+/// \param state
+///
+void DialogConnectionDetails::on_checkBoxExcludeVirtualPorts_stateChanged(int state)
+{
+    ui->comboBoxSerialPort->setExcludeVirtuals(state == Qt::Checked);
+    validate();
+}
+#endif
 
 ///
 /// \brief DialogConnectionDetails::on_comboBoxIPAddress_currentTextChanged

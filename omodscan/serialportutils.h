@@ -2,6 +2,7 @@
 #define SERIALPORTUTILS_H
 
 #include <QDir>
+#include <QDebug>
 #include <QSerialPortInfo>
 #include <QRegularExpression>
 
@@ -40,39 +41,26 @@ inline bool isVirtualPort(const QString& portName)
     bool isVirtual = false;
     for (DWORD i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &devInfoData); i++)
     {
-        WCHAR deviceID[MAX_PATH];
-        if (SetupDiGetDeviceInstanceIdW(hDevInfo, &devInfoData, deviceID, MAX_PATH, NULL))
+        wchar_t friendlyName[256];
+        if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &devInfoData, SPDRP_FRIENDLYNAME,
+                                             nullptr, (PBYTE)friendlyName, sizeof(friendlyName), nullptr))
         {
-            QString deviceIdStr = QString::fromWCharArray(deviceID);
-            if (deviceIdStr.contains(portName, Qt::CaseInsensitive))
+            QString fn = QString::fromWCharArray(friendlyName);
+            if (fn.contains("(" + portName + ")", Qt::CaseInsensitive))
             {
-                WCHAR friendlyName[256];
-                DWORD size = sizeof(friendlyName);
-                if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &devInfoData, SPDRP_FRIENDLYNAME, NULL, (PBYTE)friendlyName, size, &size))
+                wchar_t hwid[256];
+                if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &devInfoData, SPDRP_HARDWAREID,
+                                                     nullptr, (PBYTE)hwid, sizeof(hwid), nullptr))
                 {
-                    QString friendlyNameStr = QString::fromWCharArray(friendlyName);
-                    if (friendlyNameStr.contains("USB", Qt::CaseInsensitive) ||
-                        friendlyNameStr.contains("Virtual", Qt::CaseInsensitive) ||
-                        friendlyNameStr.contains("COMposite", Qt::CaseInsensitive))
+                    QString id = QString::fromWCharArray(hwid);
+                    if (id.contains("USB", Qt::CaseInsensitive) ||
+                        id.contains("VIRT", Qt::CaseInsensitive) ||
+                        id.contains("ROOT", Qt::CaseInsensitive))
                     {
                         isVirtual = true;
                         break;
                     }
-                }
-
-                // check through hardware ID
-                WCHAR hardwareID[1024];
-                if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &devInfoData, SPDRP_HARDWAREID, NULL, (PBYTE)hardwareID, sizeof(hardwareID), &size))
-                {
-                    QString hardwareIdStr = QString::fromWCharArray(hardwareID);
-                    if (hardwareIdStr.contains("USB", Qt::CaseInsensitive) ||
-                        hardwareIdStr.contains("VID_", Qt::CaseInsensitive) ||
-                        hardwareIdStr.contains("PID_", Qt::CaseInsensitive))
-                    {
-                        isVirtual = true;
-                        break;
-                    }
-                }
+                };
             }
         }
     }

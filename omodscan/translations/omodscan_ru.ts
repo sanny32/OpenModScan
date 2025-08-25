@@ -436,7 +436,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="187"/>
         <source>Connect Using:</source>
-        <translation>Подключение с помощью:</translation>
+        <translation>Подключение через:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="131"/>
@@ -451,12 +451,12 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
         <source>Remote TCP/IP Server</source>
-        <translation type="unfinished">Удаленный TCP/IP Сервер</translation>
+        <translation>Удаленный TCP/IP Сервер</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="206"/>
         <source>Direct Connection to Serial Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключение к порту</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="75"/>
@@ -466,7 +466,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
         <source>Serial Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Последовательный порт:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>

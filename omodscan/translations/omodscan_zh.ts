@@ -451,7 +451,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
         <source>Remote TCP/IP Server</source>
-        <translation type="unfinished">遠端 TCP/IP 伺服器</translation>
+        <translation>遠端 TCP/IP 伺服器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="206"/>

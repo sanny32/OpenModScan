@@ -596,7 +596,7 @@
     <string>Write Multiple Coils</string>
    </property>
    <property name="toolTip">
-    <string notr="true">15: Write Multiple Coils</string>
+    <string>15: Write Multiple Coils</string>
    </property>
   </action>
   <action name="actionPresetRegs">
@@ -608,7 +608,7 @@
     <string>Write Multiple Registers</string>
    </property>
    <property name="toolTip">
-    <string notr="true">16: Write Multiple Registers</string>
+    <string>16: Write Multiple Registers</string>
    </property>
   </action>
   <action name="actionMaskWrite">
@@ -620,7 +620,7 @@
     <string>Mask Write Register</string>
    </property>
    <property name="toolTip">
-    <string notr="true">22: Mask Write Register</string>
+    <string>22: Mask Write Register</string>
    </property>
   </action>
   <action name="actionUserMsg">
@@ -976,7 +976,7 @@
     <string>Write Single Coil</string>
    </property>
    <property name="toolTip">
-    <string notr="true">05: Write Single Coil</string>
+    <string>05: Write Single Coil</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
@@ -991,7 +991,7 @@
     <string>Write Holding Register</string>
    </property>
    <property name="toolTip">
-    <string notr="true">06: Write Holding Register</string>
+    <string>06: Write Holding Register</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>

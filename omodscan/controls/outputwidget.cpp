@@ -337,15 +337,14 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setStatusColor(Qt::red);
     setUninitializedStatus();
 
-    ui->modbusMsg->setVisible(false);
-    //ui->modbusMsg->setBackGroundColor(Qt::white);
-    //ui->logView->setBackGroundColor(Qt::white);
+    hideModbusMessage();
 
     connect(ui->logView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
-            this, [&](const QItemSelection& sel) {
-                if(!sel.indexes().isEmpty())
+            this, [this](const QItemSelection& sel) {
+                if(!sel.indexes().isEmpty()) {
                     showModbusMessage(sel.indexes().first());
+                }
             });
 }
 
@@ -562,7 +561,7 @@ void OutputWidget::clearLogView()
 {
     ui->logView->clear();
     ui->modbusMsg->clear();
-    ui->modbusMsg->setVisible(false);
+    hideModbusMessage();
 }
 
 ///
@@ -902,11 +901,22 @@ void OutputWidget::captureString(const QString& s)
 void OutputWidget::showModbusMessage(const QModelIndex& index)
 {
     const auto msg = ui->logView->itemAt(index);
-
     if(msg) {
-        ui->modbusMsg->setVisible(true);
+        if(ui->splitter->widget(1)->isHidden()) {
+            ui->splitter->setSizes({1, 1});
+            ui->splitter->widget(1)->show();
+        }
         ui->modbusMsg->setModbusMessage(msg);
     }
+}
+
+///
+/// \brief OutputWidget::hideModbusMessage
+///
+void OutputWidget::hideModbusMessage()
+{
+    ui->splitter->setSizes({1, 0});
+    ui->splitter->widget(1)->hide();
 }
 
 ///

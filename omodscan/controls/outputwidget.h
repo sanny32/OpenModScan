@@ -146,6 +146,7 @@ private:
     void setUninitializedStatus();
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
+    void hideModbusMessage();
     void updateLogView(bool request, int deviceId, int transactionId, const QModbusPdu& pdu);
 
 private:

@@ -183,7 +183,11 @@ void ModbusMessageWidget::update()
         }
     };
 
-    addItem(tr("<b>Type:</b> %1").arg(_mm->isRequest() ? tr("Request (Tx)") : tr("Response (Rx)")));
+    const auto dirText = QString("<font color=\"%1\"><b>%2</b></font>").arg(
+        _mm->isRequest() ? "#0066cc" : "#009933",
+        _mm->isRequest() ? tr("Request (Tx)") : tr("Response (Rx)"));
+
+    addItem(tr("<b>Type:</b> %1").arg(dirText));
     if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_mm->timestamp().toString(Qt::ISODateWithMs)));
 
     if(_mm->protocolType() == ModbusMessage::Tcp)

@@ -158,6 +158,7 @@ void ModbusMessageWidget::update()
     if(_mm == nullptr)
         return;
 
+
     if(!_mm->isValid())
     {
         if(_mm->isRequest())
@@ -165,6 +166,14 @@ void ModbusMessageWidget::update()
         else if(!_mm->isException())
             addItem(tr("<span style='color:%1'>*** INVALID MODBUS RESPONSE ***</span>").arg(_statusClr.name()));
     }
+
+    const QString errColor = "#cc0000";
+    const QString valueColor = "#663399";
+    const QString dataColor = "#444444";
+    const QString dirColor = _mm->isRequest() ? "#0066cc" : "#009933";
+    auto addField = [&](const QString &name, const QString &value, const QString &clr) {
+        addItem(QString("<b style='color:#000000'>%1:</b> <span style='color:%2'>%3</span>").arg(name, clr, value));
+    };
 
     auto addChecksum = [&]{
         if(_mm->protocolType() == ModbusMessage::Rtu)
@@ -183,12 +192,8 @@ void ModbusMessageWidget::update()
         }
     };
 
-    const auto dirText = QString("<font color=\"%1\"><b>%2</b></font>").arg(
-        _mm->isRequest() ? "#0066cc" : "#009933",
-        _mm->isRequest() ? tr("Request (Tx)") : tr("Response (Rx)"));
-
-    addItem(tr("<b>Type:</b> %1").arg(dirText));
-    if(_showTimestamp) addItem(tr("<b>Timestamp:</b> %1").arg(_mm->timestamp().toString(Qt::ISODateWithMs)));
+    addField(tr("Type"), _mm->isRequest() ? tr("Request (Tx)") : tr("Response (Rx)"), dirColor);
+    if(_showTimestamp) addField(tr("Type"), _mm->timestamp().toString(Qt::ISODateWithMs), dataColor);
 
     if(_mm->protocolType() == ModbusMessage::Tcp)
     {
@@ -196,18 +201,18 @@ void ModbusMessageWidget::update()
         const auto transactionId = adu->isValid() ? formatUInt16Value(_dataDisplayMode, adu->transactionId()) : "??";
         const auto protocolId = adu->isValid() ? formatUInt16Value(_dataDisplayMode, adu->protocolId()): "??";
         const auto length = adu->isValid() ? formatUInt16Value(_dataDisplayMode, adu->length()): "??";
-        addItem(tr("<b>Transaction ID:</b> %1").arg(transactionId));
-        addItem(tr("<b>Protocol ID:</b> %1").arg(protocolId));
-        addItem(tr("<b>Length:</b> %1").arg(length));
+        addField(tr("Transaction ID"), transactionId, valueColor);
+        addField(tr("Protocol ID"), protocolId, valueColor);
+        addField(tr("Length"), length, valueColor);
     }
     
-    addItem(tr("<b>Device ID:</b> %1").arg(formatUInt8Value(_dataDisplayMode, _mm->deviceId())));
+    addField(tr("Device ID"), formatUInt8Value(_dataDisplayMode, _mm->deviceId()), valueColor);
 
     if(_mm->isException())
     {
-        const auto exception = QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, _mm->exception()), _mm->exception());
-        addItem(tr("<b>Error Code:</b> %1").arg(formatUInt8Value(_dataDisplayMode, _mm->function())));
-        addItem(tr("<b>Exception Code:</b> %1").arg(exception));
+        const auto exception = QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, _mm->exception()), _mm->exception());        
+        addField(tr("Error Code"), formatUInt8Value(_dataDisplayMode, _mm->function()), errColor);
+        addField(tr("Exception Code"), exception, errColor);
         addChecksum();
         return;
     }
@@ -216,7 +221,7 @@ void ModbusMessageWidget::update()
     const auto function = func.isValid() ?
                               QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, func), func) :
                               formatUInt8Value(_dataDisplayMode, func);
-    addItem(tr("<b>Function Code:</b> %1").arg(function));
+    addField(tr("Function Code"), function, dirColor);
     const auto addrBase = tr("(0-based)");
 
     switch(_mm->function())
@@ -225,18 +230,18 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadCoilsRequest*>(_mm.get());
-            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
-                addItem(tr("<b>Length:</b> %1").arg(length));
+                addField(tr("Start Address"), QString("%1 %2").arg(startAddress, addrBase), valueColor);
+                addField(tr("Length"), length, valueColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadCoilsResponse*>(_mm.get());
                 const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
                 const auto coilStatus = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->coilStatus()) : "???";
-                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
-                addItem(tr("<b>Coil Status:</b> %1").arg(coilStatus));
+                addField(tr("Byte Count"), byteCount, dataColor);
+                addField(tr("Coil Status"), coilStatus, dataColor);
             }
         break;
 
@@ -244,18 +249,18 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(_mm.get());
-            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
-                addItem(tr("<b>Length:</b> %1").arg(length));
+                addField(tr("Start Address"), QString("%1 %2").arg(startAddress, addrBase), valueColor);
+                addField(tr("Length"), length, valueColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadDiscreteInputsResponse*>(_mm.get());
                 const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
                 const auto inputStatus = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->inputStatus()) : "???";
-                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
-                addItem(tr("<b>Input Status:</b> %1").arg(inputStatus));
+                addField(tr("Byte Count"), byteCount, dataColor);
+                addField(tr("Input Status"), inputStatus, dataColor);
             }
         break;
 
@@ -263,18 +268,18 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(_mm.get());
-            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
-                addItem(tr("<b>Length:</b> %1").arg(length));
+                addField(tr("Start Address"), QString("%1 %2").arg(startAddress, addrBase), valueColor);
+                addField(tr("Length"), length, valueColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_mm.get());
                 const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
                 const auto registerValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder) : "???";
-                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
-                addItem(tr("<b>Register Value:</b> %1").arg(registerValue));
+                addField(tr("Byte Count"), byteCount, dataColor);
+                addField(tr("Register Value"), registerValue, dataColor);
             }
         break;
 
@@ -282,18 +287,18 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadInputRegistersRequest*>(_mm.get());
-            const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) : "??";
                 const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
-                addItem(tr("<b>Start Address:</b> %1 %2").arg(startAddress, addrBase));
-                addItem(tr("<b>Length:</b> %1").arg(length));
+                addField(tr("Start Address"), QString("%1 %2").arg(startAddress, addrBase), valueColor);
+                addField(tr("Length"), length, valueColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadInputRegistersResponse*>(_mm.get());
                 const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
                 const auto registerValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder) : "???";
-                addItem(tr("<b>Byte Count:</b> %1").arg(byteCount));
-                addItem(tr("<b>Input Registers:</b> %1").arg(registerValue));
+                addField(tr("Byte Count"), byteCount, dataColor);
+                addField(tr("Input Registers"), registerValue, dataColor);
             }
         break;
 

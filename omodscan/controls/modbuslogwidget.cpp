@@ -50,7 +50,7 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
         case Qt::DisplayRole:
-            return QString("<font color=\"#82828F\"><b>%1</b></font> %2 %3").arg(
+            return QString("<font color=\"#444444\">%1</font> %2 %3").arg(
                                                 item->timestamp().toString(Qt::ISODateWithMs),
                                                 dirText,
                                                 item->toString(_parentWidget->dataDisplayMode()));

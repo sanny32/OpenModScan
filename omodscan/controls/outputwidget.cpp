@@ -561,6 +561,8 @@ void OutputWidget::setLogViewLimit(int l)
 void OutputWidget::clearLogView()
 {
     ui->logView->clear();
+    ui->modbusMsg->clear();
+    ui->modbusMsg->setVisible(false);
 }
 
 ///

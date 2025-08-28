@@ -267,3 +267,24 @@ void ModbusLogWidget::setAutoscroll(bool on)
 {
     _autoscroll = on;
 }
+
+///
+/// \brief ModbusLogWidget::backgroundColor
+/// \return
+///
+QColor ModbusLogWidget::backgroundColor() const
+{
+    return palette().color(QPalette::Base);
+}
+
+///
+/// \brief ModbusLogWidget::setBackGroundColor
+/// \param clr
+///
+void ModbusLogWidget::setBackGroundColor(const QColor& clr)
+{
+    auto pal = palette();
+    pal.setColor(QPalette::Base, clr);
+    pal.setColor(QPalette::Window, clr);
+    setPalette(pal);
+}

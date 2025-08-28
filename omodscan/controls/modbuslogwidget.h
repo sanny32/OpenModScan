@@ -65,6 +65,9 @@ public:
     bool autoscroll() const;
     void setAutoscroll(bool on);
 
+    QColor backgroundColor() const;
+    void setBackGroundColor(const QColor& clr);
+
 protected:
     void changeEvent(QEvent* event) override;
 

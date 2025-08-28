@@ -29,6 +29,9 @@ public:
 
     void setStatusColor(const QColor& clr);
 
+    QColor backgroundColor() const;
+    void setBackGroundColor(const QColor& clr);
+
 protected:
     void changeEvent(QEvent* event) override;
 

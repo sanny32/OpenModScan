@@ -335,6 +335,10 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setStatusColor(Qt::red);
     setUninitializedStatus();
 
+    ui->modbusMsg->setBackGroundColor(Qt::white);
+    ui->logView->setBackGroundColor(Qt::white);
+    ui->modbusMsg->setVisible(false);
+
     connect(ui->logView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
             this, [&](const QItemSelection& sel) {
@@ -894,7 +898,11 @@ void OutputWidget::captureString(const QString& s)
 void OutputWidget::showModbusMessage(const QModelIndex& index)
 {
     const auto msg = ui->logView->itemAt(index);
-    ui->modbusMsg->setModbusMessage(msg);
+
+    if(msg) {
+        ui->modbusMsg->setVisible(true);
+        ui->modbusMsg->setModbusMessage(msg);
+    }
 }
 
 ///

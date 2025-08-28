@@ -109,6 +109,27 @@ void ModbusMessageWidget::setStatusColor(const QColor& clr)
 }
 
 ///
+/// \brief ModbusMessageWidget::backgroundColor
+/// \return
+///
+QColor ModbusMessageWidget::backgroundColor() const
+{
+    return palette().color(QPalette::Base);
+}
+
+///
+/// \brief ModbusLogWidget::setBackGroundColor
+/// \param clr
+///
+void ModbusMessageWidget::setBackGroundColor(const QColor& clr)
+{
+    auto pal = palette();
+    pal.setColor(QPalette::Base, clr);
+    pal.setColor(QPalette::Window, clr);
+    setPalette(pal);
+}
+
+///
 /// \brief ModbusMessageWidget::modbusMessage
 /// \return
 ///

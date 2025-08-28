@@ -306,7 +306,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabTableView">
       <attribute name="title">
@@ -468,7 +468,20 @@
            <bool>true</bool>
           </property>
          </widget>
-         <widget class="ModbusMessageWidget" name="info"/>
+         <widget class="ModbusMessageWidget" name="info">
+          <property name="minimumSize">
+           <size>
+            <width>280</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
         </widget>
        </item>
        <item>

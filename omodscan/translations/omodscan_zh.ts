@@ -151,37 +151,37 @@
 <context>
     <name>CsvExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Device Id</source>
         <translation>裝置地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Length</source>
         <translation>長度</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Point Type</source>
         <translation>暫存器類型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Registers on Query</source>
         <translation>查詢中的暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Address Base</source>
         <translation>基地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1184"/>
         <source>Byte Order</source>
         <translation>位元組序</translation>
     </message>
@@ -283,7 +283,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="269"/>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="405"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="408"/>
         <source>Scan</source>
         <translation>掃描</translation>
     </message>
@@ -318,22 +318,22 @@
         <translation>日誌</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="479"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="492"/>
         <source>Show Only Valid Responses</source>
         <translation>僅顯示有效回應</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="405"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="408"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="590"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="593"/>
         <source>Pdf files (*.pdf);;CSV files (*.csv)</source>
         <translation>Pdf 檔案 (*.pdf);;CSV 檔案 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="667"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="670"/>
         <source>No connection to MODBUS device!</source>
         <translation>沒有連繫到 MODBUS 裝置！</translation>
     </message>
@@ -2636,26 +2636,26 @@ Valid Slave Responses: %2</source>
 <context>
     <name>PdfExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="948"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="951"/>
         <source>Error. Failed to write PDF file!</source>
         <translation>錯誤：儲存為PDF失敗！</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1001"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1004"/>
         <source>Address Base: %1
 Start Address: %2</source>
         <translation>基地址：%1
 起始地址：%2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1004"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1007"/>
         <source>Device Id: %1		Length: %2
 Point Type: [%3]</source>
         <translation>裝置地址%1		長度%2
 暫存器類型：[%3]</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1007"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1010"/>
         <source>Registers on Query: %1
 Byte Order: %2</source>
         <translation>要求中的暫存器：%1

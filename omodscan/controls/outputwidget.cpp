@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QTextStream>
 #include <QInputDialog>
+#include "fontutils.h"
 #include "formatutils.h"
 #include "outputwidget.h"
 #include "modbusmessages.h"
@@ -328,16 +329,17 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->listView->setModel(_listModel.get());
     ui->labelStatus->setAutoFillBackground(true);
 
+    setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
     setForegroundColor(Qt::black);
-    setBackgroundColor(Qt::lightGray);
+    setBackgroundColor(Qt::white);
 
     setStatusColor(Qt::red);
     setUninitializedStatus();
 
-    ui->modbusMsg->setBackGroundColor(Qt::white);
-    ui->logView->setBackGroundColor(Qt::white);
     ui->modbusMsg->setVisible(false);
+    //ui->modbusMsg->setBackGroundColor(Qt::white);
+    //ui->logView->setBackGroundColor(Qt::white);
 
     connect(ui->logView->selectionModel(),
             &QItemSelectionModel::selectionChanged,

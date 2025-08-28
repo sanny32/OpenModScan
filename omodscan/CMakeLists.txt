@@ -151,6 +151,7 @@ set(HEADERS
     dialogs/dialogwriteholdingregisterbits.h
     displaydefinition.h
     enums.h
+    fontutils.h
     formatutils.h
     formmodsca.h
     htmldelegate.h

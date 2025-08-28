@@ -6,6 +6,7 @@
 #include <QPrinter>
 #include <QVersionNumber>
 #include "enums.h"
+#include "fontutils.h"
 #include "modbusclient.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
@@ -205,9 +206,9 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     wndSize = in.value("ViewSize").toSize();
 
     auto wnd = frm->parentWidget();
-    frm->setFont(in.value("Font", wnd->font()).value<QFont>());
+    frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
     frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::lightGray)).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
     frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
 
     wnd->resize(wndSize);

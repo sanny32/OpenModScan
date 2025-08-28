@@ -2422,12 +2422,12 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="812"/>
+        <location filename="../controls/outputwidget.cpp" line="814"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="878"/>
+        <location filename="../controls/outputwidget.cpp" line="880"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>

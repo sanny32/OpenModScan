@@ -5,13 +5,7 @@
 
 #include <QFont>
 #include <QList>
-#include <QtGlobal>
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <QFontDatabase>
-#else
-#include <QFontDatabase>
-#endif
 
 inline QFont defaultMonospaceFont(int pointSize = -1)
 {

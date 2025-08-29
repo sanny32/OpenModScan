@@ -29,7 +29,7 @@
       <number>30</number>
      </property>
      <property name="bottomMargin">
-      <number>10</number>
+      <number>4</number>
      </property>
      <item row="0" column="0">
       <widget class="QLabel" name="labelScanRate">

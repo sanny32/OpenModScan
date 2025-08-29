@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>241</width>
-    <height>196</height>
+    <height>203</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -157,7 +157,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayoutSimulation">
      <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">

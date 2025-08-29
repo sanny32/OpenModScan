@@ -23,9 +23,13 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
-    ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::Disabled);
 
-    if(simParams.Mode != SimulationMode::Off)
+    if(simParams.Mode == SimulationMode::Disabled)
+    {
+        delete ui->pushButtonSimulation;
+        delete ui->horizontalLayoutSimulation;
+    }
+    else if(simParams.Mode != SimulationMode::Off)
     {
         QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
         iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));

@@ -22,15 +22,11 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
     ui->lineEditAddress->setValue(params.Address);
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
-    //ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::Disabled);
 
     if(simParams.Mode == SimulationMode::Disabled)
     {
-        //ui->horizontalLayout_4->removeWidget(ui->pushButtonSimulation);
-        ui->pushButtonSimulation->hide();
-        ui->pushButtonSimulation->deleteLater(); // убрать совсем
-        delete ui->horizontalLayout_4;
-        adjustSize(); // пересчитать размер окна
+        delete ui->pushButtonSimulation;
+        delete ui->horizontalLayoutSimulation;
     }
     else if(simParams.Mode != SimulationMode::Off)
     {

@@ -1316,8 +1316,12 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="165"/>
+        <source>Enter bytes value separated by spaces</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Enter bytes value  separated by spaces</source>
-        <translation>Введите значение в байтах, разделенное пробелами</translation>
+        <translation type="vanished">Введите значение в байтах, разделенное пробелами</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="174"/>
@@ -1432,12 +1436,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>Симуляция</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="66"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="70"/>
         <source>Value, (HEX): </source>
         <translation>Значение, (Шестн): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="73"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="77"/>
         <source>Value, (ANSI): </source>
         <translation>Знвчение, (ANSI): </translation>
     </message>

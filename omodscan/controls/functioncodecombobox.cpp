@@ -185,6 +185,8 @@ void FunctionCodeComboBox::on_currentTextChanged(const QString& text)
 
         _currentFunc = ok ? (QModbusPdu::FunctionCode)func : QModbusPdu::Invalid;
     }
+
+    emit functionCodeChanged(_currentFunc);
 }
 
 ///

@@ -1346,7 +1346,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>傳送</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="101"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="110"/>
         <source>No connection to device</source>
         <translation>無法連繫到裝置</translation>
     </message>

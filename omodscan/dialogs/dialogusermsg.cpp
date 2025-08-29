@@ -28,12 +28,12 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
 
     ui->sendData->setFont(defaultMonospaceFont());
     ui->responseBuffer->setFont(defaultMonospaceFont());
-    ui->responseInfo->setFont(defaultMonospaceFont());
 
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveAddress->setValue(slaveAddress);
     ui->comboBoxFunction->addItems(ModbusFunction::validCodes());
     ui->comboBoxFunction->setCurrentFunctionCode(func);
+    ui->requestInfo->setShowTimestamp(false);
     ui->responseInfo->setShowTimestamp(false);
 
     switch(mode)
@@ -74,18 +74,27 @@ void DialogUserMsg::changeEvent(QEvent* event)
 }
 
 ///
-/// \brief DialogUserMsg::on_sendData_valueChanged
-/// \param value
+/// \brief DialogUserMsg::on_lineEditSlaveAddress_valueChanged
 ///
-void DialogUserMsg::on_sendData_valueChanged(const QByteArray& value)
+void DialogUserMsg::on_lineEditSlaveAddress_valueChanged(const QVariant&)
 {
-    QModbusRequest request;
-    request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
-    request.setData(ui->sendData->value());
+    updateRequestInfo();
+}
 
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    auto msg = ModbusMessage::create(request, protocol, ui->lineEditSlaveAddress->value<int>(), QDateTime::currentDateTime(), true);
-    ui->requestInfo->setModbusMessage(msg);
+///
+/// \brief DialogUserMsg::on_comboBoxFunction_functionCodeChanged
+///
+void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode)
+{
+    updateRequestInfo();
+}
+
+///
+/// \brief DialogUserMsg::on_sendData_valueChanged
+///
+void DialogUserMsg::on_sendData_valueChanged(const QByteArray&)
+{
+    updateRequestInfo();
 }
 
 ///
@@ -172,4 +181,18 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
         ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::UInt16);
     }
+}
+
+///
+/// \brief DialogUserMsg::updateRequestInfo
+///
+void DialogUserMsg::updateRequestInfo()
+{
+    QModbusRequest request;
+    request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
+    request.setData(ui->sendData->value());
+
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    auto msg = ModbusMessage::create(request, protocol, ui->lineEditSlaveAddress->value<int>(), QDateTime::currentDateTime(), true);
+    ui->requestInfo->setModbusMessage(msg);
 }

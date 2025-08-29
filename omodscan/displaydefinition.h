@@ -18,6 +18,7 @@ struct DisplayDefinition
     quint16 LogViewLimit = 30;
     bool ZeroBasedAddress = false;
     bool HexAddress = false;
+    bool AutoscrollLog = false;
 
     void normalize()
     {
@@ -41,6 +42,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/LogViewLimit",      dd.LogViewLimit);
     out.setValue("DisplayDefinition/ZeroBasedAddress",  dd.ZeroBasedAddress);
     out.setValue("DisplayDefinition/HexAddress",        dd.HexAddress);
+    out.setValue("DisplayDefinition/AutoscrollLog",     dd.AutoscrollLog);
 
     return out;
 }
@@ -61,6 +63,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
+    dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
 
     dd.normalize();
     return in;

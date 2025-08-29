@@ -20,6 +20,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLogLimit->setInputRange(4, 1000);
+    ui->checkBoxAutoscrollLog->setChecked(dd.AutoscrollLog);
 
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
@@ -51,6 +52,7 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.Length = ui->lineEditLength->value<int>();
     _displayDefinition.ScanRate = ui->lineEditScanRate->value<int>();
     _displayDefinition.LogViewLimit = ui->lineEditLogLimit->value<int>();
+    _displayDefinition.AutoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
 
     QFixedSizeDialog::accept();

@@ -395,6 +395,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolTyp
 
     setProtocol(protocol);
     setLogViewLimit(dd.LogViewLimit);
+    setAutosctollLogView(dd.AutoscrollLog);
 
     _listModel->clear();
 
@@ -554,6 +555,24 @@ int OutputWidget::logViewLimit() const
 void OutputWidget::setLogViewLimit(int l)
 {
     ui->logView->setRowLimit(l);
+}
+
+///
+/// \brief OutputWidget::autoscrollLogView
+/// \return
+///
+bool OutputWidget::autoscrollLogView() const
+{
+    return ui->logView->autoscroll();
+}
+
+///
+/// \brief OutputWidget::setAutosctollLogView
+/// \param on
+///
+void OutputWidget::setAutosctollLogView(bool on)
+{
+    ui->logView->setAutoscroll(on);
 }
 
 ///

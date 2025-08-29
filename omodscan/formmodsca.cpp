@@ -137,6 +137,7 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
+    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.ZeroBasedAddress = ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0;
     dd.HexAddress = displayHexAddresses();
 

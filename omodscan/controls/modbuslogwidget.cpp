@@ -130,7 +130,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     connect(model(), &ModbusLogModel::rowsInserted,
             this, [&]{
         if(_autoscroll) scrollToBottom();
-        setCurrentIndex(QModelIndex());
+        //setCurrentIndex(QModelIndex());
     });
 }
 

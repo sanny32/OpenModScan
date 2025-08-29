@@ -116,6 +116,9 @@ public:
     int logViewLimit() const;
     void setLogViewLimit(int l);
 
+    bool autoscrollLogView() const;
+    void setAutosctollLogView(bool on);
+
     void setStatus(const QString& status);
 
     void paint(const QRect& rc, QPainter& painter);

@@ -475,8 +475,17 @@
             <height>0</height>
            </size>
           </property>
+          <property name="focusPolicy">
+           <enum>Qt::FocusPolicy::NoFocus</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+          </property>
           <property name="alternatingRowColors">
            <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -559,6 +568,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ModbusMessageWidget</class>
+   <extends>QListWidget</extends>
+   <header>modbusmessagewidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
    <header>numericlineedit.h</header>
@@ -572,11 +586,6 @@
    <class>AddressBaseComboBox</class>
    <extends>QComboBox</extends>
    <header>addressbasecombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ModbusMessageWidget</class>
-   <extends>QListWidget</extends>
-   <header>modbusmessagewidget.h</header>
   </customwidget>
   <customwidget>
    <class>ByteOrderComboBox</class>

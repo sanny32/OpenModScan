@@ -318,7 +318,7 @@
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="492"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="501"/>
         <source>Show Only Valid Responses</source>
         <translation>Показывать только корректные ответы</translation>
     </message>

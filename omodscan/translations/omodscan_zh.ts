@@ -318,7 +318,7 @@
         <translation>日誌</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="492"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="501"/>
         <source>Show Only Valid Responses</source>
         <translation>僅顯示有效回應</translation>
     </message>

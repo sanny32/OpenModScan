@@ -162,7 +162,7 @@
         <bool>true</bool>
        </property>
        <property name="placeholderText">
-        <string>Enter bytes value  separated by spaces</string>
+        <string>Enter bytes value separated by spaces</string>
        </property>
       </widget>
      </item>

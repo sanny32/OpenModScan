@@ -59,8 +59,14 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     connect(ui->statisticWidget, &StatisticWidget::pollStateChanged, this, [&](PollState state) {
         switch (state) {
         case Off: break;
-        case Paused: _timer.stop(); break;
-        case Running: beginUpdate(); _timer.start(); break;
+        case Paused:
+            ui->outputWidget->setStatus(tr("Device polling paused..."));
+            _timer.stop();
+        break;
+        case Running:
+            beginUpdate();
+            _timer.start();
+        break;
         }
     });
 

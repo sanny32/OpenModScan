@@ -74,6 +74,21 @@ void DialogUserMsg::changeEvent(QEvent* event)
 }
 
 ///
+/// \brief DialogUserMsg::on_sendData_valueChanged
+/// \param value
+///
+void DialogUserMsg::on_sendData_valueChanged(const QByteArray& value)
+{
+    QModbusRequest request;
+    request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
+    request.setData(ui->sendData->value());
+
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    auto msg = ModbusMessage::create(request, protocol, ui->lineEditSlaveAddress->value<int>(), QDateTime::currentDateTime(), true);
+    ui->requestInfo->setModbusMessage(msg);
+}
+
+///
 /// \brief DialogUserMsg::on_pushButtonSend_clicked
 ///
 void DialogUserMsg::on_pushButtonSend_clicked()
@@ -89,10 +104,8 @@ void DialogUserMsg::on_pushButtonSend_clicked()
 
     ui->pushButtonSend->setEnabled(false);
 
-    QModbusRequest request;
-    request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
-    request.setData(ui->sendData->value());
-
+    auto msg = ui->requestInfo->modbusMessage();
+    const QModbusRequest request = msg->adu()->pdu();
     _modbusClient.sendRawRequest(request, ui->lineEditSlaveAddress->value<int>(), 0);
 
     const auto timeout = _modbusClient.timeout() * _modbusClient.numberOfRetries();

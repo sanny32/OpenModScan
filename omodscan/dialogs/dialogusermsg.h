@@ -23,6 +23,7 @@ protected:
     void changeEvent(QEvent* event) override;
 
 private slots:
+    void on_sendData_valueChanged(const QByteArray& value);
     void on_modbusReply(QModbusReply* reply);
     void on_radioButtonHex_clicked(bool checked);
     void on_radioButtonDecimal_clicked(bool checked);

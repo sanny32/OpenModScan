@@ -94,6 +94,9 @@ public:
     uint numberOfPolls() const;
     uint validSlaveResposes() const;
 
+    PollState pollState() const;
+    void setPollState(PollState state);
+
 public slots:
     void show();
 

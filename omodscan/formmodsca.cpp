@@ -54,7 +54,15 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
 
+    setPollState(Off);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
+    connect(ui->statisticWidget, &StatisticWidget::pollStateChanged, this, [&](PollState state) {
+        switch (state) {
+        case Off: break;
+        case Paused: _timer.stop(); break;
+        case Running: beginUpdate(); break;
+        }
+    });
 
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
@@ -506,6 +514,24 @@ uint FormModSca::validSlaveResposes() const
 }
 
 ///
+/// \brief FormModSca::pollState
+/// \return
+///
+PollState FormModSca::pollState() const
+{
+    return ui->statisticWidget->pollState();
+}
+
+///
+/// \brief FormModSca::setPollState
+/// \param state
+///
+void FormModSca::setPollState(PollState state)
+{
+    ui->statisticWidget->setPollState(state);
+}
+
+///
 /// \brief FormModSca::show
 ///
 void FormModSca::show()
@@ -544,8 +570,10 @@ void FormModSca::on_timeout()
 ///
 void FormModSca::beginUpdate()
 {
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != QModbusDevice::ConnectedState) {
+        setPollState(Off);
         return;
+    }
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ?  0 : 1);
@@ -555,6 +583,7 @@ void FormModSca::beginUpdate()
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
     _timer.start();
+    setPollState(Running);
 }
 
 ///
@@ -725,6 +754,7 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
 void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
     _timer.stop();
+    setPollState(Off);
     ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
 }
 

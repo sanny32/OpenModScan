@@ -1512,12 +1512,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>寄存器类型</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="167"/>
+        <location filename="../formmodsca.cpp" line="175"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="398"/>
+        <location filename="../formmodsca.cpp" line="406"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1526,7 +1526,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="402"/>
+        <location filename="../formmodsca.cpp" line="410"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1535,29 +1535,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="405"/>
+        <location filename="../formmodsca.cpp" line="413"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>轮询次数：%1
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="555"/>
+        <location filename="../formmodsca.cpp" line="583"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>没有扫描：指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="728"/>
+        <location filename="../formmodsca.cpp" line="758"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="534"/>
+        <location filename="../formmodsca.cpp" line="560"/>
         <source>No Responses from Slave Device</source>
         <translation>从设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="686"/>
+        <location filename="../formmodsca.cpp" line="715"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>
@@ -2689,27 +2689,43 @@ Byte Order: %2</source>
 <context>
     <name>StatisticWidget</name>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="41"/>
+        <location filename="../controls/statisticwidget.ui" line="44"/>
         <source>Number of Polls: 0</source>
         <translation>轮询次数：0</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="48"/>
+        <location filename="../controls/statisticwidget.ui" line="51"/>
         <source>Valid Slave Responses: 0</source>
         <translation>有效的从站响应：0</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="70"/>
+        <location filename="../controls/statisticwidget.ui" line="75"/>
         <source>Reset Ctrs</source>
         <translation>重置计数器</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="89"/>
+        <location filename="../controls/statisticwidget.ui" line="97"/>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="95"/>
+        <location filename="../controls/statisticwidget.cpp" line="99"/>
+        <source>Pause Poll</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="103"/>
+        <source>Resume Poll</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="136"/>
         <source>Number of Polls: %1</source>
         <translation>轮询次数：%1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="90"/>
+        <location filename="../controls/statisticwidget.cpp" line="137"/>
         <source>Valid Slave Responses: %1</source>
         <translation>有效的从站响应：%1</translation>
     </message>

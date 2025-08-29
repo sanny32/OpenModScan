@@ -2,6 +2,7 @@
 #define STATISTICWIDGET_H
 
 #include <QWidget>
+#include "enums.h"
 
 namespace Ui {
 class StatisticWidget;
@@ -25,16 +26,21 @@ public:
     void increaseValidSlaveResponses();
     void resetCtrs();
 
+    PollState pollState() const;
+    void setPollState(PollState state);
+
 signals:
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
     void ctrsReseted();
+    void pollStateChanged(PollState state);
 
 protected:
     void changeEvent(QEvent* event) override;
 
 private slots:
     void on_pushButtonResetCtrs_clicked();
+    void on_pushButtonPause_clicked();
 
 private:
     void updateStatistic();
@@ -45,6 +51,7 @@ private:
 private:
     uint _numberOfPolls;
     uint _validSlaveResponses;
+    PollState _pollState;
 };
 
 #endif // STATISTICWIDGET_H

@@ -22,9 +22,17 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
     ui->lineEditAddress->setValue(params.Address);
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
-    ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::Disabled);
+    //ui->pushButtonSimulation->setVisible(simParams.Mode != SimulationMode::Disabled);
 
-    if(simParams.Mode != SimulationMode::Off)
+    if(simParams.Mode == SimulationMode::Disabled)
+    {
+        //ui->horizontalLayout_4->removeWidget(ui->pushButtonSimulation);
+        ui->pushButtonSimulation->hide();
+        ui->pushButtonSimulation->deleteLater(); // убрать совсем
+        delete ui->horizontalLayout_4;
+        adjustSize(); // пересчитать размер окна
+    }
+    else if(simParams.Mode != SimulationMode::Off)
     {
         QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
         iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
@@ -44,6 +52,7 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
         ui->pushButtonSimulation->setText(QString());
         ui->pushButtonSimulation->setLayout(layout);
     }
+
 
     if(ui->radioButtonOff->isChecked())
         ui->radioButtonOn->setFocus();

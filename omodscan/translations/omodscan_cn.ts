@@ -537,57 +537,57 @@
         <translation>扫描频率： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="68"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="71"/>
         <source>(msecs)</source>
         <translation>（毫秒）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="79"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="95"/>
         <source>Log View</source>
         <translation type="unfinished">日志</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="94"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="110"/>
         <source>Log View Limit:</source>
         <translation>日志视图：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="125"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="144"/>
         <source>(rows)</source>
         <translation>（行）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="134"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="166"/>
         <source>Autoscroll Log View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="150"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="182"/>
         <source>Modbus Data</source>
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="165"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="197"/>
         <source>Slave Address:</source>
         <translation>从设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="239"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="271"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="291"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="323"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="210"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="242"/>
         <source>Point Address:</source>
         <translation>寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="262"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="294"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>

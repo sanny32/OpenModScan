@@ -1325,12 +1325,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>Ответ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="248"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="251"/>
         <source>Send</source>
         <translation>Отправить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="81"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="86"/>
         <source>No connection to device</source>
         <translation>Нет подключения к устройству</translation>
     </message>

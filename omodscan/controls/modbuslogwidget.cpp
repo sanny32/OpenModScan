@@ -82,7 +82,9 @@ void ModbusLogModel::append(QSharedPointer<const ModbusMessage> data)
 
     while(rowCount() >= _rowLimit)
     {
+        beginRemoveRows(QModelIndex(), 0, 0);
         _items.removeFirst();
+        endRemoveRows();
     }
 
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
@@ -130,7 +132,6 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     connect(model(), &ModbusLogModel::rowsInserted,
             this, [&]{
         if(_autoscroll) scrollToBottom();
-        //setCurrentIndex(QModelIndex());
     });
 }
 

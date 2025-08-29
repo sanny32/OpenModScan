@@ -359,7 +359,6 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
     ui->comboBoxByteOrder->setCurrentByteOrder(order);
     ui->info->setShowTimestamp(false);
-    ui->info->setFont(defaultMonospaceFont());
     ui->logView->setFont(defaultMonospaceFont());
 
     auto dispatcher = QAbstractEventDispatcher::instance();

@@ -3,6 +3,7 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QTextDocument>
+#include "fontutils.h"
 #include "formatutils.h"
 #include "htmldelegate.h"
 #include "modbusmessages.h"
@@ -19,9 +20,13 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     ,_dataDisplayMode(DataDisplayMode::UInt16)
     ,_showTimestamp(true)
 {
+    setAlternatingRowColors(true);
+    setEditTriggers(NoEditTriggers);
+    setSelectionMode(QAbstractItemView::NoSelection);
     setItemDelegate(new HtmlDelegate(this));
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setFont(defaultMonospaceFont());
 
     connect(this, &QWidget::customContextMenuRequested,
             this, &ModbusMessageWidget::on_customContextMenuRequested);

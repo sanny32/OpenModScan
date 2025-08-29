@@ -3,6 +3,7 @@
 #include <QClipboard>
 #include <QTextDocument>
 #include <QApplication>
+#include "fontutils.h"
 #include "htmldelegate.h"
 #include "modbuslogwidget.h"
 
@@ -130,6 +131,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
 {
+    setFont(defaultMonospaceFont());
     setContextMenuPolicy(Qt::CustomContextMenu);
     setItemDelegate(new HtmlDelegate(this));
     setModel(new ModbusLogModel(this));

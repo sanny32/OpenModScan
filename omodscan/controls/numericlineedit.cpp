@@ -481,7 +481,9 @@ void NumericLineEdit::on_textChanged(const QString& text)
 ///
 void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& top)
 {
-    blockSignals(true);
+    const bool isBlocked = signalsBlocked();
+    if(!isBlocked) blockSignals(true);
+
     setValidator(nullptr);
     switch(_inputMode)
     {
@@ -542,5 +544,5 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         break;
     }
     internalSetValue(_value);
-    blockSignals(false);
+    if(!isBlocked) blockSignals(false);
 }

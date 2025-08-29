@@ -195,6 +195,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto byteOrder = _parentWidget->byteOrder();
     const auto codepage = _parentWidget->codepage();
+    const bool zeroBased = _parentWidget->_displayDefinition.ZeroBasedAddress;
 
     for(int i = 0; i < rowCount(); i++)
     {
@@ -300,10 +301,11 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 ///
 QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    if(_parentWidget->_displayDefinition.PointType != type)
+    const auto dd = _parentWidget->_displayDefinition;
+
+    if(dd.PointType != type)
         return QModelIndex();
 
-    const auto dd =  _parentWidget->_displayDefinition;
     const int row = addr - (dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
     if(row >= 0 && row < rowCount())
         return index(row);

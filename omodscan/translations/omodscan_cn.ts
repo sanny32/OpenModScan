@@ -2605,12 +2605,12 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="815"/>
+        <location filename="../controls/outputwidget.cpp" line="817"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="881"/>
+        <location filename="../controls/outputwidget.cpp" line="883"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>

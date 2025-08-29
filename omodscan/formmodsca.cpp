@@ -137,7 +137,7 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
-    dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.ZeroBasedAddress = ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0;
     dd.HexAddress = displayHexAddresses();
 
     return dd;
@@ -227,7 +227,7 @@ void FormModSca::setDisplayHexAddresses(bool on)
     ui->outputWidget->setDisplayHexAddresses(on);
 
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
 }
 
 ///

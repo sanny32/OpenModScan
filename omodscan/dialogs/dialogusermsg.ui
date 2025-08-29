@@ -19,7 +19,7 @@
      <item>
       <layout class="QFormLayout" name="formLayout">
        <property name="labelAlignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
        </property>
        <item row="0" column="0">
         <widget class="QLabel" name="labelSlaveAddress">
@@ -43,7 +43,7 @@
           </size>
          </property>
          <property name="contextMenuPolicy">
-          <enum>Qt::NoContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
          </property>
         </widget>
        </item>
@@ -63,7 +63,7 @@
           </size>
          </property>
          <property name="contextMenuPolicy">
-          <enum>Qt::NoContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
          </property>
          <property name="editable">
           <bool>true</bool>
@@ -75,10 +75,10 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -120,7 +120,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -156,7 +156,7 @@
         </size>
        </property>
        <property name="inputMethodHints">
-        <set>Qt::ImhNone</set>
+        <set>Qt::InputMethodHint::ImhNone</set>
        </property>
        <property name="tabChangesFocus">
         <bool>true</bool>
@@ -177,7 +177,7 @@
       <item>
        <widget class="QSplitter" name="splitter">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Orientation::Vertical</enum>
         </property>
         <widget class="ByteListTextEdit" name="responseBuffer">
          <property name="sizePolicy">
@@ -193,7 +193,7 @@
           <bool>true</bool>
          </property>
          <property name="textInteractionFlags">
-          <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+          <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
          </property>
         </widget>
         <widget class="ModbusMessageWidget" name="responseInfo">
@@ -204,13 +204,13 @@
           </sizepolicy>
          </property>
          <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
+          <enum>Qt::FocusPolicy::NoFocus</enum>
          </property>
          <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
          </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::NoSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -226,7 +226,7 @@
      <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -238,6 +238,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonSend">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="text">
         <string>Send</string>
        </property>
@@ -254,18 +260,24 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="standardButtons">
-        <set>QDialogButtonBox::Close</set>
+        <set>QDialogButtonBox::StandardButton::Close</set>
        </property>
       </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -286,6 +298,11 @@
    <header>modbusmessagewidget.h</header>
   </customwidget>
   <customwidget>
+   <class>NumericLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>numericlineedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>ByteListTextEdit</class>
    <extends>QPlainTextEdit</extends>
    <header>bytelisttextedit.h</header>
@@ -294,11 +311,6 @@
    <class>FunctionCodeComboBox</class>
    <extends>QComboBox</extends>
    <header>functioncodecombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>NumericLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>numericlineedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

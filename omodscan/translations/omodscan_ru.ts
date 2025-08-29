@@ -282,43 +282,43 @@
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="269"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
         <location filename="../dialogs/dialogaddressscan.cpp" line="408"/>
         <source>Scan</source>
         <translation>Сканировать</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="276"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="288"/>
         <source>Export...</source>
         <translation>Экспортировать...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="313"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="331"/>
         <source>Table View</source>
         <translation>Таблица</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="377"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="395"/>
         <source>Find Next</source>
         <translation>Найти далее</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="397"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="415"/>
         <source>Hex View</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="411"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="429"/>
         <source>Byte Order: </source>
         <translation>Порядок байт: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="434"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="452"/>
         <source>Log View</source>
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="501"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="519"/>
         <source>Show Only Valid Responses</source>
         <translation>Показывать только корректные ответы</translation>
     </message>
@@ -398,7 +398,7 @@
         <translation>Введите путь конфигурационного файла для автозагрузки:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautostart.ui" line="60"/>
+        <location filename="../dialogs/dialogautostart.ui" line="66"/>
         <source>Browse</source>
         <translation>Обзор</translation>
     </message>
@@ -1049,7 +1049,7 @@
         <translation>Введите значение в байтах, разделенное пробелами</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="191"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="197"/>
         <source>Parse</source>
         <translation>Анализ</translation>
     </message>
@@ -1272,7 +1272,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="98"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="104"/>
         <source>Number of Points: </source>
         <translation>Количество точек: </translation>
     </message>
@@ -1325,7 +1325,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Ответ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="242"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="248"/>
         <source>Send</source>
         <translation>Отправить</translation>
     </message>
@@ -1343,17 +1343,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>Окна</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="29"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="35"/>
         <source>Activate</source>
         <translation>Активировать</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="36"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="48"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="43"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="61"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -1395,7 +1395,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Вкл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="224"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="236"/>
         <source>Auto Simulation</source>
         <translation>Симуляция</translation>
     </message>
@@ -1427,7 +1427,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Значение: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="174"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="186"/>
         <source>Auto Simulation</source>
         <translation>Симуляция</translation>
     </message>

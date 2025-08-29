@@ -265,6 +265,12 @@
        </property>
        <item>
         <widget class="QPushButton" name="pushButtonScan">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
+         </property>
          <property name="text">
           <string>Scan</string>
          </property>
@@ -272,6 +278,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonExport">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
+         </property>
          <property name="text">
           <string>Export...</string>
          </property>
@@ -284,6 +296,12 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
          </property>
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>

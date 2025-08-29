@@ -282,43 +282,43 @@
         <translation>设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="269"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
         <location filename="../dialogs/dialogaddressscan.cpp" line="408"/>
         <source>Scan</source>
         <translation>扫描</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="276"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="288"/>
         <source>Export...</source>
         <translation>导出...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="313"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="331"/>
         <source>Table View</source>
         <translation>主窗口</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="377"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="395"/>
         <source>Find Next</source>
         <translation>查找下一个</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="397"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="415"/>
         <source>Hex View</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="411"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="429"/>
         <source>Byte Order: </source>
         <translation>字节序： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="434"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="452"/>
         <source>Log View</source>
         <translation>日志</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="501"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="519"/>
         <source>Show Only Valid Responses</source>
         <translation>仅显示有效响应</translation>
     </message>
@@ -398,7 +398,7 @@
         <translation>请输入启动时加载的配置文件路径：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautostart.ui" line="60"/>
+        <location filename="../dialogs/dialogautostart.ui" line="66"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
@@ -1057,7 +1057,7 @@
         <translation>请输入以空格分隔的字节值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="191"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="197"/>
         <source>Parse</source>
         <translation>解析</translation>
     </message>
@@ -1279,7 +1279,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="98"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="104"/>
         <source>Number of Points: </source>
         <translation>点数： </translation>
     </message>
@@ -1332,7 +1332,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>响应缓冲区</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="242"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="248"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
@@ -1350,17 +1350,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>窗口</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="29"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="35"/>
         <source>Activate</source>
         <translation>启用</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="36"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="48"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="43"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="61"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -1402,7 +1402,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>开</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="224"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="236"/>
         <source>Auto Simulation</source>
         <translation>自动仿真</translation>
     </message>
@@ -1434,7 +1434,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>值： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="174"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="186"/>
         <source>Auto Simulation</source>
         <translation>自动仿真</translation>
     </message>

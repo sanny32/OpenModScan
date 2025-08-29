@@ -1540,7 +1540,7 @@ Valid Slave Responses: %2</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="758"/>
+        <location filename="../formmodsca.cpp" line="760"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
@@ -1550,7 +1550,7 @@ Valid Slave Responses: %2</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="715"/>
+        <location filename="../formmodsca.cpp" line="717"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>

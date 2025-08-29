@@ -1547,7 +1547,7 @@ Valid Slave Responses: %2</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="758"/>
+        <location filename="../formmodsca.cpp" line="760"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
@@ -1557,7 +1557,7 @@ Valid Slave Responses: %2</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="715"/>
+        <location filename="../formmodsca.cpp" line="717"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>

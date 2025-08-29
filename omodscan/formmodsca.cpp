@@ -60,7 +60,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
         switch (state) {
         case Off: break;
         case Paused: _timer.stop(); break;
-        case Running: beginUpdate(); break;
+        case Running: beginUpdate(); _timer.start(); break;
         }
     });
 
@@ -582,8 +582,10 @@ void FormModSca::beginUpdate()
     else
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
-    _timer.start();
-    setPollState(Running);
+    if(pollState() == Off) {
+        _timer.start();
+        setPollState(Running);
+    }
 }
 
 ///

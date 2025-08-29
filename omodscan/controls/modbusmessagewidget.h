@@ -35,6 +35,9 @@ public:
 protected:
     void changeEvent(QEvent* event) override;
 
+private slots:
+    void on_customContextMenuRequested(const QPoint &pos);
+
 private:
     void update();
 

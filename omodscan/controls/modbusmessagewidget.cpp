@@ -1,4 +1,8 @@
+#include <QMenu>
 #include <QEvent>
+#include <QClipboard>
+#include <QApplication>
+#include <QTextDocument>
 #include "formatutils.h"
 #include "htmldelegate.h"
 #include "modbusmessages.h"
@@ -17,6 +21,10 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
 {
     setItemDelegate(new HtmlDelegate(this));
     setEditTriggers(QAbstractItemView::NoEditTriggers);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(this, &QWidget::customContextMenuRequested,
+            this, &ModbusMessageWidget::on_customContextMenuRequested);
 }
 
 ///
@@ -569,4 +577,69 @@ void ModbusMessageWidget::update()
     }
 
     addChecksum();
+}
+
+///
+/// \brief ModbusMessageWidget::on_customContextMenuRequested
+/// \param pos
+///
+void ModbusMessageWidget::on_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu(this);
+
+    QAction* copyAct = menu.addAction(tr("Copy Text"));
+    QAction* copyValuesAct = nullptr;
+
+    if(!_mm->isRequest() && !_mm->isException())
+    {
+        switch(_mm->function())
+        {
+            case QModbusPdu::ReadCoils:
+            case QModbusPdu::ReadDiscreteInputs:
+            case QModbusPdu::ReadInputRegisters:
+            case QModbusPdu::ReadHoldingRegisters:
+                copyValuesAct = menu.addAction(tr("Copy Values"));
+            break;
+            default: break;
+        }
+    }
+
+    QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));
+    if (!chosen)
+        return;
+
+    if (chosen == copyAct) {
+        QString text;
+        for (int i = 0; i < count(); ++i) {
+            QListWidgetItem* item = this->item(i);
+            if (item) {
+                QTextDocument doc;
+                doc.setHtml(item->text());
+                text += doc.toPlainText() + "\n";
+            }
+        }
+        QApplication::clipboard()->setText(text.trimmed());
+    } else if (chosen == copyValuesAct) {
+        QString allValues;
+        switch(_mm->function()) {
+            case QModbusPdu::ReadCoils: {
+                auto resp = reinterpret_cast<const ReadCoilsResponse*>(_mm.get());
+                allValues = formatUInt8Array(_dataDisplayMode, resp->coilStatus());
+            } break;
+            case QModbusPdu::ReadDiscreteInputs: {
+                auto resp = reinterpret_cast<const ReadDiscreteInputsResponse*>(_mm.get());
+                allValues = formatUInt8Array(_dataDisplayMode, resp->inputStatus());
+            } break;
+            case QModbusPdu::ReadHoldingRegisters: {
+                auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_mm.get());
+                allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
+            } break;
+            case QModbusPdu::ReadInputRegisters: {
+                auto resp = reinterpret_cast<const ReadInputRegistersResponse*>(_mm.get());
+                allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
+            } break;
+            default: break;
+        }
+        QApplication::clipboard()->setText(allValues);
+    }
 }

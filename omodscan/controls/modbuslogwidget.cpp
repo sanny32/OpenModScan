@@ -1,6 +1,7 @@
 #include <QMenu>
 #include <QEvent>
 #include <QClipboard>
+#include <QTextDocument>
 #include <QApplication>
 #include "htmldelegate.h"
 #include "modbuslogwidget.h"
@@ -326,7 +327,9 @@ void ModbusLogWidget::on_customContextMenuRequested(const QPoint &pos)
         return;
 
     if (chosen == copyAct) {
-        QApplication::clipboard()->setText(index.data(Qt::DisplayRole).toString());
+        QTextDocument doc;
+        doc.setHtml(index.data(Qt::DisplayRole).toString());
+        QApplication::clipboard()->setText(doc.toPlainText());
     } else if (chosen == copyBytesAct) {
         QApplication::clipboard()->setText(msg->toString(dataDisplayMode()));
     }

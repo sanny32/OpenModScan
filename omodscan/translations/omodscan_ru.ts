@@ -2134,6 +2134,19 @@ Valid Slave Responses: %2</source>
     </message>
 </context>
 <context>
+    <name>ModbusLogWidget</name>
+    <message>
+        <location filename="../controls/modbuslogwidget.cpp" line="317"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/modbuslogwidget.cpp" line="318"/>
+        <source>Copy Bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ModbusMessageWidget</name>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="168"/>

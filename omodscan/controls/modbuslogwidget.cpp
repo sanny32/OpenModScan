@@ -1,4 +1,7 @@
+#include <QMenu>
 #include <QEvent>
+#include <QClipboard>
+#include <QApplication>
 #include "htmldelegate.h"
 #include "modbuslogwidget.h"
 
@@ -126,9 +129,12 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setItemDelegate(new HtmlDelegate(this));
     setModel(new ModbusLogModel(this));
 
+    connect(this, &QWidget::customContextMenuRequested,
+            this, &ModbusLogWidget::on_customContextMenuRequested);
     connect(model(), &ModbusLogModel::rowsInserted,
             this, [&]{
         if(_autoscroll) scrollToBottom();
@@ -294,4 +300,34 @@ void ModbusLogWidget::setBackGroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+}
+
+///
+/// \brief ModbusLogWidget::on_customContextMenuRequested
+/// \param pos
+///
+void ModbusLogWidget::on_customContextMenuRequested(const QPoint &pos)
+{
+    QModelIndex index = indexAt(pos);
+    if (!index.isValid())
+        return;
+
+    QMenu menu(this);
+
+    QAction* copyAct = menu.addAction(tr("Copy"));
+    QAction* copyBytesAct = menu.addAction(tr("Copy Bytes"));
+
+    QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));
+    if (!chosen)
+        return;
+
+    auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
+    if (!msg)
+        return;
+
+    if (chosen == copyAct) {
+        QApplication::clipboard()->setText(index.data(Qt::DisplayRole).toString());
+    } else if (chosen == copyBytesAct) {
+        QApplication::clipboard()->setText(msg->toString(dataDisplayMode()));
+    }
 }

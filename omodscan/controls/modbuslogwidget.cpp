@@ -314,7 +314,7 @@ void ModbusLogWidget::on_customContextMenuRequested(const QPoint &pos)
 
     QMenu menu(this);
 
-    QAction* copyAct = menu.addAction(tr("Copy"));
+    QAction* copyAct = menu.addAction(tr("Copy Text"));
     QAction* copyBytesAct = menu.addAction(tr("Copy Bytes"));
 
     QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));

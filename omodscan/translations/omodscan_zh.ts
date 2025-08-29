@@ -1527,12 +1527,12 @@ single-point  write functions 05 and 06.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="178"/>
+        <location filename="../formmodsca.cpp" line="182"/>
         <source>Data Uninitialized</source>
         <translation>數據未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="409"/>
+        <location filename="../formmodsca.cpp" line="413"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1541,7 +1541,7 @@ Length: %3</source>
 長度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="413"/>
+        <location filename="../formmodsca.cpp" line="417"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1550,29 +1550,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="416"/>
+        <location filename="../formmodsca.cpp" line="420"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>輪詢次數：%1
 有效的從站回應：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="586"/>
+        <location filename="../formmodsca.cpp" line="590"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="763"/>
+        <location filename="../formmodsca.cpp" line="767"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="563"/>
+        <location filename="../formmodsca.cpp" line="567"/>
         <source>No Responses from Slave Device</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="720"/>
+        <location filename="../formmodsca.cpp" line="724"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>
@@ -2749,12 +2749,12 @@ Byte Order: %2</source>
     <message>
         <location filename="../controls/statisticwidget.cpp" line="95"/>
         <location filename="../controls/statisticwidget.cpp" line="99"/>
-        <source>Pause Poll</source>
+        <source>Pause Polling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../controls/statisticwidget.cpp" line="103"/>
-        <source>Resume Poll</source>
+        <source>Resume Polling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

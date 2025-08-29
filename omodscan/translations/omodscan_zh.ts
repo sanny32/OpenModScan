@@ -1332,12 +1332,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>回應緩衝區</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="248"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="251"/>
         <source>Send</source>
         <translation>傳送</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="81"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="86"/>
         <source>No connection to device</source>
         <translation>無法連繫到裝置</translation>
     </message>

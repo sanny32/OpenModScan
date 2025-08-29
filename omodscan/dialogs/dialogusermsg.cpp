@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDialogButtonBox>
+#include "fontutils.h"
 #include "modbuslimits.h"
 #include "dialogusermsg.h"
 #include "ui_dialogusermsg.h"
@@ -24,6 +25,10 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
+
+    ui->sendData->setFont(defaultMonospaceFont());
+    ui->responseBuffer->setFont(defaultMonospaceFont());
+    ui->responseInfo->setFont(defaultMonospaceFont());
 
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveAddress->setValue(slaveAddress);

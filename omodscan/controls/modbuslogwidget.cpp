@@ -46,18 +46,18 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
         return QVariant();
 
     const auto item = _items.at(index.row());
-    const auto dirText = QString("<font color=\"%1\"><b>[%2] %3</b></font>").arg(
-                            item->isRequest() ? "#0066cc" : "#009933",
-                            item->isRequest() ? "Tx" : "Rx",
-                            item->isRequest() ? "&larr;" : "&rarr;");
-
     switch(role)
     {
         case Qt::DisplayRole:
-            return QString("<font color=\"#444444\">%1</font> %2 %3").arg(
-                                                item->timestamp().toString(Qt::ISODateWithMs),
-                                                dirText,
-                                                item->toString(_parentWidget->dataDisplayMode()));
+            return QString(R"(
+                    <span style="color:#444444">%1</span>
+                    <span style="color:%2"><b>%3</b></span>
+                    <span>%4</span>
+                )")
+                .arg(item->timestamp().toString(Qt::ISODateWithMs),
+                     item->isRequest() ? "#0066cc" : "#009933",
+                     item->isRequest() ? "[Tx] ←" : "[Rx] →",
+                     item->toString(_parentWidget->dataDisplayMode()));
 
         case Qt::UserRole:
             return QVariant::fromValue(item);

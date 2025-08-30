@@ -2,7 +2,6 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDialogButtonBox>
-#include "fontutils.h"
 #include "modbuslimits.h"
 #include "dialogusermsg.h"
 #include "ui_dialogusermsg.h"
@@ -84,6 +83,23 @@ void DialogUserMsg::on_lineEditSlaveAddress_valueChanged(const QVariant&)
 ///
 void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode fc)
 {
+    switch(fc)
+    {
+        case QModbusPdu::Invalid:
+        case QModbusPdu::ReadExceptionStatus:
+        case QModbusPdu::GetCommEventCounter:
+        case QModbusPdu::GetCommEventLog:
+        case QModbusPdu::ReportServerId:
+        case QModbusPdu::UndefinedFunctionCode:
+            ui->pushButtonGenerate->setEnabled(false);
+            ui->sendData->setEnabled(false);
+        break;
+        default:
+            ui->pushButtonGenerate->setEnabled(true);
+            ui->sendData->setEnabled(true);
+        break;
+    }
+
     ui->sendData->setValue(QByteArray());
     updateRequestInfo();
 }
@@ -149,7 +165,7 @@ void DialogUserMsg::on_pushButtonGenerate_clicked()
             break;
 
         default:
-            break;
+        break;
     }
 
     ui->sendData->blockSignals(true);

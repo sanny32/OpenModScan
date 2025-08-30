@@ -1287,9 +1287,13 @@ single-point  write functions 05 and 06.)</source>
 <context>
     <name>DialogUserMsg</name>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="14"/>
         <source>User Defined Command String</source>
-        <translation>用戶定義的命令字符串</translation>
+        <translation type="vanished">用戶定義的命令字符串</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="14"/>
+        <source>User Defined Command</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="27"/>
@@ -1346,7 +1350,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>傳送</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="107"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="125"/>
         <source>No connection to device</source>
         <translation>無法連繫到裝置</translation>
     </message>
@@ -2157,12 +2161,12 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="320"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="321"/>
         <source>Copy Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="321"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="322"/>
         <source>Copy Bytes</source>
         <translation type="unfinished"></translation>
     </message>

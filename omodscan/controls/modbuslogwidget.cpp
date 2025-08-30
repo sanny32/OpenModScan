@@ -131,6 +131,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
 {
+    setFocusPolicy(Qt::NoFocus);
     setFont(defaultMonospaceFont());
     setContextMenuPolicy(Qt::CustomContextMenu);
     setItemDelegate(new HtmlDelegate(this));

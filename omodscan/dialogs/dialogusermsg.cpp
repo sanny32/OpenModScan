@@ -80,9 +80,27 @@ void DialogUserMsg::on_lineEditSlaveAddress_valueChanged(const QVariant&)
 
 ///
 /// \brief DialogUserMsg::on_comboBoxFunction_functionCodeChanged
+/// \param fc
 ///
-void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode)
+void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode fc)
 {
+    QByteArray data;
+    switch(fc)
+    {
+        case QModbusPdu::ReadCoils:
+        case QModbusPdu::ReadDiscreteInputs:
+        case QModbusPdu::ReadInputRegisters:
+        case QModbusPdu::ReadHoldingRegisters:
+            data = QByteArray("\x00\x01\x00\x02", 4);
+        break;
+
+        default: break;
+    }
+
+    ui->sendData->blockSignals(true);
+    ui->sendData->setValue(data);
+    ui->sendData->blockSignals(false);
+
     updateRequestInfo();
 }
 
@@ -160,6 +178,7 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
     {
         ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::HexMode);
         ui->sendData->setInputMode(ByteListTextEdit::HexMode);
+        ui->requestInfo->setDataDisplayMode(DataDisplayMode::Hex);
         ui->responseBuffer->setInputMode(ByteListTextEdit::HexMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::Hex);
     }
@@ -175,6 +194,7 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
     {
         ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::DecMode);
         ui->sendData->setInputMode(ByteListTextEdit::DecMode);
+        ui->requestInfo->setDataDisplayMode(DataDisplayMode::UInt16);
         ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::UInt16);
     }

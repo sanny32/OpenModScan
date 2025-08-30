@@ -1280,9 +1280,13 @@ single-point  write functions 05 and 06.)</source>
 <context>
     <name>DialogUserMsg</name>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="14"/>
         <source>User Defined Command String</source>
-        <translation>Пользовательская команда</translation>
+        <translation type="vanished">Пользовательская команда</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="14"/>
+        <source>User Defined Command</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="27"/>
@@ -1339,7 +1343,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Отправить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="107"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="125"/>
         <source>No connection to device</source>
         <translation>Нет подключения к устройству</translation>
     </message>
@@ -2150,12 +2154,12 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="320"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="321"/>
         <source>Copy Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="321"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="322"/>
         <source>Copy Bytes</source>
         <translation type="unfinished"></translation>
     </message>

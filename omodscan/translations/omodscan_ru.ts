@@ -1339,7 +1339,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Отправить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="110"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="107"/>
         <source>No connection to device</source>
         <translation>Нет подключения к устройству</translation>
     </message>

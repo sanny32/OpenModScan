@@ -1,5 +1,6 @@
 #include <QRegularExpressionValidator>
 #include <QMimeData>
+#include "fontutils.h"
 #include "formatutils.h"
 #include "bytelisttextedit.h"
 
@@ -31,6 +32,7 @@ ByteListTextEdit::ByteListTextEdit(QWidget* parent)
     ,_validator(nullptr)
 {
     setInputMode(DecMode);
+    setFont(defaultMonospaceFont());
     connect(this, &QPlainTextEdit::textChanged, this, &ByteListTextEdit::on_textChanged);
 }
 
@@ -45,6 +47,7 @@ ByteListTextEdit::ByteListTextEdit(InputMode mode, QWidget *parent)
     ,_validator(nullptr)
 {
     setInputMode(mode);
+    setFont(defaultMonospaceFont());
     connect(this, &QPlainTextEdit::textChanged, this, &ByteListTextEdit::on_textChanged);
 }
 

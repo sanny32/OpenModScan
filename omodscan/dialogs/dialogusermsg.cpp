@@ -26,9 +26,6 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->sendData->setFont(defaultMonospaceFont());
-    ui->responseBuffer->setFont(defaultMonospaceFont());
-
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveAddress->setValue(slaveAddress);
     ui->comboBoxFunction->addItems(ModbusFunction::validCodes());

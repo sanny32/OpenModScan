@@ -26,6 +26,7 @@ private slots:
     void on_lineEditSlaveAddress_valueChanged(const QVariant&);
     void on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode);
     void on_sendData_valueChanged(const QByteArray&);
+    void on_pushButtonGenerate_clicked();
     void on_modbusReply(QModbusReply* reply);
     void on_radioButtonHex_clicked(bool checked);
     void on_radioButtonDecimal_clicked(bool checked);

@@ -84,67 +84,72 @@ void DialogUserMsg::on_lineEditSlaveAddress_valueChanged(const QVariant&)
 ///
 void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode fc)
 {
-    QByteArray data;
-    switch(fc)
-    {
-        case QModbusPdu::Invalid:
-        case QModbusPdu::UndefinedFunctionCode:
-        case QModbusPdu::GetCommEventCounter:
-        case QModbusPdu::GetCommEventLog:
-        case QModbusPdu::ReadExceptionStatus:
-        case QModbusPdu::ReportServerId:
-        break;
+    ui->sendData->setValue(QByteArray());
+    updateRequestInfo();
+}
 
+///
+/// \brief DialogUserMsg::on_pushButtonGenerate_clicked
+///
+void DialogUserMsg::on_pushButtonGenerate_clicked()
+{
+
+    QByteArray data;
+    switch(ui->comboBoxFunction->currentFunctionCode())
+    {
         case QModbusPdu::ReadCoils:
         case QModbusPdu::ReadDiscreteInputs:
         case QModbusPdu::ReadInputRegisters:
         case QModbusPdu::ReadHoldingRegisters:
             data = QByteArray("\x00\x01\x00\x02", 4);
-        break;
+            break;
 
         case QModbusPdu::WriteSingleCoil:
             data = QByteArray("\x00\x02\xFF\x00", 4);
-        break;
+            break;
 
         case QModbusPdu::WriteSingleRegister:
             data = QByteArray("\x00\x01\x00\x03", 4);
-        break;
+            break;
 
         case QModbusPdu::Diagnostics:
             data = QByteArray("\x00\x02\x00\x00", 4);
-        break;
+            break;
 
         case QModbusPdu::WriteMultipleCoils:
             data = QByteArray("\x00\x01\x00\x03\x01\x07", 6);
-        break;
+            break;
 
         case QModbusPdu::WriteMultipleRegisters:
             data = QByteArray("\x00\x01\x00\x03\x06\xF8\xB7\xEF\x7E\xDB\x72", 11);
-        break;
+            break;
 
         case QModbusPdu::ReadFileRecord:
             data = QByteArray("\x07\x06\x00\x01\x00\x00\x00\x02", 8);
-        break;
+            break;
 
         case QModbusPdu::WriteFileRecord:
             data = QByteArray("\x0B\x06\x00\x01\x00\x00\x00\x02\x00\x0A\x00\x0B", 12);
-        break;
+            break;
 
         case QModbusPdu::MaskWriteRegister:
             data = QByteArray("\x00\x02\xFF\xFF\x00\x00", 6);
-        break;
+            break;
 
         case QModbusPdu::ReadWriteMultipleRegisters:
             data = QByteArray("\x00\x64\x00\x02\x00\xC8\x00\x02\x04\x00\x0A\x00\x0B", 13);
-        break;
+            break;
 
         case QModbusPdu::ReadFifoQueue:
             data = QByteArray("\x00\x0A", 2);
-        break;
+            break;
 
         case QModbusPdu::EncapsulatedInterfaceTransport:
             data = QByteArray("\x0E\x01\x00", 3);
-        break;
+            break;
+
+        default:
+            break;
     }
 
     ui->sendData->blockSignals(true);

@@ -1324,7 +1324,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>Данные запроса: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="175"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="190"/>
+        <source>Make Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="177"/>
         <source>Enter bytes value separated by spaces</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1333,17 +1338,17 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Введите значение в байтах, разделенное пробелами</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="201"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="218"/>
         <source>Response Buffer</source>
         <translation>Ответ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="281"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="298"/>
         <source>Send</source>
         <translation>Отправить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="175"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="180"/>
         <source>No connection to device</source>
         <translation>Нет подключения к устройству</translation>
     </message>

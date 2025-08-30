@@ -1331,7 +1331,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>傳送數據： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="175"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="190"/>
+        <source>Make Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="177"/>
         <source>Enter bytes value separated by spaces</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1340,17 +1345,17 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">輸入位元組值，值之間用空格分隔</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="201"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="218"/>
         <source>Response Buffer</source>
         <translation>回應緩衝區</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="281"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="298"/>
         <source>Send</source>
         <translation>傳送</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="175"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="180"/>
         <source>No connection to device</source>
         <translation>無法連繫到裝置</translation>
     </message>

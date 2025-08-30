@@ -94,6 +94,14 @@ void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::Function
             data = QByteArray("\x00\x01\x00\x02", 4);
         break;
 
+        case QModbusPdu::WriteSingleCoil:
+            data = QByteArray("\x00\x02\xFF\x00", 4);
+        break;
+
+        case QModbusPdu::WriteSingleRegister:
+            data = QByteArray("\x00\x01\x00\x03", 4);
+        break;
+
         default: break;
     }
 

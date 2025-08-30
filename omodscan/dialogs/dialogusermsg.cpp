@@ -102,6 +102,22 @@ void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::Function
             data = QByteArray("\x00\x01\x00\x03", 4);
         break;
 
+        case QModbusPdu::Diagnostics:
+            data = QByteArray("\x00\x02\x00\x00", 4);
+        break;
+
+        case QModbusPdu::WriteMultipleCoils:
+            data = QByteArray("\x00\x01\x00\x03\x01\x07", 6);
+        break;
+
+        case QModbusPdu::WriteMultipleRegisters:
+            data = QByteArray("\x00\x01\x00\x03\x06\xF8\xB7\xEF\x7E\xDB\x72", 11);
+        break;
+
+        case QModbusPdu::MaskWriteRegister:
+            data = QByteArray("\x00\x02\xFF\xFF\x00\x00", 6);
+        break;
+
         default: break;
     }
 

@@ -1350,7 +1350,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>发送</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="133"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="149"/>
         <source>No connection to device</source>
         <translation>无法连接到设备</translation>
     </message>
@@ -2404,7 +2404,6 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="325"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="333"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="423"/>
         <source>Output Value</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2471,6 +2470,11 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="421"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="431"/>
         <source>Quantity of Outputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="423"/>
+        <source>Outputs Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -87,6 +87,14 @@ void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::Function
     QByteArray data;
     switch(fc)
     {
+        case QModbusPdu::Invalid:
+        case QModbusPdu::UndefinedFunctionCode:
+        case QModbusPdu::GetCommEventCounter:
+        case QModbusPdu::GetCommEventLog:
+        case QModbusPdu::ReadExceptionStatus:
+        case QModbusPdu::ReportServerId:
+        break;
+
         case QModbusPdu::ReadCoils:
         case QModbusPdu::ReadDiscreteInputs:
         case QModbusPdu::ReadInputRegisters:
@@ -114,11 +122,29 @@ void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::Function
             data = QByteArray("\x00\x01\x00\x03\x06\xF8\xB7\xEF\x7E\xDB\x72", 11);
         break;
 
+        case QModbusPdu::ReadFileRecord:
+            data = QByteArray("\x07\x06\x00\x01\x00\x00\x00\x02", 8);
+        break;
+
+        case QModbusPdu::WriteFileRecord:
+            data = QByteArray("\x0B\x06\x00\x01\x00\x00\x00\x02\x00\x0A\x00\x0B", 12);
+        break;
+
         case QModbusPdu::MaskWriteRegister:
             data = QByteArray("\x00\x02\xFF\xFF\x00\x00", 6);
         break;
 
-        default: break;
+        case QModbusPdu::ReadWriteMultipleRegisters:
+            data = QByteArray("\x00\x64\x00\x02\x00\xC8\x00\x02\x04\x00\x0A\x00\x0B", 13);
+        break;
+
+        case QModbusPdu::ReadFifoQueue:
+            data = QByteArray("\x00\x0A", 2);
+        break;
+
+        case QModbusPdu::EncapsulatedInterfaceTransport:
+            data = QByteArray("\x0E\x01\x00", 3);
+        break;
     }
 
     ui->sendData->blockSignals(true);

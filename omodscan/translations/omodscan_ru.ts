@@ -1343,7 +1343,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Отправить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="149"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="175"/>
         <source>No connection to device</source>
         <translation>Нет подключения к устройству</translation>
     </message>
@@ -2425,7 +2425,7 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="484"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="495"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="503"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="579"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="580"/>
         <source>Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2556,12 +2556,12 @@ Valid Slave Responses: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="595"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="596"/>
         <source>Copy Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="606"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="607"/>
         <source>Copy Values</source>
         <translation type="unfinished"></translation>
     </message>

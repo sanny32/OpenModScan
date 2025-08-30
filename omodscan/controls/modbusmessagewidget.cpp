@@ -576,7 +576,8 @@ void ModbusMessageWidget::update()
         default:
         {
             const auto data = _mm->isValid() ? formatUInt8Array(_dataDisplayMode, _mm->adu()->pdu().data()) : "???";
-            if(!data.isEmpty()) addField(tr("Data"), data, dataColor);
+            if(!data.isEmpty())
+                addField(tr("Data"), data, dataColor);
         }
         break;
     }

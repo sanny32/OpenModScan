@@ -727,7 +727,7 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const quint16 value = _modbusClient.readRegister(dd.PointType, _lastWriteSingleCoilAddress, dd.DeviceId);
+    const quint16 value = _modbusClient.readRegister(QModbusDataUnit::Coils, _lastWriteSingleCoilAddress, dd.DeviceId);
 
     ModbusSimulationParams simParams(SimulationMode::Disabled);
     ModbusWriteParams params = { dd.DeviceId, _lastWriteSingleCoilAddress, value, mode, byteOrder, codepage, dd.ZeroBasedAddress };
@@ -736,7 +736,7 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteSingleCoilAddress = params.Address;
-        _modbusClient.writeRegister(dd.PointType, params, frm->formId());
+        _modbusClient.writeRegister(QModbusDataUnit::Coils, params, frm->formId());
     }
 }
 
@@ -764,7 +764,7 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const quint16 value = _modbusClient.readRegister(dd.PointType, _lastWriteHoldingRegisterAddress, dd.DeviceId);
+    const quint16 value = _modbusClient.readRegister(QModbusDataUnit::HoldingRegisters, _lastWriteHoldingRegisterAddress, dd.DeviceId);
 
     ModbusSimulationParams simParams(SimulationMode::Disabled);
     ModbusWriteParams params = { dd.DeviceId, _lastWriteHoldingRegisterAddress, value, mode, byteOrder, codepage, dd.ZeroBasedAddress };
@@ -773,7 +773,7 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteHoldingRegisterAddress = params.Address;
-        _modbusClient.writeRegister(dd.PointType, params, frm->formId());
+        _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, frm->formId());
     }
 }
 

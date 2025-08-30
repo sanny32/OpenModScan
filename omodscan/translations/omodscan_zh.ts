@@ -1327,7 +1327,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>傳送數據： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="169"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="175"/>
         <source>Enter bytes value separated by spaces</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1336,12 +1336,12 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">輸入位元組值，值之間用空格分隔</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="192"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="201"/>
         <source>Response Buffer</source>
         <translation>回應緩衝區</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="272"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="281"/>
         <source>Send</source>
         <translation>傳送</translation>
     </message>
@@ -2109,12 +2109,12 @@ Valid Slave Responses: %2</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1208"/>
+        <location filename="../mainwindow.cpp" line="1209"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1209"/>
+        <location filename="../mainwindow.cpp" line="1210"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>

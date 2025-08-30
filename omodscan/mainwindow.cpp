@@ -934,8 +934,9 @@ void MainWindow::on_actionUserMsg_triggered()
         break;
     }
 
-    DialogUserMsg dlg(dd.DeviceId, func, mode, _modbusClient, this);
-    dlg.exec();
+    auto dlg = new DialogUserMsg(dd.DeviceId, func, mode, _modbusClient, this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
 }
 
 ///

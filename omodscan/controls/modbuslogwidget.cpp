@@ -52,7 +52,7 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
         case Qt::DisplayRole:
             return QString(R"(
                     <span style="color:#444444">%1</span>
-                    <span style="color:%2"><b>%3</b></span>
+                    <b style="color:%2">%3</b>
                     <span>%4</span>
                 )")
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),

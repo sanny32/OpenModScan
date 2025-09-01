@@ -2776,23 +2776,23 @@ Byte Order: %2</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="95"/>
-        <location filename="../controls/statisticwidget.cpp" line="99"/>
+        <location filename="../controls/statisticwidget.cpp" line="96"/>
+        <location filename="../controls/statisticwidget.cpp" line="100"/>
         <source>Pause Polling</source>
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="103"/>
+        <location filename="../controls/statisticwidget.cpp" line="104"/>
         <source>Resume Polling</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="136"/>
+        <location filename="../controls/statisticwidget.cpp" line="137"/>
         <source>Number of Polls: %1</source>
         <translation>Количество запросов: %1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="137"/>
+        <location filename="../controls/statisticwidget.cpp" line="138"/>
         <source>Valid Slave Responses: %1</source>
         <translation>Корректных ответов устройства: %1</translation>
     </message>

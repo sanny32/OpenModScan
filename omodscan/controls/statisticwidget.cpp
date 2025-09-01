@@ -31,6 +31,7 @@ void StatisticWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        setPollState(_pollState);
     }
 
     QWidget::changeEvent(event);

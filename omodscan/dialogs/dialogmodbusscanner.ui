@@ -470,11 +470,11 @@
        </item>
        <item>
         <widget class="QDialogButtonBox" name="buttonBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
          </property>
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
@@ -1037,14 +1037,14 @@ font-weight: bold;</string>
    <header>addressbasecombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>IpAddressLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>ipaddresslineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>FunctionCodeComboBox</class>
    <extends>QComboBox</extends>
    <header>functioncodecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>IpAddressLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>ipaddresslineedit.h</header>
   </customwidget>
   <customwidget>
    <class>FormattedSpinBox</class>

@@ -265,6 +265,12 @@
        </property>
        <item>
         <widget class="QPushButton" name="pushButtonScan">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
+         </property>
          <property name="text">
           <string>Scan</string>
          </property>
@@ -272,6 +278,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonExport">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
+         </property>
          <property name="text">
           <string>Export...</string>
          </property>
@@ -284,6 +296,12 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
          </property>
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -306,7 +324,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabTableView">
       <attribute name="title">
@@ -468,7 +486,29 @@
            <bool>true</bool>
           </property>
          </widget>
-         <widget class="ModbusMessageWidget" name="info"/>
+         <widget class="ModbusMessageWidget" name="info">
+          <property name="minimumSize">
+           <size>
+            <width>280</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::FocusPolicy::NoFocus</enum>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
         </widget>
        </item>
        <item>
@@ -546,6 +586,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ModbusMessageWidget</class>
+   <extends>QListWidget</extends>
+   <header>modbusmessagewidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
    <header>numericlineedit.h</header>
@@ -559,11 +604,6 @@
    <class>AddressBaseComboBox</class>
    <extends>QComboBox</extends>
    <header>addressbasecombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ModbusMessageWidget</class>
-   <extends>QListWidget</extends>
-   <header>modbusmessagewidget.h</header>
   </customwidget>
   <customwidget>
    <class>ByteOrderComboBox</class>

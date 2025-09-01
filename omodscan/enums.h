@@ -199,5 +199,15 @@ enum class SimulationMode
 };
 Q_DECLARE_METATYPE(SimulationMode);
 
+///
+/// \brief The PollState enum
+///
+enum PollState {
+    Off,
+    Running,
+    Paused
+};
+Q_DECLARE_METATYPE(PollState);
+
 
 #endif // ENUMS_H

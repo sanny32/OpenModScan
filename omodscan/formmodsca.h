@@ -6,6 +6,7 @@
 #include <QPrinter>
 #include <QVersionNumber>
 #include "enums.h"
+#include "fontutils.h"
 #include "modbusclient.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
@@ -93,6 +94,9 @@ public:
     uint numberOfPolls() const;
     uint validSlaveResposes() const;
 
+    PollState pollState() const;
+    void setPollState(PollState state);
+
 public slots:
     void show();
 
@@ -154,6 +158,7 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
 {
     if(!frm) return out;
 
+    out.setValue("FormVersion", FormModSca::VERSION.toString());
     out.setValue("Font", frm->font());
     out.setValue("ForegroundColor", frm->foregroundColor());
     out.setValue("BackgroundColor", frm->backgroundColor());
@@ -186,6 +191,9 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
 {
     if(!frm) return in;
 
+    QVersionNumber version;
+    version = QVersionNumber::fromString(in.value("FormVersion").toString());
+
     DisplayMode displayMode;
     in >> displayMode;
 
@@ -204,12 +212,14 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     QSize wndSize;
     wndSize = in.value("ViewSize").toSize();
 
-    auto wnd = frm->parentWidget();
-    frm->setFont(in.value("Font", wnd->font()).value<QFont>());
-    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::lightGray)).value<QColor>());
-    frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+    if(version.isNull() || version >= FormModSca::VERSION) {
+        frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
+        frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
+        frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+        frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+    }
 
+    auto wnd = frm->parentWidget();
     wnd->resize(wndSize);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 

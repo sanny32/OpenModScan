@@ -65,11 +65,19 @@ public:
     bool autoscroll() const;
     void setAutoscroll(bool on);
 
+    QColor backgroundColor() const;
+    void setBackGroundColor(const QColor& clr);
+
 protected:
     void changeEvent(QEvent* event) override;
 
+private slots:
+    void on_customContextMenuRequested(const QPoint &pos);
+
 private:
     bool _autoscroll;
+    QAction* _copyAct;
+    QAction* _copyBytesAct;
     DataDisplayMode _dataDisplayMode;
 };
 

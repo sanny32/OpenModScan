@@ -31,6 +31,7 @@ void StatisticWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        setPollState(_pollState);
     }
 
     QWidget::changeEvent(event);
@@ -73,12 +74,59 @@ void StatisticWidget::resetCtrs()
 }
 
 ///
+/// \brief StatisticWidget::pollState
+/// \return
+///
+PollState StatisticWidget::pollState() const
+{
+    return _pollState;
+}
+
+///
+/// \brief StatisticWidget::setPollState
+/// \param state
+///
+void StatisticWidget::setPollState(PollState state)
+{
+    _pollState = state;
+    switch (state)
+    {
+        case Off:
+            ui->pushButtonPause->setEnabled(false);
+            ui->pushButtonPause->setText(tr("Pause Polling"));
+        break;
+        case Running:
+            ui->pushButtonPause->setEnabled(true);
+            ui->pushButtonPause->setText(tr("Pause Polling"));
+        break;
+        case Paused:
+            ui->pushButtonPause->setEnabled(true);
+            ui->pushButtonPause->setText(tr("Resume Polling"));
+        break;
+    }
+}
+
+///
 /// \brief StatisticWidget::on_pushButtonResetCtrs_clicked
 ///
 void StatisticWidget::on_pushButtonResetCtrs_clicked()
 {
     resetCtrs();
     emit ctrsReseted();
+}
+
+///
+/// \brief StatisticWidget::on_pushButtonPause_clicked
+///
+void StatisticWidget::on_pushButtonPause_clicked()
+{
+    switch (_pollState) {
+    case Off: break;
+    case Running: setPollState(Paused); break;
+    case Paused: setPollState(Running); break;
+    }
+
+    emit pollStateChanged(pollState());
 }
 
 ///

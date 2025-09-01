@@ -1,6 +1,7 @@
 #include <QtCore>
 #include <QtWidgets>
 #include <QtPrintSupport>
+#include "fontutils.h"
 #include "modbuslimits.h"
 #include "dialogaddressscan.h"
 #include "ui_dialogaddressscan.h"
@@ -358,6 +359,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
     ui->comboBoxByteOrder->setCurrentByteOrder(order);
     ui->info->setShowTimestamp(false);
+    ui->logView->setFont(defaultMonospaceFont());
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>203</width>
-    <height>204</height>
+    <height>218</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -192,6 +192,12 @@
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>26</height>
+      </size>
+     </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
@@ -201,7 +207,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <layout class="QHBoxLayout" name="horizontalLayoutSimulation">
      <item>
       <spacer name="horizontalSpacer_7">
        <property name="orientation">
@@ -220,6 +226,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonSimulation">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="text">
         <string>Auto Simulation</string>
        </property>

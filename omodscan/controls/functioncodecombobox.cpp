@@ -35,11 +35,14 @@ QModbusPdu::FunctionCode FunctionCodeComboBox::currentFunctionCode() const
 ///
 void FunctionCodeComboBox::setCurrentFunctionCode(QModbusPdu::FunctionCode funcCode)
 {
-    _currentFunc = funcCode;
+    if(funcCode != _currentFunc)
+    {
+        _currentFunc = funcCode;
 
-    const auto idx = findData(funcCode);
-    if(idx != -1) setCurrentIndex(idx);
-    else setCurrentText(formatFuncCode(funcCode));
+        const auto idx = findData(funcCode);
+        if(idx != -1) setCurrentIndex(idx);
+        else setCurrentText(formatFuncCode(funcCode));
+    }
 }
 
 ///
@@ -162,10 +165,11 @@ void FunctionCodeComboBox::on_currentIndexChanged(int index)
 ///
 void FunctionCodeComboBox::on_currentTextChanged(const QString& text)
 {
+    QModbusPdu::FunctionCode funcCode;
     const auto idx = findData(text, Qt::DisplayRole);
     if(idx != -1)
     {
-        _currentFunc = itemData(idx).value<QModbusPdu::FunctionCode>();
+        funcCode = itemData(idx).value<QModbusPdu::FunctionCode>();
     }
     else
     {
@@ -183,7 +187,12 @@ void FunctionCodeComboBox::on_currentTextChanged(const QString& text)
             break;
         }
 
-        _currentFunc = ok ? (QModbusPdu::FunctionCode)func : QModbusPdu::Invalid;
+        funcCode = ok ? (QModbusPdu::FunctionCode)func : QModbusPdu::Invalid;
+    }
+
+    if(funcCode != _currentFunc) {
+        _currentFunc = funcCode;
+        emit functionCodeChanged(_currentFunc);
     }
 }
 

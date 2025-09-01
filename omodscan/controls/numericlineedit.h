@@ -49,7 +49,7 @@ public:
     {
         _minValue = QVariant::fromValue<T>(bottom);
         _maxValue = QVariant::fromValue<T>(top);
-        emit rangeChanged(_minValue, _maxValue);
+        on_rangeChanged(_minValue, _maxValue);
     }
 
     InputMode inputMode() const;

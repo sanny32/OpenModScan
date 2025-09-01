@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QTextStream>
 #include <QInputDialog>
+#include "fontutils.h"
 #include "formatutils.h"
 #include "outputwidget.h"
 #include "modbusmessages.h"
@@ -194,6 +195,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto byteOrder = _parentWidget->byteOrder();
     const auto codepage = _parentWidget->codepage();
+    const bool zeroBased = _parentWidget->_displayDefinition.ZeroBasedAddress;
 
     for(int i = 0; i < rowCount(); i++)
     {
@@ -299,10 +301,11 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 ///
 QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    if(_parentWidget->_displayDefinition.PointType != type)
+    const auto dd = _parentWidget->_displayDefinition;
+
+    if(dd.PointType != type)
         return QModelIndex();
 
-    const auto dd =  _parentWidget->_displayDefinition;
     const int row = addr - (dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
     if(row >= 0 && row < rowCount())
         return index(row);
@@ -328,18 +331,22 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->listView->setModel(_listModel.get());
     ui->labelStatus->setAutoFillBackground(true);
 
+    setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
     setForegroundColor(Qt::black);
-    setBackgroundColor(Qt::lightGray);
+    setBackgroundColor(Qt::white);
 
     setStatusColor(Qt::red);
     setUninitializedStatus();
 
+    hideModbusMessage();
+
     connect(ui->logView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
-            this, [&](const QItemSelection& sel) {
-                if(!sel.indexes().isEmpty())
+            this, [this](const QItemSelection& sel) {
+                if(!sel.indexes().isEmpty()) {
                     showModbusMessage(sel.indexes().first());
+                }
             });
 }
 
@@ -388,6 +395,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolTyp
 
     setProtocol(protocol);
     setLogViewLimit(dd.LogViewLimit);
+    setAutosctollLogView(dd.AutoscrollLog);
 
     _listModel->clear();
 
@@ -550,11 +558,31 @@ void OutputWidget::setLogViewLimit(int l)
 }
 
 ///
+/// \brief OutputWidget::autoscrollLogView
+/// \return
+///
+bool OutputWidget::autoscrollLogView() const
+{
+    return ui->logView->autoscroll();
+}
+
+///
+/// \brief OutputWidget::setAutosctollLogView
+/// \param on
+///
+void OutputWidget::setAutosctollLogView(bool on)
+{
+    ui->logView->setAutoscroll(on);
+}
+
+///
 /// \brief OutputWidget::clearLogView
 ///
 void OutputWidget::clearLogView()
 {
     ui->logView->clear();
+    ui->modbusMsg->clear();
+    hideModbusMessage();
 }
 
 ///
@@ -894,7 +922,22 @@ void OutputWidget::captureString(const QString& s)
 void OutputWidget::showModbusMessage(const QModelIndex& index)
 {
     const auto msg = ui->logView->itemAt(index);
-    ui->modbusMsg->setModbusMessage(msg);
+    if(msg) {
+        if(ui->splitter->widget(1)->isHidden()) {
+            ui->splitter->setSizes({1, 1});
+            ui->splitter->widget(1)->show();
+        }
+        ui->modbusMsg->setModbusMessage(msg);
+    }
+}
+
+///
+/// \brief OutputWidget::hideModbusMessage
+///
+void OutputWidget::hideModbusMessage()
+{
+    ui->splitter->setSizes({1, 0});
+    ui->splitter->widget(1)->hide();
 }
 
 ///

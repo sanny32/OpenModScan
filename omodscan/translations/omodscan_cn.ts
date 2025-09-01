@@ -151,37 +151,37 @@
 <context>
     <name>CsvExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1183"/>
         <source>Device Id</source>
         <translation>设备地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1183"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1183"/>
         <source>Length</source>
         <translation>长度</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1183"/>
         <source>Point Type</source>
         <translation>寄存器类型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1183"/>
         <source>Registers on Query</source>
         <translation>查询中的寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1183"/>
         <source>Address Base</source>
         <translation>基地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1181"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1183"/>
         <source>Byte Order</source>
         <translation>字节序</translation>
     </message>
@@ -282,58 +282,58 @@
         <translation>设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="269"/>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="405"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="407"/>
         <source>Scan</source>
         <translation>扫描</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="276"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="288"/>
         <source>Export...</source>
         <translation>导出...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="313"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="331"/>
         <source>Table View</source>
         <translation>主窗口</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="377"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="395"/>
         <source>Find Next</source>
         <translation>查找下一个</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="397"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="415"/>
         <source>Hex View</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="411"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="429"/>
         <source>Byte Order: </source>
         <translation>字节序： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="434"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="452"/>
         <source>Log View</source>
         <translation>日志</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.ui" line="479"/>
+        <location filename="../dialogs/dialogaddressscan.ui" line="519"/>
         <source>Show Only Valid Responses</source>
         <translation>仅显示有效响应</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="405"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="407"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="590"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="592"/>
         <source>Pdf files (*.pdf);;CSV files (*.csv)</source>
         <translation>Pdf 文件 (*.pdf);;CSV 文件 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="667"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="669"/>
         <source>No connection to MODBUS device!</source>
         <translation>没有连接到 MODBUS 设备！</translation>
     </message>
@@ -398,7 +398,7 @@
         <translation>请输入启动时加载的配置文件路径：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautostart.ui" line="60"/>
+        <location filename="../dialogs/dialogautostart.ui" line="66"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
@@ -456,7 +456,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="206"/>
         <source>Direct Connection to Serial Port</source>
-        <translation type="unfinished"></translation>
+        <translation>直接连接到串行端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="75"/>
@@ -466,7 +466,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
         <source>Serial Port:</source>
-        <translation type="unfinished"></translation>
+        <translation>端口：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
@@ -532,7 +532,7 @@
         <translation>显示设置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="40"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="37"/>
         <source>Scan Rate: </source>
         <translation>扫描频率： </translation>
     </message>
@@ -542,42 +542,53 @@
         <translation>（毫秒）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="80"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="95"/>
+        <source>Log View</source>
+        <translation>日志</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="110"/>
         <source>Log View Limit:</source>
         <translation>日志视图：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="111"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="144"/>
         <source>(rows)</source>
         <translation>（行）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="128"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="166"/>
+        <source>Autoscroll Log View</source>
+        <translatorcomment>自动滚动日志视图</translatorcomment>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="182"/>
         <source>Modbus Data</source>
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="143"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="197"/>
         <source>Slave Address:</source>
         <translation>从设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="217"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="271"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="269"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="323"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="188"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="242"/>
         <source>Point Address:</source>
         <translation>寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="240"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="294"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
@@ -591,7 +602,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <source>15: WRITE MULTIPLE COILS</source>
-        <translation type="unfinished"></translation>
+        <translation>15: 写入多个线圈</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="43"/>
@@ -668,7 +679,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
         <source>16: WRITE MULTIPLE REGISTERS</source>
-        <translation type="unfinished"></translation>
+        <translation>16: 写入多个寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="63"/>
@@ -700,7 +711,7 @@
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="14"/>
         <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>22: 掩码写寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="38"/>
@@ -1047,7 +1058,7 @@
         <translation>请输入以空格分隔的字节值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="191"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="197"/>
         <source>Parse</source>
         <translation>解析</translation>
     </message>
@@ -1269,17 +1280,31 @@ single-point  write functions 05 and 06.)</source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="98"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="104"/>
         <source>Number of Points: </source>
         <translation>点数： </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="28"/>
+        <source>15: WRITE MULTIPLE COILS</source>
+        <translation>15: 写入多个线圈</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="32"/>
+        <source>16: WRITE MULTIPLE REGISTERS</source>
+        <translation>16: 写入多个寄存器</translation>
     </message>
 </context>
 <context>
     <name>DialogUserMsg</name>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="14"/>
         <source>User Defined Command String</source>
-        <translation>用户定义的命令字符串</translation>
+        <translation type="vanished">用户定义的命令字符串</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="14"/>
+        <source>User Defined Command</source>
+        <translation>用户定义消息</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="27"/>
@@ -1307,27 +1332,41 @@ single-point  write functions 05 and 06.)</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="140"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="138"/>
+        <source>Request</source>
+        <translation>请求</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="144"/>
         <source>Send Data: </source>
         <translation>发送数据： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="165"/>
-        <source>Enter bytes value  separated by spaces</source>
+        <location filename="../dialogs/dialogusermsg.ui" line="190"/>
+        <source>Make Data</source>
+        <translation>制作数据</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="177"/>
+        <source>Enter bytes value separated by spaces</source>
         <translation>输入字节值，值之间用空格分隔</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="174"/>
+        <source>Enter bytes value  separated by spaces</source>
+        <translation type="vanished">输入字节值，值之间用空格分隔</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogusermsg.ui" line="218"/>
         <source>Response Buffer</source>
         <translation>响应缓冲区</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="242"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="298"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.cpp" line="81"/>
+        <location filename="../dialogs/dialogusermsg.cpp" line="196"/>
         <source>No connection to device</source>
         <translation>无法连接到设备</translation>
     </message>
@@ -1340,17 +1379,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>窗口</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="29"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="35"/>
         <source>Activate</source>
         <translation>启用</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="36"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="48"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwindowsmanager.ui" line="43"/>
+        <location filename="../dialogs/dialogwindowsmanager.ui" line="61"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -1364,7 +1403,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>05: 写入单线圈</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="38"/>
@@ -1392,7 +1431,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>开</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="224"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="236"/>
         <source>Auto Simulation</source>
         <translation>自动仿真</translation>
     </message>
@@ -1406,7 +1445,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>06: 写入保持寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="35"/>
@@ -1424,17 +1463,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>值： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="174"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="186"/>
         <source>Auto Simulation</source>
         <translation>自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="66"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="70"/>
         <source>Value, (HEX): </source>
         <translation>值（十六进制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="73"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="77"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1448,7 +1487,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="14"/>
         <source>06: Write Holding Register Bits</source>
-        <translation type="unfinished">06：写入保持寄存器位</translation>
+        <translation>06：写入保持寄存器位</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
@@ -1512,12 +1551,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>寄存器类型</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="167"/>
+        <location filename="../formmodsca.cpp" line="63"/>
+        <source>Device polling paused...</source>
+        <translation>设备轮询已暂停...</translation>
+    </message>
+    <message>
+        <location filename="../formmodsca.cpp" line="182"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="398"/>
+        <location filename="../formmodsca.cpp" line="413"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1526,7 +1570,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="402"/>
+        <location filename="../formmodsca.cpp" line="417"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1535,29 +1579,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="405"/>
+        <location filename="../formmodsca.cpp" line="420"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>轮询次数：%1
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="555"/>
+        <location filename="../formmodsca.cpp" line="590"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>没有扫描：指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="728"/>
+        <location filename="../formmodsca.cpp" line="767"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="534"/>
+        <location filename="../formmodsca.cpp" line="567"/>
         <source>No Responses from Slave Device</source>
         <translation>从设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="686"/>
+        <location filename="../formmodsca.cpp" line="724"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>
@@ -1817,7 +1861,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="599"/>
         <source>15: Write Multiple Coils</source>
-        <translation type="unfinished"></translation>
+        <translation>15: 写入多个线圈</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="608"/>
@@ -1827,7 +1871,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="611"/>
         <source>16: Write Multiple Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>16: 写入多个寄存器</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="620"/>
@@ -1837,7 +1881,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="623"/>
         <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>22: 掩码写寄存器</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="632"/>
@@ -1927,12 +1971,12 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>05: 写入单线圈</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="994"/>
         <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>06: 写入保持寄存器</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="587"/>
@@ -2085,12 +2129,12 @@ Valid Slave Responses: %2</source>
         <translation>所有文件(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1208"/>
+        <location filename="../mainwindow.cpp" line="1209"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1209"/>
+        <location filename="../mainwindow.cpp" line="1210"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>
@@ -2131,310 +2175,517 @@ Valid Slave Responses: %2</source>
     </message>
 </context>
 <context>
+    <name>ModbusLogWidget</name>
+    <message>
+        <location filename="../controls/modbuslogwidget.cpp" line="146"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="192"/>
+        <source>Copy Text</source>
+        <translation>复制文本</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbuslogwidget.cpp" line="161"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="193"/>
+        <source>Copy Bytes</source>
+        <translation>复制字节</translation>
+    </message>
+</context>
+<context>
     <name>ModbusMessageWidget</name>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="143"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="232"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS REQUEST ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** 无效的 Modbus 请求 ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="145"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="234"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS RESPONSE ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** 无效的 Modbus 响应 ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="155"/>
         <source>&lt;b&gt;Checksum:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;校验和：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;校验和：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="160"/>
         <source>&lt;b&gt;Checksum:&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt; (Expected: %2)</source>
-        <translation>&lt;b&gt;校验和：&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt;（期望值 %2）</translation>
+        <translation type="vanished">&lt;b&gt;校验和：&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt;（期望值 %2）</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="165"/>
         <source>&lt;b&gt;Type:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;类型：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;类型：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="165"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
         <source>Request (Tx)</source>
         <translation>请求（Tx）</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="165"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
         <source>Response (Rx)</source>
         <translation>响应（Rx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="166"/>
         <source>&lt;b&gt;Timestamp:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;时间戳：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;时间戳：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="174"/>
         <source>&lt;b&gt;Transaction ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;事务 ID：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;事务 ID：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="175"/>
         <source>&lt;b&gt;Protocol ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;协议 ID：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;协议 ID：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="176"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="206"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="225"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="244"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="263"/>
         <source>&lt;b&gt;Length:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;长度：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;长度：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="179"/>
         <source>&lt;b&gt;Device ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;设备地址：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;设备地址：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="184"/>
         <source>&lt;b&gt;Error Code:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;错误代码：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;错误代码：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="185"/>
         <source>&lt;b&gt;Exception Code:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;异常代码：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;异常代码：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="194"/>
         <source>&lt;b&gt;Function Code:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;功能码：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;功能码：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="195"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="289"/>
         <source>(0-based)</source>
         <translation>（基地址为 0）</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="205"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="224"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="243"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="262"/>
         <source>&lt;b&gt;Start Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;起始地址：&lt;/b&gt; %1 %2</translation>
+        <translation type="vanished">&lt;b&gt;起始地址：&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="281"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="289"/>
         <source>&lt;b&gt;Output Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;输出地址：&lt;/b&gt; %1 %2</translation>
+        <translation type="vanished">&lt;b&gt;输出地址：&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="300"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="308"/>
         <source>&lt;b&gt;Register Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;寄存器地址：&lt;/b&gt; %1 %2</translation>
+        <translation type="vanished">&lt;b&gt;寄存器地址：&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="377"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="387"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="410"/>
         <source>&lt;b&gt;Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;起始地址：&lt;/b&gt; %1 %2</translation>
+        <translation type="vanished">&lt;b&gt;起始地址：&lt;/b&gt; %1 %2</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Address:&lt;/b&gt; %1 %2</source>
+        <translation type="vanished">&lt;b&gt;地址：&lt;/b&gt; %1 %2</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Read Starting Address:&lt;/b&gt; %1 %2</source>
+        <translation type="vanished">&lt;b&gt;读起始地址：&lt;/b&gt; %1 %2</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Write Starting Address:&lt;/b&gt; %1 %2</source>
+        <translation type="vanished">&lt;b&gt;写起始地址：&lt;/b&gt; %1 %2</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;FIFO Point Address:&lt;/b&gt; %1 %2</source>
+        <translation type="vanished">&lt;b&gt;先进先出点地址：&lt;/b&gt; %1 %2</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Byte Count:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;字节计数：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
+        <source>Type</source>
+        <translation>类型</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="268"/>
+        <source>Transaction ID</source>
+        <translation>事务 ID</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="269"/>
+        <source>Protocol ID</source>
+        <translation>协议 ID</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Coil Status:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;线圈状态：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Input Status:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;输入状态：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Register Value:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;寄存器值：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Input Registers:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;寄存器输入：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="273"/>
+        <source>Device ID</source>
+        <translation>设备地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="278"/>
+        <source>Error Code</source>
+        <translation>错误代码</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <source>Exception Code</source>
+        <translation>异常代码</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="288"/>
+        <source>Function Code</source>
+        <translation>功能码</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="299"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="318"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="337"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="356"/>
+        <source>Start Address</source>
+        <translation>起始地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="270"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="300"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="319"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="338"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="357"/>
+        <source>Length</source>
+        <translation>长度</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="249"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="254"/>
+        <source>Checksum</source>
+        <translation>校验和</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="260"/>
+        <source>Time</source>
+        <translation>时间戳</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="307"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="326"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="345"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="364"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="455"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="473"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="496"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="515"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="526"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="534"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="603"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="621"/>
+        <source>Byte Count</source>
+        <translation>字节计数</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="308"/>
+        <source>Coil Status</source>
+        <translation>线圈状态</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="327"/>
+        <source>Input Status</source>
+        <translation>输入状态</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="346"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="395"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="403"/>
+        <source>Register Value</source>
+        <translation>寄存器值</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="365"/>
+        <source>Input Registers</source>
+        <translation>寄存器输入</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="375"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="383"/>
+        <source>Output Address</source>
+        <translation>输出地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="376"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="384"/>
+        <source>Output Value</source>
+        <translation>输出值</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="394"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="402"/>
+        <source>Register Address</source>
+        <translation>寄存器地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="412"/>
+        <source>Output Data</source>
+        <translation>输出数据</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="422"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="430"/>
+        <source>Sub-function</source>
+        <translation>子功能</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="423"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="431"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="516"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="527"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="535"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="546"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="554"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="631"/>
+        <source>Data</source>
+        <translation>数据</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="441"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="456"/>
+        <source>Status</source>
+        <translation>状态</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="442"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="457"/>
+        <source>Event Count</source>
+        <translation>事件计数</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="458"/>
+        <source>Message Count</source>
+        <translation>消息计数</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="459"/>
+        <source>Events</source>
+        <translation>事件</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="471"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="481"/>
-        <source>&lt;b&gt;Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="497"/>
-        <source>&lt;b&gt;Read Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;读起始地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="499"/>
-        <source>&lt;b&gt;Write Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;写起始地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="519"/>
-        <source>&lt;b&gt;FIFO Point Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;先进先出点地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="213"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="232"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="251"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="270"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="361"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="379"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="402"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="421"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="432"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="440"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="509"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="527"/>
-        <source>&lt;b&gt;Byte Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;字节计数：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="214"/>
-        <source>&lt;b&gt;Coil Status:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;线圈状态：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="233"/>
-        <source>&lt;b&gt;Input Status:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;输入状态：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="252"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="301"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="309"/>
-        <source>&lt;b&gt;Register Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;寄存器值：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="271"/>
-        <source>&lt;b&gt;Input Registers:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;寄存器输入：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="282"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="290"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="380"/>
-        <source>&lt;b&gt;Output Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;输出值：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="318"/>
-        <source>&lt;b&gt;Output Data:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;输出数据：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="328"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="336"/>
-        <source>&lt;b&gt;Sub-function:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;子功能：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="329"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="337"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="422"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="433"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="441"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="452"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="460"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="536"/>
-        <source>&lt;b&gt;Data:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;数据：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="347"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
-        <source>&lt;b&gt;Status:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;状态：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="348"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="363"/>
-        <source>&lt;b&gt;Event Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;事件计数：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="364"/>
-        <source>&lt;b&gt;Message Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;消息计数：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="365"/>
-        <source>&lt;b&gt;Events:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;事件：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="378"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="388"/>
-        <source>&lt;b&gt;Quantity of Outputs:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;输出数量：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="401"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="411"/>
-        <source>&lt;b&gt;Quantity of Registers:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;寄存器数量：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="403"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
-        <source>&lt;b&gt;Registers Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;寄存器值：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="451"/>
-        <source>&lt;b&gt;Request Data Length:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;请求数据长度：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="459"/>
-        <source>&lt;b&gt;Response Data Length:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;响应数据长度：&lt;/b&gt; %1</translation>
+        <location filename="../controls/modbusmessagewidget.cpp" line="494"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="504"/>
+        <source>Starting Address</source>
+        <translation>起始地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="472"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="482"/>
+        <source>Quantity of Outputs</source>
+        <translation>输出数量</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="474"/>
+        <source>Outputs Value</source>
+        <translation>输出值</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="495"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="505"/>
+        <source>Quantity of Registers</source>
+        <translation>寄存器数量</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="497"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="604"/>
+        <source>Registers Value</source>
+        <translation>寄存器值</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="545"/>
+        <source>Request Data Length</source>
+        <translation>请求数据长度</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="553"/>
+        <source>Response Data Length</source>
+        <translation>响应数据长度</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="565"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="575"/>
+        <source>Address</source>
+        <translation>地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="566"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="576"/>
+        <source>And Mask</source>
+        <translation>与掩码</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="567"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="577"/>
+        <source>Or Mask</source>
+        <translation>或掩码</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="591"/>
+        <source>Read Starting Address</source>
+        <translation>读起始地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="592"/>
+        <source>Quantity to Read</source>
+        <translation>读取数量</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="593"/>
+        <source>Write Starting Address</source>
+        <translation>写起始地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="594"/>
+        <source>Quantity to Write</source>
+        <translation>写入数量</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="595"/>
+        <source>Write Byte Count</source>
+        <translation>字节计数</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="596"/>
+        <source>Write Registers Value</source>
+        <translation>写入寄存器值</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="613"/>
+        <source>FIFO Point Address</source>
+        <translation>先进先出点地址</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="622"/>
+        <source>FIFO Count</source>
+        <translation>先进先出队列计数</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="623"/>
+        <source>FIFO Value Register</source>
+        <translation>先进先出队列值寄存器</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="37"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="93"/>
+        <source>Copy Text</source>
+        <translation>复制文本</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="53"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="94"/>
+        <source>Copy Values</source>
+        <translation>复制值</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Output Value:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;输出值：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Output Data:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;输出数据：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Sub-function:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;子功能：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Data:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;数据：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Status:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;状态：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Event Count:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;事件计数：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Message Count:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;消息计数：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Events:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;事件：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Quantity of Outputs:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;输出数量：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Quantity of Registers:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;寄存器数量：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Registers Value:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;寄存器值：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Request Data Length:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;请求数据长度：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Response Data Length:&lt;/b&gt; %1</source>
+        <translation type="vanished">&lt;b&gt;响应数据长度：&lt;/b&gt; %1</translation>
+    </message>
+    <message>
         <source>&lt;b&gt;And Mask:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;与掩码：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;与掩码：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="473"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="483"/>
         <source>&lt;b&gt;Or Mask:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;或掩码：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;或掩码：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="498"/>
         <source>&lt;b&gt;Quantity to Read:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;读取数量：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;读取数量：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
         <source>&lt;b&gt;Quantity to Write:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;写入数量：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;写入数量：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
         <source>&lt;b&gt;Write Byte Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;写入字节计数：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;写入字节计数：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
         <source>&lt;b&gt;Write Registers Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;写入寄存器值：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;写入寄存器值：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="528"/>
         <source>&lt;b&gt;FIFO Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;先进先出队列计数：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;先进先出队列计数：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="529"/>
         <source>&lt;b&gt;FIFO Value Register:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;先进先出队列值寄存器：&lt;/b&gt; %1</translation>
+        <translation type="vanished">&lt;b&gt;先进先出队列值寄存器：&lt;/b&gt; %1</translation>
     </message>
 </context>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="808"/>
+        <location filename="../controls/outputwidget.cpp" line="836"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="874"/>
+        <location filename="../controls/outputwidget.cpp" line="902"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>
@@ -2460,26 +2711,26 @@ Valid Slave Responses: %2</source>
 <context>
     <name>PdfExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="948"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="950"/>
         <source>Error. Failed to write PDF file!</source>
         <translation>错误：保存为PDF失败！</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1001"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1003"/>
         <source>Address Base: %1
 Start Address: %2</source>
         <translation>基地址：%1
 起始地址：%2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1004"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1006"/>
         <source>Device Id: %1		Length: %2
 Point Type: [%3]</source>
         <translation>设备地址%1		长度%2
 寄存器类型：[%3]</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1007"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1009"/>
         <source>Registers on Query: %1
 Byte Order: %2</source>
         <translation>请求中的寄存器：%1
@@ -2513,27 +2764,43 @@ Byte Order: %2</source>
 <context>
     <name>StatisticWidget</name>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="41"/>
+        <location filename="../controls/statisticwidget.ui" line="44"/>
         <source>Number of Polls: 0</source>
         <translation>轮询次数：0</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="48"/>
+        <location filename="../controls/statisticwidget.ui" line="51"/>
         <source>Valid Slave Responses: 0</source>
         <translation>有效的从站响应：0</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="70"/>
+        <location filename="../controls/statisticwidget.ui" line="75"/>
         <source>Reset Ctrs</source>
         <translation>重置计数器</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="89"/>
+        <location filename="../controls/statisticwidget.ui" line="97"/>
+        <source>Pause</source>
+        <translation>暂停</translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="96"/>
+        <location filename="../controls/statisticwidget.cpp" line="100"/>
+        <source>Pause Polling</source>
+        <translation>暂停投票</translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="104"/>
+        <source>Resume Polling</source>
+        <translation>恢复投票</translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="137"/>
         <source>Number of Polls: %1</source>
         <translation>轮询次数：%1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="90"/>
+        <location filename="../controls/statisticwidget.cpp" line="138"/>
         <source>Valid Slave Responses: %1</source>
         <translation>有效的从站响应：%1</translation>
     </message>

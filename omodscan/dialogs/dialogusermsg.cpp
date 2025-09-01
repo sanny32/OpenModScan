@@ -29,6 +29,7 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
     ui->lineEditSlaveAddress->setValue(slaveAddress);
     ui->comboBoxFunction->addItems(ModbusFunction::validCodes());
     ui->comboBoxFunction->setCurrentFunctionCode(func);
+    ui->requestInfo->setShowTimestamp(false);
     ui->responseInfo->setShowTimestamp(false);
 
     switch(mode)
@@ -69,6 +70,120 @@ void DialogUserMsg::changeEvent(QEvent* event)
 }
 
 ///
+/// \brief DialogUserMsg::on_lineEditSlaveAddress_valueChanged
+///
+void DialogUserMsg::on_lineEditSlaveAddress_valueChanged(const QVariant&)
+{
+    updateRequestInfo();
+}
+
+///
+/// \brief DialogUserMsg::on_comboBoxFunction_functionCodeChanged
+/// \param fc
+///
+void DialogUserMsg::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode fc)
+{
+    switch(fc)
+    {
+        case QModbusPdu::Invalid:
+        case QModbusPdu::ReadExceptionStatus:
+        case QModbusPdu::GetCommEventCounter:
+        case QModbusPdu::GetCommEventLog:
+        case QModbusPdu::ReportServerId:
+        case QModbusPdu::UndefinedFunctionCode:
+            ui->pushButtonGenerate->setEnabled(false);
+            ui->sendData->setEnabled(false);
+        break;
+        default:
+            ui->pushButtonGenerate->setEnabled(true);
+            ui->sendData->setEnabled(true);
+        break;
+    }
+
+    ui->sendData->setValue(QByteArray());
+    updateRequestInfo();
+}
+
+///
+/// \brief DialogUserMsg::on_pushButtonGenerate_clicked
+///
+void DialogUserMsg::on_pushButtonGenerate_clicked()
+{
+
+    QByteArray data;
+    switch(ui->comboBoxFunction->currentFunctionCode())
+    {
+        case QModbusPdu::ReadCoils:
+        case QModbusPdu::ReadDiscreteInputs:
+        case QModbusPdu::ReadInputRegisters:
+        case QModbusPdu::ReadHoldingRegisters:
+            data = QByteArray("\x00\x01\x00\x02", 4);
+            break;
+
+        case QModbusPdu::WriteSingleCoil:
+            data = QByteArray("\x00\x02\xFF\x00", 4);
+            break;
+
+        case QModbusPdu::WriteSingleRegister:
+            data = QByteArray("\x00\x01\x00\x03", 4);
+            break;
+
+        case QModbusPdu::Diagnostics:
+            data = QByteArray("\x00\x02\x00\x00", 4);
+            break;
+
+        case QModbusPdu::WriteMultipleCoils:
+            data = QByteArray("\x00\x01\x00\x03\x01\x07", 6);
+            break;
+
+        case QModbusPdu::WriteMultipleRegisters:
+            data = QByteArray("\x00\x01\x00\x03\x06\xF8\xB7\xEF\x7E\xDB\x72", 11);
+            break;
+
+        case QModbusPdu::ReadFileRecord:
+            data = QByteArray("\x07\x06\x00\x01\x00\x00\x00\x02", 8);
+            break;
+
+        case QModbusPdu::WriteFileRecord:
+            data = QByteArray("\x0B\x06\x00\x01\x00\x00\x00\x02\x00\x0A\x00\x0B", 12);
+            break;
+
+        case QModbusPdu::MaskWriteRegister:
+            data = QByteArray("\x00\x02\xFF\xFF\x00\x00", 6);
+            break;
+
+        case QModbusPdu::ReadWriteMultipleRegisters:
+            data = QByteArray("\x00\x64\x00\x02\x00\xC8\x00\x02\x04\x00\x0A\x00\x0B", 13);
+            break;
+
+        case QModbusPdu::ReadFifoQueue:
+            data = QByteArray("\x00\x0A", 2);
+            break;
+
+        case QModbusPdu::EncapsulatedInterfaceTransport:
+            data = QByteArray("\x0E\x01\x00", 3);
+            break;
+
+        default:
+        break;
+    }
+
+    ui->sendData->blockSignals(true);
+    ui->sendData->setValue(data);
+    ui->sendData->blockSignals(false);
+
+    updateRequestInfo();
+}
+
+///
+/// \brief DialogUserMsg::on_sendData_valueChanged
+///
+void DialogUserMsg::on_sendData_valueChanged(const QByteArray&)
+{
+    updateRequestInfo();
+}
+
+///
 /// \brief DialogUserMsg::on_pushButtonSend_clicked
 ///
 void DialogUserMsg::on_pushButtonSend_clicked()
@@ -84,10 +199,8 @@ void DialogUserMsg::on_pushButtonSend_clicked()
 
     ui->pushButtonSend->setEnabled(false);
 
-    QModbusRequest request;
-    request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
-    request.setData(ui->sendData->value());
-
+    auto msg = ui->requestInfo->modbusMessage();
+    const QModbusRequest request = msg->adu()->pdu();
     _modbusClient.sendRawRequest(request, ui->lineEditSlaveAddress->value<int>(), 0);
 
     const auto timeout = _modbusClient.timeout() * _modbusClient.numberOfRetries();
@@ -136,6 +249,7 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
     {
         ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::HexMode);
         ui->sendData->setInputMode(ByteListTextEdit::HexMode);
+        ui->requestInfo->setDataDisplayMode(DataDisplayMode::Hex);
         ui->responseBuffer->setInputMode(ByteListTextEdit::HexMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::Hex);
     }
@@ -151,7 +265,22 @@ void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
     {
         ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::DecMode);
         ui->sendData->setInputMode(ByteListTextEdit::DecMode);
+        ui->requestInfo->setDataDisplayMode(DataDisplayMode::UInt16);
         ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
         ui->responseInfo->setDataDisplayMode(DataDisplayMode::UInt16);
     }
+}
+
+///
+/// \brief DialogUserMsg::updateRequestInfo
+///
+void DialogUserMsg::updateRequestInfo()
+{
+    QModbusRequest request;
+    request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
+    request.setData(ui->sendData->value());
+
+    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    auto msg = ModbusMessage::create(request, protocol, ui->lineEditSlaveAddress->value<int>(), QDateTime::currentDateTime(), true);
+    ui->requestInfo->setModbusMessage(msg);
 }

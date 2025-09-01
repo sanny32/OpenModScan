@@ -25,11 +25,11 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
-            setWindowTitle("15: WRITE MULTIPLE COILS");
+            setWindowTitle(tr("15: WRITE MULTIPLE COILS"));
             ui->lineEditNumberOfPoints->setInputRange(1, 1968);
         break;
         case QModbusDataUnit::HoldingRegisters:
-            setWindowTitle("16: WRITE MULTIPLE REGISTERS");
+            setWindowTitle(tr("16: WRITE MULTIPLE REGISTERS"));
             ui->lineEditNumberOfPoints->setInputRange(1, 123);
         break;
         default:

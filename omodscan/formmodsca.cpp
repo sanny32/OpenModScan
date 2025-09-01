@@ -10,7 +10,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 6);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 7);
 
 ///
 /// \brief FormModSca::FormModSca
@@ -54,7 +54,21 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
 
+    setPollState(Off);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
+    connect(ui->statisticWidget, &StatisticWidget::pollStateChanged, this, [&](PollState state) {
+        switch (state) {
+        case Off: break;
+        case Paused:
+            ui->outputWidget->setStatus(tr("Device polling paused..."));
+            _timer.stop();
+        break;
+        case Running:
+            beginUpdate();
+            _timer.start();
+        break;
+        }
+    });
 
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
@@ -129,7 +143,8 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
-    dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    dd.ZeroBasedAddress = ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0;
     dd.HexAddress = displayHexAddresses();
 
     return dd;
@@ -219,7 +234,7 @@ void FormModSca::setDisplayHexAddresses(bool on)
     ui->outputWidget->setDisplayHexAddresses(on);
 
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
 }
 
 ///
@@ -506,6 +521,24 @@ uint FormModSca::validSlaveResposes() const
 }
 
 ///
+/// \brief FormModSca::pollState
+/// \return
+///
+PollState FormModSca::pollState() const
+{
+    return ui->statisticWidget->pollState();
+}
+
+///
+/// \brief FormModSca::setPollState
+/// \param state
+///
+void FormModSca::setPollState(PollState state)
+{
+    ui->statisticWidget->setPollState(state);
+}
+
+///
 /// \brief FormModSca::show
 ///
 void FormModSca::show()
@@ -544,8 +577,10 @@ void FormModSca::on_timeout()
 ///
 void FormModSca::beginUpdate()
 {
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != QModbusDevice::ConnectedState) {
+        setPollState(Off);
         return;
+    }
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ?  0 : 1);
@@ -554,7 +589,10 @@ void FormModSca::beginUpdate()
     else
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
-    _timer.start();
+    if(pollState() == Off) {
+        _timer.start();
+        setPollState(Running);
+    }
 }
 
 ///
@@ -725,6 +763,7 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
 void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
     _timer.stop();
+    setPollState(Off);
     ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
 }
 

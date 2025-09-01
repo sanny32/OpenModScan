@@ -29,8 +29,14 @@ public:
 
     void setStatusColor(const QColor& clr);
 
+    QColor backgroundColor() const;
+    void setBackGroundColor(const QColor& clr);
+
 protected:
     void changeEvent(QEvent* event) override;
+
+private slots:
+    void on_customContextMenuRequested(const QPoint &pos);
 
 private:
     void update();
@@ -40,6 +46,8 @@ private:
     ByteOrder _byteOrder;
     DataDisplayMode _dataDisplayMode;
     bool _showTimestamp;
+    QAction* _copyAct;
+    QAction* _copyValuesAct;
     QSharedPointer<const ModbusMessage> _mm;
 };
 

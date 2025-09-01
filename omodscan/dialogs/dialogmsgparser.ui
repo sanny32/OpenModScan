@@ -44,14 +44,14 @@
      <item>
       <widget class="Line" name="line">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item>
       <widget class="Line" name="line_2">
        <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
+        <enum>Qt::Vertical</enum>
        </property>
       </widget>
      </item>
@@ -80,7 +80,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -97,7 +97,7 @@
      <item>
       <widget class="QCheckBox" name="hexView">
        <property name="layoutDirection">
-        <enum>Qt::LayoutDirection::RightToLeft</enum>
+        <enum>Qt::RightToLeft</enum>
        </property>
        <property name="text">
         <string>Hex View</string>
@@ -107,7 +107,7 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -129,7 +129,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
+      <enum>Qt::Vertical</enum>
      </property>
      <widget class="ByteListTextEdit" name="bytesData">
       <property name="sizePolicy">
@@ -150,19 +150,19 @@
        </sizepolicy>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::FocusPolicy::NoFocus</enum>
+       <enum>Qt::NoFocus</enum>
       </property>
       <property name="contextMenuPolicy">
-       <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+       <enum>Qt::NoContextMenu</enum>
       </property>
       <property name="editTriggers">
-       <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
       <property name="selectionMode">
-       <enum>QAbstractItemView::SelectionMode::NoSelection</enum>
+       <enum>QAbstractItemView::NoSelection</enum>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -175,7 +175,7 @@
      <item>
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -216,10 +216,10 @@
         </size>
        </property>
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="standardButtons">
-        <set>QDialogButtonBox::StandardButton::Close</set>
+        <set>QDialogButtonBox::Close</set>
        </property>
        <property name="centerButtons">
         <bool>false</bool>
@@ -229,7 +229,7 @@
      <item>
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

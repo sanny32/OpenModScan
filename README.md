@@ -1,10 +1,10 @@
 # OpenModScan
 OpenModScan is a free and open-source Modbus Master (Client) utility supporting both Modbus-TCP and Modbus-RTU protocols.
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/137433d4-d2fd-484a-bb07-c0e9457f66dc" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/fc839046-f9de-484a-ab8c-1b553635cba8" />
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/3e0ea476-ac6c-4c46-a686-544dddd87825" />
 
+<img width="1292" height="760" alt="image" src="https://github.com/user-attachments/assets/f4e6599c-480d-4b26-b0c3-49e5dc8d1f17" />
 
 
 ## Features
@@ -28,13 +28,14 @@ Registers
 
 ## Modbus Logging
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/de6c8836-8011-43ee-b691-f9a91c6d0679" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/b12b019f-6df6-4c85-b7f3-85e347576c83" />
+
 
     
 ## Extended Featues
 - Modbus Address Scan
   
- ![image](https://github.com/user-attachments/assets/798ed74a-c5fc-413f-a173-e223c9c7d3f3)
+  ![image](https://github.com/user-attachments/assets/798ed74a-c5fc-413f-a173-e223c9c7d3f3)
 
 - Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
   
@@ -42,11 +43,12 @@ Registers
 
 - Modbus Message Parser
 
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/4f05f38e-d739-4c49-8bc3-f12e7b74d8ab)
+  <img width="674" height="463" alt="image" src="https://github.com/user-attachments/assets/9d7a53ef-dda2-4d7f-bfb0-c3337e2ca40b" />
 
 - Modbus User Message
-  
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/1aba6329-873c-4ff2-8db8-939245a50722)
+
+  <img width="529" height="722" alt="image" src="https://github.com/user-attachments/assets/1aa3aadb-1462-4989-afa9-0ad131d5faa7" />
+
 
 ## Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.

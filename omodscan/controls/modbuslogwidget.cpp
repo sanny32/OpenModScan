@@ -189,6 +189,8 @@ void ModbusLogWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         update();
+        _copyAct->setText(tr("Copy Text"));
+        _copyBytesAct->setText(tr("Copy Bytes"));
     }
     QListView::changeEvent(event);
 }

@@ -90,6 +90,8 @@ void ModbusMessageWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         update();
+        _copyAct->setText(tr("Copy Text"));
+        _copyValuesAct->setText(tr("Copy Values"));
     }
     QListWidget::changeEvent(event);
 }

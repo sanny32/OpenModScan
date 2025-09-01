@@ -2166,12 +2166,12 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="327"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="146"/>
         <source>Copy Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="331"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="161"/>
         <source>Copy Bytes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2179,12 +2179,12 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusMessageWidget</name>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="181"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="230"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS REQUEST ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** 无效的 Modbus 请求 ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="183"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="232"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS RESPONSE ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** 无效的 Modbus 响应 ***&lt;/span&gt;</translation>
     </message>
@@ -2201,12 +2201,12 @@ Valid Slave Responses: %2</source>
         <translation type="vanished">&lt;b&gt;类型：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="208"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="257"/>
         <source>Request (Tx)</source>
         <translation>请求（Tx）</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="208"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="257"/>
         <source>Response (Rx)</source>
         <translation>响应（Rx)</translation>
     </message>
@@ -2243,7 +2243,7 @@ Valid Slave Responses: %2</source>
         <translation type="vanished">&lt;b&gt;功能码：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="238"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="287"/>
         <source>(0-based)</source>
         <translation>（基地址为 0）</translation>
     </message>
@@ -2284,17 +2284,17 @@ Valid Slave Responses: %2</source>
         <translation type="vanished">&lt;b&gt;字节计数：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="208"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="257"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="217"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="266"/>
         <source>Transaction ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="218"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="267"/>
         <source>Protocol ID</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2315,265 +2315,265 @@ Valid Slave Responses: %2</source>
         <translation type="vanished">&lt;b&gt;寄存器输入：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="222"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="271"/>
         <source>Device ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="227"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="276"/>
         <source>Error Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="228"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="277"/>
         <source>Exception Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="237"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="286"/>
         <source>Function Code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="248"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="267"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="286"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="305"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="297"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="316"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="335"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="354"/>
         <source>Start Address</source>
         <translation type="unfinished">起始地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="219"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="249"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="268"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="287"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="306"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="298"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="317"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="336"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="355"/>
         <source>Length</source>
         <translation type="unfinished">长度</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="198"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="203"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="247"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="252"/>
         <source>Checksum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="209"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="258"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="256"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="275"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="294"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="313"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="404"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="422"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="445"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="464"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="475"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="483"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="552"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="570"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="305"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="453"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="471"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="494"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="513"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="524"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="532"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="601"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="619"/>
         <source>Byte Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="257"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="306"/>
         <source>Coil Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="276"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="325"/>
         <source>Input Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="295"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="344"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="352"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="393"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="401"/>
         <source>Register Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="314"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="363"/>
         <source>Input Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="332"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="373"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="381"/>
         <source>Output Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="325"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="333"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="374"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="382"/>
         <source>Output Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="351"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="392"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
         <source>Register Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="361"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="410"/>
         <source>Output Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="371"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="379"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="420"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="428"/>
         <source>Sub-function</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="372"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="380"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="465"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="476"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="484"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="495"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="503"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="580"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="421"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="429"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="514"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="525"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="533"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="544"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="552"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="629"/>
         <source>Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="390"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="405"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="439"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="454"/>
         <source>Status</source>
         <translation type="unfinished">状态</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="391"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="406"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="440"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="455"/>
         <source>Event Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="407"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="456"/>
         <source>Message Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="457"/>
         <source>Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="420"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="430"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="443"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="453"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="469"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="479"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="492"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
         <source>Starting Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="421"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="431"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="470"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="480"/>
         <source>Quantity of Outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="423"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="472"/>
         <source>Outputs Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="444"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="454"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="493"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="503"/>
         <source>Quantity of Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="446"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="553"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="495"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="602"/>
         <source>Registers Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="494"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="543"/>
         <source>Request Data Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
         <source>Response Data Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="514"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="524"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="563"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="573"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="515"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="525"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="564"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="574"/>
         <source>And Mask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="516"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="526"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="565"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="575"/>
         <source>Or Mask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="540"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="589"/>
         <source>Read Starting Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="541"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="590"/>
         <source>Quantity to Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="542"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="591"/>
         <source>Write Starting Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="543"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="592"/>
         <source>Quantity to Write</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="544"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="593"/>
         <source>Write Byte Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="545"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="594"/>
         <source>Write Registers Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="562"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="611"/>
         <source>FIFO Point Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="571"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="620"/>
         <source>FIFO Count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="572"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="621"/>
         <source>FIFO Value Register</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="601"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="37"/>
         <source>Copy Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="615"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="53"/>
         <source>Copy Values</source>
         <translation type="unfinished"></translation>
     </message>

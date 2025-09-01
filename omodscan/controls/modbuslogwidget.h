@@ -76,6 +76,8 @@ private slots:
 
 private:
     bool _autoscroll;
+    QAction* _copyAct;
+    QAction* _copyBytesAct;
     DataDisplayMode _dataDisplayMode;
 };
 

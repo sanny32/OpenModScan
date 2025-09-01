@@ -132,11 +132,45 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
 {
-    setFocusPolicy(Qt::NoFocus);
+    setFocusPolicy(Qt::StrongFocus);
     setFont(defaultMonospaceFont());
     setContextMenuPolicy(Qt::CustomContextMenu);
     setItemDelegate(new HtmlDelegate(this));
     setModel(new ModbusLogModel(this));
+
+    QIcon copyIcon = QIcon::fromTheme("edit-copy");
+    if (copyIcon.isNull()) {
+        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
+    }
+
+    _copyAct = new QAction(copyIcon, tr("Copy Text"), this);
+    _copyAct->setShortcut(QKeySequence::Copy);
+    _copyAct->setShortcutContext(Qt::WidgetShortcut);
+    _copyAct->setShortcutVisibleInContextMenu(true);
+    addAction(_copyAct);
+
+    connect(_copyAct, &QAction::triggered, this, [this]() {
+        QModelIndex index = currentIndex();
+        if (index.isValid()) {
+            QTextDocument doc;
+            doc.setHtml(index.data(Qt::DisplayRole).toString());
+            QApplication::clipboard()->setText(doc.toPlainText());
+        }
+    });
+
+    _copyBytesAct = new QAction(tr("Copy Bytes"), this);
+    _copyBytesAct->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
+    _copyBytesAct->setShortcutContext(Qt::WidgetShortcut);
+    _copyBytesAct->setShortcutVisibleInContextMenu(true);
+    addAction(_copyBytesAct);
+
+    connect(_copyBytesAct, &QAction::triggered, this, [this]() {
+        QModelIndex index = currentIndex();
+        if (index.isValid()) {
+            auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
+            if (msg) QApplication::clipboard()->setText(msg->toString(dataDisplayMode()));
+        }
+    });
 
     connect(this, &QWidget::customContextMenuRequested,
             this, &ModbusLogWidget::on_customContextMenuRequested);
@@ -313,36 +347,8 @@ void ModbusLogWidget::setBackGroundColor(const QColor& clr)
 ///
 void ModbusLogWidget::on_customContextMenuRequested(const QPoint &pos)
 {
-    QModelIndex index = indexAt(pos);
-    if (!index.isValid())
-        return;
-
     QMenu menu(this);
-
-    QIcon copyIcon = QIcon::fromTheme("edit-copy");
-    if (copyIcon.isNull()) {
-        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
-    }
-
-    QAction* copyAct = menu.addAction(copyIcon, tr("Copy Text"));
-    copyAct->setShortcut(QKeySequence::Copy);
-    copyAct->setShortcutVisibleInContextMenu(true);
-
-    QAction* copyBytesAct = menu.addAction(tr("Copy Bytes"));
-
-    QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));
-    if (!chosen)
-        return;
-
-    auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
-    if (!msg)
-        return;
-
-    if (chosen == copyAct) {
-        QTextDocument doc;
-        doc.setHtml(index.data(Qt::DisplayRole).toString());
-        QApplication::clipboard()->setText(doc.toPlainText());
-    } else if (chosen == copyBytesAct) {
-        QApplication::clipboard()->setText(msg->toString(dataDisplayMode()));
-    }
+    menu.addAction(_copyAct);
+    menu.addAction(_copyBytesAct);
+    menu.exec(viewport()->mapToGlobal(pos));
 }

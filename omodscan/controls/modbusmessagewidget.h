@@ -46,6 +46,8 @@ private:
     ByteOrder _byteOrder;
     DataDisplayMode _dataDisplayMode;
     bool _showTimestamp;
+    QAction* _copyAct;
+    QAction* _copyValuesAct;
     QSharedPointer<const ModbusMessage> _mm;
 };
 

@@ -20,6 +20,7 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     ,_dataDisplayMode(DataDisplayMode::UInt16)
     ,_showTimestamp(true)
 {
+    setFocusPolicy(Qt::NoFocus);
     setAlternatingRowColors(true);
     setEditTriggers(NoEditTriggers);
     setSelectionMode(QAbstractItemView::NoSelection);
@@ -27,6 +28,54 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFont(defaultMonospaceFont());
+
+    QIcon copyIcon = QIcon::fromTheme("edit-copy");
+    if (copyIcon.isNull()) {
+        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
+    }
+
+    _copyAct = new QAction(copyIcon, tr("Copy Text"), this);
+    addAction(_copyAct);
+
+    connect(_copyAct, &QAction::triggered, this, [this]() {
+        QString text;
+        for (int i = 0; i < count(); ++i) {
+            QListWidgetItem* item = this->item(i);
+            if (item) {
+                QTextDocument doc;
+                doc.setHtml(item->text());
+                text += doc.toPlainText() + "\n";
+            }
+        }
+        QApplication::clipboard()->setText(text.trimmed());
+    });
+
+    _copyValuesAct = new QAction(tr("Copy Values"), this);
+    addAction(_copyValuesAct);
+
+    connect(_copyValuesAct, &QAction::triggered, this, [this]() {
+        QString allValues;
+        switch(_mm->function()) {
+        case QModbusPdu::ReadCoils: {
+            auto resp = reinterpret_cast<const ReadCoilsResponse*>(_mm.get());
+            allValues = formatUInt8Array(_dataDisplayMode, resp->coilStatus());
+        } break;
+        case QModbusPdu::ReadDiscreteInputs: {
+            auto resp = reinterpret_cast<const ReadDiscreteInputsResponse*>(_mm.get());
+            allValues = formatUInt8Array(_dataDisplayMode, resp->inputStatus());
+        } break;
+        case QModbusPdu::ReadHoldingRegisters: {
+            auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_mm.get());
+            allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
+        } break;
+        case QModbusPdu::ReadInputRegisters: {
+            auto resp = reinterpret_cast<const ReadInputRegistersResponse*>(_mm.get());
+            allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
+        } break;
+        default: break;
+        }
+        if(!allValues.isEmpty()) QApplication::clipboard()->setText(allValues);
+    });
 
     connect(this, &QWidget::customContextMenuRequested,
             this, &ModbusMessageWidget::on_customContextMenuRequested);
@@ -592,18 +641,8 @@ void ModbusMessageWidget::update()
 void ModbusMessageWidget::on_customContextMenuRequested(const QPoint &pos)
 {
     QMenu menu(this);
+    menu.addAction(_copyAct);
 
-    QIcon copyIcon = QIcon::fromTheme("edit-copy");
-    if (copyIcon.isNull()) {
-        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
-    }
-
-    QAction* copyAct = menu.addAction(copyIcon, tr("Copy Text"));
-    copyAct->setShortcut(QKeySequence::Copy);
-    copyAct->setShortcutVisibleInContextMenu(true);
-
-
-    QAction* copyValuesAct = nullptr;
     if(!_mm->isRequest() && !_mm->isException())
     {
         switch(_mm->function())
@@ -612,48 +651,11 @@ void ModbusMessageWidget::on_customContextMenuRequested(const QPoint &pos)
             case QModbusPdu::ReadDiscreteInputs:
             case QModbusPdu::ReadInputRegisters:
             case QModbusPdu::ReadHoldingRegisters:
-                copyValuesAct = menu.addAction(tr("Copy Values"));
+                menu.addAction(_copyValuesAct);
             break;
             default: break;
         }
     }
 
-    QAction* chosen = menu.exec(viewport()->mapToGlobal(pos));
-    if (!chosen)
-        return;
-
-    if (chosen == copyAct) {
-        QString text;
-        for (int i = 0; i < count(); ++i) {
-            QListWidgetItem* item = this->item(i);
-            if (item) {
-                QTextDocument doc;
-                doc.setHtml(item->text());
-                text += doc.toPlainText() + "\n";
-            }
-        }
-        QApplication::clipboard()->setText(text.trimmed());
-    } else if (chosen == copyValuesAct) {
-        QString allValues;
-        switch(_mm->function()) {
-            case QModbusPdu::ReadCoils: {
-                auto resp = reinterpret_cast<const ReadCoilsResponse*>(_mm.get());
-                allValues = formatUInt8Array(_dataDisplayMode, resp->coilStatus());
-            } break;
-            case QModbusPdu::ReadDiscreteInputs: {
-                auto resp = reinterpret_cast<const ReadDiscreteInputsResponse*>(_mm.get());
-                allValues = formatUInt8Array(_dataDisplayMode, resp->inputStatus());
-            } break;
-            case QModbusPdu::ReadHoldingRegisters: {
-                auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_mm.get());
-                allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
-            } break;
-            case QModbusPdu::ReadInputRegisters: {
-                auto resp = reinterpret_cast<const ReadInputRegistersResponse*>(_mm.get());
-                allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
-            } break;
-            default: break;
-        }
-        QApplication::clipboard()->setText(allValues);
-    }
+    menu.exec(viewport()->mapToGlobal(pos));
 }

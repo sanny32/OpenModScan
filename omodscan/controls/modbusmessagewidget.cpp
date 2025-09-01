@@ -593,9 +593,17 @@ void ModbusMessageWidget::on_customContextMenuRequested(const QPoint &pos)
 {
     QMenu menu(this);
 
-    QAction* copyAct = menu.addAction(tr("Copy Text"));
-    QAction* copyValuesAct = nullptr;
+    QIcon copyIcon = QIcon::fromTheme("edit-copy");
+    if (copyIcon.isNull()) {
+        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
+    }
 
+    QAction* copyAct = menu.addAction(copyIcon, tr("Copy Text"));
+    copyAct->setShortcut(QKeySequence::Copy);
+    copyAct->setShortcutVisibleInContextMenu(true);
+
+
+    QAction* copyValuesAct = nullptr;
     if(!_mm->isRequest() && !_mm->isException())
     {
         switch(_mm->function())

@@ -1283,6 +1283,16 @@ single-point  write functions 05 and 06.)</source>
         <source>Number of Points: </source>
         <translation>點數： </translation>
     </message>
+    <message>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="28"/>
+        <source>15: WRITE MULTIPLE COILS</source>
+        <translation>15: 寫入多個線圈</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="32"/>
+        <source>16: WRITE MULTIPLE REGISTERS</source>
+        <translation>16: 寫入多個暫存器</translation>
+    </message>
 </context>
 <context>
     <name>DialogUserMsg</name>

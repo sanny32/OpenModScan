@@ -434,12 +434,12 @@
         <translation>連繫詳情</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="187"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="200"/>
         <source>Connect Using:</source>
         <translation>使用連繫：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="131"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="144"/>
         <source>Exclude Virtual Serial Ports</source>
         <translation>排除虚拟串行端口</translation>
     </message>
@@ -449,12 +449,12 @@
         <translation>IP地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="214"/>
         <source>Remote TCP/IP Server</source>
         <translation>遠端 TCP/IP 伺服器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="206"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
         <source>Direct Connection to Serial Port</source>
         <translation>直接連接到序列埠</translation>
     </message>
@@ -464,57 +464,57 @@
         <translation>埠：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="127"/>
         <source>Serial Port:</source>
         <translation>埠:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="237"/>
         <source>Configuration</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="250"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="263"/>
         <source>Baud Rate: </source>
         <translation>波特率： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="313"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="326"/>
         <source>Word Length: </source>
         <translation>數據位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="343"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="356"/>
         <source>Parity: </source>
         <translation>奇偶校驗： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="363"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="376"/>
         <source>Stop Bits: </source>
         <translation>停止位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="398"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="411"/>
         <source>Hardware Flow Control</source>
         <translation>硬體流控</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="407"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="420"/>
         <source>Flow Control Mode: </source>
         <translation>流控模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="427"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="440"/>
         <source>DTR Control: </source>
         <translation>DTR控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="450"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="463"/>
         <source>RTS Control: </source>
         <translation>RTS控制： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="500"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="513"/>
         <source>Protocol Selections</source>
         <translation>協定選擇</translation>
     </message>
@@ -728,7 +728,7 @@
         <translation>與遮罩</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="604"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="479"/>
         <source>OR Mask</source>
         <translation>或遮罩</translation>
     </message>
@@ -1316,37 +1316,37 @@ single-point  write functions 05 and 06.)</source>
         <translation>功能： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="100"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="106"/>
         <source>Show Data in</source>
         <translation>數據顯示格式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="106"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
         <source>Decimal</source>
         <translation>十進制</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="113"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="119"/>
         <source>Hex</source>
         <translation>十六進制</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="138"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="131"/>
         <source>Request</source>
         <translation>要求</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="144"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
         <source>Send Data: </source>
         <translation>傳送數據： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="190"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="183"/>
         <source>Make Data</source>
         <translation>製作數據</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="177"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="170"/>
         <source>Enter bytes value separated by spaces</source>
         <translation>請輸入以空格分隔的位元組值</translation>
     </message>
@@ -1355,12 +1355,12 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">輸入位元組值，值之間用空格分隔</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="218"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="211"/>
         <source>Response Buffer</source>
         <translation>回應緩衝區</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="298"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="291"/>
         <source>Send</source>
         <translation>傳送</translation>
     </message>

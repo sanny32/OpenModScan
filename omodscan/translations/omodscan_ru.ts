@@ -434,12 +434,12 @@
         <translation>Детали подключения</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="187"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="200"/>
         <source>Connect Using:</source>
         <translation>Подключение через:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="131"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="144"/>
         <source>Exclude Virtual Serial Ports</source>
         <translation>Исключить виртуальные последовательные порты</translation>
     </message>
@@ -449,12 +449,12 @@
         <translation>IP адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="201"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="214"/>
         <source>Remote TCP/IP Server</source>
         <translation>Удаленный TCP/IP Сервер</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="206"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
         <source>Direct Connection to Serial Port</source>
         <translation>Подключение к порту</translation>
     </message>
@@ -464,57 +464,57 @@
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="121"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="127"/>
         <source>Serial Port:</source>
         <translation>Последовательный порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="237"/>
         <source>Configuration</source>
         <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="250"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="263"/>
         <source>Baud Rate: </source>
         <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="313"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="326"/>
         <source>Word Length: </source>
         <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="343"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="356"/>
         <source>Parity: </source>
         <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="363"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="376"/>
         <source>Stop Bits: </source>
         <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="398"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="411"/>
         <source>Hardware Flow Control</source>
         <translation>Управление потоком</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="407"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="420"/>
         <source>Flow Control Mode: </source>
         <translation>Режим управления: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="427"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="440"/>
         <source>DTR Control: </source>
         <translation>Управление DTR: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="450"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="463"/>
         <source>RTS Control: </source>
         <translation>Управление RTS: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="500"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="513"/>
         <source>Protocol Selections</source>
         <translation>Настройки протокола</translation>
     </message>
@@ -720,7 +720,7 @@
         <translation>Маска И</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="604"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="479"/>
         <source>OR Mask</source>
         <translation>Маска ИЛИ</translation>
     </message>
@@ -1309,37 +1309,37 @@ single-point  write functions 05 and 06.)</source>
         <translation>Функция: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="100"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="106"/>
         <source>Show Data in</source>
         <translation>Отображать данные в формате</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="106"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
         <source>Decimal</source>
         <translation>Десятичный</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="113"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="119"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="138"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="131"/>
         <source>Request</source>
         <translation>Запрос</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="144"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
         <source>Send Data: </source>
         <translation>Данные запроса: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="190"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="183"/>
         <source>Make Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="177"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="170"/>
         <source>Enter bytes value separated by spaces</source>
         <translation>Введите значение в байтах, разделенное пробелами</translation>
     </message>
@@ -1348,12 +1348,12 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Введите значение в байтах, разделенное пробелами</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="218"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="211"/>
         <source>Response Buffer</source>
         <translation>Ответ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="298"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="291"/>
         <source>Send</source>
         <translation>Отправить</translation>
     </message>

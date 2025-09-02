@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.24)
 
 project(omodscan
     VERSION 1.11.0
@@ -15,7 +15,7 @@ set(PRODUCT_NAME "Open ModScan")
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
 if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET REQUIRED)
 endif()
 
 # Define target

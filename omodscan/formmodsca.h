@@ -212,7 +212,7 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     QSize wndSize;
     wndSize = in.value("ViewSize").toSize();
 
-    if(version.isNull() || version >= QVersionNumber(1, 7)) {
+    if(!version.isNull() || version >= QVersionNumber(1, 7)) {
         frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
         frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
         frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());

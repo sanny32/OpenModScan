@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>268</height>
+    <height>266</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>22: Mask Write Register</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QCheckBox { spacing: 0px; }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

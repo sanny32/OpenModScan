@@ -713,22 +713,22 @@
         <translation>22: 遮罩寫暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="38"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="41"/>
         <source>Node: </source>
         <translation>節點： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="100"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="103"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="147"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="150"/>
         <source>AND Mask</source>
         <translation>與遮罩</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="479"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="482"/>
         <source>OR Mask</source>
         <translation>或遮罩</translation>
     </message>
@@ -1499,7 +1499,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="147"/>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="150"/>
         <source>Bit Pattern</source>
         <translation>位模式</translation>
     </message>

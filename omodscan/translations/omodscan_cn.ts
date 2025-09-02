@@ -714,22 +714,22 @@
         <translation>22: 掩码写寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="38"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="41"/>
         <source>Node: </source>
         <translation>节点： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="100"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="103"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="147"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="150"/>
         <source>AND Mask</source>
         <translation>与掩码</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="479"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="482"/>
         <source>OR Mask</source>
         <translation>或掩码</translation>
     </message>
@@ -1500,7 +1500,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="147"/>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="150"/>
         <source>Bit Pattern</source>
         <translation>位模式</translation>
     </message>

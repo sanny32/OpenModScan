@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>190</height>
+    <height>189</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -143,6 +143,9 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="styleSheet">
+      <string notr="true">QCheckBox { spacing: 0px; }</string>
+     </property>
      <property name="title">
       <string>Bit Pattern</string>
      </property>

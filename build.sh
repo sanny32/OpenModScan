@@ -112,6 +112,6 @@ BUILD_DIR="build-Qt_${QT_VERSION}_${COMPILER}_${ARCH}-Release"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="$QT_PREFIX"
+cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="$QT_PREFIX" -DCMAKE_BUILD_TYPE=Release
 ninja
 echo "Build finished successfully in $BUILD_DIR."

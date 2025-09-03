@@ -63,7 +63,7 @@ install_pkg() {
         debian|ubuntu|mint|astra)
             check_cmd="dpkg -s"
             ;;
-        rhel)
+        rhel|fedora|altlinux|redos)
             check_cmd="rpm -q"
             ;;
         arch)

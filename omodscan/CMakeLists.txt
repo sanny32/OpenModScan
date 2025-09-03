@@ -26,7 +26,7 @@ if (NOT Qt6_FOUND)
 endif()
 
 if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
-    message(FATAL_ERROR "Qt not found. Please install Qt5 or Qt6 development packages.")
+    message(FATAL_ERROR "One or more Qt developmant packages not found. Please install Qt5 or Qt6 development packages.")
 endif()
 
 # Define target

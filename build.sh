@@ -57,7 +57,7 @@ install_pkg() {
     local check_cmd
 
     case "$DISTRO" in
-        debian|ubuntu|mint|astra)
+        debian|ubuntu|linuxmint|astra)
             check_cmd="dpkg -s"
             ;;
         rhel|fedora|altlinux|redos)

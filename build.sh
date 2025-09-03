@@ -95,7 +95,7 @@ install_pkg() {
 # Install prerequisites
 # ==========================
 install_prereqs() {
-    echo "Checking prerequisites for $DISTRO..."
+    echo "Checking prerequisites for $ID..."
 
     case "$DISTRO" in
         debian)

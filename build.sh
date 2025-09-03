@@ -53,7 +53,8 @@ esac
 # ==========================
 install_pkg() {
     local pkg_list=("$@")
-    local check_cmd install_cmd
+    local missing=()
+    local check_cmd
 
     case "$DISTRO" in
         debian|ubuntu|mint|astra)
@@ -69,21 +70,25 @@ install_pkg() {
 
     for pkg in "${pkg_list[@]}"; do
         if ! $check_cmd "$pkg" >/dev/null 2>&1; then
-            echo "Installing missing package: $pkg"
-            if [ "$EUID" -ne 0 ]; then
-                case "$DISTRO" in
-                    altlinux)
-                        su -c "$INSTALL_CMD "$pkg""
-                    ;;
-                    *)
-                        sudo $INSTALL_CMD "$pkg"
-                    ;;
-                esac
-            else
-                $INSTALL_CMD "$pkg"
-            fi
+            missing+=("$pkg")
         fi
     done
+
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo "Installing missing packages: ${missing[*]}"
+        if [ "$EUID" -ne 0 ]; then
+            case "$DISTRO" in
+                altlinux)
+                    su -c "$INSTALL_CMD ${missing[*]}"
+                    ;;
+                *)
+                    sudo $INSTALL_CMD "${missing[@]}"
+                    ;;
+            esac
+        else
+            $INSTALL_CMD "${missing[@]}"
+        fi
+    fi
 }
 
 # ==========================

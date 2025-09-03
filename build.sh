@@ -186,16 +186,8 @@ ARCH=$(uname -m)
 COMPILER="Unknown"
 if command -v g++ >/dev/null 2>&1; then
     COMPILER="GCC"
-    if command -v gcc >/dev/null 2>&1; then
-        GCC_VERSION=$(gcc --version | head -n1 | awk '{print $NF}')
-        COMPILER="GCC_${GCC_VERSION}"
-    fi
 elif command -v clang++ >/dev/null 2>&1; then
     COMPILER="Clang"
-    if command -v clang >/dev/null 2>&1; then
-        CLANG_VERSION=$(clang --version | head -n1 | awk '{print $3}')
-        COMPILER="Clang_${CLANG_VERSION}"
-    fi
 fi
 
 # ==========================
@@ -207,8 +199,7 @@ BUILD_TYPE=Release
 # Build project
 # ==========================
 SANITIZED_QT_VERSION=$(echo "$QT_VERSION" | tr '.' '_' | tr ' ' '_')
-SANITIZED_COMPILER=$(echo "$COMPILER" | tr '.' '_' | tr ' ' '_')
-BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${SANITIZED_COMPILER}_${ARCH}-${BUILD_TYPE}"
+BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"

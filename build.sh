@@ -29,59 +29,124 @@ install_prereqs() {
     echo "Checking prerequisites..."
 
     if [ "$PM" = "apt-get" ]; then
-        for pkg in build-essential cmake ninja-build pkg-config; do
+        # Общие пакеты
+        GENERAL_PACKAGES=(build-essential cmake ninja-build pkg-config)
+        for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! dpkg -s "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
                 $INSTALL_CMD "$pkg"
             fi
         done
 
+        # Qt6 или Qt5
         if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-            echo "Qt6 found in repo, checking packages..."
-            for pkg in qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-connectivity-dev qt6-core5compat-dev; do
-                if ! dpkg -s "$pkg" >/dev/null 2>&1; then
-                    echo "Installing missing package: $pkg"
-                    $INSTALL_CMD "$pkg"
-                fi
-            done
+            QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-connectivity-dev qt6-core5compat-dev)
+            QTVERSION="Qt6"
         else
-            echo "Qt6 not available, falling back to Qt5..."
-            for pkg in qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev; do
-                if ! dpkg -s "$pkg" >/dev/null 2>&1; then
-                    echo "Installing missing package: $pkg"
-                    $INSTALL_CMD "$pkg"
-                fi
-            done
+            QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
+            QTVERSION="Qt5"
+        fi
+
+        MISSING_QT=()
+        for pkg in "${QT_PACKAGES[@]}"; do
+            if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+                MISSING_QT+=("$pkg")
+            fi
+        done
+
+        if [ ${#MISSING_QT[@]} -gt 0 ]; then
+            echo "Installing missing $QTVERSION packages: ${MISSING_QT[*]}"
+            $INSTALL_CMD "${MISSING_QT[@]}"
+        else
+            echo "$QTVERSION packages already installed."
         fi
 
     elif [ "$PM" = "dnf" ]; then
-        for pkg in gcc gcc-c++ cmake ninja-build pkg-config; do
+        # Общие пакеты
+        GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config)
+        for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! rpm -q "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
                 $INSTALL_CMD "$pkg"
             fi
         done
 
-        if $INSTALL_CMD qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtconnectivity-devel qt6-qt5compat-devel; then
-            echo "Qt6 packages installed/verified."
+        # Qt6
+        QT6_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtconnectivity-devel qt6-qt5compat-devel)
+        MISSING_QT6=()
+        for pkg in "${QT6_PACKAGES[@]}"; do
+            if ! rpm -q "$pkg" >/dev/null 2>&1; then
+                MISSING_QT6+=("$pkg")
+            fi
+        done
+
+        if [ ${#MISSING_QT6[@]} -gt 0 ]; then
+            echo "Installing missing Qt6 packages: ${MISSING_QT6[*]}"
+            $INSTALL_CMD "${MISSING_QT6[@]}" || true
         else
+            echo "Qt6 packages already installed."
+        fi
+
+        # Если Qt6 не установлен, пробуем Qt5
+        if [ ${#MISSING_QT6[@]} -eq ${#QT6_PACKAGES[@]} ]; then
             echo "Falling back to Qt5..."
-            $INSTALL_CMD qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel
+            QT5_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
+            MISSING_QT5=()
+            for pkg in "${QT5_PACKAGES[@]}"; do
+                if ! rpm -q "$pkg" >/dev/null 2>&1; then
+                    MISSING_QT5+=("$pkg")
+                fi
+            done
+            if [ ${#MISSING_QT5[@]} -gt 0 ]; then
+                echo "Installing missing Qt5 packages: ${MISSING_QT5[*]}"
+                $INSTALL_CMD "${MISSING_QT5[@]}"
+            else
+                echo "Qt5 packages already installed."
+            fi
         fi
 
     elif [ "$PM" = "pacman" ]; then
-        for pkg in base-devel cmake ninja pkgconf; do
+        # Общие пакеты
+        GENERAL_PACKAGES=(base-devel cmake ninja pkgconf)
+        for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
                 $INSTALL_CMD "$pkg"
             fi
         done
 
-        if $INSTALL_CMD qt6-base qt6-tools qt6-serialport qt6-connectivity qt6-5compat; then
-            echo "Qt6 packages installed/verified."
+        # Qt6
+        QT6_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-connectivity qt6-5compat)
+        MISSING_QT6=()
+        for pkg in "${QT6_PACKAGES[@]}"; do
+            if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
+                MISSING_QT6+=("$pkg")
+            fi
+        done
+
+        if [ ${#MISSING_QT6[@]} -gt 0 ]; then
+            echo "Installing missing Qt6 packages: ${MISSING_QT6[*]}"
+            $INSTALL_CMD "${MISSING_QT6[@]}"
         else
+            echo "Qt6 packages already installed."
+        fi
+
+        # Если Qt6 нет, пробуем Qt5
+        if [ ${#MISSING_QT6[@]} -eq ${#QT6_PACKAGES[@]} ]; then
             echo "Falling back to Qt5..."
-            $INSTALL_CMD qt5-base qt5-tools qt5-serialport qt5-serialbus
+            QT5_PACKAGES=(qt5-base qt5-tools qt5-serialport qt5-serialbus)
+            MISSING_QT5=()
+            for pkg in "${QT5_PACKAGES[@]}"; do
+                if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
+                    MISSING_QT5+=("$pkg")
+                fi
+            done
+            if [ ${#MISSING_QT5[@]} -gt 0 ]; then
+                echo "Installing missing Qt5 packages: ${MISSING_QT5[*]}"
+                $INSTALL_CMD "${MISSING_QT5[@]}"
+            else
+                echo "Qt5 packages already installed."
+            fi
         fi
     fi
 }

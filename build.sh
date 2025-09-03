@@ -22,8 +22,12 @@ DISTRO=""
 INSTALL_CMD=""
 
 case "$ID" in
-    debian|ubuntu|linuxmint)
+    debian|linuxmint)
         DISTRO="debian"
+        INSTALL_CMD="sudo apt install -y"
+        ;;
+    ubuntu)
+        DISTRO="ubuntu"
         INSTALL_CMD="sudo apt install -y"
         ;;
     rhel|centos|fedora|altlinux|redos)
@@ -45,121 +49,100 @@ case "$ID" in
 esac
 
 # ==========================
+# Install packages
+# ==========================
+install_pkg() {
+    local pkg_list=("$@")
+    local check_cmd install_cmd
+
+    case "$DISTRO" in
+        debian|ubuntu|mint|astra)
+            check_cmd="dpkg -s"
+            ;;
+        rhel)
+            check_cmd="rpm -q"
+            ;;
+        arch)
+            check_cmd="pacman -Qi"
+            ;;
+    esac
+
+    for pkg in "${pkg_list[@]}"; do
+        if ! $check_cmd "$pkg" >/dev/null 2>&1; then
+            echo "Installing missing package: $pkg"
+            $INSTALL_CMD "$pkg"
+        fi
+    done
+}
+
+# ==========================
 # Install prerequisites
 # ==========================
 install_prereqs() {
     echo "Checking prerequisites for $DISTRO..."
 
     case "$DISTRO" in
-        debian|ubuntu|astra)
+        debian|astra)
             GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
             
             # Qt6/Qt5 selection
             if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-connectivity-dev qt6-core5compat-dev)
+                QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-qt5compat-devel)
             else
                 QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
             fi
 
-            for pkg in "${GENERAL_PACKAGES[@]}" "${QT_PACKAGES[@]}"; do
-                if ! dpkg -s "$pkg" >/dev/null 2>&1; then
-                    echo "Installing missing package: $pkg"
-                    $INSTALL_CMD "$pkg"
-                fi
-            done
+            install_pkg "${GENERAL_PACKAGES[@]}"
+            install_pkg "${QT_PACKAGES[@]}"
             ;;
-        
+
+        ubuntu)
+            GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
+            
+            # Qt6/Qt5 selection
+            if apt-cache show qt6-base-dev >/dev/null 2>&1; then
+                QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-5compat-dev)
+            else
+                QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
+            fi
+
+            install_pkg "${GENERAL_PACKAGES[@]}"
+            install_pkg "${QT_PACKAGES[@]}"
+            ;;
+
         rhel)
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel libxcb-cursor-devel libxcb-devel)
-
-            QT6_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qtconnectivity-devel qt6-qt5compat-devel)
+            
             QT5_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
 
-            for pkg in "${GENERAL_PACKAGES[@]}"; do
-                if ! rpm -q "$pkg" >/dev/null 2>&1; then
-                    echo "Installing missing package: $pkg"
-                    $INSTALL_CMD "$pkg"
-                fi
-            done
-
-            # Try Qt6 first
-            MISSING_QT=()
-            for pkg in "${QT6_PACKAGES[@]}"; do
-                if ! rpm -q "$pkg" >/dev/null 2>&1; then
-                    MISSING_QT+=("$pkg")
-                fi
-            done
-
-            if [ ${#MISSING_QT[@]} -gt 0 ]; then
-                echo "Installing missing Qt6 packages: ${MISSING_QT[*]}"
-                $INSTALL_CMD "${MISSING_QT[@]}" || true
+            if dnf list available qt6-qtbase-devel >/dev/null 2>&1; then
+                QT_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel)
             else
-                echo "Qt6 packages already installed."
+                QT_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
             fi
 
-            # Fallback to Qt5
-            if [ ${#MISSING_QT[@]} -eq ${#QT6_PACKAGES[@]} ]; then
-                MISSING_QT5=()
-                for pkg in "${QT5_PACKAGES[@]}"; do
-                    if ! rpm -q "$pkg" >/dev/null 2>&1; then
-                        MISSING_QT5+=("$pkg")
-                    fi
-                done
-                if [ ${#MISSING_QT5[@]} -gt 0 ]; then
-                    echo "Installing missing Qt5 packages: ${MISSING_QT5[*]}"
-                    $INSTALL_CMD "${MISSING_QT5[@]}" || true
-                else
-                    echo "Qt5 packages already installed."
-                fi
-            fi
+            install_pkg "${GENERAL_PACKAGES[@]}"
+            install_pkg "${QT_PACKAGES[@]}"
             ;;
         
         arch)
             GENERAL_PACKAGES=(base-devel cmake ninja libxcb-cursor pkgconf)
-            QT6_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-serialbus qt6-connectivity qt6-5compat)
             QT5_PACKAGES=(qt5-base qt5-tools qt5-serialport qt5-serialbus)
 
-            for pkg in "${GENERAL_PACKAGES[@]}"; do
-                if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
-                    echo "Installing missing package: $pkg"
-                    $INSTALL_CMD "$pkg"
-                fi
-            done
-
-            MISSING_QT=()
-            for pkg in "${QT6_PACKAGES[@]}"; do
-                if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
-                    MISSING_QT+=("$pkg")
-                fi
-            done
-
-            if [ ${#MISSING_QT[@]} -gt 0 ]; then
-                echo "Installing missing Qt6 packages: ${MISSING_QT[*]}"
-                $INSTALL_CMD "${MISSING_QT[@]}"
+            # Qt6/Qt5 selection
+            if pacman -Si qt6-base >/dev/null 2>&1; then
+                QT_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-serialbus qt6-5compat)
             else
-                echo "Qt6 packages already installed."
+                QT_PACKAGES=(qt5-base qt5-tools qt5-serialport qt5-serialbus)
             fi
 
-            if [ ${#MISSING_QT[@]} -eq ${#QT6_PACKAGES[@]} ]; then
-                MISSING_QT5=()
-                for pkg in "${QT5_PACKAGES[@]}"; do
-                    if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
-                        MISSING_QT5+=("$pkg")
-                    fi
-                done
-                if [ ${#MISSING_QT5[@]} -gt 0 ]; then
-                    echo "Installing missing Qt5 packages: ${MISSING_QT5[*]}"
-                    $INSTALL_CMD "${MISSING_QT5[@]}"
-                else
-                    echo "Qt5 packages already installed."
-                fi
-            fi
+            install_pkg "${GENERAL_PACKAGES[@]}"
+            install_pkg "${QT_PACKAGES[@]}"
             ;;
     esac
 }
 
 install_prereqs
-
 
 # ==========================
 # Always check/install prereqs first

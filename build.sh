@@ -95,25 +95,39 @@ install_prereqs
 # Detect Qt installation path
 # ==========================
 get_qt_prefix() {
-    if command -v qmake6 >/dev/null 2>&1; then
-        qmake6 -query QT_INSTALL_PREFIX 2>/dev/null && return
-    fi
-    if command -v qmake-qt6 >/dev/null 2>&1; then
-        qmake-qt6 -query QT_INSTALL_PREFIX 2>/dev/null && return
-    fi
-    if command -v qmake >/dev/null 2>&1; then
-        qmake -query QT_INSTALL_PREFIX 2>/dev/null && return
-    fi
+    for q in qmake6 qmake-qt6 qmake; do
+        if command -v "$q" >/dev/null 2>&1; then
+            # Сначала пробуем путь к include (он всегда в qt6/)
+            prefix=$("$q" -query QT_INSTALL_HEADERS 2>/dev/null)
+            if [ -n "$prefix" ] && [ -d "$prefix" ]; then
+                echo "$(dirname "$prefix")"
+                return
+            fi
+
+            # Или путь к libs
+            prefix=$("$q" -query QT_INSTALL_LIBS 2>/dev/null)
+            if [ -n "$prefix" ] && [ -d "$prefix" ]; then
+                echo "$prefix"
+                return
+            fi
+        fi
+    done
+
     if command -v qtpaths6 >/dev/null 2>&1; then
-        qtpaths6 --install-prefix 2>/dev/null && return
-        qtpaths6 --qt-install-dir 2>/dev/null && return
+        prefix=$(qtpaths6 --qt-install-headers 2>/dev/null)
+        if [ -n "$prefix" ] && [ -d "$prefix" ]; then
+            echo "$(dirname "$prefix")"
+            return
+        fi
     fi
+
     if [ -d "/usr/lib64/qt6" ]; then echo "/usr/lib64/qt6"; return; fi
     if [ -d "/usr/lib/qt6" ]; then echo "/usr/lib/qt6"; return; fi
     if [ -d "/usr/lib64/qt5" ]; then echo "/usr/lib64/qt5"; return; fi
     if [ -d "/usr/lib/qt5" ]; then echo "/usr/lib/qt5"; return; fi
     echo "/usr"
 }
+
 
 # ==========================
 # Get Qt version string

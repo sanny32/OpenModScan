@@ -161,8 +161,6 @@ install_prereqs() {
     esac
 }
 
-install_prereqs
-
 # ==========================
 # Always check/install prereqs first
 # ==========================

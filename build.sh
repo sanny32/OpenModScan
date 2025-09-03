@@ -22,7 +22,7 @@ DISTRO=""
 INSTALL_CMD=""
 
 case "$ID" in
-    debian|linuxmint)
+    debian|linuxmint|astra)
         DISTRO="debian"
         INSTALL_CMD="sudo apt install -y"
         ;;
@@ -33,10 +33,6 @@ case "$ID" in
     rhel|fedora|altlinux|redos)
         DISTRO="rhel"
         INSTALL_CMD="sudo dnf install -y"
-        ;;
-    astra)
-        DISTRO="astra"
-        INSTALL_CMD="sudo apt install -y"
         ;;
     arch|manjaro)
         DISTRO="arch"
@@ -90,10 +86,7 @@ install_prereqs() {
                 QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-qt5compat-devel)
             else
                 QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
-            fi
-
-            install_pkg "${GENERAL_PACKAGES[@]}"
-            install_pkg "${QT_PACKAGES[@]}"
+            fi           
             ;;
 
         ubuntu)
@@ -105,14 +98,10 @@ install_prereqs() {
             else
                 QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
             fi
-
-            install_pkg "${GENERAL_PACKAGES[@]}"
-            install_pkg "${QT_PACKAGES[@]}"
             ;;
 
         rhel)
-            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)
-            
+            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
             QT5_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
 
             if dnf list available qt6-qtbase-devel >/dev/null 2>&1; then
@@ -120,9 +109,6 @@ install_prereqs() {
             else
                 QT_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
             fi
-
-            install_pkg "${GENERAL_PACKAGES[@]}"
-            install_pkg "${QT_PACKAGES[@]}"
             ;;
         
         arch)
@@ -135,11 +121,11 @@ install_prereqs() {
             else
                 QT_PACKAGES=(qt5-base qt5-tools qt5-serialport qt5-serialbus)
             fi
-
-            install_pkg "${GENERAL_PACKAGES[@]}"
-            install_pkg "${QT_PACKAGES[@]}"
-            ;;
+           ;;
     esac
+
+    install_pkg "${GENERAL_PACKAGES[@]}"
+    install_pkg "${QT_PACKAGES[@]}"
 }
 
 # ==========================

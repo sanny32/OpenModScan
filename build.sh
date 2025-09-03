@@ -126,7 +126,7 @@ install_prereqs() {
             ;;
 
         altlinux)
-            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config xcb-util-cursor-devel)         
+            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor)         
     
             # Qt6/Qt5 selection
             if apt-cache show qt6-base-dev >/dev/null 2>&1; then

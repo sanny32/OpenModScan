@@ -24,23 +24,23 @@ INSTALL_CMD=""
 case "$ID" in
     debian|linuxmint|astra)
         DISTRO="debian"
-        INSTALL_CMD="sudo apt install -y"
+        INSTALL_CMD="apt install -y"
         ;;
     ubuntu)
         DISTRO="ubuntu"
-        INSTALL_CMD="sudo apt install -y"
+        INSTALL_CMD="apt install -y"
         ;;
     rhel|fedora|redos)
         DISTRO="rhel"
-        INSTALL_CMD="sudo dnf install -y"
+        INSTALL_CMD="dnf install -y"
         ;;
     altlinux)
         DISTRO="altlinux"
-        INSTALL_CMD="su -c apt-get install -y"
+        INSTALL_CMD="apt-get install -y"
         ;;
     arch|manjaro)
         DISTRO="arch"
-        INSTALL_CMD="sudo pacman -S --noconfirm"
+        INSTALL_CMD="pacman -S --noconfirm"
         ;;
     *)
         echo "Unsupported Linux distribution: $ID"
@@ -70,7 +70,18 @@ install_pkg() {
     for pkg in "${pkg_list[@]}"; do
         if ! $check_cmd "$pkg" >/dev/null 2>&1; then
             echo "Installing missing package: $pkg"
-            $INSTALL_CMD "$pkg"
+            if [ "$EUID" -ne 0 ]; then
+                case "$DISTRO" in
+                    alt)
+                        su -c "$INSTALL_CMD "$pkg""
+                    ;;
+                    *)
+                        sudo $INSTALL_CMD "$pkg"
+                    ;;
+                esac
+            else
+                $INSTALL_CMD "$pkg"
+            fi
         fi
     done
 }

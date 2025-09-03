@@ -146,31 +146,64 @@ get_qt_prefix() {
 }
 
 # ==========================
-# Detect Qt version
+# Get Qt version string
+# ==========================
+get_qt_version() {
+    # Try multiple methods to get full Qt version
+    
+    # Method 1: Use qmake6
+    if command -v qmake6 >/dev/null 2>&1; then
+        qmake6 -query QT_VERSION 2>/dev/null && return
+    fi
+    
+    # Method 2: Use qmake-qt6
+    if command -v qmake-qt6 >/dev/null 2>&1; then
+        qmake-qt6 -query QT_VERSION 2>/dev/null && return
+    fi
+    
+    # Method 3: Use regular qmake
+    if command -v qmake >/dev/null 2>&1; then
+        qmake -query QT_VERSION 2>/dev/null && return
+    fi
+    
+    # Method 4: Try to extract from qtpaths
+    if command -v qtpaths6 >/dev/null 2>&1; then
+        qtpaths6 --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
+    fi
+    
+    if command -v qtpaths >/dev/null 2>&1; then
+        qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
+    fi
+}
+
+# ==========================
+# Detect Qt version and prefix
 # ==========================
 QT_PREFIX=""
-QT_VERSION="Unknown"
+QT_VERSION="unknown"
 
 # First try to detect Qt6
 if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
     QT_PREFIX=$(get_qt_prefix)
-    QT_VERSION="qt6"
-    echo "Using Qt6 from: $QT_PREFIX"
+    QT_VERSION=$(get_qt_version "qt6")
+    echo "Using Qt $QT_VERSION from: $QT_PREFIX"
 # Then try Qt5
 elif command -v qmake >/dev/null 2>&1 || command -v qtpaths >/dev/null 2>&1; then
     QT_PREFIX=$(get_qt_prefix)
-    QT_VERSION="qt5"
-    echo "Using Qt5 from: $QT_PREFIX"
+    QT_VERSION=$(get_qt_version "qt5")
+    echo "Using Qt $QT_VERSION from: $QT_PREFIX"
 else
     echo "Qt not found. Installing prerequisites..."
     install_prereqs
     # Try again after installation
     if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1; then
         QT_PREFIX=$(get_qt_prefix)
-        QT_VERSION="qt6"
+        QT_VERSION=$(get_qt_version "qt6")
+        echo "Using Qt $QT_VERSION from: $QT_PREFIX"
     elif command -v qmake >/dev/null 2>&1; then
         QT_PREFIX=$(get_qt_prefix)
-        QT_VERSION="qt5"
+        QT_VERSION=$(get_qt_version "qt5")
+        echo "Using Qt $QT_VERSION from: $QT_PREFIX"
     else
         echo "Error: Qt installation not found even after installing prerequisites"
         exit 1
@@ -200,7 +233,8 @@ BUILD_TYPE=Release
 # ==========================
 # Build project
 # ==========================
-BUILD_DIR="build-Qt_${QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
+SANITIZED_QT_VERSION=$(echo "$QT_VERSION" | tr '.' '_' | tr ' ' '_')
+BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"

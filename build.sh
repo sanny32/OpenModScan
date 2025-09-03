@@ -149,7 +149,7 @@ get_qt_prefix() {
 # Detect Qt version
 # ==========================
 QT_PREFIX=""
-QT_VERSION="unknown"
+QT_VERSION="Unknown"
 
 # First try to detect Qt6
 if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
@@ -185,7 +185,7 @@ ARCH=$(uname -m)
 # ==========================
 # Detect compiler
 # ==========================
-COMPILER="unknown"
+COMPILER="Unknown"
 if command -v g++ >/dev/null 2>&1; then
     COMPILER="GCC"
 elif command -v clang++ >/dev/null 2>&1; then

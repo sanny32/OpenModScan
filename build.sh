@@ -77,14 +77,12 @@ install_pkg() {
     if [ ${#missing[@]} -gt 0 ]; then
         echo "Installing missing packages: ${missing[*]}"
         if [ "$EUID" -ne 0 ]; then
-            case "$DISTRO" in
-                altlinux)
-                    su -c "$INSTALL_CMD ${missing[*]}"
-                    ;;
-                *)
-                    sudo $INSTALL_CMD "${missing[@]}"
-                    ;;
-            esac
+            if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+                sudo $INSTALL_CMD "${missing[@]}"
+            else
+                echo "Using su for package installation..."
+                su -c "$INSTALL_CMD ${missing[*]}"
+            fi
         else
             $INSTALL_CMD "${missing[@]}"
         fi

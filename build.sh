@@ -325,7 +325,7 @@ BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../omodscan -GNinja -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 

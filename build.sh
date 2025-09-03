@@ -116,14 +116,6 @@ install_prereqs() {
             fi
         fi
 
-        if [ -f "/usr/lib64/cmake/Qt6Core/Qt6CoreConfig.cmake" ]; then
-            export CMAKE_PREFIX_PATH="/usr/lib64/cmake:$CMAKE_PREFIX_PATH"
-            echo "Set CMAKE_PREFIX_PATH for Qt6: $CMAKE_PREFIX_PATH"
-        elif [ -f "/usr/lib64/cmake/Qt5Core/Qt5CoreConfig.cmake" ]; then
-            export CMAKE_PREFIX_PATH="/usr/lib64/cmake:$CMAKE_PREFIX_PATH"
-            echo "Set CMAKE_PREFIX_PATH for Qt5: $CMAKE_PREFIX_PATH"
-        fi
-
     elif [ "$PM" = "pacman" ]; then
         GENERAL_PACKAGES=(base-devel cmake ninja)
         for pkg in "${GENERAL_PACKAGES[@]}"; do
@@ -238,29 +230,70 @@ get_qt_version() {
     if command -v qtpaths >/dev/null 2>&1; then
         qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
     fi
-    if [ "$qt_type" = "qt6" ]; then
-        echo "6.0.0"
-    else
-        echo "5.0.0"
-    fi
+
+    echo "Error: Qt$QT_VERSION installation not found or invalid. Please install Qt$QT_VERSION development packages." >&2
+    exit 1
 }
+
+get_cmake_prefix() {
+    local QT_VER="$1"   # "qt5" or "qt6"
+    local PREFIX=""
+
+    if [ "$QT_VER" = "qt6" ]; then
+        if command -v qmake6 >/dev/null 2>&1; then
+            PREFIX=$(qmake6 -query QT_INSTALL_PREFIX 2>/dev/null)
+        elif command -v qmake-qt6 >/dev/null 2>&1; then
+            PREFIX=$(qmake-qt6 -query QT_INSTALL_PREFIX 2>/dev/null)
+        elif command -v qtpaths6 >/dev/null 2>&1; then
+            PREFIX=$(qtpaths6 --install-prefix 2>/dev/null || qtpaths6 --qt-install-dir 2>/dev/null)
+        fi
+    else
+        if command -v qmake >/dev/null 2>&1; then
+            PREFIX=$(qmake -query QT_INSTALL_PREFIX 2>/dev/null)
+        elif command -v qtpaths >/dev/null 2>&1; then
+            PREFIX=$(qtpaths --install-prefix 2>/dev/null || qtpaths --qt-install-dir 2>/dev/null)
+        fi
+    fi
+
+    if [ -n "$PREFIX" ]; then
+        if [ -f "$PREFIX/lib/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ] || \
+           [ -f "$PREFIX/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ]; then
+            echo "$PREFIX"
+            return
+        fi
+    fi
+
+    # Fedora /usr/lib64/qt6 или /usr/lib64/qt5
+    if [ -f "/usr/lib64/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ]; then
+        echo "/usr/lib64"
+        return
+    fi
+    if [ -f "/usr/lib/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ]; then
+        echo "/usr/lib"
+        return
+    fi
+    
+    echo "Error: Qt$QT_VER installation not found or invalid. Please install Qt$QT_VER development packages." >&2
+    exit 1
+}
+
 
 # ==========================
 # Detect Qt version and prefix
 # ==========================
-QT_PREFIX=""
+CMAKE_PREFIX=""
 QT_VERSION="Unknown"
 
 if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
-    QT_PREFIX=$(get_qt_prefix)
     QT_VERSION=$(get_qt_version "qt6")
-    echo "Using Qt $QT_VERSION from: $QT_PREFIX"
+    CMAKE_PREFIX=$(get_cmake_prefix "qt6")
+    echo "Using Qt $QT_VERSION (Qt6) from: $CMAKE_PREFIX"
 elif command -v qmake >/dev/null 2>&1 || command -v qtpaths >/dev/null 2>&1; then
-    QT_PREFIX=$(get_qt_prefix)
     QT_VERSION=$(get_qt_version "qt5")
-    echo "Using Qt $QT_VERSION from: $QT_PREFIX"
+    CMAKE_PREFIX=$(get_cmake_prefix "qt5")
+    echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
 else
-    echo "Error: Qt installation not found even after installing prerequisites"
+    echo "Error: Qt installation not found even after installing prerequisites" >&2
     exit 1
 fi
 
@@ -292,7 +325,7 @@ BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="$QT_PREFIX" -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX" -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 

@@ -45,7 +45,7 @@ install_prereqs() {
 
         # Qt
         if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-            QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-connectivity-dev qt6-core5compat-dev)
+            QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-connectivity-dev qt6-core5compat-dev)
             QTVERSION="Qt6"
         else
             QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
@@ -83,7 +83,7 @@ install_prereqs() {
 
 
         # Qt6
-        QT6_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtconnectivity-devel qt6-qt5compat-devel)
+        QT6_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qtconnectivity-devel qt6-qt5compat-devel)
         MISSING_QT6=()
         for pkg in "${QT6_PACKAGES[@]}"; do
             if ! rpm -q "$pkg" >/dev/null 2>&1; then
@@ -132,7 +132,7 @@ install_prereqs() {
         fi
 
         # Qt6
-        QT6_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-connectivity qt6-5compat)
+        QT6_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-serialbus qt6-connectivity qt6-5compat)
         MISSING_QT6=()
         for pkg in "${QT6_PACKAGES[@]}"; do
             if ! pacman -Qi "$pkg" >/dev/null 2>&1; then

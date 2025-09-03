@@ -29,8 +29,7 @@ install_prereqs() {
     echo "Checking prerequisites..."
 
     if [ "$PM" = "apt-get" ]; then
-        # Общие пакеты
-        GENERAL_PACKAGES=(build-essential cmake ninja-build pkg-config)
+        GENERAL_PACKAGES=(build-essential cmake ninja-build)
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! dpkg -s "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
@@ -38,7 +37,13 @@ install_prereqs() {
             fi
         done
 
-        # Qt6 или Qt5
+        # pkg-config
+        if ! command -v pkg-config >/dev/null 2>&1; then
+            echo "Installing missing package: pkg-config"
+            $INSTALL_CMD pkg-config
+        fi
+
+        # Qt
         if apt-cache show qt6-base-dev >/dev/null 2>&1; then
             QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-connectivity-dev qt6-core5compat-dev)
             QTVERSION="Qt6"
@@ -62,14 +67,20 @@ install_prereqs() {
         fi
 
     elif [ "$PM" = "dnf" ]; then
-        # Общие пакеты
-        GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config)
+        GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build)
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! rpm -q "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
                 $INSTALL_CMD "$pkg"
             fi
         done
+
+        # pkg-config
+        if ! command -v pkg-config >/dev/null 2>&1; then
+            echo "Installing missing package: pkg-config"
+            $INSTALL_CMD pkgconf-pkg-config
+        fi
+
 
         # Qt6
         QT6_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtconnectivity-devel qt6-qt5compat-devel)
@@ -106,14 +117,19 @@ install_prereqs() {
         fi
 
     elif [ "$PM" = "pacman" ]; then
-        # Общие пакеты
-        GENERAL_PACKAGES=(base-devel cmake ninja pkgconf)
+        GENERAL_PACKAGES=(base-devel cmake ninja)
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
                 $INSTALL_CMD "$pkg"
             fi
         done
+
+        # pkg-config
+        if ! command -v pkg-config >/dev/null 2>&1; then
+            echo "Installing missing package: pkg-config"
+            $INSTALL_CMD pkgconf
+        fi
 
         # Qt6
         QT6_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-connectivity qt6-5compat)
@@ -131,7 +147,7 @@ install_prereqs() {
             echo "Qt6 packages already installed."
         fi
 
-        # Если Qt6 нет, пробуем Qt5
+        # Qt5
         if [ ${#MISSING_QT6[@]} -eq ${#QT6_PACKAGES[@]} ]; then
             echo "Falling back to Qt5..."
             QT5_PACKAGES=(qt5-base qt5-tools qt5-serialport qt5-serialbus)

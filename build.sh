@@ -227,7 +227,6 @@ get_cmake_prefix() {
     exit 1
 }
 
-
 # ==========================
 # Detect Qt version and prefix
 # ==========================
@@ -244,6 +243,25 @@ elif command -v qmake >/dev/null 2>&1 || command -v qtpaths >/dev/null 2>&1; the
     echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
 else
     echo "Error: Qt installation not found even after installing prerequisites" >&2
+    exit 1
+fi
+
+verlte() {
+    # $1 <= $2 ?
+    [ "$1" = "$(printf '%s\n%s' "$1" "$2" | sort -V | head -n1)" ]
+}
+
+verlt() {
+    # $1 < $2 ?
+    [ "$1" != "$2" ] && verlte "$1" "$2"
+}
+
+# ==========================
+# Check minimal Qt version
+# ==========================
+MIN_QT_VERSION="5.15.0"
+if verlt "$QT_VERSION" "$MIN_QT_VERSION"; then
+    echo "Error: Qt >= $MIN_QT_VERSION is required, but found $QT_VERSION" >&2
     exit 1
 fi
 

@@ -183,7 +183,7 @@ get_qt_prefix() {
                 echo "$(dirname "$prefix")"
                 return
             fi
-            
+
             prefix=$("$q" -query QT_INSTALL_LIBS 2>/dev/null)
             if [ -n "$prefix" ] && [ -d "$prefix" ]; then
                 echo "$prefix"
@@ -319,7 +319,7 @@ BUILD_TYPE=Release
 # Build project
 # ==========================
 SANITIZED_QT_VERSION=$(echo "$QT_VERSION" | tr '.' '_' | tr ' ' '_')
-BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
+BUILD_DIR="build-omodscan-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"

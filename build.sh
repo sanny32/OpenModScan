@@ -29,7 +29,7 @@ install_prereqs() {
     echo "Checking prerequisites..."
 
     if [ "$PM" = "apt-get" ]; then
-        GENERAL_PACKAGES=(build-essential cmake ninja-build)
+        GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev)
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! dpkg -s "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
@@ -67,7 +67,7 @@ install_prereqs() {
         fi
 
     elif [ "$PM" = "dnf" ]; then
-        GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build)
+        GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build libxcb-cursor-devel)
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! rpm -q "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
@@ -117,7 +117,7 @@ install_prereqs() {
         fi
 
     elif [ "$PM" = "pacman" ]; then
-        GENERAL_PACKAGES=(base-devel cmake ninja)
+        GENERAL_PACKAGES=(base-devel cmake ninja libxcb-cursor)
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"

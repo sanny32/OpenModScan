@@ -11,15 +11,12 @@ echo "=================================="
 if command -v apt-get >/dev/null 2>&1; then
     PM="apt-get"
     INSTALL_CMD="sudo apt-get install -y"
-    UPDATE_CMD="sudo apt-get update"
 elif command -v dnf >/dev/null 2>&1; then
     PM="dnf"
     INSTALL_CMD="sudo dnf install -y"
-    UPDATE_CMD="sudo dnf update -y"
 elif command -v pacman >/dev/null 2>&1; then
     PM="pacman"
     INSTALL_CMD="sudo pacman -S --noconfirm"
-    UPDATE_CMD="sudo pacman -Sy --noconfirm"
 else
     echo "Error: No supported package manager found (apt, dnf, pacman)."
     exit 1
@@ -30,7 +27,6 @@ fi
 # ==========================
 install_prereqs() {
     echo "Checking prerequisites..."
-    $UPDATE_CMD
 
     if [ "$PM" = "apt-get" ]; then
         for pkg in build-essential cmake ninja-build pkg-config; do

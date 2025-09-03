@@ -22,11 +22,11 @@ DISTRO=""
 INSTALL_CMD=""
 
 case "$ID" in
-    debian|linuxmint|astra)
+    debian|astra)
         DISTRO="debian"
         INSTALL_CMD="apt install -y"
         ;;
-    ubuntu)
+    ubuntu|linuxmint)
         DISTRO="ubuntu"
         INSTALL_CMD="apt install -y"
         ;;
@@ -98,7 +98,7 @@ install_prereqs() {
     echo "Checking prerequisites for $DISTRO..."
 
     case "$DISTRO" in
-        debian|astra)
+        debian)
             GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
             
             # Qt6/Qt5 selection

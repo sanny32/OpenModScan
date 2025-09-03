@@ -178,14 +178,12 @@ install_prereqs
 get_qt_prefix() {
     for q in qmake6 qmake-qt6 qmake; do
         if command -v "$q" >/dev/null 2>&1; then
-            # Сначала пробуем путь к include (он всегда в qt6/)
             prefix=$("$q" -query QT_INSTALL_HEADERS 2>/dev/null)
             if [ -n "$prefix" ] && [ -d "$prefix" ]; then
                 echo "$(dirname "$prefix")"
                 return
             fi
-
-            # Или путь к libs
+            
             prefix=$("$q" -query QT_INSTALL_LIBS 2>/dev/null)
             if [ -n "$prefix" ] && [ -d "$prefix" ]; then
                 echo "$prefix"

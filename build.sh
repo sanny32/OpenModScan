@@ -72,7 +72,7 @@ install_pkg() {
             echo "Installing missing package: $pkg"
             if [ "$EUID" -ne 0 ]; then
                 case "$DISTRO" in
-                    alt)
+                    altlinux)
                         su -c "$INSTALL_CMD "$pkg""
                     ;;
                     *)

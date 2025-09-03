@@ -117,10 +117,10 @@ install_prereqs() {
         fi
 
         if [ -f "/usr/lib64/cmake/Qt6Core/Qt6CoreConfig.cmake" ]; then
-            export CMAKE_PREFIX_PATH="/usr/lib64:$CMAKE_PREFIX_PATH"
+            export CMAKE_PREFIX_PATH="/usr/lib64/cmake:$CMAKE_PREFIX_PATH"
             echo "Set CMAKE_PREFIX_PATH for Qt6: $CMAKE_PREFIX_PATH"
         elif [ -f "/usr/lib64/cmake/Qt5Core/Qt5CoreConfig.cmake" ]; then
-            export CMAKE_PREFIX_PATH="/usr/lib64:$CMAKE_PREFIX_PATH"
+            export CMAKE_PREFIX_PATH="/usr/lib64/cmake:$CMAKE_PREFIX_PATH"
             echo "Set CMAKE_PREFIX_PATH for Qt5: $CMAKE_PREFIX_PATH"
         fi
 

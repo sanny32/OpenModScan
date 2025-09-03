@@ -22,7 +22,11 @@ list(GET VERSION_LIST 2 VERSION_PATCH)
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
 if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET REQUIRED)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
+endif()
+
+if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
+    message(FATAL_ERROR "Qt not found. Please install Qt5 or Qt6 development packages.")
 endif()
 
 # Define target

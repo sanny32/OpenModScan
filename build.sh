@@ -76,20 +76,23 @@ install_pkg() {
 
     if [ ${#missing[@]} -gt 0 ]; then
         echo "Installing missing packages: ${missing[*]}"
-        if [ "$EUID" -ne 0 ]; then
-            if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+        if command -v sudo >/dev/null 2>&1; then
+            if sudo -n true 2>/dev/null; then
+                echo "Using sudo (no password required)..."
                 sudo $INSTALL_CMD "${missing[@]}"
             else
-                if ! command -v sudo >/dev/null 2>&1; then
-                    echo "Using su for package installation (sudo not installed)."
+                if sudo -l >/dev/null 2>&1; then
+                    echo "Using sudo (password required)..."
+                    sudo $INSTALL_CMD "${missing[@]}"
                 else
-                    echo "Using su for package installation (current user not in sudoers)."
+                    echo "Using su (user not in sudoers)..."
+                    su -c "$INSTALL_CMD ${missing[*]}"
                 fi
-                su -c "$INSTALL_CMD ${missing[*]}"
             fi
         else
-            $INSTALL_CMD "${missing[@]}"
-fi
+            echo "Using su (sudo not installed)..."
+            su -c "$INSTALL_CMD ${missing[*]}"
+        fi
     fi
 }
 

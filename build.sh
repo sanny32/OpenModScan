@@ -67,7 +67,16 @@ install_prereqs() {
         fi
 
     elif [ "$PM" = "dnf" ]; then
-        GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build libxcb-cursor-devel)
+        GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build)
+        
+        if rpm -q xcb-util-cursor-devel >/dev/null 2>&1; then
+            GENERAL_PACKAGES+=(xcb-util-cursor-devel)
+        elif rpm -q libxcb-devel >/dev/null 2>&1; then
+            GENERAL_PACKAGES+=(libxcb-devel)
+        else
+            echo "Warning: Neither xcb-util-cursor-devel nor libxcb-devel found. GUI apps may fail."
+        fi
+
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! rpm -q "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"

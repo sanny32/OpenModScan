@@ -129,10 +129,10 @@ install_prereqs() {
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor)         
     
             # Qt6/Qt5 selection
-            if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-base-dev qt6-tools-dev qt6-serialport-dev qt6-serialbus-dev qt6-compat-dev)
+            if apt-cache show qt6-base-devel >/dev/null 2>&1; then
+                QT_PACKAGES=(qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat)
             else
-                QT_PACKAGES=(qt5-base-dev qt5-tools-dev qt5-serialport-dev qt5-serialbus-dev)
+                QT_PACKAGES=(qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel)
             fi
             ;;
         

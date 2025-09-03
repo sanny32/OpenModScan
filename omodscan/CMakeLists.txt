@@ -13,6 +13,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PRODUCT_NAME "Open ModScan")
 set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}")
 
+# Split version to major, minor, patch
+string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
+list(GET VERSION_LIST 0 VERSION_MAJOR)
+list(GET VERSION_LIST 1 VERSION_MINOR)
+list(GET VERSION_LIST 2 VERSION_PATCH)
+
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
 if (NOT Qt6_FOUND)
@@ -21,6 +27,21 @@ endif()
 
 # Define target
 add_executable(${PROJECT_NAME})
+
+find_package(Git QUIET)
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+        OUTPUT_VARIABLE GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET)
+
+    if(${GIT_BRANCH} MATCHES dev)
+        set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+    endif()
+else()
+    message(STATUS "Git not found - skipping branch detection")
+endif()
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
@@ -261,11 +282,6 @@ else()
 endif()
 
 if(WIN32)
-    string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
-    list(GET VERSION_LIST 0 VERSION_MAJOR)
-    list(GET VERSION_LIST 1 VERSION_MINOR)
-    list(GET VERSION_LIST 2 VERSION_PATCH)
-
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodscan.ico")
 
     configure_file(

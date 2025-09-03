@@ -98,7 +98,7 @@ install_prereqs() {
             echo "Qt6 packages already installed."
         fi
 
-        # Если Qt6 не установлен, пробуем Qt5
+        # Qt5
         if [ ${#MISSING_QT6[@]} -eq ${#QT6_PACKAGES[@]} ]; then
             echo "Falling back to Qt5..."
             QT5_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
@@ -114,6 +114,16 @@ install_prereqs() {
             else
                 echo "Qt5 packages already installed."
             fi
+        fi
+
+        # Qt6
+        if [ -d "/usr/lib64/qt6/lib/cmake/Qt6Core" ]; then
+            export CMAKE_PREFIX_PATH="/usr/lib64/qt6:$CMAKE_PREFIX_PATH"
+            echo "Set CMAKE_PREFIX_PATH for Qt6: $CMAKE_PREFIX_PATH"
+        # Qt5 fallback
+        elif [ -d "/usr/lib64/qt5/lib/cmake/Qt5Core" ]; then
+            export CMAKE_PREFIX_PATH="/usr/lib64/qt5:$CMAKE_PREFIX_PATH"
+            echo "Set CMAKE_PREFIX_PATH for Qt5: $CMAKE_PREFIX_PATH"
         fi
 
     elif [ "$PM" = "pacman" ]; then

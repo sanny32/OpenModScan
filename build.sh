@@ -35,7 +35,13 @@ install_prereqs() {
     $UPDATE_CMD
 
     # Install basic build tools
-    $INSTALL_CMD build-essential cmake ninja-build pkg-config
+    if [ "$PM" = "apt-get" ]; then
+        $INSTALL_CMD build-essential cmake ninja-build pkg-config
+    elif [ "$PM" = "dnf" ]; then
+        $INSTALL_CMD gcc gcc-c++ cmake ninja-build pkg-config
+    elif [ "$PM" = "pacman" ]; then
+        $INSTALL_CMD base-devel cmake ninja pkgconf
+    fi
 
     if [ "$PM" = "apt-get" ]; then
         if apt-cache show qt6-base-dev >/dev/null 2>&1; then
@@ -60,12 +66,10 @@ install_prereqs() {
         fi
 
     elif [ "$PM" = "dnf" ]; then
-        $INSTALL_CMD gcc gcc-c++ cmake ninja-build pkg-config
         $INSTALL_CMD qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtconnectivity-devel qt6-qt5compat-devel || \
             $INSTALL_CMD qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel
 
     elif [ "$PM" = "pacman" ]; then
-        $INSTALL_CMD base-devel cmake ninja pkgconf
         $INSTALL_CMD qt6-base qt6-tools qt6-serialport qt6-connectivity qt6-5compat || \
             $INSTALL_CMD qt5-base qt5-tools qt5-serialport qt5-serialbus
     fi
@@ -76,15 +80,11 @@ install_prereqs() {
 # ==========================
 check_and_install() {
     local tool=$1
+    local package_name=${2:-$tool}
+    
     if ! command -v "$tool" >/dev/null 2>&1; then
         echo "$tool not found. Installing..."
-        if [ "$PM" = "apt-get" ]; then
-            sudo apt-get install -y "$tool"
-        elif [ "$PM" = "dnf" ]; then
-            sudo dnf install -y "$tool"
-        elif [ "$PM" = "pacman" ]; then
-            sudo pacman -S --noconfirm "$tool"
-        fi
+        $INSTALL_CMD "$package_name"
     fi
 }
 
@@ -92,7 +92,13 @@ check_and_install() {
 check_and_install cmake
 check_and_install ninja
 check_and_install g++
-check_and_install gcc
+if [ "$PM" = "apt-get" ]; then
+    check_and_install gcc "gcc"
+elif [ "$PM" = "dnf" ]; then
+    check_and_install gcc "gcc"
+elif [ "$PM" = "pacman" ]; then
+    check_and_install gcc "gcc"
+fi
 
 # ==========================
 # Detect Qt installation path
@@ -149,6 +155,8 @@ get_qt_prefix() {
 # Get Qt version string
 # ==========================
 get_qt_version() {
+    local qt_type=$1
+    
     # Try multiple methods to get full Qt version
     
     # Method 1: Use qmake6
@@ -174,13 +182,20 @@ get_qt_version() {
     if command -v qtpaths >/dev/null 2>&1; then
         qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
     fi
+    
+    # Fallback based on detected Qt type
+    if [ "$qt_type" = "qt6" ]; then
+        echo "6.0.0"
+    else
+        echo "5.0.0"
+    fi
 }
 
 # ==========================
 # Detect Qt version and prefix
 # ==========================
 QT_PREFIX=""
-QT_VERSION="unknown"
+QT_VERSION="Unknown"
 
 # First try to detect Qt6
 if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
@@ -221,8 +236,18 @@ ARCH=$(uname -m)
 COMPILER="Unknown"
 if command -v g++ >/dev/null 2>&1; then
     COMPILER="GCC"
+    # Get GCC version for more detailed info
+    if command -v gcc >/dev/null 2>&1; then
+        GCC_VERSION=$(gcc --version | head -n1 | awk '{print $NF}')
+        COMPILER="GCC_${GCC_VERSION}"
+    fi
 elif command -v clang++ >/dev/null 2>&1; then
     COMPILER="Clang"
+    # Get Clang version for more detailed info
+    if command -v clang >/dev/null 2>&1; then
+        CLANG_VERSION=$(clang --version | head -n1 | awk '{print $3}')
+        COMPILER="Clang_${CLANG_VERSION}"
+    fi
 fi
 
 # ==========================
@@ -234,10 +259,21 @@ BUILD_TYPE=Release
 # Build project
 # ==========================
 SANITIZED_QT_VERSION=$(echo "$QT_VERSION" | tr '.' '_' | tr ' ' '_')
-BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
+SANITIZED_COMPILER=$(echo "$COMPILER" | tr '.' '_' | tr ' ' '_')
+BUILD_DIR="build-Qt_${SANITIZED_QT_VERSION}_${SANITIZED_COMPILER}_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="$QT_PREFIX" -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
+
+# ==========================
+# Optional: Install
+# ==========================
+read -p "Do you want to install the application? [y/N] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    sudo ninja install
+    echo "Application installed successfully."
+fi

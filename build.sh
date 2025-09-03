@@ -68,15 +68,6 @@ install_prereqs() {
 
     elif [ "$PM" = "dnf" ]; then
         GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build)
-        
-        if rpm -q xcb-util-cursor-devel >/dev/null 2>&1; then
-            GENERAL_PACKAGES+=(xcb-util-cursor-devel)
-        elif rpm -q libxcb-devel >/dev/null 2>&1; then
-            GENERAL_PACKAGES+=(libxcb-devel)
-        else
-            echo "Warning: Neither xcb-util-cursor-devel nor libxcb-devel found. GUI apps may fail."
-        fi
-
         for pkg in "${GENERAL_PACKAGES[@]}"; do
             if ! rpm -q "$pkg" >/dev/null 2>&1; then
                 echo "Installing missing package: $pkg"
@@ -90,6 +81,19 @@ install_prereqs() {
             $INSTALL_CMD pkgconf-pkg-config
         fi
 
+        XCB_CURSOR_PKGS=(xcb-util-cursor-devel libxcb-cursor-devel libxcb-devel)
+        FOUND_XCB_CURSOR=0
+        for pkg in "${XCB_CURSOR_PKGS[@]}"; do
+            if rpm -q "$pkg" >/dev/null 2>&1; then
+                FOUND_XCB_CURSOR=1
+                break
+            fi
+        done
+
+        if [ $FOUND_XCB_CURSOR -eq 0 ]; then
+            echo "Installing libxcb-cursor package..."
+            $INSTALL_CMD "${XCB_CURSOR_PKGS[@]}" || true
+        fi
 
         # Qt6
         QT6_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qtconnectivity-devel qt6-qt5compat-devel)

@@ -214,7 +214,7 @@ get_qt_prefix() {
 # Get Qt version string
 # ==========================
 get_qt_version() {
-    local qt_type=$1
+    local QT_VER=$1
     if command -v qmake6 >/dev/null 2>&1; then
         qmake6 -query QT_VERSION 2>/dev/null && return
     fi
@@ -231,7 +231,7 @@ get_qt_version() {
         qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
     fi
 
-    echo "Error: Qt$QT_VERSION installation not found or invalid. Please install Qt$QT_VERSION development packages." >&2
+    echo "Error: $QT_VER installation not found or invalid. Please install $QT_VER development packages." >&2
     exit 1
 }
 
@@ -263,7 +263,7 @@ get_cmake_prefix() {
         fi
     fi
 
-    # Fedora /usr/lib64/qt6 или /usr/lib64/qt5
+    # Fedora use /usr/lib64/qt6 or /usr/lib64/qt5
     if [ -f "/usr/lib64/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ]; then
         echo "/usr/lib64"
         return
@@ -272,8 +272,8 @@ get_cmake_prefix() {
         echo "/usr/lib"
         return
     fi
-    
-    echo "Error: Qt$QT_VER installation not found or invalid. Please install Qt$QT_VER development packages." >&2
+
+    echo "Error: $QT_VER installation not found or invalid. Please install $QT_VER development packages." >&2
     exit 1
 }
 

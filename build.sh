@@ -30,9 +30,13 @@ case "$ID" in
         DISTRO="ubuntu"
         INSTALL_CMD="sudo apt install -y"
         ;;
-    rhel|fedora|altlinux|redos)
+    rhel|fedora|redos)
         DISTRO="rhel"
         INSTALL_CMD="sudo dnf install -y"
+        ;;
+    altlinux)
+        DISTRO="altlinux"
+        INSTALL_CMD="apt-get install -y"
         ;;
     arch|manjaro)
         DISTRO="arch"
@@ -100,7 +104,7 @@ install_prereqs() {
             fi
             ;;
 
-        rhel)
+        rhel|altlinux)
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
             QT5_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
 

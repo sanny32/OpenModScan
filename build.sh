@@ -130,9 +130,9 @@ install_prereqs() {
     
             # Qt6/Qt5 selection
             if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-qtbase-dev qt6-qttools-dev qt6-qtserialport-dev qt6-qtserialbus-dev qt6-qt5compat-dev)
+                QT_PACKAGES=(qt6-base-dev qt6-tools-dev qt6-serialport-dev qt6-serialbus-dev qt6-compat-dev)
             else
-                QT_PACKAGES=(qt5-qtbase-dev qt5-qttools-dev qt5-qtserialport-dev qt5-qtserialbus-dev)
+                QT_PACKAGES=(qt5-base-dev qt5-tools-dev qt5-serialport-dev qt5-serialbus-dev)
             fi
             ;;
         

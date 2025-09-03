@@ -36,7 +36,7 @@ case "$ID" in
         ;;
     altlinux)
         DISTRO="altlinux"
-        INSTALL_CMD="apt-get install -y"
+        INSTALL_CMD="su -c apt-get install -y"
         ;;
     arch|manjaro)
         DISTRO="arch"

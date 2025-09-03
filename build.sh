@@ -229,49 +229,40 @@ get_qt_version() {
         qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
     fi
 
-    echo "Error: $QT_VER installation not found or invalid. Please install $QT_VER development packages." >&2
+    echo "Error: Can't detect installed Qt version." >&2
     exit 1
 }
 
 get_cmake_prefix() {
-    local QT_VER="$1"   # "qt5" or "qt6"
+    local QT_VER="$1"
+    local CONFIG_FILE="Qt${QT_VER: -1}CoreConfig.cmake"
     local PREFIX=""
 
-    if [ "$QT_VER" = "qt6" ]; then
-        if command -v qmake6 >/dev/null 2>&1; then
-            PREFIX=$(qmake6 -query QT_INSTALL_PREFIX 2>/dev/null)
-        elif command -v qmake-qt6 >/dev/null 2>&1; then
-            PREFIX=$(qmake-qt6 -query QT_INSTALL_PREFIX 2>/dev/null)
-        elif command -v qtpaths6 >/dev/null 2>&1; then
-            PREFIX=$(qtpaths6 --install-prefix 2>/dev/null || qtpaths6 --qt-install-dir 2>/dev/null)
-        fi
-    else
-        if command -v qmake >/dev/null 2>&1; then
-            PREFIX=$(qmake -query QT_INSTALL_PREFIX 2>/dev/null)
-        elif command -v qtpaths >/dev/null 2>&1; then
-            PREFIX=$(qtpaths --install-prefix 2>/dev/null || qtpaths --qt-install-dir 2>/dev/null)
-        fi
-    fi
-
-    if [ -n "$PREFIX" ]; then
-        if [ -f "$PREFIX/lib/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ] || \
-           [ -f "$PREFIX/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ]; then
+     if command -v pkg-config >/dev/null 2>&1; then
+        PREFIX=$(pkg-config --variable=prefix Qt${QT_VER: -1}Core 2>/dev/null || true)
+        if [ -n "$PREFIX" ]; then
             echo "$PREFIX"
             return
         fi
     fi
 
-    # Fedora use /usr/lib64/qt6 or /usr/lib64/qt5
-    if [ -f "/usr/lib64/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ]; then
-        echo "/usr/lib64"
-        return
-    fi
-    if [ -f "/usr/lib/cmake/Qt${QT_VER: -1}Core/Qt${QT_VER: -1}CoreConfig.cmake" ]; then
-        echo "/usr/lib"
+     for q in qmake6 qmake-qt6 qmake qtpaths6 qtpaths; do
+        if command -v "$q" >/dev/null 2>&1; then
+            PREFIX=$("$q" -query QT_INSTALL_PREFIX 2>/dev/null || "$q" --install-prefix 2>/dev/null || true)
+            if [ -n "$PREFIX" ] && [ -f "$PREFIX/lib/cmake/$CONFIG_FILE" ]; then
+                echo "$PREFIX"
+                return
+            fi
+        fi
+    done
+
+    PREFIX=$(find /usr /usr/local -type f -name "$CONFIG_FILE" 2>/dev/null | head -n1)
+    if [ -n "$PREFIX" ]; then
+        echo "$(dirname "$PREFIX")"
         return
     fi
 
-    echo "Error: $QT_VER installation not found or invalid. Please install $QT_VER development packages." >&2
+    echo "Error: Can't detect cmake prefix path." >&2
     exit 1
 }
 
@@ -326,13 +317,3 @@ cd "$BUILD_DIR"
 cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
-
-# ==========================
-# Optional: Install
-# ==========================
-read -p "Do you want to install the application? [y/N] " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    sudo ninja install
-    echo "Application installed successfully."
-fi

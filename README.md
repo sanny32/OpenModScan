@@ -52,6 +52,7 @@ Registers
 
 ## Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  On Linux you can build application via `build.sh` script.
 
 ## About supported operating systems
 

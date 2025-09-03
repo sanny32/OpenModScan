@@ -104,11 +104,21 @@ install_prereqs() {
             fi
             ;;
 
-        rhel|altlinux)
+        rhel)
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
-            QT5_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
-
+     
             if dnf list available qt6-qtbase-devel >/dev/null 2>&1; then
+                QT_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel)
+            else
+                QT_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
+            fi
+            ;;
+
+        altlinux)
+            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config xcb-util-cursor-devel)         
+    
+            # Qt6/Qt5 selection
+            if apt-cache show qt6-base-dev >/dev/null 2>&1; then
                 QT_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel)
             else
                 QT_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
@@ -117,8 +127,7 @@ install_prereqs() {
         
         arch)
             GENERAL_PACKAGES=(base-devel cmake ninja libxcb-cursor pkgconf)
-            QT5_PACKAGES=(qt5-base qt5-tools qt5-serialport qt5-serialbus)
-
+    
             # Qt6/Qt5 selection
             if pacman -Si qt6-base >/dev/null 2>&1; then
                 QT_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-serialbus qt6-5compat)

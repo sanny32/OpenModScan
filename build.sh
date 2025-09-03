@@ -29,125 +29,93 @@ fi
 # Install prerequisites
 # ==========================
 install_prereqs() {
-    echo "Installing prerequisites..."
-
-    # Update package lists
+    echo "Checking prerequisites..."
     $UPDATE_CMD
 
-    # Install basic build tools
     if [ "$PM" = "apt-get" ]; then
-        $INSTALL_CMD build-essential cmake ninja-build pkg-config
-    elif [ "$PM" = "dnf" ]; then
-        $INSTALL_CMD gcc gcc-c++ cmake ninja-build pkg-config
-    elif [ "$PM" = "pacman" ]; then
-        $INSTALL_CMD base-devel cmake ninja pkgconf
-    fi
+        for pkg in build-essential cmake ninja-build pkg-config; do
+            if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+                echo "Installing missing package: $pkg"
+                $INSTALL_CMD "$pkg"
+            fi
+        done
 
-    if [ "$PM" = "apt-get" ]; then
         if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-            echo "Qt6 found in repo, installing..."
-            $INSTALL_CMD \
-                qt6-base-dev \
-                qt6-base-dev-tools \
-                qt6-tools-dev \
-                qt6-tools-dev-tools \
-                qt6-serialport-dev \
-                qt6-connectivity-dev \
-                qt6-core5compat-dev
+            echo "Qt6 found in repo, checking packages..."
+            for pkg in qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-connectivity-dev qt6-core5compat-dev; do
+                if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+                    echo "Installing missing package: $pkg"
+                    $INSTALL_CMD "$pkg"
+                fi
+            done
         else
             echo "Qt6 not available, falling back to Qt5..."
-            $INSTALL_CMD \
-                qtbase5-dev \
-                qtbase5-dev-tools \
-                qttools5-dev \
-                qttools5-dev-tools \
-                libqt5serialport5-dev \
-                libqt5serialbus5-dev
+            for pkg in qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev; do
+                if ! dpkg -s "$pkg" >/dev/null 2>&1; then
+                    echo "Installing missing package: $pkg"
+                    $INSTALL_CMD "$pkg"
+                fi
+            done
         fi
 
     elif [ "$PM" = "dnf" ]; then
-        $INSTALL_CMD qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtconnectivity-devel qt6-qt5compat-devel || \
+        for pkg in gcc gcc-c++ cmake ninja-build pkg-config; do
+            if ! rpm -q "$pkg" >/dev/null 2>&1; then
+                echo "Installing missing package: $pkg"
+                $INSTALL_CMD "$pkg"
+            fi
+        done
+
+        if $INSTALL_CMD qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtconnectivity-devel qt6-qt5compat-devel; then
+            echo "Qt6 packages installed/verified."
+        else
+            echo "Falling back to Qt5..."
             $INSTALL_CMD qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel
+        fi
 
     elif [ "$PM" = "pacman" ]; then
-        $INSTALL_CMD qt6-base qt6-tools qt6-serialport qt6-connectivity qt6-5compat || \
+        for pkg in base-devel cmake ninja pkgconf; do
+            if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
+                echo "Installing missing package: $pkg"
+                $INSTALL_CMD "$pkg"
+            fi
+        done
+
+        if $INSTALL_CMD qt6-base qt6-tools qt6-serialport qt6-connectivity qt6-5compat; then
+            echo "Qt6 packages installed/verified."
+        else
+            echo "Falling back to Qt5..."
             $INSTALL_CMD qt5-base qt5-tools qt5-serialport qt5-serialbus
+        fi
     fi
 }
 
 # ==========================
-# Check and install required tools
+# Always check/install prereqs first
 # ==========================
-check_and_install() {
-    local tool=$1
-    local package_name=${2:-$tool}
-    
-    if ! command -v "$tool" >/dev/null 2>&1; then
-        echo "$tool not found. Installing..."
-        $INSTALL_CMD "$package_name"
-    fi
-}
-
-# Проверяем и устанавливаем необходимые инструменты
-check_and_install cmake
-check_and_install ninja
-check_and_install g++
-if [ "$PM" = "apt-get" ]; then
-    check_and_install gcc "gcc"
-elif [ "$PM" = "dnf" ]; then
-    check_and_install gcc "gcc"
-elif [ "$PM" = "pacman" ]; then
-    check_and_install gcc "gcc"
-fi
+install_prereqs
 
 # ==========================
 # Detect Qt installation path
 # ==========================
 get_qt_prefix() {
-    # Try multiple methods to get Qt installation prefix
-    
-    # Method 1: Use qmake (most reliable)
     if command -v qmake6 >/dev/null 2>&1; then
         qmake6 -query QT_INSTALL_PREFIX 2>/dev/null && return
     fi
-    
     if command -v qmake-qt6 >/dev/null 2>&1; then
         qmake-qt6 -query QT_INSTALL_PREFIX 2>/dev/null && return
     fi
-    
     if command -v qmake >/dev/null 2>&1; then
         qmake -query QT_INSTALL_PREFIX 2>/dev/null && return
     fi
-    
-    # Method 2: Use qtpaths with different options
     if command -v qtpaths6 >/dev/null 2>&1; then
-        # Try different options that might work
         qtpaths6 --install-prefix 2>/dev/null && return
         qtpaths6 --qt-install-dir 2>/dev/null && return
     fi
-    
-    # Method 3: Default paths
-    if [ -d "/usr/lib64/qt6" ]; then
-        echo "/usr/lib64/qt6"
-        return
-    fi
-    
-    if [ -d "/usr/lib/qt6" ]; then
-        echo "/usr/lib/qt6"
-        return
-    fi
-    
-    if [ -d "/usr/lib64/qt5" ]; then
-        echo "/usr/lib64/qt5"
-        return
-    fi
-    
-    if [ -d "/usr/lib/qt5" ]; then
-        echo "/usr/lib/qt5"
-        return
-    fi
-    
-    # Fallback to /usr
+    if [ -d "/usr/lib64/qt6" ]; then echo "/usr/lib64/qt6"; return; fi
+    if [ -d "/usr/lib/qt6" ]; then echo "/usr/lib/qt6"; return; fi
+    if [ -d "/usr/lib64/qt5" ]; then echo "/usr/lib64/qt5"; return; fi
+    if [ -d "/usr/lib/qt5" ]; then echo "/usr/lib/qt5"; return; fi
     echo "/usr"
 }
 
@@ -156,34 +124,21 @@ get_qt_prefix() {
 # ==========================
 get_qt_version() {
     local qt_type=$1
-    
-    # Try multiple methods to get full Qt version
-    
-    # Method 1: Use qmake6
     if command -v qmake6 >/dev/null 2>&1; then
         qmake6 -query QT_VERSION 2>/dev/null && return
     fi
-    
-    # Method 2: Use qmake-qt6
     if command -v qmake-qt6 >/dev/null 2>&1; then
         qmake-qt6 -query QT_VERSION 2>/dev/null && return
     fi
-    
-    # Method 3: Use regular qmake
     if command -v qmake >/dev/null 2>&1; then
         qmake -query QT_VERSION 2>/dev/null && return
     fi
-    
-    # Method 4: Try to extract from qtpaths
     if command -v qtpaths6 >/dev/null 2>&1; then
         qtpaths6 --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
     fi
-    
     if command -v qtpaths >/dev/null 2>&1; then
         qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
     fi
-    
-    # Fallback based on detected Qt type
     if [ "$qt_type" = "qt6" ]; then
         echo "6.0.0"
     else
@@ -197,32 +152,17 @@ get_qt_version() {
 QT_PREFIX=""
 QT_VERSION="Unknown"
 
-# First try to detect Qt6
 if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
     QT_PREFIX=$(get_qt_prefix)
     QT_VERSION=$(get_qt_version "qt6")
     echo "Using Qt $QT_VERSION from: $QT_PREFIX"
-# Then try Qt5
 elif command -v qmake >/dev/null 2>&1 || command -v qtpaths >/dev/null 2>&1; then
     QT_PREFIX=$(get_qt_prefix)
     QT_VERSION=$(get_qt_version "qt5")
     echo "Using Qt $QT_VERSION from: $QT_PREFIX"
 else
-    echo "Qt not found. Installing prerequisites..."
-    install_prereqs
-    # Try again after installation
-    if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1; then
-        QT_PREFIX=$(get_qt_prefix)
-        QT_VERSION=$(get_qt_version "qt6")
-        echo "Using Qt $QT_VERSION from: $QT_PREFIX"
-    elif command -v qmake >/dev/null 2>&1; then
-        QT_PREFIX=$(get_qt_prefix)
-        QT_VERSION=$(get_qt_version "qt5")
-        echo "Using Qt $QT_VERSION from: $QT_PREFIX"
-    else
-        echo "Error: Qt installation not found even after installing prerequisites"
-        exit 1
-    fi
+    echo "Error: Qt installation not found even after installing prerequisites"
+    exit 1
 fi
 
 # ==========================
@@ -236,14 +176,12 @@ ARCH=$(uname -m)
 COMPILER="Unknown"
 if command -v g++ >/dev/null 2>&1; then
     COMPILER="GCC"
-    # Get GCC version for more detailed info
     if command -v gcc >/dev/null 2>&1; then
         GCC_VERSION=$(gcc --version | head -n1 | awk '{print $NF}')
         COMPILER="GCC_${GCC_VERSION}"
     fi
 elif command -v clang++ >/dev/null 2>&1; then
     COMPILER="Clang"
-    # Get Clang version for more detailed info
     if command -v clang >/dev/null 2>&1; then
         CLANG_VERSION=$(clang --version | head -n1 | awk '{print $3}')
         COMPILER="Clang_${CLANG_VERSION}"

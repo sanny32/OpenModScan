@@ -19,28 +19,23 @@ else
 fi
 
 DISTRO=""
-PM=""
 INSTALL_CMD=""
 
 case "$ID" in
     debian|ubuntu|linuxmint)
         DISTRO="debian"
-        PM="apt-get"
-        INSTALL_CMD="sudo apt-get install -y"
+        INSTALL_CMD="sudo apt install -y"
         ;;
     rhel|centos|fedora|altlinux|redos)
         DISTRO="rhel"
-        PM="dnf"
         INSTALL_CMD="sudo dnf install -y"
         ;;
     astra)
         DISTRO="astra"
-        PM="apt-get"
-        INSTALL_CMD="sudo apt-get install -y"
+        INSTALL_CMD="sudo apt install -y"
         ;;
     arch|manjaro)
         DISTRO="arch"
-        PM="pacman"
         INSTALL_CMD="sudo pacman -S --noconfirm"
         ;;
     *)

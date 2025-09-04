@@ -103,7 +103,7 @@ esac
 # Install packages
 # ==========================
 install_pkg() {
-     local pkg_groups=("$@")
+    local pkg_groups=("$@")
     local missing=()
     local check_cmd search_cmd
 
@@ -130,8 +130,10 @@ install_pkg() {
         IFS=',' read -ra aliases <<< "$group"
         installed=false
         for pkg in "${aliases[@]}"; do
+            echo "Check $pkg for installation..."
             if $check_cmd "$pkg" >/dev/null 2>&1; then
                 installed=true
+                echo "$pkg installed"
                 break
             fi
         done

@@ -19,24 +19,20 @@ DISTRO=""
 INSTALL_CMD=""
 
 case "$ID" in
-    debian|ubuntu|linuxmint)
-        DISTRO="debian"
+    debian|ubuntu|linuxmint|astra)
+        DISTRO="debian-based"
         INSTALL_CMD="apt install -y"
         ;;
     rhel|fedora|redos)
-        DISTRO="rhel"
+        DISTRO="rhel-based"
         INSTALL_CMD="dnf install -y"
-        ;;
-    astra)
-        DISTRO="astra"
-        INSTALL_CMD="apt install -y"
         ;;
     altlinux)
         DISTRO="altlinux"
         INSTALL_CMD="apt-get install -y"
         ;;
     suse|opensuse)
-        DISTRO="suse"
+        DISTRO="suse-based"
         INSTALL_CMD="zypper install -y"
         ;;
     *)
@@ -111,11 +107,11 @@ install_pkg() {
     local check_cmd search_cmd
 
     case "$DISTRO" in
-        debian|astra)
+        debian-based)
             check_cmd="dpkg -s"
             search_cmd="apt-cache show"
             ;;
-        rhel|fedora|redos)
+        rhel-based)
             check_cmd="rpm -q"
             search_cmd="dnf list --available"
             ;;
@@ -123,7 +119,7 @@ install_pkg() {
             check_cmd="rpm -q"
             search_cmd="apt-cache show"
             ;;
-        suse)
+        suse-based)
             check_cmd="rpm -q"
             search_cmd="zypper search -i"
             ;;
@@ -186,7 +182,7 @@ install_prereqs() {
     echo "Checking prerequisites for $ID..."
 
     case "$DISTRO" in
-        debian)
+        debian-based)
             GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
             
             # Qt6/Qt5 selection
@@ -212,7 +208,7 @@ install_prereqs() {
             fi
             ;;
 
-        rhel)
+        rhel-based)
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
      
             if dnf list available qt6-qtbase-devel >/dev/null 2>&1; then
@@ -231,32 +227,6 @@ install_prereqs() {
                     qt5-qtserialbus-devel
                 )
             fi
-            ;;
-
-        astra)
-            GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
-            
-            # Qt6/Qt5 selection
-            if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-                QT_PACKAGES=(
-                    qt6-base-dev 
-                    qt6-base-dev-tools 
-                    qt6-tools-dev 
-                    qt6-tools-dev-tools 
-                    qt6-serialport-dev
-                    qt6-serialbus-dev
-                    qt6-5compat-dev
-                )
-            else
-                QT_PACKAGES=(
-                    qtbase5-dev 
-                    qtbase5-dev-tools 
-                    qttools5-dev 
-                    qttools5-dev-tools 
-                    libqt5serialport5-dev 
-                    libqt5serialbus5-dev
-                )
-            fi           
             ;;
 
         altlinux)
@@ -281,7 +251,7 @@ install_prereqs() {
             fi
             ;;
         
-        suse)
+        suse-based)
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0)
     
             # Qt6/Qt5 selection

@@ -328,4 +328,7 @@ cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_BUILD_TY
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 echo ""
-echo "To install Open ModScan, run: cd $BUILD_DIR && ninja install"
+echo "To install Open ModScan, run:"
+echo ""
+echo -e "    cd \"$BUILD_DIR\" && ninja install"
+echo ""

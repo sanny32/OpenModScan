@@ -121,7 +121,7 @@ install_pkg() {
             ;;
         suse-based)
             check_cmd="rpm -q"
-            search_cmd="zypper search -i"
+            search_cmd="zypper search"
             ;;
     esac
 

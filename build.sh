@@ -137,7 +137,7 @@ install_pkg() {
     done
 
     for pkg in "${available_pkgs[@]}"; do
-        printf "Checking if %-30s... " "$pkg"
+        printf "Checking for %-30s... " "$pkg"
         if $check_cmd "$pkg" >/dev/null 2>&1; then
             echo "yes"
         else

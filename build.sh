@@ -15,6 +15,57 @@ else
     exit 1
 fi
 
+# ==========================
+# Check minimum OS version
+# ==========================
+verlte() {
+    # $1 <= $2 ?
+    [ "$1" = "$(printf '%s\n%s' "$1" "$2" | sort -V | head -n1)" ]
+}
+verlt() {
+    # $1 < $2 ?
+    [ "$1" != "$2" ] && verlte "$1" "$2"
+}
+
+check_min_os_version() {
+    local MIN_VERSION="$1"
+    if [ -z "$VERSION_ID" ]; then
+        echo "Warning: Cannot detect OS version, skipping version check."
+        return
+    fi
+
+    local OS_VER="${VERSION_ID//\"/}"
+
+    if verlt "$OS_VER" "$MIN_VERSION"; then
+        echo "Error: $NAME $OS_VER is too old. Minimum required version is $MIN_VERSION." >&2
+        exit 1
+    fi
+}
+
+case "$ID" in
+    ubuntu|linuxmint)
+        check_min_os_version "24.04"
+        ;;
+    debian)
+        check_min_os_version "12"
+        ;;
+    fedora)
+        check_min_os_version "42"
+        ;;
+    rhel)
+        check_min_os_version "8"
+        ;;
+    astra)
+        check_min_os_version "1.7"
+        ;;
+    altlinux)
+        check_min_os_version "11.0"
+        ;;
+    arch|manjaro)
+        # Rolling release
+        ;;
+esac
+
 DISTRO=""
 INSTALL_CMD=""
 
@@ -361,16 +412,6 @@ else
     echo "Error: Qt installation not found even after installing prerequisites" >&2
     exit 1
 fi
-
-verlte() {
-    # $1 <= $2 ?
-    [ "$1" = "$(printf '%s\n%s' "$1" "$2" | sort -V | head -n1)" ]
-}
-
-verlt() {
-    # $1 < $2 ?
-    [ "$1" != "$2" ] && verlte "$1" "$2"
-}
 
 # ==========================
 # Check minimal Qt version

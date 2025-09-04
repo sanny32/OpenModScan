@@ -466,9 +466,9 @@ echo ""
 echo "To install Open ModScan, run:"
 echo ""
 if command -v sudo >/dev/null 2>&1; then
-    echo -e "    cd \"$BUILD_DIR\" && sudo ninja install"
+    echo -e "    cd $BUILD_DIR && sudo ninja install"
 else
-    echo -e "    cd \"$BUILD_DIR\" && su -c 'ninja install'"
+    echo -e "    cd $BUILD_DIR && su -c 'ninja install'"
 fi
 
 echo ""

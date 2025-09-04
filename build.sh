@@ -5,9 +5,6 @@ echo "=================================="
 echo " OpenModScan build script (Linux) "
 echo "=================================="
 
-#!/usr/bin/env bash
-set -e
-
 # ==========================
 # Detect package manager and distro
 # ==========================
@@ -52,44 +49,69 @@ esac
 # Install packages
 # ==========================
 install_pkg() {
-    local pkg_list=("$@")
+     local pkg_groups=("$@")
     local missing=()
-    local check_cmd
+    local check_cmd search_cmd
 
     case "$DISTRO" in
         debian|ubuntu|linuxmint|astra)
             check_cmd="dpkg -s"
+            search_cmd="apt-cache show"
             ;;
-        rhel|fedora|altlinux|redos)
+        rhel|fedora|redos)
             check_cmd="rpm -q"
+            search_cmd="dnf list --available --installed"
+            ;;
+        altlinux)
+            check_cmd="rpm -q"
+            search_cmd="apt-cache show"
             ;;
         arch)
             check_cmd="pacman -Qi"
+            search_cmd="pacman -Si"
             ;;
     esac
 
-    for pkg in "${pkg_list[@]}"; do
-        if ! $check_cmd "$pkg" >/dev/null 2>&1; then
-            missing+=("$pkg")
+    for group in "${pkg_groups[@]}"; do
+        IFS=',' read -ra aliases <<< "$group"
+        installed=false
+        for pkg in "${aliases[@]}"; do
+            if $check_cmd "$pkg" >/dev/null 2>&1; then
+                installed=true
+                break
+            fi
+        done
+
+        if [ "$installed" = false ]; then
+            for pkg in "${aliases[@]}"; do
+                if $search_cmd "$pkg" >/dev/null 2>&1; then
+                    missing+=("$pkg")
+                    break
+                fi
+            done
         fi
     done
 
     if [ ${#missing[@]} -gt 0 ]; then
         echo "Installing missing packages: ${missing[*]}"
-        if command -v sudo >/dev/null 2>&1; then
-            if sudo -n true 2>/dev/null; then
-                sudo $INSTALL_CMD "${missing[@]}"
-            else
-                if sudo -l >/dev/null 2>&1; then
+        if [ "$EUID" -eq 0 ]; then
+            "$INSTALL_CMD ${missing[*]}"
+        else
+            if command -v sudo >/dev/null 2>&1; then
+                if sudo -n true 2>/dev/null; then
                     sudo $INSTALL_CMD "${missing[@]}"
                 else
-                    echo "Using su (user not in sudoers)..."
-                    su -c "$INSTALL_CMD ${missing[*]}"
+                    if sudo -l >/dev/null 2>&1; then
+                        sudo $INSTALL_CMD "${missing[@]}"
+                    else
+                        echo "Using su (user not in sudoers)..."
+                        su -c "$INSTALL_CMD ${missing[*]}"
+                    fi
                 fi
+            else
+                echo "Using su (sudo not installed)..."
+                su -c "$INSTALL_CMD ${missing[*]}"
             fi
-        else
-            echo "Using su (sudo not installed)..."
-            su -c "$INSTALL_CMD ${missing[*]}"
         fi
     fi
 }
@@ -106,9 +128,24 @@ install_prereqs() {
             
             # Qt6/Qt5 selection
             if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-5compat-dev)
+                QT_PACKAGES=(
+                    qt6-base-dev 
+                    qt6-base-dev-tools 
+                    qt6-tools-dev 
+                    qt6-tools-dev-tools 
+                    qt6-serialport-dev,libqt6serialport6-dev
+                    qt6-serialbus-dev,libqt6serialbus6-dev
+                    qt6-5compat-dev,libqt6core5compat6-dev
+                )
             else
-                QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
+                QT_PACKAGES=(
+                    qtbase5-dev 
+                    qtbase5-dev-tools 
+                    qttools5-dev 
+                    qttools5-dev-tools 
+                    libqt5serialport5-dev 
+                    libqt5serialbus5-dev
+                )
             fi
             ;;
 
@@ -116,9 +153,20 @@ install_prereqs() {
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
      
             if dnf list available qt6-qtbase-devel >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel)
+                QT_PACKAGES=(
+                    qt6-qtbase-devel 
+                    qt6-qttools-devel 
+                    qt6-qtserialport-devel 
+                    qt6-qtserialbus-devel 
+                    qt6-qt5compat-devel
+                )
             else
-                QT_PACKAGES=(qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel)
+                QT_PACKAGES=(
+                    qt5-qtbase-devel 
+                    qt5-qttools-devel 
+                    qt5-qtserialport-devel 
+                    qt5-qtserialbus-devel
+                )
             fi
             ;;
 
@@ -127,9 +175,24 @@ install_prereqs() {
             
             # Qt6/Qt5 selection
             if apt-cache show qt6-base-dev >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-qt5compat-devel)
+                QT_PACKAGES=(
+                    qt6-base-dev 
+                    qt6-base-dev-tools 
+                    qt6-tools-dev 
+                    qt6-tools-dev-tools 
+                    qt6-serialport-dev
+                    qt6-serialbus-dev
+                    qt6-5compat-dev
+                )
             else
-                QT_PACKAGES=(qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev)
+                QT_PACKAGES=(
+                    qtbase5-dev 
+                    qtbase5-dev-tools 
+                    qttools5-dev 
+                    qttools5-dev-tools 
+                    libqt5serialport5-dev 
+                    libqt5serialbus5-dev
+                )
             fi           
             ;;
 
@@ -138,9 +201,20 @@ install_prereqs() {
     
             # Qt6/Qt5 selection
             if apt-cache show qt6-base-devel >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel)
+                QT_PACKAGES=(
+                    qt6-base-devel 
+                    qt6-tools-devel 
+                    qt6-serialport-devel 
+                    qt6-serialbus-devel 
+                    qt6-5compat-devel
+                )
             else
-                QT_PACKAGES=(qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel)
+                QT_PACKAGES=(
+                    qt5-base-devel 
+                    qt5-tools-devel 
+                    qt5-serialport-devel 
+                    qt5-serialbus-devel
+                )
             fi
             ;;
         
@@ -149,9 +223,20 @@ install_prereqs() {
     
             # Qt6/Qt5 selection
             if pacman -Si qt6-base >/dev/null 2>&1; then
-                QT_PACKAGES=(qt6-base qt6-tools qt6-serialport qt6-serialbus qt6-5compat)
+                QT_PACKAGES=(
+                    qt6-base 
+                    qt6-tools 
+                    qt6-serialport 
+                    qt6-serialbus 
+                    qt6-5compat
+                )
             else
-                QT_PACKAGES=(qt5-base qt5-tools qt5-serialport qt5-serialbus)
+                QT_PACKAGES=(
+                    qt5-base 
+                    qt5-tools 
+                    qt5-serialport 
+                    qt5-serialbus
+                )
             fi
            ;;
     esac
@@ -306,9 +391,9 @@ ARCH=$(uname -m)
 # ==========================
 COMPILER="Unknown"
 if command -v g++ >/dev/null 2>&1; then
-    COMPILER="GCC"
+    COMPILER="g++"
 elif command -v clang++ >/dev/null 2>&1; then
-    COMPILER="Clang"
+    COMPILER="clang++"
 fi
 
 # ==========================

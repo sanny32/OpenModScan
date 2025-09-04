@@ -439,7 +439,7 @@ echo ""
 if ninja --version | awk '{if ($1 >= 1.10) exit 0; else exit 1}'; then
     echo "To install Open ModScan, run:"
     echo ""
-    if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+    if command -v sudo >/dev/null 2>&1 && sudo -l >/dev/null 2>&1; then
         echo -e "    cd $BUILD_DIR && sudo ninja install"
     else
         echo -e "    cd $BUILD_DIR && su -c 'ninja install'"

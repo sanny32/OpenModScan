@@ -17,23 +17,28 @@ fi
 
 DISTRO=""
 INSTALL_CMD=""
+SEARCH_CMD=""
 
 case "$ID" in
     debian|ubuntu|linuxmint|astra)
         DISTRO="debian-based"
         INSTALL_CMD="apt install -y"
+        SEARCH_CMD="apt-cache show"
         ;;
     rhel|fedora|redos)
         DISTRO="rhel-based"
         INSTALL_CMD="dnf install -y"
+        SEARCH_CMD="dnf list --available"
         ;;
     altlinux)
         DISTRO="altlinux"
         INSTALL_CMD="apt-get install -y"
+        SEARCH_CMD="apt-cache show"
         ;;
     suse|opensuse-leap)
         DISTRO="suse-based"
         INSTALL_CMD="zypper install -y"
+        SEARCH_CMD="zypper search"
         ;;
     *)
         echo "Unsupported Linux distribution: $ID"
@@ -104,24 +109,20 @@ esac
 install_pkg() {
     local pkg_groups=("$@")
     local missing=()
-    local check_cmd search_cmd
+    local check_cmd
 
     case "$DISTRO" in
         debian-based)
             check_cmd="dpkg -s"
-            search_cmd="apt-cache show"
             ;;
         rhel-based)
             check_cmd="rpm -q"
-            search_cmd="dnf list --available"
             ;;
         altlinux)
             check_cmd="rpm -q"
-            search_cmd="apt-cache show"
             ;;
         suse-based)
             check_cmd="rpm -q"
-            search_cmd="zypper search"
             ;;
     esac
 
@@ -129,7 +130,7 @@ install_pkg() {
     for group in "${pkg_groups[@]}"; do
         IFS=',' read -ra aliases <<< "$group"
         for pkg in "${aliases[@]}"; do
-            if $search_cmd "$pkg" >/dev/null 2>&1; then
+            if $SEARCH_CMD "$pkg" >/dev/null 2>&1; then
                 available_pkgs+=("$pkg")
                 break
             fi
@@ -183,7 +184,7 @@ install_prereqs() {
             GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
             
             # Qt6/Qt5 selection
-            if apt-cache show qt6-base-dev >/dev/null 2>&1; then
+            if $SEARCH_CMD qt6-base-dev >/dev/null 2>&1; then
                 QT_PACKAGES=(
                     qt6-base-dev 
                     qt6-base-dev-tools 
@@ -208,7 +209,7 @@ install_prereqs() {
         rhel-based)
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
      
-            if dnf list available qt6-qtbase-devel >/dev/null 2>&1; then
+            if $SEARCH_CMD qt6-qtbase-devel >/dev/null 2>&1; then
                 QT_PACKAGES=(
                     qt6-qtbase-devel 
                     qt6-qttools-devel 
@@ -230,7 +231,7 @@ install_prereqs() {
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor)         
     
             # Qt6/Qt5 selection
-            if apt-cache show qt6-base-devel >/dev/null 2>&1; then
+            if $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; then
                 QT_PACKAGES=(
                     qt6-base-devel 
                     qt6-tools-devel 
@@ -252,7 +253,7 @@ install_prereqs() {
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0)
     
             # Qt6/Qt5 selection
-            if zypper search -i qt6-base-devel >/dev/null 2>&1; then
+            if $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; then
                 QT_PACKAGES=(
                     qt6-base-devel
                     qt6-tools-devel

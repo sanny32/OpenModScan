@@ -80,7 +80,7 @@ case "$ID" in
         check_min_os_version "22"
         ;;
     debian)
-        check_min_os_version "12"
+        check_min_os_version "11"
         ;;
     fedora)
         check_min_os_version "42"

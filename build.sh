@@ -438,7 +438,7 @@ echo "Build finished successfully in $BUILD_DIR."
 echo ""
 
 NINJA_VER=$(ninja --version)
-if verlt "$NINJA_VER" "1.11"; then
+if verlt "$NINJA_VER" "1.11.0"; then
     echo "To install Open ModScan, run:"
     echo ""
     if [ "$EUID" -eq 0 ]; then

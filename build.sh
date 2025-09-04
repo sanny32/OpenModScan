@@ -43,8 +43,11 @@ check_min_os_version() {
 }
 
 case "$ID" in
-    ubuntu|linuxmint)
+    ubuntu)
         check_min_os_version "24.04"
+        ;;
+    linuxmint)
+        check_min_os_version "22"
         ;;
     debian)
         check_min_os_version "12"

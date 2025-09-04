@@ -58,6 +58,9 @@ case "$ID" in
     rhel)
         check_min_os_version "8"
         ;;
+    redos)
+        check_min_os_version "8"
+        ;;
     astra)
         check_min_os_version "1.7"
         ;;

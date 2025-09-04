@@ -442,7 +442,7 @@ if ninja --version | awk '{if ($1 >= 1.10) exit 0; else exit 1}'; then
     if [ "$EUID" -eq 0 ]; then
          echo -e "    cd $BUILD_DIR && ninja install"
     else
-        if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+        if command -v sudo >/dev/null 2>&1 && !(sudo -n -l 2>&1 | grep -q "not in the sudoers file"); then
             echo -e "    cd $BUILD_DIR && sudo ninja install"
         else
             echo -e "    cd $BUILD_DIR && su -c 'ninja install'"

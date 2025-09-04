@@ -465,5 +465,10 @@ echo "Build finished successfully in $BUILD_DIR."
 echo ""
 echo "To install Open ModScan, run:"
 echo ""
-echo -e "    cd \"$BUILD_DIR\" && ninja install"
+if command -v sudo >/dev/null 2>&1; then
+    echo -e "    cd \"$BUILD_DIR\" && sudo ninja install"
+else
+    echo -e "    cd \"$BUILD_DIR\" && su -c 'ninja install'"
+fi
+
 echo ""

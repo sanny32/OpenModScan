@@ -46,22 +46,25 @@ esac
 # ==========================
 verlte() {
     # $1 <= $2 ?
-    local v1="$1"
-    local v2="$2"
-    local lowest
-    lowest=$(printf '%s\n%s\n' "$v1" "$v2" | sort -V | head -n1)
-    if [ "$v1" = "$lowest" ]; then
-        return 0
-    else
-        return 1
-    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    local len=${#ver1[@]}
+    if [ ${#ver2[@]} -gt $len ]; then len=${#ver2[@]}; fi
+    for ((i=0;i<len;i++)); do
+        local v1=${ver1[i]:-0}
+        local v2=${ver2[i]:-0}
+        if ((v1 < v2)); then
+            return 0
+        elif ((v1 > v2)); then
+            return 1
+        fi
+    done
+    return 0
 }
 
 verlt() {
     # $1 < $2 ?
-    local v1="$1"
-    local v2="$2"
-    [ "$v1" != "$v2" ] && verlte "$v1" "$v2"
+    verlte "$1" "$2" && [ "$1" != "$2" ]
 }
 
 check_min_os_version() {

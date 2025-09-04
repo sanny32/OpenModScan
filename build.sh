@@ -130,7 +130,7 @@ install_pkg() {
     esac
 
     for group in "${pkg_groups[@]}"; do
-        IFS=',' read -ra aliases <<< "${group:-}"
+        IFS=',' read -ra aliases <<< "$group"
         installed=false
         for pkg in "${aliases[@]}"; do
             printf "Checking for %-30s... " "$pkg"

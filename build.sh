@@ -46,25 +46,11 @@ esac
 # ==========================
 verlte() {
     # $1 <= $2 ?
-    local IFS=.
-    local i ver1=($1) ver2=($2)
-    local len=${#ver1[@]}
-    if [ ${#ver2[@]} -gt $len ]; then len=${#ver2[@]}; fi
-    for ((i=0;i<len;i++)); do
-        local v1=${ver1[i]:-0}
-        local v2=${ver2[i]:-0}
-        if ((v1 < v2)); then
-            return 0
-        elif ((v1 > v2)); then
-            return 1
-        fi
-    done
-    return 0
+    [ "$1" = "$(printf '%s\n%s' "$1" "$2" | sort -V | head -n1)" ]
 }
-
 verlt() {
     # $1 < $2 ?
-    verlte "$1" "$2" && [ "$1" != "$2" ]
+    [ "$1" != "$2" ] && verlte "$1" "$2"
 }
 
 check_min_os_version() {
@@ -452,7 +438,7 @@ echo "Build finished successfully in $BUILD_DIR."
 echo ""
 
 NINJA_VER=$(ninja --version)
-if verlt "$NINJA_VER" "1.11.0"; then
+if verlt "1.11.0" "$NINJA_VER"; then
     echo "To install Open ModScan, run:"
     echo ""
     if [ "$EUID" -eq 0 ]; then

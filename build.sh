@@ -56,7 +56,7 @@ verlt() {
 check_min_os_version() {
     local MIN_VERSION="$1"
     if [ -z "$VERSION_ID" ]; then
-        echo "Warning: Cannot detect OS version."
+        echo "Error: Cannot detect OS version."
         exit 1
     fi
 

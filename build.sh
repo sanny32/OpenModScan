@@ -46,16 +46,22 @@ esac
 # ==========================
 verlte() {
     # $1 <= $2 ?
-    local ver1="$1"
-    local ver2="$2"
-    [ "$ver1" = "$(printf '%s\n%s\n' "$ver1" "$ver2" | sort -V | head -n1)" ]
+    local v1="$1"
+    local v2="$2"
+    local lowest
+    lowest=$(printf '%s\n%s\n' "$v1" "$v2" | sort -V | head -n1)
+    if [ "$v1" = "$lowest" ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 verlt() {
     # $1 < $2 ?
-    local ver1="$1"
-    local ver2="$2"
-    [ "$ver1" != "$ver2" ] && verlte "$ver1" "$ver2"
+    local v1="$1"
+    local v2="$2"
+    [ "$v1" != "$v2" ] && verlte "$v1" "$v2"
 }
 
 check_min_os_version() {

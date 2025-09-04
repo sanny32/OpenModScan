@@ -135,6 +135,8 @@ install_pkg() {
                 installed=true
                 echo "$pkg installed"
                 break
+            else
+                echo "$pkg not installed"
             fi
         done
 

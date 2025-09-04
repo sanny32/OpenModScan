@@ -326,11 +326,22 @@ get_qt_version() {
     if command -v qmake-qt6 >/dev/null 2>&1; then
         qmake-qt6 -query QT_VERSION 2>/dev/null && return
     fi
-    if command -v qmake >/dev/null 2>&1; then
-        qmake -query QT_VERSION 2>/dev/null && return
-    fi
     if command -v qtpaths6 >/dev/null 2>&1; then
         qtpaths6 --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
+    fi
+    
+    if command -v qmake-qt5 >/dev/null 2>&1; then
+        qmake-qt5 -query QT_VERSION 2>/dev/null && return
+    fi
+    if command -v qt5-qmake >/dev/null 2>&1; then
+        qt5-qmake -query QT_VERSION 2>/dev/null && return
+    fi
+    if command -v qtpaths-qt5 >/dev/null 2>&1; then
+        qtpaths-qt5 --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
+    fi
+    
+    if command -v qmake >/dev/null 2>&1; then
+        qmake -query QT_VERSION 2>/dev/null && return
     fi
     if command -v qtpaths >/dev/null 2>&1; then
         qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return

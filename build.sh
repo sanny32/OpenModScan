@@ -436,7 +436,9 @@ cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_BUILD_TY
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 echo ""
-if ninja --version | awk '{if ($1 > 1.10) exit 0; else exit 1}'; then
+
+NINJA_VER=$(ninja --version)
+if verlte "$NINJA_VER" "1.10"; then
     echo "To install Open ModScan, run:"
     echo ""
     if [ "$EUID" -eq 0 ]; then

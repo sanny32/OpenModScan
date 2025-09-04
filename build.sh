@@ -92,7 +92,7 @@ case "$ID" in
         check_min_os_version "8"
         ;;
     astra)
-        check_min_os_version "1.7"
+        check_min_os_version "1.7.3"
         ;;
     altlinux)
         check_min_os_version "11.0"

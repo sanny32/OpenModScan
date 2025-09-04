@@ -15,6 +15,36 @@ else
     exit 1
 fi
 
+DISTRO=""
+INSTALL_CMD=""
+
+case "$ID" in
+    debian|ubuntu|linuxmint)
+        DISTRO="debian"
+        INSTALL_CMD="apt install -y"
+        ;;
+    rhel|fedora|redos)
+        DISTRO="rhel"
+        INSTALL_CMD="dnf install -y"
+        ;;
+    astra)
+        DISTRO="astra"
+        INSTALL_CMD="apt install -y"
+        ;;
+    altlinux)
+        DISTRO="altlinux"
+        INSTALL_CMD="apt-get install -y"
+        ;;
+    arch|manjaro)
+        DISTRO="arch"
+        INSTALL_CMD="pacman -S --noconfirm"
+        ;;
+    *)
+        echo "Unsupported Linux distribution: $ID"
+        exit 1
+        ;;
+esac
+
 # ==========================
 # Check minimum OS version
 # ==========================
@@ -69,36 +99,6 @@ case "$ID" in
         ;;
     arch|manjaro)
         # Rolling release
-        ;;
-esac
-
-DISTRO=""
-INSTALL_CMD=""
-
-case "$ID" in
-    debian|ubuntu|linuxmint)
-        DISTRO="debian"
-        INSTALL_CMD="apt install -y"
-        ;;
-    rhel|fedora|redos)
-        DISTRO="rhel"
-        INSTALL_CMD="dnf install -y"
-        ;;
-    astra)
-        DISTRO="astra"
-        INSTALL_CMD="apt install -y"
-        ;;
-    altlinux)
-        DISTRO="altlinux"
-        INSTALL_CMD="apt-get install -y"
-        ;;
-    arch|manjaro)
-        DISTRO="arch"
-        INSTALL_CMD="pacman -S --noconfirm"
-        ;;
-    *)
-        echo "Unsupported Linux distribution: $ID"
-        exit 1
         ;;
 esac
 

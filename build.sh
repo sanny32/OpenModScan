@@ -78,11 +78,9 @@ install_pkg() {
         echo "Installing missing packages: ${missing[*]}"
         if command -v sudo >/dev/null 2>&1; then
             if sudo -n true 2>/dev/null; then
-                echo "Using sudo (no password required)..."
                 sudo $INSTALL_CMD "${missing[@]}"
             else
                 if sudo -l >/dev/null 2>&1; then
-                    echo "Using sudo (password required)..."
                     sudo $INSTALL_CMD "${missing[@]}"
                 else
                     echo "Using su (user not in sudoers)..."

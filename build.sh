@@ -114,7 +114,7 @@ install_pkg() {
             ;;
         rhel|fedora|redos)
             check_cmd="rpm -q"
-            search_cmd="dnf list --available --installed"
+            search_cmd="dnf list --available"
             ;;
         altlinux)
             check_cmd="rpm -q"
@@ -130,13 +130,13 @@ install_pkg() {
         IFS=',' read -ra aliases <<< "$group"
         installed=false
         for pkg in "${aliases[@]}"; do
-            echo "Check $pkg for installation..."
+            printf "Checking for %-20s... " "$pkg"
             if $check_cmd "$pkg" >/dev/null 2>&1; then
                 installed=true
-                echo "$pkg installed"
+                echo "yes"
                 break
             else
-                echo "$pkg not installed"
+                echo "no"
             fi
         done
 

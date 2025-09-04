@@ -466,11 +466,13 @@ cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_BUILD_TY
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 echo ""
-echo "To install Open ModScan, run:"
-echo ""
-if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
-    echo -e "    cd $BUILD_DIR && sudo ninja install"
-else
-    echo -e "    cd $BUILD_DIR && su -c 'ninja install'"
+if ninja -t targets 2>/dev/null | grep -q '^install$'; then
+    echo "To install Open ModScan, run:"
+    echo ""
+    if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
+        echo -e "    cd $BUILD_DIR && sudo ninja install"
+    else
+        echo -e "    cd $BUILD_DIR && su -c 'ninja install'"
+    fi
+    echo ""
 fi
-echo ""

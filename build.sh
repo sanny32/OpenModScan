@@ -265,6 +265,7 @@ install_prereqs() {
                     libqt5-qtbase-devel
                     libqt5-qttools-devel
                     libqt5-qtserialport-devel
+                    libqt5-qtserialbus
                     libqt5-qtserialbus-devel
                 )
             fi

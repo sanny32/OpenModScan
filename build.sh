@@ -439,7 +439,7 @@ if verlt "1.11.0" "$NINJA_VER"; then
     echo "To install Open ModScan, run:"
     echo ""
     if [ "$EUID" -eq 0 ]; then
-         echo -e "    cd $BUILD_DIR && ninja install"
+        echo -e "    cd $BUILD_DIR && ninja install"
     else
         if command -v sudo >/dev/null 2>&1 && !(sudo -n -l 2>&1 | grep -q "not in the sudoers file"); then
             echo -e "    cd $BUILD_DIR && sudo ninja install"

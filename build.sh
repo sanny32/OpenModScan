@@ -130,7 +130,7 @@ install_pkg() {
         IFS=',' read -ra aliases <<< "$group"
         installed=false
         for pkg in "${aliases[@]}"; do
-            printf "Checking for %-20s... " "$pkg"
+            printf "Checking for %-30s... " "$pkg"
             if $check_cmd "$pkg" >/dev/null 2>&1; then
                 installed=true
                 echo "yes"
@@ -153,14 +153,19 @@ install_pkg() {
     if [ ${#missing[@]} -gt 0 ]; then
         echo "Installing missing packages: ${missing[*]}"
         if [ "$EUID" -eq 0 ]; then
-            "$INSTALL_CMD ${missing[*]}"
+            $INSTALL_CMD "${missing[@]}"
         else
             if command -v sudo >/dev/null 2>&1; then
-                if sudo -n true 2>/dev/null; then
+               if sudo -n true 2>/dev/null; then
                     sudo $INSTALL_CMD "${missing[@]}"
                 else
                     if sudo -l >/dev/null 2>&1; then
                         sudo $INSTALL_CMD "${missing[@]}"
+                        RET=$?
+                        if [ $RET -ne 0 ]; then
+                            echo "sudo failed or cancelled. Aborting."
+                            exit 1
+                        fi
                     else
                         echo "Using su (user not in sudoers)..."
                         su -c "$INSTALL_CMD ${missing[*]}"
@@ -172,6 +177,7 @@ install_pkg() {
             fi
         fi
     fi
+
 }
 
 # ==========================

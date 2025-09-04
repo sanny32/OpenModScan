@@ -31,7 +31,7 @@ case "$ID" in
         DISTRO="altlinux"
         INSTALL_CMD="apt-get install -y"
         ;;
-    suse|opensuse)
+    suse|opensuse-leap)
         DISTRO="suse-based"
         INSTALL_CMD="zypper install -y"
         ;;
@@ -93,8 +93,8 @@ case "$ID" in
     altlinux)
         check_min_os_version "11.0"
         ;;
-    suse|opensuse)
-        check_min_os_version "15.0"
+    suse|opensuse-leap)
+        check_min_os_version "15.5"
         ;;
 esac
 

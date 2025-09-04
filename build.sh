@@ -473,5 +473,4 @@ if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then
 else
     echo -e "    cd $BUILD_DIR && su -c 'ninja install'"
 fi
-
 echo ""

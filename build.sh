@@ -35,9 +35,9 @@ case "$ID" in
         DISTRO="altlinux"
         INSTALL_CMD="apt-get install -y"
         ;;
-    arch|manjaro)
-        DISTRO="arch"
-        INSTALL_CMD="pacman -S --noconfirm"
+    suse|opensuse)
+        DISTRO="suse"
+        INSTALL_CMD="zypper install -y"
         ;;
     *)
         echo "Unsupported Linux distribution: $ID"
@@ -97,8 +97,8 @@ case "$ID" in
     altlinux)
         check_min_os_version "11.0"
         ;;
-    arch|manjaro)
-        # Rolling release
+    suse|opensuse)
+        check_min_os_version "15.0"
         ;;
 esac
 
@@ -111,7 +111,7 @@ install_pkg() {
     local check_cmd search_cmd
 
     case "$DISTRO" in
-        debian|ubuntu|linuxmint|astra)
+        debian|astra)
             check_cmd="dpkg -s"
             search_cmd="apt-cache show"
             ;;
@@ -123,9 +123,9 @@ install_pkg() {
             check_cmd="rpm -q"
             search_cmd="apt-cache show"
             ;;
-        arch)
-            check_cmd="pacman -Qi"
-            search_cmd="pacman -Si"
+        suse)
+            check_cmd="rpm -q"
+            search_cmd="zypper search -i"
             ;;
     esac
 
@@ -281,24 +281,24 @@ install_prereqs() {
             fi
             ;;
         
-        arch)
-            GENERAL_PACKAGES=(base-devel cmake ninja libxcb-cursor pkgconf)
+        suse)
+            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0)
     
             # Qt6/Qt5 selection
-            if pacman -Si qt6-base >/dev/null 2>&1; then
+            if zypper search -i qt6-base-devel >/dev/null 2>&1; then
                 QT_PACKAGES=(
-                    qt6-base 
-                    qt6-tools 
-                    qt6-serialport 
-                    qt6-serialbus 
-                    qt6-5compat
+                    qt6-base-devel
+                    qt6-tools-devel
+                    qt6-serialport-devel
+                    qt6-serialbus-devel
+                    qt6-core5compat-devel
                 )
             else
                 QT_PACKAGES=(
-                    qt5-base 
-                    qt5-tools 
-                    qt5-serialport 
-                    qt5-serialbus
+                    libqt5-qtbase-devel
+                    libqt5-qttools-devel
+                    libqt5-qtserialport-devel
+                    libqt5-qtserialbus-devel
                 )
             fi
            ;;

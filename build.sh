@@ -161,7 +161,7 @@ install_pkg() {
 
         if [ "$installed" = false ]; then
             for pkg in "${aliases[@]}"; do
-                if $search_cmd "$pkg" >/dev/null 2>&1; then
+                if $SEARCH_CMD "$pkg" >/dev/null 2>&1; then
                     missing+=("$pkg")
                     break
                 fi

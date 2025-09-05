@@ -256,7 +256,10 @@ install_pkg() {
             if command -v sudo >/dev/null 2>&1; then
                trap 'echo "Installation cancelled by user."; exit 1' INT
                 if can_sudo; then
-                    sudo $INSTALL_CMD "${missing[@]}"
+                    if ! sudo $INSTALL_CMD "${missing[@]}" 2>&1 | grep -q "not in the sudoers file"; then
+                        echo "Using su (user not in sudoers)..."
+                        su -c "$INSTALL_CMD ${missing[*]}"
+                    fi 
                 else
                     echo "Using su (user not in sudoers)..."
                     su -c "$INSTALL_CMD ${missing[*]}"

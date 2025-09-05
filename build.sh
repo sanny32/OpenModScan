@@ -106,7 +106,7 @@ esac
 # ==========================
 # Parse script arguments
 # ==========================
-QT_CHOICE="auto"
+QT_CHOICE=""
 for arg in "$@"; do
     case "$arg" in
         -qt5|qt5)
@@ -128,6 +128,90 @@ done
 can_sudo() {
     command -v sudo >/dev/null 2>&1 && \
     ! (sudo -n -l 2>&1 | grep -q "not in the sudoers file")
+}
+
+# ==========================
+# Get Qt5 packages
+# ==========================
+get_qt5_packages() {
+    case "$DISTRO" in
+        debian-based)
+            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev"
+            ;;
+        rhel-based)
+            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
+            ;;
+        altlinux)
+            echo "qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel"
+            ;;
+        suse-based)
+            echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
+            ;;
+    esac
+}
+
+# ==========================
+# Get Qt6 packages
+# ==========================
+get_qt6_packages() {
+    case "$DISTRO" in
+        debian-based)
+            case "$ID-${VERSION_ID%%.*}" in
+                ubuntu-22)
+                    echo "qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
+                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev"
+                ;;
+                *)
+                    echo "qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev \
+                            qt6-5compat-dev"
+                ;;
+            esac
+            ;;
+        rhel-based)
+            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
+            ;;
+        altlinux)
+            echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
+            ;;
+        suse-based)
+            echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
+            ;;
+    esac
+}
+
+# ==========================
+# Function to get packages
+# Returns combined general + Qt package list
+# ==========================
+get_packages() {
+    local general_packages=""
+    local qt_packages=""
+
+    case "$DISTRO" in
+        debian-based)
+            general_packages="build-essential cmake ninja-build libxcb-cursor-dev pkg-config"
+            ;;
+        rhel-based)
+            general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
+            ;;
+        altlinux)
+            general_packages="gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor"
+            ;;
+        suse-based)
+            general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
+            ;;
+    esac
+
+    case "$QT_CHOICE" in
+        qt5)
+            qt_packages=$(get_qt5_packages) || return 1
+            ;;
+        qt6)
+            qt_packages=$(get_qt6_packages) || return 1
+            ;;
+    esac
+
+    echo "$general_packages $qt_packages"
 }
 
 # ==========================
@@ -186,114 +270,11 @@ install_pkg() {
 }
 
 # ==========================
-# Get Qt5 packages for a distro
-# ==========================
-get_qt5_packages_for_distro() {
-    local distro="$1"
-
-    case "$distro" in
-        debian-based)
-            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev"
-            ;;
-        rhel-based)
-            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
-            ;;
-        altlinux)
-            echo "qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel"
-            ;;
-        suse-based)
-            echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
-            ;;
-        *)
-            echo "Error: Unsupported distro $distro for Qt5" >&2
-            exit 1
-            ;;
-    esac
-}
-
-# ==========================
-# Get Qt6 packages for a distro + version
-# ==========================
-get_qt6_packages_for_distro() {
-    local distro="$1"
-
-    case "$distro" in
-        debian-based)
-            case "$ID-${VERSION_ID%%.*}" in
-                ubuntu-22)
-                    echo "qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
-                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev"
-                ;;
-                *)
-                    echo "qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev \
-                            qt6-5compat-dev"
-                ;;
-            esac
-            ;;
-        rhel-based)
-            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
-            ;;
-        altlinux)
-            echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
-            ;;
-        suse-based)
-            echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
-            ;;
-        *)
-            echo "Error: Unsupported distro $distro for Qt6" >&2
-            exit 1
-            ;;
-    esac
-}
-
-# ==========================
-# Function to get packages for a distro
-# Returns combined general + Qt package list
-# ==========================
-get_packages_for_distro() {
-    local distro="$1"
-    local qt_choice="$2"
-
-    local general_packages=""
-    local qt_packages=""
-
-    case "$distro" in
-        debian-based)
-            general_packages="build-essential cmake ninja-build libxcb-cursor-dev pkg-config"
-            ;;
-        rhel-based)
-            general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
-            ;;
-        altlinux)
-            general_packages="gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor"
-            ;;
-        suse-based)
-            general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
-            ;;
-    esac
-
-    case "$qt_choice" in
-        qt5)
-            qt_packages=$(get_qt5_packages_for_distro "$distro") || return 1
-            ;;
-        qt6)
-            qt_packages=$(get_qt6_packages_for_distro "$distro") || return 1
-            ;;
-        *)
-            echo "Error: Unsupported Qt choice $qt_choice" >&2
-            exit 1
-            ;;
-    esac
-
-    echo "$general_packages $qt_packages"
-}
-
-# ==========================
 # Install prerequisites
 # ==========================
 install_prereqs() {
     local pkgs
-    pkgs=$(get_packages_for_distro "$DISTRO" "$QT_CHOICE") || return 1
+    pkgs=$(get_packages) || return 1
     install_pkg $pkgs
 }
 
@@ -301,7 +282,7 @@ install_prereqs() {
 # Always check/install prereqs first
 # ==========================
 echo "Checking prerequisites for $ID..."
-if [ "$QT_CHOICE" = "auto" ]; then
+if [ "$QT_CHOICE" = "" ]; then
     if $SEARCH_CMD qt6-* 2>/dev/null | grep -q "qt6"; then
         QT_CHOICE="qt6"
     else

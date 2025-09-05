@@ -415,10 +415,7 @@ get_cmake_prefix() {
             esac
             if [ -n "$prefix" ]; then
                 if [ -n "$config_file" ]; then
-                    if [ -f "$prefix/lib/cmake/${config_file/Core\//Core\/}" ] || \
-                    [ -f "$prefix/lib64/cmake/${config_file/Core\//Core\/}" ] || \
-                    [ -f "/usr/lib64/cmake/Qt6Core/$config_file" ] || \
-                    [ -f "/usr/lib64/cmake/Qt5Core/$config_file" ]; then
+                    if [ -f "$prefix/lib/cmake/$config_file" ] || [ -f "$prefix/lib64/cmake/$config_file" ]; then
                         echo "$prefix"
                         return 0
                     fi

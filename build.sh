@@ -109,11 +109,11 @@ esac
 QT_CHOICE="auto"
 for arg in "$@"; do
     case "$arg" in
-        -qt5)
+        -qt5|qt5)
             QT_CHOICE="qt5"
             shift
             ;;
-        -qt6)
+        -qt6|qt6)
             QT_CHOICE="qt6"
             shift
             ;;

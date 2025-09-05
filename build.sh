@@ -35,7 +35,7 @@ case "$ID" in
         INSTALL_CMD="apt-get install -y"
         SEARCH_CMD="apt-cache show"
         ;;
-    suse|opensuse-leap)
+    suse|opensuse*)
         DISTRO="suse-based"
         INSTALL_CMD="zypper install -y"
         SEARCH_CMD="zypper search"
@@ -98,7 +98,7 @@ case "$ID" in
     altlinux)
         check_min_os_version "11.0"
         ;;
-    suse|opensuse-leap)
+    suse|opensuse*)
         check_min_os_version "15.5"
         ;;
 esac
@@ -118,6 +118,11 @@ for arg in "$@"; do
             shift
             ;;
         *)
+            if $SEARCH_CMD qt6-* 2>/dev/null | grep -q "qt6"; then
+                QT_CHOICE="qt6"
+            else
+                QT_CHOICE="qt5"
+            fi
             ;;
     esac
 done
@@ -186,128 +191,87 @@ install_pkg() {
 }
 
 # ==========================
+# Function to get packages for a distro
+# Returns combined general + Qt package list
+# ==========================
+get_packages_for_distro() {
+    local distro="$1"
+    local version="$2"
+    local qt_choice="$3"
+
+    local general_packages=""
+    local qt_packages=""
+
+    case "$distro" in
+        debian)
+            general_packages="build-essential cmake ninja-build libxcb-cursor-dev pkg-config"
+            ;;
+        rhel)
+            general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
+            ;;
+        altlinux)
+            general_packages="gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor"
+            ;;
+        suse)
+            general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
+            ;;
+    esac
+
+    case "$qt_choice" in
+        qt6)
+            case "$distro" in
+                debian)
+                    if [ "$ID" = "ubuntu" ] && [ "${version%%.*}" = "22" ]; then
+                        qt_packages="qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools libqt6serialport6-dev libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev"
+                    else
+                        qt_packages="qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-5compat-dev"
+                    fi
+                    ;;
+                rhel)
+                    qt_packages="qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
+                    ;;
+                altlinux)
+                    qt_packages="qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
+                    ;;
+                suse)
+                    qt_packages="qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
+                    ;;
+            esac
+            ;;
+        qt5)
+            case "$distro" in
+                debian)
+                    qt_packages="qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev"
+                    ;;
+                rhel)
+                    qt_packages="qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
+                    ;;
+                altlinux)
+                    qt_packages="qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel"
+                    ;;
+                suse)
+                    qt_packages="libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
+                    ;;
+            esac
+            ;;
+    esac
+
+    echo "$general_packages $qt_packages"
+}
+
+# ==========================
 # Install prerequisites
 # ==========================
 install_prereqs() {
-    echo "Checking prerequisites for $ID..."
-
-    case "$DISTRO" in
-        debian-based)
-            GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
-            
-            # Qt6/Qt5 selection
-            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-dev >/dev/null 2>&1; }; then
-                case "$ID-${VERSION_ID%%.*}" in
-                    ubuntu-22)
-                         QT_PACKAGES=(
-                            qt6-base-dev 
-                            qt6-base-dev-tools 
-                            qt6-tools-dev 
-                            qt6-tools-dev-tools 
-                            libqt6serialport6-dev
-                            libqt6serialbus6-bin
-                            libqt6serialbus6-dev
-                            libqt6core5compat6-dev
-                        )
-                    ;;
-                    *)
-                        QT_PACKAGES=(
-                            qt6-base-dev 
-                            qt6-base-dev-tools 
-                            qt6-tools-dev 
-                            qt6-tools-dev-tools 
-                            qt6-serialport-dev
-                            qt6-serialbus-dev
-                            qt6-5compat-dev
-                        )
-                    ;;
-                esac
-            else
-                QT_PACKAGES=(
-                    qtbase5-dev 
-                    qtbase5-dev-tools 
-                    qttools5-dev 
-                    qttools5-dev-tools 
-                    libqt5serialport5-dev 
-                    libqt5serialbus5-dev
-                )
-            fi
-            ;;
-
-        rhel-based)
-            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
-     
-            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-qtbase-devel >/dev/null 2>&1; }; then
-                QT_PACKAGES=(
-                    qt6-qtbase-devel 
-                    qt6-qttools-devel 
-                    qt6-qtserialport-devel 
-                    qt6-qtserialbus-devel 
-                    qt6-qt5compat-devel
-                )
-            else
-                QT_PACKAGES=(
-                    qt5-qtbase-devel 
-                    qt5-qttools-devel 
-                    qt5-qtserialport-devel 
-                    qt5-qtserialbus-devel
-                )
-            fi
-            ;;
-
-        altlinux)
-            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor)         
-    
-            # Qt6/Qt5 selection
-            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; }; then
-                QT_PACKAGES=(
-                    qt6-base-devel 
-                    qt6-tools-devel 
-                    qt6-serialport-devel 
-                    qt6-serialbus-devel 
-                    qt6-5compat-devel
-                )
-            else
-                QT_PACKAGES=(
-                    qt5-base-devel 
-                    qt5-tools-devel 
-                    qt5-serialport-devel 
-                    qt5-serialbus-devel
-                )
-            fi
-            ;;
-        
-        suse-based)
-            GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0)
-    
-            # Qt6/Qt5 selection
-            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; }; then
-                QT_PACKAGES=(
-                    qt6-base-devel
-                    qt6-tools-devel
-                    qt6-serialport-devel
-                    qt6-serialbus-devel
-                    qt6-qt5compat-devel
-                    qt6-linguist-devel
-                )
-            else
-                QT_PACKAGES=(
-                    libqt5-qtbase-devel
-                    libqt5-qttools-devel
-                    libqt5-qtserialport-devel
-                    libqt5-qtserialbus
-                    libqt5-qtserialbus-devel
-                )
-            fi
-           ;;
-    esac
-
-    install_pkg "${GENERAL_PACKAGES[@]}" "${QT_PACKAGES[@]}"
+    local pkgs
+    pkgs=$(get_packages_for_distro "$DISTRO" "$VERSION_ID" "$QT_CHOICE") || return 1
+    install_pkg $pkgs
 }
 
 # ==========================
 # Always check/install prereqs first
 # ==========================
+echo "Checking prerequisites for $ID..."
 install_prereqs
 
 # ==========================

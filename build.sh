@@ -123,6 +123,14 @@ for arg in "$@"; do
 done
 
 # ==========================
+# Can use sudo?
+# ==========================
+can_sudo() {
+    command -v sudo >/dev/null 2>&1 && \
+    ! (sudo -n -l 2>&1 | grep -q "not in the sudoers file")
+}
+
+# ==========================
 # Install packages
 # ==========================
 install_pkg() {
@@ -162,15 +170,11 @@ install_pkg() {
         else
             if command -v sudo >/dev/null 2>&1; then
                trap 'echo "Installation cancelled by user."; exit 1' INT
-                if sudo -n true 2>/dev/null; then
+                if can_sudo; then
                     sudo $INSTALL_CMD "${missing[@]}"
                 else
-                    if sudo -l >/dev/null 2>&1; then
-                        sudo $INSTALL_CMD "${missing[@]}"
-                    else
-                        echo "Using su (user not in sudoers)..."
-                        su -c "$INSTALL_CMD ${missing[*]}"
-                    fi
+                    echo "Using su (user not in sudoers)..."
+                    su -c "$INSTALL_CMD ${missing[*]}"
                 fi
                 trap - INT
             else
@@ -516,7 +520,7 @@ select_max_gpp() {
     echo "$max_bin"
 }
 CXX_COMPILER=$(select_max_gpp)
-
+echo "Found compiler: $CXX_COMPILER"
 
 # ==========================
 # Build type
@@ -543,7 +547,7 @@ if verlt "1.11.0" "$NINJA_VER"; then
     if [ "$EUID" -eq 0 ]; then
         echo -e "    cd $BUILD_DIR && ninja install"
     else
-        if command -v sudo >/dev/null 2>&1 && !(sudo -n -l 2>&1 | grep -q "not in the sudoers file"); then
+        if can_sudo; then
             echo -e "    cd $BUILD_DIR && sudo ninja install"
         else
             echo -e "    cd $BUILD_DIR && su -c 'ninja install'"

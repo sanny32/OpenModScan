@@ -54,7 +54,7 @@ else()
     if (Qt5_FOUND)
        print_qt_components(5)
     else()
-        message(STATUS "Qt not found")
+        message(FATAL_ERROR "Qt not found")
     endif()
 endif()
 

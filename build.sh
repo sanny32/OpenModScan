@@ -197,7 +197,7 @@ install_prereqs() {
             
             # Qt6/Qt5 selection
             if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-dev >/dev/null 2>&1; }; then
-                case "$ID-${VERSION_ID%%.*}"
+                case "$ID-${VERSION_ID%%.*}" in
                     ubuntu-22)
                          QT_PACKAGES=(
                             qt6-base-dev 

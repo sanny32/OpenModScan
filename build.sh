@@ -491,15 +491,32 @@ ARCH=$(uname -m)
 # ==========================
 # Detect compiler
 # ==========================
-COMPILER=""
-if command -v g++ >/dev/null 2>&1; then
-    COMPILER="g++"
-elif command -v clang++ >/dev/null 2>&1; then
-    COMPILER="clang++"
-else
-    echo "Error: Can't detect compiller" >&2
-    exit 1
-fi
+select_max_gpp() {
+    local candidates max_ver="" max_bin=""
+    
+    candidates=$(compgen -c g++ | sort -u)
+
+    for bin in $candidates; do
+        if command -v "$bin" >/dev/null 2>&1; then
+            ver=$("$bin" -dumpfullversion -dumpversion 2>/dev/null | head -n1)
+            if [[ -n "$ver" ]]; then
+                if [[ -z "$max_ver" ]] || verlt "$max_ver" "$ver"; then
+                    max_ver=$ver
+                    max_bin=$bin
+                fi
+            fi
+        fi
+    done
+
+    if [[ -z "$max_bin" ]]; then
+        echo "Error: Can't find g++ compiller" >&2
+        exit 1
+    fi
+
+    echo "$max_bin"
+}
+CXX_COMPILER=$(select_max_gpp)
+
 
 # ==========================
 # Build type
@@ -510,11 +527,11 @@ BUILD_TYPE=Release
 # Build project
 # ==========================
 SANITIZED_QT_VERSION=$(echo "$QT_VERSION" | tr '.' '_' | tr ' ' '_')
-BUILD_DIR="build-omodscan-Qt_${SANITIZED_QT_VERSION}_${COMPILER}_${ARCH}-${BUILD_TYPE}"
+BUILD_DIR="build-omodscan-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 echo ""

@@ -264,7 +264,7 @@ install_pkg() {
                         su -c "$INSTALL_CMD ${missing[*]}"
                     fi 
                 else
-                    echo "Using su (may not run sudo)..."
+                    echo "Using su (user may not run sudo)..."
                     su -c "$INSTALL_CMD ${missing[*]}"
                 fi
                 trap - INT

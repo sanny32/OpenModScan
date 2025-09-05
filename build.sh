@@ -274,10 +274,10 @@ get_packages_for_distro() {
 
     case "$qt_choice" in
         qt5)
-            qt_packages=$(get_qt5_packages "$distro") || return 1
+            qt_packages=$(get_qt5_packages_for_distro "$distro") || return 1
             ;;
         qt6)
-            qt_packages=$(get_qt6_packages "$distro") || return 1
+            qt_packages=$(get_qt6_packages_for_distro "$distro") || return 1
             ;;
         *)
             echo "Error: Unsupported Qt choice $qt_choice" >&2

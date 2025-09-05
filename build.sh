@@ -126,10 +126,12 @@ done
 # ==========================
 # Can use sudo?
 # ==========================
-can_sudo() {
-    command -v sudo >/dev/null 2>&1 && \
-    ! (sudo -n -l 2>&1 | grep -q "not in the sudoers file")
-}
+CAN_SUDO=0
+if command -v sudo >/dev/null 2>&1; then
+    if sudo -v 2>/dev/null; then
+        CAN_SUDO=1
+    fi
+fi
 
 # ==========================
 # Get Qt5 packages
@@ -255,8 +257,9 @@ install_pkg() {
         else
             if command -v sudo >/dev/null 2>&1; then
                trap 'echo "Installation cancelled by user."; exit 1' INT
-                if can_sudo; then
-                    if sudo $INSTALL_CMD "${missing[@]}" 2>&1 | grep -q "not in the sudoers file"; then
+                if [ "$CAN_SUDO" -eq 1 ];; then
+                    if sudo $INSTALL_CMD "${missing[@]}" 2>&1 | grep -Eq "not in the sudoers file|may not run sudo"; then
+                        CAN_SUDO=0
                         echo "Using su (user not in sudoers)..."
                         su -c "$INSTALL_CMD ${missing[*]}"
                     fi 
@@ -564,7 +567,7 @@ if verlt "1.11.0" "$NINJA_VER"; then
     if [ "$EUID" -eq 0 ]; then
         echo -e "    cd $BUILD_DIR && ninja install"
     else
-        if can_sudo; then
+        if [ "$CAN_SUDO" -eq 1 ]; then
             echo -e "    cd $BUILD_DIR && sudo ninja install"
         else
             echo -e "    cd $BUILD_DIR && su -c 'ninja install'"

@@ -367,7 +367,7 @@ get_qt_version() {
 # Get cmake prefix for Qt
 # ==========================
 get_cmake_prefix() {
-    local REQ="$1"   # "qt6", "qt5" or auto
+    local REQ="$1"
     local config_file=""
     local prefix=""
 
@@ -375,9 +375,6 @@ get_cmake_prefix() {
         config_file="Qt6CoreConfig.cmake"
     elif [ "$REQ" = "qt5" ]; then
         config_file="Qt5CoreConfig.cmake"
-    else
-        # auto
-        :
     fi
 
     if command -v pkg-config >/dev/null 2>&1; then
@@ -385,14 +382,43 @@ get_cmake_prefix() {
             qt6) prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || true) ;;
             qt5) prefix=$(pkg-config --variable=prefix Qt5Core 2>/dev/null || true) ;;
             auto)
-                prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || pkg-config --variable=prefix Qt5Core 2>/dev/null || true)
+                prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || \
+                         pkg-config --variable=prefix Qt5Core 2>/dev/null || true)
                 ;;
         esac
         if [ -n "$prefix" ]; then
-            echo "$prefix"
-            return 0
+            for d in "$prefix/lib" "$prefix/lib64"; do
+                if [ -f "$d/cmake/$config_file" ]; then
+                    echo "$prefix"
+                    return 0
+                fi
+            done
         fi
     fi
+
+    case "$REQ" in
+        qt6)
+            if [ -f /usr/lib64/cmake/Qt6/$config_file ] || [ -f /usr/lib64/cmake/Qt6Core/$config_file ]; then
+                echo "/usr/lib64"
+                return 0
+            fi
+            ;;
+        qt5)
+            if [ -f /usr/lib64/cmake/Qt5/$config_file ] || [ -f /usr/lib64/cmake/Qt5Core/$config_file ]; then
+                echo "/usr/lib64"
+                return 0
+            fi
+            ;;
+        auto)
+            if [ -f /usr/lib64/cmake/Qt6/$config_file ] || [ -f /usr/lib64/cmake/Qt6Core/$config_file ]; then
+                echo "/usr/lib64"
+                return 0
+            elif [ -f /usr/lib64/cmake/Qt5/$config_file ] || [ -f /usr/lib64/cmake/Qt5Core/$config_file ]; then
+                echo "/usr/lib64"
+                return 0
+            fi
+            ;;
+    esac
 
     local probes=()
     if [ "$REQ" = "qt6" ]; then
@@ -442,7 +468,6 @@ get_cmake_prefix() {
     echo "Error: Can't detect cmake prefix path for $REQ." >&2
     exit 1
 }
-
 
 # ==========================
 # Detect Qt version and prefix

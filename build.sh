@@ -145,24 +145,27 @@ install_pkg() {
             ;;
     esac
 
-    local available_pkgs=()
     for group in "${pkg_groups[@]}"; do
         IFS=',' read -ra aliases <<< "$group"
+        installed=false
         for pkg in "${aliases[@]}"; do
-            if $SEARCH_CMD "$pkg" >/dev/null 2>&1; then
-                available_pkgs+=("$pkg")
+            printf "Checking for %-30s... " "$pkg"
+            if $check_cmd "$pkg" >/dev/null 2>&1; then
+                installed=true
+                echo "yes"
                 break
+            else
+                echo "no"
             fi
         done
-    done
 
-    for pkg in "${available_pkgs[@]}"; do
-        printf "Checking for %-30s... " "$pkg"
-        if $check_cmd "$pkg" >/dev/null 2>&1; then
-            echo "yes"
-        else
-            echo "no"
-            missing+=("$pkg")
+        if [ "$installed" = false ]; then
+            for pkg in "${aliases[@]}"; do
+                if $search_cmd "$pkg" >/dev/null 2>&1; then
+                    missing+=("$pkg")
+                    break
+                fi
+            done
         fi
     done
 

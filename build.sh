@@ -268,6 +268,7 @@ install_prereqs() {
                     qt6-serialport-devel
                     qt6-serialbus-devel
                     qt6-qt5compat-devel
+                    qt6-linguist-devel
                 )
             else
                 QT_PACKAGES=(

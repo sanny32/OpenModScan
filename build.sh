@@ -122,16 +122,6 @@ for arg in "$@"; do
     esac
 done
 
-if [ "$QT_CHOICE" = "auto" ]; then
-    if $SEARCH_CMD qt6-* 2>/dev/null | grep -q "qt6"; then
-        QT_CHOICE="qt6"
-        echo "Auto-detected: Qt6 available, using Qt6"
-    else
-        QT_CHOICE="qt5"
-        echo "Auto-detected: Qt6 not available, using Qt5"
-    fi
-fi
-
 # ==========================
 # Can use sudo?
 # ==========================
@@ -208,16 +198,16 @@ get_packages_for_distro() {
     local qt_packages=""
 
     case "$distro" in
-        debian)
+        debian-based)
             general_packages="build-essential cmake ninja-build libxcb-cursor-dev pkg-config"
             ;;
-        rhel)
+        rhel-based)
             general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
             general_packages="gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor"
             ;;
-        suse)
+        suse-based)
             general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
             ;;
     esac
@@ -225,36 +215,36 @@ get_packages_for_distro() {
     case "$qt_choice" in
         qt6)
             case "$distro" in
-                debian)
+                debian-based)
                     if [ "$ID" = "ubuntu" ] && [ "${version%%.*}" = "22" ]; then
                         qt_packages="qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools libqt6serialport6-dev libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev"
                     else
                         qt_packages="qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-5compat-dev"
                     fi
                     ;;
-                rhel)
+                rhel-based)
                     qt_packages="qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
                     ;;
                 altlinux)
                     qt_packages="qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
                     ;;
-                suse)
+                suse-based)
                     qt_packages="qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
                     ;;
             esac
             ;;
         qt5)
             case "$distro" in
-                debian)
+                debian-based)
                     qt_packages="qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev"
                     ;;
-                rhel)
+                rhel-based)
                     qt_packages="qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
                     ;;
                 altlinux)
                     qt_packages="qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel"
                     ;;
-                suse)
+                suse-based)
                     qt_packages="libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
                     ;;
             esac
@@ -277,6 +267,15 @@ install_prereqs() {
 # Always check/install prereqs first
 # ==========================
 echo "Checking prerequisites for $ID..."
+if [ "$QT_CHOICE" = "auto" ]; then
+    if $SEARCH_CMD qt6-* 2>/dev/null | grep -q "qt6"; then
+        QT_CHOICE="qt6"
+        echo "Auto-detected: Qt6 available, using Qt6"
+    else
+        QT_CHOICE="qt5"
+        echo "Auto-detected: Qt6 not available, using Qt5"
+    fi
+fi
 install_prereqs
 
 # ==========================

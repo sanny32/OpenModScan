@@ -118,14 +118,19 @@ for arg in "$@"; do
             shift
             ;;
         *)
-            if $SEARCH_CMD qt6-* 2>/dev/null | grep -q "qt6"; then
-                QT_CHOICE="qt6"
-            else
-                QT_CHOICE="qt5"
-            fi
             ;;
     esac
 done
+
+if [ "$QT_CHOICE" = "auto" ]; then
+    if $SEARCH_CMD qt6-* 2>/dev/null | grep -q "qt6"; then
+        QT_CHOICE="qt6"
+        echo "Auto-detected: Qt6 available, using Qt6"
+    else
+        QT_CHOICE="qt5"
+        echo "Auto-detected: Qt6 not available, using Qt5"
+    fi
+fi
 
 # ==========================
 # Can use sudo?

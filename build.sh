@@ -334,11 +334,9 @@ get_qt_version() {
     local probes=()
 
     if [ "$REQ" = "qt6" ]; then
-        probes=(qmake6 qmake-qt6 qtpaths6)
+        probes=(qmake qmake6 qmake-qt6 qtpaths6)
     elif [ "$REQ" = "qt5" ]; then
-        probes=(qmake-qt5 qt5-qmake qtpaths-qt5)
-    else
-        probes=(qmake6 qmake-qt6 qtpaths6 qmake-qt5 qt5-qmake qtpaths-qt5 qmake qtpaths)
+        probes=(qmake qmake-qt5 qt5-qmake qtpaths-qt5)
     fi
 
     for p in "${probes[@]}"; do

@@ -381,35 +381,12 @@ get_cmake_prefix() {
         case "$REQ" in
             qt6) prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || true) ;;
             qt5) prefix=$(pkg-config --variable=prefix Qt5Core 2>/dev/null || true) ;;
-            auto)
-                prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || \
-                         pkg-config --variable=prefix Qt5Core 2>/dev/null || true)
-                ;;
         esac
         if [ -n "$prefix" ]; then
-            for d in "$prefix/lib" "$prefix/lib64"; do
-                if [ -f "$d/cmake/$config_file" ]; then
-                    echo "$prefix"
-                    return 0
-                fi
-            done
+            echo "$prefix"
+            return 0
         fi
     fi
-
-    case "$REQ" in
-        qt6)
-            if [ -f /usr/lib64/cmake/Qt6/$config_file ] || [ -f /usr/lib64/cmake/Qt6Core/$config_file ]; then
-                echo "/usr/lib64/cmake/Qt6"
-                return 0
-            fi
-            ;;
-        qt5)
-            if [ -f /usr/lib64/cmake/Qt5/$config_file ] || [ -f /usr/lib64/cmake/Qt5Core/$config_file ]; then
-                echo "/usr/lib64"
-                return 0
-            fi
-            ;;
-    esac
 
     local probes=()
     if [ "$REQ" = "qt6" ]; then

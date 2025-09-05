@@ -260,11 +260,11 @@ install_pkg() {
                 if [ "$CAN_SUDO" -eq 1 ]; then
                     if sudo $INSTALL_CMD "${missing[@]}" 2>&1 | grep -Eq "not in the sudoers file|may not run sudo"; then
                         CAN_SUDO=0
-                        echo "Using su (user not in sudoers)..."
+                        echo "Using su (user may not run sudo)..."
                         su -c "$INSTALL_CMD ${missing[*]}"
                     fi 
                 else
-                    echo "Using su (user not in sudoers)..."
+                    echo "Using su (may not run sudo)..."
                     su -c "$INSTALL_CMD ${missing[*]}"
                 fi
                 trap - INT

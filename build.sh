@@ -206,7 +206,7 @@ get_qt5_packages_for_distro() {
             ;;
         *)
             echo "Error: Unsupported distro $distro for Qt5" >&2
-            return 1
+            exit 1
             ;;
     esac
 }
@@ -252,8 +252,7 @@ get_qt6_packages_for_distro() {
 # ==========================
 get_packages_for_distro() {
     local distro="$1"
-    local version="$2"
-    local qt_choice="$3"
+    local qt_choice="$2"
 
     local general_packages=""
     local qt_packages=""
@@ -294,7 +293,7 @@ get_packages_for_distro() {
 # ==========================
 install_prereqs() {
     local pkgs
-    pkgs=$(get_packages_for_distro "$DISTRO" "$VERSION_ID" "$QT_CHOICE") || return 1
+    pkgs=$(get_packages_for_distro "$DISTRO" "$QT_CHOICE") || return 1
     install_pkg $pkgs
 }
 

@@ -399,21 +399,12 @@ get_cmake_prefix() {
     case "$REQ" in
         qt6)
             if [ -f /usr/lib64/cmake/Qt6/$config_file ] || [ -f /usr/lib64/cmake/Qt6Core/$config_file ]; then
-                echo "/usr/lib64"
+                echo "/usr/lib64/cmake/Qt6"
                 return 0
             fi
             ;;
         qt5)
             if [ -f /usr/lib64/cmake/Qt5/$config_file ] || [ -f /usr/lib64/cmake/Qt5Core/$config_file ]; then
-                echo "/usr/lib64"
-                return 0
-            fi
-            ;;
-        auto)
-            if [ -f /usr/lib64/cmake/Qt6/$config_file ] || [ -f /usr/lib64/cmake/Qt6Core/$config_file ]; then
-                echo "/usr/lib64"
-                return 0
-            elif [ -f /usr/lib64/cmake/Qt5/$config_file ] || [ -f /usr/lib64/cmake/Qt5Core/$config_file ]; then
                 echo "/usr/lib64"
                 return 0
             fi
@@ -425,8 +416,6 @@ get_cmake_prefix() {
         probes=(qmake6 qmake-qt6 qtpaths6)
     elif [ "$REQ" = "qt5" ]; then
         probes=(qmake-qt5 qt5-qmake qtpaths-qt5)
-    else
-        probes=(qmake6 qmake-qt6 qtpaths6 qmake-qt5 qt5-qmake qtpaths-qt5 qmake qtpaths)
     fi
 
     for q in "${probes[@]}"; do

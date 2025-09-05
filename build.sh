@@ -146,21 +146,12 @@ install_pkg() {
     esac
 
     for group in "${pkg_groups[@]}"; do
-        IFS=',' read -ra aliases <<< "$group"
-        installed=false
-        for pkg in "${aliases[@]}"; do
-            printf "Checking for %-30s... " "$pkg"
-            if $check_cmd "$pkg" >/dev/null 2>&1; then
-                installed=true
-                echo "yes"
-                break
-            else
-                echo "no"
-            fi
-        done
-
-        if [ "$installed" = false ]; then
-            missing+=("${aliases[0]}")
+        printf "Checking for %-30s... " "$group"
+        if $check_cmd "$group" >/dev/null 2>&1; then
+            echo "yes"
+        else
+            echo "no"
+            missing+=("$group")
         fi
     done
 

@@ -205,6 +205,7 @@ install_prereqs() {
                             qt6-tools-dev 
                             qt6-tools-dev-tools 
                             libqt6serialport6-dev
+                            libqt6serialbus6-bin
                             libqt6serialbus6-dev
                             libqt6core5compat6-dev
                         )

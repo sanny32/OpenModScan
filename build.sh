@@ -502,7 +502,6 @@ select_max_gpp() {
     echo "$max_bin"
 }
 CXX_COMPILER=$(select_max_gpp)
-echo "Found compiler: $CXX_COMPILER"
 
 # ==========================
 # Build type

@@ -75,7 +75,7 @@ check_min_os_version() {
 
 case "$ID" in
     ubuntu)
-        check_min_os_version "24.04"
+        check_min_os_version "22"
         ;;
     linuxmint)
         check_min_os_version "22"
@@ -197,15 +197,30 @@ install_prereqs() {
             
             # Qt6/Qt5 selection
             if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-dev >/dev/null 2>&1; }; then
-                QT_PACKAGES=(
-                    qt6-base-dev 
-                    qt6-base-dev-tools 
-                    qt6-tools-dev 
-                    qt6-tools-dev-tools 
-                    qt6-serialport-dev
-                    qt6-serialbus-dev
-                    qt6-5compat-dev
-                )
+                case "$ID-${VERSION_ID%%.*}"
+                    ubuntu-22)
+                         QT_PACKAGES=(
+                            qt6-base-dev 
+                            qt6-base-dev-tools 
+                            qt6-tools-dev 
+                            qt6-tools-dev-tools 
+                            libqt6serialport6-dev
+                            libqt6serialbus6-dev
+                            libqt6core5compat6-dev
+                        )
+                    ;;
+                    *)
+                        QT_PACKAGES=(
+                            qt6-base-dev 
+                            qt6-base-dev-tools 
+                            qt6-tools-dev 
+                            qt6-tools-dev-tools 
+                            qt6-serialport-dev
+                            qt6-serialbus-dev
+                            qt6-5compat-dev
+                        )
+                    ;;
+                esac
             else
                 QT_PACKAGES=(
                     qtbase5-dev 

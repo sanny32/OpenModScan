@@ -4,6 +4,7 @@ set -e
 echo "=================================="
 echo " OpenModScan build script (Linux) "
 echo "=================================="
+echo ""
 
 # ==========================
 # Detect package manager and distro
@@ -189,7 +190,7 @@ get_packages() {
 
     case "$DISTRO" in
         debian-based)
-            general_packages="build-essential cmake ninja-build libxcb-cursor-dev pkg-config"
+            general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config"
             ;;
         rhel-based)
             general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
@@ -290,6 +291,7 @@ if [ "$QT_CHOICE" = "" ]; then
     fi
 fi
 install_prereqs
+echo ""
 
 # ==========================
 # Detect Qt installation path

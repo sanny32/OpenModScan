@@ -104,6 +104,25 @@ case "$ID" in
 esac
 
 # ==========================
+# Parse script arguments
+# ==========================
+QT_CHOICE="auto"
+for arg in "$@"; do
+    case "$arg" in
+        -qt5)
+            QT_CHOICE="qt5"
+            shift
+            ;;
+        -qt6)
+            QT_CHOICE="qt6"
+            shift
+            ;;
+        *)
+            ;;
+    esac
+done
+
+# ==========================
 # Install packages
 # ==========================
 install_pkg() {
@@ -184,7 +203,7 @@ install_prereqs() {
             GENERAL_PACKAGES=(build-essential cmake ninja-build libxcb-cursor-dev pkg-config)
             
             # Qt6/Qt5 selection
-            if $SEARCH_CMD qt6-base-dev >/dev/null 2>&1; then
+            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-dev >/dev/null 2>&1; }; then
                 QT_PACKAGES=(
                     qt6-base-dev 
                     qt6-base-dev-tools 
@@ -209,7 +228,7 @@ install_prereqs() {
         rhel-based)
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel)         
      
-            if $SEARCH_CMD qt6-qtbase-devel >/dev/null 2>&1; then
+            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-qtbase-devel >/dev/null 2>&1; }; then
                 QT_PACKAGES=(
                     qt6-qtbase-devel 
                     qt6-qttools-devel 
@@ -231,7 +250,7 @@ install_prereqs() {
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor)         
     
             # Qt6/Qt5 selection
-            if $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; then
+            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; }; then
                 QT_PACKAGES=(
                     qt6-base-devel 
                     qt6-tools-devel 
@@ -253,7 +272,7 @@ install_prereqs() {
             GENERAL_PACKAGES=(gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0)
     
             # Qt6/Qt5 selection
-            if $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; then
+            if [ "$QT_CHOICE" = "qt6" ] || { [ "$QT_CHOICE" = "auto" ] && $SEARCH_CMD qt6-base-devel >/dev/null 2>&1; }; then
                 QT_PACKAGES=(
                     qt6-base-devel
                     qt6-tools-devel
@@ -321,88 +340,159 @@ get_qt_prefix() {
 # Get Qt version string
 # ==========================
 get_qt_version() {
-    local QT_VER=$1
-    if command -v qmake6 >/dev/null 2>&1; then
-        qmake6 -query QT_VERSION 2>/dev/null && return
+    local REQ="$1"
+    local ver=""
+    local probes=()
+
+    if [ "$REQ" = "qt6" ]; then
+        probes=(qmake6 qmake-qt6 qtpaths6)
+    elif [ "$REQ" = "qt5" ]; then
+        probes=(qmake-qt5 qt5-qmake qtpaths-qt5)
+    else
+        probes=(qmake6 qmake-qt6 qtpaths6 qmake-qt5 qt5-qmake qtpaths-qt5 qmake qtpaths)
     fi
-    if command -v qmake-qt6 >/dev/null 2>&1; then
-        qmake-qt6 -query QT_VERSION 2>/dev/null && return
-    fi
-    if command -v qtpaths6 >/dev/null 2>&1; then
-        qtpaths6 --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
-    fi
-    
-    if command -v qmake-qt5 >/dev/null 2>&1; then
-        qmake-qt5 -query QT_VERSION 2>/dev/null && return
-    fi
-    if command -v qt5-qmake >/dev/null 2>&1; then
-        qt5-qmake -query QT_VERSION 2>/dev/null && return
-    fi
-    if command -v qtpaths-qt5 >/dev/null 2>&1; then
-        qtpaths-qt5 --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
-    fi
-    
-    if command -v qmake >/dev/null 2>&1; then
-        qmake -query QT_VERSION 2>/dev/null && return
-    fi
-    if command -v qtpaths >/dev/null 2>&1; then
-        qtpaths --version 2>/dev/null | grep -oP 'Qt version \K[0-9.]+' && return
-    fi
+
+    for p in "${probes[@]}"; do
+        if command -v "$p" >/dev/null 2>&1; then
+            case "$p" in
+                qtpaths* )
+                    ver=$("$p" --version 2>/dev/null | grep -oE '[0-9]+(\.[0-9]+)+' || true)
+                    ;;
+                *)
+                    ver=$("$p" -query QT_VERSION 2>/dev/null || true)
+                    ;;
+            esac
+
+            if [ -n "$ver" ]; then
+                echo "$ver"
+                return 0
+            fi
+        fi
+    done
 
     echo "Error: Can't detect installed Qt version." >&2
     exit 1
 }
 
+# ==========================
+# Get cmake prefix for Qt
+# ==========================
 get_cmake_prefix() {
-    local QT_VER="$1"
-    local CONFIG_FILE="Qt${QT_VER: -1}CoreConfig.cmake"
-    local PREFIX=""
+    local REQ="$1"   # "qt6", "qt5" or auto
+    local config_file=""
+    local prefix=""
 
-     if command -v pkg-config >/dev/null 2>&1; then
-        PREFIX=$(pkg-config --variable=prefix Qt${QT_VER: -1}Core 2>/dev/null || true)
-        if [ -n "$PREFIX" ]; then
-            echo "$PREFIX"
-            return
+    if [ "$REQ" = "qt6" ]; then
+        config_file="Qt6CoreConfig.cmake"
+    elif [ "$REQ" = "qt5" ]; then
+        config_file="Qt5CoreConfig.cmake"
+    else
+        # auto
+        :
+    fi
+
+    if command -v pkg-config >/dev/null 2>&1; then
+        case "$REQ" in
+            qt6) prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || true) ;;
+            qt5) prefix=$(pkg-config --variable=prefix Qt5Core 2>/dev/null || true) ;;
+            auto)
+                prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || pkg-config --variable=prefix Qt5Core 2>/dev/null || true)
+                ;;
+        esac
+        if [ -n "$prefix" ]; then
+            echo "$prefix"
+            return 0
         fi
     fi
 
-     for q in qmake6 qmake-qt6 qmake qtpaths6 qtpaths; do
+    local probes=()
+    if [ "$REQ" = "qt6" ]; then
+        probes=(qmake6 qmake-qt6 qtpaths6)
+    elif [ "$REQ" = "qt5" ]; then
+        probes=(qmake-qt5 qt5-qmake qtpaths-qt5)
+    else
+        probes=(qmake6 qmake-qt6 qtpaths6 qmake-qt5 qt5-qmake qtpaths-qt5 qmake qtpaths)
+    fi
+
+    for q in "${probes[@]}"; do
         if command -v "$q" >/dev/null 2>&1; then
-            PREFIX=$("$q" -query QT_INSTALL_PREFIX 2>/dev/null || "$q" --install-prefix 2>/dev/null || true)
-            if [ -n "$PREFIX" ] && [ -f "$PREFIX/lib/cmake/$CONFIG_FILE" ]; then
-                echo "$PREFIX"
-                return
+            case "$q" in
+                qtpaths* )
+                    prefix=$("$q" --install-prefix 2>/dev/null || true)
+                    ;;
+                *)
+                    prefix=$("$q" -query QT_INSTALL_PREFIX 2>/dev/null || true)
+                    ;;
+            esac
+            if [ -n "$prefix" ]; then
+                if [ -n "$config_file" ]; then
+                    if [ -f "$prefix/lib/cmake/$config_file" ] || [ -f "$prefix/lib64/cmake/$config_file" ]; then
+                        echo "$prefix"
+                        return 0
+                    fi
+                else
+                    echo "$prefix"
+                    return 0
+                fi
             fi
         fi
     done
 
-    PREFIX=$(find /usr /usr/local -type f -name "$CONFIG_FILE" 2>/dev/null | head -n1)
-    if [ -n "$PREFIX" ]; then
-        echo "$(dirname "$PREFIX")"
-        return
+    local found=""
+    if [ -n "$config_file" ]; then
+        found=$(find /usr /usr/local -type f -name "$config_file" 2>/dev/null | head -n1)
+    else
+        found=$(find /usr /usr/local -type f \( -name "Qt6CoreConfig.cmake" -o -name "Qt5CoreConfig.cmake" \) 2>/dev/null | head -n1)
     fi
 
-    echo "Error: Can't detect cmake prefix path." >&2
+    if [ -n "$found" ]; then
+        echo "$(dirname "$found")/.."
+        return 0
+    fi
+
+    echo "Error: Can't detect cmake prefix path for $REQ." >&2
     exit 1
 }
+
 
 # ==========================
 # Detect Qt version and prefix
 # ==========================
 CMAKE_PREFIX=""
-QT_VERSION="Unknown"
+QT_VERSION=""
 
-if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
-    QT_VERSION=$(get_qt_version "qt6")
-    CMAKE_PREFIX=$(get_cmake_prefix "qt6")
-    echo "Using Qt $QT_VERSION (Qt6) from: $CMAKE_PREFIX"
-elif command -v qmake >/dev/null 2>&1 || command -v qtpaths >/dev/null 2>&1; then
-    QT_VERSION=$(get_qt_version "qt5")
-    CMAKE_PREFIX=$(get_cmake_prefix "qt5")
-    echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
+if [ "$QT_CHOICE" = "qt6" ]; then
+    if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
+        QT_VERSION=$(get_qt_version "qt6")
+        CMAKE_PREFIX=$(get_cmake_prefix "qt6")
+        echo "Using Qt $QT_VERSION (Qt6) from: $CMAKE_PREFIX"
+    else
+        echo "Error: Qt6 was explicitly requested but not found." >&2
+        exit 1
+    fi
+elif [ "$QT_CHOICE" = "qt5" ]; then
+    if command -v qmake-qt5 >/dev/null 2>&1 || command -v qt5-qmake >/dev/null 2>&1 || command -v qtpaths-qt5 >/dev/null 2>&1 || command -v qmake >/dev/null 2>&1; then
+        QT_VERSION=$(get_qt_version "qt5")
+        CMAKE_PREFIX=$(get_cmake_prefix "qt5")
+        echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
+    else
+        echo "Error: Qt5 was explicitly requested but not found." >&2
+        exit 1
+    fi
 else
-    echo "Error: Qt installation not found even after installing prerequisites" >&2
-    exit 1
+    # auto-detect qt version
+    if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
+        QT_VERSION=$(get_qt_version "qt6")
+        CMAKE_PREFIX=$(get_cmake_prefix "qt6")
+        echo "Using Qt $QT_VERSION (Qt6) from: $CMAKE_PREFIX"
+    elif command -v qmake >/dev/null 2>&1 || command -v qtpaths >/dev/null 2>&1; then
+        QT_VERSION=$(get_qt_version "qt5")
+        CMAKE_PREFIX=$(get_cmake_prefix "qt5")
+        echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
+    else
+        echo "Error: Qt installation not found even after installing prerequisites" >&2
+        exit 1
+    fi
 fi
 
 # ==========================
@@ -422,11 +512,14 @@ ARCH=$(uname -m)
 # ==========================
 # Detect compiler
 # ==========================
-COMPILER="Unknown"
+COMPILER=""
 if command -v g++ >/dev/null 2>&1; then
     COMPILER="g++"
 elif command -v clang++ >/dev/null 2>&1; then
     COMPILER="clang++"
+else
+    echo "Error: Can't detect compiller" >&2
+    exit 1
 fi
 
 # ==========================

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
     VERSION 1.11.1
@@ -20,13 +20,42 @@ list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
 
 # Find Qt6 or fallback to Qt5
-find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
-if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
-endif()
+function(print_qt_components QT_VERSION)
+    message(STATUS "Qt${QT_VERSION} with components:")
 
-if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
-    message(FATAL_ERROR "One or more Qt development packages not found. Please install Qt5 or Qt6 development packages.")
+    if(${QT_VERSION} EQUAL 6)
+        set(COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools)
+    else()
+        set(COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools)
+    endif()
+
+    foreach(COMPONENT IN LISTS COMPONENTS)
+        string(LENGTH "${COMPONENT}" LEN)
+        math(EXPR SPACES_NEEDED "15 - ${LEN}")
+        set(SPACES "")
+        while(SPACES_NEEDED GREATER 0)
+            set(SPACES "${SPACES} ")
+            math(EXPR SPACES_NEEDED "${SPACES_NEEDED} - 1")
+        endwhile()
+
+        if(TARGET "Qt${QT_VERSION}::${COMPONENT}")
+            message(STATUS "   ${COMPONENT}${SPACES} : FOUND")
+        else()
+            message(STATUS "   ${COMPONENT}${SPACES} : NOT FOUND")
+        endif()
+    endforeach()
+endfunction()
+
+find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
+if (Qt6_FOUND)
+    print_qt_components(6)
+else()
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
+    if (Qt5_FOUND)
+       print_qt_components(5)
+    else()
+        message(STATUS "Qt not found")
+    endif()
 endif()
 
 # Define target

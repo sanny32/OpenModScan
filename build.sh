@@ -160,12 +160,7 @@ install_pkg() {
         done
 
         if [ "$installed" = false ]; then
-            for pkg in "${aliases[@]}"; do
-                if $SEARCH_CMD "$pkg" >/dev/null 2>&1; then
-                    missing+=("$pkg")
-                    break
-                fi
-            done
+            missing+=("${aliases[0]}")
         fi
     done
 
@@ -212,9 +207,9 @@ install_prereqs() {
                     qt6-base-dev-tools 
                     qt6-tools-dev 
                     qt6-tools-dev-tools 
-                    qt6-serialport-dev,libqt6serialport6-dev
-                    qt6-serialbus-dev,libqt6serialbus6-dev
-                    qt6-5compat-dev,libqt6core5compat6-dev
+                    qt6-serialport-dev
+                    qt6-serialbus-dev
+                    qt6-5compat-dev
                 )
             else
                 QT_PACKAGES=(

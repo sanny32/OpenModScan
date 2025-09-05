@@ -186,6 +186,67 @@ install_pkg() {
 }
 
 # ==========================
+# Get Qt5 packages for a distro
+# ==========================
+get_qt5_packages_for_distro() {
+    local distro="$1"
+
+    case "$distro" in
+        debian-based)
+            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev"
+            ;;
+        rhel-based)
+            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
+            ;;
+        altlinux)
+            echo "qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel"
+            ;;
+        suse-based)
+            echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
+            ;;
+        *)
+            echo "Error: Unsupported distro $distro for Qt5" >&2
+            return 1
+            ;;
+    esac
+}
+
+# ==========================
+# Get Qt6 packages for a distro + version
+# ==========================
+get_qt6_packages_for_distro() {
+    local distro="$1"
+
+    case "$distro" in
+        debian-based)
+            case "$ID-${VERSION_ID%%.*}" in
+                ubuntu-22)
+                    echo "qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
+                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev"
+                ;;
+                *)
+                    echo "qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev \
+                            qt6-5compat-dev"
+                ;;
+            esac
+            ;;
+        rhel-based)
+            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
+            ;;
+        altlinux)
+            echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
+            ;;
+        suse-based)
+            echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
+            ;;
+        *)
+            echo "Error: Unsupported distro $distro for Qt6" >&2
+            exit 1
+            ;;
+    esac
+}
+
+# ==========================
 # Function to get packages for a distro
 # Returns combined general + Qt package list
 # ==========================
@@ -213,41 +274,15 @@ get_packages_for_distro() {
     esac
 
     case "$qt_choice" in
-        qt6)
-            case "$distro" in
-                debian-based)
-                    if [ "$ID" = "ubuntu" ] && [ "${version%%.*}" = "22" ]; then
-                        qt_packages="qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools libqt6serialport6-dev libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev"
-                    else
-                        qt_packages="qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev qt6-5compat-dev"
-                    fi
-                    ;;
-                rhel-based)
-                    qt_packages="qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
-                    ;;
-                altlinux)
-                    qt_packages="qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
-                    ;;
-                suse-based)
-                    qt_packages="qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
-                    ;;
-            esac
-            ;;
         qt5)
-            case "$distro" in
-                debian-based)
-                    qt_packages="qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev"
-                    ;;
-                rhel-based)
-                    qt_packages="qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
-                    ;;
-                altlinux)
-                    qt_packages="qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel"
-                    ;;
-                suse-based)
-                    qt_packages="libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
-                    ;;
-            esac
+            qt_packages=$(get_qt5_packages "$distro") || return 1
+            ;;
+        qt6)
+            qt_packages=$(get_qt6_packages "$distro") || return 1
+            ;;
+        *)
+            echo "Error: Unsupported Qt choice $qt_choice" >&2
+            exit 1
             ;;
     esac
 
@@ -321,9 +356,12 @@ get_qt_version() {
     local probes=()
 
     if [ "$REQ" = "qt6" ]; then
-        probes=(qmake qmake6 qmake-qt6 qtpaths6)
+        probes=(qmake6 qmake-qt6 qtpaths6 qmake)
     elif [ "$REQ" = "qt5" ]; then
-        probes=(qmake qmake-qt5 qt5-qmake qtpaths-qt5)
+        probes=( qmake-qt5 qt5-qmake qtpaths-qt5 qmake)
+    else
+        echo "Error: Unknown Qt requirement: $REQ" >&2
+        exit 1
     fi
 
     for p in "${probes[@]}"; do
@@ -338,8 +376,21 @@ get_qt_version() {
             esac
 
             if [ -n "$ver" ]; then
-                echo "$ver"
-                return 0
+                local major="${ver%%.*}"
+                case "$REQ" in
+                    qt6)
+                        if [ "$major" -eq 6 ]; then
+                            echo "$ver"
+                            return 0
+                        fi
+                        ;;
+                    qt5)
+                        if [ "$major" -eq 5 ]; then
+                            echo "$ver"
+                            return 0
+                        fi
+                        ;;
+                esac
             fi
         fi
     done

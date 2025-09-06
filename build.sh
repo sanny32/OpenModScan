@@ -24,7 +24,7 @@ case "$ID" in
     debian|ubuntu|linuxmint|astra)
         DISTRO="debian-based"
         INSTALL_CMD="apt install -y"
-        SEARCH_CMD="apt-cache show"
+        SEARCH_CMD="apt-cache search --names-only"
         ;;
     rhel|fedora|redos)
         DISTRO="rhel-based"
@@ -34,7 +34,7 @@ case "$ID" in
     altlinux)
         DISTRO="altlinux"
         INSTALL_CMD="apt-get install -y"
-        SEARCH_CMD="apt-cache show"
+        SEARCH_CMD="apt-cache search --names-only"
         ;;
     suse|opensuse*)
         DISTRO="suse-based"
@@ -298,8 +298,12 @@ install_prereqs() {
 # Always check/install prereqs first
 # ==========================
 echo "Checking prerequisites for $ID..."
-if [ "$QT_CHOICE" = "" ]; then
-    if $SEARCH_CMD qt6-* 2>/dev/null | grep -q "qt6"; then
+if [ -z "$QT_CHOICE" ]; then
+    if $SEARCH_CMD '^qt6-' 2>/dev/null | head -n5 | grep -q "qt6-"; then
+        QT_CHOICE="qt6"
+    elif $SEARCH_CMD '^libqt6' 2>/dev/null | head -n5 | grep -q "libqt6"; then
+        QT_CHOICE="qt6"
+    elif $SEARCH_CMD 'qt6-*' 2>/dev/null | head -n5 | grep -q "qt6-"; then
         QT_CHOICE="qt6"
     else
         QT_CHOICE="qt5"

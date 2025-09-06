@@ -17,27 +17,32 @@ else
 fi
 
 DISTRO=""
+CHECK_CMD=""
 INSTALL_CMD=""
 SEARCH_CMD=""
 
 case "$ID" in
     debian|ubuntu|linuxmint|astra)
         DISTRO="debian-based"
+        CHECK_CMD="dpkg -s"
         INSTALL_CMD="apt install -y"
         SEARCH_CMD="apt-cache search --names-only"
         ;;
     rhel|fedora|redos)
         DISTRO="rhel-based"
+        CHECK_CMD="rpm -q"
         INSTALL_CMD="dnf install -y"
         SEARCH_CMD="dnf list --available"
         ;;
     altlinux)
         DISTRO="altlinux"
+        CHECK_CMD="rpm -q"
         INSTALL_CMD="apt-get install -y"
         SEARCH_CMD="apt-cache search --names-only"
         ;;
     suse|opensuse*)
         DISTRO="suse-based"
+        CHECK_CMD="rpm -q"
         INSTALL_CMD="zypper install -y"
         SEARCH_CMD="zypper search"
         ;;
@@ -223,26 +228,10 @@ get_packages() {
 install_pkg() {
     local pkg_groups=("$@")
     local missing=()
-    local check_cmd
-
-    case "$DISTRO" in
-        debian-based)
-            check_cmd="dpkg -s"
-            ;;
-        rhel-based)
-            check_cmd="rpm -q"
-            ;;
-        altlinux)
-            check_cmd="rpm -q"
-            ;;
-        suse-based)
-            check_cmd="rpm -q"
-            ;;
-    esac
-
+  
     for group in "${pkg_groups[@]}"; do
         printf "Checking for %-30s... " "$group"
-        if $check_cmd "$group" >/dev/null 2>&1; then
+        if $CHECK_CMD "$group" >/dev/null 2>&1; then
             echo "yes"
         else
             echo "no"

@@ -484,7 +484,6 @@ ARCH=$(uname -m)
 # ==========================
 select_max_gpp() {
     local candidates max_ver="" max_bin=""
-    
     candidates=$(compgen -c g++ | sort -u)
 
     for bin in $candidates; do

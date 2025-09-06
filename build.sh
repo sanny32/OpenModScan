@@ -313,9 +313,6 @@ get_qt_version() {
         probes=(qmake6 qmake-qt6 qtpaths6 qmake)
     elif [ "$REQ" = "qt5" ]; then
         probes=( qmake-qt5 qt5-qmake qtpaths-qt5 qmake)
-    else
-        echo "Error: Unknown Qt requirement: $REQ" >&2
-        exit 1
     fi
 
     for p in "${probes[@]}"; do

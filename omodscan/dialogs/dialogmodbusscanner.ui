@@ -710,6 +710,12 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBoxIPAddressRange">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Address Range</string>
          </property>
@@ -792,6 +798,12 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBoxSubnetMask">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Subnet Mask</string>
          </property>
@@ -823,6 +835,12 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBoxPortRange">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Port Range</string>
          </property>
@@ -1026,6 +1044,12 @@ font-weight: bold;</string>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBoxSanTime">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
           <string>Scan Time</string>
          </property>

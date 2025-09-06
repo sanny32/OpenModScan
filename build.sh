@@ -256,16 +256,24 @@ install_pkg() {
             $INSTALL_CMD "${missing[@]}"
         else
             if command -v sudo >/dev/null 2>&1; then
-               trap 'echo "Installation cancelled by user."; exit 1' INT
+                trap 'echo "Installation cancelled by user."; exit 1' INT
                 if [ "$CAN_SUDO" -eq 1 ]; then
-                    if sudo $INSTALL_CMD "${missing[@]}" 2>&1 | grep -Eq "not in the sudoers file|may not run sudo"; then
-                        CAN_SUDO=0
+                    if ! sudo $INSTALL_CMD "${missing[@]}" 2> >(tee /tmp/sudo.err >&2); then
+                        if grep -Eq "not in the sudoers file|may not run sudo" /tmp/sudo.err; then
+                            CAN_SUDO=0
+                            echo "Using su (user may not run sudo)..."
+                            su -c "$INSTALL_CMD ${missing[*]}"
+                        fi
+                    fi
+                else
+                    if sudo -n true 2>/tmp/sudo_check.err; then
+                        sudo $INSTALL_CMD "${missing[@]}"
+                    elif grep -Eq "not in the sudoers file|may not run sudo" /tmp/sudo_check.err; then
                         echo "Using su (user may not run sudo)..."
                         su -c "$INSTALL_CMD ${missing[*]}"
-                    fi 
-                else
-                    echo "Using su (user may not run sudo)..."
-                    su -c "$INSTALL_CMD ${missing[*]}"
+                    else
+                        sudo $INSTALL_CMD "${missing[@]}"
+                    fi
                 fi
                 trap - INT
             else
@@ -274,6 +282,7 @@ install_pkg() {
             fi
         fi
     fi
+
 }
 
 # ==========================

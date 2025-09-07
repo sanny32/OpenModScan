@@ -311,7 +311,7 @@ get_qt_version() {
     if [ "$QT_CHOICE" = "qt6" ]; then
         probes=(qmake6 qmake-qt6 qtpaths6 qmake)
     elif [ "$QT_CHOICE" = "qt5" ]; then
-        probes=( qmake-qt5 qt5-qmake qtpaths-qt5 qmake)
+        probes=(qmake-qt5 qt5-qmake qtpaths-qt5 qmake)
     fi
 
     for p in "${probes[@]}"; do

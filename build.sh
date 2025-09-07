@@ -375,9 +375,9 @@ get_cmake_prefix() {
 
     local probes=()
     if [ "$QT_CHOICE" = "qt6" ]; then
-        probes=(qmake6 qmake-qt6 qtpaths6)
+        probes=(qmake6 qmake-qt6 qtpaths6 qmake)
     elif [ "$QT_CHOICE" = "qt5" ]; then
-        probes=(qmake-qt5 qt5-qmake qtpaths-qt5)
+        probes=(qmake-qt5 qt5-qmake qtpaths-qt5 qmake)
     fi
 
     for q in "${probes[@]}"; do
@@ -423,8 +423,8 @@ get_cmake_prefix() {
 # ==========================
 # Detect Qt version and cmake prefix
 # ==========================
-CMAKE_PREFIX=$(get_cmake_prefix)
 QT_VERSION=$(get_qt_version)
+CMAKE_PREFIX=$(get_cmake_prefix)
 
 # ==========================
 # Check minimal Qt version

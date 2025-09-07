@@ -288,11 +288,11 @@ install_prereqs() {
 # ==========================
 echo "Checking prerequisites for $ID..."
 if [ -z "$QT_CHOICE" ]; then
-    if $SEARCH_CMD '^qt6-' 2>/dev/null | head -n5 | grep -q "qt6-"; then
+    if $SEARCH_CMD '^qt6-' 2>/dev/null | head -n30 | grep -q "qt6-"; then
         QT_CHOICE="qt6"
-    elif $SEARCH_CMD '^libqt6' 2>/dev/null | head -n5 | grep -q "libqt6"; then
+    elif $SEARCH_CMD '^libqt6' 2>/dev/null | head -n30 | grep -q "libqt6"; then
         QT_CHOICE="qt6"
-    elif $SEARCH_CMD 'qt6-*' 2>/dev/null | head -n5 | grep -q "qt6-"; then
+    elif $SEARCH_CMD 'qt6-*' 2>/dev/null | head -n30 | grep -q "qt6-"; then
         QT_CHOICE="qt6"
     else
         QT_CHOICE="qt5"

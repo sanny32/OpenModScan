@@ -423,43 +423,17 @@ get_cmake_prefix() {
 }
 
 # ==========================
-# Detect Qt version and prefix
+# Detect Qt version and cmake prefix
 # ==========================
 CMAKE_PREFIX=""
 QT_VERSION=""
 
 if [ "$QT_CHOICE" = "qt6" ]; then
-    if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
-        QT_VERSION=$(get_qt_version "qt6")
-        CMAKE_PREFIX=$(get_cmake_prefix "qt6")
-        echo "Using Qt $QT_VERSION (Qt6) from: $CMAKE_PREFIX"
-    else
-        echo "Error: Qt6 was explicitly requested but not found." >&2
-        exit 1
-    fi
+    QT_VERSION=$(get_qt_version "qt6")
+    CMAKE_PREFIX=$(get_cmake_prefix "qt6")
 elif [ "$QT_CHOICE" = "qt5" ]; then
-    if command -v qmake-qt5 >/dev/null 2>&1 || command -v qt5-qmake >/dev/null 2>&1 || command -v qtpaths-qt5 >/dev/null 2>&1 || command -v qmake >/dev/null 2>&1; then
-        QT_VERSION=$(get_qt_version "qt5")
-        CMAKE_PREFIX=$(get_cmake_prefix "qt5")
-        echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
-    else
-        echo "Error: Qt5 was explicitly requested but not found." >&2
-        exit 1
-    fi
-else
-    # auto-detect qt version
-    if command -v qmake6 >/dev/null 2>&1 || command -v qmake-qt6 >/dev/null 2>&1 || command -v qtpaths6 >/dev/null 2>&1; then
-        QT_VERSION=$(get_qt_version "qt6")
-        CMAKE_PREFIX=$(get_cmake_prefix "qt6")
-        echo "Using Qt $QT_VERSION (Qt6) from: $CMAKE_PREFIX"
-    elif command -v qmake >/dev/null 2>&1 || command -v qtpaths >/dev/null 2>&1; then
-        QT_VERSION=$(get_qt_version "qt5")
-        CMAKE_PREFIX=$(get_cmake_prefix "qt5")
-        echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
-    else
-        echo "Error: Qt installation not found even after installing prerequisites" >&2
-        exit 1
-    fi
+    QT_VERSION=$(get_qt_version "qt5")
+    CMAKE_PREFIX=$(get_cmake_prefix "qt5")
 fi
 
 # ==========================
@@ -469,6 +443,8 @@ MIN_QT_VERSION="5.15.0"
 if verlt "$QT_VERSION" "$MIN_QT_VERSION"; then
     echo "Error: Qt >= $MIN_QT_VERSION is required, but found $QT_VERSION" >&2
     exit 1
+else
+    echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
 fi
 
 # ==========================

@@ -52,7 +52,14 @@ Registers
 
 ## Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
-  On Linux you can build application via `build.sh` script.
+
+## Linux Building  
+- `git clone https://github.com/sanny32/OpenModScan.git`
+- `cd OpenModScan`
+- `./build.sh`
+
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `./build.sh -qt5` or  `./build.sh -qt6`
 
 ## About supported operating systems
 

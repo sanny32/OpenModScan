@@ -327,7 +327,7 @@ get_qt_version() {
 
             if [ -n "$ver" ]; then
                 local major="${ver%%.*}"
-                case "$$QT_CHOICE" in
+                case "$QT_CHOICE" in
                     qt6)
                         if [ "$major" -eq 6 ]; then
                             echo "$ver"

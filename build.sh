@@ -305,13 +305,12 @@ echo ""
 # Get Qt version string
 # ==========================
 get_qt_version() {
-    local REQ="$1"
     local ver=""
     local probes=()
 
-    if [ "$REQ" = "qt6" ]; then
+    if [ "$QT_CHOICE" = "qt6" ]; then
         probes=(qmake6 qmake-qt6 qtpaths6 qmake)
-    elif [ "$REQ" = "qt5" ]; then
+    elif [ "$QT_CHOICE" = "qt5" ]; then
         probes=( qmake-qt5 qt5-qmake qtpaths-qt5 qmake)
     fi
 
@@ -354,18 +353,17 @@ get_qt_version() {
 # Get cmake prefix for Qt
 # ==========================
 get_cmake_prefix() {
-    local REQ="$1"
     local config_file=""
     local prefix=""
 
-    if [ "$REQ" = "qt6" ]; then
+    if [ "$QT_CHOICE" = "qt6" ]; then
         config_file="Qt6CoreConfig.cmake"
-    elif [ "$REQ" = "qt5" ]; then
+    elif [ "$QT_CHOICE" = "qt5" ]; then
         config_file="Qt5CoreConfig.cmake"
     fi
 
     if command -v pkg-config >/dev/null 2>&1; then
-        case "$REQ" in
+        case "$QT_CHOICE" in
             qt6) prefix=$(pkg-config --variable=prefix Qt6Core 2>/dev/null || true) ;;
             qt5) prefix=$(pkg-config --variable=prefix Qt5Core 2>/dev/null || true) ;;
         esac
@@ -376,9 +374,9 @@ get_cmake_prefix() {
     fi
 
     local probes=()
-    if [ "$REQ" = "qt6" ]; then
+    if [ "$QT_CHOICE" = "qt6" ]; then
         probes=(qmake6 qmake-qt6 qtpaths6)
-    elif [ "$REQ" = "qt5" ]; then
+    elif [ "$QT_CHOICE" = "qt5" ]; then
         probes=(qmake-qt5 qt5-qmake qtpaths-qt5)
     fi
 
@@ -425,16 +423,8 @@ get_cmake_prefix() {
 # ==========================
 # Detect Qt version and cmake prefix
 # ==========================
-CMAKE_PREFIX=""
-QT_VERSION=""
-
-if [ "$QT_CHOICE" = "qt6" ]; then
-    QT_VERSION=$(get_qt_version "qt6")
-    CMAKE_PREFIX=$(get_cmake_prefix "qt6")
-elif [ "$QT_CHOICE" = "qt5" ]; then
-    QT_VERSION=$(get_qt_version "qt5")
-    CMAKE_PREFIX=$(get_cmake_prefix "qt5")
-fi
+CMAKE_PREFIX=$(get_cmake_prefix)
+QT_VERSION=$(get_qt_version)
 
 # ==========================
 # Check minimal Qt version

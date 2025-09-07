@@ -64,12 +64,15 @@ If you need to specify Qt framework major version (5 or 6), you can do it in the
 ## About supported operating systems
 
 The following operating systems are supported for OpenModScan.
-- Microsoft Windows 7 x86 and amd64 or later.
-- Ubuntu Linux 22.04 amd64 or later.
-- Fedora Linux 41 amd64 or later.
-- Alt Linux 11 amd64 or later.
-- Astra Linux 1.7 amd64 or later.
-- RedOS 8 amd64 or later.
+- Microsoft Windows 7 x86 and amd64 or later
+- Debian Linux 11 amd64 or later
+- Ubuntu Linux 22.04 amd64 or later
+- Mint Linux 22 amd64 or later
+- Fedora Linux 41 amd64 or later
+- OpenSuse Linux 15.6 amd64 or later
+- Alt Linux 11 amd64 or later
+- Astra Linux 1.7 amd64 or later
+- RedOS 8 amd64 or later
 
   
 ## MIT License

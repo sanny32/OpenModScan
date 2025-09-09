@@ -105,9 +105,9 @@ sudo dnf install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
 Replace X.XX.X-Y with the application version.
 
 ## SUSE/OpenSUSE Linux
-Import qt6-omodscan.pubkey to rpm repository:
+Import qt6-omodscan.rpm.pubkey to rpm repository:
 ```bash
-sudo rpm --import qt6-omodscan.pubkey
+sudo rpm --import qt6-omodscan.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash

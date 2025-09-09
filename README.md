@@ -111,7 +111,7 @@ sudo rpm --import qt6-omodscan.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo dnf install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+sudo zypper install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
 ```
 Replace X.XX.X-Y with the application version.
 

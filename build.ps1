@@ -1,6 +1,7 @@
 param(
     [string]$QtVersion = "6.9.2",
-    [string]$Compiler = "win64_msvc2022_64",
+    [string]$Arch = "win64",
+    [string]$Compiler = "msvc2022_64",
     [string]$BuildType = "Release"
 )
 
@@ -94,6 +95,7 @@ if (-not $aqtInstalled) {
 
 Write-Host "Using aqtinstall version:"
 python -m aqt version
+Write-Host ""
 
 # Check if CMake is available
 $cmakePath = $null
@@ -107,15 +109,15 @@ if (Get-Command cmake -ErrorAction SilentlyContinue) {
     $cmakePath = "$cmakeDir\cmake.exe"
 }
 
-Write-Host "CMake version:"
 & $cmakePath --version
+Write-Host ""
 
 $BuildDir = "build-omodscan-Qt_${QtVersion}_MSVC2022_64bit-$BuildType"
 $QtDir = Join-Path $PWD ".qt\$QtVersion\$Compiler"
 
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
-    python -m aqt install-qt windows desktop $QtVersion $Compiler --outputdir $QtDir
+    python -m aqt install-qt windows desktop $QtVersion "$Arch_$Compiler" --outputdir "$PWD\.qt"
     if ($LASTEXITCODE -ne 0) {
         Write-Error "ERROR: aqtinstall failed. Exiting."
         exit 1
@@ -131,17 +133,32 @@ $QtBin = Join-Path $QtDir "bin"
 $env:PATH = "$QtBin;$env:PATH"
 
 Write-Host "Configuring project with CMake..."
-& $cmakePath ../omodscan -G "Visual Studio 17 2022" -DCMAKE_PREFIX_PATH="$QtDir" -DCMAKE_BUILD_TYPE=$BuildType
+$cmakeArgs = @(
+    "../omodscan",
+    "-G", "Visual Studio 17 2022",
+    "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
+    "-DQt6_DIR=`"$QtDir\lib\cmake\Qt6`"",
+    "-DCMAKE_BUILD_TYPE=$BuildType",
+    "-DCMAKE_VERBOSE_MAKEFILE=ON"
+)
+
+Write-Host "CMake arguments: $cmakeArgs"
+& $cmakePath @cmakeArgs
+
 if ($LASTEXITCODE -ne 0) {
-    Write-Error "CMake configuration failed"
+    Set-Location ..
+
+    Write-Error "CMake configuration failed"   
     exit 1
 }
 
 Write-Host "Building project..."
 & $cmakePath --build . --config $BuildType
 if ($LASTEXITCODE -ne 0) {
+    Set-Location ..
     Write-Error "Build failed"
     exit 1
 }
 
+Set-Location ..
 Write-Host "=== Build finished successfully ==="

@@ -30,6 +30,10 @@ $QtDir = Join-Path $PWD ".qt\$QtVersion\$Compiler"
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
     python -m aqt install-qt windows desktop $QtVersion $Compiler --outputdir $QtDir
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "ERROR: aqtinstall failed. Exiting."
+        exit 1
+    }
 }
 
 if (-not (Test-Path $BuildDir)) { New-Item -ItemType Directory -Path $BuildDir | Out-Null }

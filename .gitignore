@@ -34,6 +34,7 @@ debug
 release
 .vcpkg
 .qt
+.tools
 
 # Qt unit tests
 target_wrapper.*

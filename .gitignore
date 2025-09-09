@@ -32,6 +32,7 @@ Makefile*
 *build-*
 debug
 release
+.vcpkg
 
 # Qt unit tests
 target_wrapper.*

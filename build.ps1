@@ -15,7 +15,7 @@ function Install-CMake {
     # Download CMake installer
     $cmakeUrl = "https://github.com/Kitware/CMake/releases/download/v3.29.4/cmake-3.29.4-windows-x86_64.msi"
     $installerPath = "$env:TEMP\cmake-installer.msi"
-    
+ 
     try {
         Invoke-WebRequest -Uri $cmakeUrl -OutFile $installerPath
         Write-Host "Download completed."
@@ -35,12 +35,17 @@ function Install-CMake {
         "ALLUSERS=1"
     )
     
-    Start-Process msiexec -ArgumentList $installArgs -Wait
+    $process = Start-Process msiexec -ArgumentList $installArgs -Wait -PassThru
+    
+    if ($process.ExitCode -ne 0) {
+        Write-Host "MSI installation failed with exit code: $($process.ExitCode)"
+    }
+    else {
+        Write-Host "CMake installed successfully. Please restart your terminal and run this script again."
+    }
     
     # Clean up
     Remove-Item $installerPath -ErrorAction SilentlyContinue
-    
-    Write-Host "CMake installed successfully. Please restart your terminal and run this script again."
     exit 0
 }
 

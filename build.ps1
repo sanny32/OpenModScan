@@ -136,8 +136,7 @@ Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
     "../omodscan",
     "-G", "Visual Studio 17 2022",
-    "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
-    "-DQt6_DIR=`"$QtDir\lib\cmake\Qt6`"",
+    "-DCMAKE_PREFIX_PATH=`"$QtDir\lib\`"",
     "-DCMAKE_BUILD_TYPE=$BuildType",
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
 )

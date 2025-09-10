@@ -85,11 +85,11 @@ function Install-Python {
 
 # Function to install CMake system-wide
 function Install-CMakeSystem {
-    $cmakeUrl = "https://github.com/Kitware/CMake/releases/download/v3.29.4/cmake-3.29.4-windows-x86_64.msi"
+    $cmakeUrl = "https://cmake.org/files/v3.29/cmake-3.29.4-windows-x86_64.msi"
     $installerPath = "$env:TEMP\cmake-installer.msi"
     
     try {
-        Write-Host "Downloading CMake from GitHub..."
+        Write-Host "Downloading CMake from cmake.org..."
         Invoke-WebRequest -Uri $cmakeUrl -OutFile $installerPath
         Write-Host "Download completed."
     }

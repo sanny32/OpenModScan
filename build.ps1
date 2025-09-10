@@ -7,7 +7,33 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+Write-Host "================================"
 Write-Host "=== OpenModScan Build Script ==="
+Write-Host "================================"
+Write-Host ""
+
+# Check Windows version and architecture
+Write-Host "Checking system requirements..."
+$os = Get-CimInstance -ClassName Win32_OperatingSystem
+$windowsVersion = [System.Environment]::OSVersion.Version
+$architecture = $env:PROCESSOR_ARCHITECTURE
+
+Write-Host "Windows Version: $($os.Caption)"
+Write-Host "Build Number: $($os.BuildNumber)"
+Write-Host "Architecture: $architecture"
+Write-Host ""
+
+# Check minimum Windows version (Windows 7 or later)
+if ($windowsVersion.Major -lt 6 -or ($windowsVersion.Major -eq 6 -and $windowsVersion.Minor -lt 1)) {
+    Write-Error "This script requires Windows 7 or later. Current version: $($windowsVersion.Major).$($windowsVersion.Minor)"
+    exit 1
+}
+
+# Check if running on 64-bit system for 64-bit builds
+if ($Arch -eq "win64" -and $architecture -ne "AMD64") {
+    Write-Error "64-bit build requested but running on 32-bit system. Architecture: $architecture"
+    exit 1
+}
 
 # Function to download and setup portable CMake
 function Install-CMakePortable {
@@ -93,7 +119,6 @@ if (-not $aqtInstalled) {
     }
 }
 
-Write-Host "Using aqtinstall version:"
 python -m aqt version
 Write-Host ""
 
@@ -113,12 +138,21 @@ if (Get-Command cmake -ErrorAction SilentlyContinue) {
 Write-Host ""
 
 $BuildDir = "build-omodscan-Qt_${QtVersion}_MSVC2022_64bit-$BuildType"
-$QtDir = Join-Path $PWD ".qt\$QtVersion\$Compiler"
+$QtDir = "C:\Qt\$QtVersion\$Compiler"
 
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
-    python -m aqt install-qt windows desktop $QtVersion "$Arch_$Compiler" --outputdir "$PWD\.qt"
+
+    $modules = @(
+        "qtserialbus", 
+        "qtserialport",
+        "qt5compat", 
+        "qtpdf"
+    )
+
+    python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt -m $modules
     if ($LASTEXITCODE -ne 0) {
+        Remove-Item $QtDir -Recurse -Force -ErrorAction SilentlyContinue
         Write-Error "ERROR: aqtinstall failed. Exiting."
         exit 1
     }
@@ -137,6 +171,7 @@ $cmakeArgs = @(
     "../omodscan",
     "-G", "Visual Studio 17 2022",
     "-DCMAKE_PREFIX_PATH=`"$QtDir\lib\`"",
+    "-DQT_DIR=`"$QtDir`"",
     "-DCMAKE_BUILD_TYPE=$BuildType",
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
 )
@@ -146,7 +181,6 @@ Write-Host "CMake arguments: $cmakeArgs"
 
 if ($LASTEXITCODE -ne 0) {
     Set-Location ..
-
     Write-Error "CMake configuration failed"   
     exit 1
 }

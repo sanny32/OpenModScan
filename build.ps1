@@ -326,13 +326,6 @@ if (Get-Command cmake -ErrorAction SilentlyContinue) {
 & $cmakePath --version
 Write-Host ""
 
-# Check if MSVC compiller is available
-$msvcPath = Test-MsvcCompiler
-if (!$msvcPath) {
-    Write-Error "MSVC compiler not found. Please install Visual Studio 2022 with C++ support"
-    exit 1
-}
-
 $BuildDir = "build-omodscan-Qt_${QtVersion}_MSVC2022_64bit-$BuildType"
 $QtDir = "C:\Qt\$QtVersion\$Compiler"
 
@@ -368,6 +361,7 @@ $cmakeArgs = @(
     "-G", "Visual Studio 17 2022",
     "-DCMAKE_PREFIX_PATH=`"$QtDir\lib\`"",
     "-DQT_DIR=`"$QtDir`"",
+    "-DCMAKE_CXX_COMPILER=`"$msvcPath`"",
     "-DCMAKE_BUILD_TYPE=$BuildType"
 )
 

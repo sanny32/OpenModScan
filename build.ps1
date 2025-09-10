@@ -23,9 +23,9 @@ Write-Host "Build Number: $($os.BuildNumber)"
 Write-Host "Architecture: $architecture"
 Write-Host ""
 
-# Check minimum Windows version (Windows 7 or later)
-if ($windowsVersion.Major -lt 6 -or ($windowsVersion.Major -eq 6 -and $windowsVersion.Minor -lt 1)) {
-    Write-Error "This script requires Windows 7 or later. Current version: $($windowsVersion.Major).$($windowsVersion.Minor)"
+# Check minimum Windows version (Windows 10 or later)
+if ($windowsVersion.Major -lt 10) {
+    Write-Error "This script requires Windows 10 or later."
     exit 1
 }
 

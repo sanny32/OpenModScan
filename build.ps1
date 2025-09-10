@@ -207,6 +207,7 @@ function Install-VisualStudioBuildTools {
 
 # Check if Python is available
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
+    Write-Host ""
     Write-Host "Python not found."
     $choice = Read-Host "Do you want to download and install Python 3.11? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
@@ -223,6 +224,7 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
 } else {
     # Check Python version
     $pythonVersion = python --version 2>&1
+    Write-Host ""
     Write-Host "Python found: $pythonVersion"
     
     # Check if Python version is compatible (3.6 or newer)
@@ -250,6 +252,7 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
 # Check if MSVC is available
 $msvcPath = Test-MsvcCompiler
 if (!$msvcPath) {
+    Write-Host ""
     Write-Host "MSVC compiler not found."
     $choice = Read-Host "Do you want to install Visual Studio Build Tools? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {

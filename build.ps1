@@ -37,8 +37,6 @@ if ($Arch -eq "win64" -and $architecture -ne "AMD64") {
 
 # Function to install Python
 function Install-Python {
-    Write-Host "Downloading Python installer..."
-    
     $pythonUrl = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe"
     $installerPath = "$env:TEMP\python-installer.exe"
     
@@ -85,17 +83,14 @@ function Install-Python {
     return $false
 }
 
-# Function to download and setup portable CMake
-function Install-CMakePortable {
-    Write-Host "Downloading portable CMake..."
-    
-    $cmakeZipUrl = "https://github.com/Kitware/CMake/releases/download/v3.29.4/cmake-3.29.4-windows-x86_64.zip"
-    $zipPath = "$env:TEMP\cmake.zip"
-    $extractPath = "$PWD\.tools\cmake"
+# Function to install CMake system-wide
+function Install-CMakeSystem {
+    $cmakeUrl = "https://github.com/Kitware/CMake/releases/download/v3.29.4/cmake-3.29.4-windows-x86_64.msi"
+    $installerPath = "$env:TEMP\cmake-installer.msi"
     
     try {
         Write-Host "Downloading CMake from GitHub..."
-        Invoke-WebRequest -Uri $cmakeZipUrl -OutFile $zipPath
+        Invoke-WebRequest -Uri $cmakeUrl -OutFile $installerPath
         Write-Host "Download completed."
     }
     catch {
@@ -103,37 +98,34 @@ function Install-CMakePortable {
         exit 1
     }
     
-    # Extract CMake
-    Write-Host "Extracting CMake..."
-    if (-not (Test-Path $extractPath)) {
-        New-Item -ItemType Directory -Path $extractPath -Force | Out-Null
+    Write-Host "Installing CMake system-wide..."
+    $installArgs = @(
+        "/i",
+        "`"$installerPath`"",
+        "/quiet",
+        "/norestart",
+        "ADD_CMAKE_TO_PATH=System"
+    )
+    
+    $process = Start-Process -FilePath "msiexec" -ArgumentList $installArgs -Wait -PassThru
+    
+    if ($process.ExitCode -eq 0) {
+        Write-Host "CMake installed successfully."
+        
+        # Refresh environment variables
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+        
+        # Verify installation
+        Start-Sleep -Seconds 2
+        if (Get-Command cmake -ErrorAction SilentlyContinue) {
+            $cmakeVersion = cmake --version
+            Write-Host "CMake version: $cmakeVersion"
+            return $true
+        }
     }
     
-    try {
-        Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
-    }
-    catch {
-        Write-Host "Failed to extract CMake. Trying alternative method..."
-        # Alternative extraction method
-        Add-Type -AssemblyName System.IO.Compression.FileSystem
-        [System.IO.Compression.ZipFile]::ExtractToDirectory($zipPath, $extractPath)
-    }
-    
-    # Clean up
-    Remove-Item $zipPath -ErrorAction SilentlyContinue
-    
-    # Find cmake.exe (it's usually in bin folder)
-    $cmakeExe = Get-ChildItem -Path $extractPath -Recurse -Filter "cmake.exe" | Select-Object -First 1
-    
-    if ($cmakeExe) {
-        $cmakeDir = $cmakeExe.DirectoryName
-        Write-Host "CMake found at: $cmakeDir"
-        return $cmakeDir
-    }
-    
-    Write-Host "Failed to find cmake.exe in the extracted files."
-    Write-Host "Please install CMake manually from: https://cmake.org/download/"
-    exit 1
+    Write-Host "CMake installation completed with exit code: $($process.ExitCode)"
+    return $false
 }
 
 # Test MSVC is installed
@@ -165,9 +157,7 @@ function Test-MsvcCompiler {
 }
 
 # Function to install Visual Studio Build Tools
-function Install-VisualStudioBuildTools {
-    Write-Host "Downloading Visual Studio Build Tools..."
-    
+function Install-VisualStudioBuildTools {   
     $vsInstallerUrl = "https://aka.ms/vs/17/release/vs_buildtools.exe"
     $installerPath = "$env:TEMP\vs_buildtools.exe"
     
@@ -183,8 +173,7 @@ function Install-VisualStudioBuildTools {
     
     Write-Host "Installing Visual Studio Build Tools (this may take a while)..."
     $installArgs = @(
-        #"--quiet",
-        "--wait",
+        "--quiet",
         "--norestart",
         "--add", "Microsoft.VisualStudio.Workload.VCTools",
         "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
@@ -310,7 +299,7 @@ if (Get-Command cmake -ErrorAction SilentlyContinue) {
     Write-Host "Found system CMake: $cmakePath"
 } else {
     Write-Host "CMake not found in PATH, using portable version..."
-    $cmakeDir = Install-CMakePortable
+    $cmakeDir = Install-CMakeSystem
     $env:PATH = "$cmakeDir;$env:PATH"
     $cmakePath = "$cmakeDir\cmake.exe"
 }

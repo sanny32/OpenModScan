@@ -298,10 +298,22 @@ if (Get-Command cmake -ErrorAction SilentlyContinue) {
     $cmakePath = (Get-Command cmake).Source
     Write-Host "Found system CMake: $cmakePath"
 } else {
-    Write-Host "CMake not found in PATH, using portable version..."
-    $cmakeDir = Install-CMakeSystem
-    $env:PATH = "$cmakeDir;$env:PATH"
-    $cmakePath = "$cmakeDir\cmake.exe"
+    Write-Host "CMake not found in PATH."
+    $choice = Read-Host "Do you want to install CMake system-wide? (y/n)"
+    if ($choice -eq 'y' -or $choice -eq 'Y') {
+        $success = Install-CMakeSystem
+        if ($success) {
+            $cmakePath = (Get-Command cmake).Source
+            Write-Host "CMake installed: $cmakePath"
+        } else {
+            Write-Error "CMake installation failed. Please install manually from: https://cmake.org/download/"
+            exit 1
+        }
+    } else {
+        Write-Host "Please install CMake manually from: https://cmake.org/download/"
+        Write-Host "Make sure to add it to PATH during installation."
+        exit 1
+    }
 }
 
 & $cmakePath --version

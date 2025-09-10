@@ -10,9 +10,9 @@ $ErrorActionPreference = "Stop"
 Write-Host "================================"
 Write-Host "=== OpenModScan Build Script ==="
 Write-Host "================================"
-Write-Host ""
 
 # Check Windows version and architecture
+Write-Host ""
 Write-Host "Checking system requirements..."
 $os = Get-CimInstance -ClassName Win32_OperatingSystem
 $windowsVersion = [System.Environment]::OSVersion.Version
@@ -21,7 +21,6 @@ $architecture = $env:PROCESSOR_ARCHITECTURE
 Write-Host "Windows Version: $($os.Caption)"
 Write-Host "Build Number: $($os.BuildNumber)"
 Write-Host "Architecture: $architecture"
-Write-Host ""
 
 # Check minimum Windows version (Windows 10 or later)
 if ($windowsVersion.Major -lt 10) {
@@ -204,6 +203,8 @@ function Install-VisualStudioBuildTools {
 }
 
 # Check if Python is available
+Write-Host ""
+Write-Host "Checking for Python..."
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
     Write-Host "Python not found."
     $choice = Read-Host "Do you want to download and install Python 3.11? (y/n)"
@@ -246,9 +247,10 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
 }
 
 # Check if MSVC is available
+Write-Host ""
+Write-Host "Checking for MSVC compiler..."
 $msvcPath = Test-MsvcCompiler
 if (!$msvcPath) {
-    Write-Host ""
     Write-Host "MSVC compiler not found."
     $choice = Read-Host "Do you want to install Visual Studio Build Tools? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
@@ -269,8 +271,13 @@ if (!$msvcPath) {
         exit 1
     }
 }
+else{
+    Write-Host "MSVC compiler found: $msvcPath"
+}
+
 
 # Check if aqtinstall is available by trying to import it
+Write-Host ""
 Write-Host "Checking for aqtinstall..."
 try {
     $null = python -c "import aqt; print('aqtinstall found')" 2>$null
@@ -297,9 +304,10 @@ if (-not $aqtInstalled) {
 }
 
 python -m aqt version
-Write-Host ""
 
 # Check if CMake is available
+Write-Host ""
+Write-Host "Checking for CMake..."
 $cmakePath = $null
 if (Get-Command cmake -ErrorAction SilentlyContinue) {
     $cmakePath = (Get-Command cmake).Source
@@ -359,8 +367,8 @@ Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
     "../omodscan",
     "-G", "Visual Studio 17 2022",
-    "-DCMAKE_PREFIX_PATH=`"$QtDir\lib\`"",
-    "-DQT_DIR=`"$QtDir`"",
+    "-DCMAKE_PREFIX_PATH=`"$QtDir\lib`"",
+    "-DQt6_DIR=`"$QtDir`"",
     "-DCMAKE_CXX_COMPILER=`"$msvcPath`"",
     "-DCMAKE_BUILD_TYPE=$BuildType"
 )

@@ -204,23 +204,12 @@ function Install-VisualStudioBuildTools {
 # Check if Python is available
 Write-Host ""
 Write-Host "Checking for Python..."
-if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-    Write-Host "Python not found."
-    $choice = Read-Host "Do you want to download and install Python 3.11? (y/n)"
-    if ($choice -eq 'y' -or $choice -eq 'Y') {
-        $success = Install-Python
-        if (-not $success) {
-            Write-Error "Python installation failed or requires terminal restart."
-            exit 1
-        }
-    } else {
-        Write-Host "Please install Python manually from: https://www.python.org/downloads/"
-        Write-Host "Make sure to check 'Add Python to PATH' during installation."
-        exit 1
+try {
+    $pythonVersion = & python --version 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Python not found"
     }
-} else {
-    # Check Python version
-    $pythonVersion = python --version 2>&1
+    
     Write-Host "Python found: $pythonVersion"
     
     # Check if Python version is compatible (3.6 or newer)
@@ -242,6 +231,21 @@ if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
                 exit 1
             }
         }
+    }
+}
+catch {
+    Write-Host "Python not found."
+    $choice = Read-Host "Do you want to download and install Python 3.11? (y/n)"
+    if ($choice -eq 'y' -or $choice -eq 'Y') {
+        $success = Install-Python
+        if (-not $success) {
+            Write-Error "Python installation failed or requires terminal restart."
+            exit 1
+        }
+    } else {
+        Write-Host "Please install Python manually from: https://www.python.org/downloads/"
+        Write-Host "Make sure to check 'Add Python to PATH' during installation."
+        exit 1
     }
 }
 

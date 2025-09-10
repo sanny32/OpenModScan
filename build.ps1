@@ -183,8 +183,7 @@ function Install-VisualStudioBuildTools {
         "--norestart",
         "--add", "Microsoft.VisualStudio.Workload.VCTools",
         "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
-        "--add", "Microsoft.VisualStudio.Component.Windows10SDK",
-        "--add", "Microsoft.VisualStudio.Component.CMake.Tools"
+        "--add", "Microsoft.VisualStudio.Component.Windows10SDK.19041"
     )
     
     $process = Start-Process -FilePath $installerPath -ArgumentList $installArgs -Wait -PassThru
@@ -274,32 +273,6 @@ if (!$msvcPath) {
 else{
     Write-Host "MSVC compiler found: $msvcPath"
 }
-
-# Initializing MSVC environment
-$vsInstallDir = $msvcPath
-for ($i=0; $i -lt 8; $i++) {
-    $vsInstallDir = Split-Path $vsInstallDir -Parent
-}
-$vcvarsall = Join-Path $vsInstallDir "VC\Auxiliary\Build\vcvarsall.bat"
-
-if (-not (Test-Path $vcvarsall)) {
-    Write-Error "vcvarsall.bat not found at $vcvarsall"
-    exit 1
-}
-
-Write-Host ""
-Write-Host "Initializing MSVC environment..."
-
-$vcvarsCommand = "`"$vcvarsall`" x64 && set"
-$envOutput = cmd /c $vcvarsCommand
-
-if ($envOutput -match "VCINSTALLDIR=(.+)") {
-    Write-Host "MSVC environment initialized successfully."
-} else {
-    Write-Error "Failed to initialize MSVC environment. Please check Visual Studio Build Tools installation."
-    exit 1
-}
-
 
 # Check if aqtinstall is available by trying to import it
 Write-Host ""

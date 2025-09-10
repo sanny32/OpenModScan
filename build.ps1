@@ -369,7 +369,7 @@ $cmakeArgs = @(
     "-G", "Visual Studio 17 2022",
     "-DCMAKE_PREFIX_PATH=`"$QtDir\lib`"",
     "-DQt6_DIR=`"$QtDir`"",
-    "-DCMAKE_CXX_COMPILER=`"$msvcPath`"",
+    "-DCMAKE_CXX_COMPILER=`"$msvcPath.Replace('\','/')`"",
     "-DCMAKE_BUILD_TYPE=$BuildType"
 )
 

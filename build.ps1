@@ -362,6 +362,7 @@ Set-Location $BuildDir
 
 $QtBin = Join-Path $QtDir "bin"
 $env:PATH = "$QtBin;$env:PATH"
+$cxx_compiler = $msvcPath.Replace('\','/')
 
 Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
@@ -369,7 +370,7 @@ $cmakeArgs = @(
     "-G", "Visual Studio 17 2022",
     "-DCMAKE_PREFIX_PATH=`"$QtDir\lib`"",
     "-DQt6_DIR=`"$QtDir`"",
-    "-DCMAKE_CXX_COMPILER=`"$msvcPath.Replace('\','/')`"",
+    "-DCMAKE_CXX_COMPILER=`"$cxx_compiler`"",
     "-DCMAKE_BUILD_TYPE=$BuildType"
 )
 

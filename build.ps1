@@ -183,7 +183,7 @@ function Install-VisualStudioBuildTools {
     
     Write-Host "Installing Visual Studio Build Tools (this may take a while)..."
     $installArgs = @(
-        "--quiet",
+        #"--quiet",
         "--wait",
         "--norestart",
         "--add", "Microsoft.VisualStudio.Workload.VCTools",

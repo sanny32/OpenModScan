@@ -5,12 +5,6 @@ param(
     [string]$BuildType = "Release"
 )
 
-if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
-   ).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Write-Error "You need to run script as an Administrator"
-    exit 1
-}
-
 $ErrorActionPreference = "Stop"
 
 Write-Host "================================"
@@ -91,6 +85,13 @@ function Install-Python {
 
 # Function to install CMake system-wide
 function Install-CMakeSystem {
+
+    if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+        ).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+            Write-Error "You need to run script as an Administrator to install CMake!"
+            exit 1
+        }
+
     $cmakeUrl = "https://cmake.org/files/v3.31/cmake-3.31.8-windows-x86_64.msi"
     $installerPath = "$env:TEMP\cmake-installer.msi"
     

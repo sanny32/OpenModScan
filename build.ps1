@@ -5,6 +5,12 @@ param(
     [string]$BuildType = "Release"
 )
 
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+   ).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Error "You need to run script as an Administrator"
+    exit 1
+}
+
 $ErrorActionPreference = "Stop"
 
 Write-Host "================================"

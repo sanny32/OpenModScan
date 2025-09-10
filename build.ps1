@@ -35,6 +35,56 @@ if ($Arch -eq "win64" -and $architecture -ne "AMD64") {
     exit 1
 }
 
+# Function to install Python
+function Install-Python {
+    Write-Host "Downloading Python installer..."
+    
+    $pythonUrl = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe"
+    $installerPath = "$env:TEMP\python-installer.exe"
+    
+    try {
+        Write-Host "Downloading Python 3.11.9..."
+        Invoke-WebRequest -Uri $pythonUrl -OutFile $installerPath
+        Write-Host "Download completed."
+    }
+    catch {
+        Write-Host "Failed to download Python. Please install manually from: https://www.python.org/downloads/"
+        exit 1
+    }
+    
+   Write-Host "Installing Python (this may take a few minutes)..."
+    $installArgs = @(
+        "/quiet",
+        "InstallAllUsers=1",
+        "PrependPath=1",
+        "Include_test=0",
+        "Include_doc=0",
+        "Include_tcltk=0",
+        "Include_launcher=1"
+    )
+    
+    $process = Start-Process -FilePath $installerPath -ArgumentList $installArgs -Wait -PassThru
+    
+    if ($process.ExitCode -eq 0) {
+        Write-Host "Python installed successfully."
+        
+        # Refresh environment variables
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+        
+        # Verify installation
+        Start-Sleep -Seconds 2
+        if (Get-Command python -ErrorAction SilentlyContinue) {
+            $pythonVersion = python --version 2>&1
+            Write-Host "Python version: $pythonVersion"
+            return $true
+        }
+    }
+    
+    Write-Host "Python installation may have completed, but verification failed."
+    Write-Host "Please restart your terminal and run the script again, or install Python manually."
+    return $false
+}
+
 # Function to download and setup portable CMake
 function Install-CMakePortable {
     Write-Host "Downloading portable CMake..."
@@ -44,7 +94,6 @@ function Install-CMakePortable {
     $extractPath = "$PWD\.tools\cmake"
     
     try {
-        # Download CMake
         Write-Host "Downloading CMake from GitHub..."
         Invoke-WebRequest -Uri $cmakeZipUrl -OutFile $zipPath
         Write-Host "Download completed."
@@ -121,7 +170,6 @@ function Install-VisualStudioBuildTools {
     $installerPath = "$env:TEMP\vs_buildtools.exe"
     
     try {
-        # Download VS Build Tools
         Write-Host "Downloading Visual Studio Build Tools..."
         Invoke-WebRequest -Uri $vsInstallerUrl -OutFile $installerPath
         Write-Host "Download completed."
@@ -131,7 +179,6 @@ function Install-VisualStudioBuildTools {
         exit 1
     }
     
-    # Install Visual Studio Build Tools
     Write-Host "Installing Visual Studio Build Tools (this may take a while)..."
     $installArgs = @(
         "--quiet",
@@ -160,11 +207,55 @@ function Install-VisualStudioBuildTools {
 
 # Check if Python is available
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-     Write-Host "MSVC compiler not found."
+    Write-Host "Python not found."
+    $choice = Read-Host "Do you want to download and install Python 3.11? (y/n)"
+    if ($choice -eq 'y' -or $choice -eq 'Y') {
+        $success = Install-Python
+        if (-not $success) {
+            Write-Error "Python installation failed or requires terminal restart."
+            exit 1
+        }
+    } else {
+        Write-Host "Please install Python manually from: https://www.python.org/downloads/"
+        Write-Host "Make sure to check 'Add Python to PATH' during installation."
+        exit 1
+    }
+} else {
+    # Check Python version
+    $pythonVersion = python --version 2>&1
+    Write-Host "Python found: $pythonVersion"
+    
+    # Check if Python version is compatible (3.6 or newer)
+    if ($pythonVersion -match "Python (\d+)\.(\d+)") {
+        $major = [int]$matches[1]
+        $minor = [int]$matches[2]
+        
+        if ($major -lt 3 -or ($major -eq 3 -and $minor -lt 6)) {
+            Write-Host "Python version $major.$minor is too old. aqtinstall requires Python 3.6+."
+            $choice = Read-Host "Do you want to install a newer Python version? (y/n)"
+            if ($choice -eq 'y' -or $choice -eq 'Y') {
+                $success = Install-Python
+                if (-not $success) {
+                    Write-Error "Python installation failed."
+                    exit 1
+                }
+            } else {
+                Write-Error "Please install Python 3.6 or newer manually."
+                exit 1
+            }
+        }
+    }
+}
+
+# Check if MSVC is available
+$msvcPath = Test-MsvcCompiler
+if (!$msvcPath) {
+    Write-Host "MSVC compiler not found."
     $choice = Read-Host "Do you want to install Visual Studio Build Tools? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
         $success = Install-VisualStudioBuildTools
         if ($success) {
+            # Check again after installation
             $msvcPath = Test-MsvcCompiler
             if (!$msvcPath) {
                 Write-Error "MSVC compiler still not found after installation. Please restart your terminal and run the script again."

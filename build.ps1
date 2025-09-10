@@ -87,10 +87,97 @@ function Install-CMakePortable {
     exit 1
 }
 
+# Test MSVC is installed
+function Test-MsvcCompiler {
+    $msvcPaths = @(
+        "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC", 
+        "${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC"
+    )
+    
+    foreach ($path in $msvcPaths) {
+        if (Test-Path $path) {
+            $versions = Get-ChildItem $path -Directory | Sort-Object Name -Descending
+            if ($versions) {
+                $latestVersion = $versions[0].Name
+                $compilerPath = Join-Path $path "$latestVersion\bin\Hostx64\x64\cl.exe"
+                if (Test-Path $compilerPath) {
+                    return $compilerPath
+                }
+            }
+        }
+    }
+    return $null
+}
+
+# Function to install Visual Studio Build Tools
+function Install-VisualStudioBuildTools {
+    Write-Host "Downloading Visual Studio Build Tools..."
+    
+    $vsInstallerUrl = "https://aka.ms/vs/17/release/vs_buildtools.exe"
+    $installerPath = "$env:TEMP\vs_buildtools.exe"
+    
+    try {
+        # Download VS Build Tools
+        Write-Host "Downloading Visual Studio Build Tools..."
+        Invoke-WebRequest -Uri $vsInstallerUrl -OutFile $installerPath
+        Write-Host "Download completed."
+    }
+    catch {
+        Write-Host "Failed to download Visual Studio Build Tools. Please install manually from: https://visualstudio.microsoft.com/downloads/"
+        exit 1
+    }
+    
+    # Install Visual Studio Build Tools
+    Write-Host "Installing Visual Studio Build Tools (this may take a while)..."
+    $installArgs = @(
+        "--quiet",
+        "--wait",
+        "--norestart",
+        "--add", "Microsoft.VisualStudio.Workload.VCTools",
+        "--add", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+        "--add", "Microsoft.VisualStudio.Component.Windows10SDK",
+        "--add", "Microsoft.VisualStudio.Component.CMake.Tools"
+    )
+    
+    $process = Start-Process -FilePath $installerPath -ArgumentList $installArgs -Wait -PassThru
+    
+    if ($process.ExitCode -eq 0) {
+        Write-Host "Visual Studio Build Tools installed successfully."
+        
+        # Refresh environment variables
+        $env:Path = [System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")
+        
+        return $true
+    } else {
+        Write-Host "Visual Studio Build Tools installation failed with exit code: $($process.ExitCode)"
+        return $false
+    }
+}
+
 # Check if Python is available
 if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
-    Write-Error "Python not found. Install from https://www.python.org/downloads/"
-    exit 1
+     Write-Host "MSVC compiler not found."
+    $choice = Read-Host "Do you want to install Visual Studio Build Tools? (y/n)"
+    if ($choice -eq 'y' -or $choice -eq 'Y') {
+        $success = Install-VisualStudioBuildTools
+        if ($success) {
+            $msvcPath = Test-MsvcCompiler
+            if (!$msvcPath) {
+                Write-Error "MSVC compiler still not found after installation. Please restart your terminal and run the script again."
+                exit 1
+            }
+        } else {
+            Write-Error "Visual Studio Build Tools installation failed. Please install manually."
+            exit 1
+        }
+    } else {
+        Write-Host "Please install Visual Studio 2022 with C++ support from: https://visualstudio.microsoft.com/downloads/"
+        exit 1
+    }
 }
 
 # Check if aqtinstall is available by trying to import it
@@ -136,6 +223,13 @@ if (Get-Command cmake -ErrorAction SilentlyContinue) {
 
 & $cmakePath --version
 Write-Host ""
+
+# Check if MSVC compiller is available
+$msvcPath = Test-MsvcCompiler
+if (!$msvcPath) {
+    Write-Error "MSVC compiler not found. Please install Visual Studio 2022 with C++ support"
+    exit 1
+}
 
 $BuildDir = "build-omodscan-Qt_${QtVersion}_MSVC2022_64bit-$BuildType"
 $QtDir = "C:\Qt\$QtVersion\$Compiler"

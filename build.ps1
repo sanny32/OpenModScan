@@ -172,11 +172,9 @@ $cmakeArgs = @(
     "-G", "Visual Studio 17 2022",
     "-DCMAKE_PREFIX_PATH=`"$QtDir\lib\`"",
     "-DQT_DIR=`"$QtDir`"",
-    "-DCMAKE_BUILD_TYPE=$BuildType",
-    "-DCMAKE_VERBOSE_MAKEFILE=ON"
+    "-DCMAKE_BUILD_TYPE=$BuildType"
 )
 
-Write-Host "CMake arguments: $cmakeArgs"
 & $cmakePath @cmakeArgs
 
 if ($LASTEXITCODE -ne 0) {
@@ -193,5 +191,47 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+# Find the built executable
+$exePath = Join-Path $PWD "$BuildType\omodscan.exe"
+if (-not (Test-Path $exePath)) {
+    # Try alternative path
+    $exePath = Join-Path $PWD "omodscan.exe"
+}
+
+if (Test-Path $exePath) {
+    Write-Host ""
+    Write-Host "Build successful! Executable found: $exePath"
+    
+    # Find windeployqt to copy required DLLs
+    $windeployqtPath = Join-Path $QtDir "bin\windeployqt.exe"
+    
+    if (Test-Path $windeployqtPath) {
+        Write-Host ""
+        Write-Host "Running windeployqt to deploy Qt dependencies..."
+        
+        # Change to directory containing the executable
+        $exeDir = Split-Path $exePath -Parent
+        $currentDir = Get-Location
+        Set-Location $exeDir
+        
+        # Run windeployqt
+        & $windeployqtPath --release --no-compiler-runtime --no-opengl-sw "omodscan.exe" | Out-Null
+        
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "windeployqt completed successfully"
+            
+        } else {
+            Write-Warning "windeployqt failed, but build completed successfully"
+        }
+        
+        # Return to original directory
+        Set-Location $currentDir
+    } else {
+        Write-Warning "windeployqt.exe not found at: $windeployqtPath"
+        Write-Host "You may need to manually copy Qt DLLs to the executable directory"
+    }
+}
+
 Set-Location ..
+Write-Host ""
 Write-Host "=== Build finished successfully ==="

@@ -275,6 +275,31 @@ else{
     Write-Host "MSVC compiler found: $msvcPath"
 }
 
+# Initializing MSVC environment
+$vsInstallDir = $msvcPath
+for ($i=0; $i -lt 8; $i++) {
+    $vsInstallDir = Split-Path $vsInstallDir -Parent
+}
+$vcvarsall = Join-Path $vsInstallDir "VC\Auxiliary\Build\vcvarsall.bat"
+
+if (-not (Test-Path $vcvarsall)) {
+    Write-Error "vcvarsall.bat not found at $vcvarsall"
+    exit 1
+}
+
+Write-Host ""
+Write-Host "Initializing MSVC environment..."
+
+$vcvarsCommand = "`"$vcvarsall`" x64 && set"
+$envOutput = cmd /c $vcvarsCommand
+
+if ($envOutput -match "VCINSTALLDIR=(.+)") {
+    Write-Host "MSVC environment initialized successfully."
+} else {
+    Write-Error "Failed to initialize MSVC environment. Please check Visual Studio Build Tools installation."
+    exit 1
+}
+
 
 # Check if aqtinstall is available by trying to import it
 Write-Host ""
@@ -362,7 +387,6 @@ Set-Location $BuildDir
 
 $QtBin = Join-Path $QtDir "bin"
 $env:PATH = "$QtBin;$env:PATH"
-$cxx_compiler = $msvcPath.Replace('\','/')
 
 Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
@@ -370,7 +394,6 @@ $cmakeArgs = @(
     "-G", "Visual Studio 17 2022",
     "-DCMAKE_PREFIX_PATH=`"$QtDir\lib`"",
     "-DQt6_DIR=`"$QtDir`"",
-    "-DCMAKE_CXX_COMPILER=`"$cxx_compiler`"",
     "-DCMAKE_BUILD_TYPE=$BuildType"
 )
 

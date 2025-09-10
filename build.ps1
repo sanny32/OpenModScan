@@ -142,9 +142,11 @@ function Test-MsvcCompiler {
         "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
         "${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC", 
         "${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC",
         "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
         "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC",
-        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC"
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC"
     )
     
     foreach ($path in $msvcPaths) {

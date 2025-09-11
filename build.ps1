@@ -29,7 +29,6 @@ $ErrorActionPreference = "Stop"
 Write-Host "================================"
 Write-Host "=== OpenModScan Build Script ==="
 Write-Host "================================"
-Write-Host "Qt Major:   $QtMajorVersion"
 Write-Host "Qt Version: $QtVersion"
 Write-Host "Compiler:   $Compiler"
 Write-Host "Generator:  $CMakeGenerator"
@@ -420,9 +419,12 @@ Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
     "../omodscan",
     "-G", $CMakeGenerator,
-    "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Qt${QtMajorVersion}=TRUE"
+    "-DCMAKE_PREFIX_PATH=`"$QtDir`""
 )
+
+if ($QtMajorVersion -eq "5") {
+    $cmakeArgs += "-DCMAKE_DISABLE_FIND_PACKAGE_Qt6=TRUE"
+} 
 
 & $cmakePath @cmakeArgs
 

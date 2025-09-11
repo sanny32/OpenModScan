@@ -123,14 +123,14 @@ or if you want to use Qt5 libraries:
 ```bash
 sudo apt install -f ./qt6-omodscan_X.XX.X-Y_amd64.deb
 ```
-Replace X.XX.X-Y with the application version.
+Replace `X.XX.X-Y` with the application version.
 
 ## RedHat/Fedora/RedOS Linux
 Install the RPM package from the command line:
 ```bash
 sudo dnf install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
 ```
-Replace X.XX.X-Y with the application version.
+Replace `X.XX.X-Y` with the application version.
 
 ## SUSE/OpenSUSE Linux
 Import qt6-omodscan.rpm.pubkey to rpm repository:
@@ -141,7 +141,7 @@ Install the RPM package using Zypper:
 ```bash
 sudo zypper install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
 ```
-Replace X.XX.X-Y with the application version.
+Replace `X.XX.X-Y` with the application version.
 
 ## Flatpak
 Run the followning command:

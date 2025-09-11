@@ -54,7 +54,7 @@ Registers
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
 ## Microsoft Windows Building
-1. Install [git](https://git-scm.com/downloads/win)
+1. Install latest [git](https://git-scm.com/downloads/win) version
 2. Run Windows PowerShell terminal as an Administrator
 3. Clone OpenModScan sources from github repository
 ```powershell

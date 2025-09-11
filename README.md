@@ -53,10 +53,38 @@ Registers
 # Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
-## Linux Building  
-- `git clone https://github.com/sanny32/OpenModScan.git`
-- `cd OpenModScan`
-- `./build.sh`
+## Microsoft Windows Building
+1. Install [git](https://git-scm.com/downloads/win)
+2. Run Windows PowerShell terminal as an Administrator
+3. Clone OpenModScan sources from github repository
+```powershell
+git clone https://github.com/sanny32/OpenModScan.git
+```
+4. Go to OpenModScan folder
+```powershell
+cd OpenModScan
+```
+5. Allow script execution in PowerShell terminal
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+6. Run the build script
+```powershell
+.\build.ps1
+```
+
+## Linux Building
+1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
+2. Run the following commands from the console:
+```bash
+git clone https://github.com/sanny32/OpenModScan.git
+```
+```bash
+cd OpenModScan
+```
+```bash
+./build.sh
+```
 
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `./build.sh -qt5` or  `./build.sh -qt6`

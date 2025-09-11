@@ -386,18 +386,11 @@ $QtDir = "C:\Qt\$QtVersion\$Compiler"
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
 
-    if ($QtMajorVersion -ne "5") {
-        $modules = @(
-            "qtserialbus", 
-            "qtserialport",
-            "qt5compat", 
-            "qtpdf"
-        )
-        python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt -m $modules
-    }
-    else {
-        python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt
-    }
+    $modules = if ($QtMajorVersion -e "6") { 
+        "qtserialbus", "qtserialport", "qt5compat", "qtpdf" 
+    } else { $null }
+
+	python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt -m $modules
 
     if ($LASTEXITCODE -ne 0) {
         Remove-Item $QtDir -Recurse -Force -ErrorAction SilentlyContinue

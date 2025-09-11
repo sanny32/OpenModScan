@@ -386,7 +386,7 @@ $QtDir = "C:\Qt\$QtVersion\$Compiler"
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
 
-    $modules = if ($QtMajorVersion -e "6") { 
+    $modules = if ($QtMajorVersion -eq "6") { 
         "qtserialbus", "qtserialport", "qt5compat", "qtpdf" 
     } else { $null }
 

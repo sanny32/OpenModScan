@@ -386,8 +386,8 @@ $QtDir = "C:\Qt\$QtVersion\$Compiler"
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
 
-        $modules = if ($QtMajorVersion -ne "5") {
-        @("qtserialbus", "qtserialport", "qt5compat", "qtpdf") -join ","
+    $modules = if ($QtMajorVersion -ne "5") {
+        @("qtserialbus", "qtserialport", "qt5compat", "qtpdf") 
     }
 
     python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt @if($modules){"-m $modules"}

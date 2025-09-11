@@ -1,14 +1,39 @@
 param(
-    [string]$QtVersion = "6.9.2",
-    [string]$Arch = "win64",
-    [string]$Compiler = "msvc2022_64",
+    [switch]$qt5,
+    [switch]$qt6,
     [string]$BuildType = "Release"
 )
+
+if ($qt5 -and $qt6) {
+    Write-Error "Can't use -qt5 and -qt6 parameters together."
+    exit 1
+}
+
+if ($qt5) {
+    $QtVersion   = "5.15.2"
+    $Arch        = "win64"
+    $Compiler    = "msvc2019_64"
+    $CMakeGenerator = "Visual Studio 16 2019"
+}
+else {
+    $QtVersion   = "6.9.2"
+    $Arch        = "win64"
+    $Compiler    = "msvc2022_64"
+    $CMakeGenerator = "Visual Studio 17 2022"
+}
+
+$QtMajorVersion = ($QtVersion -replace '^(\d+)\..*$', '$1')
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "================================"
 Write-Host "=== OpenModScan Build Script ==="
+Write-Host "================================"
+Write-Host "Qt Major:   $QtMajorVersion"
+Write-Host "Qt Version: $QtVersion"
+Write-Host "Compiler:   $Compiler"
+Write-Host "Generator:  $CMakeGenerator"
+Write-Host "BuildType:  $BuildType"
 Write-Host "================================"
 
 # Check Windows version and architecture
@@ -136,16 +161,31 @@ function Install-CMakeSystem {
 
 # Test MSVC is installed
 function Test-MsvcCompiler {
-    $msvcPaths = @(
-        "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
-        "${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC", 
-        "${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
-        "${env:ProgramFiles}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC",
-        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
-        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC",
-        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
-        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC"
-    )
+    if ($QtMajorVersion -eq "5") {
+        $msvcPaths = @(
+            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC",
+            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC",
+            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC",
+            "${env:ProgramFiles}\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC"
+        )
+    }
+    else {
+        $msvcPaths = @(
+            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
+            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC", 
+            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
+            "${env:ProgramFiles}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC"
+        )
+    }
+
     
     foreach ($path in $msvcPaths) {
         if (Test-Path $path) {
@@ -164,8 +204,13 @@ function Test-MsvcCompiler {
 
 # Function to install Visual Studio Build Tools
 function Install-VisualStudioBuildTools {   
-    $vsInstallerUrl = "https://aka.ms/vs/17/release/vs_buildtools.exe"
-    $installerPath = "$env:TEMP\vs_buildtools.exe"
+    if ($QtMajorVersion -eq "5") {
+        $vsInstallerUrl = "https://aka.ms/vs/16/release/vs_buildtools.exe"  # VS2019
+        $installerPath = "$env:TEMP\vs2019_buildtools.exe"
+    } else {
+        $vsInstallerUrl = "https://aka.ms/vs/17/release/vs_buildtools.exe"  # VS2022
+        $installerPath = "$env:TEMP\vs2022_buildtools.exe"
+    }
     
     try {
         Write-Host "Downloading Visual Studio Build Tools..."
@@ -334,11 +379,11 @@ if (Get-Command cmake -ErrorAction SilentlyContinue) {
 }
 
 & $cmakePath --version
+
+# Check if Qt is available
 Write-Host ""
-
-$BuildDir = "build-omodscan-Qt_${QtVersion}_MSVC2022_64bit-$BuildType"
+Write-Host "Checking for Qt..."
 $QtDir = "C:\Qt\$QtVersion\$Compiler"
-
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
 
@@ -356,7 +401,10 @@ if (-not (Test-Path $QtDir)) {
         exit 1
     }
 }
+Write-Host "Found Qt: $QtDir"
 
+# Create Build dir
+$BuildDir = "build-omodscan-Qt_${QtVersion}_$($Compiler.ToUpper())bit-$BuildType"
 if (-not (Test-Path $BuildDir)) { 
     New-Item -ItemType Directory -Path $BuildDir -Force | Out-Null 
 }
@@ -365,12 +413,15 @@ Set-Location $BuildDir
 $QtBin = Join-Path $QtDir "bin"
 $env:PATH = "$QtBin;$env:PATH"
 
+$QtDir = $QtDir -replace '\\', '/'
+
+Write-Host ""
 Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
     "../omodscan",
-    "-G", "Visual Studio 17 2022",
-    "-DCMAKE_PREFIX_PATH=`"$QtDir\lib`"",
-    "-DQt6_DIR=`"$QtDir`""
+    "-G", $CMakeGenerator,
+    "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
+    "-DCMAKE_DISABLE_FIND_PACKAGE_Qt${QtMajorVersion}=TRUE"
 )
 
 & $cmakePath @cmakeArgs

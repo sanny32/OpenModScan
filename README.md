@@ -54,6 +54,9 @@ Registers
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
 ## Microsoft Windows Building
+
+The minimum supported version of Microsoft Windows for building OpenModScan from source is Windows 10.
+
 1. Install latest [git](https://git-scm.com/downloads/win) version
 2. Run Windows PowerShell terminal as an Administrator
 3. Clone OpenModScan sources from github repository
@@ -75,7 +78,6 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
 
-The minimum supported version of Microsoft Windows for building OpenModScan from source is Windows 10.
 The build script supports building the application only for 64-bit architecture.
 
 ## Linux Building

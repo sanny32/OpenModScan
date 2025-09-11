@@ -104,9 +104,9 @@ The following minimum operating system versions are supported for OpenModScan:
 - Astra Linux 1.7
 - RedOS 8
 
-# Install
+# Install from binary distributions
 
-Installing OpenModScan from binary distributions.
+Below are the methods for installing the OpenModScan for different OS
 
 ## Microsoft Windows
 Run the installer:
@@ -119,11 +119,11 @@ Replace `X.XX.X-Y` with the application version.
 ## Debian/Ubintu/Mint/Astra Linux
 Install the DEB package from the command line:
 ```bash
-sudo apt install -f ./qt5-omodscan_X.XX.X-Y_amd64.deb
+sudo apt install -f ./qt6-omodscan_X.XX.X-Y_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install -f ./qt6-omodscan_X.XX.X-Y_amd64.deb
+sudo apt install -f ./qt5-omodscan_X.XX.X-Y_amd64.deb
 ```
 Replace `X.XX.X-Y` with the application version.
 

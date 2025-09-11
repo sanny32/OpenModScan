@@ -73,6 +73,8 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\build.ps1
 ```
 
+Minimum Microsoft Windows version is supported to build OpenModScan from sources is Windows 10.
+
 ## Linux Building
 1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
 2. Run the following commands from the console:

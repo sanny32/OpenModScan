@@ -122,6 +122,7 @@ Run the installer:
 Replace `X.XX.X-Y` with the application version.
 
 ## Debian/Ubintu/Mint/Astra Linux
+### Install
 Install the DEB package from the command line:
 ```bash
 sudo apt install -f ./qt6-omodscan_X.XX.X-Y_amd64.deb
@@ -132,6 +133,7 @@ sudo apt install -f ./qt5-omodscan_X.XX.X-Y_amd64.deb
 ```
 Replace `X.XX.X-Y` with the application version.
 
+### Remove
 To remove the DEB package run:
 ```bash
 sudo apt remove qt6-omodscan
@@ -142,30 +144,35 @@ sudo apt remove qt5-omodscan
 ```
 
 ## RedHat/Fedora/RedOS Linux
+### Install
 Install the RPM package from the command line:
 ```bash
 sudo dnf install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
 ```
 Replace `X.XX.X-Y` with the application version.
 
+### Remove
 To remove the RPM package run:
 ```bash
 sudo dnf remove qt6-omodscan
 ```
 
 ## Alt Linux
+### Install
 Install the RPM package from the command line as root user:
 ```bash
 apt-get install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
 ```
 Replace `X.XX.X-Y` with the application version.
 
+### Remove
 To remove the RPM package run as root user:
 ```bash
 apt-get remove qt6-omodscan
 ```
 
 ## SUSE/OpenSUSE Linux
+### Install
 Import qt6-omodscan.rpm.pubkey to rpm repository:
 ```bash
 sudo rpm --import qt6-omodscan.rpm.pubkey
@@ -176,13 +183,15 @@ sudo zypper install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
 ```
 Replace `X.XX.X-Y` with the application version.
 
+### Remove
 To remove the RPM package run:
 ```bash
 sudo zypper remove qt6-omodscan
 ```
 
 ## Flatpak
-Install flatpak package to run the followning commands:
+### Install
+Install flatpak package run the followning commands:
 ```bash
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 ```
@@ -190,6 +199,7 @@ flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/fl
 flatpak install --user io.github.sanny32.omodscan.flatpak
 ```
 
+### Remove
 To remove the flatpak package run:
 ```bash
 flatpak uninstall --user io.github.sanny32.omodscan

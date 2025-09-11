@@ -72,6 +72,8 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```powershell
 .\build.ps1
 ```
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
 
 The minimum supported version of Microsoft Windows for building OpenModScan from source is Windows 10.
 

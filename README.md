@@ -55,7 +55,7 @@ Registers
 
 ## Microsoft Windows Building
 
-The minimum supported version of Microsoft Windows for building OpenModScan from source is Windows 10.
+The minimum supported version of Microsoft Windows for building OpenModScan from sources is Windows 10.
 
 1. Install latest [git](https://git-scm.com/downloads/win) version
 2. Run Windows PowerShell terminal as an Administrator

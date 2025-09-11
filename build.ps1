@@ -370,8 +370,7 @@ $cmakeArgs = @(
     "../omodscan",
     "-G", "Visual Studio 17 2022",
     "-DCMAKE_PREFIX_PATH=`"$QtDir\lib`"",
-    "-DQt6_DIR=`"$QtDir`"",
-    "-DCMAKE_BUILD_TYPE=$BuildType"
+    "-DQt6_DIR=`"$QtDir`""
 )
 
 & $cmakePath @cmakeArgs

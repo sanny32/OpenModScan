@@ -388,7 +388,7 @@ if (-not (Test-Path $QtDir)) {
 
     $modules = if ($QtMajorVersion -eq "6") { 
         "qtserialbus", "qtserialport", "qt5compat", "qtpdf" 
-    } else { $null }
+    }
 
 	python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt -m $modules
 

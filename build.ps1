@@ -386,14 +386,12 @@ $QtDir = "C:\Qt\$QtVersion\$Compiler"
 if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
 
-    $modules = @(
-        "qtserialbus", 
-        "qtserialport",
-        "qt5compat", 
-        "qtpdf"
-    )
+        $modules = if ($QtMajorVersion -ne "5") {
+        @("qtserialbus", "qtserialport", "qt5compat", "qtpdf") -join ","
+    }
 
-    python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt -m $modules
+    python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt @if($modules){"-m $modules"}
+
     if ($LASTEXITCODE -ne 0) {
         Remove-Item $QtDir -Recurse -Force -ErrorAction SilentlyContinue
         Write-Error "ERROR: aqtinstall failed. Exiting."

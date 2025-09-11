@@ -76,6 +76,7 @@ If you need to specify Qt framework major version (5 or 6), you can do it in the
   - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
 
 The minimum supported version of Microsoft Windows for building OpenModScan from source is Windows 10.
+The build script supports building the application only for 64-bit architecture.
 
 ## Linux Building
 1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution

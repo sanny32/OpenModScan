@@ -199,6 +199,12 @@ flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/fl
 flatpak install --user io.github.sanny32.omodscan.flatpak
 ```
 
+If you want to use a serial port connection, you must add the user to the `dialout` group
+```bash
+sudo usermod -a -G dialout $USER
+```
+and then log in to the user again or reboot the computer.
+
 ### Remove
 To remove the flatpak package run:
 ```bash

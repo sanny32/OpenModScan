@@ -1892,7 +1892,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="659"/>
         <source>Main Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>主酒吧</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="717"/>

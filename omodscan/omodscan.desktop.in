@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=@PRODUCT_NAME@
+Comment=@PROJECT_DESCRIPTION@
+Exec=@EXECUTABLE_PATH@
+Icon=@PROJECT_NAME@
+Terminal=false
+Categories=Utility;

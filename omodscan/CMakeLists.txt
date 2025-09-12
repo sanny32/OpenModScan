@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.11.0
+    VERSION 1.11.1
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -11,6 +11,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PRODUCT_NAME "Open ModScan")
+set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}")
+
+# Split version to major, minor, patch
+string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
+list(GET VERSION_LIST 0 VERSION_MAJOR)
+list(GET VERSION_LIST 1 VERSION_MINOR)
+list(GET VERSION_LIST 2 VERSION_PATCH)
 
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
@@ -18,8 +25,28 @@ if (NOT Qt6_FOUND)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
 endif()
 
+if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
+    message(FATAL_ERROR "One or more Qt development packages not found. Please install Qt5 or Qt6 development packages.")
+endif()
+
+
 # Define target
-add_executable(omodscan)
+add_executable(${PROJECT_NAME})
+
+find_package(Git QUIET)
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+        OUTPUT_VARIABLE GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET)
+
+    if(${GIT_BRANCH} MATCHES dev)
+        set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+    endif()
+else()
+    message(STATUS "Git not found - skipping branch detection")
+endif()
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
@@ -27,7 +54,7 @@ add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 
 # Include directories
-target_include_directories(omodscan PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/controls
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
@@ -236,17 +263,20 @@ set(TS_FILES
 )
 
 # Link libraries
-target_sources(omodscan PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
-target_link_libraries(omodscan PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort)
+target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort)
+
+if(TARGET update_translations)
+    add_dependencies(${PROJECT_NAME} update_translations)
+endif()
 
 if(Qt6_FOUND)
-    qt_add_lupdate(omodscan
+    qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
     )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
-target_link_libraries(omodscan PRIVATE Qt6::Core)
-else()
+elseif(Qt5_FOUND AND EXISTS ${Qt5_LUPDATE_EXECUTABLE})
     add_custom_command(
         OUTPUT ${TS_FILES}
         COMMAND ${Qt5_LUPDATE_EXECUTABLE}
@@ -257,23 +287,38 @@ else()
         COMMENT "Updating translation files..."
     )
     add_custom_target(update_translations ALL DEPENDS ${TS_FILES})
+else()
+    message(STATUS "lupdate not available - skipping translation updates")
+    add_custom_target(update_translations)
 endif()
 
 if(WIN32)
-    string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
-    list(GET VERSION_LIST 0 VERSION_MAJOR)
-    list(GET VERSION_LIST 1 VERSION_MINOR)
-    list(GET VERSION_LIST 2 VERSION_PATCH)
-
-    set(EXECUTABLE_NAME "omodscan")
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodscan.ico")
-    set(RC_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/omodscan.rc.in")
-    set(GENERATED_RC "${CMAKE_BINARY_DIR}/omodscan.rc")
 
-    configure_file(${RC_TEMPLATE} ${GENERATED_RC} @ONLY)
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/omodscan.rc.in"
+        "${CMAKE_BINARY_DIR}/omodscan.rc"
+        @ONLY
+    )
 
-    target_sources(omodscan PRIVATE ${ICON_PATH} ${GENERATED_RC})
-    set_target_properties(omodscan PROPERTIES WIN32_EXECUTABLE ON)
+    target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} "${CMAKE_BINARY_DIR}/omodscan.rc")
+    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
 endif()
 
-add_dependencies(omodscan update_translations)
+if(LINUX)
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/omodscan.desktop.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/omodscan.desktop"
+        @ONLY
+    )
+
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+    install(FILES res/omodscan16.png DESTINATION share/icons/hicolor/16x16/apps RENAME omodscan.png)
+    install(FILES res/omodscan32.png DESTINATION share/icons/hicolor/32x32/apps RENAME omodscan.png)
+    install(FILES res/omodscan64.png DESTINATION share/icons/hicolor/64x64/apps RENAME omodscan.png)
+    install(FILES res/omodscan128.png DESTINATION share/icons/hicolor/128x128/apps RENAME omodscan.png)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodscan.desktop" DESTINATION share/applications)
+
+    install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
+    install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
+endif()

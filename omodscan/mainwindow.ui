@@ -171,6 +171,7 @@
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
     <addaction name="actionDisplayBar"/>
+    <addaction name="actionWriteBar"/>
     <addaction name="separator"/>
     <addaction name="menuConfig"/>
     <addaction name="menuLanguage"/>
@@ -655,7 +656,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Toolbar</string>
+    <string>Main Toolbar</string>
    </property>
   </action>
   <action name="actionStatusBar">
@@ -995,6 +996,14 @@
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionWriteBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Write Bar</string>
    </property>
   </action>
  </widget>

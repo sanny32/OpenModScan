@@ -32,6 +32,9 @@ Makefile*
 *build-*
 debug
 release
+.vcpkg
+.qt
+.tools
 
 # Qt unit tests
 target_wrapper.*
@@ -54,3 +57,4 @@ CMakeLists.txt.user*
 *.rc
 *.qtds
 *.ts text eol=lf
+*.log

@@ -50,21 +50,168 @@ Registers
   <img width="529" height="722" alt="image" src="https://github.com/user-attachments/assets/1aa3aadb-1462-4989-afa9-0ad131d5faa7" />
 
 
-## Building
+# Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
-## About supported operating systems
+## Microsoft Windows Building
 
-The following operating systems are supported for OpenModScan.
-- Microsoft Windows 7 x86 and amd64 or later.
-- Ubuntu Linux 22.04 amd64 or later.
-- Fedora Linux 41 amd64 or later.
-- Alt Linux 11 amd64 or later.
-- Astra Linux 1.7 amd64 or later.
-- RedOS 8 amd64 or later.
+The minimum supported version of Microsoft Windows for building OpenModScan from sources is Windows 10.
 
-  
-## MIT License
+1. Install latest [git](https://git-scm.com/downloads/win) version
+2. Run Windows PowerShell terminal as an Administrator
+3. Clone OpenModScan sources from github repository
+```powershell
+git clone https://github.com/sanny32/OpenModScan.git
+```
+4. Go to OpenModScan folder
+```powershell
+cd OpenModScan
+```
+5. Allow script execution in PowerShell terminal
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+6. Run the build script
+```powershell
+.\build.ps1
+```
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
+
+The build script supports building the application only for 64-bit architecture.
+
+## Linux Building
+1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
+2. Run the following commands from the console:
+```bash
+git clone https://github.com/sanny32/OpenModScan.git
+```
+```bash
+cd OpenModScan
+```
+```bash
+./build.sh
+```
+
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `./build.sh -qt5` or  `./build.sh -qt6`
+
+# About supported operating systems
+
+The following minimum operating system versions are supported for OpenModScan:
+- Microsoft Windows 7
+- Debian Linux 11
+- Ubuntu Linux 22.04
+- Mint Linux 22
+- Fedora Linux 41
+- OpenSuse Linux 15.6
+- Alt Linux 11
+- Astra Linux 1.7
+- RedOS 8
+
+# Install from binary distributions
+
+Below are the methods for installing the OpenModScan for different OS
+
+## Microsoft Windows
+Run the installer:
+
+- For 32-bit Windows: `qt5-omodscan_X.XX.X-Y_x86.exe`
+- For 64-bit Windows: `qt5-omodscan_X.XX.X-Y_amd64.exe` or `qt6-omodscan_X.XX.X-Y_amd64.exe`
+
+Replace `X.XX.X-Y` with the application version.
+
+## Debian/Ubintu/Mint/Astra Linux
+### Install
+Install the DEB package from the command line:
+```bash
+sudo apt install -f ./qt6-omodscan_X.XX.X-Y_amd64.deb
+```
+or if you want to use Qt5 libraries:
+```bash
+sudo apt install -f ./qt5-omodscan_X.XX.X-Y_amd64.deb
+```
+Replace `X.XX.X-Y` with the application version.
+
+### Remove
+To remove the DEB package run:
+```bash
+sudo apt remove qt6-omodscan
+```
+or for Qt5 package:
+```bash
+sudo apt remove qt5-omodscan
+```
+
+## RedHat/Fedora/RedOS Linux
+### Install
+Install the RPM package from the command line:
+```bash
+sudo dnf install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+```
+Replace `X.XX.X-Y` with the application version.
+
+### Remove
+To remove the RPM package run:
+```bash
+sudo dnf remove qt6-omodscan
+```
+
+## Alt Linux
+### Install
+Install the RPM package from the command line as root user:
+```bash
+apt-get install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+```
+Replace `X.XX.X-Y` with the application version.
+
+### Remove
+To remove the RPM package run as root user:
+```bash
+apt-get remove qt6-omodscan
+```
+
+## SUSE/OpenSUSE Linux
+### Install
+Import qt6-omodscan.rpm.pubkey to rpm repository:
+```bash
+sudo rpm --import qt6-omodscan.rpm.pubkey
+```
+Install the RPM package using Zypper:
+```bash
+sudo zypper install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+```
+Replace `X.XX.X-Y` with the application version.
+
+### Remove
+To remove the RPM package run:
+```bash
+sudo zypper remove qt6-omodscan
+```
+
+## Flatpak
+### Install
+Install flatpak package run the followning commands:
+```bash
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+```
+```bash
+flatpak install --user io.github.sanny32.omodscan.flatpak
+```
+
+If you want to use a serial port connection, you must add the user to the `dialout` group
+```bash
+sudo usermod -a -G dialout $USER
+```
+and then log in to the user again or reboot the computer.
+
+### Remove
+To remove the flatpak package run:
+```bash
+flatpak uninstall --user io.github.sanny32.omodscan
+```
+
+# MIT License
 Copyright 2025 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:

@@ -1,4 +1,5 @@
 #include <QPainter>
+#include <QDebug>
 #include <QApplication>
 #include <QTextDocument>
 #include <QStyleOptionViewItem>
@@ -46,9 +47,11 @@ void HtmlDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
     doc.setDefaultTextOption(textOption);
     doc.setTextWidth(opt.rect.width());
 
-    /// Painting item without text
-    opt.text = QString();
+    // Painting item without text
+    QString oldText = opt.text;
+    opt.text.clear();
     style->drawControl(QStyle::CE_ItemViewItem, &opt, painter);
+    opt.text = oldText;
 
     QAbstractTextDocumentLayout::PaintContext ctx;
 

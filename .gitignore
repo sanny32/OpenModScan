@@ -58,3 +58,4 @@ CMakeLists.txt.user*
 *.qtds
 *.ts text eol=lf
 *.log
+/.flatpak/io.github.sanny32.omodscan.flatpak

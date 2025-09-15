@@ -1,0 +1,69 @@
+id: io.github.sanny32.omodscan
+branch: stable
+runtime: org.kde.Sdk
+runtime-version: "6.9"
+sdk: org.kde.Sdk
+command: omodscan
+finish-args:
+  - "--socket=wayland"
+  - "--socket=fallback-x11"
+  - "--socket=cups"
+  - "--device=all"
+  - "--share=network"
+  - "--filesystem=home"
+  - "--system-talk-name=org.freedesktop.UDisks2"
+cleanup:
+  - /include
+  - /lib/cmake
+  - /lib/libexec
+  - /lib/metatypes
+  - /lib/pkgconfig
+  - /lib/sbom
+  - /lib/systemd
+  - /bin/canbusutil
+  - /mkspecs
+  - /modules
+  - '*.a'
+
+modules:
+  - name: qt6-serialbus
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_FEATURE_socketcan=OFF
+    sources:
+      - type: archive
+        url: https://mirrors.20i.com/pub/qt.io/archive/qt/6.9/6.9.2/submodules/qtserialbus-everywhere-src-6.9.2.tar.xz
+        sha256: 951e07c2faf4476c75a59af96b40eeedbdf1a1c5c354c2825b59eaf3594f2a76
+
+  - name: qt6-serialport
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: archive
+        url: https://mirrors.20i.com/pub/qt.io/archive/qt/6.9/6.9.2/submodules/qtserialport-everywhere-src-6.9.2.zip
+        sha256: e30f6492e80a5532568450174fbfa2b8c166f28a75d7858ff1cf7f30e998e371
+
+  - name: omodscan
+    builddir: true
+    buildsystem: simple
+    build-commands:
+        - cmake -DCMAKE_BUILD_TYPE=Release -B ../build
+        - cmake --build ../build -- -j$(nproc)
+    post-install:
+      - install -D ../build/omodscan /app/bin/omodscan
+      - install -Dm644 ../io.github.sanny32.omodscan.png -t /app/share/icons/hicolor/128x128/apps
+      - install -Dm644 ../io.github.sanny32.omodscan.desktop -t /app/share/applications
+      - install -Dm644 ../io.github.sanny32.omodscan.metainfo.xml -t /app/share/metainfo
+    subdir: omodscan
+    sources:
+      - type: git
+        url: https://github.com/sanny32/OpenModScan.git
+        tag: "1.11.1"
+      - type: file
+        path: io.github.sanny32.omodscan.png
+      - type: file
+        path: io.github.sanny32.omodscan.desktop
+      - type: file
+        path: io.github.sanny32.omodscan.metainfo.xml

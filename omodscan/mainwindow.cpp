@@ -74,7 +74,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
 
-    ui->actionNew->trigger();
     loadSettings();
 }
 
@@ -1566,8 +1565,21 @@ void MainWindow::loadSettings()
     _lang = m.value("Language", "en").toString();
     setLanguage(_lang);
 
-    m >> firstMdiChild();
     m >> _connParams;
+
+    const QStringList groups = m.childGroups();
+    for (const QString& g : groups) {
+        if (g.startsWith("Form_")) {
+            m.beginGroup(g);
+            const auto id = m.value("FromId", ++_windowCounter).toInt();
+            auto frm = createMdiChild(id);
+            m >> frm;
+            m.endGroup();
+        }
+    }
+
+    if(_windowCounter == 0)
+        ui->actionNew->trigger();
 
     if(_autoStart)
     {
@@ -1603,6 +1615,9 @@ void MainWindow::saveSettings()
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
+    m.clear();
+    m.sync();
+
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("WriteBarArea", toolBarArea(ui->toolBarWrite));
@@ -1613,6 +1628,16 @@ void MainWindow::saveSettings()
     m.setValue("StartUpFile", _fileAutoStart);
     m.setValue("Language", _lang);
 
-    m << firstMdiChild();
     m << _connParams;
+
+    const auto subWindowList = ui->mdiArea->subWindowList();
+    for(int i = 0; i < subWindowList.size(); ++i) {
+        const auto frm = qobject_cast<FormModSca*>(subWindowList[i]->widget());
+        if(frm) {
+            m.beginGroup("Form_" + QString::number(i + 1));
+            m.setValue("FromId", frm->formId());
+            m << frm;
+            m.endGroup();
+        }
+    }
 }

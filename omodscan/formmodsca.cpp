@@ -64,6 +64,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
             _timer.stop();
         break;
         case Running:
+            ui->outputWidget->setStatus("");
             beginUpdate();
             _timer.start();
         break;

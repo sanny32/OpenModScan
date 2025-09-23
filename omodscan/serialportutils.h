@@ -14,6 +14,18 @@
 #endif
 
 ///
+/// \brief isVirt
+/// \param n
+/// \return
+///
+inline bool isVirt(const QString& n)
+{
+    return n.contains("USB", Qt::CaseInsensitive)  ||
+           n.contains("VIRT", Qt::CaseInsensitive) ||
+           n.contains("ROOT", Qt::CaseInsensitive);
+}
+
+///
 /// \brief isVirtualPort
 /// \param portName
 /// \return
@@ -45,22 +57,28 @@ inline bool isVirtualPort(const QString& portName)
         if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &devInfoData, SPDRP_FRIENDLYNAME,
                                              nullptr, (PBYTE)friendlyName, sizeof(friendlyName), nullptr))
         {
-            QString fn = QString::fromWCharArray(friendlyName);
-            if (fn.contains("(" + portName + ")", Qt::CaseInsensitive))
+            const QString fn = QString::fromWCharArray(friendlyName);
+            if (fn.contains(portName, Qt::CaseInsensitive))
             {
-                wchar_t hwid[256];
-                if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &devInfoData, SPDRP_HARDWAREID,
-                                                     nullptr, (PBYTE)hwid, sizeof(hwid), nullptr))
+                if (isVirt(fn))
                 {
-                    QString id = QString::fromWCharArray(hwid);
-                    if (id.contains("USB", Qt::CaseInsensitive) ||
-                        id.contains("VIRT", Qt::CaseInsensitive) ||
-                        id.contains("ROOT", Qt::CaseInsensitive))
+                    isVirtual = true;
+                    break;
+                }
+                else
+                {
+                    wchar_t hwid[256];
+                    if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &devInfoData, SPDRP_HARDWAREID,
+                                                         nullptr, (PBYTE)hwid, sizeof(hwid), nullptr))
                     {
-                        isVirtual = true;
-                        break;
+                        const QString id = QString::fromWCharArray(hwid);
+                        if (isVirt(id))
+                        {
+                            isVirtual = true;
+                            break;
+                        }
                     }
-                };
+                }
             }
         }
     }

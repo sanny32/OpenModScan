@@ -60,7 +60,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/sanny32/OpenModScan.git
-        tag: "1.11.1"
+        tag: "1.11.2"
       - type: file
         path: io.github.sanny32.omodscan.png
       - type: file

@@ -116,22 +116,20 @@ Below are the methods for installing the OpenModScan for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodscan_X.XX.X-Y_x86.exe`
-- For 64-bit Windows: `qt5-omodscan_X.XX.X-Y_amd64.exe` or `qt6-omodscan_X.XX.X-Y_amd64.exe`
+- For 32-bit Windows: `qt5-omodscan_1.11.2-1_x86.exe`
+- For 64-bit Windows: `qt5-omodscan_1.11.2-1_amd64.exe` or `qt6-omodscan_1.11.2-1_amd64.exe`
 
-Replace `X.XX.X-Y` with the application version.
 
 ## Debian/Ubintu/Mint/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install -f ./qt6-omodscan_X.XX.X-Y_amd64.deb
+sudo apt install -f ./qt6-omodscan_1.11.2-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install -f ./qt5-omodscan_X.XX.X-Y_amd64.deb
+sudo apt install -f ./qt5-omodscan_1.11.2-1_amd64.deb
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the DEB package run:
@@ -147,9 +145,8 @@ sudo apt remove qt5-omodscan
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+sudo dnf install ./qt6-omodscan_1.11.2-1.x86_64.rpm
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the RPM package run:
@@ -161,9 +158,8 @@ sudo dnf remove qt6-omodscan
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+apt-get install ./qt6-omodscan_1.11.2-1.x86_64.rpm
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the RPM package run as root user:
@@ -179,9 +175,8 @@ sudo rpm --import qt6-omodscan.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+sudo zypper install ./qt6-omodscan_1.11.2-1.x86_64.rpm
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the RPM package run:

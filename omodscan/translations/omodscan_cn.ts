@@ -22,25 +22,25 @@
         <location filename="../ansimenu.cpp" line="12"/>
         <location filename="../ansimenu.cpp" line="53"/>
         <source>Arabic</source>
-        <translation>阿拉伯人的</translation>
+        <translation>阿拉伯语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="13"/>
         <location filename="../ansimenu.cpp" line="54"/>
         <source>Baltic</source>
-        <translation>巴尔</translation>
+        <translation>波罗的语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="14"/>
         <location filename="../ansimenu.cpp" line="55"/>
         <source>Celtic</source>
-        <translation>塞尔特</translation>
+        <translation>凯尔特语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="15"/>
         <location filename="../ansimenu.cpp" line="56"/>
         <source>Cyrillic</source>
-        <translation>西里尔</translation>
+        <translation>西里尔语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="16"/>
@@ -52,7 +52,7 @@
         <location filename="../ansimenu.cpp" line="17"/>
         <location filename="../ansimenu.cpp" line="58"/>
         <source>Chinese</source>
-        <translation>中文</translation>
+        <translation>简体中文</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="18"/>
@@ -76,25 +76,25 @@
         <location filename="../ansimenu.cpp" line="21"/>
         <location filename="../ansimenu.cpp" line="62"/>
         <source>Japanese</source>
-        <translation>日本人</translation>
+        <translation>日语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="22"/>
         <location filename="../ansimenu.cpp" line="63"/>
         <source>Korean</source>
-        <translation>韩国人</translation>
+        <translation>韩语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="23"/>
         <location filename="../ansimenu.cpp" line="64"/>
         <source>Thai</source>
-        <translation>泰国</translation>
+        <translation>泰语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="24"/>
         <location filename="../ansimenu.cpp" line="65"/>
         <source>Turkish</source>
-        <translation>土耳其</translation>
+        <translation>土耳其语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="25"/>
@@ -436,12 +436,12 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="200"/>
         <source>Connect Using:</source>
-        <translation>使用连接：</translation>
+        <translation>连接方式：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="144"/>
         <source>Exclude Virtual Serial Ports</source>
-        <translation>排除虛擬串行埠</translation>
+        <translation>排除虚拟端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="68"/>
@@ -451,12 +451,12 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="214"/>
         <source>Remote TCP/IP Server</source>
-        <translation>远程 TCP/IP 服务器</translation>
+        <translation>TCP/IP 服务器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
         <source>Direct Connection to Serial Port</source>
-        <translation>直接连接到串行端口</translation>
+        <translation>串行端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="75"/>
@@ -496,7 +496,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="411"/>
         <source>Hardware Flow Control</source>
-        <translation>硬流控</translation>
+        <translation>流控</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="420"/>
@@ -506,22 +506,22 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="440"/>
         <source>DTR Control: </source>
-        <translation>DTR控制： </translation>
+        <translation>DTR： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="463"/>
         <source>RTS Control: </source>
-        <translation>RTS控制： </translation>
+        <translation>RTS： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="513"/>
         <source>Protocol Selections</source>
-        <translation>协议选择</translation>
+        <translation>高级设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.cpp" line="75"/>
         <source>Lookup host failed: </source>
-        <translation>查找主机失败： </translation>
+        <translation>连接失败： </translation>
     </message>
 </context>
 <context>
@@ -597,7 +597,7 @@
     <name>DialogForceMultipleCoils</name>
     <message>
         <source>15: FORCE MULTIPLE COILS</source>
-        <translation type="vanished">15：强制多个线圈的状态</translation>
+        <translation type="vanished">15：强制写入多个线圈</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
@@ -607,12 +607,12 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="43"/>
         <source>Slave Device: </source>
-        <translation>从设备： </translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="50"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>寄存器地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="74"/>
@@ -632,7 +632,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="25"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>寄存器地址：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="26"/>
@@ -642,7 +642,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="27"/>
         <source>Slave Device: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>从设备：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>设备地址：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -716,22 +716,22 @@
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="41"/>
         <source>Node: </source>
-        <translation>节点： </translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="103"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>寄存器地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="150"/>
         <source>AND Mask</source>
-        <translation>与掩码</translation>
+        <translation>与掩码写入</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="482"/>
         <source>OR Mask</source>
-        <translation>或掩码</translation>
+        <translation>或掩码写入</translation>
     </message>
 </context>
 <context>
@@ -749,12 +749,12 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="639"/>
         <source>Connection</source>
-        <translation>通讯方式</translation>
+        <translation>连接方式</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="674"/>
         <source>Serial port</source>
-        <translation>端口</translation>
+        <translation>串行端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="702"/>
@@ -793,7 +793,7 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="938"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>IP地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="945"/>
@@ -828,7 +828,7 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="1005"/>
         <source>Scan Time</source>
-        <translation>扫描时长</translation>
+        <translation>扫描耗时</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="27"/>
@@ -891,7 +891,7 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="346"/>
         <source>Response Timeout</source>
-        <translation>响应超时</translation>
+        <translation>响应超时设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="391"/>
@@ -912,7 +912,7 @@
         <location filename="../dialogs/dialogmodbusscanner.ui" line="424"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="271"/>
         <source>PORT: Device Id (serial port settings)</source>
-        <translation>端口：设备地址（串口设置）</translation>
+        <translation>端口：设备地址（串口配置）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="446"/>
@@ -947,12 +947,12 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="290"/>
         <source>Address: port (Device Id)</source>
-        <translation>地址：端口（设备地址）</translation>
+        <translation>IP地址：端口（设备地址）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="329"/>
         <source>Clear previous scan results?</source>
-        <translation>清除之前的扫描结果？</translation>
+        <translation>清除扫描结果？</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="361"/>
@@ -1050,7 +1050,7 @@
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="123"/>
         <source>Request</source>
-        <translation>请求</translation>
+        <translation>数据包是请求数据</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="142"/>
@@ -1098,12 +1098,12 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="109"/>
         <source>Paper</source>
-        <translation>纸张</translation>
+        <translation>纸张来源</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="124"/>
         <source>Size: </source>
-        <translation>大小： </translation>
+        <translation>页面尺寸： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="147"/>
@@ -1113,7 +1113,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="176"/>
         <source>Orientation</source>
-        <translation>方向</translation>
+        <translation>打印方向</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="212"/>
@@ -1148,7 +1148,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="153"/>
         <source>Only One</source>
-        <translation>仅一张</translation>
+        <translation>单页</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="157"/>
@@ -1221,12 +1221,12 @@
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="14"/>
         <source>Modbus Protocol Selections</source>
-        <translation>Modbus 协议选择</translation>
+        <translation>Modbus 协议高级配置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="26"/>
         <source>Slave Response Timeout</source>
-        <translation>从设备响应超时</translation>
+        <translation>响应超时设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="60"/>
@@ -1241,7 +1241,7 @@
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="96"/>
         <source>Number of Retries Before a Request Fails</source>
-        <translation>请求失败前的重试次数</translation>
+        <translation>失败重试次数</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprotocolselections.ui" line="171"/>
@@ -1272,17 +1272,17 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
         <source>Slave Device: </source>
-        <translation>从设备： </translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>寄存器地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="104"/>
         <source>Number of Points: </source>
-        <translation>点数： </translation>
+        <translation>长度： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="28"/>
@@ -1309,12 +1309,12 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="27"/>
         <source>Slave Address: </source>
-        <translation>从设备地址： </translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="53"/>
         <source>Function: </source>
-        <translation>功能： </translation>
+        <translation>功能码： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="106"/>
@@ -1339,7 +1339,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="137"/>
         <source>Send Data: </source>
-        <translation>发送数据： </translation>
+        <translation>要发送的数据： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="183"/>
@@ -1358,7 +1358,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="211"/>
         <source>Response Buffer</source>
-        <translation>响应缓冲区</translation>
+        <translation>响应</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="291"/>
@@ -1408,17 +1408,17 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="38"/>
         <source>Node: </source>
-        <translation>节点： </translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="100"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>寄存器地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="147"/>
         <source>Value</source>
-        <translation>状态</translation>
+        <translation>值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="166"/>
@@ -1450,12 +1450,12 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="35"/>
         <source>Node: </source>
-        <translation>节点： </translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="85"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>寄存器地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="117"/>
@@ -1492,17 +1492,17 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
         <source>Node: </source>
-        <translation>节点： </translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="100"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>寄存器地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="150"/>
         <source>Bit Pattern</source>
-        <translation>位模式</translation>
+        <translation>各位的值</translation>
     </message>
 </context>
 <context>
@@ -1533,7 +1533,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../formmodsca.ui" line="118"/>
         <source>Address Base:</source>
-        <translation>基地址：</translation>
+        <translation>基地址格式：</translation>
     </message>
     <message>
         <location filename="../formmodsca.ui" line="135"/>
@@ -1548,7 +1548,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../formmodsca.ui" line="275"/>
         <source>MODBUS Point Type</source>
-        <translation>寄存器类型</translation>
+        <translation>功能码：寄存器类型</translation>
     </message>
     <message>
         <location filename="../formmodsca.cpp" line="63"/>
@@ -1588,7 +1588,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../formmodsca.cpp" line="590"/>
         <source>No Scan: Invalid Data Length Specified</source>
-        <translation>没有扫描：指定的数据长度无效</translation>
+        <translation>指定的数据长度无效</translation>
     </message>
     <message>
         <location filename="../formmodsca.cpp" line="767"/>
@@ -1598,7 +1598,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../formmodsca.cpp" line="567"/>
         <source>No Responses from Slave Device</source>
-        <translation>从设备未响应</translation>
+        <translation>设备未响应</translation>
     </message>
     <message>
         <location filename="../formmodsca.cpp" line="724"/>
@@ -1686,7 +1686,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="71"/>
         <source>Auto-Start</source>
-        <translation>自启动</translation>
+        <translation>自动连接</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="89"/>
@@ -1696,7 +1696,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="93"/>
         <source>Display Options</source>
-        <translation>显示格式设置</translation>
+        <translation>显示选项</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="122"/>
@@ -1740,13 +1740,13 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="237"/>
         <source>Display Bar</source>
-        <translation>格式栏</translation>
+        <translation>显示格式工具栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="280"/>
         <location filename="../mainwindow.ui" line="1006"/>
         <source>Write Bar</source>
-        <translation>写吧</translation>
+        <translation>数据写入工具栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="302"/>
@@ -1771,7 +1771,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="339"/>
         <source>Save As...</source>
-        <translation>保存为…</translation>
+        <translation>另存为</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="348"/>
@@ -1831,17 +1831,17 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="424"/>
         <source>Data Definition</source>
-        <translation>数据格式</translation>
+        <translation>数据定义</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="436"/>
         <source>Show Data</source>
-        <translation>显示数据</translation>
+        <translation>数据界面</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="448"/>
         <source>Show Traffic</source>
-        <translation>显示流量</translation>
+        <translation>报文界面</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="460"/>
@@ -1892,7 +1892,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="659"/>
         <source>Main Toolbar</source>
-        <translation>主酒吧</translation>
+        <translation>主菜单</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="717"/>
@@ -1914,7 +1914,7 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="805"/>
         <location filename="../mainwindow.ui" line="808"/>
         <source>Swapped 32-bit Integer</source>
-        <translation>32位整数（字节交换）</translation>
+        <translation>32位整数（交换字节）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="823"/>
@@ -1925,7 +1925,7 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="838"/>
         <location filename="../mainwindow.ui" line="841"/>
         <source>Swapped Unsigned 32-bit Integer</source>
-        <translation>无符号32位整数（字节交换）</translation>
+        <translation>无符号32位整数（交换字节）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="867"/>
@@ -1935,7 +1935,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="882"/>
         <source>Swapped 64-bit Integer</source>
-        <translation>64位整数（字节交换）</translation>
+        <translation>64位整数（交换字节）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="897"/>
@@ -1945,12 +1945,12 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="912"/>
         <source>Swapped Unsigned 64-bit Integer</source>
-        <translation>无符号64位整数（字节交换）</translation>
+        <translation>无符号64位整数（交换字节）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="938"/>
         <source>ANSI</source>
-        <translation>ANSI</translation>
+        <translation>ANSI字符</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="951"/>
@@ -2032,7 +2032,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="675"/>
         <source>Dsiplay Bar</source>
-        <translation>格式栏</translation>
+        <translation>显示格式栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="680"/>
@@ -2101,7 +2101,7 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="538"/>
         <location filename="../mainwindow.ui" line="541"/>
         <source>Swapped Float</source>
-        <translation>浮点数（字节交换）</translation>
+        <translation>浮点数（交换字节）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="556"/>
@@ -2792,12 +2792,12 @@ Byte Order: %2</source>
         <location filename="../controls/statisticwidget.cpp" line="96"/>
         <location filename="../controls/statisticwidget.cpp" line="100"/>
         <source>Pause Polling</source>
-        <translation>暂停投票</translation>
+        <translation>暂停轮询</translation>
     </message>
     <message>
         <location filename="../controls/statisticwidget.cpp" line="104"/>
         <source>Resume Polling</source>
-        <translation>恢复投票</translation>
+        <translation>恢复轮询</translation>
     </message>
     <message>
         <location filename="../controls/statisticwidget.cpp" line="137"/>

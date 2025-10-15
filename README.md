@@ -1,4 +1,9 @@
 # OpenModScan
+
+[![GitHub all releases](https://img.shields.io/github/downloads/sanny32/OpenModScan/total?logo=github)](https://github.com/sanny32/OpenModScan/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sanny32/OpenModScan?logo=github)](https://github.com/sanny32/OpenModScan/releases/latest)
+[![License](https://img.shields.io/github/license/sanny32/OpenModScan)](LICENSE.md)
+
 OpenModScan is a free and open-source Modbus Master (Client) utility supporting both Modbus-TCP and Modbus-RTU protocols.
 
 <img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/fc839046-f9de-484a-ab8c-1b553635cba8" />

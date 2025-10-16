@@ -53,6 +53,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
+    connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSca::captureError);
 
     setPollState(Off);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);

@@ -1309,6 +1309,11 @@ FormModSca* MainWindow::createMdiChild(int id)
         qobject_cast<MainStatusBar*>(statusBar())->updateValidSlaveResponses();
     });
 
+    connect(frm, &FormModSca::captureError, this, [this](const QString& error)
+    {
+        QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n %1").arg(error));
+    });
+
     _windowActionList->addWindow(wnd);
 
     return frm;

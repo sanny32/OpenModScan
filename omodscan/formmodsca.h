@@ -107,6 +107,7 @@ signals:
     void codepageChanged(const QString&);
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
+    void captureError(const QString& error);
 
 protected:
     void changeEvent(QEvent* event) override;

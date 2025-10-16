@@ -444,7 +444,8 @@ CaptureMode OutputWidget::captureMode() const
 void OutputWidget::startTextCapture(const QString& file)
 {
     _fileCapture.setFileName(file);
-    _fileCapture.open(QFile::Text | QFile::WriteOnly);
+    if(!_fileCapture.open(QFile::Text | QFile::WriteOnly))
+        emit startTextCaptureError(_fileCapture.errorString());
 }
 
 ///

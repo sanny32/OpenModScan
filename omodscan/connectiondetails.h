@@ -217,7 +217,7 @@ struct ModbusProtocolSelections
     {
         Mode = qBound(TransmissionMode::ASCII, Mode, TransmissionMode::RTU);
         SlaveResponseTimeOut = qBound(10U, SlaveResponseTimeOut, 300000U);
-        NumberOfRetries = qBound(1U, NumberOfRetries, 10U);
+        NumberOfRetries = qBound(0U, NumberOfRetries, 10U);
         InterFrameDelay = qBound(0U, InterFrameDelay, 300000U);
     }
 

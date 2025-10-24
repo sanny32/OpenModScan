@@ -80,10 +80,6 @@ jobs:
           cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
         shell: cmd
 
-      - name: Copy docs
-        run: xcopy %CD%\${{ env.BUILD_DIR }}\docs %CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\docs /E /I /Y
-        shell: cmd
-
       - name: Get Visual Studio path
         run: |
           for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^

@@ -3,8 +3,7 @@ name: Build OpenModScan Installer (Windows x86, Qt5)
 on:
   push:
     tags:
-      - "*"
-    branches: [dev]      
+      - "*"    
   workflow_dispatch:
     inputs:
       branch:

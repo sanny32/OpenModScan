@@ -1,0 +1,121 @@
+name: Build OpenModScan Installer (Windows x64, Qt6)
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Checkout branch'
+        required: false
+      tag:
+        description: 'Checkout tag'
+        required: false
+      
+env:
+  QT_VERSION: 6.9.3
+  QT_ARCH: win64_msvc2022_64
+  CMAKE_COMPILER: msvc2022_64
+  CMAKE_GENERATOR: "Visual Studio 17 2022"
+  CMAKE_ARCH: x64
+  BUILD_TYPE: Release
+
+jobs:
+  build-omodscan:
+    name: Build OpenModScan installer version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Extract version from CMakeLists.txt
+        run: |
+          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" omodscan\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
+        shell: cmd
+
+      - name: Convert version for dev branch
+        if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' }}
+        run: |
+          for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
+            echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
+          )
+        shell: cmd
+
+      - name: Install Python (for aqtinstall)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install aqtinstall
+        run: |
+          python -m pip install aqtinstall
+
+      - name: Install Qt
+        run: |
+          python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt -m qt5compat qtpdf qtserialport qtserialbus
+        shell: cmd
+
+      - name: Set BUILD_DIR
+        run: |
+          echo BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}>>%GITHUB_ENV%
+        shell: cmd
+
+      - name: Configure CMake
+        run: |
+          cmake omodscan -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+        shell: cmd
+
+      - name: Build
+        run: |
+          cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
+        shell: cmd
+
+      - name: Copy docs
+        run: xcopy %CD%\${{ env.BUILD_DIR }}\docs %CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\docs /E /I /Y
+        shell: cmd
+
+      - name: Get Visual Studio path
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^
+           -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VS_PATH=%%i
+          echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
+        shell: cmd
+
+      - name: Deploy Qt dependencies using windeployqt
+        run: |
+          call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat"
+          "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
+            "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe" ^
+            --release ^
+            --no-opengl-sw ^
+            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
+            --skip-plugin-types help,generic,networkinformation,qmltooling,tls ^
+            --exclude-plugins qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql
+        shell: cmd
+
+      - name: Install NSIS
+        run: |
+          choco install nsis -y
+        shell: cmd
+
+      - name: Build NSIS installer
+        run: |
+          "C:\Program Files (x86)\NSIS\makensis.exe" ^
+           /DVERSION="${{ env.APP_VERSION }}" ^
+           /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
+           /DICON_FILE="%CD%\omodscan\res\omodscan.ico" ^
+           /DLICENSE_FILE="%CD%\omodscan\res\license.txt" ^
+           /DOUTPUT_FILE="%CD%\qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
+           %CD%\.nsis\installer-win64.nsi
+        shell: cmd
+
+      - name: Upload Installer
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
+          path: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe

@@ -1,0 +1,227 @@
+name: Build Debian package (Ubuntu x64, Qt6)
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Checkout branch'
+        required: false
+      tag:
+        description: 'Checkout tag'
+        required: false
+
+jobs:
+  build-omodscan:
+    name: Build OpenModScan deb package version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+
+    env:
+      QT_VERSION: "6.9.3"
+      QT_HOST: "linux"
+      QT_TARGET: "desktop"
+      QT_ARCH: "linux_gcc_64"
+      QT_INSTALL_DIR: "/opt/Qt"
+      CMAKE_COMPILER: "gcc_64"
+      CMAKE_GENERATOR: "Ninja"
+      BUILD_TYPE: "Release"
+      DEB_REVISION: "1"
+      DEB_ARCH: "amd64"
+      DEB_PACKAGE_NAME: "qt6-omodscan"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Extract version from CMakeLists.txt
+        id: extract_version
+        run: |
+          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' omodscan/CMakeLists.txt)
+
+          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
+            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
+            APP_VERSION="${MAJOR_MINOR}~dev"
+          else
+            APP_VERSION="$FULL_VERSION"
+          fi
+
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "Extracted version: $APP_VERSION"
+
+      - name: Install dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update
+          apt-get install -y \
+            git build-essential ninja-build cmake patchelf rsync \
+            dh-make debhelper debhelper-compat lintian fakeroot \
+            libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
+            libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
+            libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
+            libfontconfig1 libfreetype6 libx11-6 libxext6 libxrender1 \
+            zlib1g-dev libpng-dev libjpeg-dev libdbus-1-3 \
+            libwayland-cursor0 libwayland-egl1-mesa \
+            libgtk-3-0 libgdk-pixbuf2.0-0 libpangocairo-1.0-0 libpango-1.0-0 libatk1.0-0 libcairo2 libcairo-gobject2 \
+            libcups2 \
+            odbcinst libodbc1 \
+            libpq5 libmysqlclient21
+
+      - name: Install Python 3.12 from sources
+        run: |
+          apt-get install -y wget libssl-dev \
+            libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev \
+            libffi-dev libbz2-dev liblzma-dev libgdbm-dev libnss3-dev \
+            libncurses-dev libgdbm-compat-dev xz-utils
+
+          wget https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz
+          tar xvf Python-3.12.2.tgz
+          cd Python-3.12.2
+
+          ./configure
+          make -j$(nproc)
+          make altinstall
+
+      - name: Set Python 3.12 as default
+        run: |
+          update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 2
+          update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+          update-alternatives --auto python3
+
+      - name: Upgrade pip
+        run: |
+          python3 -m ensurepip --upgrade
+          python3 -m pip install --upgrade pip
+
+      - name: Install aqtinstall
+        run: |
+          python3 -m pip install aqtinstall
+
+      - name: Download Qt
+        run: |
+          mkdir -p ${{ env.QT_INSTALL_DIR }}
+          aqt install-qt \
+            ${{ env.QT_HOST }} \
+            ${{ env.QT_TARGET }} \
+            ${{ env.QT_VERSION }} \
+            ${{ env.QT_ARCH }} \
+            -m qt5compat qtpdf qtserialport qtserialbus \
+            -O ${{ env.QT_INSTALL_DIR }}
+
+      - name: Add Qt to PATH
+        run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
+
+      - name: Install cmake 3.26
+        run: |
+          apt-get remove -y cmake
+          wget https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.sh
+          sh cmake-3.26.5-linux-x86_64.sh --skip-license --prefix=/usr/local
+          cmake --version
+
+      - name: Set BUILD_DIR
+        run: echo "BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+
+      - name: Configure project
+        run: |
+            cmake omodscan -B ${{ env.BUILD_DIR }} \
+            -G "${{ env.CMAKE_GENERATOR }}" \
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
+
+      - name: Build
+        run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
+
+      - name: Set BUILD_DEB_DIR
+        run: echo "BUILD_DEB_DIR=build-deb-package-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
+
+      - name: Set DEB_SRC_DIR
+        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
+
+      - name: Create DEB build directories
+        run: |
+          mkdir -p ${{ env.DEB_SRC_DIR }}/debian
+          mkdir -p ${{ env.DEB_SRC_DIR }}/usr
+          
+      - name: Copy files to DEB_SRC_DIR
+        run: |
+          cp -r .pkg/deb/* ${{ env.DEB_SRC_DIR }}/debian
+          cp -r .pkg/usr/* ${{ env.DEB_SRC_DIR }}/usr
+         
+      - name: Install cqtdeployer from sources
+        run: |
+          git clone https://github.com/QuasarApp/CQtDeployer.git
+          cd CQtDeployer
+          git checkout v1.6.2365
+          git submodule update --init --recursive
+          cmake -B build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCQT_DEPLOYER_TESTS=OFF \
+            -DCMAKE_INSTALL_PREFIX=/usr/local \
+            -DCMAKE_INSTALL_RPATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
+            -Wno-dev
+          cmake --build build --parallel
+          cmake --install build
+
+      - name: Bundle Qt libraries and plugins throught cqtdeployer
+        run: |
+          CQtDeployer -bin ${{ env.BUILD_DIR }}/omodscan \
+            -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModScan \
+            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
+            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
+            -extraLibs icudata,icui18n,icuuc,libxcb-util
+
+      - name: Copy OpenModScan docs
+        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModScan/docs/"
+
+      - name: Create Debian control file
+        run: |
+          sed -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
+              -e "s|@PACKAGE_SOURCE@|${{ env.DEB_PACKAGE_NAME }}|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/control.in > ${{ env.DEB_SRC_DIR }}/debian/control
+          rm ${{ env.DEB_SRC_DIR }}/debian/control.in
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/control
+
+      - name: Create Debian changelog file
+        run: |
+          sed -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
+              -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
+              -e "s|@DEB_REVISION@|${{ env.DEB_REVISION }}|g" \
+              -e "s|@RELEASE_DATE@|$(date -R)|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/changelog.in > ${{ env.DEB_SRC_DIR }}/debian/changelog
+          rm ${{ env.DEB_SRC_DIR }}/debian/changelog.in
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/changelog
+
+      - name: Create Debian copyrigth file
+        run: |
+          sed -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
+              -e "s|@RELEASE_YEAR@|$(date +%Y)|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/copyrigth.in > ${{ env.DEB_SRC_DIR }}/debian/copyrigth
+          rm ${{ env.DEB_SRC_DIR }}/debian/copyrigth.in
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/copyrigth
+
+      - name: Create Debian rules file
+        run: |
+          sed -e "s|@QT_LIB_PATH@|${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/rules.in > ${{ env.DEB_SRC_DIR }}/debian/rules
+          rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/rules
+
+      - name: Patch binary file
+        run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModScan/bin/omodscan"
+
+      - name: Build DEB package
+        working-directory: ${{ env.DEB_SRC_DIR }}
+        run: dpkg-buildpackage -us -uc -tc -b
+
+      - name: Upload DEB package
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: ${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
+          path: ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb

@@ -1,0 +1,18 @@
+#!/bin/bash
+# This `DEBIAN/postinst` script is run post-installation
+set -e
+
+if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then
+    rm -f /etc/udev/rules.d/99-omodscan.rules
+fi
+
+if [ ! -f /etc/udev/rules.d/99-omodsim.rules ]; then
+    printf  "KERNEL==\"ttyS[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
+    printf  "KERNEL==\"ttyUSB[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
+fi
+
+udevadm trigger
+
+xdg-desktop-menu forceupdate
+setcap 'cap_net_bind_service=+ep' /opt/OpenModScan/bin/omodscan || true
+ln -sf /opt/OpenModSim/omodscan.sh /usr/bin/omodscan

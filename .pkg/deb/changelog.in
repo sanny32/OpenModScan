@@ -1,0 +1,5 @@
+@PACKAGE_NAME@ (@APP_VERSION@-@DEB_REVISION@) stable; urgency=medium
+
+  * Version @APP_VERSION@
+
+ -- Alexandr Ananev <mail@ananev.org>  @RELEASE_DATE@

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+    brancjes: [ dev ]
   workflow_dispatch:
     inputs:
       branch:
@@ -205,7 +206,7 @@ jobs:
           if [ "$RPM_FILE" != "$SAFE_RPM_FILE" ]; then
             mv "RPMS/${RPM_ARCH}/$RPM_FILE" "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE"
           fi
-          rpmsign --addsign --define "_gpg_name 841A6E73CED20603737BDCBA457ECBB2757E57F1" "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE"
+          rpmsign --addsign --define "_gpg_name 0A845C8CBD8C44185F602120EF63A914DDB8502F" "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE"
 
           if [ "$RPM_FILE" != "$SAFE_RPM_FILE" ]; then
             mv "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE" "RPMS/${RPM_ARCH}/$RPM_FILE"

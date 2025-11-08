@@ -121,8 +121,8 @@ Below are the methods for installing the OpenModScan for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodscan_1.11.2-1_x86.exe`
-- For 64-bit Windows: `qt5-omodscan_1.11.2-1_amd64.exe` or `qt6-omodscan_1.11.2-1_amd64.exe`
+- For 32-bit Windows: `qt5-omodscan_1.11.2_x86.exe`
+- For 64-bit Windows: `qt5-omodscan_1.11.2_x64.exe` or `qt6-omodscan_1.11.2_x64.exe`
 
 
 ## Debian/Ubintu/Mint/Astra Linux

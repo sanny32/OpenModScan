@@ -32,7 +32,14 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QMdiArea" name="mdiArea"/>
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="tabsMovable">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -212,7 +219,7 @@
     </size>
    </property>
    <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+    <enum>Qt::ToolButtonIconOnly</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -956,7 +963,7 @@
     <string notr="true">06: Write Holding Register</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionWriteHoldingRegisterBits">
@@ -967,7 +974,7 @@
     <string>06: Write Holding Register Bits</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionWriteSingleCoil">
@@ -982,7 +989,7 @@
     <string>05: Write Single Coil</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionWriteHoldingRegister">
@@ -997,7 +1004,7 @@
     <string>06: Write Holding Register</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="actionWriteBar">

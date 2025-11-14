@@ -51,7 +51,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
     switch(role)
     {
         case Qt::ToolTipRole:
-            return formatAddress(_data.registerType(), getAddress(idx), false);
+            return formatAddress(_data.registerType(), getAddress(idx), _addressSpace, false);
 
         case Qt::DisplayRole:
         {
@@ -59,7 +59,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             const auto value = _data.value(idx);
             const auto pointType = _data.registerType();
             auto result = _hexView ? formatHexValue(pointType, value, _byteOrder, outValue) :
-                                    formatUInt16Value(pointType, value, _byteOrder, outValue);
+                                    formatUInt16Value(pointType, value, _byteOrder, _showLeadingZeros, outValue);
 
             return _data.hasValue(idx) ? result.remove('<').remove('>') : "-";
         }
@@ -150,7 +150,7 @@ QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation
                     const auto pointAddress = getAddress(0);
                     const auto addressFrom = pointAddress + section * _columns;
                     const auto addressTo = pointAddress + qMin<quint16>(length - 1, (section + 1) * _columns - 1);
-                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom, _hexAddress), formatAddress(pointType, addressTo, _hexAddress));
+                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom, _addressSpace, _hexAddress), formatAddress(pointType, addressTo, _addressSpace, _hexAddress));
                 }
             }
         break;
@@ -175,10 +175,10 @@ Qt::ItemFlags TableViewItemModel::flags(const QModelIndex &index) const
 }
 
 ///
-/// \brief TableViewItemModel::addressBse
+/// \brief TableViewItemModel::addressBase
 /// \return
 ///
-AddressBase TableViewItemModel::addressBse() const
+AddressBase TableViewItemModel::addressBase() const
 {
     return _addressBase;
 }
@@ -190,6 +190,42 @@ AddressBase TableViewItemModel::addressBse() const
 void TableViewItemModel::setAddressBase(AddressBase base)
 {
     _addressBase = base;
+}
+
+///
+/// \brief TableViewItemModel::addressSpace
+/// \return
+///
+AddressSpace TableViewItemModel::addressSpace() const
+{
+    return _addressSpace;
+}
+
+///
+/// \brief TableViewItemModel::setAddressSpace
+/// \param space
+///
+void TableViewItemModel::setAddressSpace(AddressSpace space)
+{
+    _addressSpace = space;
+}
+
+///
+/// \brief TableViewItemModel::showLeadingZeros
+/// \return
+///
+bool TableViewItemModel::showLeadingZeros() const
+{
+    return _showLeadingZeros;
+}
+
+///
+/// \brief TableViewItemModel::setShowLeadingZeros
+/// \param value
+///
+void TableViewItemModel::setShowLeadingZeros(bool value)
+{
+    _showLeadingZeros = value;
 }
 
 ///
@@ -251,7 +287,7 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
         {
             const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16;
             const auto addr = item.Addr + (_addressBase == AddressBase::Base1 ? 1 : 0);
-            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, addr, _hexAddress),
+            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, addr, _addressSpace, _hexAddress),
                                                item.Msg->isRequest() ? "<<" : ">>",
                                                item.Msg->toString(mode));
         }
@@ -267,10 +303,10 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
 }
 
 ///
-/// \brief LogViewModel::addressBse
+/// \brief LogViewModel::addressBase
 /// \return
 ///
-AddressBase LogViewModel::addressBse() const
+AddressBase LogViewModel::addressBase() const
 {
     return _addressBase;
 }
@@ -282,6 +318,24 @@ AddressBase LogViewModel::addressBse() const
 void LogViewModel::setAddressBase(AddressBase base)
 {
     _addressBase = base;
+}
+
+///
+/// \brief LogViewModel::addressSpace
+/// \return
+///
+AddressSpace LogViewModel::addressSpace() const
+{
+    return _addressSpace;
+}
+
+///
+/// \brief LogViewModel::setAddressSpace
+/// \param space
+///
+void LogViewModel::setAddressSpace(AddressSpace space)
+{
+    _addressSpace = space;
 }
 
 ///
@@ -335,9 +389,14 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
 
     auto viewModel = new TableViewItemModel(this);
     viewModel->setHexAddress(dd.HexAddress);
+    viewModel->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    viewModel->setAddressSpace(dd.AddrSpace);
+    viewModel->setShowLeadingZeros(dd.LeadingZeros);
 
     auto logModel = new LogViewModel(this);
     logModel->setHexAddress(dd.HexAddress);
+    logModel->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    logModel->setAddressSpace(dd.AddrSpace);
 
     auto proxyLogModel = new LogViewProxyModel(this);
     proxyLogModel->setSourceModel(logModel);
@@ -347,7 +406,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->lineEditStartAddress->setPaddingZeroes(true);
+    ui->lineEditStartAddress->setLeadingZeroes(true);
     ui->lineEditStartAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());

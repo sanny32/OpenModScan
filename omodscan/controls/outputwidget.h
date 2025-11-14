@@ -43,6 +43,13 @@ public:
     void update();
     void updateData(const QModbusDataUnit& data);
 
+    int columnsDistance() const {
+        return _columnsDistance;
+    }
+    void setColumnsDistance(int value) {
+        _columnsDistance = qMax(1, value);
+    }
+
     QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
@@ -59,6 +66,7 @@ private:
     QModbusDataUnit _lastData;
     QIcon _iconPointGreen;
     QIcon _iconPointEmpty;
+    int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };
 
@@ -112,6 +120,9 @@ public:
 
     QFont font() const;
     void setFont(const QFont& font);
+
+    int dataViewColumnsDistance() const;
+    void setDataViewColumnsDistance(int value);
 
     int logViewLimit() const;
     void setLogViewLimit(int l);

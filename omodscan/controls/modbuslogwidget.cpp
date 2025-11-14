@@ -59,7 +59,7 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),
                      item->isRequest() ? "#0066cc" : "#009933",
                      item->isRequest() ? "[Tx] ←" : "[Rx] →",
-                     item->toString(_parentWidget->dataDisplayMode()));
+                     item->toString(_parentWidget->dataDisplayMode(), _parentWidget->showLeadingZeros()));
 
         case Qt::UserRole:
             return QVariant::fromValue(item);
@@ -131,6 +131,7 @@ void ModbusLogModel::deleteItems()
 ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
+    , _showLeadingZeros(true)
 {
     setFocusPolicy(Qt::StrongFocus);
     setFont(defaultMonospaceFont());
@@ -168,7 +169,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
         QModelIndex index = currentIndex();
         if (index.isValid()) {
             auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
-            if (msg) QApplication::clipboard()->setText(msg->toString(dataDisplayMode()));
+            if (msg) QApplication::clipboard()->setText(msg->toString(dataDisplayMode(), _showLeadingZeros));
         }
     });
 
@@ -279,6 +280,27 @@ void ModbusLogWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
 
+    if(model()) {
+        ((ModbusLogModel*)model())->update();
+    }
+}
+
+///
+/// \brief ModbusLogWidget::showLeadingZeros
+/// \return
+///
+bool ModbusLogWidget::showLeadingZeros() const
+{
+    return _showLeadingZeros;
+}
+
+///
+/// \brief ModbusLogWidget::setShowLeadingZeros
+/// \param value
+///
+void ModbusLogWidget::setShowLeadingZeros(bool value)
+{
+    _showLeadingZeros = value;
     if(model()) {
         ((ModbusLogModel*)model())->update();
     }

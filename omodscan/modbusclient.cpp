@@ -708,7 +708,7 @@ void ModbusClient::on_writeReply()
         if (reply->error() == QModbusDevice::ProtocolError)
         {
             ModbusException ex(raw.exceptionCode());
-            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatUInt8Value(DataDisplayMode::Hex, ex)), requestId);
+            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatUInt8Value(DataDisplayMode::Hex, true, ex)), requestId);
         }
         else if(reply->error() != QModbusDevice::NoError)
             emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);

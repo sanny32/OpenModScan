@@ -60,4 +60,12 @@ private:
     ConnectionType _connectionType;
 };
 
+DECLARE_ENUM_STRINGS(QModbusDataUnit::RegisterType,
+                     {   QModbusDataUnit::Invalid,          "Invalid"           },
+                     {   QModbusDataUnit::DiscreteInputs,   "DiscreteInputs"    },
+                     {   QModbusDataUnit::Coils,            "Coils"             },
+                     {   QModbusDataUnit::InputRegisters,   "InputRegisters"    },
+                     {   QModbusDataUnit::HoldingRegisters, "HoldingRegisters"  }
+)
+
 #endif // MODBUSCLIENT_H

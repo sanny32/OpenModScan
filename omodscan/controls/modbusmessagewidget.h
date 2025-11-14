@@ -27,6 +27,9 @@ public:
     bool showTimestamp() const;
     void setShowTimestamp(bool on);
 
+    bool showLeadingZeros() const;
+    void setShowLeadingZeros(bool value);
+
     void setStatusColor(const QColor& clr);
 
     QColor backgroundColor() const;
@@ -45,6 +48,7 @@ private:
     QColor _statusClr;
     ByteOrder _byteOrder;
     DataDisplayMode _dataDisplayMode;
+    bool _showLeadingZeros;
     bool _showTimestamp;
     QAction* _copyAct;
     QAction* _copyValuesAct;

@@ -5,6 +5,7 @@
 #include <QSerialPort>
 #include <QModbusDevice>
 #include <QDataStream>
+#include <QXmlStreamReader>
 #include <QSettings>
 #include "enums.h"
 
@@ -87,6 +88,50 @@ inline QSettings& operator >>(QSettings& in, TcpConnectionParams& params)
 }
 
 ///
+/// \brief operator <<
+/// \param xml
+/// \param dd
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const TcpConnectionParams& params)
+{
+    xml.writeStartElement("TcpConnectionParams");
+    xml.writeAttribute("IPAddress", params.IPAddress);
+    xml.writeAttribute("ServicePort", QString::number(params.ServicePort));
+    xml.writeEndElement();
+
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param params
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, TcpConnectionParams& params)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("TcpConnectionParams")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("IPAddress")) {
+            params.IPAddress = attributes.value("IPAddress").toString();
+        }
+
+        if (attributes.hasAttribute("ServicePort")) {
+            bool ok; const quint16 port = attributes.value("ServicePort").toUShort(&ok);
+            if (ok) params.ServicePort = port;
+        }
+
+        xml.skipCurrentElement();
+
+        params.normalize();
+    }
+
+    return xml;
+}
+
+///
 /// \brief The SerialConnectionParams class
 ///
 struct SerialConnectionParams
@@ -121,6 +166,23 @@ struct SerialConnectionParams
     }
 };
 Q_DECLARE_METATYPE(SerialConnectionParams)
+DECLARE_ENUM_STRINGS(QSerialPort::Parity,
+                     {   QSerialPort::NoParity,     "NO"        },
+                     {   QSerialPort::EvenParity,   "EVEN"      },
+                     {   QSerialPort::OddParity,    "ODD"       },
+                     {   QSerialPort::SpaceParity,  "SPACE"     },
+                     {   QSerialPort::MarkParity,   "MARK"      }
+)
+DECLARE_ENUM_STRINGS(QSerialPort::StopBits,
+                     {   QSerialPort::OneStop,          "1"         },
+                     {   QSerialPort::OneAndHalfStop,   "1.5"       },
+                     {   QSerialPort::TwoStop,          "2"         }
+)
+DECLARE_ENUM_STRINGS(QSerialPort::FlowControl,
+                     {   QSerialPort::NoFlowControl,        "NO"        },
+                     {   QSerialPort::HardwareControl,      "HARDWARE"  },
+                     {   QSerialPort::SoftwareControl,      "SOFTWARE"  }
+)
 
 ///
 /// \brief operator <<
@@ -200,6 +262,82 @@ inline QSettings& operator >>(QSettings& in, SerialConnectionParams& params)
 
     params.normalize();
     return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param params
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const SerialConnectionParams& params)
+{
+    xml.writeStartElement("SerialConnectionParams");
+
+    xml.writeAttribute("PortName", params.PortName);
+    xml.writeAttribute("BaudRate", QString::number(params.BaudRate));
+    xml.writeAttribute("DataBits", QString::number(params.WordLength));
+    xml.writeAttribute("Parity", enumToString(params.Parity));
+    xml.writeAttribute("StopBits", enumToString(params.StopBits));
+    xml.writeAttribute("FlowControl", enumToString(params.FlowControl));
+    xml.writeAttribute("SetDTR", boolToString(params.SetDTR));
+    xml.writeAttribute("SetRTS", boolToString(params.SetRTS));
+
+    xml.writeEndElement();
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param params
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, SerialConnectionParams& params)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("SerialConnectionParams")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("PortName")) {
+            params.PortName = attributes.value("PortName").toString();
+        }
+
+        if (attributes.hasAttribute("BaudRate")) {
+            bool ok; const auto baudRate = attributes.value("ServicePort").toUInt(&ok);
+            if (ok) params.BaudRate = static_cast<QSerialPort::BaudRate>(baudRate);
+        }
+
+        if (attributes.hasAttribute("DataBits")) {
+            bool ok; const auto wordLength = attributes.value("DataBits").toUInt(&ok);
+            if (ok) params.WordLength = static_cast<QSerialPort::DataBits>(wordLength);
+        }
+
+        if (attributes.hasAttribute("Parity")) {
+            params.Parity = enumFromString<QSerialPort::Parity>(attributes.value("Parity").toString());
+        }
+
+        if (attributes.hasAttribute("StopBits")) {
+            params.StopBits = enumFromString<QSerialPort::StopBits>(attributes.value("StopBits").toString());
+        }
+
+        if (attributes.hasAttribute("FlowControl")) {
+            params.FlowControl = enumFromString<QSerialPort::FlowControl>(attributes.value("FlowControl").toString());
+        }
+
+        if (attributes.hasAttribute("SetDTR")) {
+            params.SetDTR = stringToBool(attributes.value("SetDTR").toString());
+        }
+
+        if (attributes.hasAttribute("SetRTS")) {
+            params.SetRTS = stringToBool(attributes.value("SetRTS").toString());
+        }
+
+        xml.skipCurrentElement();
+
+        params.normalize();
+    }
+
+    return xml;
 }
 
 ///
@@ -303,6 +441,65 @@ inline QSettings& operator >>(QSettings& in, ModbusProtocolSelections& params)
 }
 
 ///
+/// \brief operator <<
+/// \param xml
+/// \param params
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusProtocolSelections& params)
+{
+    xml.writeStartElement("ModbusProtocolSelections");
+    xml.writeAttribute("Mode", enumToString(params.Mode));
+    xml.writeAttribute("SlaveResponseTimeOut", QString::number(params.SlaveResponseTimeOut));
+    xml.writeAttribute("NumberOfRetries", QString::number(params.NumberOfRetries));
+    xml.writeAttribute("InterFrameDelay", QString::number(params.InterFrameDelay));
+    xml.writeAttribute("ForceModbus15And16Func", boolToString(params.ForceModbus15And16Func));
+    xml.writeEndElement();
+
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param params
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusProtocolSelections& params)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("ModbusProtocolSelections")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("Mode")) {
+            params.Mode = enumFromString<TransmissionMode>(attributes.value("Mode").toString());
+        }
+
+        if (attributes.hasAttribute("SlaveResponseTimeOut")) {
+            bool ok; const auto timeout = attributes.value("SlaveResponseTimeOut").toUInt(&ok);
+            if (ok) params.SlaveResponseTimeOut = timeout;
+        }
+
+        if (attributes.hasAttribute("NumberOfRetries")) {
+            bool ok; const auto reties = attributes.value("NumberOfRetries").toUInt(&ok);
+            if (ok) params.NumberOfRetries = reties;
+        }
+
+        if (attributes.hasAttribute("InterFrameDelay")) {
+            bool ok; const auto delay = attributes.value("InterFrameDelay").toUInt(&ok);
+            if (ok) params.InterFrameDelay = delay;
+        }
+
+        if (attributes.hasAttribute("ForceModbus15And16Func")) {
+            params.ForceModbus15And16Func = stringToBool(attributes.value("ForceModbus15And16Func").toString());
+        }
+
+        xml.skipCurrentElement();
+    }
+
+    return xml;
+}
+
+///
 /// \brief The ConnectionDetails class
 ///
 struct ConnectionDetails
@@ -386,6 +583,75 @@ inline QSettings& operator >>(QSettings& in, ConnectionDetails& params)
     in >> params.ModbusParams;
 
     return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param cd
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ConnectionDetails& cd)
+{
+    xml.writeStartElement("ConnectionDetails");
+    xml.writeAttribute("ConnectionType", enumToString(cd.Type));
+    xml.writeAttribute("ExcludeVirtualPorts", boolToString(cd.ExcludeVirtualPorts));
+
+    switch(cd.Type) {
+    case ConnectionType::Tcp:
+        xml << cd.TcpParams;
+        break;
+    case ConnectionType::Serial:
+        xml << cd.SerialParams;
+        break;
+    }
+
+    xml << cd.ModbusParams;
+
+    xml.writeEndElement();
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param cd
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ConnectionDetails& cd)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("ConnectionDetails")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("ConnectionType")) {
+            cd.Type = enumFromString<ConnectionType>(attributes.value("ConnectionType").toString());
+        }
+
+        if (attributes.hasAttribute("ExcludeVirtualPorts")) {
+            cd.ExcludeVirtualPorts = stringToBool(attributes.value("ExcludeVirtualPorts").toString());
+        }
+
+        switch(cd.Type) {
+            case ConnectionType::Tcp:
+                if(xml.readNextStartElement() && xml.name() == QLatin1String("TcpConnectionParams")) {
+                    xml >> cd.TcpParams;
+                }
+                break;
+            case ConnectionType::Serial:
+                if(xml.readNextStartElement() && xml.name() == QLatin1String("SerialConnectionParams")) {
+                    xml >> cd.SerialParams;
+                }
+                break;
+        }
+
+        if(xml.readNextStartElement() && xml.name() == QLatin1String("ModbusParams")) {
+            xml >> cd.ModbusParams;
+        }
+
+        xml.skipCurrentElement();
+    }
+
+    return xml;
 }
 
 #endif // CONNECTIONDETAILS_H

@@ -76,10 +76,11 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
 
     const auto row = index.row();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
+    const auto addrSpace = _parentWidget->_displayDefinition.AddrSpace;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
 
     const ItemData& itemData = _mapItems[row];
-    const auto addrstr = formatAddress(pointType, itemData.Address, hexAddresses);
+    const auto addrstr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
 
     switch(role)
     {
@@ -90,7 +91,7 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             const auto descr = itemData.Description.length() > 20 ?
                         QString("%1...").arg(itemData.Description.left(18)): itemData.Description;
             if(!descr.isEmpty()) str += QString("; %1").arg(descr);
-            return str.leftJustified(length + 16, ' ');
+            return str.leftJustified(length + _columnsDistance, ' ');
         }
 
         case CaptureRole:
@@ -192,6 +193,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
     _lastData = data;
 
     const auto mode = _parentWidget->dataDisplayMode();
+    const auto leadingZeros = _parentWidget->_displayDefinition.LeadingZeros;
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto byteOrder = _parentWidget->byteOrder();
     const auto codepage = _parentWidget->codepage();
@@ -211,7 +213,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
 
             case DataDisplayMode::UInt16:
-                itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, itemData.Value);
+                itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, leadingZeros, itemData.Value);
             break;
 
             case DataDisplayMode::Int16:
@@ -258,12 +260,12 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
 
             case DataDisplayMode::UInt32:
-                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
+                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder, leadingZeros,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedUInt32:
-                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
+                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder, leadingZeros,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
@@ -280,12 +282,12 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 
             case DataDisplayMode::UInt64:
                 itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
-                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                                           byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
                 break;
 
             case DataDisplayMode::SwappedUInt64:
                 itemData.ValueStr = formatUInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
-                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                                                      byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
                 break;
         }
     }
@@ -395,7 +397,10 @@ void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolTyp
 
     setProtocol(protocol);
     setLogViewLimit(dd.LogViewLimit);
+    setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     setAutosctollLogView(dd.AutoscrollLog);
+    ui->logView->setShowLeadingZeros(dd.LeadingZeros);
+    ui->modbusMsg->setShowLeadingZeros(dd.LeadingZeros);
 
     _listModel->clear();
 
@@ -538,6 +543,24 @@ void OutputWidget::setFont(const QFont& font)
     ui->labelStatus->setFont(font);
     ui->logView->setFont(font);
     ui->modbusMsg->setFont(font);
+}
+
+///
+/// \brief OutputWidget::dataViewColumnsDistance
+/// \return
+///
+int OutputWidget::dataViewColumnsDistance() const
+{
+    return _listModel->columnsDistance();
+}
+
+///
+/// \brief OutputWidget::setDataViewColumnsDistance
+/// \param value
+///
+void OutputWidget::setDataViewColumnsDistance(int value)
+{
+    _listModel->setColumnsDistance(value);
 }
 
 ///
@@ -957,7 +980,7 @@ void OutputWidget::updateLogView(bool request, int server, int transactionId, co
                 (msg->isRequest()?  "Tx" : "Rx"),
                 msg->timestamp().toString(Qt::ISODateWithMs),
                 (msg->isRequest()?  "<<" : ">>"),
-                msg->toString(DataDisplayMode::Hex));
+                msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
         captureString(str);
     }
 }

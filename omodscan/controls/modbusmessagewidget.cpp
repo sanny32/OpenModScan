@@ -58,19 +58,19 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
         switch(_mm->function()) {
         case QModbusPdu::ReadCoils: {
             auto resp = reinterpret_cast<const ReadCoilsResponse*>(_mm.get());
-            allValues = formatUInt8Array(_dataDisplayMode, resp->coilStatus());
+            allValues = formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->coilStatus());
         } break;
         case QModbusPdu::ReadDiscreteInputs: {
             auto resp = reinterpret_cast<const ReadDiscreteInputsResponse*>(_mm.get());
-            allValues = formatUInt8Array(_dataDisplayMode, resp->inputStatus());
+            allValues = formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->inputStatus());
         } break;
         case QModbusPdu::ReadHoldingRegisters: {
             auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_mm.get());
-            allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
+            allValues = formatUInt16Array(_dataDisplayMode, _showLeadingZeros, resp->registerValue(), _byteOrder);
         } break;
         case QModbusPdu::ReadInputRegisters: {
             auto resp = reinterpret_cast<const ReadInputRegistersResponse*>(_mm.get());
-            allValues = formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder);
+            allValues = formatUInt16Array(_dataDisplayMode, _showLeadingZeros, resp->registerValue(), _byteOrder);
         } break;
         default: break;
         }
@@ -163,6 +163,25 @@ void ModbusMessageWidget::setShowTimestamp(bool on)
 }
 
 ///
+/// \brief ModbusMessageWidget::showLeadingZeros
+/// \return
+///
+bool ModbusMessageWidget::showLeadingZeros() const
+{
+    return _showLeadingZeros;
+}
+
+///
+/// \brief ModbusMessageWidget::setShowLeadingZeros
+/// \param value
+///
+void ModbusMessageWidget::setShowLeadingZeros(bool value)
+{
+    _showLeadingZeros = value;
+    update();
+}
+
+///
 /// \brief ModbusMessageWidget::setStatusColor
 /// \param clr
 ///
@@ -243,14 +262,14 @@ void ModbusMessageWidget::update()
         if(_mm->protocolType() == ModbusMessage::Rtu)
         {
             auto adu = reinterpret_cast<const QModbusAduRtu*>(_mm->adu());
-            const auto checksum = formatUInt16Value(_dataDisplayMode, adu->checksum());
+            const auto checksum = formatUInt16Value(_dataDisplayMode, _showLeadingZeros, adu->checksum());
             if(adu->matchingChecksum())
             {
                 addField(tr("Checksum"), checksum, dataColor);
             }
             else
             {
-                const auto calcChecksum = formatUInt16Value(_dataDisplayMode, adu->calcChecksum());
+                const auto calcChecksum = formatUInt16Value(_dataDisplayMode, _showLeadingZeros, adu->calcChecksum());
                 addField(tr("Checksum"), QString("%1 <span style='color:#000000'>(Expected: %2)</span>").arg(checksum, calcChecksum), errColor);
             }
         }
@@ -262,20 +281,20 @@ void ModbusMessageWidget::update()
     if(_mm->protocolType() == ModbusMessage::Tcp)
     {
         auto adu = reinterpret_cast<const QModbusAduTcp*>(_mm->adu());
-        const auto transactionId = adu->isValid() ? formatUInt16Value(_dataDisplayMode, adu->transactionId()) : "??";
-        const auto protocolId = adu->isValid() ? formatUInt16Value(_dataDisplayMode, adu->protocolId()): "??";
-        const auto length = adu->isValid() ? formatUInt16Value(_dataDisplayMode, adu->length()): "??";
+        const auto transactionId = adu->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, adu->transactionId()) : "??";
+        const auto protocolId = adu->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, adu->protocolId()): "??";
+        const auto length = adu->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, adu->length()): "??";
         addField(tr("Transaction ID"), transactionId, valueColor);
         addField(tr("Protocol ID"), protocolId, valueColor);
         addField(tr("Length"), length, valueColor);
     }
     
-    addField(tr("Device ID"), formatUInt8Value(_dataDisplayMode, _mm->deviceId()), valueColor);
+    addField(tr("Device ID"), formatUInt8Value(_dataDisplayMode, _showLeadingZeros, _mm->deviceId()), valueColor);
 
     if(_mm->isException())
     {
-        const auto exception = QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, _mm->exception()), _mm->exception());        
-        addField(tr("Error Code"), formatUInt8Value(_dataDisplayMode, _mm->function()), errColor);
+        const auto exception = QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, _showLeadingZeros, _mm->exception()), _mm->exception());
+        addField(tr("Error Code"), formatUInt8Value(_dataDisplayMode, _showLeadingZeros, _mm->function()), errColor);
         addField(tr("Exception Code"), exception, errColor);
         addChecksum();
         return;
@@ -283,8 +302,8 @@ void ModbusMessageWidget::update()
 
     const auto func = _mm->function();
     const auto function = func.isValid() ?
-                              QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, func), func) :
-                              formatUInt8Value(_dataDisplayMode, func);
+                              QString("%1 (%2)").arg(formatUInt8Value(_dataDisplayMode, _showLeadingZeros, func), func) :
+                              formatUInt8Value(_dataDisplayMode, _showLeadingZeros, func);
     addField(tr("Function Code"), function, dirColor);
     const auto addrBase = tr("(0-based)");
 
@@ -294,16 +313,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadCoilsRequest*>(_mm.get());
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->length()): "??";
                 addField(tr("Start Address"), startAddress, dataColor);
                 addField(tr("Length"), length, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadCoilsResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto coilStatus = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->coilStatus()) : "???";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto coilStatus = resp->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->coilStatus()) : "???";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Coil Status"), coilStatus, dataColor);
             }
@@ -313,16 +332,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(_mm.get());
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->length()): "??";
                 addField(tr("Start Address"), startAddress, dataColor);
                 addField(tr("Length"), length, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadDiscreteInputsResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto inputStatus = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->inputStatus()) : "???";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto inputStatus = resp->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->inputStatus()) : "???";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Input Status"), inputStatus, dataColor);
             }
@@ -332,16 +351,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(_mm.get());
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->length()): "??";
                 addField(tr("Start Address"), startAddress, dataColor);
                 addField(tr("Length"), length, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadHoldingRegistersResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto registerValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder) : "???";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto registerValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, _showLeadingZeros, resp->registerValue(), _byteOrder) : "???";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Register Value"), registerValue, dataColor);
             }
@@ -351,16 +370,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadInputRegistersRequest*>(_mm.get());
-                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->length()): "??";
+                const auto startAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto length = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->length()): "??";
                 addField(tr("Start Address"), startAddress, dataColor);
                 addField(tr("Length"), length, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadInputRegistersResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto registerValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, resp->registerValue(), _byteOrder) : "???";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto registerValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, _showLeadingZeros, resp->registerValue(), _byteOrder) : "???";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Input Registers"), registerValue, dataColor);
             }
@@ -370,16 +389,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteSingleCoilRequest*>(_mm.get());
-                const auto outputAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) + QString(" %1").arg(addrBase) : "??";
-                const auto outputValue = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->value()) : "??";
+                const auto outputAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->address()) + QString(" %1").arg(addrBase) : "??";
+                const auto outputValue = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->value()) : "??";
                 addField(tr("Output Address"), outputAddress, dataColor);
                 addField(tr("Output Value"), outputValue, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteSingleCoilResponse*>(_mm.get());
-                const auto outputAddress = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->address()) + QString(" %1").arg(addrBase) : "??";
-                const auto outputValue = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->value()) : "??";
+                const auto outputAddress = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->address()) + QString(" %1").arg(addrBase) : "??";
+                const auto outputValue = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->value()) : "??";
                 addField(tr("Output Address"), outputAddress, dataColor);
                 addField(tr("Output Value"), outputValue, dataColor);
             }
@@ -389,16 +408,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(_mm.get());
-                const auto registerAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) + QString(" %1").arg(addrBase): "??";
-                const auto registerValue = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->value()) : "??";
+                const auto registerAddress = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->address()) + QString(" %1").arg(addrBase): "??";
+                const auto registerValue = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->value()) : "??";
                 addField(tr("Register Address"), registerAddress, dataColor);
                 addField(tr("Register Value"), registerValue, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteSingleRegisterResponse*>(_mm.get());
-                const auto registerAddress = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->address()) + QString(" %1").arg(addrBase) : "??";
-                const auto registerValue = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->value()) : "??";
+                const auto registerAddress = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->address()) + QString(" %1").arg(addrBase) : "??";
+                const auto registerValue = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->value()) : "??";
                 addField(tr("Register Address"), registerAddress, dataColor);
                 addField(tr("Register Value"), registerValue, dataColor);
             }
@@ -408,7 +427,7 @@ void ModbusMessageWidget::update()
             if(!_mm->isRequest())
             {
                 auto resp = reinterpret_cast<const ReadExceptionStatusResponse*>(_mm.get());
-                const auto outputData = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->outputData()) : "?";
+                const auto outputData = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->outputData()) : "?";
                 addField(tr("Output Data"), outputData, dataColor);
             }
             break;
@@ -417,16 +436,16 @@ void ModbusMessageWidget::update()
             if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const DiagnosticsRequest*>(_mm.get());
-                const auto subFunc = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->subfunc()) : "??";
-                const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, req->data()) : "???";
+                const auto subFunc = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->subfunc()) : "??";
+                const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, req->data()) : "???";
                 addField(tr("Sub-function"), subFunc, dataColor);
                 addField(tr("Data"), data, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const DiagnosticsResponse*>(_mm.get());
-                const auto subFunc = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->subfunc()) : "??";
-                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->data()) : "???";
+                const auto subFunc = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->subfunc()) : "??";
+                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->data()) : "???";
                 addField(tr("Sub-function"), subFunc, dataColor);
                 addField(tr("Data"), data, dataColor);
             }
@@ -436,8 +455,8 @@ void ModbusMessageWidget::update()
             if(!_mm->isRequest())
             {
                 auto resp = reinterpret_cast<const GetCommEventCounterResponse*>(_mm.get());
-                const auto status = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->status()) : "??";
-                const auto eventCount = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->eventCount()) : "??";
+                const auto status = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->status()) : "??";
+                const auto eventCount = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->eventCount()) : "??";
                 addField(tr("Status"), status, dataColor);
                 addField(tr("Event Count"), eventCount, dataColor);
             }
@@ -447,11 +466,11 @@ void ModbusMessageWidget::update()
             if(!_mm->isRequest())
             {
                 auto resp = reinterpret_cast<const GetCommEventLogResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto status = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->status()) : "??";
-                const auto eventCount = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->eventCount()) : "??";
-                const auto messageCount = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->messageCount()) : "??";
-                const auto events = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->events()) : "???";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto status = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->status()) : "??";
+                const auto eventCount = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->eventCount()) : "??";
+                const auto messageCount = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->messageCount()) : "??";
+                const auto events = resp->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->events()) : "???";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Status"), status, dataColor);
                 addField(tr("Event Count"), eventCount, dataColor);
@@ -464,10 +483,10 @@ void ModbusMessageWidget::update()
             if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(_mm.get());
-                const auto startAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto quantity = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->quantity()) : "??";
-                const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->byteCount()) : "?";
-                const auto values = req->isValid() ? formatUInt8Array(_dataDisplayMode, req->values()) : "???";
+                const auto startAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto quantity = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->quantity()) : "??";
+                const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, req->byteCount()) : "?";
+                const auto values = req->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, req->values()) : "???";
                 addField(tr("Starting Address"), startAddr, dataColor);
                 addField(tr("Quantity of Outputs"), quantity, dataColor);
                 addField(tr("Byte Count"), byteCount, dataColor);
@@ -476,8 +495,8 @@ void ModbusMessageWidget::update()
             else
             {
                 auto resp = reinterpret_cast<const WriteMultipleCoilsResponse*>(_mm.get());
-                const auto startAddr = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto quantity = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->quantity()) : "??";
+                const auto startAddr = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto quantity = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->quantity()) : "??";
                 addField(tr("Starting Address"), startAddr, dataColor);
                 addField(tr("Quantity of Outputs"), quantity, dataColor);
             }
@@ -487,10 +506,10 @@ void ModbusMessageWidget::update()
             if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(_mm.get());
-                const auto startAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto quantity = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->quantity()) : "??";
-                const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->byteCount()) : "?";
-                const auto values = req->isValid() ? formatUInt16Array(_dataDisplayMode, req->values(), _byteOrder) : "???";
+                const auto startAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto quantity = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->quantity()) : "??";
+                const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, req->byteCount()) : "?";
+                const auto values = req->isValid() ? formatUInt16Array(_dataDisplayMode, _showLeadingZeros, req->values(), _byteOrder) : "???";
                 addField(tr("Starting Address"), startAddr, dataColor);
                 addField(tr("Quantity of Registers"), quantity, dataColor);
                 addField(tr("Byte Count"), byteCount, dataColor);
@@ -499,8 +518,8 @@ void ModbusMessageWidget::update()
             else
             {
                 auto resp = reinterpret_cast<const WriteMultipleRegistersResponse*>(_mm.get());
-                const auto startAddr = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->startAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto quantity = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->quantity()) : "??";
+                const auto startAddr = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->startAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto quantity = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->quantity()) : "??";
                 addField(tr("Starting Address"), startAddr, dataColor);
                 addField(tr("Quantity of Registers"), quantity, dataColor);
             }
@@ -510,8 +529,8 @@ void ModbusMessageWidget::update()
         if(!_mm->isRequest())
             {
                 auto resp = reinterpret_cast<const ReportServerIdResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->data()) : "?";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->data()) : "?";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Data"), data, dataColor);
             }
@@ -521,16 +540,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadFileRecordRequest*>(_mm.get());
-                const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->byteCount()) : "?";
-                const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, req->data()) : "?";
+                const auto byteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, req->byteCount()) : "?";
+                const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, req->data()) : "?";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Data"), data, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadFileRecordResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->data()) : "?";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->data()) : "?";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Data"), data, dataColor);
             }
@@ -540,16 +559,16 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const WriteFileRecordRequest*>(_mm.get());
-                const auto length = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->length()) : "?";
-                const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, req->data()) : "???";
+                const auto length = req->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, req->length()) : "?";
+                const auto data = req->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, req->data()) : "???";
                 addField(tr("Request Data Length"), length, dataColor);
                 addField(tr("Data"), data, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const WriteFileRecordResponse*>(_mm.get());
-                const auto length = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->length()) : "?";
-                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, resp->data()) : "???";
+                const auto length = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->length()) : "?";
+                const auto data = resp->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, resp->data()) : "???";
                 addField(tr("Response Data Length"), length, dataColor);
                 addField(tr("Data"), data, dataColor);
             }
@@ -559,9 +578,9 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(_mm.get());
-                const auto address = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->address()) + QString(" %1").arg(addrBase) : "??";
-                const auto andMask = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->andMask()) : "??";
-                const auto orMask = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->orMask()) : "??";
+                const auto address = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->address()) + QString(" %1").arg(addrBase) : "??";
+                const auto andMask = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->andMask()) : "??";
+                const auto orMask = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->orMask()) : "??";
                 addField(tr("Address"), address, dataColor);
                 addField(tr("And Mask"), andMask, dataColor);
                 addField(tr("Or Mask"), orMask, dataColor);
@@ -569,9 +588,9 @@ void ModbusMessageWidget::update()
             else
             {
                 auto resp = reinterpret_cast<const MaskWriteRegisterResponse*>(_mm.get());
-                const auto address = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->address()) + QString(" %1").arg(addrBase): "??";
-                const auto andMask = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->andMask()) : "??";
-                const auto orMask = resp->isValid() ? formatUInt16Value(_dataDisplayMode, resp->orMask()) : "??";
+                const auto address = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->address()) + QString(" %1").arg(addrBase): "??";
+                const auto andMask = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->andMask()) : "??";
+                const auto orMask = resp->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, resp->orMask()) : "??";
                 addField(tr("Address"), address, dataColor);
                 addField(tr("And Mask"), andMask, dataColor);
                 addField(tr("Or Mask"), orMask, dataColor);
@@ -582,12 +601,12 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(_mm.get());
-                const auto readStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->readStartAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto readLength = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->readLength()) : "??";
-                const auto writeStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->writeStartAddress()) + QString(" %1").arg(addrBase) : "??";
-                const auto writeLength = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->writeLength()) : "??";
-                const auto writeByteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, req->writeByteCount()) : "?";
-                const auto writeValues = req->isValid() ? formatUInt16Array(_dataDisplayMode, req->writeValues(), _byteOrder) : "???";
+                const auto readStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->readStartAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto readLength = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->readLength()) : "??";
+                const auto writeStartAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->writeStartAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto writeLength = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->writeLength()) : "??";
+                const auto writeByteCount = req->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, req->writeByteCount()) : "?";
+                const auto writeValues = req->isValid() ? formatUInt16Array(_dataDisplayMode, _showLeadingZeros, req->writeValues(), _byteOrder) : "???";
                 addField(tr("Read Starting Address"), readStartAddr, dataColor);
                 addField(tr("Quantity to Read"), readLength, dataColor);
                 addField(tr("Write Starting Address"), writeStartAddr, dataColor);
@@ -598,8 +617,8 @@ void ModbusMessageWidget::update()
             else
             {
                 auto resp = reinterpret_cast<const ReadWriteMultipleRegistersResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()): "?";
-                const auto values = resp->isValid() ? formatUInt16Array(_dataDisplayMode, resp->values(), _byteOrder) : "???";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()): "?";
+                const auto values = resp->isValid() ? formatUInt16Array(_dataDisplayMode, _showLeadingZeros, resp->values(), _byteOrder) : "???";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("Registers Value"), values, dataColor);
             }
@@ -609,15 +628,15 @@ void ModbusMessageWidget::update()
         if(_mm->isRequest())
             {
                 auto req = reinterpret_cast<const ReadFifoQueueRequest*>(_mm.get());
-                const auto fifoAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, req->fifoAddress()) + QString(" %1").arg(addrBase) : "??";
+                const auto fifoAddr = req->isValid() ? formatUInt16Value(_dataDisplayMode, _showLeadingZeros, req->fifoAddress()) + QString(" %1").arg(addrBase) : "??";
                 addField(tr("FIFO Point Address"), fifoAddr, dataColor);
             }
             else
             {
                 auto resp = reinterpret_cast<const ReadFifoQueueResponse*>(_mm.get());
-                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->byteCount()) : "?";
-                const auto fifoCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, resp->fifoCount()) : "?";
-                const auto fifoValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, resp->fifoValue(), _byteOrder) : "???";
+                const auto byteCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->byteCount()) : "?";
+                const auto fifoCount = resp->isValid() ? formatUInt8Value(_dataDisplayMode, _showLeadingZeros, resp->fifoCount()) : "?";
+                const auto fifoValue = resp->isValid() ? formatUInt16Array(_dataDisplayMode, _showLeadingZeros, resp->fifoValue(), _byteOrder) : "???";
                 addField(tr("Byte Count"), byteCount, dataColor);
                 addField(tr("FIFO Count"), fifoCount, dataColor);
                 addField(tr("FIFO Value Register"), fifoValue, dataColor);
@@ -626,7 +645,7 @@ void ModbusMessageWidget::update()
 
         default:
         {
-            const auto data = _mm->isValid() ? formatUInt8Array(_dataDisplayMode, _mm->adu()->pdu().data()) : "???";
+            const auto data = _mm->isValid() ? formatUInt8Array(_dataDisplayMode, _showLeadingZeros, _mm->adu()->pdu().data()) : "???";
             if(!data.isEmpty())
                 addField(tr("Data"), data, dataColor);
         }

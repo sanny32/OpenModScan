@@ -94,6 +94,7 @@ private slots:
     void on_actionUserMsg_triggered();
 
     /* View menu slots */
+    void on_actionTabbedView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();
@@ -138,10 +139,13 @@ private:
     FormModSca* firstMdiChild() const;
 
     FormModSca* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSca* frm);
+    void saveMdiChild(FormModSca* frm, SerializationFormat format);
+    void closeMdiChild(FormModSca* frm);
+
+    void saveAs(FormModSca* frm, SerializationFormat format);
 
     void loadConfig(const QString& filename);
-    void saveConfig(const QString& filename);
+    void saveConfig(const QString& filename, SerializationFormat format);
 
     void loadSettings();
     void saveSettings();
@@ -166,6 +170,7 @@ private:
     RecentFileActionList* _recentFileActionList;
     QPrinter* _selectedPrinter;
     DataSimulator* _dataSimulator;
+    QString _savePath;
 
     quint32 _lastWriteSingleCoilAddress = 0;
     quint32 _lastWriteHoldingRegisterAddress = 0;

@@ -1,4 +1,5 @@
 #include "modbuslimits.h"
+#include "quintvalidator.h"
 #include "displaydefinition.h"
 #include "dialogdisplaydefinition.h"
 #include "ui_dialogdisplaydefinition.h"
@@ -14,6 +15,13 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     , ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
+
+    ui->lineEditFormName->setText(dd.FormName);
+
+    ui->comboBoxColumnsDistance->setValidator(new QUIntValidator(1, 32, this));
+    ui->comboBoxColumnsDistance->setEditText(QString::number(dd.DataViewColumnsDistance));
+    ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
+
     ui->lineEditScanRate->setInputRange(20, 36000000);
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
@@ -46,6 +54,7 @@ DialogDisplayDefinition::~DialogDisplayDefinition()
 ///
 void DialogDisplayDefinition::accept()
 {
+    _displayDefinition.FormName = ui->lineEditFormName->text();
     _displayDefinition.DeviceId = ui->lineEditSlaveAddress->value<int>();
     _displayDefinition.PointAddress = ui->lineEditPointAddress->value<int>();
     _displayDefinition.PointType = ui->comboBoxPointType->currentPointType();
@@ -54,6 +63,8 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.LogViewLimit = ui->lineEditLogLimit->value<int>();
     _displayDefinition.AutoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    _displayDefinition.DataViewColumnsDistance = ui->comboBoxColumnsDistance->currentText().toUInt();
+    _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
 
     QFixedSizeDialog::accept();
 }

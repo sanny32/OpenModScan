@@ -29,7 +29,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="childrenCollapsible">
       <bool>false</bool>
@@ -39,10 +39,10 @@
        <bool>true</bool>
       </property>
       <property name="frameShape">
-       <enum>QFrame::WinPanel</enum>
+       <enum>QFrame::Shape::WinPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
+       <enum>QFrame::Shadow::Sunken</enum>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <property name="spacing">
@@ -62,10 +62,10 @@
          <item>
           <widget class="QFrame" name="frame_5">
            <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
+            <enum>QFrame::Shape::NoFrame</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
+            <enum>QFrame::Shadow::Raised</enum>
            </property>
            <layout class="QFormLayout" name="formLayout">
             <property name="leftMargin">
@@ -105,7 +105,7 @@
                </size>
               </property>
               <property name="contextMenuPolicy">
-               <enum>Qt::NoContextMenu</enum>
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
               </property>
               <property name="acceptDrops">
                <bool>false</bool>
@@ -157,7 +157,7 @@
                </size>
               </property>
               <property name="contextMenuPolicy">
-               <enum>Qt::NoContextMenu</enum>
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
               </property>
               <property name="acceptDrops">
                <bool>false</bool>
@@ -170,7 +170,7 @@
          <item>
           <widget class="Line" name="line1">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
           </widget>
          </item>
@@ -183,7 +183,7 @@
             </sizepolicy>
            </property>
            <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
+            <enum>QFrame::Shape::NoFrame</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <property name="leftMargin">
@@ -223,25 +223,22 @@
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>32</width>
+                  <width>35</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="contextMenuPolicy">
-                 <enum>Qt::NoContextMenu</enum>
+                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
                 </property>
                 <property name="acceptDrops">
                  <bool>false</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
                 </property>
                </widget>
               </item>
               <item>
                <spacer name="horizontalSpacer_2">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -256,10 +253,10 @@
             <item>
              <spacer name="verticalSpacer_2">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeType">
-               <enum>QSizePolicy::Fixed</enum>
+               <enum>QSizePolicy::Policy::Fixed</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -275,7 +272,7 @@
                <string>MODBUS Point Type</string>
               </property>
               <property name="alignment">
-               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -294,7 +291,7 @@
                </size>
               </property>
               <property name="focusPolicy">
-               <enum>Qt::StrongFocus</enum>
+               <enum>Qt::FocusPolicy::StrongFocus</enum>
               </property>
               <property name="frame">
                <bool>true</bool>
@@ -304,7 +301,7 @@
             <item>
              <spacer name="verticalSpacer">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -320,7 +317,7 @@
          <item>
           <widget class="Line" name="line2">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
           </widget>
          </item>
@@ -332,7 +329,7 @@
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -352,10 +349,10 @@
        </sizepolicy>
       </property>
       <property name="frameShape">
-       <enum>QFrame::WinPanel</enum>
+       <enum>QFrame::Shape::WinPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
+       <enum>QFrame::Shadow::Sunken</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <property name="spacing">

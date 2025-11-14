@@ -15,6 +15,7 @@ struct ModbusWriteParams
     quint32 Address;
     QVariant Value;
     DataDisplayMode DisplayMode;
+    AddressSpace AddrSpace;
     ByteOrder Order;
     QString Codepage;
     bool ZeroBasedAddress;

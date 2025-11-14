@@ -43,10 +43,10 @@ NumericLineEdit::NumericLineEdit(NumericLineEdit::InputMode mode, QWidget *paren
 }
 
 ///
-/// \brief NumericLineEdit::paddingZeroes
+/// \brief NumericLineEdit::leadingZeroes
 /// \return
 ///
-bool NumericLineEdit::paddingZeroes() const
+bool NumericLineEdit::leadingZeroes() const
 {
     return _paddingZeroes;
 }
@@ -55,7 +55,7 @@ bool NumericLineEdit::paddingZeroes() const
 /// \brief NumberLineEdit::enablePaddingZero
 /// \param on
 ///
-void NumericLineEdit::setPaddingZeroes(bool on)
+void NumericLineEdit::setLeadingZeroes(bool on)
 {
     _paddingZeroes = on;
 }

@@ -42,7 +42,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -168,6 +168,8 @@
      <addaction name="actionChineseCn"/>
      <addaction name="actionChineseZh"/>
     </widget>
+    <addaction name="actionTabbedView"/>
+    <addaction name="separator"/>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
     <addaction name="actionDisplayBar"/>
@@ -1004,6 +1006,14 @@
    </property>
    <property name="text">
     <string>Write Bar</string>
+   </property>
+  </action>
+  <action name="actionTabbedView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tabbed View</string>
    </property>
   </action>
  </widget>

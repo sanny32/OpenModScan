@@ -202,10 +202,11 @@ public:
     ///
     /// \brief toString
     /// \param mode
+    /// \param leadingZeros
     /// \return
     ///
-    QString toString(DataDisplayMode mode) const {
-        return formatUInt8Array(mode, *this);
+    QString toString(DataDisplayMode mode, bool leadingZeros = true) const {
+        return formatUInt8Array(mode, leadingZeros, *this);
     }
 
     ///

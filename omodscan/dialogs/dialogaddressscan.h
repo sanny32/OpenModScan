@@ -32,8 +32,14 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-    AddressBase addressBse() const;
+    AddressBase addressBase() const;
     void setAddressBase(AddressBase base);
+
+    AddressSpace addressSpace() const;
+    void setAddressSpace(AddressSpace space);
+
+    bool showLeadingZeros() const;
+    void setShowLeadingZeros(bool value);
 
     void reset(const ModbusDataUnit& data, int columns = 10){
         beginResetModel();
@@ -68,8 +74,10 @@ private:
     ModbusDataUnit _data;
     bool _hexView = false;
     bool _hexAddress = false;
+    AddressSpace _addressSpace = AddressSpace::Addr6Digits;
     AddressBase _addressBase = AddressBase::Base1;
     ByteOrder _byteOrder = ByteOrder::Direct;
+    bool _showLeadingZeros = true;
 };
 
 ///
@@ -86,8 +94,11 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
-    AddressBase addressBse() const;
+    AddressBase addressBase() const;
     void setAddressBase(AddressBase base);
+
+    AddressSpace addressSpace() const;
+    void setAddressSpace(AddressSpace space);
 
     void append(quint16 addr, QModbusDataUnit::RegisterType type, QSharedPointer<const ModbusMessage> msg) {
         if(msg == nullptr) return;
@@ -127,6 +138,7 @@ private:
 private:
     bool _hexView = false;
     bool _hexAddress = false;
+    AddressSpace _addressSpace = AddressSpace::Addr6Digits;
     AddressBase _addressBase = AddressBase::Base1;
     QVector<LogViewItem> _items;
 };

@@ -644,7 +644,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ConnectionDetails& c
                 break;
         }
 
-        if(xml.readNextStartElement() && xml.name() == QLatin1String("ModbusParams")) {
+        if(xml.readNextStartElement() && xml.name() == QLatin1String("ModbusProtocolSelections")) {
             xml >> cd.ModbusParams;
         }
 

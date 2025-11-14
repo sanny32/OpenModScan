@@ -353,9 +353,14 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    filters << tr("All files (*)");
+
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     openFile(filename);
 }
 
@@ -512,7 +517,7 @@ void MainWindow::on_actionQuickConnect_triggered()
 ///
 void MainWindow::on_actionEnable_triggered()
 {
-    DialogAutoStart dlg(_fileAutoStart, this);
+    DialogAutoStart dlg(_fileAutoStart, _savePath, this);
     _autoStart = dlg.exec() == QDialog::Accepted;
 }
 

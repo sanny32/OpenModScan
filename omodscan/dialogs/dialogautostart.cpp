@@ -6,12 +6,14 @@
 ///
 /// \brief DialogAutoStart::DialogAutoStart
 /// \param filepath
+/// \param savePath
 /// \param parent
 ///
-DialogAutoStart::DialogAutoStart(QString& filepath, QWidget *parent) :
+DialogAutoStart::DialogAutoStart(QString& filepath, const QString& savePath, QWidget *parent) :
       QFixedSizeDialog(parent)
     , ui(new Ui::DialogAutoStart)
     ,_filepath(filepath)
+    ,_savePath(savePath)
 {
     ui->setupUi(this);
     ui->lineEditPath->setText(_filepath);
@@ -39,7 +41,11 @@ void DialogAutoStart::accept()
 ///
 void DialogAutoStart::on_pushButtonBrowse_clicked()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _filepath, "All files (*)");
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    filters << tr("All files (*)");
+
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _filepath.isEmpty() ? _savePath : _filepath, filters.join(";;"));
     if(filename.isEmpty()) return;
 
     ui->lineEditPath->setText(filename);

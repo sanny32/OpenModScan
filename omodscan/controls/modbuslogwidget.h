@@ -53,7 +53,7 @@ public:
     int rowCount() const;
     QModelIndex index(int row);
 
-    QSharedPointer<const ModbusMessage> addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request);
+    void addItem(QSharedPointer<const ModbusMessage> msg);
     QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
 
     DataDisplayMode dataDisplayMode() const;

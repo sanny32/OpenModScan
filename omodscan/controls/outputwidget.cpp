@@ -673,24 +673,11 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 
 ///
 /// \brief OutputWidget::updateTraffic
-/// \param request
-/// \param deviceId
-/// \param transactionId
+/// \param msg
 ///
-void OutputWidget::updateTraffic(const QModbusRequest& request, int deviceId, int transactionId)
+void OutputWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
 {
-    updateLogView(true, deviceId, transactionId, request);
-}
-
-///
-/// \brief OutputWidget::updateTraffic
-/// \param response
-/// \param deviceId
-/// \param transactionId
-///
-void OutputWidget::updateTraffic(const QModbusResponse& response, int deviceId, int transactionId)
-{
-    updateLogView(false, deviceId, transactionId, response);
+    updateLogView(msg);
 }
 
 ///
@@ -966,21 +953,18 @@ void OutputWidget::hideModbusMessage()
 
 ///
 /// \brief OutputWidget::updateLogView
-/// \param request
-/// \param server
-/// \param transactionId
-/// \param pdu
+/// \param msg
 ///
-void OutputWidget::updateLogView(bool request, int server, int transactionId, const QModbusPdu& pdu)
+void OutputWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
-    auto msg = ui->logView->addItem(pdu, _protocol, server, transactionId, QDateTime::currentDateTime(), request);
+    ui->logView->addItem(msg);
     if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
         const auto str = QString("%1: %2 %3 %4").arg(
-                (msg->isRequest()?  "Tx" : "Rx"),
-                msg->timestamp().toString(Qt::ISODateWithMs),
-                (msg->isRequest()?  "<<" : ">>"),
-                msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
+            (msg->isRequest()?  "Tx" : "Rx"),
+            msg->timestamp().toString(Qt::ISODateWithMs),
+            (msg->isRequest()?  "<<" : ">>"),
+            msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
         captureString(str);
     }
 }

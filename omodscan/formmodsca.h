@@ -116,8 +116,9 @@ private slots:
     void on_timeout();
     void on_modbusConnected(const ConnectionDetails& cd);
     void on_modbusDisconnected(const ConnectionDetails& cd);
-    void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request);
+    void on_modbusReply(const QModbusReply* const reply);
+    void on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
+    void on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -132,10 +133,9 @@ private slots:
 
 private:
     void beginUpdate();
-    bool isValidReply(const QModbusReply* reply) const;
+    bool isValidReply(const QModbusReply* const reply) const;
 
-    void logReply(const QModbusReply* reply);
-    void logRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request);
+    void logModbusMessage(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
 
 private:
     Ui::FormModSca *ui;

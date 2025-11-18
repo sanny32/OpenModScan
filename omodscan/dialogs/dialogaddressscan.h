@@ -280,8 +280,11 @@ protected:
 private slots:
     void on_awake();
     void on_timeout();
-    void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& data);
+
+    void on_modbusReply(const QModbusReply* const reply);
+    void on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
+    void on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
+
     void on_checkBoxHexView_toggled(bool);
     void on_checkBoxShowValid_toggled(bool);
     void on_lineEditStartAddress_valueChanged(const QVariant& value);
@@ -309,8 +312,7 @@ private:
     void updateProgress();
     void updateTableView(int pointAddress, QVector<quint16> values);
 
-    void updateLogView(int deviceId, int transactionId, const QModbusRequest& request);
-    void updateLogView(const QModbusReply* reply);
+    void updateLogView(QSharedPointer<const ModbusMessage> msg);
 
     void exportPdf(const QString& filename);
     void exportCsv(const QString& filename);

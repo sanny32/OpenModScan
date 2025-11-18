@@ -25,10 +25,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     /// \param request
     ///
-    explicit ModbusMessage(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request)
+    explicit ModbusMessage(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
         :_protocol(protocol)
         ,_request(request)
         ,_timestamp(timestamp)
@@ -53,7 +54,7 @@ public:
             {
                 QByteArray data;
                 QDataStream dataStream(&data, QIODevice::Append);
-                dataStream << quint16(0);
+                dataStream << quint16(transactionId);
                 dataStream << quint16(0);
                 dataStream << quint16(pdu.size() + 1);
                 dataStream << quint8(deviceId);
@@ -102,11 +103,12 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     /// \param request
     /// \return
     ///
-    static QSharedPointer<const ModbusMessage> create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request);
+    static QSharedPointer<const ModbusMessage> create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request);
 
     ///
     /// \brief create

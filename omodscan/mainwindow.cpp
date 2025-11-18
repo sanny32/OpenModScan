@@ -806,7 +806,7 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const quint16 value = _modbusClient.readRegister(QModbusDataUnit::Coils, _lastWriteSingleCoilAddress, dd.DeviceId);
+    const quint16 value = _modbusClient.syncReadRegister(QModbusDataUnit::Coils, _lastWriteSingleCoilAddress, dd.DeviceId);
 
     ModbusSimulationParams simParams(SimulationMode::Disabled);
     ModbusWriteParams params = { dd.DeviceId, _lastWriteSingleCoilAddress, value, mode,dd.AddrSpace, byteOrder, codepage, dd.ZeroBasedAddress };
@@ -843,7 +843,7 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const quint16 value = _modbusClient.readRegister(QModbusDataUnit::HoldingRegisters, _lastWriteHoldingRegisterAddress, dd.DeviceId);
+    const quint16 value = _modbusClient.syncReadRegister(QModbusDataUnit::HoldingRegisters, _lastWriteHoldingRegisterAddress, dd.DeviceId);
 
     ModbusSimulationParams simParams(SimulationMode::Disabled);
     ModbusWriteParams params = { dd.DeviceId, _lastWriteHoldingRegisterAddress, value, mode, dd.AddrSpace, byteOrder, codepage, dd.ZeroBasedAddress };
@@ -872,7 +872,7 @@ void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
     const auto mode = frm->dataDisplayMode();
     const auto byteOrder = frm->byteOrder();
     const auto codepage = frm->codepage();
-    const quint16 value = _modbusClient.readRegister(dd.PointType, _lastWriteHoldingRegisterBitsAddress, dd.DeviceId);
+    const quint16 value = _modbusClient.syncReadRegister(dd.PointType, _lastWriteHoldingRegisterBitsAddress, dd.DeviceId);
 
     ModbusWriteParams params = { dd.DeviceId, _lastWriteHoldingRegisterBitsAddress, value, mode, dd.AddrSpace, byteOrder, codepage, dd.ZeroBasedAddress, &_modbusClient };
     DialogWriteHoldingRegisterBits dlg(params, frm->displayHexAddresses(), this);

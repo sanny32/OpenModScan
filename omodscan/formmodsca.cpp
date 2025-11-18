@@ -55,16 +55,16 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->outputWidget->setFocus();
     connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSca::captureError);
 
-    setPollState(Off);
+    setPollState(PollState::Off);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
     connect(ui->statisticWidget, &StatisticWidget::pollStateChanged, this, [&](PollState state) {
         switch (state) {
-        case Off: break;
-        case Paused:
+        case PollState::Off: break;
+        case PollState::Paused:
             ui->outputWidget->setStatus(tr("Device polling paused..."));
             _timer.stop();
         break;
-        case Running:
+        case PollState::Running:
             ui->outputWidget->setStatus("");
             beginUpdate();
             _timer.start();
@@ -73,6 +73,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     });
 
     connect(&_modbusClient, &ModbusClient::modbusRequest, this, &FormModSca::on_modbusRequest);
+    connect(&_modbusClient, &ModbusClient::modbusResponse, this, &FormModSca::on_modbusResponse);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &FormModSca::on_modbusReply);
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &FormModSca::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &FormModSca::on_modbusDisconnected);
@@ -588,7 +589,7 @@ void FormModSca::on_timeout()
 void FormModSca::beginUpdate()
 {
     if(_modbusClient.state() != QModbusDevice::ConnectedState) {
-        setPollState(Off);
+        setPollState(PollState::Off);
         return;
     }
 
@@ -599,9 +600,9 @@ void FormModSca::beginUpdate()
     else
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
-    if(pollState() == Off) {
+    if(pollState() == PollState::Off) {
         _timer.start();
-        setPollState(Running);
+        setPollState(PollState::Running);
     }
 }
 
@@ -610,7 +611,7 @@ void FormModSca::beginUpdate()
 /// \param reply
 /// \return
 ///
-bool FormModSca::isValidReply(const QModbusReply* reply) const
+bool FormModSca::isValidReply(const QModbusReply* const reply) const
 {
     const auto dd = displayDefinition();
     const auto data = reply->result();
@@ -634,38 +635,40 @@ bool FormModSca::isValidReply(const QModbusReply* reply) const
 }
 
 ///
-/// \brief FormModSca::logRequest
-/// \param requestId
-/// \param deviceId
-/// \param transactionId
-/// \param request
+/// \brief FormModSca::logModbusMessage
+/// \param requestGroupId
+/// \param msg
 ///
-void FormModSca::logRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
+void FormModSca::logModbusMessage(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
 {
-    if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
-        ui->outputWidget->updateTraffic(request, deviceId, transactionId);
-    else if(requestId == 0 && isActive())
-        ui->outputWidget->updateTraffic(request, deviceId, transactionId);
+    if(!msg)
+        return;
+
+    if(requestGroupId == _formId && msg->deviceId() == ui->lineEditDeviceId->value<int>())
+        ui->outputWidget->updateTraffic(msg);
+    else if(requestGroupId == 0 && isActive())
+        ui->outputWidget->updateTraffic(msg);
 }
 
 ///
 /// \brief FormModSca::on_modbusRequest
 /// \param requestId
-/// \param deviceId
-/// \param transactionId
-/// \param request
+/// \param msg
 ///
-void FormModSca::on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
+void FormModSca::on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
 {
-   logRequest(requestId, deviceId, transactionId, request);
+    if(!msg)
+        return;
 
-    switch(request.functionCode())
+    logModbusMessage(requestGroupId, msg);
+
+    switch(msg->functionCode())
     {
         case QModbusPdu::ReadCoils:
         case QModbusPdu::ReadDiscreteInputs:
         case QModbusPdu::ReadHoldingRegisters:
         case QModbusPdu::ReadInputRegisters:
-            if(requestId == _formId)
+            if(requestGroupId == _formId)
                 ui->statisticWidget->increaseNumberOfPolls();
         break;
 
@@ -675,40 +678,27 @@ void FormModSca::on_modbusRequest(int requestId, int deviceId, int transactionId
 }
 
 ///
-/// \brief FormModSca::logReply
-/// \param reply
+/// \brief FormModSca::on_modbusResponse
+/// \param requestGroupId
+/// \param msg
 ///
-void FormModSca::logReply(const QModbusReply* reply)
+void FormModSca::on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
 {
-    if(!reply) return;
-
-    if(reply->error() != QModbusDevice::NoError &&
-        reply->error() != QModbusDevice::ProtocolError)
-    {
+    if(!msg)
         return;
-    }
 
-    const auto deviceId = reply->serverAddress();
-    const auto requestId = reply->property("RequestId").toInt();
-    const auto transactionId = reply->property("TransactionId").toInt();
-
-    if(requestId == _formId && deviceId == ui->lineEditDeviceId->value<int>())
-        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress(), transactionId);
-    else if(requestId == 0 && isActive())
-        ui->outputWidget->updateTraffic(reply->rawResult(), reply->serverAddress(), transactionId);
+    logModbusMessage(requestGroupId, msg);
 }
 
 ///
 /// \brief FormModSca::on_modbusReply
 /// \param reply
 ///
-void FormModSca::on_modbusReply(QModbusReply* reply)
+void FormModSca::on_modbusReply(const QModbusReply* const reply)
 {
     if(!reply) return;
 
-    logReply(reply);
-
-    const auto response = reply->rawResult();
+    const QModbusResponse response = reply->rawResult();
     const bool hasError = reply->error() != QModbusDevice::NoError;
 
     switch(response.functionCode())
@@ -724,7 +714,7 @@ void FormModSca::on_modbusReply(QModbusReply* reply)
         return;
     }
 
-    if(reply->property("RequestId").toInt() != _formId)
+    if(reply->property("RequestGroupId").toInt() != _formId)
     return;
 
     if (!hasError)
@@ -773,7 +763,7 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
 void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
     _timer.stop();
-    setPollState(Off);
+    setPollState(PollState::Off);
     ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
 }
 

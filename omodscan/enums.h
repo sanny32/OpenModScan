@@ -286,7 +286,7 @@ DECLARE_ENUM_STRINGS(SimulationMode,
 ///
 /// \brief The PollState enum
 ///
-enum PollState {
+enum class PollState {
     Off,
     Running,
     Paused

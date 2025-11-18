@@ -591,22 +591,31 @@ void DialogAddressScan::on_logView_clicked(const QModelIndex &index)
 
 ///
 /// \brief DialogAddressScan::on_modbusRequest
-/// \param requestId
-/// \param deviceId
-/// \param transactionId
-/// \param request
+/// \param requestGroupId
+/// \param msg
 ///
-void DialogAddressScan::on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
+void DialogAddressScan::on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
 {
-    if(requestId == -1)
-        updateLogView(deviceId, transactionId, request);
+    if(requestGroupId == -1)
+        updateLogView(msg);
+}
+
+///
+/// \brief DialogAddressScan::on_modbusResponse
+/// \param requestGroupId
+/// \param msg
+///
+void DialogAddressScan::on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
+{
+    if(requestGroupId == -1)
+        updateLogView(msg);
 }
 
 ///
 /// \brief DialogAddressScan::on_modbusReply
 /// \param reply
 ///
-void DialogAddressScan::on_modbusReply(QModbusReply* reply)
+void DialogAddressScan::on_modbusReply(const QModbusReply* const reply)
 {
     if(!_scanning || !reply) return;
 
@@ -616,7 +625,6 @@ void DialogAddressScan::on_modbusReply(QModbusReply* reply)
     }
 
     updateProgress();
-    updateLogView(reply);
 
     if (reply->error() == QModbusDevice::NoError)
         updateTableView(reply->result().startAddress(), reply->result().values());
@@ -861,54 +869,23 @@ void DialogAddressScan::updateTableView(int pointAddress, QVector<quint16> value
 
 ///
 /// \brief DialogAddressScan::updateLogView
-/// \param deviceId
-/// \param transactionId
-/// \param request
+/// \param msg
 ///
-void DialogAddressScan::updateLogView(int deviceId, int transactionId, const QModbusRequest& request)
+void DialogAddressScan::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
+    if(!msg)
+        return;
+
     quint16 pointAddress;
-    request.decodeData(&pointAddress);
-
-    auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
-    auto msg = ModbusMessage::create(request, protocol, deviceId, QDateTime::currentDateTime(), true);
-
-    if(protocol == ModbusMessage::Tcp)
-        ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
+    msg->adu()->pdu().decodeData(&pointAddress);
 
     const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
     pointAddress += (addressBase == AddressBase::Base0 ? 0 : 1);
 
-    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(), msg);
-}
-
-///
-/// \brief DialogAddressScan::updateLogView
-/// \param reply
-///
-void DialogAddressScan::updateLogView(const QModbusReply* reply)
-{
-    if(!reply)
-        return;
-
-    const auto deviceId = reply->serverAddress();
-    const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
-    const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + (addressBase == AddressBase::Base0 ? 0 : 1);
-    const auto transactionId = reply->property("TransactionId").toInt();
-    const auto pdu = reply->rawResult();
-
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
-    auto msg = ModbusMessage::create(pdu, protocol, deviceId, QDateTime::currentDateTime(), false);
-
-    if(protocol == ModbusMessage::Tcp)
-        ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
-
     proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(), msg);
 }
+
 
 ///
 /// \brief DialogAddressScan::exportPdf

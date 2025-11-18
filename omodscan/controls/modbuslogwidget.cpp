@@ -234,18 +234,11 @@ QModelIndex ModbusLogWidget::index(int row)
 /// \param request
 /// \return
 ///
-QSharedPointer<const ModbusMessage> ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
+void ModbusLogWidget::addItem(QSharedPointer<const ModbusMessage> msg)
 {
-    QSharedPointer<const ModbusMessage> msg;
-    if(model())
-    {
-        msg = ModbusMessage::create(pdu, protocol, deviceId, timestamp, request);
-        if(protocol == ModbusMessage::Tcp)
-            ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
-
+    if(model()) {
         ((ModbusLogModel*)model())->append(msg);
     }
-    return msg;
 }
 
 ///

@@ -2,10 +2,10 @@
 #define MODBUSCLIENT_H
 
 #include <QModbusClient>
+#include "modbusmessage.h"
 #include "connectiondetails.h"
 #include "modbuswriteparams.h"
-
-Q_DECLARE_METATYPE(QModbusDataUnit)
+#include "modbusclientprivate.h"
 
 ///
 /// \brief The ModbusClient class
@@ -33,16 +33,18 @@ public:
     uint numberOfRetries() const;
     void setNumberOfRetries(uint number);
 
-    void sendRawRequest(const QModbusRequest& request, int server, int requestId);
-    void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId);
-    quint16 readRegister(QModbusDataUnit::RegisterType pointType, int address, int server);
-    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId);
-    void maskWriteRegister(const ModbusMaskWriteParams& params, int requestId);
+    void sendRawRequest(const QModbusRequest& request, int server, int requestGroupId);
+    void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestGroupId);
+    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestGroupId);
+    void maskWriteRegister(const ModbusMaskWriteParams& params, int requestGroupId);
+
+    quint16 syncReadRegister(QModbusDataUnit::RegisterType pointType, int address, int server);
 
 signals:
-    void modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request);
-    void modbusReply(QModbusReply* reply);
-    void modbusError(const QString& error, int requestId);
+    void modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
+    void modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
+    void modbusReply(const QModbusReply* const reply);
+    void modbusError(const QString& error, int requestGroupId);
     void modbusConnectionError(const QString& error);
     void modbusConnecting(const ConnectionDetails& cd);
     void modbusConnected(const ConnectionDetails& cd);
@@ -55,11 +57,11 @@ private slots:
     void on_stateChanged(QModbusDevice::State state);
 
 private:
-    int _transactionId = -1;
-    QModbusClient* _modbusClient;
+    ModbusClientPrivate* _modbusClient;
     ConnectionType _connectionType;
 };
 
+Q_DECLARE_METATYPE(QModbusDataUnit)
 DECLARE_ENUM_STRINGS(QModbusDataUnit::RegisterType,
                      {   QModbusDataUnit::Invalid,          "Invalid"           },
                      {   QModbusDataUnit::DiscreteInputs,   "DiscreteInputs"    },

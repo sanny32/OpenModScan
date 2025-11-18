@@ -1,18 +1,11 @@
 #include <QTimer>
 #include <QEventLoop>
-#include <QModbusTcpClient>
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QModbusRtuSerialMaster>
-typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
-#else
-#include <QModbusRtuSerialClient>
-#endif
-
 #include "formatutils.h"
 #include "numericutils.h"
 #include "modbusexception.h"
 #include "modbusclient.h"
+#include "modbustcpclient.h"
+#include "modbusrtuclient.h"
 
 ///
 /// \brief ModbusClient::ModbusClient
@@ -50,7 +43,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
     {
         case ConnectionType::Tcp:
         {
-            _modbusClient = new QModbusTcpClient(this);
+            _modbusClient = new ModbusTcpClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
             _modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
@@ -61,14 +54,14 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
         break;
 
         case ConnectionType::Serial:
-            _modbusClient = new QModbusRtuSerialClient(this);
+            _modbusClient = new ModbusRtuClient(this);
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
             _modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));
             _modbusClient->setProperty("DTRControl", cd.SerialParams.SetDTR);
             _modbusClient->setProperty("RTSControl", cd.SerialParams.SetRTS);
             _modbusClient->setProperty("ForceModbus15And16Func", cd.ModbusParams.ForceModbus15And16Func);
-            qobject_cast<QModbusRtuSerialClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
+            qobject_cast<ModbusRtuClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
             _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
@@ -81,8 +74,10 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
     if(_modbusClient)
     {
         _connectionType = cd.Type;
-        connect(_modbusClient, &QModbusDevice::stateChanged, this, &ModbusClient::on_stateChanged);
-        connect(_modbusClient, &QModbusDevice::errorOccurred, this, &ModbusClient::on_errorOccurred);
+        connect(_modbusClient, &ModbusClientPrivate::stateChanged, this, &ModbusClient::on_stateChanged);
+        connect(_modbusClient, &ModbusClientPrivate::errorOccurred, this, &ModbusClient::on_errorOccurred);
+        connect(_modbusClient, &ModbusClientPrivate::modbusRequest, this, &ModbusClient::modbusRequest);
+        connect(_modbusClient, &ModbusClientPrivate::modbusResponse, this, &ModbusClient::modbusResponse);
         _modbusClient->connectDevice();
     }
 }
@@ -125,20 +120,17 @@ QModbusRequest createReadRequest(const QModbusDataUnit& data)
 /// \brief ModbusClient::sendRawRequest
 /// \param request
 /// \param server
-/// \param requestId
+/// \param requestGroupId
 ///
-void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int requestId)
+void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int requestGroupId)
 {
     if(_modbusClient == nullptr || state() != QModbusDevice::ConnectedState)
     {
         return;
     }
 
-    emit modbusRequest(requestId, server, ++_transactionId, request);
-    if(auto reply = _modbusClient->sendRawRequest(request, server))
+    if(auto reply = _modbusClient->sendRawRequest(request, server, requestGroupId))
     {
-        reply->setProperty("RequestId", requestId);
-        reply->setProperty("TransactionId", _transactionId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_readReply);
@@ -149,7 +141,7 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
         }
     }
     else
-        emit modbusError(tr("Invalid Modbus Request"), requestId);
+        emit modbusError(tr("Invalid Modbus Request"), requestGroupId);
 }
 
 ///
@@ -158,9 +150,9 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
 /// \param startAddress
 /// \param valueCount
 /// \param server
-/// \param requestId
+/// \param requestGroupId
 ///
-void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestId)
+void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestGroupId)
 {
     if(_modbusClient == nullptr || state() != QModbusDevice::ConnectedState)
     {
@@ -171,11 +163,8 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
     const auto request = createReadRequest(dataUnit);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, server, ++_transactionId, request);
-    if(auto reply = _modbusClient->sendReadRequest(dataUnit, server))
+    if(auto reply = _modbusClient->sendReadRequest(dataUnit, server, requestGroupId))
     {
-        reply->setProperty("RequestId", requestId);
-        reply->setProperty("TransactionId", _transactionId);
         reply->setProperty("RequestData", QVariant::fromValue(dataUnit));
         if (!reply->isFinished())
         {
@@ -189,13 +178,13 @@ void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int 
 }
 
 ///
-/// \brief ModbusClient::readRegister
+/// \brief ModbusClient::syncReadRegister
 /// \param pointType
 /// \param address
 /// \param server
 /// \return
 ///
-quint16 ModbusClient::readRegister(QModbusDataUnit::RegisterType pointType, int address, int server)
+quint16 ModbusClient::syncReadRegister(QModbusDataUnit::RegisterType pointType, int address, int server)
 {
     if(_modbusClient == nullptr || state() != QModbusDevice::ConnectedState)
     {
@@ -446,9 +435,9 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, const QVecto
 /// \brief ModbusClient::writeRegister
 /// \param pointType
 /// \param params
-/// \param requestId
+/// \param requestGroupId
 ///
-void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestId)
+void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestGroupId)
 {
     QModbusDataUnit data;
     const auto addr = params.ZeroBasedAddress ? params.Address : params.Address - 1;
@@ -545,7 +534,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
             break;
         }
 
-        emit modbusError(errorDesc, requestId);
+        emit modbusError(errorDesc, requestGroupId);
         return;
     }
 
@@ -553,11 +542,8 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
-    emit modbusRequest(requestId, params.Node, ++_transactionId, request);
-    if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
+    if(auto reply = _modbusClient->sendRawRequest(request, params.Node, requestGroupId))
     {
-        reply->setProperty("RequestId", requestId);
-        reply->setProperty("TransactionId", _transactionId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_writeReply);
@@ -573,25 +559,22 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
 ///
 /// \brief ModbusClient::maskWriteRegister
 /// \param params
-/// \param requestId
+/// \param requestGroupId
 ///
-void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int requestId)
+void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int requestGroupId)
 {
     if(_modbusClient == nullptr ||
        _modbusClient->state() != QModbusDevice::ConnectedState)
     {
-        emit modbusError(tr("Mask Write Register Failure"), requestId);
+        emit modbusError(tr("Mask Write Register Failure"), requestGroupId);
         return;
     }
 
     const auto addr = params.ZeroBasedAddress ? params.Address : params.Address - 1;
     QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(addr), params.AndMask, params.OrMask);
-    emit modbusRequest(requestId, params.Node, ++_transactionId, request);
 
-    if(auto reply = _modbusClient->sendRawRequest(request, params.Node))
+    if(auto reply = _modbusClient->sendRawRequest(request, params.Node, requestGroupId))
     {
-        reply->setProperty("RequestId", requestId);
-        reply->setProperty("TransactionId", _transactionId);
         if (!reply->isFinished())
         {
             connect(reply, &QModbusReply::finished, this, &ModbusClient::on_writeReply);
@@ -703,32 +686,32 @@ void ModbusClient::on_writeReply()
 
     emit modbusReply(reply);
 
-    auto onError = [this, reply, raw](const QString& errorDesc, int requestId)
+    auto onError = [this, reply, raw](const QString& errorDesc, int requestGroupId)
     {
         if (reply->error() == QModbusDevice::ProtocolError)
         {
             ModbusException ex(raw.exceptionCode());
-            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatUInt8Value(DataDisplayMode::Hex, true, ex)), requestId);
+            emit modbusError(QString("%1. %2 (%3)").arg(errorDesc, ex, formatUInt8Value(DataDisplayMode::Hex, true, ex)), requestGroupId);
         }
         else if(reply->error() != QModbusDevice::NoError)
-            emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestId);
+            emit modbusError(QString("%1. %2").arg(errorDesc, reply->errorString()), requestGroupId);
     };
 
-    const int requestId = reply->property("RequestId").toInt();
+    const int requestGroupId = reply->property("requestGroupId").toInt();
     switch(raw.functionCode())
     {
         case QModbusRequest::WriteSingleCoil:
         case QModbusRequest::WriteMultipleCoils:
-            onError(tr("Coil Write Failure"), requestId);
+            onError(tr("Coil Write Failure"), requestGroupId);
         break;
 
         case QModbusRequest::WriteSingleRegister:
         case QModbusRequest::WriteMultipleRegisters:
-            onError(tr("Register Write Failure"), requestId);
+            onError(tr("Register Write Failure"), requestGroupId);
         break;
 
         case QModbusRequest::MaskWriteRegister:
-            onError(tr("Mask Register Write Failure"), requestId);
+            onError(tr("Mask Register Write Failure"), requestGroupId);
         break;
 
     default:
@@ -779,7 +762,6 @@ void ModbusClient::on_stateChanged(QModbusDevice::State state)
                 }
             }
 
-            _transactionId = -1;
             emit modbusConnected(cd);
         }
         break;

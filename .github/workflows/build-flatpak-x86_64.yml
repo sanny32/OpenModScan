@@ -33,6 +33,14 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
+      - name: Set Flatpak manifest branch
+        run: |
+              TARGET_REF="${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}"
+              echo "Target ref for Flatpak manifest is: $TARGET_REF"
+              sed -i "s/^\([[:space:]]*branch:[[:space:]]*\).*/\1$TARGET_REF/" io.github.sanny32.omodscan.yaml
+              echo "Updated manifest:"
+              cat io.github.sanny32.omodscan.yaml
+
       - name: Prepare Flatpak
         run: |
           flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -42,12 +50,12 @@ jobs:
         run: |
           cd .flatpak
           flatpak info org.kde.Sdk//6.9
-          flatpak-builder --repo=repo --force-clean --verbose --default-branch=dev build io.github.sanny32.omodscan.yaml
+          flatpak-builder --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yaml
           flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
         with:
-          name: OpenModScan-flatpak
+          name: io.github.sanny32.omodscan.flatpak
           path: |
             .flatpak/io.github.sanny32.omodscan.flatpak

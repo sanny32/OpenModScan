@@ -36,14 +36,13 @@ jobs:
       - name: Set Flatpak manifest branch
         run: |
           TARGET_REF="${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}"
-          INPUT_TAG_VALUE="${{ github.event.inputs.tag }}"
-          IS_TAG="$([ "$TARGET_REF" = "$INPUT_TAG_VALUE" ] && [ -n "$INPUT_TAG_VALUE" ] && echo "true" || echo "false")"
+          IS_TAG="$([ "${{ github.event.inputs.tag }}" = "$TARGET_REF" ] && [ -n "${{ github.event.inputs.tag }}" ] && echo "true" || echo "false")"
           MANIFEST_FILE=".flatpak/io.github.sanny32.omodscan.yaml"
-          URL_LINE="url: https://github.com/sanny32/OpenModScan.git"
+
           if [ "$IS_TAG" = "true" ]; then
-            sed -i "/type: git/,/^$/ { #$URL_LINE# { n; /branch:\|tag:\|commit:/d; }; }; #$URL_LINE#a\        tag: $TARGET_REF" "$MANIFEST_FILE"
+            sed -i "/url: https:\/\/github.com\/sanny32\/OpenModScan.git/{n;/branch:\|tag:\|commit:/d;a\        tag: $TARGET_REF}" "$MANIFEST_FILE"
           else
-            sed -i "/type: git/,/^$/ { #$URL_LINE# { n; /branch:\|tag:\|commit:/d; }; }; #$URL_LINE#a\        branch: $TARGET_REF" "$MANIFEST_FILE"
+            sed -i "/url: https:\/\/github.com\/sanny32\/OpenModScan.git/{n;/branch:\|tag:\|commit:/d;a\        branch: $TARGET_REF}" "$MANIFEST_FILE"
           fi
 
       - name: Prepare Flatpak

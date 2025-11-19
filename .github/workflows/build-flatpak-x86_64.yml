@@ -36,14 +36,16 @@ jobs:
       - name: Set Flatpak manifest branch
         run: |
           TARGET_REF="${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}"
-          IS_TAG="$([ "${{ github.event.inputs.tag }}" = "$TARGET_REF" ] && [ -n "${{ github.event.inputs.tag }}" ] && echo "true" || echo "false")"
-          MANIFEST_FILE=".flatpak/io.github.sanny32.omodscan.yaml"
-
-          if [ "$IS_TAG" = "true" ]; then
-            sed -i "/url: https:\/\/github.com\/sanny32\/OpenModScan.git/{n;/branch:\|tag:\|commit:/d;a\        tag: $TARGET_REF}" "$MANIFEST_FILE"
-          else
-            sed -i "/url: https:\/\/github.com\/sanny32\/OpenModScan.git/{n;/branch:\|tag:\|commit:/d;a\        branch: $TARGET_REF}" "$MANIFEST_FILE"
+          REF_TYPE="branch"
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            REF_TYPE="tag"
           fi
+          sed -i "/url: https:\/\/github.com\/sanny32\/OpenModScan.git/{
+            n
+            /branch:\|tag:\|commit:/d
+            a\
+            \        $REF_TYPE: $TARGET_REF
+          }" .flatpak/io.github.sanny32.omodscan.yaml
 
       - name: Prepare Flatpak
         run: |

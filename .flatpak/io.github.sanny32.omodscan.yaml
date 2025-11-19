@@ -60,8 +60,6 @@ modules:
     sources:
       - type: git
         url: https://github.com/sanny32/OpenModScan.git
-        branch: ${REF}
-        default-branch: main
       - type: file
         path: io.github.sanny32.omodscan.png
       - type: file

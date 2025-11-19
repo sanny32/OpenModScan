@@ -40,15 +40,10 @@ jobs:
           path: ~/.cache/flatpak-builder
           key: flatpak-builder-${{ runner.os }}-${{ hashFiles('.flatpak/*.yaml') }}
 
-      - name: Prepare Flatpak YAML
-        run: |
-          export REF=$REF
-          envsubst < .flatpak/io.github.sanny32.omodscan.yaml > .flatpak/io.github.sanny32.omodscan.build.yaml
-          
       - name: Build Flatpak
         run: |
           mkdir -p build-repo build-dir
-          flatpak-builder --disable-rofiles-fuse --repo=build-repo build-dir .flatpak/io.github.sanny32.omodscan.build.yaml
+          flatpak-builder --disable-rofiles-fuse --default-branch=dev --repo=build-repo build-dir .flatpak/io.github.sanny32.omodscan.yaml
           flatpak build-bundle build-repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan
 
       - name: Upload bundle artifact

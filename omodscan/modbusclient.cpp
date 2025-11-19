@@ -542,7 +542,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
     const auto request = createWriteRequest(data, useMultipleWriteFunc);
     if(!request.isValid()) return;
 
-    if(auto reply = _modbusClient->sendRawRequest(request, params.Node, requestGroupId))
+    if(auto reply = _modbusClient->sendRawRequest(request, params.DeviceId, requestGroupId))
     {
         if (!reply->isFinished())
         {
@@ -573,7 +573,7 @@ void ModbusClient::maskWriteRegister(const ModbusMaskWriteParams& params, int re
     const auto addr = params.ZeroBasedAddress ? params.Address : params.Address - 1;
     QModbusRequest request(QModbusRequest::MaskWriteRegister, quint16(addr), params.AndMask, params.OrMask);
 
-    if(auto reply = _modbusClient->sendRawRequest(request, params.Node, requestGroupId))
+    if(auto reply = _modbusClient->sendRawRequest(request, params.DeviceId, requestGroupId))
     {
         if (!reply->isFinished())
         {

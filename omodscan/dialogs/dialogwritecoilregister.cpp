@@ -15,11 +15,16 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
     ,_simParams(simParams)
 {
     ui->setupUi(this);
+
+    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditNode->setValue(params.DeviceId);
+
+    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
+
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
 
@@ -71,7 +76,7 @@ void DialogWriteCoilRegister::accept()
 {
     _writeParams.Address = ui->lineEditAddress->value<int>();
     _writeParams.Value = ui->radioButtonOn->isChecked();
-    _writeParams.Node = ui->lineEditNode->value<int>();
+    _writeParams.DeviceId = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
 }

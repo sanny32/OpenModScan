@@ -17,7 +17,7 @@
    <item>
     <layout class="QFormLayout" name="formLayout_2">
      <property name="formAlignment">
-      <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+      <set>Qt::AlignHCenter|Qt::AlignTop</set>
      </property>
      <property name="horizontalSpacing">
       <number>30</number>
@@ -75,7 +75,7 @@
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -109,10 +109,10 @@
        <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Policy::Fixed</enum>
+          <enum>QSizePolicy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -133,7 +133,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout_4">
       <property name="formAlignment">
-       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
       <property name="leftMargin">
        <number>30</number>
@@ -210,7 +210,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <property name="formAlignment">
-       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
       </property>
       <property name="leftMargin">
        <number>30</number>
@@ -262,7 +262,7 @@
         <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
+           <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -297,7 +297,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="formAlignment">
-       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+       <set>Qt::AlignHCenter|Qt::AlignTop</set>
       </property>
       <property name="leftMargin">
        <number>30</number>
@@ -308,7 +308,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="labelSlaveAddress">
         <property name="text">
-         <string>Slave Address:</string>
+         <string>Device Id: </string>
         </property>
        </widget>
       </item>
@@ -450,10 +450,10 @@
       </size>
      </property>
      <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
      <property name="centerButtons">
       <bool>true</bool>

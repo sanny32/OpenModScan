@@ -11,14 +11,15 @@ class ModbusClient;
 ///
 struct ModbusWriteParams
 {
-    quint32 Node;
+    quint32 DeviceId;
     quint32 Address;
     QVariant Value;
     DataDisplayMode DisplayMode;
-    AddressSpace AddrSpace;
+    AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     ByteOrder Order;
     QString Codepage;
     bool ZeroBasedAddress;
+    bool LeadingZeros = false;
     ModbusClient* Client = nullptr;
 };
 
@@ -27,11 +28,12 @@ struct ModbusWriteParams
 ///
 struct ModbusMaskWriteParams
 {
-    quint32 Node;
+    quint32 DeviceId;
     quint32 Address;
     quint16 AndMask;
     quint16 OrMask;
     bool ZeroBasedAddress;
+    bool LeadingZeros = false;
 };
 
 #endif // MODBUSWRITEPARAMS_H

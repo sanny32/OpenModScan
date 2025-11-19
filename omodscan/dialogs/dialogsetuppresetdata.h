@@ -6,10 +6,11 @@
 
 struct SetupPresetParams
 {
-    quint16 SlaveAddress;
+    quint16 DeviceId;
     quint16 PointAddress;
     quint16 Length;
     bool ZeroBasedAddress;
+    bool LeadingZeros = false;
 };
 
 namespace Ui {

@@ -8,13 +8,13 @@
 
 ///
 /// \brief DialogUserMsg::DialogUserMsg
-/// \param slaveAddress
+/// \param dd
 /// \param func
 /// \param mode
 /// \param client
 /// \param parent
 ///
-DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
+DialogUserMsg::DialogUserMsg(const DisplayDefinition& dd, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogUserMsg)
     ,_modbusClient(client)
@@ -25,11 +25,16 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
+    ui->lineEditSlaveAddress->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditSlaveAddress->setValue(slaveAddress);
+    ui->lineEditSlaveAddress->setValue(dd.DeviceId);
+
     ui->comboBoxFunction->addItems(ModbusFunction::validCodes());
     ui->comboBoxFunction->setCurrentFunctionCode(func);
+
+    ui->requestInfo->setShowLeadingZeros(dd.LeadingZeros);
     ui->requestInfo->setShowTimestamp(false);
+    ui->responseInfo->setShowLeadingZeros(dd.LeadingZeros);
     ui->responseInfo->setShowTimestamp(false);
 
     switch(mode)

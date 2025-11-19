@@ -846,30 +846,37 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         return;
     }
 
+    const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
-    const quint32 node = ui->lineEditDeviceId->value<int>();
-    const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    const auto pointType = ui->comboBoxModbusPointType->currentPointType();
-    const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
-    const auto addressSpace = displayDefinition().AddrSpace;
+    const auto zeroBasedAddress = dd.ZeroBasedAddress;
+    const auto addressSpace = dd.AddrSpace;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
-    auto simParams = _dataSimulator->simulationParams(pointType, simAddr, deviceId);
+    auto simParams = _dataSimulator->simulationParams(dd.PointType, simAddr, dd.DeviceId);
 
-    switch(pointType)
+    switch(dd.PointType)
     {
         case QModbusDataUnit::Coils:
         {
-            ModbusWriteParams params = { node, addr, value, mode, addressSpace, byteOrder(), codepage(), zeroBasedAddress };
+            ModbusWriteParams params;
+            params.DeviceId = dd.DeviceId;
+            params.Address = addr;
+            params.Value = value;
+            params.DisplayMode = mode;
+            params.AddrSpace = dd.AddrSpace;
+            params.Order = byteOrder();
+            params.Codepage = codepage();
+            params.ZeroBasedAddress = dd.ZeroBasedAddress;
+
             DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
-                    _modbusClient.writeRegister(pointType, params, _formId);
+                    _modbusClient.writeRegister(dd.PointType, params, _formId);
                 break;
 
                 case 2:
-                    if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
-                    else _dataSimulator->startSimulation(mode, pointType, simAddr, deviceId, simParams);
+                    if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(dd.PointType, simAddr, dd.DeviceId);
+                    else _dataSimulator->startSimulation(mode, dd.PointType, simAddr, dd.DeviceId, simParams);
                 break;
             }
         }
@@ -877,12 +884,22 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { node, addr, value, mode, addressSpace, byteOrder(), codepage(), zeroBasedAddress };
+            ModbusWriteParams params;
+            params.DeviceId = dd.DeviceId;
+            params.Address = addr;
+            params.Value = value;
+            params.DisplayMode = mode;
+            params.AddrSpace = dd.AddrSpace;
+            params.Order = byteOrder();
+            params.Codepage = codepage();
+            params.ZeroBasedAddress = dd.ZeroBasedAddress;
+            params.LeadingZeros = dd.LeadingZeros;
+
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), _parent);
                 if(dlg.exec() == QDialog::Accepted)
-                    _modbusClient.writeRegister(pointType, params, _formId);
+                    _modbusClient.writeRegister(dd.PointType, params, _formId);
             }
             else
             {
@@ -890,12 +907,12 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:
-                        _modbusClient.writeRegister(pointType, params, _formId);
+                        _modbusClient.writeRegister(dd.PointType, params, _formId);
                     break;
 
                     case 2:
-                        if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(pointType, simAddr, deviceId);
-                        else _dataSimulator->startSimulation(mode, pointType, simAddr, deviceId, simParams);
+                        if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(dd.PointType, simAddr, dd.DeviceId);
+                        else _dataSimulator->startSimulation(mode, dd.PointType, simAddr, dd.DeviceId, simParams);
                     break;
                 }
             }

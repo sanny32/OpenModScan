@@ -13,8 +13,8 @@
 /// \param hexAddress
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent) :
-      QDialog(parent)
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent)
+    :  QFixedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
     ,_hexAddress(hexAddress)
@@ -24,9 +24,9 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, params.AddrSpace, _hexAddress)));
-    ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
-    ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
+    ui->labelAddress->setText(tr("Address: <b>%1</b>").arg(formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, params.AddrSpace, _hexAddress)));
+    ui->labelLength->setText(tr("Length: <b>%1</b>").arg(length));
+    ui->labelSlaveDevice->setText(tr("Device Id: <b>%1</b>").arg(params.DeviceId, 3, 10, QLatin1Char('0')));
 
     switch(_writeParams.DisplayMode)
     {
@@ -54,12 +54,14 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
         case DataDisplayMode::Binary:
         case DataDisplayMode::UInt16:
+            ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
         break;
 
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
+            ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
         break;
 
@@ -70,6 +72,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
+            ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
         break;
 
@@ -88,6 +91,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     if(_data.length() != length) _data.resize(length);
 
     updateTableWidget();
+    adjustSize();
 }
 
 ///
@@ -441,6 +445,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::UInt16:
             numEdit = new NumericLineEdit(NumericLineEdit::Int32Mode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
+            numEdit->setLeadingZeroes(_writeParams.LeadingZeros);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
@@ -470,6 +475,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::UInt32Mode, ui->tableWidget);
+                numEdit->setLeadingZeroes(_writeParams.LeadingZeros);
                 numEdit->setValue(makeUInt32(_data[idx], _data[idx + 1], _writeParams.Order));
             }
         break;
@@ -478,6 +484,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             if(!(idx % 2) && (idx + 1 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::UInt32Mode, ui->tableWidget);
+                numEdit->setLeadingZeroes(_writeParams.LeadingZeros);
                 numEdit->setValue(makeUInt32(_data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;
@@ -534,6 +541,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::UInt64Mode, ui->tableWidget);
+                numEdit->setLeadingZeroes(_writeParams.LeadingZeros);
                 numEdit->setValue(makeUInt64(_data[idx], _data[idx + 1], _data[idx + 2], _data[idx + 3], _writeParams.Order));
             }
         break;
@@ -542,6 +550,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             if(!(idx % 4) && (idx + 3 < _data.size()))
             {
                 numEdit = new NumericLineEdit(NumericLineEdit::UInt64Mode, ui->tableWidget);
+                numEdit->setLeadingZeroes(_writeParams.LeadingZeros);
                 numEdit->setValue(makeUInt64(_data[idx + 3], _data[idx + 2], _data[idx + 1], _data[idx], _writeParams.Order));
             }
         break;

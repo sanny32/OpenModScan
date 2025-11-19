@@ -34,15 +34,13 @@ jobs:
         with:
           ref: ${{ env.REF }}
 
-      - name: Restore Flatpak cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/flatpak-builder
-          key: flatpak-builder-${{ runner.os }}-${{ hashFiles('.flatpak/*.yaml') }}
-
       - name: Build Flatpak
         run: |
-          flatpak run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build ./flatpakio.github.sanny32.omodscan.yaml
+          cd .flatpak
+          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install -y flathub org.kde.Sdk//6.9
+          flatpak install -y flathub org.flatpak.Builder
+          flatpak run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build io.github.sanny32.omodscan.yaml
           flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 
       - name: Upload bundle artifact

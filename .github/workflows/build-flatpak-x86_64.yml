@@ -20,17 +20,15 @@ jobs:
   flatpak:
     name: Flatpak Build
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-23.08
+      options: --privileged
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
-
-      - name: Set up Flatpak
-        uses: flatpak/flatpak‑github‑actions/flatpak-builder@v6
-        with:
-          bundle: "true"
 
       - name: Restore Flatpak cache
         uses: actions/cache@v4
@@ -39,13 +37,10 @@ jobs:
           key: flatpak-builder-${{ runner.os }}-${{ hashFiles('.flatpak/*.yaml') }}
 
       - name: Build Flatpak
-        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
-        with:
-          manifest-path: .flatpak/io.github.sanny32.omodscan.yaml
-          build-bundle: io.github.sanny32.omodscan.flatpak
-          bundle-runtime: org.freedesktop.Platform
-          runtime-version: "23.08"
-          cache: true
+        run: |
+          mkdir -p build-repo build-dir
+          flatpak-builder --repo=build-repo build-dir .flatpak/io.github.sanny32.omodscan.yaml
+          flatpak build-bundle build-repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
@@ -53,4 +48,3 @@ jobs:
           name: OpenModScan-flatpak
           path: |
             io.github.sanny32.omodscan.flatpak
-            *.flatpakref

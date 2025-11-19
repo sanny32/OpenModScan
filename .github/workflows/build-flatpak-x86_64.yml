@@ -37,7 +37,7 @@ jobs:
         run: |
           flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak --user install -y flathub org.kde.Platform//6.9
-          flatpak --user install -y flathub org.kde.Sdk
+          flatpak --user install -y flathub org.kde.Sdk//6.9
           flatpak --user install -y flathub org.flatpak.Builder
 
       - name: Build Flatpak

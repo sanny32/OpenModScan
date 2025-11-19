@@ -41,9 +41,9 @@ jobs:
           MANIFEST_FILE=".flatpak/io.github.sanny32.omodscan.yaml"
           URL_LINE="url: https://github.com/sanny32/OpenModScan.git"
           if [ "$IS_TAG" = "true" ]; then
-            sed -i "/type: git/,|^$| { |$URL_LINE| { n; /branch:\|tag:\|commit:/d; }; }; |$URL_LINE|a\        tag: $TARGET_REF" "$MANIFEST_FILE"
+            sed -i "/type: git/,/^$/ { #$URL_LINE# { n; /branch:\|tag:\|commit:/d; }; }; #$URL_LINE#a\        tag: $TARGET_REF" "$MANIFEST_FILE"
           else
-            sed -i "/type: git/,|^$| { |$URL_LINE| { n; /branch:\|tag:\|commit:/d; }; }; |$URL_LINE|a\        branch: $TARGET_REF" "$MANIFEST_FILE"
+            sed -i "/type: git/,/^$/ { #$URL_LINE# { n; /branch:\|tag:\|commit:/d; }; }; #$URL_LINE#a\        branch: $TARGET_REF" "$MANIFEST_FILE"
           fi
 
       - name: Prepare Flatpak

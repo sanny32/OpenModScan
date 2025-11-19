@@ -37,15 +37,17 @@ jobs:
         with:
           ref: ${{ env.REF }}
 
+      - name: Prepare Flatpak
+        run: |
+          flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak --user install -y flathub org.kde.Sdk//6.9
+          flatpak --user install -y flathub org.flatpak.Builder
+
       - name: Build Flatpak
         run: |
           cd .flatpak
-          flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak --user update --appstream
-          flatpak --user install -y flathub org.kde.Sdk//6.9
-          flatpak --user install -y flathub org.flatpak.Builder
           flatpak --user run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build io.github.sanny32.omodscan.yaml
-          flatpak --user build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
+          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4

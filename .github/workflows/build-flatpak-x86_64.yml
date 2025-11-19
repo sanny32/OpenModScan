@@ -21,7 +21,7 @@ jobs:
     name: Flatpak Build
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-23.08
+      image: ghcr.io/flathub-infra/flatpak-github-actions:qt6-6.9
       options: --privileged
 
     steps:

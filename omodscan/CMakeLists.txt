@@ -279,10 +279,6 @@ set(TS_FILES
 target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort)
 
-if(TARGET update_translations)
-    add_dependencies(${PROJECT_NAME} update_translations)
-endif()
-
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
@@ -303,6 +299,10 @@ elseif(Qt5_FOUND AND EXISTS ${Qt5_LUPDATE_EXECUTABLE})
 else()
     message(STATUS "lupdate not available - skipping translation updates")
     add_custom_target(update_translations)
+endif()
+
+if(TARGET update_translations)
+    add_dependencies(${PROJECT_NAME} update_translations)
 endif()
 
 if(WIN32)

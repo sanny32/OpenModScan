@@ -44,9 +44,8 @@ jobs:
           flatpak --user update --appstream
           flatpak --user install -y flathub org.kde.Sdk//6.9
           flatpak --user install -y flathub org.flatpak.Builder
-          flatpak --user info --arch=x86_64 --show-commit org.kde.Sdk 6.9
           flatpak --user run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build io.github.sanny32.omodscan.yaml
-          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
+          flatpak --user build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4

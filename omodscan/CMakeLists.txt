@@ -26,6 +26,7 @@ if (NOT Qt6_FOUND)
 find_package(Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt5 REQUIRED COMPONENTS Core)
 endif()
 
 if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
@@ -121,6 +122,7 @@ set(SOURCES
     modbusrtuclient.cpp
     modbusdataunit.cpp
     modbusmessages/modbusmessage.cpp
+    modbusreply.cpp
     modbusrtuscanner.cpp
     modbusscanner.cpp
     modbustcpscanner.cpp
@@ -192,8 +194,10 @@ set(HEADERS
     modbusclient.h
     modbusclientprivate.h
     modbustcpclient.h
+    modbusreply.h
     modbusrtuclient.h
     modbusdataunit.h
+    modbusdevice.h
     modbusexception.h
     modbusfunction.h
     modbusmessages/diagnostics.h
@@ -285,9 +289,6 @@ if(Qt6_FOUND)
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
     )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
-target_link_libraries(omodscan PRIVATE Qt5::Core)
-target_link_libraries(omodscan PRIVATE Qt5::Core)
-target_link_libraries(omodscan PRIVATE Qt5::Core)
 elseif(Qt5_FOUND AND EXISTS ${Qt5_LUPDATE_EXECUTABLE})
     add_custom_command(
         OUTPUT ${TS_FILES}

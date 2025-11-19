@@ -55,8 +55,8 @@ public:
     int turnaroundDelay() const;
     void setTurnaroundDelay(int turnaroundDelay);
 
-    QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const override;
-    void setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value) override;
+    QVariant connectionParameter(ModbusDevice::ConnectionParameter parameter) const override;
+    void setConnectionParameter(ModbusDevice::ConnectionParameter parameter, const QVariant &value) override;
 
     QIODevice *device() const override { return _serialPort; }
 
@@ -66,7 +66,7 @@ protected:
     bool open() override;
     void close() override;
 
-    QModbusReply* enqueueRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit &unit, QModbusReply::ReplyType type) override;
+    ModbusReply* enqueueRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit &unit, ModbusReply::ReplyType type) override;
 
 private slots:
     void on_readyRead();

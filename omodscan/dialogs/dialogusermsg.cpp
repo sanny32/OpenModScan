@@ -193,7 +193,7 @@ void DialogUserMsg::on_pushButtonSend_clicked()
     ui->responseBuffer->clear();
     ui->responseInfo->clear();
 
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != ModbusDevice::ConnectedState)
     {
         QMessageBox::warning(this, windowTitle(), tr("No connection to device"));
         return;
@@ -213,17 +213,17 @@ void DialogUserMsg::on_pushButtonSend_clicked()
 /// \brief DialogUserMsg::on_modbusReply
 /// \param reply
 ///
-void DialogUserMsg::on_modbusReply(const QModbusReply* const reply)
+void DialogUserMsg::on_modbusReply(const ModbusReply* const reply)
 {
     if(!reply) return;
 
-    if(0 != reply->property("RequestId").toInt())
+    if(0 != reply->requestGroupId())
     {
         return;
     }
 
-    if(reply->error() != QModbusDevice::NoError &&
-        reply->error() != QModbusDevice::ProtocolError)
+    if(reply->error() != ModbusDevice::NoError &&
+        reply->error() != ModbusDevice::ProtocolError)
     {
         QMessageBox::warning(this, windowTitle(), reply->errorString());
         return;

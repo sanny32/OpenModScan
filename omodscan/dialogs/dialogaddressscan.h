@@ -281,7 +281,7 @@ private slots:
     void on_awake();
     void on_timeout();
 
-    void on_modbusReply(const QModbusReply* const reply);
+    void on_modbusReply(const ModbusReply* const reply);
     void on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
     void on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
 

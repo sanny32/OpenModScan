@@ -615,18 +615,18 @@ void DialogAddressScan::on_modbusResponse(int requestGroupId, QSharedPointer<con
 /// \brief DialogAddressScan::on_modbusReply
 /// \param reply
 ///
-void DialogAddressScan::on_modbusReply(const QModbusReply* const reply)
+void DialogAddressScan::on_modbusReply(const ModbusReply* const reply)
 {
     if(!_scanning || !reply) return;
 
-    if(-1 != reply->property("RequestId").toInt())
+    if(-1 != reply->requestGroupId())
     {
         return;
     }
 
     updateProgress();
 
-    if (reply->error() == QModbusDevice::NoError)
+    if (reply->error() == ModbusDevice::NoError)
         updateTableView(reply->result().startAddress(), reply->result().values());
 
     if(_requestCount > ui->lineEditLength->value<int>()
@@ -731,7 +731,7 @@ void DialogAddressScan::startScan()
     if(_scanning)
         return;
 
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != ModbusDevice::ConnectedState)
     {
         QMessageBox::warning(this, windowTitle(), tr("No connection to MODBUS device!"));
         return;

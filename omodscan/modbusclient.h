@@ -21,7 +21,7 @@ public:
     void disconnectDevice();
 
     bool isValid() const;
-    QModbusDevice::State state() const;
+    ModbusDevice::State state() const;
 
     ConnectionType connectionType() const {
         return _connectionType;
@@ -43,7 +43,7 @@ public:
 signals:
     void modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
     void modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
-    void modbusReply(const QModbusReply* const reply);
+    void modbusReply(const ModbusReply* const reply);
     void modbusError(const QString& error, int requestGroupId);
     void modbusConnectionError(const QString& error);
     void modbusConnecting(const ConnectionDetails& cd);
@@ -53,8 +53,8 @@ signals:
 private slots:
     void on_readReply();
     void on_writeReply();
-    void on_errorOccurred(QModbusDevice::Error error);
-    void on_stateChanged(QModbusDevice::State state);
+    void on_errorOccurred(ModbusDevice::Error error);
+    void on_stateChanged(ModbusDevice::State state);
 
 private:
     ModbusClientPrivate* _modbusClient;

@@ -6,7 +6,7 @@
 #include <QSharedPointer>
 #include <QLoggingCategory>
 #include <QModbusPdu>
-#include <QModbusReply>
+#include "modbusreply.h"
 #include "modbusmessage.h"
 
 enum Coil {
@@ -42,17 +42,17 @@ class ModbusClientPrivate : public QObject
     Q_OBJECT
 
 public:
-    virtual QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const = 0;
-    virtual void setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant& value) = 0;
+    virtual QVariant connectionParameter(ModbusDevice::ConnectionParameter parameter) const = 0;
+    virtual void setConnectionParameter(ModbusDevice::ConnectionParameter parameter, const QVariant& value) = 0;
 
     bool connectDevice();
     void disconnectDevice();
 
     virtual bool isOpen() const { return false; }
 
-    QModbusDevice::State state() const;
+    ModbusDevice::State state() const;
 
-    QModbusDevice::Error error() const;
+    ModbusDevice::Error error() const;
     QString errorString() const;
 
     int timeout() const;
@@ -61,17 +61,17 @@ public:
     int numberOfRetries() const;
     void setNumberOfRetries(int number);
 
-    QModbusReply* sendReadRequest(const QModbusDataUnit& read, int serverAddress, int requestGroupId = 0);
-    QModbusReply* sendWriteRequest(const QModbusDataUnit& write, int serverAddress, int requestGroupId = 0);
-    QModbusReply* sendReadWriteRequest(const QModbusDataUnit& read, const QModbusDataUnit& write, int serverAddress, int requestGroupId = 0);
-    QModbusReply* sendRawRequest(const QModbusRequest& request, int serverAddress, int requestGroupId = 0);
+    ModbusReply* sendReadRequest(const QModbusDataUnit& read, int serverAddress, int requestGroupId = 0);
+    ModbusReply* sendWriteRequest(const QModbusDataUnit& write, int serverAddress, int requestGroupId = 0);
+    ModbusReply* sendReadWriteRequest(const QModbusDataUnit& read, const QModbusDataUnit& write, int serverAddress, int requestGroupId = 0);
+    ModbusReply* sendRawRequest(const QModbusRequest& request, int serverAddress, int requestGroupId = 0);
 
     virtual QIODevice *device() const = 0;
 
 signals:
     void timeoutChanged(int newTimeout);
-    void errorOccurred(QModbusDevice::Error error);
-    void stateChanged(QModbusDevice::State state);
+    void errorOccurred(ModbusDevice::Error error);
+    void stateChanged(ModbusDevice::State state);
 
     void modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
     void modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
@@ -82,10 +82,10 @@ protected:
     virtual bool open() = 0;
     virtual void close() = 0;
 
-    void setState(QModbusDevice::State newState);
-    void setError(const QString& errorText, QModbusDevice::Error error);
+    void setState(ModbusDevice::State newState);
+    void setError(const QString& errorText, ModbusDevice::Error error);
 
-    QModbusReply* sendRequest(int requestGroupId, const QModbusRequest& request, int serverAddress, const QModbusDataUnit* const unit);
+    ModbusReply* sendRequest(int requestGroupId, const QModbusRequest& request, int serverAddress, const QModbusDataUnit* const unit);
     QModbusRequest createReadRequest(const QModbusDataUnit& data) const;
     QModbusRequest createWriteRequest(const QModbusDataUnit& data) const;
     QModbusRequest createRWRequest(const QModbusDataUnit& read, const QModbusDataUnit& write) const;
@@ -110,13 +110,13 @@ protected:
     bool collateMultipleValues(const QModbusPdu &pdu, QModbusDataUnit::RegisterType type, QModbusDataUnit* data);
     bool processReadWriteMultipleRegistersResponse(const QModbusResponse& response, QModbusDataUnit* data);
 
-    virtual QModbusReply* enqueueRequest(int requestGroupId, const QModbusRequest&, int, const QModbusDataUnit&, QModbusReply::ReplyType) {
+    virtual ModbusReply* enqueueRequest(int requestGroupId, const QModbusRequest&, int, const QModbusDataUnit&, ModbusReply::ReplyType) {
         return nullptr;
     }
 
     struct QueueElement {
         QueueElement() = default;
-        QueueElement(QModbusReply* r, const QModbusRequest& req, const QModbusDataUnit& u, int num, int timeout = -1)
+        QueueElement(ModbusReply* r, const QModbusRequest& req, const QModbusDataUnit& u, int num, int timeout = -1)
             : reply(r), requestPdu(req), unit(u), numberOfRetries(num)
         {
             if (timeout >= 0) {
@@ -130,7 +130,7 @@ protected:
             return reply == other.reply;
         }
 
-        QPointer<QModbusReply> reply;
+        QPointer<ModbusReply> reply;
         QModbusRequest requestPdu;
         QModbusDataUnit unit;
         int numberOfRetries;
@@ -145,8 +145,8 @@ private:
     int _numberOfRetries = 3;
     int _responseTimeoutDuration = 1000;
 
-    QModbusDevice::State _state = QModbusDevice::UnconnectedState;
-    QModbusDevice::Error _error = QModbusDevice::NoError;
+    ModbusDevice::State _state = ModbusDevice::UnconnectedState;
+    ModbusDevice::Error _error = ModbusDevice::NoError;
     QString _errorString;
 };
 

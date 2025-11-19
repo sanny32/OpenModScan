@@ -182,18 +182,18 @@ bool ModbusRtuClient::isOpen() const
 /// \param parameter
 /// \return
 ///
-QVariant ModbusRtuClient::connectionParameter(QModbusDevice::ConnectionParameter parameter) const
+QVariant ModbusRtuClient::connectionParameter(ModbusDevice::ConnectionParameter parameter) const
 {
     switch (parameter) {
-    case QModbusDevice::SerialPortNameParameter:
+    case ModbusDevice::SerialPortNameParameter:
         return _comPort;
-    case QModbusDevice::SerialDataBitsParameter:
+    case ModbusDevice::SerialDataBitsParameter:
         return _dataBits;
-    case QModbusDevice::SerialParityParameter:
+    case ModbusDevice::SerialParityParameter:
         return _parity;
-    case QModbusDevice::SerialStopBitsParameter:
+    case ModbusDevice::SerialStopBitsParameter:
         return _stopBits;
-    case QModbusDevice::SerialBaudRateParameter:
+    case ModbusDevice::SerialBaudRateParameter:
         return _baudRate;
     default:
         return {};
@@ -205,22 +205,22 @@ QVariant ModbusRtuClient::connectionParameter(QModbusDevice::ConnectionParameter
 /// \param parameter
 /// \param value
 ///
-void ModbusRtuClient::setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value)
+void ModbusRtuClient::setConnectionParameter(ModbusDevice::ConnectionParameter parameter, const QVariant &value)
 {
     switch (parameter) {
-    case QModbusDevice::SerialPortNameParameter:
+    case ModbusDevice::SerialPortNameParameter:
         _comPort = value.toString();
         break;
-    case QModbusDevice::SerialDataBitsParameter:
+    case ModbusDevice::SerialDataBitsParameter:
         _dataBits = QSerialPort::DataBits(value.toInt());
         break;
-    case QModbusDevice::SerialParityParameter:
+    case ModbusDevice::SerialParityParameter:
         _parity = QSerialPort::Parity(value.toInt());
         break;
-    case QModbusDevice::SerialStopBitsParameter:
+    case ModbusDevice::SerialStopBitsParameter:
         _stopBits = QSerialPort::StopBits(value.toInt());
         break;
-    case QModbusDevice::SerialBaudRateParameter:
+    case ModbusDevice::SerialBaudRateParameter:
         _baudRate = QSerialPort::BaudRate(value.toInt());
         break;
     default:
@@ -308,17 +308,17 @@ void ModbusRtuClient::setupEnvironment()
 ///
 bool ModbusRtuClient::open()
 {
-    if (state() == QModbusDevice::ConnectedState)
+    if (state() == ModbusDevice::ConnectedState)
         return true;
 
     setupEnvironment(); // to be done before open
     if (_serialPort->open(QIODevice::ReadWrite)) {
-        setState(QModbusDevice::ConnectedState);
+        setState(ModbusDevice::ConnectedState);
         _serialPort->clear(); // only possible after open
     } else {
-        setError(_serialPort->errorString(), QModbusDevice::ConnectionError);
+        setError(_serialPort->errorString(), ModbusDevice::ConnectionError);
     }
-    return (state() == QModbusDevice::ConnectedState);
+    return (state() == ModbusDevice::ConnectedState);
 }
 
 ///
@@ -326,10 +326,10 @@ bool ModbusRtuClient::open()
 ///
 void ModbusRtuClient::close()
 {
-    if (state() == QModbusDevice::UnconnectedState)
+    if (state() == ModbusDevice::UnconnectedState)
         return;
 
-    setState(QModbusDevice::ClosingState);
+    setState(ModbusDevice::ClosingState);
 
     if (_serialPort->isOpen())
         _serialPort->close();
@@ -339,7 +339,7 @@ void ModbusRtuClient::close()
         // Finish each open reply and forget them
         ModbusClientPrivate::QueueElement elem = _queue.dequeue();
         if (!elem.reply.isNull()) {
-            elem.reply->setError(QModbusDevice::ReplyAbortedError,
+            elem.reply->setError(ModbusDevice::ReplyAbortedError,
                                  QModbusClient::tr("Reply aborted due to connection closure."));
             numberOfAborts++;
         }
@@ -348,7 +348,7 @@ void ModbusRtuClient::close()
     if (numberOfAborts > 0)
         qCDebug(QT_MODBUS_LOW) << "(RTU client) Aborted replies:" << numberOfAborts;
 
-    setState(QModbusDevice::UnconnectedState);
+    setState(ModbusDevice::UnconnectedState);
 }
 
 ///
@@ -359,10 +359,10 @@ void ModbusRtuClient::close()
 /// \param type
 /// \return
 ///
-QModbusReply* ModbusRtuClient::enqueueRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit &unit, QModbusReply::ReplyType type)
+ModbusReply* ModbusRtuClient::enqueueRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit &unit, ModbusReply::ReplyType type)
 {
-    auto reply = new QModbusReply(serverAddress == 0 ? QModbusReply::Broadcast : type, serverAddress, this);
-    reply->setProperty("RequestGroupId", requestGroupId);
+    auto reply = new ModbusReply(serverAddress == 0 ? ModbusReply::Broadcast : type, serverAddress, this);
+    reply->setRequestGroupId(requestGroupId);
 
     QueueElement element(reply, request, unit, numberOfRetries() + 1);
     element.adu = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, serverAddress, request);
@@ -403,9 +403,8 @@ void ModbusRtuClient::processQueue()
         scheduleNextRequest(_interFrameDelayMilliseconds);
     } else {
 
-        const auto requestGroupId = current.reply->property("RequestGroupId").toInt();
         const auto msgReq = ModbusMessage::create(current.adu, ModbusMessage::Rtu, QDateTime::currentDateTime(), true);
-        emit modbusRequest(requestGroupId, msgReq);
+        emit modbusRequest(current.reply->requestGroupId(), msgReq);
 
         current.bytesWritten = 0;
         current.numberOfRetries--;
@@ -499,10 +498,8 @@ void ModbusRtuClient::on_readyRead()
         qCWarning(QT_MODBUS) << "(RTU client) Discarding response with wrong CRC, received:"
                              << adu.checksum<quint16>() << ", calculated CRC:"
                              << QModbusSerialAdu::calculateCRC(adu.data(), adu.size());
-        #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         if (!current.reply.isNull())
-            current.reply->addIntermediateError(QModbusClient::ResponseCrcError);
-        #endif
+            current.reply->addIntermediateError(ModbusDevice::ResponseCrcError);
         return;
     }
 
@@ -510,10 +507,8 @@ void ModbusRtuClient::on_readyRead()
     if (!canMatchRequestAndResponse(response, adu.serverAddress())) {
         qCWarning(QT_MODBUS) << "(RTU client) Cannot match response with open request, "
                                 "ignoring";
-        #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         if (!current.reply.isNull())
-            current.reply->addIntermediateError(QModbusClient::ResponseRequestMismatch);
-        #endif
+            current.reply->addIntermediateError(ModbusDevice::ResponseRequestMismatch);
         return;
     }
 
@@ -532,7 +527,7 @@ void ModbusRtuClient::on_readyRead()
 ///
 void ModbusRtuClient::on_aboutToClose()
 {
-    Q_ASSERT(state() == QModbusDevice::ClosingState);
+    Q_ASSERT(state() == ModbusDevice::ClosingState);
     _responseTimer.stop();
 }
 
@@ -555,7 +550,7 @@ void ModbusRtuClient::on_responseTimeout(int timerId)
     if (current.numberOfRetries <= 0) {
         auto item = _queue.dequeue();
         if (item.reply) {
-            item.reply->setError(QModbusDevice::TimeoutError,
+            item.reply->setError(ModbusDevice::TimeoutError,
                                  QModbusClient::tr("Request timeout."));
         }
     }
@@ -580,7 +575,7 @@ void ModbusRtuClient::on_bytesWritten(qint64 bytes)
 
     qCDebug(QT_MODBUS) << "(RTU client) Send successful:" << current.requestPdu;
 
-    if (!current.reply.isNull() && current.reply->type() == QModbusReply::Broadcast) {
+    if (!current.reply.isNull() && current.reply->type() == ModbusReply::Broadcast) {
         _state = ProcessReply;
         processQueueElement({}, ModbusMessage::Rtu, current.reply->serverAddress(), _queue.dequeue());
         _state = Idle;
@@ -605,35 +600,35 @@ void ModbusRtuClient::on_error(QSerialPort::SerialPortError error)
      switch (error) {
     case QSerialPort::DeviceNotFoundError:
         setError(QModbusDevice::tr("Referenced serial device does not exist."),
-                    QModbusDevice::ConnectionError);
+                    ModbusDevice::ConnectionError);
         break;
     case QSerialPort::PermissionError:
         setError(QModbusDevice::tr("Cannot open serial device due to permissions."),
-                    QModbusDevice::ConnectionError);
+                    ModbusDevice::ConnectionError);
         break;
     case QSerialPort::OpenError:
     case QSerialPort::NotOpenError:
         setError(QModbusDevice::tr("Cannot open serial device."),
-                    QModbusDevice::ConnectionError);
+                    ModbusDevice::ConnectionError);
         break;
     case QSerialPort::WriteError:
-        setError(QModbusDevice::tr("Write error."), QModbusDevice::WriteError);
+        setError(QModbusDevice::tr("Write error."), ModbusDevice::WriteError);
         break;
     case QSerialPort::ReadError:
-        setError(QModbusDevice::tr("Read error."), QModbusDevice::ReadError);
+        setError(QModbusDevice::tr("Read error."), ModbusDevice::ReadError);
         break;
     case QSerialPort::ResourceError:
-        setError(QModbusDevice::tr("Resource error."), QModbusDevice::ConnectionError);
+        setError(QModbusDevice::tr("Resource error."), ModbusDevice::ConnectionError);
         break;
     case QSerialPort::UnsupportedOperationError:
         setError(QModbusDevice::tr("Device operation is not supported error."),
-                    QModbusDevice::ConfigurationError);
+                    ModbusDevice::ConfigurationError);
         break;
     case QSerialPort::TimeoutError:
-        setError(QModbusDevice::tr("Timeout error."), QModbusDevice::TimeoutError);
+        setError(QModbusDevice::tr("Timeout error."), ModbusDevice::TimeoutError);
         break;
     case QSerialPort::UnknownError:
-        setError(QModbusDevice::tr("Unknown error."), QModbusDevice::UnknownError);
+        setError(QModbusDevice::tr("Unknown error."), ModbusDevice::UnknownError);
         break;
     default:
         qCDebug(QT_MODBUS) << "(RTU server) Unhandled QSerialPort error" << error;

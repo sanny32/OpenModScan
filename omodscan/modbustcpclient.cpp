@@ -31,7 +31,7 @@ ModbusTcpClient::~ModbusTcpClient()
 ///
 bool ModbusTcpClient::open()
 {
-    if (state() == QModbusDevice::ConnectedState)
+    if (state() == ModbusDevice::ConnectedState)
         return true;
 
     if (_socket->state() != QAbstractSocket::UnconnectedState)
@@ -41,7 +41,7 @@ bool ModbusTcpClient::open()
                                          + QString::number(_networkPort));
 
     if (!url.isValid()) {
-        setError(tr("Invalid connection settings for TCP communication specified."), QModbusDevice::ConnectionError);
+        setError(tr("Invalid connection settings for TCP communication specified."), ModbusDevice::ConnectionError);
         qCWarning(QT_MODBUS) << "(TCP client) Invalid host:" << url.host() << "or port:"
                              << url.port();
         return false;
@@ -68,7 +68,7 @@ bool ModbusTcpClient::isOpen() const
 ///
 void ModbusTcpClient::close()
 {
-    if (state() == QModbusDevice::UnconnectedState)
+    if (state() == ModbusDevice::UnconnectedState)
         return;
 
     _socket->disconnectFromHost();
@@ -79,12 +79,12 @@ void ModbusTcpClient::close()
 /// \param parameter
 /// \return
 ///
-QVariant ModbusTcpClient::connectionParameter(QModbusDevice::ConnectionParameter parameter) const
+QVariant ModbusTcpClient::connectionParameter(ModbusDevice::ConnectionParameter parameter) const
 {
     switch (parameter) {
-    case QModbusDevice::NetworkPortParameter:
+    case ModbusDevice::NetworkPortParameter:
         return _networkPort;
-    case QModbusDevice::NetworkAddressParameter:
+    case ModbusDevice::NetworkAddressParameter:
         return _networkAddress;
     default:
         break;
@@ -97,13 +97,13 @@ QVariant ModbusTcpClient::connectionParameter(QModbusDevice::ConnectionParameter
 /// \param parameter
 /// \param value
 ///
-void ModbusTcpClient::setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value)
+void ModbusTcpClient::setConnectionParameter(ModbusDevice::ConnectionParameter parameter, const QVariant &value)
 {
     switch (parameter) {
-    case QModbusDevice::NetworkPortParameter:
+    case ModbusDevice::NetworkPortParameter:
         _networkPort = value.toInt();
         break;
-    case QModbusDevice::NetworkAddressParameter:
+    case ModbusDevice::NetworkAddressParameter:
         _networkAddress = value.toString();
         break;
     default:
@@ -119,7 +119,7 @@ void ModbusTcpClient::on_connected()
 {
     qCDebug(QT_MODBUS) << "(TCP client) Connected to" << _socket->peerAddress() << "on port" << _socket->peerPort();
     _responseBuffer.clear();
-    setState(QModbusDevice::ConnectedState);
+    setState(ModbusDevice::ConnectedState);
 }
 
 ///
@@ -128,7 +128,7 @@ void ModbusTcpClient::on_connected()
 void ModbusTcpClient::on_disconnected()
 {
     qCDebug(QT_MODBUS)  << "(TCP client) Connection closed.";
-    setState(QModbusDevice::UnconnectedState);
+    setState(ModbusDevice::UnconnectedState);
     cleanupTransactionStore();
 }
 
@@ -140,9 +140,9 @@ void ModbusTcpClient::on_errorOccurred(QAbstractSocket::SocketError error)
 {
     if (_socket->state() == QAbstractSocket::UnconnectedState) {
         cleanupTransactionStore();
-        setState(QModbusDevice::UnconnectedState);
+        setState(ModbusDevice::UnconnectedState);
     }
-    setError(QModbusClient::tr("TCP socket error (%1).").arg(_socket->errorString()), QModbusDevice::ConnectionError);
+    setError(QModbusClient::tr("TCP socket error (%1).").arg(_socket->errorString()), ModbusDevice::ConnectionError);
 }
 
 ///
@@ -207,7 +207,7 @@ void ModbusTcpClient::on_readyRead()
 /// \param type
 /// \return
 ///
-QModbusReply* ModbusTcpClient::enqueueRequest(int requestGroupId, const QModbusRequest& request, int serverAddress, const QModbusDataUnit& unit, QModbusReply::ReplyType type)
+ModbusReply* ModbusTcpClient::enqueueRequest(int requestGroupId, const QModbusRequest& request, int serverAddress, const QModbusDataUnit& unit, ModbusReply::ReplyType type)
 {
     auto writeToSocket = [this](int requestGroupId, quint16 tId, const QModbusRequest& request, int address) {
         QByteArray buffer;
@@ -220,7 +220,7 @@ QModbusReply* ModbusTcpClient::enqueueRequest(int requestGroupId, const QModbusR
         int writtenBytes = _socket->write(buffer);
         if (writtenBytes == -1 || writtenBytes < buffer.size()) {
             qCDebug(QT_MODBUS) << "(TCP client) Cannot write request to socket.";
-            setError(QModbusTcpClient::tr("Could not write request to socket."), QModbusDevice::WriteError);
+            setError(QModbusTcpClient::tr("Could not write request to socket."), ModbusDevice::WriteError);
             return false;
         }
         qCDebug(QT_MODBUS_LOW) << "(TCP client) Sent TCP ADU:" << buffer.toHex();
@@ -233,9 +233,9 @@ QModbusReply* ModbusTcpClient::enqueueRequest(int requestGroupId, const QModbusR
     if (!writeToSocket(requestGroupId, tId, request, serverAddress))
         return nullptr;
 
-    auto reply = new QModbusReply(type, serverAddress, this);
-    reply->setProperty("RequestGroupId", requestGroupId);
-    reply->setProperty("TransactionId", tId);
+    auto reply = new ModbusReply(type, serverAddress, this);
+    reply->setRequestGroupId(requestGroupId);
+    reply->setTransactionId(tId);
 
     const auto element = QueueElement{ reply, request, unit, numberOfRetries(), timeout() };
     _transactionStore.insert(tId, element);
@@ -267,7 +267,7 @@ QModbusReply* ModbusTcpClient::enqueueRequest(int requestGroupId, const QModbusR
                 qCDebug(QT_MODBUS) << "(TCP client) Resend request with tId:" << Qt::hex << tId;
             } else {
                 qCDebug(QT_MODBUS) << "(TCP client) Timeout of request with tId:" <<Qt::hex << tId;
-                elem.reply->setError(QModbusDevice::TimeoutError,
+                elem.reply->setError(ModbusDevice::TimeoutError,
                                      QModbusClient::tr("Request timeout."));
             }
         });
@@ -294,7 +294,7 @@ void ModbusTcpClient::cleanupTransactionStore()
     for (const auto &elem : std::as_const(_transactionStore)) {
         if (elem.reply.isNull())
             continue;
-        elem.reply->setError(QModbusDevice::ReplyAbortedError,
+        elem.reply->setError(ModbusDevice::ReplyAbortedError,
                              QModbusClient::tr("Reply aborted due to connection closure."));
     }
     _transactionStore.clear();

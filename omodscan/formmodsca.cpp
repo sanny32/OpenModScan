@@ -482,7 +482,7 @@ void FormModSca::startSimulation(QModbusDataUnit::RegisterType type, quint16 add
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, deviceId, params);
-    if(_modbusClient.state() != QModbusDevice::ConnectedState) _dataSimulator->pauseSimulations();
+    if(_modbusClient.state() != ModbusDevice::ConnectedState) _dataSimulator->pauseSimulations();
 }
 
 ///
@@ -563,7 +563,7 @@ void FormModSca::show()
 ///
 void FormModSca::on_timeout()
 {
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != ModbusDevice::ConnectedState)
         return;
 
     const auto dd = displayDefinition();
@@ -588,7 +588,7 @@ void FormModSca::on_timeout()
 ///
 void FormModSca::beginUpdate()
 {
-    if(_modbusClient.state() != QModbusDevice::ConnectedState) {
+    if(_modbusClient.state() != ModbusDevice::ConnectedState) {
         setPollState(PollState::Off);
         return;
     }
@@ -611,9 +611,13 @@ void FormModSca::beginUpdate()
 /// \param reply
 /// \return
 ///
-bool FormModSca::isValidReply(const QModbusReply* const reply) const
+bool FormModSca::isValidReply(const ModbusReply* const reply) const
 {
     const auto dd = displayDefinition();
+    if(reply->serverAddress() != dd.DeviceId) {
+        return false;
+    }
+
     const auto data = reply->result();
     const auto response = reply->rawResult();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
@@ -644,7 +648,7 @@ void FormModSca::logModbusMessage(int requestGroupId, QSharedPointer<const Modbu
     if(!msg)
         return;
 
-    if(requestGroupId == _formId && msg->deviceId() == ui->lineEditDeviceId->value<int>())
+    if(requestGroupId == _formId)
         ui->outputWidget->updateTraffic(msg);
     else if(requestGroupId == 0 && isActive())
         ui->outputWidget->updateTraffic(msg);
@@ -694,12 +698,12 @@ void FormModSca::on_modbusResponse(int requestGroupId, QSharedPointer<const Modb
 /// \brief FormModSca::on_modbusReply
 /// \param reply
 ///
-void FormModSca::on_modbusReply(const QModbusReply* const reply)
+void FormModSca::on_modbusReply(const ModbusReply* const reply)
 {
     if(!reply) return;
 
     const QModbusResponse response = reply->rawResult();
-    const bool hasError = reply->error() != QModbusDevice::NoError;
+    const bool hasError = reply->error() != ModbusDevice::NoError;
 
     switch(response.functionCode())
     {
@@ -714,8 +718,9 @@ void FormModSca::on_modbusReply(const QModbusReply* const reply)
         return;
     }
 
-    if(reply->property("RequestGroupId").toInt() != _formId)
-    return;
+    if(reply->requestGroupId() != _formId) {
+        return;
+    }
 
     if (!hasError)
     {
@@ -730,7 +735,7 @@ void FormModSca::on_modbusReply(const QModbusReply* const reply)
             ui->statisticWidget->increaseValidSlaveResponses();
         }
     }
-    else if (reply->error() == QModbusDevice::ProtocolError)
+    else if (reply->error() == ModbusDevice::ProtocolError)
     {
         const auto ex = ModbusException(response.exceptionCode());
         const auto errorString = QString("%1 (%2)").arg(ex, formatUInt8Value(DataDisplayMode::Hex, true, ex));
@@ -738,6 +743,7 @@ void FormModSca::on_modbusReply(const QModbusReply* const reply)
     }
     else
     {
+
         ui->outputWidget->setStatus(reply->errorString());
     }
 
@@ -834,7 +840,7 @@ void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
     if(!_modbusClient.isValid() ||
-        _modbusClient.state() != QModbusDevice::ConnectedState)
+        _modbusClient.state() != ModbusDevice::ConnectedState)
     {
         return;
     }
@@ -953,7 +959,7 @@ void FormModSca::on_simulationStopped(QModbusDataUnit::RegisterType type, quint1
 ///
 void FormModSca::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, QVariant value)
 {
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != ModbusDevice::ConnectedState)
     {
         return;
     }

@@ -31,7 +31,7 @@ private slots:
     void on_radioButtonDecimal_clicked(bool checked);
     void on_pushButtonSend_clicked();
 
-    void on_modbusReply(const QModbusReply* const reply);
+    void on_modbusReply(const ModbusReply* const reply);
     void on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
     void on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
 

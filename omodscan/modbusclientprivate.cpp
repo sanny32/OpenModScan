@@ -20,13 +20,13 @@ ModbusClientPrivate::ModbusClientPrivate(QObject *parent)
 ///
 bool ModbusClientPrivate::connectDevice()
 {
-    if (_state != QModbusDevice::UnconnectedState)
+    if (_state != ModbusDevice::UnconnectedState)
         return false;
 
-    setState(QModbusDevice::ConnectingState);
+    setState(ModbusDevice::ConnectingState);
 
     if (!open()) {
-        setState(QModbusDevice::UnconnectedState);
+        setState(ModbusDevice::UnconnectedState);
         return false;
     }
 
@@ -39,10 +39,10 @@ bool ModbusClientPrivate::connectDevice()
 ///
 void ModbusClientPrivate::disconnectDevice()
 {
-    if (auto s = state(); s == QModbusDevice::UnconnectedState || s == QModbusDevice::ClosingState)
+    if (auto s = state(); s == ModbusDevice::UnconnectedState || s == ModbusDevice::ClosingState)
         return;
 
-    setState(QModbusDevice::ClosingState);
+    setState(ModbusDevice::ClosingState);
 
     //Unconnected is set by backend -> might be delayed by event loop
     close();
@@ -52,7 +52,7 @@ void ModbusClientPrivate::disconnectDevice()
 /// \brief ModbusClientPrivate::state
 /// \return
 ///
-QModbusDevice::State ModbusClientPrivate::state() const
+ModbusDevice::State ModbusClientPrivate::state() const
 {
     return _state;
 }
@@ -61,7 +61,7 @@ QModbusDevice::State ModbusClientPrivate::state() const
 /// \brief ModbusClientPrivate::error
 /// \return
 ///
-QModbusDevice::Error ModbusClientPrivate::error() const
+ModbusDevice::Error ModbusClientPrivate::error() const
 {
     return _error;
 }
@@ -125,7 +125,7 @@ void ModbusClientPrivate::setNumberOfRetries(int number)
 /// \param requestGroupId
 /// \return
 ///
-QModbusReply* ModbusClientPrivate::sendReadRequest(const QModbusDataUnit& read, int serverAddress, int requestGroupId)
+ModbusReply* ModbusClientPrivate::sendReadRequest(const QModbusDataUnit& read, int serverAddress, int requestGroupId)
 {
     return sendRequest(requestGroupId, createReadRequest(read), serverAddress, &read);
 }
@@ -137,7 +137,7 @@ QModbusReply* ModbusClientPrivate::sendReadRequest(const QModbusDataUnit& read, 
 /// \param requestGroupId
 /// \return
 ///
-QModbusReply* ModbusClientPrivate::sendWriteRequest(const QModbusDataUnit& write, int serverAddress, int requestGroupId)
+ModbusReply* ModbusClientPrivate::sendWriteRequest(const QModbusDataUnit& write, int serverAddress, int requestGroupId)
 {
     return sendRequest(requestGroupId, createWriteRequest(write), serverAddress, &write);
 }
@@ -150,7 +150,7 @@ QModbusReply* ModbusClientPrivate::sendWriteRequest(const QModbusDataUnit& write
 /// \param requestGroupId
 /// \return
 ///
-QModbusReply* ModbusClientPrivate::sendReadWriteRequest(const QModbusDataUnit& read, const QModbusDataUnit& write, int serverAddress, int requestGroupId)
+ModbusReply* ModbusClientPrivate::sendReadWriteRequest(const QModbusDataUnit& read, const QModbusDataUnit& write, int serverAddress, int requestGroupId)
 {
     return sendRequest(requestGroupId, createRWRequest(read, write), serverAddress, &read);
 }
@@ -162,7 +162,7 @@ QModbusReply* ModbusClientPrivate::sendReadWriteRequest(const QModbusDataUnit& r
 /// \param requestGroupId
 /// \return
 ///
-QModbusReply* ModbusClientPrivate::sendRawRequest(const QModbusRequest& request, int serverAddress, int requestGroupId)
+ModbusReply* ModbusClientPrivate::sendRawRequest(const QModbusRequest& request, int serverAddress, int requestGroupId)
 {
     return sendRequest(requestGroupId, request, serverAddress, nullptr);
 }
@@ -171,7 +171,7 @@ QModbusReply* ModbusClientPrivate::sendRawRequest(const QModbusRequest& request,
 /// \brief ModbusClientPrivate::setState
 /// \param newState
 ///
-void ModbusClientPrivate::setState(QModbusDevice::State newState)
+void ModbusClientPrivate::setState(ModbusDevice::State newState)
 {
     if (newState == _state)
         return;
@@ -185,7 +185,7 @@ void ModbusClientPrivate::setState(QModbusDevice::State newState)
 /// \param errorText
 /// \param error
 ///
-void ModbusClientPrivate::setError(const QString& errorText, QModbusDevice::Error error)
+void ModbusClientPrivate::setError(const QString& errorText, ModbusDevice::Error error)
 {
     _error = error;
     _errorString = errorText;
@@ -200,23 +200,23 @@ void ModbusClientPrivate::setError(const QString& errorText, QModbusDevice::Erro
 /// \param unit
 /// \return
 ///
-QModbusReply *ModbusClientPrivate::sendRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit* const unit)
+ModbusReply *ModbusClientPrivate::sendRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit* const unit)
 {
     if (!isOpen() || state() != QModbusDevice::ConnectedState) {
         qCWarning(QT_MODBUS) << "(Client) Device is not connected";
-        setError(QModbusClient::tr("Device not connected."), QModbusDevice::ConnectionError);
+        setError(QModbusClient::tr("Device not connected."), ModbusDevice::ConnectionError);
         return nullptr;
     }
 
     if (!request.isValid()) {
         qCWarning(QT_MODBUS) << "(Client) Refuse to send invalid request.";
-        setError(QModbusClient::tr("Invalid Modbus request."), QModbusDevice::ProtocolError);
+        setError(QModbusClient::tr("Invalid Modbus request."), ModbusDevice::ProtocolError);
         return nullptr;
     }
 
     if (unit)
-        return enqueueRequest(requestGroupId, request, serverAddress, *unit, QModbusReply::Common);
-    return enqueueRequest(requestGroupId, request, serverAddress, QModbusDataUnit(), QModbusReply::Raw);
+        return enqueueRequest(requestGroupId, request, serverAddress, *unit, ModbusReply::Common);
+    return enqueueRequest(requestGroupId, request, serverAddress, QModbusDataUnit(), ModbusReply::Raw);
 }
 
 ///
@@ -331,27 +331,32 @@ void ModbusClientPrivate::processQueueElement(const QModbusResponse& pdu, Modbus
     if (element.reply.isNull())
         return;
 
+    const quint16 transactionId = element.reply->transactionId();
+    const auto msg = ModbusMessage::create(pdu, protocolType, serverAddress, transactionId, QDateTime::currentDateTime(), false);
+    emit modbusResponse(element.reply->requestGroupId(), msg);
+
     element.reply->setRawResult(pdu);
 
-    const auto requestGroupId = element.reply->property("RequestGroupId").toInt();
-    const quint16 transactionId = element.reply->property("TransactionId").toInt();
-    const auto msg = ModbusMessage::create(pdu, protocolType, serverAddress, transactionId, QDateTime::currentDateTime(), false);
-    emit modbusResponse(requestGroupId, msg);
+    if(serverAddress != element.reply->serverAddress()) {
+        element.reply->setError(ModbusDevice::InvalidResponseError,
+                                QModbusClient::tr("An invalid server address was received."));
+        return;
+    }
 
     if (pdu.isException()) {
-        element.reply->setError(QModbusDevice::ProtocolError,
+        element.reply->setError(ModbusDevice::ProtocolError,
                                 QModbusClient::tr("Modbus Exception Response."));
         return;
     }
 
-    if (element.reply->type() == QModbusReply::Broadcast) {
+    if (element.reply->type() == ModbusReply::Broadcast) {
         element.reply->setFinished(true);
         return;
     }
 
     QModbusDataUnit unit = element.unit;
     if (!processResponse(pdu, &unit)) {
-        element.reply->setError(static_cast<QModbusDevice::Error>(9), // InvalidResponseError
+        element.reply->setError(ModbusDevice::InvalidResponseError,
                                 QModbusClient::tr("An invalid response has been received."));
         return;
     }

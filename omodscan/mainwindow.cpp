@@ -178,9 +178,9 @@ void MainWindow::on_awake()
     ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
 
-    ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
-    ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionQuickConnect->setEnabled(state == QModbusDevice::UnconnectedState);
+    ui->actionConnect->setEnabled(state == ModbusDevice::UnconnectedState);
+    ui->actionDisconnect->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionQuickConnect->setEnabled(state == ModbusDevice::UnconnectedState);
     ui->actionEnable->setEnabled(!_autoStart);
     ui->actionDisable->setEnabled(_autoStart);
     ui->actionDataDefinition->setEnabled(frm != nullptr);
@@ -206,16 +206,16 @@ void MainWindow::on_awake()
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
     ui->actionSwapBytes->setEnabled(frm != nullptr);
 
-    ui->actionWriteSingleCoil->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionWriteHoldingRegister->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionWriteHoldingRegisterValue->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionWriteHoldingRegisterBits->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionForceCoils->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionPresetRegs->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionMaskWrite->setEnabled(state == QModbusDevice::ConnectedState);
-    ui->actionUserMsg->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionWriteSingleCoil->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionWriteHoldingRegister->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionWriteHoldingRegisterValue->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionWriteHoldingRegisterBits->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionForceCoils->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionPresetRegs->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionMaskWrite->setEnabled(state == ModbusDevice::ConnectedState);
+    ui->actionUserMsg->setEnabled(state == ModbusDevice::ConnectedState);
 
-    ui->actionAddressScan->setEnabled(state == QModbusDevice::ConnectedState);
+    ui->actionAddressScan->setEnabled(state == ModbusDevice::ConnectedState);
     ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
     ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
     ui->actionResetCtrs->setEnabled(frm != nullptr);
@@ -1742,7 +1742,7 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
             s << _connParams;
 
             // connection state
-            s << (_modbusClient.state() == QModbusDevice::ConnectedState);
+            s << (_modbusClient.state() == ModbusDevice::ConnectedState);
         }
         break;
 
@@ -1757,7 +1757,7 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
 
             w << _connParams;
             w.writeStartElement("ConnectionState");
-            w. writeCharacters((_modbusClient.state() == QModbusDevice::ConnectedState) ? "Connected" : "Disconnected");
+            w. writeCharacters((_modbusClient.state() == ModbusDevice::ConnectedState) ? "Connected" : "Disconnected");
             w.writeEndElement();
 
             w.writeStartElement("Forms");

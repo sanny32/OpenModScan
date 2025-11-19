@@ -26,6 +26,15 @@ cleanup:
   - '*.a'
 
 modules:
+  - name: qt6-serialport
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: archive
+        url: https://mirrors.20i.com/pub/qt.io/archive/qt/6.9/6.9.3/submodules/qtserialport-everywhere-src-6.9.3.tar.xz
+        sha256: 4b18ec030ff2644698c3f5c776894d8ffe5d3174c964d9bd8668429c943e8298
+
   - name: qt6-serialbus
     buildsystem: cmake
     config-opts:
@@ -33,17 +42,8 @@ modules:
       - -DQT_FEATURE_socketcan=OFF
     sources:
       - type: archive
-        url: https://mirrors.20i.com/pub/qt.io/archive/qt/6.9/6.9.2/submodules/qtserialbus-everywhere-src-6.9.2.tar.xz
-        sha256: 951e07c2faf4476c75a59af96b40eeedbdf1a1c5c354c2825b59eaf3594f2a76
-
-  - name: qt6-serialport
-    buildsystem: cmake
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-    sources:
-      - type: archive
-        url: https://mirrors.20i.com/pub/qt.io/archive/qt/6.9/6.9.2/submodules/qtserialport-everywhere-src-6.9.2.zip
-        sha256: e30f6492e80a5532568450174fbfa2b8c166f28a75d7858ff1cf7f30e998e371
+        url: https://mirrors.20i.com/pub/qt.io/archive/qt/6.9/6.9.3/submodules/qtserialbus-everywhere-src-6.9.3.tar.xz
+        sha256: 0a8139da071afcb768b9d115f514a3e5783312530b2be69e3ee42b301d775bcf
 
   - name: omodscan
     builddir: true
@@ -61,6 +61,7 @@ modules:
       - type: git
         url: https://github.com/sanny32/OpenModScan.git
         branch: ${REF}
+        default-branch: main
       - type: file
         path: io.github.sanny32.omodscan.png
       - type: file

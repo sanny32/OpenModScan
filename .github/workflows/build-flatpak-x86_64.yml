@@ -28,7 +28,7 @@ jobs:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Set up Flatpak
-        uses: flatpak/flatpak-github-actions/setup@v6
+        uses: flatpak/flatpak‑github‑actions/flatpak-builder@v6
         with:
           bundle: "true"
 

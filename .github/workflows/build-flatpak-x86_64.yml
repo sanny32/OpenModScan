@@ -48,7 +48,7 @@ jobs:
       - name: Build Flatpak
         run: |
           mkdir -p build-repo build-dir
-          flatpak-builder --repo=build-repo build-dir .flatpak/io.github.sanny32.omodscan.yaml
+          flatpak-builder --repo=build-repo build-dir .flatpak/io.github.sanny32.omodscan.build.yaml
           flatpak build-bundle build-repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan
 
       - name: Upload bundle artifact

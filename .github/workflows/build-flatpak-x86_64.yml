@@ -46,6 +46,7 @@ jobs:
             a\
             \        $REF_TYPE: $TARGET_REF
           }" .flatpak/io.github.sanny32.omodscan.yaml
+          cat .flatpak/io.github.sanny32.omodscan.yaml
 
       - name: Prepare Flatpak
         run: |

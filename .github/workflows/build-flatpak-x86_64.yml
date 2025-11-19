@@ -35,11 +35,11 @@ jobs:
 
       - name: Set Flatpak manifest branch
         run: |
-              TARGET_REF="${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}"
-              echo "Target ref for Flatpak manifest is: $TARGET_REF"
-              sed -i "s/^\([[:space:]]*branch:[[:space:]]*\).*/\1$TARGET_REF/" io.github.sanny32.omodscan.yaml
-              echo "Updated manifest:"
-              cat io.github.sanny32.omodscan.yaml
+          TARGET_REF="${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}"
+          echo "Target ref for Flatpak manifest is: $TARGET_REF"
+          sed -i "s/^\([[:space:]]*branch:[[:space:]]*\).*/\1$TARGET_REF/" .flatpak/io.github.sanny32.omodscan.yaml
+          echo "Updated manifest:"
+          cat .flatpak/io.github.sanny32.omodscan.yaml
 
       - name: Prepare Flatpak
         run: |

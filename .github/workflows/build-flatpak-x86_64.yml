@@ -20,11 +20,17 @@ jobs:
   flatpak:
     name: Flatpak Build
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Set REF env
         run: |
           echo "REF=${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          sudo apt update
+          sudo apt install -y flatpak-builder flatpak
 
       - name: Checkout repository
         uses: actions/checkout@v4

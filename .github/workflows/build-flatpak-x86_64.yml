@@ -42,9 +42,8 @@ jobs:
 
       - name: Build Flatpak
         run: |
-          mkdir -p build-repo build-dir
-          flatpak-builder --disable-rofiles-fuse --default-branch=dev --repo=build-repo build-dir .flatpak/io.github.sanny32.omodscan.yaml
-          flatpak build-bundle build-repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan
+          flatpak run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build ./flatpakio.github.sanny32.omodscan.yaml
+          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4

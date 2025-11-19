@@ -40,10 +40,10 @@ jobs:
       - name: Build Flatpak
         run: |
           cd .flatpak
-          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak install -y flathub org.kde.Sdk//6.9
-          flatpak install -y flathub org.flatpak.Builder
-          flatpak run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build io.github.sanny32.omodscan.yaml
+          flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak --user install -y flathub org.kde.Sdk//6.9
+          flatpak --user install -y flathub org.flatpak.Builder
+          flatpak --user run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build io.github.sanny32.omodscan.yaml
           flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 
       - name: Upload bundle artifact
@@ -51,4 +51,4 @@ jobs:
         with:
           name: OpenModScan-flatpak
           path: |
-            io.github.sanny32.omodscan.flatpak
+            .flatpak/io.github.sanny32.omodscan.flatpak

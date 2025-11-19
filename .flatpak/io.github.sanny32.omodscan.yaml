@@ -2,7 +2,7 @@ id: io.github.sanny32.omodscan
 branch: stable
 runtime: org.kde.Platform
 runtime-version: "6.9"
-sdk: org.kde.Sdk//6.9
+sdk: org.kde.Sdk
 command: omodscan
 finish-args:
   - "--socket=wayland"

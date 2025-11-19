@@ -22,10 +22,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set REF env
-        run: |
-          echo "REF=${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
@@ -35,12 +31,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.REF }}
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Prepare Flatpak
         run: |
           flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak --user install -y flathub org.kde.Sdk//6.9
+          flatpak --user install -y flathub org.kde.Platform//6.9
+          flatpak --user install -y flathub org.kde.Sdk
           flatpak --user install -y flathub org.flatpak.Builder
 
       - name: Build Flatpak

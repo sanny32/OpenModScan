@@ -35,16 +35,15 @@ jobs:
 
       - name: Prepare Flatpak
         run: |
-          flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak --user install -y flathub org.kde.Platform//6.9
-          flatpak --user install -y flathub org.kde.Sdk//6.9
-          flatpak --user install -y flathub org.flatpak.Builder
+          sudo flatpak --system remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak --system install -y flathub org.kde.Sdk//6.9
+          sudo flatpak --system install -y flathub org.flatpak.Builder
 
       - name: Build Flatpak
         run: |
           cd .flatpak
           flatpak info org.kde.Sdk//6.9
-          flatpak --user run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev --arch=x86_64 build io.github.sanny32.omodscan.yaml
+          sudo flatpak --system run org.flatpak.Builder --repo=repo --force-clean --verbose --default-branch=dev build io.github.sanny32.omodscan.yaml
           flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 
       - name: Upload bundle artifact

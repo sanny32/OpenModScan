@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.9
-      options: --privileged
+      options: --privileged -v /var/lib/dbus:/var/lib/dbus:ro
 
     steps:
       - name: Set REF env

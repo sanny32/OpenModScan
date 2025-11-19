@@ -22,7 +22,7 @@ struct DisplayDefinition
     bool ZeroBasedAddress = false;
     bool HexAddress = false;
     bool AutoscrollLog = false;
-    AddressSpace AddrSpace;
+    AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     quint16 DataViewColumnsDistance = 16;
     bool LeadingZeros = true;
 

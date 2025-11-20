@@ -53,11 +53,14 @@ public:
     int rowCount() const;
     QModelIndex index(int row);
 
-    QSharedPointer<const ModbusMessage> addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request);
+    void addItem(QSharedPointer<const ModbusMessage> msg);
     QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
 
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
+
+    bool showLeadingZeros() const;
+    void setShowLeadingZeros(bool value);
 
     int rowLimit() const;
     void setRowLimit(int val);
@@ -79,6 +82,7 @@ private:
     QAction* _copyAct;
     QAction* _copyBytesAct;
     DataDisplayMode _dataDisplayMode;
+    bool _showLeadingZeros = true;
 };
 
 #endif // MODBUSLOGWIDGET_H

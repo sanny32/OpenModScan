@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=OpenModScan
+Comment=An Open Source Modbus Master (Client) Utility
+Exec=/app/bin/omodscan
+Icon=io.github.sanny32.omodscan
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=true

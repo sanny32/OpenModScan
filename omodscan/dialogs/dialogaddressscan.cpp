@@ -51,7 +51,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
     switch(role)
     {
         case Qt::ToolTipRole:
-            return formatAddress(_data.registerType(), getAddress(idx), false);
+            return formatAddress(_data.registerType(), getAddress(idx), _addressSpace, false);
 
         case Qt::DisplayRole:
         {
@@ -59,7 +59,7 @@ QVariant TableViewItemModel::data(const QModelIndex &index, int role) const
             const auto value = _data.value(idx);
             const auto pointType = _data.registerType();
             auto result = _hexView ? formatHexValue(pointType, value, _byteOrder, outValue) :
-                                    formatUInt16Value(pointType, value, _byteOrder, outValue);
+                                    formatUInt16Value(pointType, value, _byteOrder, _showLeadingZeros, outValue);
 
             return _data.hasValue(idx) ? result.remove('<').remove('>') : "-";
         }
@@ -150,7 +150,7 @@ QVariant TableViewItemModel::headerData(int section, Qt::Orientation orientation
                     const auto pointAddress = getAddress(0);
                     const auto addressFrom = pointAddress + section * _columns;
                     const auto addressTo = pointAddress + qMin<quint16>(length - 1, (section + 1) * _columns - 1);
-                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom, _hexAddress), formatAddress(pointType, addressTo, _hexAddress));
+                    return QString("%1-%2").arg(formatAddress(pointType, addressFrom, _addressSpace, _hexAddress), formatAddress(pointType, addressTo, _addressSpace, _hexAddress));
                 }
             }
         break;
@@ -175,10 +175,10 @@ Qt::ItemFlags TableViewItemModel::flags(const QModelIndex &index) const
 }
 
 ///
-/// \brief TableViewItemModel::addressBse
+/// \brief TableViewItemModel::addressBase
 /// \return
 ///
-AddressBase TableViewItemModel::addressBse() const
+AddressBase TableViewItemModel::addressBase() const
 {
     return _addressBase;
 }
@@ -190,6 +190,42 @@ AddressBase TableViewItemModel::addressBse() const
 void TableViewItemModel::setAddressBase(AddressBase base)
 {
     _addressBase = base;
+}
+
+///
+/// \brief TableViewItemModel::addressSpace
+/// \return
+///
+AddressSpace TableViewItemModel::addressSpace() const
+{
+    return _addressSpace;
+}
+
+///
+/// \brief TableViewItemModel::setAddressSpace
+/// \param space
+///
+void TableViewItemModel::setAddressSpace(AddressSpace space)
+{
+    _addressSpace = space;
+}
+
+///
+/// \brief TableViewItemModel::showLeadingZeros
+/// \return
+///
+bool TableViewItemModel::showLeadingZeros() const
+{
+    return _showLeadingZeros;
+}
+
+///
+/// \brief TableViewItemModel::setShowLeadingZeros
+/// \param value
+///
+void TableViewItemModel::setShowLeadingZeros(bool value)
+{
+    _showLeadingZeros = value;
 }
 
 ///
@@ -251,7 +287,7 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
         {
             const DataDisplayMode mode = _hexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16;
             const auto addr = item.Addr + (_addressBase == AddressBase::Base1 ? 1 : 0);
-            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, addr, _hexAddress),
+            return QString("[%1] %2 [%3]").arg(formatAddress(item.Type, addr, _addressSpace, _hexAddress),
                                                item.Msg->isRequest() ? "<<" : ">>",
                                                item.Msg->toString(mode));
         }
@@ -267,10 +303,10 @@ QVariant LogViewModel::data(const QModelIndex& index, int role) const
 }
 
 ///
-/// \brief LogViewModel::addressBse
+/// \brief LogViewModel::addressBase
 /// \return
 ///
-AddressBase LogViewModel::addressBse() const
+AddressBase LogViewModel::addressBase() const
 {
     return _addressBase;
 }
@@ -282,6 +318,24 @@ AddressBase LogViewModel::addressBse() const
 void LogViewModel::setAddressBase(AddressBase base)
 {
     _addressBase = base;
+}
+
+///
+/// \brief LogViewModel::addressSpace
+/// \return
+///
+AddressSpace LogViewModel::addressSpace() const
+{
+    return _addressSpace;
+}
+
+///
+/// \brief LogViewModel::setAddressSpace
+/// \param space
+///
+void LogViewModel::setAddressSpace(AddressSpace space)
+{
+    _addressSpace = space;
 }
 
 ///
@@ -335,9 +389,14 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
 
     auto viewModel = new TableViewItemModel(this);
     viewModel->setHexAddress(dd.HexAddress);
+    viewModel->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    viewModel->setAddressSpace(dd.AddrSpace);
+    viewModel->setShowLeadingZeros(dd.LeadingZeros);
 
     auto logModel = new LogViewModel(this);
     logModel->setHexAddress(dd.HexAddress);
+    logModel->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    logModel->setAddressSpace(dd.AddrSpace);
 
     auto proxyLogModel = new LogViewProxyModel(this);
     proxyLogModel->setSourceModel(logModel);
@@ -347,7 +406,7 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->lineEditStartAddress->setPaddingZeroes(true);
+    ui->lineEditStartAddress->setLeadingZeroes(true);
     ui->lineEditStartAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
@@ -532,34 +591,42 @@ void DialogAddressScan::on_logView_clicked(const QModelIndex &index)
 
 ///
 /// \brief DialogAddressScan::on_modbusRequest
-/// \param requestId
-/// \param deviceId
-/// \param transactionId
-/// \param request
+/// \param requestGroupId
+/// \param msg
 ///
-void DialogAddressScan::on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& request)
+void DialogAddressScan::on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
 {
-    if(requestId == -1)
-        updateLogView(deviceId, transactionId, request);
+    if(requestGroupId == -1)
+        updateLogView(msg);
+}
+
+///
+/// \brief DialogAddressScan::on_modbusResponse
+/// \param requestGroupId
+/// \param msg
+///
+void DialogAddressScan::on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
+{
+    if(requestGroupId == -1)
+        updateLogView(msg);
 }
 
 ///
 /// \brief DialogAddressScan::on_modbusReply
 /// \param reply
 ///
-void DialogAddressScan::on_modbusReply(QModbusReply* reply)
+void DialogAddressScan::on_modbusReply(const ModbusReply* const reply)
 {
     if(!_scanning || !reply) return;
 
-    if(-1 != reply->property("RequestId").toInt())
+    if(-1 != reply->requestGroupId())
     {
         return;
     }
 
     updateProgress();
-    updateLogView(reply);
 
-    if (reply->error() == QModbusDevice::NoError)
+    if (reply->error() == ModbusDevice::NoError)
         updateTableView(reply->result().startAddress(), reply->result().values());
 
     if(_requestCount > ui->lineEditLength->value<int>()
@@ -664,7 +731,7 @@ void DialogAddressScan::startScan()
     if(_scanning)
         return;
 
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != ModbusDevice::ConnectedState)
     {
         QMessageBox::warning(this, windowTitle(), tr("No connection to MODBUS device!"));
         return;
@@ -802,54 +869,23 @@ void DialogAddressScan::updateTableView(int pointAddress, QVector<quint16> value
 
 ///
 /// \brief DialogAddressScan::updateLogView
-/// \param deviceId
-/// \param transactionId
-/// \param request
+/// \param msg
 ///
-void DialogAddressScan::updateLogView(int deviceId, int transactionId, const QModbusRequest& request)
+void DialogAddressScan::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
+    if(!msg)
+        return;
+
     quint16 pointAddress;
-    request.decodeData(&pointAddress);
-
-    auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
-    auto msg = ModbusMessage::create(request, protocol, deviceId, QDateTime::currentDateTime(), true);
-
-    if(protocol == ModbusMessage::Tcp)
-        ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
+    msg->adu()->pdu().decodeData(&pointAddress);
 
     const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
     pointAddress += (addressBase == AddressBase::Base0 ? 0 : 1);
 
-    proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(), msg);
-}
-
-///
-/// \brief DialogAddressScan::updateLogView
-/// \param reply
-///
-void DialogAddressScan::updateLogView(const QModbusReply* reply)
-{
-    if(!reply)
-        return;
-
-    const auto deviceId = reply->serverAddress();
-    const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
-    const auto pointAddress = reply->property("RequestData").value<QModbusDataUnit>().startAddress() + (addressBase == AddressBase::Base0 ? 0 : 1);
-    const auto transactionId = reply->property("TransactionId").toInt();
-    const auto pdu = reply->rawResult();
-
     auto proxyLogModel = ((LogViewProxyModel*)ui->logView->model());
-
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
-    auto msg = ModbusMessage::create(pdu, protocol, deviceId, QDateTime::currentDateTime(), false);
-
-    if(protocol == ModbusMessage::Tcp)
-        ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
-
     proxyLogModel->append(pointAddress, ui->comboBoxPointType->currentPointType(), msg);
 }
+
 
 ///
 /// \brief DialogAddressScan::exportPdf

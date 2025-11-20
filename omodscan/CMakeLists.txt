@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.11.1
+    VERSION 1.12.0
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -23,6 +23,10 @@ list(GET VERSION_LIST 2 VERSION_PATCH)
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat LinguistTools QUIET)
 if (NOT Qt6_FOUND)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools QUIET)
+find_package(Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt5 REQUIRED COMPONENTS Core)
 endif()
 
 if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
@@ -113,8 +117,12 @@ set(SOURCES
     main.cpp
     mainwindow.cpp
     modbusclient.cpp
+    modbusclientprivate.cpp
+    modbustcpclient.cpp
+    modbusrtuclient.cpp
     modbusdataunit.cpp
     modbusmessages/modbusmessage.cpp
+    modbusreply.cpp
     modbusrtuscanner.cpp
     modbusscanner.cpp
     modbustcpscanner.cpp
@@ -184,7 +192,12 @@ set(HEADERS
     htmldelegate.h
     mainwindow.h
     modbusclient.h
+    modbusclientprivate.h
+    modbustcpclient.h
+    modbusreply.h
+    modbusrtuclient.h
     modbusdataunit.h
+    modbusdevice.h
     modbusexception.h
     modbusfunction.h
     modbusmessages/diagnostics.h
@@ -266,10 +279,6 @@ set(TS_FILES
 target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort)
 
-if(TARGET update_translations)
-    add_dependencies(${PROJECT_NAME} update_translations)
-endif()
-
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
@@ -290,6 +299,10 @@ elseif(Qt5_FOUND AND EXISTS ${Qt5_LUPDATE_EXECUTABLE})
 else()
     message(STATUS "lupdate not available - skipping translation updates")
     add_custom_target(update_translations)
+endif()
+
+if(TARGET update_translations)
+    add_dependencies(${PROJECT_NAME} update_translations)
 endif()
 
 if(WIN32)

@@ -14,10 +14,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    ReadExceptionStatusRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    ReadExceptionStatusRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadExceptionStatus);
     }
@@ -46,10 +47,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    ReadExceptionStatusResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    ReadExceptionStatusResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadExceptionStatus);
     }

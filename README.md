@@ -1,10 +1,14 @@
 # OpenModScan
+
+[![GitHub all releases](https://img.shields.io/github/downloads/sanny32/OpenModScan/total?logo=github&cacheSeconds=3600)](https://github.com/sanny32/OpenModScan/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sanny32/OpenModScan?logo=github&cacheSeconds=3600)](https://github.com/sanny32/OpenModScan/releases/latest)
+[![License](https://img.shields.io/github/license/sanny32/OpenModScan)](LICENSE.md)
+
 OpenModScan is a free and open-source Modbus Master (Client) utility supporting both Modbus-TCP and Modbus-RTU protocols.
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/fc839046-f9de-484a-ab8c-1b553635cba8" />
+<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/9454af59-2c08-4a62-9706-0fb1e668e67b" />
 
-
-<img width="1292" height="760" alt="image" src="https://github.com/user-attachments/assets/f4e6599c-480d-4b26-b0c3-49e5dc8d1f17" />
+<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/bc0cdbd3-0a67-4477-b09f-f75ced9dfa12" />
 
 
 ## Features
@@ -28,8 +32,7 @@ Registers
 
 ## Modbus Logging
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/b12b019f-6df6-4c85-b7f3-85e347576c83" />
-
+<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/23226306-85d1-464d-ad74-4c007665c7ef" />
 
     
 ## Extended Featues
@@ -116,22 +119,20 @@ Below are the methods for installing the OpenModScan for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodscan_X.XX.X-Y_x86.exe`
-- For 64-bit Windows: `qt5-omodscan_X.XX.X-Y_amd64.exe` or `qt6-omodscan_X.XX.X-Y_amd64.exe`
+- For 32-bit Windows: `qt5-omodscan_1.12.0_x86.exe`
+- For 64-bit Windows: `qt5-omodscan_1.12.0_x64.exe` or `qt6-omodscan_1.12.0_x64.exe`
 
-Replace `X.XX.X-Y` with the application version.
 
 ## Debian/Ubintu/Mint/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install -f ./qt6-omodscan_X.XX.X-Y_amd64.deb
+sudo apt install -f ./qt6-omodscan_1.12.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install -f ./qt5-omodscan_X.XX.X-Y_amd64.deb
+sudo apt install -f ./qt5-omodscan_1.12.0-1_amd64.deb
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the DEB package run:
@@ -147,9 +148,8 @@ sudo apt remove qt5-omodscan
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+sudo dnf install ./qt6-omodscan_1.12.0-1.x86_64.rpm
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the RPM package run:
@@ -161,9 +161,8 @@ sudo dnf remove qt6-omodscan
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+apt-get install ./qt6-omodscan_1.12.0-1.x86_64.rpm
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the RPM package run as root user:
@@ -179,9 +178,8 @@ sudo rpm --import qt6-omodscan.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodscan_X.XX.X-Y.x86_64.rpm
+sudo zypper install ./qt6-omodscan_1.12.0-1.x86_64.rpm
 ```
-Replace `X.XX.X-Y` with the application version.
 
 ### Remove
 To remove the RPM package run:

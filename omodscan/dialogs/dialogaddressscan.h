@@ -32,8 +32,14 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-    AddressBase addressBse() const;
+    AddressBase addressBase() const;
     void setAddressBase(AddressBase base);
+
+    AddressSpace addressSpace() const;
+    void setAddressSpace(AddressSpace space);
+
+    bool showLeadingZeros() const;
+    void setShowLeadingZeros(bool value);
 
     void reset(const ModbusDataUnit& data, int columns = 10){
         beginResetModel();
@@ -68,8 +74,10 @@ private:
     ModbusDataUnit _data;
     bool _hexView = false;
     bool _hexAddress = false;
+    AddressSpace _addressSpace = AddressSpace::Addr6Digits;
     AddressBase _addressBase = AddressBase::Base1;
     ByteOrder _byteOrder = ByteOrder::Direct;
+    bool _showLeadingZeros = true;
 };
 
 ///
@@ -86,8 +94,11 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
-    AddressBase addressBse() const;
+    AddressBase addressBase() const;
     void setAddressBase(AddressBase base);
+
+    AddressSpace addressSpace() const;
+    void setAddressSpace(AddressSpace space);
 
     void append(quint16 addr, QModbusDataUnit::RegisterType type, QSharedPointer<const ModbusMessage> msg) {
         if(msg == nullptr) return;
@@ -127,6 +138,7 @@ private:
 private:
     bool _hexView = false;
     bool _hexAddress = false;
+    AddressSpace _addressSpace = AddressSpace::Addr6Digits;
     AddressBase _addressBase = AddressBase::Base1;
     QVector<LogViewItem> _items;
 };
@@ -268,8 +280,11 @@ protected:
 private slots:
     void on_awake();
     void on_timeout();
-    void on_modbusReply(QModbusReply* reply);
-    void on_modbusRequest(int requestId, int deviceId, int transactionId, const QModbusRequest& data);
+
+    void on_modbusReply(const ModbusReply* const reply);
+    void on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
+    void on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
+
     void on_checkBoxHexView_toggled(bool);
     void on_checkBoxShowValid_toggled(bool);
     void on_lineEditStartAddress_valueChanged(const QVariant& value);
@@ -297,8 +312,7 @@ private:
     void updateProgress();
     void updateTableView(int pointAddress, QVector<quint16> values);
 
-    void updateLogView(int deviceId, int transactionId, const QModbusRequest& request);
-    void updateLogView(const QModbusReply* reply);
+    void updateLogView(QSharedPointer<const ModbusMessage> msg);
 
     void exportPdf(const QString& filename);
     void exportCsv(const QString& filename);

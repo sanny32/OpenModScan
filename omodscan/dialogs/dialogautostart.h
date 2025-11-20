@@ -16,7 +16,7 @@ class DialogAutoStart : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogAutoStart(QString& filepath, QWidget *parent = nullptr);
+    explicit DialogAutoStart(QString& filepath, const QString& savePath, QWidget *parent = nullptr);
     ~DialogAutoStart();
 
     void accept() override;
@@ -28,6 +28,7 @@ private slots:
 private:
     Ui::DialogAutoStart *ui;
     QString& _filepath;
+    QString _savePath;
 };
 
 #endif // DIALOGAUTOSTART_H

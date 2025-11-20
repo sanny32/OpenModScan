@@ -17,10 +17,14 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
     ,_writeParams(params)
 {
     ui->setupUi(this);
+
+    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditNode->setValue(params.DeviceId);
+
+    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
     setValue(params.Value.toUInt());
@@ -48,7 +52,7 @@ void DialogWriteHoldingRegisterBits::accept()
     }
     _writeParams.Value = value;
     _writeParams.Address = ui->lineEditAddress->value<int>();
-    _writeParams.Node = ui->lineEditNode->value<int>();
+    _writeParams.DeviceId = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
 }
@@ -63,8 +67,8 @@ void DialogWriteHoldingRegisterBits::on_lineEditAddress_valueChanged(const QVari
 
     const quint32 address = value.toUInt();
     ModbusClient* cli = _writeParams.Client;
-    if(cli != nullptr && cli->state() == QModbusDevice::ConnectedState) {
-        setValue(cli->readRegister(QModbusDataUnit::HoldingRegisters, address, ui->lineEditNode->value<int>()));
+    if(cli != nullptr && cli->state() == ModbusDevice::ConnectedState) {
+        setValue(cli->syncReadRegister(QModbusDataUnit::HoldingRegisters, address, ui->lineEditNode->value<int>()));
     }
 }
 

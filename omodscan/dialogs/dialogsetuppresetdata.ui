@@ -15,12 +15,12 @@
   </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="labelAlignment">
-    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
    <item row="0" column="0">
     <widget class="QLabel" name="labelSlaveDevice">
      <property name="text">
-      <string>Slave Device: </string>
+      <string>Device Id: </string>
      </property>
     </widget>
    </item>
@@ -72,10 +72,10 @@
       </size>
      </property>
      <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
      <property name="centerButtons">
       <bool>true</bool>

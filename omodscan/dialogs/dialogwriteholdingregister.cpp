@@ -18,10 +18,14 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ,_simParams(simParams)
 {
     ui->setupUi(this);
+
+    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditNode->setValue(params.DeviceId);
+
+    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
     if(simParams.Mode == SimulationMode::Disabled)
@@ -56,6 +60,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         break;
 
         case DataDisplayMode::UInt16:
+            ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
@@ -68,7 +73,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         case DataDisplayMode::Hex:
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->labelValue->setText(tr("Value, (HEX): "));
-            ui->lineEditValue->setPaddingZeroes(true);
+            ui->lineEditValue->setLeadingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
@@ -100,6 +105,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
+            ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
@@ -112,6 +118,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
+            ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(params.Value.toULongLong());
         break;
@@ -134,7 +141,7 @@ void DialogWriteHoldingRegister::accept()
 {
     _writeParams.Address = ui->lineEditAddress->value<int>();
     _writeParams.Value = ui->lineEditValue->value<QVariant>();
-    _writeParams.Node = ui->lineEditNode->value<int>();
+    _writeParams.DeviceId = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
 }

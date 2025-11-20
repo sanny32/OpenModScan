@@ -3,13 +3,14 @@
 
 #include <QDialog>
 #include <QTableWidgetItem>
+#include "qfixedsizedialog.h"
 #include "modbuswriteparams.h"
 
 namespace Ui {
 class DialogForceMultipleCoils;
 }
 
-class DialogForceMultipleCoils : public QDialog
+class DialogForceMultipleCoils : public QFixedSizeDialog
 {
     Q_OBJECT
 

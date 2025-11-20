@@ -8,7 +8,7 @@ class NumericLineEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(InputMode inputMode READ inputMode WRITE setInputMode)
-    Q_PROPERTY(bool paddingZeroes READ paddingZeroes WRITE setPaddingZeroes)
+    Q_PROPERTY(bool leadingZeroes READ leadingZeroes WRITE setLeadingZeroes)
 
 public:
     enum InputMode
@@ -33,8 +33,8 @@ public:
     void setValue(T value)
     { internalSetValue(value); }
 
-    bool paddingZeroes() const;
-    void setPaddingZeroes(bool on);
+    bool leadingZeroes() const;
+    void setLeadingZeroes(bool on);
 
     template<typename T>
     QRange<T> range() const

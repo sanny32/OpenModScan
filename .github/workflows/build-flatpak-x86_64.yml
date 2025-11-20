@@ -1,0 +1,62 @@
+name: Build Flatpak
+
+on:
+  push:
+    tags:
+      - "*"
+
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Checkout branch'
+        required: false
+      tag:
+        description: 'Checkout tag'
+        required: false
+
+jobs:
+  flatpak:
+    name: Flatpak Build
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+      options: --privileged --security-opt seccomp=unconfined
+
+    steps:
+      - name: Install dependencies
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          apt update
+          apt install -y flatpak-builder flatpak
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Set Flatpak manifest branch
+        run: |
+            REF_TYPE="branch"
+            if [ -n "${{ github.event.inputs.tag }}" ]; then
+              REF_TYPE="tag"
+            fi
+            sed -i "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" .flatpak/io.github.sanny32.omodscan.yaml
+
+      - name: Prepare Flatpak
+        run: |
+          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install -y flathub org.kde.Sdk//6.9
+
+      - name: Build Flatpak
+        run: |
+          cd .flatpak
+          flatpak info org.kde.Sdk//6.9
+          flatpak-builder --repo=repo --force-clean --disable-rofiles-fuse --verbose build io.github.sanny32.omodscan.yaml
+          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
+
+      - name: Upload bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: io.github.sanny32.omodscan.flatpak
+          path: |
+            .flatpak/io.github.sanny32.omodscan.flatpak

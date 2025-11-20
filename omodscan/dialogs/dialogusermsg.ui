@@ -24,7 +24,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="labelSlaveAddress">
          <property name="text">
-          <string>Slave Address: </string>
+          <string>Device Id: </string>
          </property>
         </widget>
        </item>

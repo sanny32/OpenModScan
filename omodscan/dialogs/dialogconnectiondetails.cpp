@@ -21,6 +21,7 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     ui->comboBoxFlowControl->setCurrentIndex(-1);
     ui->comboBoxIPAddress->setCurrentText(cd.TcpParams.IPAddress);
     ui->lineEditServicePort->setValue(cd.TcpParams.ServicePort);
+    ui->comboBoxSerialPort->setCurrentText(cd.SerialParams.PortName);
     ui->comboBoxBaudRate->setCurrentValue(cd.SerialParams.BaudRate);
     ui->comboBoxWordLength->setCurrentValue(cd.SerialParams.WordLength);
     ui->comboBoxParity->setCurrentParity(cd.SerialParams.Parity);

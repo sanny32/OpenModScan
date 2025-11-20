@@ -15,11 +15,16 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     ,_params(params)
 {
     ui->setupUi(this);
+
+    ui->lineEditSlaveDevice->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditSlaveDevice->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditSlaveDevice->setValue(params.DeviceId);
+
+    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditSlaveDevice->setValue(params.SlaveAddress);
     ui->lineEditAddress->setValue(params.PointAddress);
+
     ui->lineEditNumberOfPoints->setValue(params.Length);
 
     switch(pointType)
@@ -53,7 +58,7 @@ DialogSetupPresetData::~DialogSetupPresetData()
 ///
 void DialogSetupPresetData::accept()
 {
-    _params.SlaveAddress = ui->lineEditSlaveDevice->value<int>();
+    _params.DeviceId = ui->lineEditSlaveDevice->value<int>();
     _params.PointAddress = ui->lineEditAddress->value<int>();
     _params.Length = ui->lineEditNumberOfPoints->value<int>();
     QFixedSizeDialog::accept();

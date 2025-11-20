@@ -8,13 +8,13 @@
 
 ///
 /// \brief DialogUserMsg::DialogUserMsg
-/// \param slaveAddress
+/// \param dd
 /// \param func
 /// \param mode
 /// \param client
 /// \param parent
 ///
-DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
+DialogUserMsg::DialogUserMsg(const DisplayDefinition& dd, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogUserMsg)
     ,_modbusClient(client)
@@ -25,11 +25,16 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
+    ui->lineEditSlaveAddress->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditSlaveAddress->setValue(slaveAddress);
+    ui->lineEditSlaveAddress->setValue(dd.DeviceId);
+
     ui->comboBoxFunction->addItems(ModbusFunction::validCodes());
     ui->comboBoxFunction->setCurrentFunctionCode(func);
+
+    ui->requestInfo->setShowLeadingZeros(dd.LeadingZeros);
     ui->requestInfo->setShowTimestamp(false);
+    ui->responseInfo->setShowLeadingZeros(dd.LeadingZeros);
     ui->responseInfo->setShowTimestamp(false);
 
     switch(mode)
@@ -44,6 +49,8 @@ DialogUserMsg::DialogUserMsg(quint8 slaveAddress, QModbusPdu::FunctionCode func,
     }
 
     ui->sendData->setFocus();
+    connect(&_modbusClient, &ModbusClient::modbusRequest, this, &DialogUserMsg::on_modbusRequest);
+    connect(&_modbusClient, &ModbusClient::modbusResponse, this, &DialogUserMsg::on_modbusResponse);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogUserMsg::on_modbusReply);
 }
 
@@ -191,7 +198,7 @@ void DialogUserMsg::on_pushButtonSend_clicked()
     ui->responseBuffer->clear();
     ui->responseInfo->clear();
 
-    if(_modbusClient.state() != QModbusDevice::ConnectedState)
+    if(_modbusClient.state() != ModbusDevice::ConnectedState)
     {
         QMessageBox::warning(this, windowTitle(), tr("No connection to device"));
         return;
@@ -211,32 +218,51 @@ void DialogUserMsg::on_pushButtonSend_clicked()
 /// \brief DialogUserMsg::on_modbusReply
 /// \param reply
 ///
-void DialogUserMsg::on_modbusReply(QModbusReply* reply)
+void DialogUserMsg::on_modbusReply(const ModbusReply* const reply)
 {
     if(!reply) return;
 
-    if(0 != reply->property("RequestId").toInt())
+    if(0 != reply->requestGroupId())
     {
         return;
     }
 
-    if(reply->error() != QModbusDevice::NoError &&
-        reply->error() != QModbusDevice::ProtocolError)
+    if(reply->error() != ModbusDevice::NoError &&
+        reply->error() != ModbusDevice::ProtocolError)
     {
         QMessageBox::warning(this, windowTitle(), reply->errorString());
         return;
     }
 
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Tcp ? ModbusMessage::Tcp : ModbusMessage::Rtu;
-    _mm = ModbusMessage::create(reply->rawResult(), protocol, reply->serverAddress(), QDateTime::currentDateTime(), false);
+    ui->pushButtonSend->setEnabled(true);
+}
 
-    if(protocol == ModbusMessage::Tcp)
-        ((QModbusAduTcp*)_mm->adu())->setTransactionId(reply->property("TransactionId").toInt());
+///
+/// \brief DialogUserMsg::on_modbusRequest
+/// \param requestGroupId
+/// \param msg
+///
+void DialogUserMsg::on_modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
+{
+    if(requestGroupId != 0)
+        return;
 
+    ui->requestInfo->setModbusMessage(msg);
+}
+
+///
+/// \brief DialogUserMsg::on_modbusResponse
+/// \param requestGroupId
+/// \param msg
+///
+void DialogUserMsg::on_modbusResponse(int requestGroupId, QSharedPointer<const ModbusMessage> msg)
+{
+    if(requestGroupId != 0)
+        return;
+
+    _mm = msg;
     ui->responseBuffer->setValue(*_mm.get());
     ui->responseInfo->setModbusMessage(_mm);
-
-    ui->pushButtonSend->setEnabled(true);
 }
 
 ///
@@ -281,6 +307,6 @@ void DialogUserMsg::updateRequestInfo()
     request.setData(ui->sendData->value());
 
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    auto msg = ModbusMessage::create(request, protocol, ui->lineEditSlaveAddress->value<int>(), QDateTime::currentDateTime(), true);
+    auto msg = ModbusMessage::create(request, protocol, ui->lineEditSlaveAddress->value<int>(), 0, QDateTime::currentDateTime(), true);
     ui->requestInfo->setModbusMessage(msg);
 }

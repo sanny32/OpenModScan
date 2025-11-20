@@ -14,10 +14,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    WriteMultipleRegistersRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    WriteMultipleRegistersRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }
@@ -88,10 +89,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    WriteMultipleRegistersResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    WriteMultipleRegistersResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleRegisters);
     }

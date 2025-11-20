@@ -14,10 +14,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    ReadFileRecordRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    ReadFileRecordRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }
@@ -71,10 +72,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    ReadFileRecordResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    ReadFileRecordResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::ReadFileRecord);
     }

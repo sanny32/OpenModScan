@@ -11,8 +11,8 @@
 /// \param hexAddress
 /// \param parent
 ///
-DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent) :
-      QDialog(parent)
+DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent)
+    : QFixedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleCoils)
     ,_writeParams(params)
     ,_hexAddress(hexAddress)
@@ -22,14 +22,15 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, in
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::Coils, params.Address, _hexAddress)));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress)));
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
-    ui->labelSlaveDevice->setText(QString(tr("Slave Device: <b>%1</b>")).arg(params.Node, 2, 10, QLatin1Char('0')));
+    ui->labelSlaveDevice->setText(QString(tr("Device Id: <b>%1</b>")).arg(params.DeviceId, 3, 10, QLatin1Char('0')));
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
 
     updateTableWidget();
+    adjustSize();
 }
 
 ///
@@ -112,8 +113,8 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + i * columns, _hexAddress);
-        const auto addressTo = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexAddress);
+        const auto addressFrom = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + i * columns, _writeParams.AddrSpace, _hexAddress);
+        const auto addressTo = formatAddress(QModbusDataUnit::Coils, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _writeParams.AddrSpace, _hexAddress);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
@@ -124,7 +125,7 @@ void DialogForceMultipleCoils::updateTableWidget()
                 auto item = new QTableWidgetItem(QString::number(_data[idx]));
                 item->setData(Qt::UserRole, idx);
                 item->setTextAlignment(Qt::AlignCenter);
-                item->setToolTip(formatAddress(QModbusDataUnit::Coils,_writeParams.Address + idx, _hexAddress));
+                item->setToolTip(formatAddress(QModbusDataUnit::Coils,_writeParams.Address + idx, _writeParams.AddrSpace, _hexAddress));
                 ui->tableWidget->setItem(i, j, item);
             }
             else

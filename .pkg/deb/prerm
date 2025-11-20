@@ -1,0 +1,5 @@
+#!/bin/bash
+# This `DEBIAN/prerm` script is run pre-remove
+
+INI_FILE=/opt/OpenModScan/bin/omodscan.ini
+[ -e "$INI_FILE" ] && rm "$INI_FILE" || true

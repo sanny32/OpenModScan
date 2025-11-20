@@ -31,6 +31,9 @@ QUIntValidator::QUIntValidator(quint64 bottom, quint64 top, QObject *parent)
 ///
 QValidator::State QUIntValidator::validate(QString& input, int &) const
 {
+    if(input.isEmpty())
+        return QValidator::Intermediate;
+
     bool ok = false;
     const auto value = input.toULongLong(&ok, 10);
 
@@ -40,4 +43,17 @@ QValidator::State QUIntValidator::validate(QString& input, int &) const
     }
 
     return QValidator::Invalid;
+}
+
+///
+/// \brief QUIntValidator::fixup
+/// \param input
+///
+void QUIntValidator::fixup(QString& input) const
+{
+    QValidator::fixup(input);
+
+    if(input.isEmpty()) {
+        input = QString::number(_bottom);
+    }
 }

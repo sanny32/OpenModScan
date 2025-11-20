@@ -91,15 +91,15 @@ void StatisticWidget::setPollState(PollState state)
     _pollState = state;
     switch (state)
     {
-        case Off:
+        case PollState::Off:
             ui->pushButtonPause->setEnabled(false);
             ui->pushButtonPause->setText(tr("Pause Polling"));
         break;
-        case Running:
+        case PollState::Running:
             ui->pushButtonPause->setEnabled(true);
             ui->pushButtonPause->setText(tr("Pause Polling"));
         break;
-        case Paused:
+        case PollState::Paused:
             ui->pushButtonPause->setEnabled(true);
             ui->pushButtonPause->setText(tr("Resume Polling"));
         break;
@@ -121,9 +121,9 @@ void StatisticWidget::on_pushButtonResetCtrs_clicked()
 void StatisticWidget::on_pushButtonPause_clicked()
 {
     switch (_pollState) {
-    case Off: break;
-    case Running: setPollState(Paused); break;
-    case Paused: setPollState(Running); break;
+    case PollState::Off: break;
+    case PollState::Running: setPollState(PollState::Paused); break;
+    case PollState::Paused: setPollState(PollState::Running); break;
     }
 
     emit pollStateChanged(pollState());

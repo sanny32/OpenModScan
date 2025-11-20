@@ -6,88 +6,89 @@
 /// \param pdu
 /// \param protocol
 /// \param deviceId
+/// \param transactionId
 /// \param timestamp
 /// \param request
 /// \return
 ///
-QSharedPointer<const ModbusMessage> ModbusMessage::create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp, bool request)
+QSharedPointer<const ModbusMessage> ModbusMessage::create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
 {
     switch(pdu.functionCode())
     {
         case QModbusPdu::ReadCoils:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadCoilsRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadCoilsResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadCoilsRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadCoilsResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReadDiscreteInputs:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadDiscreteInputsRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadDiscreteInputsResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadDiscreteInputsRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadDiscreteInputsResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReadHoldingRegisters:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadHoldingRegistersRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadHoldingRegistersResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadHoldingRegistersRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadHoldingRegistersResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReadInputRegisters:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadInputRegistersRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadInputRegistersResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadInputRegistersRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadInputRegistersResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::WriteSingleCoil:
-            if(request) return QSharedPointer<const ModbusMessage>(new WriteSingleCoilRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new WriteSingleCoilResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new WriteSingleCoilRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new WriteSingleCoilResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::WriteSingleRegister:
-            if(request) return QSharedPointer<const ModbusMessage>(new WriteSingleRegisterRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new WriteSingleRegisterResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new WriteSingleRegisterRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new WriteSingleRegisterResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReadExceptionStatus:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadExceptionStatusRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadExceptionStatusResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadExceptionStatusRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadExceptionStatusResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::Diagnostics:
-            if(request) return QSharedPointer<const ModbusMessage>(new DiagnosticsRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new DiagnosticsResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new DiagnosticsRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new DiagnosticsResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::GetCommEventCounter:
-            if(request) return QSharedPointer<const ModbusMessage>(new GetCommEventCounterRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new GetCommEventCounterResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new GetCommEventCounterRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new GetCommEventCounterResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::GetCommEventLog:
-            if(request) return QSharedPointer<const ModbusMessage>(new GetCommEventLogRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new GetCommEventLogResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new GetCommEventLogRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new GetCommEventLogResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::WriteMultipleCoils:
-            if(request) return QSharedPointer<const ModbusMessage>(new WriteMultipleCoilsRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new WriteMultipleCoilsResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new WriteMultipleCoilsRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new WriteMultipleCoilsResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::WriteMultipleRegisters:
-            if(request) return QSharedPointer<const ModbusMessage>(new WriteMultipleRegistersRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new WriteMultipleRegistersResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new WriteMultipleRegistersRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new WriteMultipleRegistersResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReportServerId:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReportServerIdRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReportServerIdResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReportServerIdRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReportServerIdResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReadFileRecord:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadFileRecordRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadFileRecordResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadFileRecordRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadFileRecordResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::WriteFileRecord:
-            if(request) return QSharedPointer<const ModbusMessage>(new WriteFileRecordRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new WriteFileRecordResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new WriteFileRecordRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new WriteFileRecordResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::MaskWriteRegister:
-            if(request) return QSharedPointer<const ModbusMessage>(new MaskWriteRegisterRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new MaskWriteRegisterResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new MaskWriteRegisterRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new MaskWriteRegisterResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReadWriteMultipleRegisters:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadWriteMultipleRegistersRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadWriteMultipleRegistersResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadWriteMultipleRegistersRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadWriteMultipleRegistersResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         case QModbusPdu::ReadFifoQueue:
-            if(request) return QSharedPointer<const ModbusMessage>(new ReadFifoQueueRequest(pdu, protocol, deviceId, timestamp));
-            else return QSharedPointer<const ModbusMessage>(new ReadFifoQueueResponse(pdu, protocol, deviceId, timestamp));
+            if(request) return QSharedPointer<const ModbusMessage>(new ReadFifoQueueRequest(pdu, protocol, deviceId, transactionId, timestamp));
+            else return QSharedPointer<const ModbusMessage>(new ReadFifoQueueResponse(pdu, protocol, deviceId, transactionId, timestamp));
 
         default:
-            return QSharedPointer<const ModbusMessage>(new ModbusMessage(pdu, protocol, deviceId, timestamp, request));
+            return QSharedPointer<const ModbusMessage>(new ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, request));
     }
 }
 

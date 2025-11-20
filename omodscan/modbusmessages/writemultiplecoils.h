@@ -14,10 +14,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    WriteMultipleCoilsRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    WriteMultipleCoilsRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleCoils);
     }
@@ -88,10 +89,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    WriteMultipleCoilsResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    WriteMultipleCoilsResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::WriteMultipleCoils);
     }

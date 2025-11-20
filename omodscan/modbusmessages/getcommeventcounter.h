@@ -14,10 +14,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    GetCommEventCounterRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        : ModbusMessage(pdu, protocol, deviceId, timestamp, true)
+    GetCommEventCounterRequest(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        : ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, true)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventCounter);
     }
@@ -46,10 +47,11 @@ public:
     /// \param pdu
     /// \param protocol
     /// \param deviceId
+    /// \param transactionId
     /// \param timestamp
     ///
-    GetCommEventCounterResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, const QDateTime& timestamp)
-        :ModbusMessage(pdu, protocol, deviceId, timestamp, false)
+    GetCommEventCounterResponse(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp)
+        :ModbusMessage(pdu, protocol, deviceId, transactionId, timestamp, false)
     {
         Q_ASSERT(functionCode() == QModbusPdu::GetCommEventCounter);
     }

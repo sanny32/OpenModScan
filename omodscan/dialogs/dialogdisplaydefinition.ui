@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>384</width>
-    <height>398</height>
+    <width>333</width>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,14 +31,14 @@
      <property name="bottomMargin">
       <number>4</number>
      </property>
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QLabel" name="labelScanRate">
        <property name="text">
         <string>Scan Rate: </string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item row="1" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
         <number>4</number>
@@ -87,7 +87,121 @@
        </item>
       </layout>
      </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelFormName">
+       <property name="text">
+        <string>Form Name: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLineEdit" name="lineEditFormName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxDataView">
+     <property name="title">
+      <string>Data View</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_4">
+      <property name="formAlignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelColumnsDistance">
+        <property name="text">
+         <string>Columns Distance: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboBoxColumnsDistance">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>25</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">16</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBoxLeadingZeros">
+        <property name="text">
+         <string>Show leading zeros for unsigned values</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
@@ -194,7 +308,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="labelSlaveAddress">
         <property name="text">
-         <string>Slave Address:</string>
+         <string>Device Id: </string>
         </property>
        </widget>
       </item>

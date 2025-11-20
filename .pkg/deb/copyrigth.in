@@ -1,0 +1,7 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: @PACKAGE_NAME@
+Source: none
+
+Files: *
+Copyright: @RELEASE_YEAR@ Alexandr Ananev <mail@ananev.org>
+License: MIT

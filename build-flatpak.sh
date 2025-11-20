@@ -47,15 +47,14 @@ echo ""
 # Build project
 echo -e "\033[32mBuilding flatpak project...\033[0m"
 $FB_APP --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yaml
-
-echo ""
+echo -e "Done\n"
 
 # Create flatpak bundle
 echo -e "\033[32mCreating flatpak bundle...\033[0m"
 flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
-
-echo ""
+echo -e "Done\n"
 
 # Cleanup
 echo -e "\033[32mCleanup...\033[0m"
 rm -rf build repo .flatpak-builder
+echo "Done"

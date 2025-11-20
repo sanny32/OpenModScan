@@ -142,7 +142,7 @@ void ModbusRtuScanner::sendRequest(int deviceId)
 
                     if(error == QModbusDevice::TimeoutError)
                         sendRequest(deviceId + 1);
-                    else
+                    else if(inProgress())
                         QTimer::singleShot(_params.Timeout, [this, deviceId] { sendRequest(deviceId + 1); });
                 },
                 Qt::QueuedConnection);

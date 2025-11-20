@@ -20,7 +20,7 @@ jobs:
     name: Flatpak Build
     runs-on: ubuntu-latest
     container:
-    image: ubuntu:24.04
+      image: ubuntu:24.04
 
     steps:
       - name: Install dependencies

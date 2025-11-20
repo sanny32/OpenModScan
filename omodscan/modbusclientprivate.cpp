@@ -202,7 +202,7 @@ void ModbusClientPrivate::setError(const QString& errorText, ModbusDevice::Error
 ///
 ModbusReply *ModbusClientPrivate::sendRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit* const unit)
 {
-    if (!isOpen() || state() != QModbusDevice::ConnectedState) {
+    if (!isOpen() || state() != ModbusDevice::ConnectedState) {
         qCWarning(QT_MODBUS) << "(Client) Device is not connected";
         setError(QModbusClient::tr("Device not connected."), ModbusDevice::ConnectionError);
         return nullptr;

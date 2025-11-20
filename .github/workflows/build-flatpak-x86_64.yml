@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+    branches: [dev]
 
   workflow_dispatch:
     inputs:
@@ -18,13 +19,15 @@ jobs:
   flatpak:
     name: Flatpak Build
     runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
 
     steps:
       - name: Install dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
-          sudo apt update
-          sudo apt install -y flatpak-builder flatpak
+          apt update
+          apt install -y flatpak-builder flatpak
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,8 +45,8 @@ jobs:
 
       - name: Prepare Flatpak
         run: |
-          flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-          flatpak --user install -y flathub org.kde.Sdk//6.9
+          flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install -y flathub org.kde.Sdk//6.9
 
       - name: Build Flatpak
         run: |

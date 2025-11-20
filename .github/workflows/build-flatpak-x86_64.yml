@@ -36,12 +36,11 @@ jobs:
 
       - name: Set Flatpak manifest branch
         run: |
-            TARGET_REF="${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}"
             REF_TYPE="branch"
             if [ -n "${{ github.event.inputs.tag }}" ]; then
               REF_TYPE="tag"
             fi
-            sed -i "s|branch: main|$REF_TYPE: $TARGET_REF|" .flatpak/io.github.sanny32.omodscan.yaml
+            sed -i "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" .flatpak/io.github.sanny32.omodscan.yaml
 
       - name: Prepare Flatpak
         run: |

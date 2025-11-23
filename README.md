@@ -127,11 +127,11 @@ Run the installer:
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install -f ./qt6-omodscan_1.12.0-1_amd64.deb
+sudo apt install ./qt6-omodscan_1.12.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install -f ./qt5-omodscan_1.12.0-1_amd64.deb
+sudo apt install ./qt5-omodscan_1.12.0-1_amd64.deb
 ```
 
 ### Remove

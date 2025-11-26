@@ -1664,7 +1664,7 @@ Valid Slave Responses: %2</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="774"/>
+        <location filename="../formmodsca.cpp" line="777"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>

@@ -732,7 +732,10 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
         else
         {
             ui->outputWidget->updateData(reply->result());
-            ui->outputWidget->setStatus(QString());
+
+            if(pollState() != PollState::Paused) {
+                ui->outputWidget->setStatus(QString());
+            }
             ui->statisticWidget->increaseValidSlaveResponses();
         }
     }

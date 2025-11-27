@@ -1,8 +1,6 @@
 #ifndef FONTUTILS_H
 #define FONTUTILS_H
 
-#pragma once
-
 #include <QFont>
 #include <QList>
 #include <QFontDatabase>

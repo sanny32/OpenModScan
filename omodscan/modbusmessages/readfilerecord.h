@@ -99,7 +99,7 @@ public:
     ///
     bool isValid() const override {
         return ModbusMessage::isValid() &&
-               byteCount() >= 0x07 && byteCount() <= 0xF5;;
+               (isException() ? true : (byteCount() >= 0x07 && byteCount() <= 0xF5));
     }
 
     ///

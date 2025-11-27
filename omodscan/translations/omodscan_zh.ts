@@ -2278,14 +2278,14 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="147"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="193"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="148"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="194"/>
         <source>Copy Text</source>
         <translation>複製文字</translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="162"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="194"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="163"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="195"/>
         <source>Copy Bytes</source>
         <translation>複製位元組</translation>
     </message>

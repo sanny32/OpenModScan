@@ -115,7 +115,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() == 4;
+        return ModbusMessage::isValid() && (isException() ? true : (dataSize() == 4));
     }
 
     ///

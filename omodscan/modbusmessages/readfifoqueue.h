@@ -89,9 +89,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() &&
-               fifoCount() <= 31 &&
-               fifoCount() == fifoValue().size();
+        return ModbusMessage::isValid() && (isException() ? true : (fifoCount() <= 31 && fifoCount() == fifoValue().size()));
     }
 
     ///

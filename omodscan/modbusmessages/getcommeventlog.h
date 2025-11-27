@@ -74,8 +74,7 @@ public:
     ///
     bool isValid() const override {
         return ModbusMessage::isValid() &&
-               byteCount() > 0 &&
-               byteCount() == events().size() - 6;
+               (isException() ? true : (byteCount() > 0 && byteCount() == events().size() - 6));
     }
 
     ///

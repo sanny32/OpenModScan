@@ -99,8 +99,7 @@ public:
     ///
     bool isValid() const override {
         return ModbusMessage::isValid() &&
-               byteCount() > 0 &&
-               byteCount() == registerValue().size();
+               (isException() ? true : (byteCount() > 0 && byteCount() == registerValue().size()));
     }
 
     ///

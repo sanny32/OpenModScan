@@ -100,8 +100,7 @@ public:
     ///
     bool isValid() const override {
         return ModbusMessage::isValid() &&
-               length() >= 0x09 &&
-               length() <= 0xFB;
+               (isException() ? true : (length() >= 0x09 && length() <= 0xFB));
     }
 
     ///

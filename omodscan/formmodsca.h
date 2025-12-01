@@ -108,9 +108,11 @@ signals:
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
     void captureError(const QString& error);
+    void doubleClicked();
 
 protected:
     void changeEvent(QEvent* event) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
 private slots:
     void on_timeout();

@@ -1,3 +1,4 @@
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPalette>
 #include <QDateTime>
@@ -83,6 +84,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     connect(_dataSimulator, &DataSimulator::simulationStarted, this, &FormModSca::on_simulationStarted);
     connect(_dataSimulator, &DataSimulator::simulationStopped, this, &FormModSca::on_simulationStopped);
     connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormModSca::on_dataSimulated);
+
+    ui->frameDataDefinition->installEventFilter(this);
 }
 
 ///
@@ -105,6 +108,24 @@ void FormModSca::changeEvent(QEvent* event)
     }
 
     QWidget::changeEvent(event);
+}
+
+///
+/// \brief FormModSca::eventFilter
+/// \param watched
+/// \param event
+/// \return
+///
+bool FormModSca::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui->frameDataDefinition && event->type() == QEvent::MouseButtonDblClick) {
+        auto* me = static_cast<QMouseEvent*>(event);
+        if(me->pos().x() > ui->statisticWidget->geometry().right()) {
+            emit doubleClicked();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 ///
@@ -573,11 +594,11 @@ void FormModSca::on_timeout()
     {
         if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
         {
-            _noSlaveResponsesCounter++;
             if(_noSlaveResponsesCounter > _modbusClient.numberOfRetries())
             {
                 ui->outputWidget->setStatus(tr("No Responses from Slave Device"));
             }
+            _noSlaveResponsesCounter++;
         }
 
         _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);

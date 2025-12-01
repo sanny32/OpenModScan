@@ -88,6 +88,9 @@ PollState StatisticWidget::pollState() const
 ///
 void StatisticWidget::setPollState(PollState state)
 {
+    if(_pollState == state)
+        return;
+
     _pollState = state;
     switch (state)
     {
@@ -104,6 +107,7 @@ void StatisticWidget::setPollState(PollState state)
             ui->pushButtonPause->setText(tr("Resume Polling"));
         break;
     }
+    emit pollStateChanged(pollState());
 }
 
 ///

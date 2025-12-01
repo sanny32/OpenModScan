@@ -38,18 +38,26 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
 
     _timer.setInterval(1000);
 
+    ui->lineEditAddress->blockSignals(true);
     ui->lineEditAddress->setLeadingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
     ui->lineEditAddress->setValue(0);
+    ui->lineEditAddress->blockSignals(false);
 
+    ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(50);
+    ui->lineEditLength->blockSignals(false);
 
+    ui->lineEditDeviceId->blockSignals(true);
     ui->lineEditDeviceId->setLeadingZeroes(true);
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
+    ui->lineEditDeviceId->blockSignals(false);
 
+    ui->comboBoxAddressBase->blockSignals(true);
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
+    ui->comboBoxAddressBase->blockSignals(false);
 
     const auto dd = displayDefinition();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
@@ -623,7 +631,6 @@ void FormModSca::beginUpdate()
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
     if(pollState() == PollState::Off) {
-        _timer.start();
         setPollState(PollState::Running);
     }
 }
@@ -793,7 +800,6 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
 ///
 void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
-    _timer.stop();
     setPollState(PollState::Off);
     ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
 }
@@ -806,6 +812,7 @@ void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+
     beginUpdate();
 }
 
@@ -817,6 +824,7 @@ void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+
     beginUpdate();
 }
 
@@ -828,6 +836,7 @@ void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+
     beginUpdate();
 }
 
@@ -852,9 +861,10 @@ void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
-    beginUpdate();
 
     emit pointTypeChanged(type);
+
+    beginUpdate();
 }
 
 ///

@@ -577,7 +577,8 @@ void ModbusRtuClient::on_bytesWritten(qint64 bytes)
 
     if (!current.reply.isNull() && current.reply->type() == ModbusReply::Broadcast) {
         _state = ProcessReply;
-        processQueueElement({}, ModbusMessage::Rtu, current.reply->serverAddress(), _queue.dequeue());
+        const int serverAddress = current.reply->serverAddress();
+        processQueueElement({}, ModbusMessage::Rtu, serverAddress, _queue.dequeue());
         _state = Idle;
         scheduleNextRequest(_turnaroundDelay);
     } else {

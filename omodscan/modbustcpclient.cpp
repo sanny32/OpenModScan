@@ -153,7 +153,7 @@ void ModbusTcpClient::on_readyRead()
     _responseBuffer += _socket->read(_socket->bytesAvailable());
     qCDebug(QT_MODBUS_LOW) << "(TCP client) Response buffer:" << _responseBuffer.toHex();
 
-    while (!_responseBuffer.isEmpty()) {        
+    while (!_responseBuffer.isEmpty()) {
         // can we read enough for Modbus ADU header?
         if (_responseBuffer.size() < mbpaHeaderSize) {
             qCDebug(QT_MODBUS_LOW) << "(TCP client) MBPA header too short. Waiting for more data.";
@@ -164,9 +164,6 @@ void ModbusTcpClient::on_readyRead()
         quint16 transactionId, bytesPdu, protocolId;
         QDataStream input(_responseBuffer);
         input >> transactionId >> protocolId >> bytesPdu >> serverAddress;
-
-        const auto msg = ModbusMessage::create(_responseBuffer, ModbusMessage::Tcp, QDateTime::currentDateTime(), false);
-        emit modbusResponse( _transactionStore[transactionId].reply->requestGroupId(), msg);
 
         // stop the timer as soon as we know enough about the transaction
         const bool knownTransaction = _transactionStore.contains(transactionId);
@@ -197,7 +194,7 @@ void ModbusTcpClient::on_readyRead()
             qCDebug(QT_MODBUS) << "(TCP client) No pending request for response with "
                                   "given transaction ID, ignoring response message.";
         } else {
-            processQueueElement(responsePdu, serverAddress, _transactionStore[transactionId]);
+            processQueueElement(responsePdu, ModbusMessage::Tcp, serverAddress, _transactionStore[transactionId]);
         }
     }
 }

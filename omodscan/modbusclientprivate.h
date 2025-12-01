@@ -139,7 +139,7 @@ protected:
         qint64 bytesWritten = 0;
         qint32 m_timerId = INT_MIN;
     };
-    void processQueueElement(const QModbusResponse& pdu, int serverAddress, const QueueElement& element);
+    void processQueueElement(const QModbusResponse& pdu, ModbusMessage::ProtocolType protocolType, int serverAddress, const QueueElement& element);
 
 private:
     int _numberOfRetries = 3;

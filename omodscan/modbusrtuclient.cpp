@@ -441,19 +441,8 @@ bool ModbusRtuClient::canMatchRequestAndResponse(const QModbusResponse &response
 ///
 void ModbusRtuClient::on_readyRead()
 {
-    if (_queue.isEmpty()) {
-        return;
-    }
-
-    auto &current = _queue.first();
-
     _responseBuffer += _serialPort->read(_serialPort->bytesAvailable());
     qCDebug(QT_MODBUS_LOW) << "(RTU client) Response buffer:" << _responseBuffer.toHex();
-
-    if (!current.reply.isNull()) {
-        const auto msg = ModbusMessage::create(_responseBuffer, ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
-        emit modbusResponse(current.reply->requestGroupId(), msg);
-    }
 
     if (_responseBuffer.size() < 2) {
         qCDebug(QT_MODBUS) << "(RTU client) Modbus ADU not complete";
@@ -475,6 +464,10 @@ void ModbusRtuClient::on_readyRead()
         qCDebug(QT_MODBUS) << "(RTU client) Incomplete ADU received, ignoring";
         return;
     }
+
+    if (_queue.isEmpty())
+        return;
+    auto &current = _queue.first();
 
     // Special case for Diagnostics:ReturnQueryData. The response has no
     // length indicator and is just a simple echo of what we have send.
@@ -523,7 +516,7 @@ void ModbusRtuClient::on_readyRead()
     _responseTimer.stop();
     current.m_timerId = INT_MIN;
 
-    processQueueElement(response, adu.serverAddress(), _queue.dequeue());
+    processQueueElement(response, ModbusMessage::Rtu, adu.serverAddress(), _queue.dequeue());
 
     _state = Idle;
     scheduleNextRequest(_interFrameDelayMilliseconds);
@@ -584,7 +577,7 @@ void ModbusRtuClient::on_bytesWritten(qint64 bytes)
 
     if (!current.reply.isNull() && current.reply->type() == ModbusReply::Broadcast) {
         _state = ProcessReply;
-        processQueueElement({}, current.reply->serverAddress(), _queue.dequeue());
+        processQueueElement({}, ModbusMessage::Rtu, current.reply->serverAddress(), _queue.dequeue());
         _state = Idle;
         scheduleNextRequest(_turnaroundDelay);
     } else {

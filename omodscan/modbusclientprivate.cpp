@@ -322,13 +322,19 @@ QModbusRequest ModbusClientPrivate::createRWRequest(const QModbusDataUnit& read,
 ///
 /// \brief ModbusClientPrivate::processQueueElement
 /// \param pdu
+/// \param protocolType
 /// \param serverAddress
 /// \param element
 ///
-void ModbusClientPrivate::processQueueElement(const QModbusResponse& pdu, int serverAddress, const QueueElement& element)
+void ModbusClientPrivate::processQueueElement(const QModbusResponse& pdu, ModbusMessage::ProtocolType protocolType, int serverAddress, const QueueElement& element)
 {
     if (element.reply.isNull())
         return;
+
+    const quint16 transactionId = element.reply->transactionId();
+    const auto msg = ModbusMessage::create(pdu, protocolType, serverAddress, transactionId, QDateTime::currentDateTime(), false);
+    emit modbusResponse(element.reply->requestGroupId(), msg);
+
     element.reply->setRawResult(pdu);
 
     if(serverAddress != element.reply->serverAddress()) {

@@ -631,7 +631,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <source>15: WRITE MULTIPLE COILS</source>
-        <translation type="unfinished"></translation>
+        <translation>15: Запись нескольких дискретных выходов</translation>
     </message>
     <message>
         <source>Slave Device: </source>
@@ -711,7 +711,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
         <source>16: WRITE MULTIPLE REGISTERS</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Запись нескольких регистров</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="56"/>
@@ -752,7 +752,7 @@
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="14"/>
         <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>22: Запись регистра по маске</translation>
     </message>
     <message>
         <source>Node: </source>
@@ -1193,7 +1193,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="153"/>
         <source>Only One</source>
-        <translation type="unfinished"></translation>
+        <translation>Одиночная подача</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="157"/>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="173"/>
         <source>Envelope Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Ручная подача конверта</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="177"/>
@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="193"/>
         <source>Large Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Лоток большой ёмкости</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="197"/>
@@ -1252,11 +1252,6 @@
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
-        <source>Max Page Source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="205"/>
         <source>Custom Source</source>
         <translation>Пользовательский источник</translation>
     </message>
@@ -1337,12 +1332,12 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
         <source>15: WRITE MULTIPLE COILS</source>
-        <translation type="unfinished"></translation>
+        <translation>15: Запись нескольких дискретных выходов</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="37"/>
         <source>16: WRITE MULTIPLE REGISTERS</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Запись нескольких регистров</translation>
     </message>
 </context>
 <context>
@@ -1457,7 +1452,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>05: Запись одного дискретного выхода</translation>
     </message>
     <message>
         <source>Node: </source>
@@ -1503,7 +1498,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>06: Запись одного регистра хранения</translation>
     </message>
     <message>
         <source>Node: </source>
@@ -1927,7 +1922,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="609"/>
         <source>15: Write Multiple Coils</source>
-        <translation type="unfinished"></translation>
+        <translation>15: Запись нескольких дискретных выходов</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="618"/>
@@ -1937,7 +1932,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="621"/>
         <source>16: Write Multiple Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Запись нескольких регистров</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="630"/>
@@ -1947,7 +1942,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="633"/>
         <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>22: Запись регистра по маске</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="642"/>
@@ -2042,12 +2037,12 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="989"/>
         <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>05: Запись одного дискретного выхода</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1004"/>
         <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>06: Запись одного регистра хранения</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1023"/>

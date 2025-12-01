@@ -197,10 +197,6 @@ QList<PapeSource> DialogPrintSettings::supportedPaperSources(const QPrinter* pri
                 name = tr("Cassette");
             break;
 
-            case QPrinter::MaxPageSource:
-                name = tr("Max Page Source");
-            break;
-
             case QPrinter::CustomSource:
                 name = tr("Custom Source");
             break;

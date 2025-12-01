@@ -1260,12 +1260,11 @@
         <translation>卡式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
         <source>Max Page Source</source>
-        <translation>最大纸张来源</translation>
+        <translation type="vanished">最大纸张来源</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="205"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
         <source>Custom Source</source>
         <translation>自定义纸张来源</translation>
     </message>

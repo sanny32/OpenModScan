@@ -1624,17 +1624,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>功能码：寄存器类型</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="66"/>
+        <location filename="../formmodsca.cpp" line="74"/>
         <source>Device polling paused...</source>
         <translation>设备轮询已暂停...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="215"/>
+        <location filename="../formmodsca.cpp" line="223"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="446"/>
+        <location filename="../formmodsca.cpp" line="454"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1643,7 +1643,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="450"/>
+        <location filename="../formmodsca.cpp" line="458"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1652,29 +1652,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="453"/>
+        <location filename="../formmodsca.cpp" line="461"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>轮询次数：%1
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="623"/>
+        <location filename="../formmodsca.cpp" line="631"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="798"/>
+        <location filename="../formmodsca.cpp" line="804"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="599"/>
+        <location filename="../formmodsca.cpp" line="607"/>
         <source>No Responses from Slave Device</source>
         <translation>设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="751"/>
+        <location filename="../formmodsca.cpp" line="758"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>
@@ -2859,17 +2859,17 @@ Byte Order: %2</source>
         <translation>无效的Modbus请求。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="342"/>
+        <location filename="../modbusclientprivate.cpp" line="345"/>
         <source>An invalid server address was received.</source>
         <translation>收到无效的服务器地址。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="348"/>
+        <location filename="../modbusclientprivate.cpp" line="351"/>
         <source>Modbus Exception Response.</source>
         <translation>Modbus异常响应。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="360"/>
+        <location filename="../modbusclientprivate.cpp" line="363"/>
         <source>An invalid response has been received.</source>
         <translation>收到无效响应。</translation>
     </message>
@@ -2894,47 +2894,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="604"/>
+        <location filename="../modbusrtuclient.cpp" line="603"/>
         <source>Referenced serial device does not exist.</source>
         <translation>引用的串行设备不存在。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="608"/>
+        <location filename="../modbusrtuclient.cpp" line="607"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由于权限问题，无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="613"/>
+        <location filename="../modbusrtuclient.cpp" line="612"/>
         <source>Cannot open serial device.</source>
         <translation>无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="617"/>
+        <location filename="../modbusrtuclient.cpp" line="616"/>
         <source>Write error.</source>
         <translation>写入错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="620"/>
+        <location filename="../modbusrtuclient.cpp" line="619"/>
         <source>Read error.</source>
         <translation>读取错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="623"/>
+        <location filename="../modbusrtuclient.cpp" line="622"/>
         <source>Resource error.</source>
         <translation>资源错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="626"/>
+        <location filename="../modbusrtuclient.cpp" line="625"/>
         <source>Device operation is not supported error.</source>
         <translation>设备操作不受支持的错误信息。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="630"/>
+        <location filename="../modbusrtuclient.cpp" line="629"/>
         <source>Timeout error.</source>
         <translation>超时错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="633"/>
+        <location filename="../modbusrtuclient.cpp" line="632"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>
@@ -2994,23 +2994,23 @@ Byte Order: %2</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="96"/>
-        <location filename="../controls/statisticwidget.cpp" line="100"/>
+        <location filename="../controls/statisticwidget.cpp" line="99"/>
+        <location filename="../controls/statisticwidget.cpp" line="103"/>
         <source>Pause Polling</source>
         <translation>暂停轮询</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="104"/>
+        <location filename="../controls/statisticwidget.cpp" line="107"/>
         <source>Resume Polling</source>
         <translation>恢复轮询</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="137"/>
+        <location filename="../controls/statisticwidget.cpp" line="141"/>
         <source>Number of Polls: %1</source>
         <translation>轮询次数：%1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="138"/>
+        <location filename="../controls/statisticwidget.cpp" line="142"/>
         <source>Valid Slave Responses: %1</source>
         <translation>有效的从站响应：%1</translation>
     </message>

@@ -1659,22 +1659,22 @@ Valid Slave Responses: %2</source>
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="631"/>
+        <location filename="../formmodsca.cpp" line="633"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="804"/>
+        <location filename="../formmodsca.cpp" line="806"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="607"/>
+        <location filename="../formmodsca.cpp" line="609"/>
         <source>No Responses from Slave Device</source>
         <translation>设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="758"/>
+        <location filename="../formmodsca.cpp" line="760"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>
@@ -2994,23 +2994,23 @@ Byte Order: %2</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="99"/>
-        <location filename="../controls/statisticwidget.cpp" line="103"/>
+        <location filename="../controls/statisticwidget.cpp" line="101"/>
+        <location filename="../controls/statisticwidget.cpp" line="105"/>
         <source>Pause Polling</source>
         <translation>暂停轮询</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="107"/>
+        <location filename="../controls/statisticwidget.cpp" line="109"/>
         <source>Resume Polling</source>
         <translation>恢复轮询</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="141"/>
+        <location filename="../controls/statisticwidget.cpp" line="143"/>
         <source>Number of Polls: %1</source>
         <translation>轮询次数：%1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="142"/>
+        <location filename="../controls/statisticwidget.cpp" line="144"/>
         <source>Valid Slave Responses: %1</source>
         <translation>有效的从站响应：%1</translation>
     </message>

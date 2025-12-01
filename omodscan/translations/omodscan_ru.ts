@@ -1647,22 +1647,22 @@ Valid Slave Responses: %2</source>
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="631"/>
+        <location filename="../formmodsca.cpp" line="633"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="804"/>
+        <location filename="../formmodsca.cpp" line="806"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="607"/>
+        <location filename="../formmodsca.cpp" line="609"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="758"/>
+        <location filename="../formmodsca.cpp" line="760"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -2981,23 +2981,23 @@ Byte Order: %2</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="99"/>
-        <location filename="../controls/statisticwidget.cpp" line="103"/>
+        <location filename="../controls/statisticwidget.cpp" line="101"/>
+        <location filename="../controls/statisticwidget.cpp" line="105"/>
         <source>Pause Polling</source>
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="107"/>
+        <location filename="../controls/statisticwidget.cpp" line="109"/>
         <source>Resume Polling</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="141"/>
+        <location filename="../controls/statisticwidget.cpp" line="143"/>
         <source>Number of Polls: %1</source>
         <translation>Количество запросов: %1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="142"/>
+        <location filename="../controls/statisticwidget.cpp" line="144"/>
         <source>Valid Slave Responses: %1</source>
         <translation>Корректных ответов устройства: %1</translation>
     </message>

@@ -462,6 +462,12 @@ void ModbusRtuClient::on_readyRead()
     int aduSize = 2 + pduSizeWithoutFcode + 2;
     if (tmpAdu.rawSize() < aduSize) {
         qCDebug(QT_MODBUS) << "(RTU client) Incomplete ADU received, ignoring";
+
+        if (!_queue.isEmpty() && !_queue.first().reply.isNull()) {
+            const auto msg = ModbusMessage::create(tmpAdu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+            emit modbusResponse(_queue.first().reply->requestGroupId(), msg);
+        }
+
         return;
     }
 
@@ -498,8 +504,12 @@ void ModbusRtuClient::on_readyRead()
         qCWarning(QT_MODBUS) << "(RTU client) Discarding response with wrong CRC, received:"
                              << adu.checksum<quint16>() << ", calculated CRC:"
                              << QModbusSerialAdu::calculateCRC(adu.data(), adu.size());
-        if (!current.reply.isNull())
+        if (!current.reply.isNull()) {
             current.reply->addIntermediateError(ModbusDevice::ResponseCrcError);
+
+            const auto msg = ModbusMessage::create(adu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+            emit modbusResponse(current.reply->requestGroupId(), msg);
+        }
         return;
     }
 

@@ -1612,17 +1612,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="65"/>
+        <location filename="../formmodsca.cpp" line="66"/>
         <source>Device polling paused...</source>
         <translation>Опрос устройства приостановлен...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="194"/>
+        <location filename="../formmodsca.cpp" line="215"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="425"/>
+        <location filename="../formmodsca.cpp" line="446"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1631,7 +1631,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="429"/>
+        <location filename="../formmodsca.cpp" line="450"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1640,29 +1640,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="432"/>
+        <location filename="../formmodsca.cpp" line="453"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="602"/>
+        <location filename="../formmodsca.cpp" line="623"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="777"/>
+        <location filename="../formmodsca.cpp" line="798"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="579"/>
+        <location filename="../formmodsca.cpp" line="599"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="730"/>
+        <location filename="../formmodsca.cpp" line="751"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -2846,17 +2846,17 @@ Byte Order: %2</source>
         <translation>Неверный запрос Modbus.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="342"/>
+        <location filename="../modbusclientprivate.cpp" line="336"/>
         <source>An invalid server address was received.</source>
         <translation>Получен неверный адрес узла.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="348"/>
+        <location filename="../modbusclientprivate.cpp" line="342"/>
         <source>Modbus Exception Response.</source>
         <translation>Ответ Modbus Exception.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="360"/>
+        <location filename="../modbusclientprivate.cpp" line="354"/>
         <source>An invalid response has been received.</source>
         <translation>Получен некорректный ответ.</translation>
     </message>
@@ -2866,13 +2866,13 @@ Byte Order: %2</source>
         <translation>Ошибка сокета TCP (%1).</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="271"/>
-        <location filename="../modbusrtuclient.cpp" line="554"/>
+        <location filename="../modbustcpclient.cpp" line="274"/>
+        <location filename="../modbusrtuclient.cpp" line="561"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="298"/>
+        <location filename="../modbustcpclient.cpp" line="301"/>
         <location filename="../modbusrtuclient.cpp" line="343"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>Ответ прерван из-за закрытия соединения.</translation>
@@ -2881,47 +2881,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="602"/>
+        <location filename="../modbusrtuclient.cpp" line="609"/>
         <source>Referenced serial device does not exist.</source>
         <translation>Указанное последовательное устройство не существует.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="606"/>
+        <location filename="../modbusrtuclient.cpp" line="613"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>Невозможно открыть последовательное устройство из-за ограничения доступа.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="611"/>
+        <location filename="../modbusrtuclient.cpp" line="618"/>
         <source>Cannot open serial device.</source>
         <translation>Невозможно открыть последовательное устройство.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="615"/>
+        <location filename="../modbusrtuclient.cpp" line="622"/>
         <source>Write error.</source>
         <translation>Ошибка записи.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="618"/>
+        <location filename="../modbusrtuclient.cpp" line="625"/>
         <source>Read error.</source>
         <translation>Ошибка чтения.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="621"/>
+        <location filename="../modbusrtuclient.cpp" line="628"/>
         <source>Resource error.</source>
         <translation>Ошибка ресурса.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="624"/>
+        <location filename="../modbusrtuclient.cpp" line="631"/>
         <source>Device operation is not supported error.</source>
         <translation>Ошибка «Работа устройства не поддерживается».</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="628"/>
+        <location filename="../modbusrtuclient.cpp" line="635"/>
         <source>Timeout error.</source>
         <translation>Ошибка тайм-аута.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="631"/>
+        <location filename="../modbusrtuclient.cpp" line="638"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
@@ -2929,7 +2929,7 @@ Byte Order: %2</source>
 <context>
     <name>QModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="223"/>
+        <location filename="../modbustcpclient.cpp" line="226"/>
         <source>Could not write request to socket.</source>
         <translation>Не удалось записать запрос в сокет.</translation>
     </message>

@@ -2846,17 +2846,17 @@ Byte Order: %2</source>
         <translation>Неверный запрос Modbus.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="336"/>
+        <location filename="../modbusclientprivate.cpp" line="342"/>
         <source>An invalid server address was received.</source>
         <translation>Получен неверный адрес узла.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="342"/>
+        <location filename="../modbusclientprivate.cpp" line="348"/>
         <source>Modbus Exception Response.</source>
         <translation>Ответ Modbus Exception.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="354"/>
+        <location filename="../modbusclientprivate.cpp" line="360"/>
         <source>An invalid response has been received.</source>
         <translation>Получен некорректный ответ.</translation>
     </message>
@@ -2866,13 +2866,13 @@ Byte Order: %2</source>
         <translation>Ошибка сокета TCP (%1).</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="274"/>
-        <location filename="../modbusrtuclient.cpp" line="561"/>
+        <location filename="../modbustcpclient.cpp" line="271"/>
+        <location filename="../modbusrtuclient.cpp" line="554"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="301"/>
+        <location filename="../modbustcpclient.cpp" line="298"/>
         <location filename="../modbusrtuclient.cpp" line="343"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>Ответ прерван из-за закрытия соединения.</translation>
@@ -2881,47 +2881,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="609"/>
+        <location filename="../modbusrtuclient.cpp" line="604"/>
         <source>Referenced serial device does not exist.</source>
         <translation>Указанное последовательное устройство не существует.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="613"/>
+        <location filename="../modbusrtuclient.cpp" line="608"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>Невозможно открыть последовательное устройство из-за ограничения доступа.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="618"/>
+        <location filename="../modbusrtuclient.cpp" line="613"/>
         <source>Cannot open serial device.</source>
         <translation>Невозможно открыть последовательное устройство.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="622"/>
+        <location filename="../modbusrtuclient.cpp" line="617"/>
         <source>Write error.</source>
         <translation>Ошибка записи.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="625"/>
+        <location filename="../modbusrtuclient.cpp" line="620"/>
         <source>Read error.</source>
         <translation>Ошибка чтения.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="628"/>
+        <location filename="../modbusrtuclient.cpp" line="623"/>
         <source>Resource error.</source>
         <translation>Ошибка ресурса.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="631"/>
+        <location filename="../modbusrtuclient.cpp" line="626"/>
         <source>Device operation is not supported error.</source>
         <translation>Ошибка «Работа устройства не поддерживается».</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="635"/>
+        <location filename="../modbusrtuclient.cpp" line="630"/>
         <source>Timeout error.</source>
         <translation>Ошибка тайм-аута.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="638"/>
+        <location filename="../modbusrtuclient.cpp" line="633"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
@@ -2929,7 +2929,7 @@ Byte Order: %2</source>
 <context>
     <name>QModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="226"/>
+        <location filename="../modbustcpclient.cpp" line="223"/>
         <source>Could not write request to socket.</source>
         <translation>Не удалось записать запрос в сокет.</translation>
     </message>

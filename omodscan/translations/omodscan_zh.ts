@@ -2858,17 +2858,17 @@ Byte Order: %2</source>
         <translation>無效的Modbus請求。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="336"/>
+        <location filename="../modbusclientprivate.cpp" line="342"/>
         <source>An invalid server address was received.</source>
         <translation>收到無效的伺服器位址。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="342"/>
+        <location filename="../modbusclientprivate.cpp" line="348"/>
         <source>Modbus Exception Response.</source>
         <translation>Modbus異常回應。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="354"/>
+        <location filename="../modbusclientprivate.cpp" line="360"/>
         <source>An invalid response has been received.</source>
         <translation>收到無效響應。</translation>
     </message>
@@ -2878,13 +2878,13 @@ Byte Order: %2</source>
         <translation>TCP 套接字錯誤（%1）。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="274"/>
-        <location filename="../modbusrtuclient.cpp" line="561"/>
+        <location filename="../modbustcpclient.cpp" line="271"/>
+        <location filename="../modbusrtuclient.cpp" line="554"/>
         <source>Request timeout.</source>
         <translation>請求超時。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="301"/>
+        <location filename="../modbustcpclient.cpp" line="298"/>
         <location filename="../modbusrtuclient.cpp" line="343"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>由於連線關閉，回覆已中止。</translation>
@@ -2893,47 +2893,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="609"/>
+        <location filename="../modbusrtuclient.cpp" line="604"/>
         <source>Referenced serial device does not exist.</source>
         <translation>引用的串行設備不存在。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="613"/>
+        <location filename="../modbusrtuclient.cpp" line="608"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由於權限問題，無法開啟串口設備。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="618"/>
+        <location filename="../modbusrtuclient.cpp" line="613"/>
         <source>Cannot open serial device.</source>
         <translation>無法開啟串口設備。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="622"/>
+        <location filename="../modbusrtuclient.cpp" line="617"/>
         <source>Write error.</source>
         <translation>寫入錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="625"/>
+        <location filename="../modbusrtuclient.cpp" line="620"/>
         <source>Read error.</source>
         <translation>讀取錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="628"/>
+        <location filename="../modbusrtuclient.cpp" line="623"/>
         <source>Resource error.</source>
         <translation>資源錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="631"/>
+        <location filename="../modbusrtuclient.cpp" line="626"/>
         <source>Device operation is not supported error.</source>
         <translation>設備操作不受支援的錯誤訊息。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="635"/>
+        <location filename="../modbusrtuclient.cpp" line="630"/>
         <source>Timeout error.</source>
         <translation>超時錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="638"/>
+        <location filename="../modbusrtuclient.cpp" line="633"/>
         <source>Unknown error.</source>
         <translation>未知錯誤。</translation>
     </message>
@@ -2941,7 +2941,7 @@ Byte Order: %2</source>
 <context>
     <name>QModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="226"/>
+        <location filename="../modbustcpclient.cpp" line="223"/>
         <source>Could not write request to socket.</source>
         <translation>無法將請求寫入套接字。</translation>
     </message>

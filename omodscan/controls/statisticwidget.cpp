@@ -5,13 +5,15 @@
 /// \brief StatisticWidget::StatisticWidget
 /// \param parent
 ///
-StatisticWidget::StatisticWidget(QWidget *parent) :
-      QWidget(parent)
+StatisticWidget::StatisticWidget(QWidget *parent)
+    : QWidget(parent)
     , ui(new Ui::StatisticWidget)
     ,_numberOfPolls(0)
     ,_validSlaveResponses(0)
+    ,_pollState(static_cast<PollState>(-1))
 {
     ui->setupUi(this);
+    setPollState(PollState::Off);
 }
 
 ///

@@ -41,7 +41,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->lineEditAddress->blockSignals(true);
     ui->lineEditAddress->setLeadingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
-    ui->lineEditAddress->setValue(0);
+    ui->lineEditAddress->setValue(1);
     ui->lineEditAddress->blockSignals(false);
 
     ui->lineEditLength->blockSignals(true);
@@ -586,6 +586,8 @@ void FormModSca::show()
 {
     QWidget::show();
     emit showed();
+
+    beginUpdate();
 }
 
 ///

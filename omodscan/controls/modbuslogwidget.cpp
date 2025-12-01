@@ -59,7 +59,7 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),
                      item->isRequest() ? "#0066cc" : "#009933",
                      item->isRequest() ? "[Tx] ←" : "[Rx] →",
-                     item->isException() ? "#cc0000" : "#000000",
+                     (item->isException() || !item->isValid()) ? "#cc0000" : "#000000",
                      item->toString(_parentWidget->dataDisplayMode(), _parentWidget->showLeadingZeros()));
 
         case Qt::UserRole:

@@ -2867,7 +2867,7 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="271"/>
-        <location filename="../modbusrtuclient.cpp" line="554"/>
+        <location filename="../modbusrtuclient.cpp" line="564"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
@@ -2881,47 +2881,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="603"/>
+        <location filename="../modbusrtuclient.cpp" line="613"/>
         <source>Referenced serial device does not exist.</source>
         <translation>Указанное последовательное устройство не существует.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="607"/>
+        <location filename="../modbusrtuclient.cpp" line="617"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>Невозможно открыть последовательное устройство из-за ограничения доступа.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="612"/>
+        <location filename="../modbusrtuclient.cpp" line="622"/>
         <source>Cannot open serial device.</source>
         <translation>Невозможно открыть последовательное устройство.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="616"/>
+        <location filename="../modbusrtuclient.cpp" line="626"/>
         <source>Write error.</source>
         <translation>Ошибка записи.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="619"/>
+        <location filename="../modbusrtuclient.cpp" line="629"/>
         <source>Read error.</source>
         <translation>Ошибка чтения.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="622"/>
+        <location filename="../modbusrtuclient.cpp" line="632"/>
         <source>Resource error.</source>
         <translation>Ошибка ресурса.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="625"/>
+        <location filename="../modbusrtuclient.cpp" line="635"/>
         <source>Device operation is not supported error.</source>
         <translation>Ошибка «Работа устройства не поддерживается».</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="629"/>
+        <location filename="../modbusrtuclient.cpp" line="639"/>
         <source>Timeout error.</source>
         <translation>Ошибка тайм-аута.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="632"/>
+        <location filename="../modbusrtuclient.cpp" line="642"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>

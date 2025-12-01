@@ -2880,7 +2880,7 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="271"/>
-        <location filename="../modbusrtuclient.cpp" line="554"/>
+        <location filename="../modbusrtuclient.cpp" line="564"/>
         <source>Request timeout.</source>
         <translation>请求超时。</translation>
     </message>
@@ -2894,47 +2894,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="603"/>
+        <location filename="../modbusrtuclient.cpp" line="613"/>
         <source>Referenced serial device does not exist.</source>
         <translation>引用的串行设备不存在。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="607"/>
+        <location filename="../modbusrtuclient.cpp" line="617"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由于权限问题，无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="612"/>
+        <location filename="../modbusrtuclient.cpp" line="622"/>
         <source>Cannot open serial device.</source>
         <translation>无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="616"/>
+        <location filename="../modbusrtuclient.cpp" line="626"/>
         <source>Write error.</source>
         <translation>写入错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="619"/>
+        <location filename="../modbusrtuclient.cpp" line="629"/>
         <source>Read error.</source>
         <translation>读取错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="622"/>
+        <location filename="../modbusrtuclient.cpp" line="632"/>
         <source>Resource error.</source>
         <translation>资源错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="625"/>
+        <location filename="../modbusrtuclient.cpp" line="635"/>
         <source>Device operation is not supported error.</source>
         <translation>设备操作不受支持的错误信息。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="629"/>
+        <location filename="../modbusrtuclient.cpp" line="639"/>
         <source>Timeout error.</source>
         <translation>超时错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="632"/>
+        <location filename="../modbusrtuclient.cpp" line="642"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>

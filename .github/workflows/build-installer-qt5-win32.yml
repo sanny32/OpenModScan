@@ -124,7 +124,7 @@ jobs:
           name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
 
-      - name: Create or update GitHub Release and upload DEB
+      - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:

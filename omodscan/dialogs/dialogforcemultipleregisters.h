@@ -2,7 +2,7 @@
 #define DIALOGFORCEMULTIPLEREGISTERS_H
 
 #include <QTableWidgetItem>
-#include "qfixedsizedialog.h"
+#include <QDialog>
 #include "numericlineedit.h"
 #include "modbuswriteparams.h"
 
@@ -13,7 +13,7 @@ class DialogForceMultipleRegisters;
 ///
 /// \brief The DialogForceMultipleRegisters class
 ///
-class DialogForceMultipleRegisters : public QFixedSizeDialog
+class DialogForceMultipleRegisters : public QDialog
 {
     Q_OBJECT
 

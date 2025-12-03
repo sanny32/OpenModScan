@@ -227,11 +227,16 @@ void DialogUserMsg::on_modbusReply(const ModbusReply* const reply)
         return;
     }
 
-    if(reply->error() != ModbusDevice::NoError &&
-        reply->error() != ModbusDevice::ProtocolError)
+    switch(reply->error())
     {
-        QMessageBox::warning(this, windowTitle(), reply->errorString());
-        return;
+        case ModbusDevice::NoError:
+        case ModbusDevice::ProtocolError:
+        case ModbusDevice::InvalidResponseError:
+        break;
+
+        default:
+            QMessageBox::warning(this, windowTitle(), reply->errorString());
+        break;
     }
 
     ui->pushButtonSend->setEnabled(true);

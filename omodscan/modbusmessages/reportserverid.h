@@ -72,7 +72,7 @@ public:
     /// \return
     ///
     bool isValid() const override {
-        return ModbusMessage::isValid() && dataSize() > 1;
+        return ModbusMessage::isValid() && (isException() ? true : (dataSize() > 1));
     }
 
     ///

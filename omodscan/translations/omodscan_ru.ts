@@ -631,7 +631,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <source>15: WRITE MULTIPLE COILS</source>
-        <translation type="unfinished"></translation>
+        <translation>15: Запись нескольких дискретных выходов</translation>
     </message>
     <message>
         <source>Slave Device: </source>
@@ -711,7 +711,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
         <source>16: WRITE MULTIPLE REGISTERS</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Запись нескольких регистров</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="56"/>
@@ -752,7 +752,7 @@
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="14"/>
         <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>22: Запись регистра по маске</translation>
     </message>
     <message>
         <source>Node: </source>
@@ -1193,7 +1193,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="153"/>
         <source>Only One</source>
-        <translation type="unfinished"></translation>
+        <translation>Одиночная подача</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="157"/>
@@ -1218,7 +1218,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="173"/>
         <source>Envelope Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Ручная подача конверта</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="177"/>
@@ -1243,7 +1243,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="193"/>
         <source>Large Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Лоток большой ёмкости</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="197"/>
@@ -1252,11 +1252,6 @@
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
-        <source>Max Page Source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="205"/>
         <source>Custom Source</source>
         <translation>Пользовательский источник</translation>
     </message>
@@ -1337,12 +1332,12 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
         <source>15: WRITE MULTIPLE COILS</source>
-        <translation type="unfinished"></translation>
+        <translation>15: Запись нескольких дискретных выходов</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="37"/>
         <source>16: WRITE MULTIPLE REGISTERS</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Запись нескольких регистров</translation>
     </message>
 </context>
 <context>
@@ -1457,7 +1452,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>05: Запись одного дискретного выхода</translation>
     </message>
     <message>
         <source>Node: </source>
@@ -1503,7 +1498,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>06: Запись одного регистра хранения</translation>
     </message>
     <message>
         <source>Node: </source>
@@ -1617,17 +1612,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="65"/>
+        <location filename="../formmodsca.cpp" line="74"/>
         <source>Device polling paused...</source>
         <translation>Опрос устройства приостановлен...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="194"/>
+        <location filename="../formmodsca.cpp" line="223"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="425"/>
+        <location filename="../formmodsca.cpp" line="454"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1636,7 +1631,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="429"/>
+        <location filename="../formmodsca.cpp" line="458"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1645,29 +1640,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="432"/>
+        <location filename="../formmodsca.cpp" line="461"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="602"/>
+        <location filename="../formmodsca.cpp" line="633"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="774"/>
+        <location filename="../formmodsca.cpp" line="806"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="579"/>
+        <location filename="../formmodsca.cpp" line="609"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="730"/>
+        <location filename="../formmodsca.cpp" line="760"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -1927,7 +1922,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="609"/>
         <source>15: Write Multiple Coils</source>
-        <translation type="unfinished"></translation>
+        <translation>15: Запись нескольких дискретных выходов</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="618"/>
@@ -1937,7 +1932,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="621"/>
         <source>16: Write Multiple Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Запись нескольких регистров</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="630"/>
@@ -1947,7 +1942,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="633"/>
         <source>22: Mask Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>22: Запись регистра по маске</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="642"/>
@@ -2042,12 +2037,12 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="989"/>
         <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>05: Запись одного дискретного выхода</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1004"/>
         <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>06: Запись одного регистра хранения</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1023"/>
@@ -2270,14 +2265,14 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="147"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="193"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="148"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="194"/>
         <source>Copy Text</source>
         <translation>Копировать текст</translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="162"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="194"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="163"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="195"/>
         <source>Copy Bytes</source>
         <translation>Копировать байты</translation>
     </message>
@@ -2851,17 +2846,17 @@ Byte Order: %2</source>
         <translation>Неверный запрос Modbus.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="342"/>
+        <location filename="../modbusclientprivate.cpp" line="345"/>
         <source>An invalid server address was received.</source>
         <translation>Получен неверный адрес узла.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="348"/>
+        <location filename="../modbusclientprivate.cpp" line="351"/>
         <source>Modbus Exception Response.</source>
         <translation>Ответ Modbus Exception.</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="360"/>
+        <location filename="../modbusclientprivate.cpp" line="363"/>
         <source>An invalid response has been received.</source>
         <translation>Получен некорректный ответ.</translation>
     </message>
@@ -2872,7 +2867,7 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="271"/>
-        <location filename="../modbusrtuclient.cpp" line="554"/>
+        <location filename="../modbusrtuclient.cpp" line="564"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
@@ -2886,47 +2881,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="602"/>
+        <location filename="../modbusrtuclient.cpp" line="613"/>
         <source>Referenced serial device does not exist.</source>
         <translation>Указанное последовательное устройство не существует.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="606"/>
+        <location filename="../modbusrtuclient.cpp" line="617"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>Невозможно открыть последовательное устройство из-за ограничения доступа.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="611"/>
+        <location filename="../modbusrtuclient.cpp" line="622"/>
         <source>Cannot open serial device.</source>
         <translation>Невозможно открыть последовательное устройство.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="615"/>
+        <location filename="../modbusrtuclient.cpp" line="626"/>
         <source>Write error.</source>
         <translation>Ошибка записи.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="618"/>
+        <location filename="../modbusrtuclient.cpp" line="629"/>
         <source>Read error.</source>
         <translation>Ошибка чтения.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="621"/>
+        <location filename="../modbusrtuclient.cpp" line="632"/>
         <source>Resource error.</source>
         <translation>Ошибка ресурса.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="624"/>
+        <location filename="../modbusrtuclient.cpp" line="635"/>
         <source>Device operation is not supported error.</source>
         <translation>Ошибка «Работа устройства не поддерживается».</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="628"/>
+        <location filename="../modbusrtuclient.cpp" line="639"/>
         <source>Timeout error.</source>
         <translation>Ошибка тайм-аута.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="631"/>
+        <location filename="../modbusrtuclient.cpp" line="642"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
@@ -2986,23 +2981,23 @@ Byte Order: %2</source>
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="96"/>
-        <location filename="../controls/statisticwidget.cpp" line="100"/>
+        <location filename="../controls/statisticwidget.cpp" line="101"/>
+        <location filename="../controls/statisticwidget.cpp" line="105"/>
         <source>Pause Polling</source>
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="104"/>
+        <location filename="../controls/statisticwidget.cpp" line="109"/>
         <source>Resume Polling</source>
         <translation>Возобновить</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="137"/>
+        <location filename="../controls/statisticwidget.cpp" line="143"/>
         <source>Number of Polls: %1</source>
         <translation>Количество запросов: %1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="138"/>
+        <location filename="../controls/statisticwidget.cpp" line="144"/>
         <source>Valid Slave Responses: %1</source>
         <translation>Корректных ответов устройства: %1</translation>
     </message>

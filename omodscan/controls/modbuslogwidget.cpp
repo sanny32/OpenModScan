@@ -54,11 +54,12 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
             return QString(R"(
                     <span style="color:#444444">%1</span>
                     <b style="color:%2">%3</b>
-                    <span>%4</span>
+                    <span style="color:%4">%5</span>
                 )")
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),
                      item->isRequest() ? "#0066cc" : "#009933",
                      item->isRequest() ? "[Tx] ←" : "[Rx] →",
+                     (item->isException() || !item->isValid()) ? "#cc0000" : "#000000",
                      item->toString(_parentWidget->dataDisplayMode(), _parentWidget->showLeadingZeros()));
 
         case Qt::UserRole:

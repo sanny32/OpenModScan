@@ -1441,6 +1441,11 @@ FormModSca* MainWindow::createMdiChild(int id)
         QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n %1").arg(error));
     });
 
+    connect(frm, &FormModSca::doubleClicked, this, [this]()
+    {
+        ui->actionDataDefinition->trigger();
+    });
+
     _windowActionList->addWindow(wnd);
 
     return frm;

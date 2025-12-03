@@ -41,7 +41,7 @@ public:
     ///
     bool isValid() const override {
         return ModbusMessage::isValid() &&
-               (value() == 0 || value() == 0xFF00);
+               (isException() ? true : (value() == 0 || value() == 0xFF00));
     }
 
     ///

@@ -1,3 +1,4 @@
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPalette>
 #include <QDateTime>
@@ -37,18 +38,26 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
 
     _timer.setInterval(1000);
 
+    ui->lineEditAddress->blockSignals(true);
     ui->lineEditAddress->setLeadingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
-    ui->lineEditAddress->setValue(0);
+    ui->lineEditAddress->setValue(1);
+    ui->lineEditAddress->blockSignals(false);
 
+    ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(50);
+    ui->lineEditLength->blockSignals(false);
 
+    ui->lineEditDeviceId->blockSignals(true);
     ui->lineEditDeviceId->setLeadingZeroes(true);
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
+    ui->lineEditDeviceId->blockSignals(false);
 
+    ui->comboBoxAddressBase->blockSignals(true);
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
+    ui->comboBoxAddressBase->blockSignals(false);
 
     const auto dd = displayDefinition();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
@@ -83,6 +92,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     connect(_dataSimulator, &DataSimulator::simulationStarted, this, &FormModSca::on_simulationStarted);
     connect(_dataSimulator, &DataSimulator::simulationStopped, this, &FormModSca::on_simulationStopped);
     connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormModSca::on_dataSimulated);
+
+    ui->frameDataDefinition->installEventFilter(this);
 }
 
 ///
@@ -105,6 +116,24 @@ void FormModSca::changeEvent(QEvent* event)
     }
 
     QWidget::changeEvent(event);
+}
+
+///
+/// \brief FormModSca::eventFilter
+/// \param watched
+/// \param event
+/// \return
+///
+bool FormModSca::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui->frameDataDefinition && event->type() == QEvent::MouseButtonDblClick) {
+        auto* me = static_cast<QMouseEvent*>(event);
+        if(me->pos().x() > ui->statisticWidget->geometry().right()) {
+            emit doubleClicked();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 ///
@@ -557,6 +586,8 @@ void FormModSca::show()
 {
     QWidget::show();
     emit showed();
+
+    beginUpdate();
 }
 
 ///
@@ -573,11 +604,11 @@ void FormModSca::on_timeout()
     {
         if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
         {
-            _noSlaveResponsesCounter++;
             if(_noSlaveResponsesCounter > _modbusClient.numberOfRetries())
             {
                 ui->outputWidget->setStatus(tr("No Responses from Slave Device"));
             }
+            _noSlaveResponsesCounter++;
         }
 
         _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
@@ -602,7 +633,6 @@ void FormModSca::beginUpdate()
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
     if(pollState() == PollState::Off) {
-        _timer.start();
         setPollState(PollState::Running);
     }
 }
@@ -732,7 +762,10 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
         else
         {
             ui->outputWidget->updateData(reply->result());
-            ui->outputWidget->setStatus(QString());
+
+            if(pollState() != PollState::Paused) {
+                ui->outputWidget->setStatus(QString());
+            }
             ui->statisticWidget->increaseValidSlaveResponses();
         }
     }
@@ -769,7 +802,6 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
 ///
 void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
-    _timer.stop();
     setPollState(PollState::Off);
     ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
 }
@@ -782,6 +814,7 @@ void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+
     beginUpdate();
 }
 
@@ -793,6 +826,7 @@ void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+
     beginUpdate();
 }
 
@@ -804,6 +838,7 @@ void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+
     beginUpdate();
 }
 
@@ -828,9 +863,10 @@ void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
-    beginUpdate();
 
     emit pointTypeChanged(type);
+
+    beginUpdate();
 }
 
 ///

@@ -5,13 +5,15 @@
 /// \brief StatisticWidget::StatisticWidget
 /// \param parent
 ///
-StatisticWidget::StatisticWidget(QWidget *parent) :
-      QWidget(parent)
+StatisticWidget::StatisticWidget(QWidget *parent)
+    : QWidget(parent)
     , ui(new Ui::StatisticWidget)
     ,_numberOfPolls(0)
     ,_validSlaveResponses(0)
+    ,_pollState(static_cast<PollState>(-1))
 {
     ui->setupUi(this);
+    setPollState(PollState::Off);
 }
 
 ///
@@ -88,6 +90,9 @@ PollState StatisticWidget::pollState() const
 ///
 void StatisticWidget::setPollState(PollState state)
 {
+    if(_pollState == state)
+        return;
+
     _pollState = state;
     switch (state)
     {
@@ -104,6 +109,7 @@ void StatisticWidget::setPollState(PollState state)
             ui->pushButtonPause->setText(tr("Resume Polling"));
         break;
     }
+    emit pollStateChanged(pollState());
 }
 
 ///

@@ -12,7 +12,10 @@ on:
       tag:
         description: 'Checkout tag'
         required: false
-      
+
+permissions:
+  contents: write
+
 env:
   QT_VERSION: 6.9.3
   QT_ARCH: win64_msvc2022_64
@@ -115,3 +118,15 @@ jobs:
         with:
           name: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
           path: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+
+      - name: Create or update GitHub Release and upload DEB
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ github.ref_name }}
+          name: Open ModScan ${{ env.APP_VERSION }}
+          files: |
+            qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

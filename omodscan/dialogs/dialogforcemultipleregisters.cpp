@@ -14,7 +14,7 @@
 /// \param parent
 ///
 DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent)
-    :  QFixedSizeDialog(parent)
+    :  QDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
     ,_hexAddress(hexAddress)

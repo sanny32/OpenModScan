@@ -30,6 +30,7 @@ jobs:
       QT_TARGET: "desktop"
       QT_ARCH: "linux_gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
+      QT_QPA_PLATFORM: "xcb"
       CMAKE_COMPILER: "gcc_64"
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
@@ -64,7 +65,7 @@ jobs:
           apt-get update
           apt-get install -y \
             git build-essential ninja-build cmake patchelf rsync \
-            rpm gpg \
+            rpm gnupg2 \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
@@ -94,8 +95,7 @@ jobs:
       - name: Set Python 3.12 as default
         run: |
           update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 2
-          update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
-          update-alternatives --auto python3
+          update-alternatives --set python3 /usr/local/bin/python3.12
 
       - name: Upgrade pip
         run: |
@@ -161,6 +161,7 @@ jobs:
           git clone https://github.com/QuasarApp/CQtDeployer.git
           cd CQtDeployer
           git checkout v1.6.2365
+          wget -qO- https://github.com/QuasarApp/CQtDeployer/pull/846.patch | git apply
           git submodule update --init --recursive
           cmake -B build -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
@@ -178,7 +179,8 @@ jobs:
             -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/opt/OpenModScan \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
-            -extraLibs icudata,icui18n,icuuc
+            -extraLibs icudata,icui18n,icuuc \
+            -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
       - name: Create RPM spec file
         run: |

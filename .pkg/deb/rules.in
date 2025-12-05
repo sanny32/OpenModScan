@@ -7,13 +7,17 @@ override_dh_builddeb:
 	dh_builddeb -- -Zgzip
 
 override_dh_dwz:
-
+	:
 
 override_dh_shlibdeps:
-	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info -l@QT_LIB_PATH@
+	dh_shlibdeps \
+		--dpkg-shlibdeps-params="--ignore-missing-info" \
+		-l@QT_LIB_PATH@
+
+	sed -i 's/, libgcc-s1 (>= [^)]*)//g' debian/@PACKAGE_NAME@.substvars
+	sed -i 's/libgcc-s1 (>= [^)]*), //g' debian/@PACKAGE_NAME@.substvars
+
+	cat debian/@PACKAGE_NAME@.substvars || true
 
 override_dh_strip:
 	dh_strip --no-automatic-dbgsym
-
-override_dh_gencontrol:
-	dh_gencontrol -- -Vshlibs:Depends=

@@ -210,6 +210,7 @@ jobs:
       - name: Create Debian rules file
         run: |
           sed -e "s|@QT_LIB_PATH@|${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib|g" \
+              -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
               ${{ env.DEB_SRC_DIR }}/debian/rules.in > ${{ env.DEB_SRC_DIR }}/debian/rules
           rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
           cat -n ${{ env.DEB_SRC_DIR }}/debian/rules

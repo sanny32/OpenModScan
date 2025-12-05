@@ -15,4 +15,4 @@ udevadm trigger
 
 xdg-desktop-menu forceupdate
 setcap 'cap_net_bind_service=+ep' /opt/OpenModScan/bin/omodscan || true
-ln -sf /opt/OpenModSim/omodscan.sh /usr/bin/omodscan
+ln -sf /opt/OpenModScan/omodscan.sh /usr/bin/omodscan

@@ -75,6 +75,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
 
     loadSettings();
+
+    if(_windowCounter == 0) {
+        ui->actionNew->trigger();
+    }
 }
 
 ///

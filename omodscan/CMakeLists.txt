@@ -55,6 +55,10 @@ else()
     endif()
 endif()
 
+if(${GIT_BRANCH} MATCHES dev)
+    set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+endif()
+
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")

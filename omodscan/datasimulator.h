@@ -53,7 +53,7 @@ private:
         DataDisplayMode Mode;
         ModbusSimulationParams Params;
         QVariant CurrentValue;
-        qint64 NextRunTime;
+        qint64 NextRunTime = 0;
     };
     struct SimulationKey{
         QModbusDataUnit::RegisterType Type;

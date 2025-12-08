@@ -142,20 +142,18 @@ void DataSimulator::scheduleNextRun()
         return;
     }
 
-    qint64 currentTime = _masterTimer.elapsed();
+    const qint64 currentTime = _masterTimer.elapsed();
     qint64 minNextTime = -1;
 
     for (auto it = _simulationMap.constBegin(); it != _simulationMap.constEnd(); ++it) {
-        qint64 nextTime = it.value().NextRunTime;
+        const qint64 nextTime = it.value().NextRunTime;
 
         if (minNextTime == -1 || nextTime < minNextTime) {
             minNextTime = nextTime;
         }
     }
 
-    qint64 delay = minNextTime - currentTime;
-
-    if (delay < 0) delay = 0;
+    const qint64 delay = qMax<qint64>(0, minNextTime - currentTime);
 
     _timer.start(delay);
 }

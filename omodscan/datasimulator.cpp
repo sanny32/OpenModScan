@@ -7,9 +7,11 @@
 ///
 DataSimulator::DataSimulator(QObject* parent)
     : QObject{parent}
-    ,_elapsed(0)
 {
+    _timer.setSingleShot(true);
+    _timer.setTimerType(Qt::PreciseTimer);
     connect(&_timer, &QTimer::timeout, this, &DataSimulator::on_timeout);
+    _masterTimer.start();
 }
 
 ///
@@ -47,8 +49,8 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
     }
 
     _simulationMap.insert({ type, addr, deviceId}, { mode, params, value });
-    resumeSimulations();
 
+    scheduleNextRun();
     emit simulationStarted(type, addr, deviceId);
 }
 
@@ -61,6 +63,8 @@ void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 a
 {
     _simulationMap.remove({ type, addr, deviceId});
     emit simulationStopped(type, addr, deviceId);
+
+    scheduleNextRun();
 }
 
 ///
@@ -85,8 +89,7 @@ void DataSimulator::pauseSimulations()
 ///
 void DataSimulator::resumeSimulations()
 {
-    if(!_timer.isActive())
-        _timer.start(_interval);
+   scheduleNextRun();
 }
 
 ///
@@ -130,41 +133,79 @@ ModbusSimulationMap DataSimulator::simulationMap(quint8 deviceId) const
 }
 
 ///
+/// \brief DataSimulator::scheduleNextRun
+///
+void DataSimulator::scheduleNextRun()
+{
+    if (_simulationMap.isEmpty()) {
+        _timer.stop();
+        return;
+    }
+
+    qint64 currentTime = _masterTimer.elapsed();
+    qint64 minNextTime = -1;
+
+    for (auto it = _simulationMap.constBegin(); it != _simulationMap.constEnd(); ++it) {
+        qint64 nextTime = it.value().NextRunTime;
+
+        if (minNextTime == -1 || nextTime < minNextTime) {
+            minNextTime = nextTime;
+        }
+    }
+
+    qint64 delay = minNextTime - currentTime;
+
+    if (delay < 0) delay = 0;
+
+    _timer.start(delay);
+}
+
+///
 /// \brief DataSimulator::on_timeout
 ///
 void DataSimulator::on_timeout()
 {
-    _elapsed++;
-    for(auto&& key : _simulationMap.keys())
+    const qint64 currentTime = _masterTimer.elapsed();
+
+    QMutableMapIterator it(_simulationMap);
+    while(it.hasNext())
     {
-        const auto mode = _simulationMap[key].Mode;
-        const auto params = _simulationMap[key].Params;
+        it.next();
+
+        auto& sim = it.value();
+        const auto& key = it.key();
+        const auto mode = sim.Mode;
+        const auto params = sim.Params;
         const auto interval = params.Interval;
 
-        if((_elapsed * _interval) % interval) continue;
+        if (interval <= 0 || sim.NextRunTime > currentTime) continue;
 
         switch(params.Mode)
         {
             case SimulationMode::Random:
                 randomSimulation(mode, key.Type, key.Address, key.DeviceId, params.RandomParams);
-            break;
+                break;
 
             case SimulationMode::Increment:
                 incrementSimulation(mode, key.Type, key.Address, key.DeviceId, params.IncrementParams);
-            break;
+                break;
 
             case SimulationMode::Decrement:
                 decrementSimailation(mode, key.Type, key.Address, key.DeviceId, params.DecrementParams);
-            break;
+                break;
 
             case SimulationMode::Toggle:
                 toggleSimulation(key.Type, key.Address, key.DeviceId);
-            break;
+                break;
 
             default:
-            break;
+                break;
         }
+
+        sim.NextRunTime = currentTime + interval;
     }
+
+    scheduleNextRun();
 }
 
 template<typename T>

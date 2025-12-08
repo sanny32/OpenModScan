@@ -380,6 +380,14 @@ void MainWindow::on_actionClose_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionCloseAll_triggered
+///
+void MainWindow::on_actionCloseAll_triggered()
+{
+    ui->mdiArea->closeAllSubWindows();
+}
+
+///
 /// \brief MainWindow::on_actionSave_triggered
 ///
 void MainWindow::on_actionSave_triggered()

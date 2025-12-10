@@ -24,6 +24,7 @@
   Var /GLOBAL DISPLAYNAME
   Var LaunchProgram
   Var RebootRequired
+  Var FinishDialog
 
 #--------------------------------
 

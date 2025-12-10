@@ -23,8 +23,8 @@
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
-  !define MUI_FINISHPAGE_LINK "Visit project website"
-  !define MUI_FINISHPAGE_LINK_LOCATION "${UPDATEURL}"
+  #!define MUI_FINISHPAGE_LINK "Visit project website"
+  #!define MUI_FINISHPAGE_LINK_LOCATION "${UPDATEURL}"
 
 #--------------------------------
 # Variables

@@ -19,6 +19,7 @@
 #--------------------------------
 # General
 
+  Var RebootRequired
   Name "${NAME} v${VERSION}"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES64\${NAME}"
@@ -92,13 +93,16 @@ SectionEnd
   SectionEnd
 #--------------------------------
 
+#--------------------------------
+# Post-install section: ask about reboot only once
 Section -Post
-    ; Ask for reboot only if needed
+    ; Check if VC Redist indicated reboot is required
     ${If} $RebootRequired == "1"
         MessageBox MB_ICONEXCLAMATION|MB_YESNO \
             "A system restart is required to complete the installation.$\r$\nRestart now?" \
             IDYES DoReboot
 
+        ; If user clicked "No", continue silently
         Goto EndPost
 
         DoReboot:

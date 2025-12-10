@@ -169,10 +169,6 @@ SectionEnd
 
 Section "Uninstall"
 
-  # Try to close the running application
-  ExecWait 'taskkill /F /IM "${APPFILE}" /T'
-  Sleep 1000
-
   # Attempt to delete the exe directly
   ClearErrors
   Delete "$INSTDIR\${APPFILE}"

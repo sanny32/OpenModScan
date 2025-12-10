@@ -98,7 +98,12 @@ FunctionEnd
 
  Section "Visual Studio Runtime"
     SetOutPath "$INSTDIR"
-    ExecWait "$INSTDIR\vc_redist.x86.exe /install /quiet"
+    ExecWait '"$INSTDIR\vc_redist.x86.exe" /install /quiet /norestart' $0
+
+    ; 3010 = reboot required
+    ${If} $0 == 3010
+        StrCpy $RebootRequired "1"
+    ${EndIf}
  SectionEnd
 
 #--------------------------------
@@ -113,6 +118,23 @@ FunctionEnd
 	    CreateShortCut "$SMPROGRAMS\${NAME}\${NAME}.lnk" "$INSTDIR\${APPFILE}" "" "$INSTDIR\${ICOFILE}"
   SectionEnd
 #--------------------------------
+
+Section -Post
+    ; Ask for reboot only if needed
+    ${If} $RebootRequired == "1"
+        MessageBox MB_ICONEXCLAMATION|MB_YESNO \
+            "A system restart is required to complete the installation.$\r$\nRestart now?" \
+            IDYES DoReboot
+
+        Goto EndPost
+
+        DoReboot:
+            Reboot
+    ${EndIf}
+
+    EndPost:
+SectionEnd
+
 # Remove empty parent directories
 
   Function un.RMDirUP

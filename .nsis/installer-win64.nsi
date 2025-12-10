@@ -17,9 +17,14 @@
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
 #--------------------------------
+# Variables
+
+  Var LaunchProgram
+  Var RebootRequired
+
+#--------------------------------
 # General
 
-  Var RebootRequired
   Name "${NAME} v${VERSION}"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES64\${NAME}"
@@ -141,6 +146,16 @@ SectionEnd
 # Section - Uninstaller
 
 Section "Uninstall"
+  # Attempt to delete the exe directly
+  ClearErrors
+  Delete "$INSTDIR\${APPFILE}"
+  IfErrors ProcessStillRunning ProcessNotFound
+
+ProcessStillRunning:
+  MessageBox MB_ICONEXCLAMATION|MB_OK "The application is still running. Uninstallation cannot continue."
+  Quit 
+
+ProcessNotFound:
   # Delete Shortcut
   Delete "$DESKTOP\${NAME}.lnk"
 

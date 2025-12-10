@@ -19,10 +19,13 @@
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
 #--------------------------------
+# Variables
 
-Var /GLOBAL DISPLAYNAME
-Var LaunchProgram
-Var RebootRequired
+  Var /GLOBAL DISPLAYNAME
+  Var LaunchProgram
+  Var RebootRequired
+
+#--------------------------------
 
 !macro SetDisplayName un
 Function ${un}SetDisplayName
@@ -46,7 +49,17 @@ Function un.onInit
 FunctionEnd
 
 Function FinishPageShow
-    StrCpy $LaunchProgram 1
+    nsDialogs::Create 1018
+    Pop $FinishDialog
+    ${If} $FinishDialog == error
+        Abort
+    ${EndIf}
+
+    ${NSD_CreateCheckBox} 20u 40u 200u 12u "Launch ${NAME} after installation"
+    Pop $LaunchProgram
+    ${NSD_SetState} $LaunchProgram 1
+
+    nsDialogs::Show
 FunctionEnd
 
 Function FinishPageLeave

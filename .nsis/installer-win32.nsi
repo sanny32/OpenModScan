@@ -171,14 +171,12 @@ Section "Uninstall"
 
   # Try to close the running application
   ExecWait 'taskkill /F /IM "${APPFILE}" /T'
-  Sleep 500
+  Sleep 1000
 
-  # Check if the process is still running
+  # Attempt to delete the exe directly
   ClearErrors
-  ExecDos::exec '"tasklist /FI "IMAGENAME eq ${APPFILE}" /NH"'
-  Pop $0
-  # If $0 contains the process name, it is still running
-  StrCmp $0 "" ProcessNotFound ProcessStillRunning
+  Delete "$INSTDIR\${APPFILE}"
+  IfErrors ProcessStillRunning ProcessNotFound
 
 ProcessStillRunning:
   MessageBox MB_ICONEXCLAMATION|MB_OK "The application is still running. Uninstallation cannot continue."

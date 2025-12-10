@@ -177,6 +177,7 @@ Section "Uninstall"
 ProcessStillRunning:
   MessageBox MB_ICONEXCLAMATION|MB_OK "The application is still running. Uninstallation cannot continue."
   Abort
+  Return 
 
 ProcessNotFound:
   # Delete Shortcut

@@ -64,9 +64,11 @@ Function FinishPageShow
 FunctionEnd
 
 Function FinishPageLeave
-    StrCmp $LaunchProgram 1 0 SkipLaunch
-    Exec '"$INSTDIR\${APPFILE}"'
-    SkipLaunch:
+     ${NSD_GetState} $LaunchCheckbox $0
+    IntCmp $0 1 Launch Skip
+    Launch:
+        Exec '"$INSTDIR\${APPFILE}"'
+    Skip:
 FunctionEnd
 
 #--------------------------------

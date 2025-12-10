@@ -69,10 +69,26 @@
 	  WriteRegDWORD HKLM64 "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "EstimatedSize" "$0"
   SectionEnd
 
- Section "Visual Studio Runtime"
+Section "Visual Studio Runtime"
     SetOutPath "$INSTDIR"
-    ExecWait "$INSTDIR\vc_redist.x64.exe /install /quiet"
- SectionEnd
+    ExecWait '"$INSTDIR\vc_redist.x64.exe" /install /quiet /norestart' $0
+    
+    ; 3010 = reboot required
+    ${If} $0 == 3010
+        MessageBox MB_ICONEXCLAMATION|MB_YESNO \
+            "A system restart is required to complete the Visual C++ Redistributable installation.$\r$\nRestart now?" \
+            IDYES RestartNow
+
+        ; User clicked "No"
+        Goto ContinueSetup
+
+        RestartNow:
+            Reboot
+    ${EndIf}
+
+    ContinueSetup:
+SectionEnd
+
 
 #--------------------------------
 # Section - Shortcut

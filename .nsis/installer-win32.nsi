@@ -18,8 +18,8 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
-  #!define MUI_FINISHPAGE_TITLE "Installation Complete"
-  #!define MUI_FINISHPAGE_TEXT "Setup has finished installing ${NAME} on your computer."
+  !define MUI_FINISHPAGE_TITLE "Installation Complete"
+  !define MUI_FINISHPAGE_TEXT "Setup has finished installing ${NAME} on your computer."
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED

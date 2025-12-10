@@ -18,11 +18,18 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
+  !define MUI_FINISHPAGE_TITLE "Installation Complete"
+  !define MUI_FINISHPAGE_TEXT "Setup has finished installing ${NAME} on your computer."
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
+  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
+  !define MUI_FINISHPAGE_RUN_CHECKED
+  !define MUI_FINISHPAGE_LINK "Visit project website"
+  !define MUI_FINISHPAGE_LINK_LOCATION "${UPDATEURL}"
+
 #--------------------------------
 # Variables
 
   Var /GLOBAL DISPLAYNAME
-  Var LaunchCheckbox 
   Var RebootRequired
 
 #--------------------------------
@@ -46,29 +53,6 @@ FunctionEnd
 
 Function un.onInit
   Call un.SetDisplayName
-FunctionEnd
-
-Function FinishPageShow
-  !insertmacro MUI_HEADER_TEXT "Installation Complete" "Thank you for installing ${NAME}"
-    
-  nsDialogs::Create 1018
-  Pop $0
-  
-  ${NSD_CreateLabel} 0 0 100% 24u "Setup has finished installing ${NAME} on your computer."
-  Pop $0
-  
-  ${NSD_CreateCheckbox} 0 40u 100% 12u "Launch ${NAME} after installation"
-  Pop $LaunchCheckbox
-  ${NSD_SetState} $LaunchCheckbox ${BST_CHECKED}
-  
-  nsDialogs::Show
-FunctionEnd
-
-Function FinishPageLeave
-  ${NSD_GetState} $LaunchCheckbox $0
-  ${If} $0 == ${BST_CHECKED}
-      Exec '"$INSTDIR\${APPFILE}"'
-  ${EndIf}
 FunctionEnd
 
 #--------------------------------

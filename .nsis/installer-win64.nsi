@@ -16,10 +16,14 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
+  !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} has been installed on your computer."
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
+  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
+  !define MUI_FINISHPAGE_RUN_CHECKED
+
 #--------------------------------
 # Variables
 
-  Var LaunchProgram
   Var RebootRequired
 
 #--------------------------------
@@ -37,6 +41,7 @@
   !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
 
   # Uninstaller pages
   !insertmacro MUI_UNPAGE_CONFIRM

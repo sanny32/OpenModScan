@@ -167,8 +167,8 @@ SectionEnd
 #--------------------------------
 # Section - Uninstaller
 
-Function UninstallApp
-# Attempt to delete the exe directly
+Section "Uninstall"
+  # Attempt to delete the exe directly
   ClearErrors
   Delete "$INSTDIR\${APPFILE}"
   IfErrors ProcessStillRunning ProcessNotFound
@@ -194,8 +194,4 @@ ProcessNotFound:
   # Remove uninstaller information from the registry
 	DeleteRegKey HKLM32 "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
   DeleteRegKey HKCU32 "Software\${NAME}"
-FunctionEnd
-
-Section "Uninstall"
-  Call UninstallApp
 SectionEnd

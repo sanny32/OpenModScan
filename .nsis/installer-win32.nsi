@@ -46,6 +46,7 @@ FunctionEnd
 #--------------------------------
 # General
 
+  Var RebootRequired
   Name "${NAME} v${VERSION} (x86)"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES\${NAME}"

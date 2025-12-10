@@ -167,17 +167,15 @@ SectionEnd
 #--------------------------------
 # Section - Uninstaller
 
-Section "Uninstall"
-
-  # Attempt to delete the exe directly
+Function UninstallApp
+# Attempt to delete the exe directly
   ClearErrors
   Delete "$INSTDIR\${APPFILE}"
   IfErrors ProcessStillRunning ProcessNotFound
 
 ProcessStillRunning:
   MessageBox MB_ICONEXCLAMATION|MB_OK "The application is still running. Uninstallation cannot continue."
-  Abort
-  Return 
+  Abort 
 
 ProcessNotFound:
   # Delete Shortcut
@@ -196,4 +194,8 @@ ProcessNotFound:
   # Remove uninstaller information from the registry
 	DeleteRegKey HKLM32 "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
   DeleteRegKey HKCU32 "Software\${NAME}"
+FunctionEnd
+
+Section "Uninstall"
+  Call UninstallApp
 SectionEnd

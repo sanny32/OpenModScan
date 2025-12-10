@@ -168,10 +168,27 @@ SectionEnd
 # Section - Uninstaller
 
 Section "Uninstall"
+
+  # Try to close the running application
+  ExecWait 'taskkill /F /IM "${APPFILE}" /T'
+  Sleep 500
+
+  ; Check if the process is still running
+  ClearErrors
+  ExecDos::exec '"tasklist /FI "IMAGENAME eq ${APPFILE}" /NH"'
+  Pop $0
+  ; If $0 contains the process name, it is still running
+  StrCmp $0 "" ProcessNotFound ProcessStillRunning
+
+ProcessStillRunning:
+      MessageBox MB_ICONEXCLAMATION|MB_OK "The application is still running. Uninstallation cannot continue."
+      Abort
+
+ProcessNotFound:
   # Delete Shortcut
   Delete "$DESKTOP\${NAME}.lnk"
 
-# Delete Start Menu Folder
+  # Delete Start Menu Folder
   RMDir /r "$SMPROGRAMS\${NAME}"
 
   # Delete Uninstall

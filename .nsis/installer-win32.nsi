@@ -22,9 +22,8 @@
 # Variables
 
   Var /GLOBAL DISPLAYNAME
-  Var LaunchProgram
+  Var LaunchCheckbox 
   Var RebootRequired
-  Var FinishDialog
 
 #--------------------------------
 
@@ -50,25 +49,26 @@ Function un.onInit
 FunctionEnd
 
 Function FinishPageShow
-    nsDialogs::Create 1018
-    Pop $FinishDialog
-    ${If} $FinishDialog == error
-        Abort
-    ${EndIf}
-
-    ${NSD_CreateCheckBox} 20u 40u 200u 12u "Launch ${NAME} after installation"
-    Pop $LaunchProgram
-    ${NSD_SetState} $LaunchProgram 1
-
-    nsDialogs::Show
+  !insertmacro MUI_HEADER_TEXT "Installation Complete" "Thank you for installing ${NAME}"
+    
+  nsDialogs::Create 1018
+  Pop $0
+  
+  ${NSD_CreateLabel} 0 0 100% 24u "Setup has finished installing ${NAME} on your computer."
+  Pop $0
+  
+  ${NSD_CreateCheckbox} 0 40u 100% 12u "Launch ${NAME} after installation"
+  Pop $LaunchCheckbox
+  ${NSD_SetState} $LaunchCheckbox ${BST_CHECKED}
+  
+  nsDialogs::Show
 FunctionEnd
 
 Function FinishPageLeave
-     ${NSD_GetState} $LaunchCheckbox $0
-    IntCmp $0 1 Launch Skip
-    Launch:
-        Exec '"$INSTDIR\${APPFILE}"'
-    Skip:
+  ${NSD_GetState} $LaunchCheckbox $0
+  ${If} $0 == ${BST_CHECKED}
+      Exec '"$INSTDIR\${APPFILE}"'
+  ${EndIf}
 FunctionEnd
 
 #--------------------------------

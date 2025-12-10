@@ -20,7 +20,9 @@
 
 #--------------------------------
 
-VAR /GLOBAL DISPLAYNAME
+Var /GLOBAL DISPLAYNAME
+Var LaunchProgram
+Var RebootRequired
 
 !macro SetDisplayName un
 Function ${un}SetDisplayName
@@ -43,10 +45,19 @@ Function un.onInit
   Call un.SetDisplayName
 FunctionEnd
 
+Function FinishPageShow
+    StrCpy $LaunchProgram 1
+FunctionEnd
+
+Function FinishPageLeave
+    StrCmp $LaunchProgram 1 0 SkipLaunch
+    Exec '"$INSTDIR\${APPFILE}"'
+    SkipLaunch:
+FunctionEnd
+
 #--------------------------------
 # General
 
-  Var RebootRequired
   Name "${NAME} v${VERSION} (x86)"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES\${NAME}"
@@ -59,6 +70,7 @@ FunctionEnd
   !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
 
   # Uninstaller pages
   !insertmacro MUI_UNPAGE_CONFIRM

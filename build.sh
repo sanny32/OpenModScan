@@ -28,7 +28,7 @@ case "$ID" in
         INSTALL_CMD="apt install -y"
         SEARCH_CMD="apt-cache search --names-only"
         ;;
-    rhel|fedora|redos)
+    rhel|fedora|rocky|redos)
         DISTRO="rhel-based"
         CHECK_CMD="rpm -q"
         INSTALL_CMD="dnf install -y"
@@ -94,6 +94,9 @@ case "$ID" in
         ;;
     rhel)
         check_min_os_version "8"
+        ;;
+    rocky)
+        check_min_os_version "9.7"
         ;;
     redos)
         check_min_os_version "8"

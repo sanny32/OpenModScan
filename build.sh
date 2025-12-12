@@ -121,6 +121,7 @@ case "$ID" in
             echo -e "\033[31mError: CRB repository is not enabled in Rocky Linux.\033[0m"
             echo "Please enable it with root privileges:"
             echo "  dnf config-manager --set-enabled crb"
+            echo ""
             exit 1
         fi
         ;;

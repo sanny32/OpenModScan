@@ -144,7 +144,7 @@ or for Qt5 package:
 sudo apt remove qt5-omodscan
 ```
 
-## RedHat/Fedora/RedOS Linux
+## RedHat/Fedora/Rocky/RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash

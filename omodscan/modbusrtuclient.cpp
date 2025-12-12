@@ -163,7 +163,7 @@ ModbusRtuClient::ModbusRtuClient(QObject *parent)
 ///
 ModbusRtuClient::~ModbusRtuClient()
 {
-    close();
+    ModbusRtuClient::close();
 }
 
 ///

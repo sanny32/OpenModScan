@@ -113,6 +113,20 @@ case "$ID" in
 esac
 
 # ==========================
+# Check other requirements
+# ==========================
+case "$ID" in
+    rocky)
+        if ! dnf repolist enabled | grep -q "crb"; then
+            echo -e "\033[31mError: CRB repository is not enabled in Rocky Linux.\033[0m"
+            echo "Please enable it with root privileges:"
+            echo "  dnf config-manager --set-enabled crb"
+            exit 1
+        fi
+        ;;
+esac
+
+# ==========================
 # Parse script arguments
 # ==========================
 QT_CHOICE=""

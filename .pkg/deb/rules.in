@@ -16,8 +16,8 @@ override_dh_shlibdeps:
 
 	sed -i 's/, libgcc-s1 (>= [^)]*)//g' debian/@PACKAGE_NAME@.substvars
 	sed -i 's/libgcc-s1 (>= [^)]*), //g' debian/@PACKAGE_NAME@.substvars
-	sed -i 's/, libgdk-pixbuf (>= [^)]*)//g' debian/@PACKAGE_NAME@.substvars
-	sed -i 's/libgdk-pixbuf (>= [^)]*), //g' debian/@PACKAGE_NAME@.substvars
+	sed -i 's/, libgdk-pixbuf2.0-0 (>= [^)]*)//g' debian/@PACKAGE_NAME@.substvars
+	sed -i 's/libgdk-pixbuf2.0-0 (>= [^)]*), //g' debian/@PACKAGE_NAME@.substvars
 
 	cat debian/@PACKAGE_NAME@.substvars || true
 

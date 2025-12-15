@@ -117,6 +117,7 @@ jobs:
         shell: cmd
 
       - name: Upload Installer
+        id: upload
         uses: actions/upload-artifact@v4
         if: success()
         with:

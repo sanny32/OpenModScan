@@ -119,9 +119,12 @@ jobs:
         shell: cmd
 
       - name: Upload Installer
-        id: build
+        id: upload
         uses: actions/upload-artifact@v4
         if: success()
+        with:
+          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
+          path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Signing
         uses: signpath/github-action-submit-signing-request@v1
@@ -139,7 +142,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
+          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}_signed
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Create or update GitHub Release and upload EXE

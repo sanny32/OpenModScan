@@ -107,6 +107,7 @@ The following minimum operating system versions are supported for OpenModScan:
 - Ubuntu Linux 22.04
 - Mint Linux 22
 - Fedora Linux 41
+- Rocky Linux 9.7
 - OpenSuse Linux 15.6
 - Alt Linux 11
 - Astra Linux 1.7

@@ -19,7 +19,7 @@ QString arch()
 #elif defined(Q_PROCESSOR_ARM64)
     return "ARM64";
 #else
-    return "Unknown";
+    return DialogAbout::tr("Unknown");
 #endif
 }
 

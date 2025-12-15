@@ -228,6 +228,11 @@
         <translation type="vanished">庫</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogabout.cpp" line="22"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogabout.cpp" line="35"/>
         <source>About %1...</source>
         <translation>關於 %1...</translation>

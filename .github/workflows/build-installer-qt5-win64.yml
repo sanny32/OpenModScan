@@ -111,6 +111,13 @@ jobs:
           output-artifact-directory: .
           wait-for-completion: true
 
+      - name: Upload signed Executable
+        uses: actions/upload-artifact@v4
+        if: success() && github.ref_type != 'tag'
+        with:
+          name: omodscan_signed
+          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
+
       - name: Deploy Qt dependencies using windeployqt
         run: |
           call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.29

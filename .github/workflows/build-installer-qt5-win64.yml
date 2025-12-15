@@ -79,12 +79,6 @@ jobs:
           echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
         shell: cmd
 
-      - name: Test call signtool
-        run: |
-          call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.29
-          signtool verify /pa /v qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
-        shell: cmd
-
       - name: Configure CMake
         run: |
           cmake omodscan -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"

@@ -136,6 +136,11 @@ jobs:
           output-artifact-directory: .
           wait-for-completion: true
 
+      - name: Verify signature
+        shell: cmd
+        run: |
+          signtool verify /pa /v qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2

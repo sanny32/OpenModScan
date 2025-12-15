@@ -65,7 +65,8 @@ int main(int argc, char *argv[])
     a.setStyle("windowsvista");
 #else
     a.setStyle("Fusion");
-    a.installEventFilter(new PaletteGuard(qApp));
+    a.setPalette(PaletteGuard(&a).lightPalette());
+    a.installEventFilter(new PaletteGuard(&a));
 #endif
 
     MainWindow w;

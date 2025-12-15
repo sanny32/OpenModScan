@@ -143,8 +143,17 @@ jobs:
           wait-for-completion: true
 
       - name: Verify signature
-        run: ${{ env.SDK_PATH }}\Windows Kits\10\bin\${{ env.CMAKE_ARCH }}\signtool verify /pa /v qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+        run: |
+         "${{ env.SDK_PATH }}\Windows Kits\10\bin\${{ env.CMAKE_ARCH }}\signtool" verify /pa /v qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
         shell: cmd
+
+      - name: Upload signed Installer
+        id: upload
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
+          path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'

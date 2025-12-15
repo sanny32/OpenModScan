@@ -97,7 +97,7 @@ jobs:
         if: success()
         with:
           name: omodscan
-          path: ${{ env.BUILD_DIR }}\omodscan.exe
+          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Signing Executable
         uses: signpath/github-action-submit-signing-request@v1
@@ -160,7 +160,7 @@ jobs:
 
       - name: Upload signed Installer
         uses: actions/upload-artifact@v4
-        if: success()
+        if: success() && github.ref_type != 'tag'
         with:
           name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}_signed
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe

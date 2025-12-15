@@ -138,7 +138,7 @@ jobs:
 
       - name: Verify signature
         run: |
-          call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.29
+          call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat"
           signtool verify /pa /v qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
         shell: cmd
 

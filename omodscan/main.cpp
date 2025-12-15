@@ -17,16 +17,34 @@ public:
     }
 
     QPalette lightPalette() const {
-        QPalette pal;
-        pal.setColor(QPalette::Window, QColor(239,239,239));
-        pal.setColor(QPalette::WindowText, Qt::black);
-        pal.setColor(QPalette::Base, Qt::white);
-        pal.setColor(QPalette::AlternateBase, QColor(246,246,246));
-        pal.setColor(QPalette::Text, Qt::black);
-        pal.setColor(QPalette::Button, QColor(239,239,239));
-        pal.setColor(QPalette::ButtonText, Qt::black);
-        pal.setColor(QPalette::Highlight, QColor(48,140,198));
-        pal.setColor(QPalette::HighlightedText, Qt::white);
+        const QColor backGround(239, 239, 239);
+        const QColor light = backGround.lighter(150);
+        const QColor mid(backGround.darker(130));
+        const QColor midLight = mid.lighter(110);
+        const QColor base = Qt::white;
+        const QColor disabledBase(backGround);
+        const QColor dark = backGround.darker(150);
+        const QColor darkDisabled = QColor(209, 209, 209).darker(110);
+        const QColor text = Qt::black;
+        const QColor hightlightedText = Qt::white;
+        const QColor disabledText = QColor(190, 190, 190);
+        const QColor button = backGround;
+        const QColor shadow = dark.darker(135);
+        const QColor disabledShadow = shadow.lighter(150);
+        QPalette pal(Qt::black, backGround, light, dark, mid, text, base);
+        pal.setBrush(QPalette::Midlight, midLight);
+        pal.setBrush(QPalette::Button, button);
+        pal.setBrush(QPalette::Shadow, shadow);
+        pal.setBrush(QPalette::HighlightedText, hightlightedText);
+        pal.setBrush(QPalette::Disabled, QPalette::Text, disabledText);
+        pal.setBrush(QPalette::Disabled, QPalette::WindowText, disabledText);
+        pal.setBrush(QPalette::Disabled, QPalette::ButtonText, disabledText);
+        pal.setBrush(QPalette::Disabled, QPalette::Base, disabledBase);
+        pal.setBrush(QPalette::Disabled, QPalette::Dark, darkDisabled);
+        pal.setBrush(QPalette::Disabled, QPalette::Shadow, disabledShadow);
+        pal.setBrush(QPalette::Active, QPalette::Highlight, QColor(48, 140, 198));
+        pal.setBrush(QPalette::Inactive, QPalette::Highlight, QColor(48, 140, 198));
+        pal.setBrush(QPalette::Disabled, QPalette::Highlight, QColor(145, 145, 145));
         return pal;
     }
 };

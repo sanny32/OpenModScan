@@ -108,12 +108,12 @@ jobs:
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
           github-artifact-id: '${{steps.build.outputs.artifact-id}}'
-          output-artifact-directory: .
+          output-artifact-directory: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
           wait-for-completion: true
 
       - name: Upload signed Executable
         uses: actions/upload-artifact@v4
-        if: success() && github.ref_type != 'tag'
+        if: success()
         with:
           name: qt5-omodscan_signed
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
@@ -167,7 +167,7 @@ jobs:
 
       - name: Upload signed Installer
         uses: actions/upload-artifact@v4
-        if: success() && github.ref_type != 'tag'
+        if: success()
         with:
           name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}_signed
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe

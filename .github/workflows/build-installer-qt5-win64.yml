@@ -91,6 +91,26 @@ jobs:
           cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
         shell: cmd
 
+      - name: Upload Executable
+        id: build
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: omodscan
+          path: ${{ env.BUILD_DIR }}\omodscan.exe
+
+      - name: Signing Executable
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '2bd9d721-94a7-4c7d-aab8-b81dd84670a5'
+          project-slug: 'OpenModScan'
+          signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
+          github-artifact-id: '${{steps.build.outputs.artifact-id}}'
+          output-artifact-directory: .
+          wait-for-completion: true
+
       - name: Deploy Qt dependencies using windeployqt
         run: |
           call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.29
@@ -126,7 +146,7 @@ jobs:
           name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
-      - name: Signing
+      - name: Signing Installer
         uses: signpath/github-action-submit-signing-request@v1
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'

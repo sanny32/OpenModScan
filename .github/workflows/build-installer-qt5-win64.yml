@@ -123,6 +123,18 @@ jobs:
           name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
+      - name: Signing
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '2bd9d721-94a7-4c7d-aab8-b81dd84670a5'
+          project-slug: 'OpenModScan'
+          signing-policy-slug: 'test-signing'
+          artifact-configuration-slug: 'test-zip'
+          github-artifact-id: '${{steps.upload.outputs.artifact-id}}'
+          output-artifact-directory: .
+          wait-for-completion: true
+
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2

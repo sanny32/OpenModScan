@@ -221,7 +221,7 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="185"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation>資訊</translation>
     </message>
     <message>
         <source>Libraries</source>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="22"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>未知</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="35"/>
@@ -245,12 +245,12 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="39"/>
         <source>• Architecture: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>• 架構： %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="40"/>
         <source>• Platform: %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>• 平台： %1 %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="41"/>

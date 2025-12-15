@@ -25,10 +25,6 @@ public:
 ///
 int main(int argc, char *argv[])
 {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
-    QApplication::setDesktopSettingsAware(false);
-#endif
-
     QApplication a(argc, argv);
     a.setApplicationName(APP_NAME);
     a.setApplicationVersion(APP_VERSION);

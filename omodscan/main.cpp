@@ -16,7 +16,7 @@ public:
         return QObject::eventFilter(obj, ev);
     }
 
-    QPalette lightPalette() const {
+    static QPalette lightPalette() {
         const QColor backGround(239, 239, 239);
         const QColor light = backGround.lighter(150);
         const QColor mid(backGround.darker(130));
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     a.setStyle("windowsvista");
 #else
     a.setStyle("Fusion");
-    a.setPalette(PaletteGuard(&a).lightPalette());
+    a.setPalette(PaletteGuard::lightPalette());
     a.installEventFilter(new PaletteGuard(&a));
 #endif
 

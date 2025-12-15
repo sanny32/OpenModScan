@@ -23,6 +23,8 @@ env:
   CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: x64
   BUILD_TYPE: Release
+  SIGNING_POLICY_SLUG: test-signing
+  ARTIFACT_CONF_SLUG: test-zip
 
 jobs:
   build-omodscan:
@@ -117,12 +119,9 @@ jobs:
         shell: cmd
 
       - name: Upload Installer
-        id: upload
+        id: build
         uses: actions/upload-artifact@v4
         if: success()
-        with:
-          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
-          path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Signing
         uses: signpath/github-action-submit-signing-request@v1
@@ -130,8 +129,8 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '2bd9d721-94a7-4c7d-aab8-b81dd84670a5'
           project-slug: 'OpenModScan'
-          signing-policy-slug: 'test-signing'
-          artifact-configuration-slug: 'test-zip'
+          signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
           github-artifact-id: '${{steps.upload.outputs.artifact-id}}'
           output-artifact-directory: .
           wait-for-completion: true

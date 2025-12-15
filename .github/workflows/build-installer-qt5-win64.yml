@@ -89,6 +89,12 @@ jobs:
           echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
         shell: cmd
 
+      - name: Get Sdk path
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.Windows10SDK -property installationPath`) do set SDK_PATH=%%i
+          echo SDK_PATH=%SDK_PATH%>>%GITHUB_ENV%
+        shell: cmd
+
       - name: Deploy Qt dependencies using windeployqt
         run: |
           call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.29
@@ -137,9 +143,8 @@ jobs:
           wait-for-completion: true
 
       - name: Verify signature
+        run: ${{ env.SDK_PATH }}\Windows Kits\10\bin\${{ env.CMAKE_ARCH }}\signtool verify /pa /v qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
         shell: cmd
-        run: |
-          signtool verify /pa /v qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'

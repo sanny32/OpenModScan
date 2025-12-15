@@ -220,26 +220,40 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="185"/>
-        <source>Libraries</source>
-        <translation>库</translation>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="16"/>
+        <source>Libraries</source>
+        <translation type="vanished">库</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="35"/>
         <source>About %1...</source>
         <translation>关于 %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="18"/>
+        <location filename="../dialogs/dialogabout.cpp" line="37"/>
         <source>Version: %1</source>
         <translation>版本 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="19"/>
+        <location filename="../dialogs/dialogabout.cpp" line="39"/>
+        <source>• Architecture: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="40"/>
+        <source>• Platform: %1 %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="41"/>
         <source>• Qt %1 (build with version %2)</source>
         <translation>Qt %1 （构建版本 %2）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="46"/>
+        <location filename="../dialogs/dialogabout.cpp" line="70"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>

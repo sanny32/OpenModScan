@@ -96,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: omodscan
+          name: qt5-omodscan
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Signing Executable
@@ -115,7 +115,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success() && github.ref_type != 'tag'
         with:
-          name: omodscan_signed
+          name: qt5-omodscan_signed
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Deploy Qt dependencies using windeployqt

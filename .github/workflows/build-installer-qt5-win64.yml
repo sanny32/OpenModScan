@@ -68,7 +68,10 @@ jobs:
           )
           if "${{ github.event_name }}"=="workflow_dispatch" (
             if "${{ github.event.inputs.signing }}"=="true" (
-              set SIGNING_POLICY_SLUG=test-signing
+              if "${{ github.ref_type }}"=="tag" (
+                set SIGNING_POLICY_SLUG=release-signing
+              ) else (
+                set SIGNING_POLICY_SLUG=test-signing
             )
           )
           echo SIGNING_POLICY_SLUG=%SIGNING_POLICY_SLUG%>>%GITHUB_ENV%

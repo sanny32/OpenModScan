@@ -9,9 +9,14 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
+        default: dev
       tag:
         description: 'Checkout tag'
         required: false
+      signing:
+        description: 'Use test-signing certificate'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -27,7 +32,6 @@ env:
   # SingPath variables
   PROJECT_SLUG: OpenModScan
   ORGANIZAITION_ID: 2bd9d721-94a7-4c7d-aab8-b81dd84670a5
-  SIGNING_POLICY_SLUG: test-signing
   ARTIFACT_CONF_SLUG: exe-zip
 
 jobs:
@@ -51,6 +55,17 @@ jobs:
         run: |
           for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
             echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
+          )
+        shell: cmd
+
+      - name: Select signing policy
+        run: |
+          if "${{ github.event_name }}"=="push" if "${{ github.ref_type }}"=="tag" (
+            echo SIGNING_POLICY_SLUG=release-signing>>%GITHUB_ENV%
+          ) else if "${{ github.event_name }}"=="workflow_dispatch" if "${{ github.event.inputs.signing }}"=="true" (
+            echo SIGNING_POLICY_SLUG=test-signing>>%GITHUB_ENV%
+          ) else (
+            echo SIGNING_POLICY_SLUG=none>>%GITHUB_ENV%
           )
         shell: cmd
 
@@ -105,10 +120,11 @@ jobs:
 
       - name: Signing Executable
         uses: signpath/github-action-submit-signing-request@v1
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ env.ORGANIZAITION_ID }}'
-          project-slug: '$${{ env.PROJECT_SLUG }}'
+          project-slug: '${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
           github-artifact-id: '${{steps.upload-exe.outputs.artifact-id}}'
@@ -118,7 +134,7 @@ jobs:
 
       - name: Upload signed Executable
         uses: actions/upload-artifact@v4
-        if: success()
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           name: omodscan-signed.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
@@ -160,10 +176,11 @@ jobs:
 
       - name: Signing Installer
         uses: signpath/github-action-submit-signing-request@v1
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: '${{ env.ORGANIZAITION_ID }}'
-          project-slug: '$${{ env.PROJECT_SLUG }}'
+          project-slug: '${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
           github-artifact-id: '${{steps.upload-installer.outputs.artifact-id}}'
@@ -173,7 +190,7 @@ jobs:
 
       - name: Upload signed Installer
         uses: actions/upload-artifact@v4
-        if: success()
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe

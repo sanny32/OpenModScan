@@ -14,7 +14,7 @@ on:
         description: 'Checkout tag'
         required: false
       signing:
-        description: 'Use test-signing certificate'
+        description: 'Sign executable and installer'
         type: boolean
         default: false
 

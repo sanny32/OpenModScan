@@ -77,6 +77,7 @@ jobs:
           )
           echo SIGNING_POLICY_SLUG=%SIGNING_POLICY_SLUG%>>%GITHUB_ENV%
           echo Selected signing policy: %SIGNING_POLICY_SLUG%
+          exit 1
         shell: cmd
 
       - name: Install Python (for aqtinstall)

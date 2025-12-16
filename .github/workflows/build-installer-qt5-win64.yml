@@ -61,13 +61,13 @@ jobs:
       - name: Select signing policy
         run: |
           set SIGNING_POLICY_SLUG=none
-          if "%GITHUB_EVENT_NAME%"=="push" (
-            if "%GITHUB_REF_TYPE%"=="tag" (
+          if "${{ github.event_name }}"=="push" (
+            if "${{ github.ref_type }}"=="tag" (
               set SIGNING_POLICY_SLUG=release-signing
             )
           )
-          if "%GITHUB_EVENT_NAME%"=="workflow_dispatch" (
-            if "%GITHUB_EVENT_INPUTS_RELEASE_SIGNING%"=="true" (
+          if "${{ github.event_name }}"=="workflow_dispatch" (
+            if "${{ github.event.inputs.signing }}"=="true" (
               set SIGNING_POLICY_SLUG=test-signing
             )
           )

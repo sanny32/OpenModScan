@@ -68,7 +68,7 @@ jobs:
           )
           if "${{ github.event_name }}"=="workflow_dispatch" (
             if "${{ github.event.inputs.signing }}"=="true" (
-              if "${{ github.event.inputs.tag }}"!="" (
+              if not "${{ github.event.inputs.tag }}"=="" (
                 set SIGNING_POLICY_SLUG=release-signing
               ) else (
                 set SIGNING_POLICY_SLUG=test-signing

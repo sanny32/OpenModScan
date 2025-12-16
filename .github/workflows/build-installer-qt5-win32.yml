@@ -9,6 +9,7 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
+        default: dev
       tag:
         description: 'Checkout tag'
         required: false

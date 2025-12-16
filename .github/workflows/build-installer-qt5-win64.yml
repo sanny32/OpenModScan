@@ -72,6 +72,7 @@ jobs:
                 set SIGNING_POLICY_SLUG=release-signing
               ) else (
                 set SIGNING_POLICY_SLUG=test-signing
+              )
             )
           )
           echo SIGNING_POLICY_SLUG=%SIGNING_POLICY_SLUG%>>%GITHUB_ENV%

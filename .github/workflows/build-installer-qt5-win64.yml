@@ -60,13 +60,19 @@ jobs:
 
       - name: Select signing policy
         run: |
-          if "${{ github.event_name }}"=="push" && "${{ github.ref_type }}"=="tag" (
-            echo SIGNING_POLICY_SLUG=release-signing>>%GITHUB_ENV%
-          ) else if "${{ github.event_name }}"=="workflow_dispatch" && "${{ github.event.inputs.signing }}"=="false" (
-            echo SIGNING_POLICY_SLUG=none>>%GITHUB_ENV% 
-          ) else (
-            echo SIGNING_POLICY_SLUG=test-signing>>%GITHUB_ENV%
+          set SIGNING_POLICY_SLUG=none
+          if "%GITHUB_EVENT_NAME%"=="push" (
+            if "%GITHUB_REF_TYPE%"=="tag" (
+              set SIGNING_POLICY_SLUG=release-signing
+            )
           )
+          if "%GITHUB_EVENT_NAME%"=="workflow_dispatch" (
+            if "%GITHUB_EVENT_INPUTS_RELEASE_SIGNING%"=="true" (
+              set SIGNING_POLICY_SLUG=test-signing
+            )
+          )
+          echo SIGNING_POLICY_SLUG=%SIGNING_POLICY_SLUG%>>%GITHUB_ENV%
+          echo Selected signing policy: %SIGNING_POLICY_SLUG%
         shell: cmd
 
       - name: Install Python (for aqtinstall)

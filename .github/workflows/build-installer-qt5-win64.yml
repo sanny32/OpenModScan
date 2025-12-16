@@ -23,8 +23,12 @@ env:
   CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: x64
   BUILD_TYPE: Release
+
+  # SingPath variables
+  PROJECT_SLUG: OpenModScan
+  ORGANIZAITION_ID: 2bd9d721-94a7-4c7d-aab8-b81dd84670a5
   SIGNING_POLICY_SLUG: test-signing
-  ARTIFACT_CONF_SLUG: test-zip
+  ARTIFACT_CONF_SLUG: exe-zip
 
 jobs:
   build-omodscan:
@@ -92,30 +96,31 @@ jobs:
         shell: cmd
 
       - name: Upload Executable
-        id: build
+        id: upload-exe
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: omodscan-exe
+          name: omodscan.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Signing Executable
         uses: signpath/github-action-submit-signing-request@v1
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '2bd9d721-94a7-4c7d-aab8-b81dd84670a5'
-          project-slug: 'OpenModScan'
+          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          project-slug: '$${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
-          github-artifact-id: '${{steps.build.outputs.artifact-id}}'
+          github-artifact-id: '${{steps.upload-exe.outputs.artifact-id}}'
           output-artifact-directory: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
           wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
 
       - name: Upload signed Executable
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: omodscan-exe_signed
+          name: omodscan-signed.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Deploy Qt dependencies using windeployqt
@@ -146,7 +151,7 @@ jobs:
         shell: cmd
 
       - name: Upload Installer
-        id: upload
+        id: upload-installer
         uses: actions/upload-artifact@v4
         if: success()
         with:
@@ -157,19 +162,20 @@ jobs:
         uses: signpath/github-action-submit-signing-request@v1
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '2bd9d721-94a7-4c7d-aab8-b81dd84670a5'
-          project-slug: 'OpenModScan'
+          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          project-slug: '$${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
-          github-artifact-id: '${{steps.upload.outputs.artifact-id}}'
+          github-artifact-id: '${{steps.upload-installer.outputs.artifact-id}}'
           output-artifact-directory: .
           wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
 
       - name: Upload signed Installer
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}_signed
+          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed
           path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Create or update GitHub Release and upload EXE

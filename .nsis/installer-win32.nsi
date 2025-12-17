@@ -18,9 +18,18 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
-#--------------------------------
+  !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} (x86) has been installed on your computer."
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
+  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
+  !define MUI_FINISHPAGE_RUN_CHECKED
 
-VAR /GLOBAL DISPLAYNAME
+#--------------------------------
+# Variables
+
+  Var /GLOBAL DISPLAYNAME
+  Var RebootRequired
+
+#--------------------------------
 
 !macro SetDisplayName un
 Function ${un}SetDisplayName
@@ -58,6 +67,7 @@ FunctionEnd
   !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
+  !insertmacro MUI_PAGE_FINISH
 
   # Uninstaller pages
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -98,7 +108,12 @@ FunctionEnd
 
  Section "Visual Studio Runtime"
     SetOutPath "$INSTDIR"
-    ExecWait "$INSTDIR\vc_redist.x86.exe /install /quiet"
+    ExecWait '"$INSTDIR\vc_redist.x86.exe" /install /quiet /norestart' $0
+
+    ; 3010 = reboot required
+    ${If} $0 == 3010
+        StrCpy $RebootRequired "1"
+    ${EndIf}
  SectionEnd
 
 #--------------------------------
@@ -113,6 +128,26 @@ FunctionEnd
 	    CreateShortCut "$SMPROGRAMS\${NAME}\${NAME}.lnk" "$INSTDIR\${APPFILE}" "" "$INSTDIR\${ICOFILE}"
   SectionEnd
 #--------------------------------
+
+#--------------------------------
+# Post-install section: ask about reboot only once
+Section -Post
+    ; Check if VC Redist indicated reboot is required
+    ${If} $RebootRequired == "1"
+        MessageBox MB_ICONEXCLAMATION|MB_YESNO \
+            "A system restart is required to complete the installation.$\r$\nRestart now?" \
+            IDYES DoReboot
+
+        ; If user clicked "No", continue silently
+        Goto EndPost
+
+        DoReboot:
+            Reboot
+    ${EndIf}
+
+    EndPost:
+SectionEnd
+
 # Remove empty parent directories
 
   Function un.RMDirUP
@@ -142,10 +177,20 @@ FunctionEnd
 # Section - Uninstaller
 
 Section "Uninstall"
+  # Attempt to delete the exe directly
+  ClearErrors
+  Delete "$INSTDIR\${APPFILE}"
+  IfErrors ProcessStillRunning ProcessNotFound
+
+ProcessStillRunning:
+  MessageBox MB_ICONEXCLAMATION|MB_OK "The application is still running. Uninstallation cannot continue."
+  Quit 
+
+ProcessNotFound:
   # Delete Shortcut
   Delete "$DESKTOP\${NAME}.lnk"
 
-# Delete Start Menu Folder
+  # Delete Start Menu Folder
   RMDir /r "$SMPROGRAMS\${NAME}"
 
   # Delete Uninstall

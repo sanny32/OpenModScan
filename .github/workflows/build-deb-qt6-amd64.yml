@@ -13,6 +13,9 @@ on:
         description: 'Checkout tag'
         required: false
 
+permissions:
+  contents: write
+
 jobs:
   build-omodscan:
     name: Build OpenModScan deb package version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
@@ -26,6 +29,7 @@ jobs:
       QT_TARGET: "desktop"
       QT_ARCH: "linux_gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
+      QT_QPA_PLATFORM: "xcb"
       CMAKE_COMPILER: "gcc_64"
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
@@ -90,8 +94,7 @@ jobs:
       - name: Set Python 3.12 as default
         run: |
           update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 2
-          update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
-          update-alternatives --auto python3
+          update-alternatives --set python3 /usr/local/bin/python3.12
 
       - name: Upgrade pip
         run: |
@@ -157,6 +160,7 @@ jobs:
           git clone https://github.com/QuasarApp/CQtDeployer.git
           cd CQtDeployer
           git checkout v1.6.2365
+          wget -qO- https://github.com/QuasarApp/CQtDeployer/pull/846.patch | git apply
           git submodule update --init --recursive
           cmake -B build -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
@@ -174,7 +178,8 @@ jobs:
             -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModScan \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
-            -extraLibs icudata,icui18n,icuuc,libxcb-util
+            -extraLibs icudata,icui18n,icuuc,libxcb-util \
+            -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
       - name: Create Debian control file
         run: |
@@ -205,6 +210,7 @@ jobs:
       - name: Create Debian rules file
         run: |
           sed -e "s|@QT_LIB_PATH@|${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib|g" \
+              -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
               ${{ env.DEB_SRC_DIR }}/debian/rules.in > ${{ env.DEB_SRC_DIR }}/debian/rules
           rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
           cat -n ${{ env.DEB_SRC_DIR }}/debian/rules
@@ -222,3 +228,15 @@ jobs:
         with:
           name: ${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
           path: ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+
+      - name: Create or update GitHub Release and upload DEB
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ github.ref_name }}
+          name: Open ModScan ${{ env.APP_VERSION }}
+          files: |
+            ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

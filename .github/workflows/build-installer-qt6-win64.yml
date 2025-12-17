@@ -9,10 +9,18 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
+        default: dev
       tag:
         description: 'Checkout tag'
         required: false
-      
+      signing:
+        description: 'Sign executable and installer'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
 env:
   QT_VERSION: 6.9.3
   QT_ARCH: win64_msvc2022_64
@@ -20,6 +28,11 @@ env:
   CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: x64
   BUILD_TYPE: Release
+  
+   # SingPath variables
+  PROJECT_SLUG: OpenModScan
+  ORGANIZAITION_ID: 2bd9d721-94a7-4c7d-aab8-b81dd84670a5
+  ARTIFACT_CONF_SLUG: exe-zip
 
 jobs:
   build-omodscan:
@@ -44,6 +57,27 @@ jobs:
             echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
           )
         shell: cmd
+      
+      - name: Select signing policy
+        run: |
+          set SIGNING_POLICY_SLUG=none
+          if "${{ github.event_name }}"=="push" (
+            if "${{ github.ref_type }}"=="tag" (
+              set SIGNING_POLICY_SLUG=release-signing
+            )
+          )
+          if "${{ github.event_name }}"=="workflow_dispatch" (
+            if "${{ github.event.inputs.signing }}"=="true" (
+              if not "${{ github.event.inputs.tag }}"=="" (
+                set SIGNING_POLICY_SLUG=release-signing
+              ) else (
+                set SIGNING_POLICY_SLUG=test-signing
+              )
+            )
+          )
+          echo SIGNING_POLICY_SLUG=%SIGNING_POLICY_SLUG%>>%GITHUB_ENV%
+          echo Selected signing policy: %SIGNING_POLICY_SLUG%
+        shell: cmd
 
       - name: Install Python (for aqtinstall)
         uses: actions/setup-python@v5
@@ -64,6 +98,13 @@ jobs:
           echo BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}>>%GITHUB_ENV%
         shell: cmd
 
+      - name: Get Visual Studio path
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^
+           -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VS_PATH=%%i
+          echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
+        shell: cmd
+
       - name: Configure CMake
         run: |
           cmake omodscan -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
@@ -74,12 +115,34 @@ jobs:
           cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
         shell: cmd
 
-      - name: Get Visual Studio path
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^
-           -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VS_PATH=%%i
-          echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
-        shell: cmd
+      - name: Upload Executable
+        id: upload-exe
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: omodscan.exe
+          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
+
+      - name: Signing Executable
+        uses: signpath/github-action-submit-signing-request@v1
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          project-slug: '${{ env.PROJECT_SLUG }}'
+          signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
+          github-artifact-id: '${{steps.upload-exe.outputs.artifact-id}}'
+          output-artifact-directory: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+
+      - name: Upload signed Executable
+        uses: actions/upload-artifact@v4
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          name: omodscan-signed.exe
+          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
@@ -110,8 +173,42 @@ jobs:
         shell: cmd
 
       - name: Upload Installer
+        id: upload-installer
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
           path: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+
+      - name: Signing Installer
+        uses: signpath/github-action-submit-signing-request@v1
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          project-slug: '${{ env.PROJECT_SLUG }}'
+          signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
+          github-artifact-id: '${{steps.upload-installer.outputs.artifact-id}}'
+          output-artifact-directory: .
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+
+      - name: Upload signed Installer
+        uses: actions/upload-artifact@v4
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          name: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed
+          path: qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+
+      - name: Create or update GitHub Release and upload EXE
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ github.ref_name }}
+          name: Open ModScan ${{ env.APP_VERSION }}
+          files: |
+            qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

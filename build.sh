@@ -28,7 +28,7 @@ case "$ID" in
         INSTALL_CMD="apt install -y"
         SEARCH_CMD="apt-cache search --names-only"
         ;;
-    rhel|fedora|redos)
+    rhel|fedora|rocky|redos)
         DISTRO="rhel-based"
         CHECK_CMD="rpm -q"
         INSTALL_CMD="dnf install -y"
@@ -95,6 +95,9 @@ case "$ID" in
     rhel)
         check_min_os_version "8"
         ;;
+    rocky)
+        check_min_os_version "9.7"
+        ;;
     redos)
         check_min_os_version "8"
         ;;
@@ -106,6 +109,21 @@ case "$ID" in
         ;;
     suse|opensuse*)
         check_min_os_version "15.5"
+        ;;
+esac
+
+# ==========================
+# Check other requirements
+# ==========================
+case "$ID" in
+    rocky)
+        if ! dnf repolist enabled | grep -q "crb"; then
+            echo -e "\033[31mError: CRB repository is not enabled in Rocky Linux.\033[0m"
+            echo "Please enable it with root privileges:"
+            echo "  dnf config-manager --set-enabled crb"
+            echo ""
+            exit 1
+        fi
         ;;
 esac
 

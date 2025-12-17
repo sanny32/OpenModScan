@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.12.1
+    VERSION 1.12.2
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -37,19 +37,26 @@ endif()
 # Define target
 add_executable(${PROJECT_NAME})
 
-find_package(Git QUIET)
-if(GIT_FOUND)
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
-        OUTPUT_VARIABLE GIT_BRANCH
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        ERROR_QUIET)
-
-    if(${GIT_BRANCH} MATCHES dev)
-        set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+if(DEFINED ENV{GITHUB_REF})
+    string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})
+    if(MATCH_RESULT AND CMAKE_MATCH_1)
+        set(GIT_BRANCH ${CMAKE_MATCH_1})
     endif()
 else()
-    message(STATUS "Git not found - skipping branch detection")
+    find_package(Git QUIET)
+    if(GIT_FOUND)
+        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+            OUTPUT_VARIABLE GIT_BRANCH
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET)
+    else()
+        message(STATUS "Git not found - branch detection is not possible")
+    endif()
+endif()
+
+if(${GIT_BRANCH} MATCHES dev)
+    set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
 endif()
 
 # Define compile definitions

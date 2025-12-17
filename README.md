@@ -113,7 +113,7 @@ The following minimum operating system versions are supported for OpenModScan:
 - Astra Linux 1.7
 - RedOS 8
 
-# Install from binary distributions
+# Install from [binary distributions](https://github.com/sanny32/OpenModScan/releases/latest)
 
 Below are the methods for installing the OpenModScan for different OS
 

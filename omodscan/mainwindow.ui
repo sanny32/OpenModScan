@@ -464,13 +464,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
+     <normaloff>:/res/actionBinary.svg</normaloff>:/res/actionBinary.svg</iconset>
    </property>
    <property name="text">
     <string>Binary</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+1</string>
+    <string>Ctrl+1</string>
    </property>
   </action>
   <action name="actionHex">
@@ -479,13 +479,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
+     <normaloff>:/res/actionHex.svg</normaloff>:/res/actionHex.svg</iconset>
    </property>
    <property name="text">
     <string>Hex</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+2</string>
+    <string>Ctrl+2</string>
    </property>
   </action>
   <action name="actionUInt16">
@@ -494,13 +494,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
+     <normaloff>:/res/actionUInt16.svg</normaloff>:/res/actionUInt16.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 16-bit Intger</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+5</string>
+    <string>Ctrl+5</string>
    </property>
   </action>
   <action name="actionInt16">
@@ -509,13 +509,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
+     <normaloff>:/res/actionInt16.svg</normaloff>:/res/actionInt16.svg</iconset>
    </property>
    <property name="text">
     <string>16-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+4</string>
+    <string>Ctrl+4</string>
    </property>
   </action>
   <action name="actionFloatingPt">
@@ -524,7 +524,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
+     <normaloff>:/res/actionFloatingPt.svg</normaloff>:/res/actionFloatingPt.svg</iconset>
    </property>
    <property name="text">
     <string>Float</string>
@@ -533,7 +533,7 @@
     <string>Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+0</string>
+    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -542,7 +542,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
+     <normaloff>:/res/actionSwappedFP.svg</normaloff>:/res/actionSwappedFP.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped Float</string>
@@ -551,7 +551,7 @@
     <string>Swapped Float</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+0</string>
+    <string>Ctrl+Alt+0</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -560,7 +560,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
+     <normaloff>:/res/actionDblFloat.svg</normaloff>:/res/actionDblFloat.svg</iconset>
    </property>
    <property name="text">
     <string>Double</string>
@@ -569,7 +569,7 @@
     <string>Double</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+-</string>
+    <string>Ctrl+-</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -578,7 +578,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
+     <normaloff>:/res/actionSwappedDbl.svg</normaloff>:/res/actionSwappedDbl.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped Double</string>
@@ -587,7 +587,7 @@
     <string>Swapped Double</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+-</string>
+    <string>Ctrl+Alt+-</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -601,7 +601,7 @@
   <action name="actionForceCoils">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionForceCoils.png</normaloff>:/res/actionForceCoils.png</iconset>
+     <normaloff>:/res/actionForceCoils.svg</normaloff>:/res/actionForceCoils.svg</iconset>
    </property>
    <property name="text">
     <string>Write Multiple Coils</string>
@@ -613,7 +613,7 @@
   <action name="actionPresetRegs">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionPresetRegs.png</normaloff>:/res/actionPresetRegs.png</iconset>
+     <normaloff>:/res/actionPresetRegs.svg</normaloff>:/res/actionPresetRegs.svg</iconset>
    </property>
    <property name="text">
     <string>Write Multiple Registers</string>
@@ -625,7 +625,7 @@
   <action name="actionMaskWrite">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionMaskWrite.png</normaloff>:/res/actionMaskWrite.png</iconset>
+     <normaloff>:/res/actionMaskWrite.svg</normaloff>:/res/actionMaskWrite.svg</iconset>
    </property>
    <property name="text">
     <string>Mask Write Register</string>
@@ -637,7 +637,7 @@
   <action name="actionUserMsg">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUserMsg.png</normaloff>:/res/actionUserMsg.png</iconset>
+     <normaloff>:/res/actionUserMsg.svg</normaloff>:/res/actionUserMsg.svg</iconset>
    </property>
    <property name="text">
     <string>User Defined Message</string>
@@ -768,7 +768,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionByteOrder.png</normaloff>:/res/actionByteOrder.png</iconset>
+     <normaloff>:/res/actionByteOrder.svg</normaloff>:/res/actionByteOrder.svg</iconset>
    </property>
    <property name="text">
     <string>Swap Bytes (0xAB → 0xBA)</string>
@@ -794,13 +794,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
+     <normaloff>:/res/actionInt32.svg</normaloff>:/res/actionInt32.svg</iconset>
    </property>
    <property name="text">
     <string>32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+6</string>
+    <string>Ctrl+6</string>
    </property>
   </action>
   <action name="actionSwappedInt32">
@@ -809,7 +809,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
+     <normaloff>:/res/actionSwappedInt32.svg</normaloff>:/res/actionSwappedInt32.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped 32-bit Integer</string>
@@ -818,7 +818,7 @@
     <string>Swapped 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+6</string>
+    <string>Ctrl+Alt+6</string>
    </property>
   </action>
   <action name="actionUInt32">
@@ -827,13 +827,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
+     <normaloff>:/res/actionUInt32.svg</normaloff>:/res/actionUInt32.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+7</string>
+    <string>Ctrl+7</string>
    </property>
   </action>
   <action name="actionSwappedUInt32">
@@ -842,7 +842,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
+     <normaloff>:/res/actionSwappedUInt32.svg</normaloff>:/res/actionSwappedUInt32.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped Unsigned 32-bit Integer</string>
@@ -851,7 +851,7 @@
     <string>Swapped Unsigned 32-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+7</string>
+    <string>Ctrl+Alt+7</string>
    </property>
   </action>
   <action name="actionMsgParser">
@@ -871,13 +871,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
+     <normaloff>:/res/actionInt64.svg</normaloff>:/res/actionInt64.svg</iconset>
    </property>
    <property name="text">
     <string>64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+8</string>
+    <string>Ctrl+8</string>
    </property>
   </action>
   <action name="actionSwappedInt64">
@@ -886,13 +886,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
+     <normaloff>:/res/actionSwappedInt64.svg</normaloff>:/res/actionSwappedInt64.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped 64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+8</string>
+    <string>Ctrl+Alt+8</string>
    </property>
   </action>
   <action name="actionUInt64">
@@ -901,13 +901,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
+     <normaloff>:/res/actionUInt64.svg</normaloff>:/res/actionUInt64.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+9</string>
+    <string>Ctrl+9</string>
    </property>
   </action>
   <action name="actionSwappedUInt64">
@@ -916,13 +916,13 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
+     <normaloff>:/res/actionSwappedUInt64.svg</normaloff>:/res/actionSwappedUInt64.svg</iconset>
    </property>
    <property name="text">
     <string>Swapped Unsigned 64-bit Integer</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+9</string>
+    <string>Ctrl+Alt+9</string>
    </property>
   </action>
   <action name="actionChineseCn">
@@ -942,7 +942,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
+     <normaloff>:/res/actionAnsi.svg</normaloff>:/res/actionAnsi.svg</iconset>
    </property>
    <property name="text">
     <string>ANSI</string>
@@ -981,7 +981,7 @@
   <action name="actionWriteSingleCoil">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionWriteSingleCoil.png</normaloff>:/res/actionWriteSingleCoil.png</iconset>
+     <normaloff>:/res/actionWriteSingleCoil.svg</normaloff>:/res/actionWriteSingleCoil.svg</iconset>
    </property>
    <property name="text">
     <string>Write Single Coil</string>
@@ -996,7 +996,7 @@
   <action name="actionWriteHoldingRegister">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionWriteHoldingRegister.png</normaloff>:/res/actionWriteHoldingRegister.png</iconset>
+     <normaloff>:/res/actionWriteHoldingRegister.svg</normaloff>:/res/actionWriteHoldingRegister.svg</iconset>
    </property>
    <property name="text">
     <string>Write Holding Register</string>

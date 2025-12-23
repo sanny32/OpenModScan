@@ -49,5 +49,29 @@
         <file>res/actionUserMsg.png</file>
         <file>res/actionWriteHoldingRegister.png</file>
         <file>res/actionWriteSingleCoil.png</file>
+        <file>res/actionBinary.svg</file>
+        <file>res/actionHex.svg</file>
+        <file>res/actionAnsi.svg</file>
+        <file>res/actionInt16.svg</file>
+        <file>res/actionUInt16.svg</file>
+        <file>res/actionInt32.svg</file>
+        <file>res/actionUInt32.svg</file>
+        <file>res/actionInt64.svg</file>
+        <file>res/actionUInt64.svg</file>
+        <file>res/actionFloatingPt.svg</file>
+        <file>res/actionDblFloat.svg</file>
+        <file>res/actionWriteSingleCoil.svg</file>
+        <file>res/actionWriteHoldingRegister.svg</file>
+        <file>res/actionForceCoils.svg</file>
+        <file>res/actionPresetRegs.svg</file>
+        <file>res/actionMaskWrite.svg</file>
+        <file>res/actionUserMsg.svg</file>
+        <file>res/actionSwappedInt32.svg</file>
+        <file>res/actionSwappedUInt32.svg</file>
+        <file>res/actionSwappedInt64.svg</file>
+        <file>res/actionSwappedUInt64.svg</file>
+        <file>res/actionSwappedFP.svg</file>
+        <file>res/actionSwappedDbl.svg</file>
+        <file>res/actionByteOrder.svg</file>
     </qresource>
 </RCC>

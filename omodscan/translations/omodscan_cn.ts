@@ -1941,9 +1941,49 @@ Valid Slave Responses: %2</source>
         <translation>二进制</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="473"/>
+        <source>Ctrl+1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="485"/>
         <source>Hex</source>
         <translation>十六进制</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="488"/>
+        <source>Ctrl+2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="503"/>
+        <source>Ctrl+5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="518"/>
+        <source>Ctrl+4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="536"/>
+        <source>Ctrl+0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="554"/>
+        <source>Ctrl+Alt+0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="572"/>
+        <source>Ctrl+-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="590"/>
+        <source>Ctrl+Alt+-</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="607"/>
@@ -2003,15 +2043,30 @@ Valid Slave Responses: %2</source>
         <translation>32位整数</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="803"/>
+        <source>Ctrl+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="815"/>
         <location filename="../mainwindow.ui" line="818"/>
         <source>Swapped 32-bit Integer</source>
         <translation>32位整数（交换字节）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="821"/>
+        <source>Ctrl+Alt+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="833"/>
         <source>Unsigned 32-bit Integer</source>
         <translation>无符号32位整数</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="836"/>
+        <source>Ctrl+7</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="848"/>
@@ -2020,9 +2075,19 @@ Valid Slave Responses: %2</source>
         <translation>无符号32位整数（交换字节）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="854"/>
+        <source>Ctrl+Alt+7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="877"/>
         <source>64-bit Integer</source>
         <translation>64位整数</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="880"/>
+        <source>Ctrl+8</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="892"/>
@@ -2030,14 +2095,29 @@ Valid Slave Responses: %2</source>
         <translation>64位整数（交换字节）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="895"/>
+        <source>Ctrl+Alt+8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="907"/>
         <source>Unsigned 64-bit Integer</source>
         <translation>无符号64位整数</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="910"/>
+        <source>Ctrl+9</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="922"/>
         <source>Swapped Unsigned 64-bit Integer</source>
         <translation>无符号64位整数（交换字节）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="925"/>
+        <source>Ctrl+Alt+9</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="948"/>

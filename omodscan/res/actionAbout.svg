@@ -1,15 +1,1 @@
-<svg class="cf-icon-svg" width="64" height="64" fill="#000000" version="1.1" viewBox="-5.5 0 1.52 1.52" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <linearGradient id="b" x1="117.05355" x2="116.83034" y1="83.525589" y2="62.245369" gradientUnits="userSpaceOnUse">
-   <stop stop-color="#0645ad" offset="0"/>
-   <stop stop-color="#398fea" offset="1"/>
-  </linearGradient>
- </defs>
- <g id="invisible_box" transform="matrix(.025235 0 0 .025235 -5.3296299 .17037012)" data-name="invisible box">
-  <rect width="48" height="48" fill="none"/>
- </g>
- <g transform="matrix(.01021552 0 0 .01021552 -7.7579613 -3.1786257)">
-  <path transform="matrix(4.56798,0,0,4.56249,-238.5556,52.855392)" d="m126.875 72.920212a9.9776783 9.9776783 0 1 1-19.95535 0 9.9776783 9.9776783 0 1 1 19.95535 0z" fill="url(#b)" stroke="url(#b)" stroke-linecap="round" stroke-width="1.93734"/>
-  <path d="m277.2878 360.81916-0.33251 0.33167 1.33428 6.66299 3.00199 0.33168c15.96053-19.24912 32.85575-0.70752 17.05131 14.94242-5.27871 5.22696-6.63016 10.83884-6.67107 17.65699 0 0.61085 2.3028 1.3327 3.00198 1.3327s2.66848-0.72252 2.66848-1.3327c-0.88719-5.92497 1.93321-10.25348 5.33679-13.65923 11.07525-11.08209 16.17721-22.35535 6.4104-30.42962-6.91416-5.71596-19.99521-6.66515-31.8014 4.16177zm17.25239 49.85507c-2.75331 1.08552-4.036 2.58372-4.97786 4.97186v0.27667c0.79669 3.03949 2.00721 4.32069 4.97786 4.97195h0.55335c2.60848-0.65168 3.96359-2.00479 4.97795-4.97195v-0.27667c-0.94194-2.60523-2.29714-4.03109-4.97795-4.97186z" fill="#fff" font-family="'Linux Biolinum O'" font-size="8.18743px" font-weight="700" letter-spacing=".372156" stroke="#fff" stroke-width="3.53775" word-spacing="0"/>
- </g>
-</svg>
+<svg class="cf-icon-svg" width="64" height="64" fill="#000000" version="1.1" viewBox="-5.5 0 1.52 1.52" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="m-4.8331165 1.0020028v0.1424998h0.285v-0.1424998zm-0.285-0.56999999v0.1425h0.57v0.14249999h-0.285v0.1425h0.57v-0.42749999z" fill="#000" stroke="#000" stroke-width=".0235125" aria-label="?"/><g id="invisible_box" transform="matrix(.025235 0 0 .025235 -5.3296299 .17037012)" data-name="invisible box"><rect width="48" height="48" fill="none"/></g><path d="m-4.8806165 0.97940056v0.14250004h0.285v-0.14250004zm-0.285-0.56999999v0.1425h0.57v0.14249999h-0.285v0.1425h0.57v-0.42749999z" fill="#ff0" stroke="#000" stroke-width=".0235125" aria-label="?"/></svg>

@@ -1845,6 +1845,11 @@ Valid Slave Responses: %2</source>
         <translation>新建</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="315"/>
+        <source>Ctrl+N</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="324"/>
         <source>Open...</source>
         <translation>開啟…</translation>
@@ -1860,6 +1865,11 @@ Valid Slave Responses: %2</source>
         <translation>儲存</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="344"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="349"/>
         <source>Save As...</source>
         <translation>儲存為…</translation>
@@ -1868,6 +1878,11 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="358"/>
         <source>Print...</source>
         <translation>列印...</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="361"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="366"/>

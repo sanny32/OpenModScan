@@ -1844,6 +1844,11 @@ Valid Slave Responses: %2</source>
         <translation>Открыть...</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="327"/>
+        <source>Ctrl+O</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="332"/>
         <source>Close</source>
         <translation>Закрыть</translation>

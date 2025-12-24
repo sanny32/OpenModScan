@@ -318,13 +318,13 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionOpen.png</normaloff>:/res/actionOpen.png</iconset>
+     <normaloff>:/res/actionOpen.svg</normaloff>:/res/actionOpen.svg</iconset>
    </property>
    <property name="text">
     <string>Open...</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+O</string>
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionClose">

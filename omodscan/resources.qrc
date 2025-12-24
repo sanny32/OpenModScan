@@ -77,5 +77,6 @@
         <file>res/actionPrint.svg</file>
         <file>res/actionNew.svg</file>
         <file>res/actionSaveAs.svg</file>
+        <file>res/actionOpen.svg</file>
     </qresource>
 </RCC>

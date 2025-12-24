@@ -73,5 +73,6 @@
         <file>res/actionSwappedFP.svg</file>
         <file>res/actionSwappedDbl.svg</file>
         <file>res/actionByteOrder.svg</file>
+        <file>res/actionAbout.svg</file>
     </qresource>
 </RCC>

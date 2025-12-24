@@ -718,7 +718,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionAbout.png</normaloff>:/res/actionAbout.png</iconset>
+     <normaloff>:/res/actionAbout.svg</normaloff>:/res/actionAbout.svg</iconset>
    </property>
    <property name="text">
     <string>About Open ModScan...</string>

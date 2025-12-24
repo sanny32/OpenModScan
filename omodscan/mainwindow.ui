@@ -428,7 +428,7 @@
   <action name="actionDataDefinition">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionDefineData.png</normaloff>:/res/actionDefineData.png</iconset>
+     <normaloff>:/res/actionDefineData.svg</normaloff>:/res/actionDefineData.svg</iconset>
    </property>
    <property name="text">
     <string>Data Definition</string>
@@ -440,7 +440,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowData.png</normaloff>:/res/actionShowData.png</iconset>
+     <normaloff>:/res/actionShowData.svg</normaloff>:/res/actionShowData.svg</iconset>
    </property>
    <property name="text">
     <string>Show Data</string>
@@ -452,7 +452,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
+     <normaloff>:/res/actionShowTraffic.svg</normaloff>:/res/actionShowTraffic.svg</iconset>
    </property>
    <property name="text">
     <string>Show Traffic</string>

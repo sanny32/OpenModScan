@@ -78,5 +78,8 @@
         <file>res/actionNew.svg</file>
         <file>res/actionSaveAs.svg</file>
         <file>res/actionOpen.svg</file>
+        <file>res/actionShowTraffic.svg</file>
+        <file>res/actionShowData.svg</file>
+        <file>res/actionDefineData.svg</file>
     </qresource>
 </RCC>

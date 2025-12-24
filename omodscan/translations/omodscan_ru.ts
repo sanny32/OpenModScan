@@ -1666,12 +1666,12 @@ Valid Slave Responses: %2</source>
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="633"/>
+        <location filename="../formmodsca.cpp" line="634"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="806"/>
+        <location filename="../formmodsca.cpp" line="807"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
@@ -1681,7 +1681,7 @@ Valid Slave Responses: %2</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="760"/>
+        <location filename="../formmodsca.cpp" line="761"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>

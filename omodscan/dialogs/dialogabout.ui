@@ -138,7 +138,7 @@
        <item>
         <widget class="QLabel" name="labelCopyright">
          <property name="text">
-          <string notr="true">© Alexandr Ananev, 2025</string>
+          <string notr="true">© Alexandr Ananev, 2026</string>
          </property>
         </widget>
        </item>

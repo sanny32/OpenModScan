@@ -627,8 +627,9 @@ void FormModSca::beginUpdate()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ?  0 : 1);
-    if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to())
+    if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to()) {
         _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
+    }
     else
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
@@ -794,7 +795,7 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
     ui->outputWidget->setProtocol(protocol);
     ui->outputWidget->clearLogView();
 
-    beginUpdate();
+    setPollState(PollState::Running);
 }
 
 ///

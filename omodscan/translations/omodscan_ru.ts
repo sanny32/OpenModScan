@@ -214,22 +214,22 @@
         <translation>Утилита Modbus Master (клиент) с открытым исходным кодом</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="177"/>
+        <location filename="../dialogs/dialogabout.ui" line="180"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Лицезния: MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="198"/>
+        <location filename="../dialogs/dialogabout.ui" line="201"/>
         <source>Components</source>
         <translation>Компоненты</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="240"/>
+        <location filename="../dialogs/dialogabout.ui" line="243"/>
         <source>Authors</source>
         <translation>Авторы</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="282"/>
+        <location filename="../dialogs/dialogabout.ui" line="285"/>
         <source>Translation</source>
         <translation>Перевод</translation>
     </message>

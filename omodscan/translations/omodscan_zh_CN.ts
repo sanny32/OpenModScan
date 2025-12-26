@@ -299,24 +299,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="185"/>
+        <location filename="../dialogs/dialogabout.cpp" line="184"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="206"/>
+        <location filename="../dialogs/dialogabout.cpp" line="205"/>
         <source>Email contributer: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="211"/>
+        <location filename="../dialogs/dialogabout.cpp" line="210"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="215"/>
+        <location filename="../dialogs/dialogabout.cpp" line="214"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
@@ -338,7 +338,7 @@
         <translation type="vanished">Qt %1 （构建版本 %2）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="237"/>
+        <location filename="../dialogs/dialogabout.cpp" line="236"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>

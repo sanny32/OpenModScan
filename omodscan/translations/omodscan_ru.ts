@@ -221,17 +221,17 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="198"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Компоненты</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="240"/>
         <source>Authors</source>
-        <translation type="unfinished"></translation>
+        <translation>Авторы</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="282"/>
         <source>Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевод</translation>
     </message>
     <message>
         <source>Info</source>
@@ -244,7 +244,7 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="43"/>
         <source>%1 build %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 сборка %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="62"/>
@@ -259,67 +259,70 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="78"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия: &lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="86"/>
         <source>Using %1 and built against %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (собрано с версией %2)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="87"/>
         <source>Cross-platform application development framework.</source>
-        <translation type="unfinished"></translation>
+        <translation>Среда для разработки кросс-платформенных приложений.</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="94"/>
         <location filename="../dialogs/dialogabout.cpp" line="101"/>
         <source>Underlying platform.</source>
-        <translation type="unfinished"></translation>
+        <translation>Базовая платформа.</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="114"/>
         <source>Author and Maintainer</source>
-        <translation type="unfinished"></translation>
+        <translation>Автор</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="127"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Русский</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="131"/>
         <source>Traditional  Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Традиционный китайский</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="136"/>
         <location filename="../dialogs/dialogabout.cpp" line="141"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Упрощенный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="185"/>
+        <location filename="../dialogs/dialogabout.cpp" line="184"/>
         <source>Visit component&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Посетить домашнюю страницу компонента
+%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="206"/>
+        <location filename="../dialogs/dialogabout.cpp" line="205"/>
         <source>Email contributer: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="211"/>
+        <location filename="../dialogs/dialogabout.cpp" line="210"/>
         <source>Visit github user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Посетить домашнюю страницу пользователя на github
+%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="215"/>
+        <location filename="../dialogs/dialogabout.cpp" line="214"/>
         <source>Visit user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Посетить домашнюю страницу пользователя
+%1</translation>
     </message>
     <message>
         <source>Version: %1</source>
@@ -338,7 +341,7 @@
         <translation type="vanished">Qt %1 (собрано на версии %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="237"/>
+        <location filename="../dialogs/dialogabout.cpp" line="236"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>

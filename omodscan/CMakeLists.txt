@@ -139,6 +139,7 @@ set(SOURCES
     qint64validator.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
+    tscrollarea.cpp
     windowactionlist.cpp
 )
 
@@ -246,6 +247,7 @@ set(HEADERS
     quintvalidator.h
     recentfileactionlist.h
     serialportutils.h
+    tscrollarea.h
     waitcursor.h
     windowactionlist.h
 )

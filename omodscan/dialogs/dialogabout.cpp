@@ -1,4 +1,5 @@
 #include <QFile>
+#include <QScrollArea>
 #include <QApplication>
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
@@ -101,7 +102,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
 #endif
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->tabComponents->setLayout(vboxLayout);
+        ui->scrollAreaComponentsWidget->setLayout(vboxLayout);
     }
 
     {
@@ -114,7 +115,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
                   "mailto: mail@ananev.org");
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->tabAuthors->setLayout(vboxLayout);
+        ui->scrollAreaAuthorsWidget->setLayout(vboxLayout);
     }
 
     {
@@ -126,7 +127,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
                   tr("Russian"));
 
         addAuthor(vboxLayout,
-                  "zx12864 ",
+                  "zx12864",
                   tr("Traditional  Chinese"),
                   "https://github.com/zx12864");
 
@@ -135,8 +136,14 @@ DialogAbout::DialogAbout(QWidget *parent) :
                   tr("Simplified Chinese"),
                   "https://github.com/FruitJelliesGD");
 
+        addAuthor(vboxLayout,
+                  "lilixxs",
+                  tr("Simplified Chinese"),
+                  "https://github.com/lilixxs");
+
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->tabTranslation->setLayout(vboxLayout);
+        ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
+
     }
 
     ui->tabWidget->setCurrentIndex(0);

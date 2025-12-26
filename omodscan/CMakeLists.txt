@@ -280,8 +280,8 @@ set(UI_FILES
 
 set(TS_FILES
     translations/omodscan_ru.ts
-    translations/omodscan_cn.ts
-    translations/omodscan_zh.ts
+    translations/omodscan_zh_CN.ts
+    translations/omodscan_zh_TW.ts
 )
 
 # Link libraries

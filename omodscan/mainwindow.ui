@@ -173,8 +173,8 @@
      </property>
      <addaction name="actionEnglish"/>
      <addaction name="actionRussian"/>
-     <addaction name="actionChineseCn"/>
-     <addaction name="actionChineseZh"/>
+     <addaction name="actionChineseCN"/>
+     <addaction name="actionChineseTW"/>
     </widget>
     <addaction name="actionTabbedView"/>
     <addaction name="separator"/>
@@ -925,7 +925,7 @@
     <string notr="true">Ctrl+Alt+9</string>
    </property>
   </action>
-  <action name="actionChineseCn">
+  <action name="actionChineseCN">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -948,7 +948,7 @@
     <string>ANSI</string>
    </property>
   </action>
-  <action name="actionChineseZh">
+  <action name="actionChineseTW">
    <property name="checkable">
     <bool>true</bool>
    </property>

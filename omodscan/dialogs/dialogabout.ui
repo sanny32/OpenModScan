@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>289</height>
+    <width>400</width>
+    <height>320</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -129,7 +129,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
+           <width>0</width>
            <height>10</height>
           </size>
          </property>
@@ -138,7 +138,7 @@
        <item>
         <widget class="QLabel" name="labelCopyright">
          <property name="text">
-          <string notr="true">© Alexandr Ananev, 2026</string>
+          <string notr="true">Copyright © Alexandr Ananev, 2023-2026</string>
          </property>
         </widget>
        </item>
@@ -178,25 +178,6 @@
          </property>
         </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabInfo">
-      <attribute name="title">
-       <string>Info</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <property name="leftMargin">
-        <number>60</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="labelArch"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelPlatform"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelQtFramework"/>
-       </item>
        <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
@@ -211,6 +192,21 @@
         </spacer>
        </item>
       </layout>
+     </widget>
+     <widget class="QWidget" name="tabComponents">
+      <attribute name="title">
+       <string>Components</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tabAuthors">
+      <attribute name="title">
+       <string>Authors</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tabTranslation">
+      <attribute name="title">
+       <string>Translation</string>
+      </attribute>
      </widget>
     </widget>
    </item>

@@ -7,6 +7,9 @@ namespace Ui {
 class DialogAbout;
 }
 
+///
+/// \brief The DialogAbout class
+///
 class DialogAbout : public QFixedSizeDialog
 {
     Q_OBJECT
@@ -15,8 +18,14 @@ public:
     explicit DialogAbout(QWidget *parent = nullptr);
     ~DialogAbout();
 
+    QSize sizeHint() const override;
+
 private slots:
     void on_labelLicense_clicked();
+
+private:
+    void addComponent(QLayout* layout, const QString& title, const QString& version, const QString& description, const QString& url = QString());
+    void addAuthor(QLayout* layout, const QString& name, const QString& description, const QString& url = QString());
 
 private:
     Ui::DialogAbout *ui;

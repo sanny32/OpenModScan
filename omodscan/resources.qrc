@@ -49,5 +49,8 @@
         <file>res/actionUserMsg.png</file>
         <file>res/actionWriteHoldingRegister.png</file>
         <file>res/actionWriteSingleCoil.png</file>
+        <file>res/applications-internet.svg</file>
+        <file>res/emblem-github.svg</file>
+        <file>res/emblem-mail.svg</file>
     </qresource>
 </RCC>

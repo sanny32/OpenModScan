@@ -1,8 +1,47 @@
 #include <QFile>
 #include <QApplication>
 #include <QPlainTextEdit>
+#include "aboutdatawidget.h"
 #include "dialogabout.h"
 #include "ui_dialogabout.h"
+
+#ifdef Q_OS_WIN
+#include <windows.h>
+
+typedef LONG (WINAPI *RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
+
+QString windowsPrettyName()
+{
+    HMODULE hMod = ::GetModuleHandleW(L"ntdll.dll");
+    if (!hMod)
+        return "Windows";
+
+    auto rtlGetVersion =
+        reinterpret_cast<RtlGetVersionPtr>(
+            ::GetProcAddress(hMod, "RtlGetVersion"));
+
+    if (!rtlGetVersion)
+        return "Windows";
+
+    RTL_OSVERSIONINFOW rovi = {};
+    rovi.dwOSVersionInfoSize = sizeof(rovi);
+
+    if (rtlGetVersion(&rovi) != 0)
+        return "Windows";
+
+    const DWORD build = rovi.dwBuildNumber;
+
+    QString name;
+    if (rovi.dwMajorVersion == 10 && build >= 22000)
+        name = "Windows 11";
+    else if (rovi.dwMajorVersion == 10)
+        name = "Windows 10";
+    else
+        name = QString("Windows %1").arg(rovi.dwMajorVersion);
+
+    return DialogAbout::tr("%1 build %2").arg(name, QString::number(build));
+}
+#endif
 
 ///
 /// \brief arch
@@ -33,12 +72,72 @@ DialogAbout::DialogAbout(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("About %1...").arg(APP_NAME));
-    ui->labelName->setText(APP_NAME);
-    ui->labelVersion->setText(tr("Version: %1").arg(APP_VERSION));
 
-    ui->labelArch->setText(tr("• Architecture: %1").arg(arch()));
-    ui->labelPlatform->setText(tr("• Platform: %1 %2").arg(QApplication::platformName(), QSysInfo::currentCpuArchitecture()));
-    ui->labelQtFramework->setText(tr("• Qt %1 (build with version %2)").arg(qVersion(), QT_VERSION_STR));
+    ui->labelName->setText(APP_NAME);
+    ui->labelVersion->setText(tr("Version: <b>%1</b> %2").arg(APP_VERSION, arch()));
+
+    {
+        auto vboxLayout = new QVBoxLayout();
+        vboxLayout->setContentsMargins(0, 0, 0, 0);
+
+        addComponent(vboxLayout,
+                     "Qt",
+                     tr("Using %1 and built against %2").arg(qVersion(), QT_VERSION_STR),
+                     tr("Cross-platform application development framework."),
+                     "https://www.qt.io");
+
+#ifdef Q_OS_LINUX
+        addComponent(vboxLayout,
+                     QSysInfo::prettyProductName(),
+                     QApplication::platformName(),
+                     tr("Underlying platform."));
+#endif
+
+#ifdef Q_OS_WIN
+        addComponent(vboxLayout,
+                     windowsPrettyName(),
+                     QSysInfo::currentCpuArchitecture(),
+                     tr("Underlying platform."));
+#endif
+
+        vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+        ui->tabComponents->setLayout(vboxLayout);
+    }
+
+    {
+        auto vboxLayout = new QVBoxLayout();
+        vboxLayout->setContentsMargins(0, 0, 0, 0);
+
+        addAuthor(vboxLayout,
+                  "Alexandr Ananev",
+                  tr("Author and Maintainer"),
+                  "mailto: mail@ananev.org");
+
+        vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+        ui->tabAuthors->setLayout(vboxLayout);
+    }
+
+    {
+        auto vboxLayout = new QVBoxLayout();
+        vboxLayout->setContentsMargins(0, 0, 0, 0);
+
+        addAuthor(vboxLayout,
+                  "Alexandr Ananev",
+                  tr("Russian"));
+
+        addAuthor(vboxLayout,
+                  "zx12864 ",
+                  tr("Traditional  Chinese"),
+                  "https://github.com/zx12864");
+
+        addAuthor(vboxLayout,
+                  "FruitJelliesGD",
+                  tr("Simplified Chinese"),
+                  "https://github.com/FruitJelliesGD");
+
+        vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+        ui->tabTranslation->setLayout(vboxLayout);
+    }
 
     ui->tabWidget->setCurrentIndex(0);
 }
@@ -49,6 +148,67 @@ DialogAbout::DialogAbout(QWidget *parent) :
 DialogAbout::~DialogAbout()
 {
     delete ui;
+}
+
+///
+/// \brief DialogAbout::sizeHint
+/// \return
+///
+QSize DialogAbout::sizeHint() const
+{
+    return QSize(400, 320);
+}
+
+///
+/// \brief DialogAbout::addComponent
+/// \param layout
+/// \param title
+/// \param version
+/// \param description
+/// \param url
+///
+void DialogAbout::addComponent(QLayout* layout, const QString& title, const QString& version, const QString& description, const QString& url)
+{
+    auto w = new AboutDataWidget(this);
+    w->setTitle(title);
+    w->setVersion(version);
+    w->setDescription(description);
+    w->setLinkUrl(QUrl(url));
+    w->setLinkIcon(QIcon::fromTheme("applications-internet", QIcon(":/res/applications-internet.svg")));
+    w->setLinkToolTip(tr("Visit component's homepage\n%1").arg(w->linkUrl().toString()));
+    layout->addWidget(w);
+}
+
+///
+/// \brief DialogAbout::addAuthor
+/// \param layout
+/// \param name
+/// \param description
+/// \param url
+///
+void DialogAbout::addAuthor(QLayout* layout, const QString& name, const QString& description, const QString& url)
+{
+    auto w = new AboutDataWidget(this);
+    w->setTitle(name);
+    w->setDescription(description);
+    w->setLinkUrl(QUrl(url));
+
+    if(url.contains("mailto:"))
+    {
+        w->setLinkIcon(QIcon::fromTheme("emblem-mail", QIcon(":/res/emblem-mail.svg")));
+        w->setLinkToolTip(tr("Email contributer: %1").arg(w->linkUrl().path()));
+    }
+    else if(url.contains("github"))
+    {
+        w->setLinkIcon(QIcon(":/res/emblem-github.svg"));
+        w->setLinkToolTip(tr("Visit github user's homepage\n%1").arg(w->linkUrl().toString()));
+    }
+    else if(!url.isEmpty())
+    {
+        w->setLinkToolTip(tr("Visit user's homepage\n%1").arg(w->linkUrl().toString()));
+    }
+
+    layout->addWidget(w);
 }
 
 ///

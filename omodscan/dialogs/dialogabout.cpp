@@ -143,7 +143,6 @@ DialogAbout::DialogAbout(QWidget *parent) :
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
         ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
-
     }
 
     ui->tabWidget->setCurrentIndex(0);

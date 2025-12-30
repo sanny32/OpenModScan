@@ -242,83 +242,83 @@
         <translation type="vanished">Библиотеки</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="43"/>
+        <location filename="../dialogs/dialogabout.cpp" line="45"/>
         <source>%1 build %2</source>
         <translation>%1 сборка %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="62"/>
+        <location filename="../dialogs/dialogabout.cpp" line="64"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="75"/>
+        <location filename="../dialogs/dialogabout.cpp" line="77"/>
         <source>About %1...</source>
         <translation>О программе %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="78"/>
+        <location filename="../dialogs/dialogabout.cpp" line="80"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
         <translation>Версия: &lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="86"/>
+        <location filename="../dialogs/dialogabout.cpp" line="88"/>
         <source>Using %1 and built against %2</source>
         <translation>%1 (собрано с версией %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="87"/>
+        <location filename="../dialogs/dialogabout.cpp" line="89"/>
         <source>Cross-platform application development framework.</source>
         <translation>Среда для разработки кросс-платформенных приложений.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="94"/>
-        <location filename="../dialogs/dialogabout.cpp" line="101"/>
+        <location filename="../dialogs/dialogabout.cpp" line="96"/>
+        <location filename="../dialogs/dialogabout.cpp" line="103"/>
         <source>Underlying platform.</source>
         <translation>Базовая платформа.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="114"/>
+        <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <source>Author and Maintainer</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="127"/>
+        <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Russian</source>
         <translation>Русский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="131"/>
+        <location filename="../dialogs/dialogabout.cpp" line="133"/>
         <source>Traditional  Chinese</source>
         <translation>Традиционный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="136"/>
-        <location filename="../dialogs/dialogabout.cpp" line="141"/>
+        <location filename="../dialogs/dialogabout.cpp" line="138"/>
+        <location filename="../dialogs/dialogabout.cpp" line="143"/>
         <source>Simplified Chinese</source>
         <translation>Упрощенный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="184"/>
+        <location filename="../dialogs/dialogabout.cpp" line="225"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="205"/>
+        <location filename="../dialogs/dialogabout.cpp" line="246"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="210"/>
+        <location filename="../dialogs/dialogabout.cpp" line="251"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="214"/>
+        <location filename="../dialogs/dialogabout.cpp" line="255"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя
@@ -341,7 +341,7 @@
         <translation type="vanished">Qt %1 (собрано на версии %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="236"/>
+        <location filename="../dialogs/dialogabout.cpp" line="277"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>

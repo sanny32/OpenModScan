@@ -242,81 +242,81 @@
         <translation type="vanished">库</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="43"/>
+        <location filename="../dialogs/dialogabout.cpp" line="45"/>
         <source>%1 build %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="62"/>
+        <location filename="../dialogs/dialogabout.cpp" line="64"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="75"/>
+        <location filename="../dialogs/dialogabout.cpp" line="77"/>
         <source>About %1...</source>
         <translation>关于 %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="78"/>
+        <location filename="../dialogs/dialogabout.cpp" line="80"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="86"/>
+        <location filename="../dialogs/dialogabout.cpp" line="88"/>
         <source>Using %1 and built against %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="87"/>
+        <location filename="../dialogs/dialogabout.cpp" line="89"/>
         <source>Cross-platform application development framework.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="94"/>
-        <location filename="../dialogs/dialogabout.cpp" line="101"/>
+        <location filename="../dialogs/dialogabout.cpp" line="96"/>
+        <location filename="../dialogs/dialogabout.cpp" line="103"/>
         <source>Underlying platform.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="114"/>
+        <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <source>Author and Maintainer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="127"/>
+        <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="131"/>
+        <location filename="../dialogs/dialogabout.cpp" line="133"/>
         <source>Traditional  Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="136"/>
-        <location filename="../dialogs/dialogabout.cpp" line="141"/>
+        <location filename="../dialogs/dialogabout.cpp" line="138"/>
+        <location filename="../dialogs/dialogabout.cpp" line="143"/>
         <source>Simplified Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="184"/>
+        <location filename="../dialogs/dialogabout.cpp" line="225"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="205"/>
+        <location filename="../dialogs/dialogabout.cpp" line="246"/>
         <source>Email contributer: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="210"/>
+        <location filename="../dialogs/dialogabout.cpp" line="251"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="214"/>
+        <location filename="../dialogs/dialogabout.cpp" line="255"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
@@ -338,7 +338,7 @@
         <translation type="vanished">Qt %1 （构建版本 %2）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="236"/>
+        <location filename="../dialogs/dialogabout.cpp" line="277"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>

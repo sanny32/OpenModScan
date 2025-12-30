@@ -1,4 +1,6 @@
 #include <QFile>
+#include <QStyle>
+#include <QTabBar>
 #include <QScrollArea>
 #include <QApplication>
 #include <QPlainTextEdit>
@@ -145,6 +147,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
         ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
     }
 
+    adjustSize();
     ui->tabWidget->setCurrentIndex(0);
 }
 
@@ -157,12 +160,50 @@ DialogAbout::~DialogAbout()
 }
 
 ///
-/// \brief DialogAbout::sizeHint
-/// \return
+/// \brief DialogAbout::adjustSize
 ///
-QSize DialogAbout::sizeHint() const
+void DialogAbout::adjustSize()
 {
-    return QSize(400, 420);
+    ensurePolished();
+
+    auto s = style();
+    const int sbWidth = s->pixelMetric(QStyle::PM_ScrollBarExtent);
+    const int frameWidth = s->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
+
+    QSize maxContentSize(0, 0);
+    for (int i = 0; i < ui->tabWidget->count(); ++i) {
+        auto tab = ui->tabWidget->widget(i);
+        auto scroll = tab->findChild<QScrollArea*>();
+
+        if (scroll && scroll->widget()) {
+            if(scroll->widget()->layout()) {
+                scroll->widget()->layout()->activate();
+            }
+
+            int marginH = 0;
+            int marginV = 0;
+            if (tab->layout()) {
+                marginH = tab->layout()->contentsMargins().left() + tab->layout()->contentsMargins().right();
+                marginV = tab->layout()->contentsMargins().top() + tab->layout()->contentsMargins().bottom();
+            }
+
+            QSize contentSize = scroll->widget()->sizeHint();
+            contentSize.rwidth() += marginH + sbWidth + frameWidth;
+            contentSize.rheight() += marginV + ui->tabWidget->tabBar()->sizeHint().height() + frameWidth;
+
+            maxContentSize = maxContentSize.expandedTo(contentSize);
+        }
+    }
+
+    int tabBarWidth = ui->tabWidget->tabBar()->sizeHint().width();
+    tabBarWidth += 40 + s->pixelMetric(QStyle::PM_TabBarBaseOverlap);
+
+    if (maxContentSize.width() < tabBarWidth) {
+        maxContentSize.setWidth(tabBarWidth);
+    }
+
+    ui->tabWidget->setMinimumSize(maxContentSize);
+    QFixedSizeDialog::adjustSize();
 }
 
 ///

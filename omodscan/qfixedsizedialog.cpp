@@ -9,9 +9,7 @@
 QFixedSizeDialog::QFixedSizeDialog(QWidget *parent, Qt::WindowFlags f)
     :QDialog(parent, f)
 {
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
+    setWindowModality(Qt::WindowModal);
 }
 
 ///
@@ -21,11 +19,15 @@ QFixedSizeDialog::QFixedSizeDialog(QWidget *parent, Qt::WindowFlags f)
 void QFixedSizeDialog::showEvent(QShowEvent* e)
 {
     QDialog::showEvent(e);
-    setFixedSize(sizeHint());
 
-    if(parentWidget() != nullptr)
-    {
-        const auto rc = parentWidget()->frameGeometry();
-        move(rc.center() - rect().center());
+    if(!_shown) {
+        _shown = true;
+        setFixedSize(sizeHint());
+
+        if(parentWidget() != nullptr)
+        {
+            const auto rc = parentWidget()->frameGeometry();
+            move(rc.center() - rect().center());
+        }
     }
 }

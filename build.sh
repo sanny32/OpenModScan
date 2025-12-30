@@ -494,6 +494,16 @@ CXX_COMPILER=$(select_max_gpp)
 BUILD_TYPE=Release
 
 # ==========================
+# Setup cmake options
+# ==========================
+CMAKE_QT_OPTION="-DUSE_QT5=OFF -DUSE_QT6=OFF"
+if [ "$QT_CHOICE" = "qt5" ]; then
+    CMAKE_QT_OPTION="-DUSE_QT5=ON"
+elif [ "$QT_CHOICE" = "qt6" ]; then
+    CMAKE_QT_OPTION="-DUSE_QT6=ON"
+fi
+
+# ==========================
 # Build project
 # ==========================
 SANITIZED_QT_VERSION=$(echo "$QT_VERSION" | tr '.' '_' | tr ' ' '_')
@@ -501,7 +511,10 @@ BUILD_DIR="build-omodscan-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+cmake ../omodsim -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
+      -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
+      -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+      ${CMAKE_QT_OPTION}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 echo ""

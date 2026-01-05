@@ -22,7 +22,7 @@ INSTALL_CMD=""
 SEARCH_CMD=""
 
 case "$ID" in
-    debian|ubuntu|linuxmint|astra)
+    debian|ubuntu|linuxmint|zorin|astra)
         DISTRO="debian-based"
         CHECK_CMD="dpkg -s"
         INSTALL_CMD="apt install -y"

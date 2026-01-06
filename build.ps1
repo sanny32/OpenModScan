@@ -16,7 +16,7 @@ if ($qt5) {
     $CMakeGenerator = "Visual Studio 16 2019"
 }
 else {
-    $QtVersion   = "6.9.2"
+    $QtVersion   = "6.10.1"
     $Arch        = "win64"
     $Compiler    = "msvc2022_64"
     $CMakeGenerator = "Visual Studio 17 2022"
@@ -463,8 +463,31 @@ if (Test-Path $exePath) {
         $currentDir = Get-Location
         Set-Location $exeDir
         
+         # Common windeployqt arguments
+        $windeployArgs = @(
+            "--release"
+            "--plugindir", ".\plugins"
+            "--no-compiler-runtime"
+            "--no-opengl-sw"
+        )
+
+        if ($QtMajorVersion -eq "6") {
+            # Qt 6 specific options
+            $windeployArgs += @(
+                "--skip-plugin-types", "help,generic,networkinformation,qmltooling,tls"
+                "--exclude-plugins", "qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql"
+            )
+        }
+        elseif ($QtMajorVersion -eq "5") {
+            # Qt 5 specific options
+            $windeployArgs += "--no-system-d3d-compiler"
+        }
+
+        # Executable
+        $windeployArgs += "omodscan.exe"
+
         # Run windeployqt
-        & $windeployqtPath --release --no-compiler-runtime --no-opengl-sw "omodscan.exe" | Out-Null
+        & $windeployqtPath @windeployArgs | Out-Null
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host "windeployqt completed successfully"

@@ -221,17 +221,17 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="201"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>成分</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="243"/>
         <source>Authors</source>
-        <translation type="unfinished"></translation>
+        <translation>作者</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="285"/>
         <source>Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>翻譯</translation>
     </message>
     <message>
         <source>Info</source>
@@ -244,7 +244,7 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="45"/>
         <source>%1 build %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 構建 %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="64"/>
@@ -259,67 +259,70 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="80"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>版本：&lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="88"/>
         <source>Using %1 and built against %2</source>
-        <translation type="unfinished"></translation>
+        <translation>使用 %1 並針對 %2 構建</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="89"/>
         <source>Cross-platform application development framework.</source>
-        <translation type="unfinished"></translation>
+        <translation>跨平台應用程式開發框架。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="96"/>
         <location filename="../dialogs/dialogabout.cpp" line="103"/>
         <source>Underlying platform.</source>
-        <translation type="unfinished"></translation>
+        <translation>底層平台。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <source>Author and Maintainer</source>
-        <translation type="unfinished"></translation>
+        <translation>作者和維護者</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>俄文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="133"/>
         <source>Traditional  Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>傳統中文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="138"/>
         <location filename="../dialogs/dialogabout.cpp" line="143"/>
         <source>Simplified Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>簡體中文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="225"/>
         <source>Visit component&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>存取元件主頁
+%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="246"/>
         <source>Email contributer: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>電子郵件貢獻者：%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="251"/>
         <source>Visit github user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>造訪 GitHub 用戶首頁
+%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="255"/>
         <source>Visit user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>訪問用戶主頁
+%1</translation>
     </message>
     <message>
         <source>Version: %1</source>

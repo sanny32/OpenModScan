@@ -166,8 +166,8 @@ jobs:
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ env.APP_VERSION }}" ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
-           /DICON_FILE="%CD%\omodscan\res\omodscan.ico" ^
-           /DLICENSE_FILE="%CD%\omodscan\res\license.txt" ^
+           /DICON_FILE="%CD%\src\res\omodscan.ico" ^
+           /DLICENSE_FILE="%CD%\omodscsrcan\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
            %CD%\.github\win32\installer-win64.nsi
         shell: cmd

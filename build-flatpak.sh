@@ -49,6 +49,11 @@ echo ""
 
 # Build project
 echo -e "\033[32mBuilding flatpak project...\033[0m"
+if [ -z "${REF_NAME:-}" ]; then
+    REF_NAME="$(git rev-parse --abbrev-ref HEAD)"
+fi
+sed -i "s|branch: main|branch: ${REF_NAME}|" io.github.sanny32.omodscan.yaml
+
 $FB_APP --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yaml
 echo -e "Done\n"
 

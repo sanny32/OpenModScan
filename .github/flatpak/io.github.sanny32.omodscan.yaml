@@ -56,7 +56,7 @@ modules:
       - install -Dm644 ../io.github.sanny32.omodscan.png -t /app/share/icons/hicolor/128x128/apps
       - install -Dm644 ../io.github.sanny32.omodscan.desktop -t /app/share/applications
       - install -Dm644 ../io.github.sanny32.omodscan.metainfo.xml -t /app/share/metainfo
-    subdir: omodscan
+    subdir: src
     sources:
       - type: git
         url: https://github.com/sanny32/OpenModScan.git

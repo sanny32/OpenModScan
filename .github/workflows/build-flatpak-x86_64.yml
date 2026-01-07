@@ -43,7 +43,7 @@ jobs:
             if [ -n "${{ github.event.inputs.tag }}" ]; then
               REF_TYPE="tag"
             fi
-            sed -i "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" .github/flatpak/io.github.sanny32.omodscan.yaml
+            sed -i "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" .github/linux/flatpak/io.github.sanny32.omodscan.yaml
 
       - name: Prepare Flatpak
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Build Flatpak
         run: |
-          cd .github/flatpak
+          cd .github/linux/flatpak
           flatpak info org.kde.Sdk//6.9
           flatpak-builder --repo=repo --force-clean --disable-rofiles-fuse --verbose build io.github.sanny32.omodscan.yaml
           flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
@@ -62,7 +62,7 @@ jobs:
         with:
           name: io.github.sanny32.omodscan.flatpak
           path: |
-            .github/flatpak/io.github.sanny32.omodscan.flatpak
+            .github/linux/flatpak/io.github.sanny32.omodscan.flatpak
 
       - name: Create or update GitHub Release and upload FLATPAK
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
@@ -72,6 +72,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Open ModScan ${{ env.APP_VERSION }}
           files: |
-            .github/flatpak/io.github.sanny32.omodscan.flatpak
+            .github/linux/flatpak/io.github.sanny32.omodscan.flatpak
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

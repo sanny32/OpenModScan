@@ -36,7 +36,7 @@ if verlt "$FB_VERSION" "1.4"; then
     FB_APP="flatpak run org.flatpak.Builder"
 fi
 
-cd .github/flatpak || exit 1
+cd .github/linux/flatpak || exit 1
 
 # Install required runtimes and tools
 if flatpak info --user org.kde.Sdk//6.9 > /dev/null 2>&1; then

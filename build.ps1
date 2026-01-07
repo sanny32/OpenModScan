@@ -415,7 +415,7 @@ $QtDir = $QtDir -replace '\\', '/'
 Write-Host ""
 Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
-    "../omodscan",
+    "../src",
     "-G", $CMakeGenerator,
     "-DCMAKE_PREFIX_PATH=`"$QtDir`""
 )

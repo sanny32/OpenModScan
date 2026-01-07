@@ -511,7 +511,7 @@ BUILD_DIR="build-omodscan-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
+cmake ../src -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
       -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
       -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
       ${CMAKE_QT_OPTION}

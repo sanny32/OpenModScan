@@ -30,7 +30,7 @@ if verlte "$FB_VERSION" "1.4"; then
     FB_APP="flatpak run org.flatpak.Builder"
 fi
 
-cd .flatpak || exit 1
+cd .github/flatpak || exit 1
 
 # Add flathub remote if not exists
 flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

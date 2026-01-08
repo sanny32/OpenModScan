@@ -49,10 +49,10 @@ echo ""
 
 # Build project
 echo -e "\033[32mBuilding flatpak project...\033[0m"
-if [ -z "${REF_NAME:-}" ]; then
-    REF_NAME="$(git rev-parse --abbrev-ref HEAD)"
+if [ -z "${BRANCH_NAME:-}" ]; then
+    BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 fi
-sed -i "s|branch: main|branch: ${REF_NAME}|" io.github.sanny32.omodscan.yaml
+sed -i "s|branch: main|branch: ${BRANCH_NAME}|" io.github.sanny32.omodscan.yaml
 
 $FB_APP --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yaml
 echo -e "Done\n"
@@ -62,10 +62,12 @@ echo -e "\033[32mCreating flatpak bundle...\033[0m"
 flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
 echo -e "Done\n"
 
-# Move bundle to script directory
-mv io.github.sanny32.omodscan.flatpak "$SCRIPT_DIR"/ || exit 1
-
 # Cleanup
 echo -e "\033[32mCleanup...\033[0m"
 rm -rf build repo .flatpak-builder
 echo "Done"
+
+# Move bundle to script directory
+mv io.github.sanny32.omodscan.flatpak "$SCRIPT_DIR"/ || exit 1
+echo "To install Open ModScan, run:"
+echo -e "    flatpak install --user io.github.sanny32.omodscan.flatpak"

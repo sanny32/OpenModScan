@@ -69,5 +69,5 @@ echo "Done"
 
 # Move bundle to script directory
 mv io.github.sanny32.omodscan.flatpak "$SCRIPT_DIR"/ || exit 1
-echo "To install Open ModScan, run:"
+echo -e "\nTo install Open ModScan, run:"
 echo -e "    flatpak install --user io.github.sanny32.omodscan.flatpak"

@@ -162,6 +162,9 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
         case DescriptionRole:
             return itemData.Description;
 
+        case ColorRole:
+            return itemData.BgColor;
+
         case Qt::DecorationRole:
             return itemData.Simulated ? _iconPointGreen : _iconPointEmpty;
     }
@@ -895,6 +898,31 @@ void OutputWidget::setCodepage(const QString& name)
 }
 
 ///
+/// \brief drawRemoveColorIcon
+/// \param size
+/// \return
+///
+QIcon drawRemoveColorIcon(int size = 16)
+{
+    QPixmap pm(size, size);
+    pm.fill(Qt::transparent);
+
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing, true);
+
+    QRect r(2, 2, size - 4, size - 4);
+    p.setBrush(Qt::white);
+    p.setPen(QPen(Qt::black, 0.1));
+    p.drawRect(r);
+
+    QPen pen(Qt::red, 1);
+    p.setPen(pen);
+    p.drawLine(0, size, size, 0);
+
+    return QIcon(pm);
+}
+
+///
 /// \brief OutputWidget::on_listView_customContextMenuRequested
 /// \param pos
 ///
@@ -924,8 +952,10 @@ void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 
     menu.addSeparator();
 
-    QAction* resetColorAction = menu.addAction(tr("Reset Color"));
-    connect(resetColorAction, &QAction::triggered, this, [this, index](){
+    QAction* removeColorAction = menu.addAction(drawRemoveColorIcon(), tr("Remove Color"));
+    const auto clr = _listModel->data(index, ColorRole).value<QColor>();
+    removeColorAction->setEnabled(clr.isValid());
+    connect(removeColorAction, &QAction::triggered, this, [this, index](){
         _listModel->setData(index, QColor(), ColorRole);
     });
 

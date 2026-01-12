@@ -133,7 +133,7 @@ public:
     bool autoscrollLogView() const;
     void setAutosctollLogView(bool on);
 
-    void setStatus(const QString& status, ModbusDevice::State state);
+    void setStatus(const QString& status);
 
     void paint(const QRect& rc, QPainter& painter);
 
@@ -149,6 +149,7 @@ public slots:
     void clearLogView();
 
 signals:
+    bool canWriteValue();
     void startTextCaptureError(const QString& error);
     void itemDoubleClicked(quint16 address, const QVariant& value);
 
@@ -173,7 +174,6 @@ private:
     bool _displayHexAddresses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
-    ModbusDevice::State _modbusClientState;
     ModbusMessage::ProtocolType _protocol;
     ByteOrder _byteOrder;
     QString _codepage;

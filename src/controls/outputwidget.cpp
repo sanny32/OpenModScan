@@ -2,6 +2,7 @@
 #include <QDateTime>
 #include <QPainter>
 #include <QTextStream>
+#include <QTextDocument>
 #include <QInputDialog>
 #include "fontutils.h"
 #include "htmldelegate.h"
@@ -670,12 +671,9 @@ void OutputWidget::clearLogView()
 ///
 /// \brief OutputWidget::setStatus
 /// \param status
-/// \param state
 ///
-void OutputWidget::setStatus(const QString& status, ModbusDevice::State state)
+void OutputWidget::setStatus(const QString& status)
 {
-    _modbusClientState = state;
-
     if(status.isEmpty()) {
         ui->labelStatus->setText(status);
     }
@@ -909,7 +907,7 @@ void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
     QMenu menu(this);
 
     QAction* writeValueAction = menu.addAction(tr("Write Value"));
-    writeValueAction->setEnabled(_modbusClientState == ModbusDevice::ConnectedState);
+    writeValueAction->setEnabled(emit canWriteValue());
     connect(writeValueAction, &QAction::triggered, this, [this, index](){
         emit ui->listView->doubleClicked(index);
     });
@@ -1017,7 +1015,7 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 ///
 void OutputWidget::setUninitializedStatus()
 {
-    setStatus(tr("Data Uninitialized"), _modbusClientState);
+    setStatus(tr("Data Uninitialized"));
 }
 
 ///

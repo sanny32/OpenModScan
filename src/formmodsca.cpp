@@ -64,6 +64,9 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
     connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSca::captureError);
+    connect(ui->outputWidget, &OutputWidget::canWriteValue, this, [this] {
+        return _modbusClient.state() == ModbusDevice::ConnectedState;
+    }, Qt::DirectConnection);
 
     setPollState(PollState::Off);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
@@ -71,11 +74,11 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
         switch (state) {
         case PollState::Off: break;
         case PollState::Paused:
-            ui->outputWidget->setStatus(tr("Device polling paused..."), _modbusClient.state());
+            ui->outputWidget->setStatus(tr("Device polling paused..."));
             _timer.stop();
         break;
         case PollState::Running:
-            ui->outputWidget->setStatus("", _modbusClient.state());
+            ui->outputWidget->setStatus("");
             beginUpdate();
             _timer.start();
         break;
@@ -220,7 +223,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxModbusPointType->blockSignals(false);
 
-    ui->outputWidget->setStatus(tr("Data Uninitialized"), _modbusClient.state());
+    ui->outputWidget->setStatus(tr("Data Uninitialized"));
 
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
@@ -606,7 +609,7 @@ void FormModSca::on_timeout()
         {
             if(_noSlaveResponsesCounter > _modbusClient.numberOfRetries())
             {
-                ui->outputWidget->setStatus(tr("No Responses from Slave Device"), _modbusClient.state());
+                ui->outputWidget->setStatus(tr("No Responses from Slave Device"));
             }
             _noSlaveResponsesCounter++;
         }
@@ -631,7 +634,7 @@ void FormModSca::beginUpdate()
         _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
     }
     else
-        ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"), _modbusClient.state());
+        ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
 
     if(pollState() == PollState::Off) {
         setPollState(PollState::Running);
@@ -758,14 +761,14 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
     {
         if(!isValidReply(reply))
         {
-            ui->outputWidget->setStatus(tr("Received Invalid Response MODBUS Query"), _modbusClient.state());
+            ui->outputWidget->setStatus(tr("Received Invalid Response MODBUS Query"));
         }
         else
         {
             ui->outputWidget->updateData(reply->result());
 
             if(pollState() != PollState::Paused) {
-                ui->outputWidget->setStatus(QString(), _modbusClient.state());
+                ui->outputWidget->setStatus(QString());
             }
             ui->statisticWidget->increaseValidSlaveResponses();
         }
@@ -774,12 +777,12 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
     {
         const auto ex = ModbusException(response.exceptionCode());
         const auto errorString = QString("%1 (%2)").arg(ex, formatUInt8Value(DataDisplayMode::Hex, true, ex));
-        ui->outputWidget->setStatus(errorString, _modbusClient.state());
+        ui->outputWidget->setStatus(errorString);
     }
     else
     {
 
-        ui->outputWidget->setStatus(reply->errorString(), _modbusClient.state());
+        ui->outputWidget->setStatus(reply->errorString());
     }
 
     _noSlaveResponsesCounter = 0;
@@ -804,7 +807,7 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
 void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
     setPollState(PollState::Off);
-    ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"), _modbusClient.state());
+    ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
 }
 
 ///

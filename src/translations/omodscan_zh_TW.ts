@@ -2915,27 +2915,27 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="937"/>
+        <location filename="../controls/outputwidget.cpp" line="969"/>
         <source>Write Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="943"/>
+        <location filename="../controls/outputwidget.cpp" line="975"/>
         <source>Add Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="946"/>
+        <location filename="../controls/outputwidget.cpp" line="978"/>
         <source>%1: Enter Description</source>
         <translation>%1：輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="955"/>
+        <location filename="../controls/outputwidget.cpp" line="987"/>
         <source>Remove Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1048"/>
+        <location filename="../controls/outputwidget.cpp" line="1080"/>
         <source>Data Uninitialized</source>
         <translation>數據未初始化</translation>
     </message>

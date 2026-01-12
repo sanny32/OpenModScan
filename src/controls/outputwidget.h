@@ -19,6 +19,7 @@ class OutputWidget;
 }
 
 class OutputWidget;
+typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QColor> AddressColorMap;
 typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QString> AddressDescriptionMap;
 
 ///
@@ -140,6 +141,9 @@ public:
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
     void updateData(const QModbusDataUnit& data);
 
+    AddressColorMap colorMap() const;
+    void setColor(QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+
     AddressDescriptionMap descriptionMap() const;
     void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
@@ -179,6 +183,7 @@ private:
     QString _codepage;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
+    AddressColorMap _colorMap;
     AddressDescriptionMap _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };

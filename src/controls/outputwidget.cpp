@@ -455,6 +455,8 @@ QVector<quint16> OutputWidget::data() const
 void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap& simulations)
 {
     _descriptionMap.insert(descriptionMap());
+    _colorMap.insert(colorMap());
+
     _displayDefinition = dd;
 
     setProtocol(protocol);
@@ -471,6 +473,9 @@ void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolTyp
 
     for(auto&& key : _descriptionMap.keys())
         setDescription(key.first, key.second, _descriptionMap[key]);
+
+    for(auto&& key : _colorMap.keys())
+        setColor(key.first, key.second, _colorMap[key]);
 
     _listModel->update();
 
@@ -749,6 +754,33 @@ void OutputWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
 void OutputWidget::updateData(const QModbusDataUnit& data)
 {
     _listModel->updateData(data);
+}
+
+///
+/// \brief OutputWidget::colorMap
+/// \return
+///
+AddressColorMap OutputWidget::colorMap() const
+{
+    AddressColorMap colorMap;
+    for(int i = 0; i < _listModel->rowCount(); i++)
+    {
+        const auto clr = _listModel->data(_listModel->index(i), ColorRole).value<QColor>();
+        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
+        colorMap[{_displayDefinition.PointType, addr }] = clr;
+    }
+    return colorMap;
+}
+
+///
+/// \brief OutputWidget::setColor
+/// \param type
+/// \param addr
+/// \param clr
+///
+void OutputWidget::setColor(QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
+{
+     _listModel->setData(_listModel->find(type, addr), clr, ColorRole);
 }
 
 ///

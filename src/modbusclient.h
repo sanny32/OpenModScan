@@ -27,6 +27,8 @@ public:
         return _connectionType;
     }
 
+    bool isForcedModbus15And16Func() const;
+
     int timeout() const;
     void setTimeout(int newTimeout);
 

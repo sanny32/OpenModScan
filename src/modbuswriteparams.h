@@ -20,6 +20,7 @@ struct ModbusWriteParams
     QString Codepage;
     bool ZeroBasedAddress;
     bool LeadingZeros = false;
+    bool ForceModbus15And16Func = false;
     ModbusClient* Client = nullptr;
 };
 

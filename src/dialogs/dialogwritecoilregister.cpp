@@ -16,6 +16,10 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
 {
     ui->setupUi(this);
 
+    if(params.ForceModbus15And16Func) {
+        setWindowTitle(tr("15: Write Single Coil"));
+    }
+
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);

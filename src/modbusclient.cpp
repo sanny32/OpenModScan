@@ -538,8 +538,7 @@ void ModbusClient::writeRegister(QModbusDataUnit::RegisterType pointType, const 
         return;
     }
 
-    const bool useMultipleWriteFunc = _modbusClient->property("ForceModbus15And16Func").toBool();
-    const auto request = createWriteRequest(data, useMultipleWriteFunc);
+    const auto request = createWriteRequest(data, isForcedModbus15And16Func());
     if(!request.isValid()) return;
 
     if(auto reply = _modbusClient->sendRawRequest(request, params.DeviceId, requestGroupId))
@@ -606,6 +605,15 @@ ModbusDevice::State ModbusClient::state() const
         return _modbusClient->state();
 
     return ModbusDevice::UnconnectedState;
+}
+
+///
+/// \brief ModbusClient::isForcedModbus15And16Func
+/// \return
+///
+bool ModbusClient::isForcedModbus15And16Func() const
+{
+    return _modbusClient->property("ForceModbus15And16Func").toBool();
 }
 
 ///

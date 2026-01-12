@@ -19,6 +19,10 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 {
     ui->setupUi(this);
 
+    if(params.ForceModbus15And16Func) {
+        setWindowTitle(tr("16: Write Holding Register"));
+    }
+
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);

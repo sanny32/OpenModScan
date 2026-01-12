@@ -71,11 +71,11 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
         switch (state) {
         case PollState::Off: break;
         case PollState::Paused:
-            ui->outputWidget->setStatus(tr("Device polling paused..."));
+            ui->outputWidget->setStatus(tr("Device polling paused..."), _modbusClient.state());
             _timer.stop();
         break;
         case PollState::Running:
-            ui->outputWidget->setStatus("");
+            ui->outputWidget->setStatus("", _modbusClient.state());
             beginUpdate();
             _timer.start();
         break;
@@ -220,7 +220,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxModbusPointType->blockSignals(false);
 
-    ui->outputWidget->setStatus(tr("Data Uninitialized"));
+    ui->outputWidget->setStatus(tr("Data Uninitialized"), _modbusClient.state());
 
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
@@ -606,7 +606,7 @@ void FormModSca::on_timeout()
         {
             if(_noSlaveResponsesCounter > _modbusClient.numberOfRetries())
             {
-                ui->outputWidget->setStatus(tr("No Responses from Slave Device"));
+                ui->outputWidget->setStatus(tr("No Responses from Slave Device"), _modbusClient.state());
             }
             _noSlaveResponsesCounter++;
         }
@@ -631,7 +631,7 @@ void FormModSca::beginUpdate()
         _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
     }
     else
-        ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
+        ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"), _modbusClient.state());
 
     if(pollState() == PollState::Off) {
         setPollState(PollState::Running);
@@ -758,14 +758,14 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
     {
         if(!isValidReply(reply))
         {
-            ui->outputWidget->setStatus(tr("Received Invalid Response MODBUS Query"));
+            ui->outputWidget->setStatus(tr("Received Invalid Response MODBUS Query"), _modbusClient.state());
         }
         else
         {
             ui->outputWidget->updateData(reply->result());
 
             if(pollState() != PollState::Paused) {
-                ui->outputWidget->setStatus(QString());
+                ui->outputWidget->setStatus(QString(), _modbusClient.state());
             }
             ui->statisticWidget->increaseValidSlaveResponses();
         }
@@ -774,12 +774,12 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
     {
         const auto ex = ModbusException(response.exceptionCode());
         const auto errorString = QString("%1 (%2)").arg(ex, formatUInt8Value(DataDisplayMode::Hex, true, ex));
-        ui->outputWidget->setStatus(errorString);
+        ui->outputWidget->setStatus(errorString, _modbusClient.state());
     }
     else
     {
 
-        ui->outputWidget->setStatus(reply->errorString());
+        ui->outputWidget->setStatus(reply->errorString(), _modbusClient.state());
     }
 
     _noSlaveResponsesCounter = 0;
@@ -804,7 +804,7 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
 void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 {
     setPollState(PollState::Off);
-    ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"));
+    ui->outputWidget->setStatus(tr("Device NOT CONNECTED!"), _modbusClient.state());
 }
 
 ///
@@ -903,6 +903,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.Order = byteOrder();
             params.Codepage = codepage();
             params.ZeroBasedAddress = dd.ZeroBasedAddress;
+            params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
 
             DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);
             switch(dlg.exec())
@@ -931,6 +932,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.Codepage = codepage();
             params.ZeroBasedAddress = dd.ZeroBasedAddress;
             params.LeadingZeros = dd.LeadingZeros;
+            params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
 
             if(mode == DataDisplayMode::Binary)
             {

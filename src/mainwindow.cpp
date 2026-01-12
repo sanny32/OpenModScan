@@ -832,6 +832,7 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     params.Codepage = codepage;
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
+    params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
 
     DialogWriteCoilRegister dlg(params, simParams, frm->displayHexAddresses(), this);
 
@@ -880,6 +881,7 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     params.Codepage = codepage;
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
+    params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
 
     DialogWriteHoldingRegister dlg(params, simParams, frm->displayHexAddresses(), this);
 
@@ -918,6 +920,7 @@ void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
     params.Codepage = codepage;
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
+    params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
     params.Client = &_modbusClient;
 
     DialogWriteHoldingRegisterBits dlg(params, frm->displayHexAddresses(), this);

@@ -18,6 +18,10 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
 {
     ui->setupUi(this);
 
+    if(params.ForceModbus15And16Func) {
+        setWindowTitle(tr("16: Write Holding Register Bits"));
+    }
+
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);

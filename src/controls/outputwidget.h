@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QStyledItemDelegate>
 #include "enums.h"
+#include "modbusdevice.h"
 #include "modbusmessage.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
@@ -60,6 +61,8 @@ private:
         QString ValueStr;
         QString Description;
         bool Simulated = false;
+        QColor BgColor;
+        QColor FgColor;
     };
 
     OutputWidget* _parentWidget;
@@ -130,7 +133,7 @@ public:
     bool autoscrollLogView() const;
     void setAutosctollLogView(bool on);
 
-    void setStatus(const QString& status);
+    void setStatus(const QString& status, ModbusDevice::State state);
 
     void paint(const QRect& rc, QPainter& painter);
 
@@ -170,6 +173,7 @@ private:
     bool _displayHexAddresses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
+    ModbusDevice::State _modbusClientState;
     ModbusMessage::ProtocolType _protocol;
     ByteOrder _byteOrder;
     QString _codepage;

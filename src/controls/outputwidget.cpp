@@ -1,8 +1,10 @@
+#include <QMenu>
 #include <QDateTime>
 #include <QPainter>
 #include <QTextStream>
 #include <QInputDialog>
 #include "fontutils.h"
+#include "htmldelegate.h"
 #include "formatutils.h"
 #include "outputwidget.h"
 #include "modbusmessages.h"
@@ -38,6 +40,37 @@ const int AddressRole = Qt::UserRole + 5;
 ///
 const int ValueRole = Qt::UserRole + 6;
 
+///
+/// \brief ColorRole
+///
+const int ColorRole = Qt::UserRole + 7;
+
+///
+/// \brief htmlPad
+/// \param count
+/// \return
+///
+QString htmlPad(int count)
+{
+    return QString("&nbsp;").repeated(count);
+}
+
+///
+/// \brief normalizeHtml
+/// \param s
+/// \return
+///
+QString normalizeHtml(const QString& s)
+{
+    QString out = s;
+    out.replace("&", "&amp;");
+    out.replace("<", "&lt;");
+    out.replace(">", "&gt;");
+    out.replace("\"", "&quot;");
+    out.replace("'", "&#39;");
+    out.replace(" ", "&nbsp;");
+    return out;
+}
 
 ///
 /// \brief OutputListModel::OutputListModel
@@ -80,25 +113,44 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     const auto hexAddresses = _parentWidget->displayHexAddresses();
 
     const ItemData& itemData = _mapItems[row];
-    const auto addrstr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
+    const auto addrStr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
 
     switch(role)
     {
         case Qt::DisplayRole:
         {
-            auto str = QString("%1: %2").arg(addrstr, itemData.ValueStr);
-            const int length = str.length();
-            const auto descr = itemData.Description.length() > 20 ?
-                        QString("%1...").arg(itemData.Description.left(18)): itemData.Description;
-            if(!descr.isEmpty()) str += QString("; %1").arg(descr);
-            return str.leftJustified(length + _columnsDistance, ' ');
+            const auto fg = itemData.FgColor.isValid() ? itemData.FgColor : _parentWidget->foregroundColor();
+            const auto bg = itemData.BgColor.isValid() ? itemData.BgColor : _parentWidget->backgroundColor();
+
+            const QString base = QString("%1: %2").arg(addrStr, itemData.ValueStr);
+            const int targetLen = base.length() + _columnsDistance;
+
+            QString descr = itemData.Description;
+            if (!descr.isEmpty())
+            {
+                const QString prefix = "; ";
+                const int freeSpace = targetLen - (base.length() + prefix.length());
+
+                if (freeSpace > 0)
+                {
+                    if (descr.length() > freeSpace)
+                        descr = descr.left(freeSpace - 4) + "...";
+
+                    descr = prefix + descr;
+                }
+            }
+
+            const int pad = targetLen - (base.length() + descr.length());
+            return QString(
+                       "<span style=\"background-color:%1; color:%2\">%3</span><span>%4%5</span>"
+                       ).arg(bg.name(), fg.name(), normalizeHtml(base), normalizeHtml(descr), (pad > 0) ? htmlPad(pad) : "");
         }
 
         case CaptureRole:
             return QString(itemData.ValueStr).remove('<').remove('>');
 
         case AddressStringRole:
-            return addrstr;
+            return addrStr;
 
         case AddressRole:
             return itemData.Address;
@@ -142,6 +194,11 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
         case DescriptionRole:
             _mapItems[index.row()].Description = value.toString();
             emit dataChanged(index, index, QVector<int>() << role);
+        return true;
+
+        case ColorRole:
+            _mapItems[index.row()].BgColor = value.value<QColor>();
+            emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
         return true;
 
         default:
@@ -331,6 +388,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setModel(_listModel.get());
+    ui->listView->setItemDelegate(new HtmlDelegate(this));
     ui->labelStatus->setAutoFillBackground(true);
 
     setFont(defaultMonospaceFont());
@@ -612,15 +670,16 @@ void OutputWidget::clearLogView()
 ///
 /// \brief OutputWidget::setStatus
 /// \param status
+/// \param state
 ///
-void OutputWidget::setStatus(const QString& status)
+void OutputWidget::setStatus(const QString& status, ModbusDevice::State state)
 {
-    if(status.isEmpty())
-    {
+    _modbusClientState = state;
+
+    if(status.isEmpty()) {
         ui->labelStatus->setText(status);
     }
-    else
-    {
+    else {
         const auto info = QString("*** %1 ***").arg(status);
         if(info != ui->labelStatus->text())
             ui->labelStatus->setText(info);
@@ -647,7 +706,10 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
     int maxWidth = 0;
     for(int i = 0; i < _listModel->rowCount(); ++i)
     {
-        const auto text = _listModel->data(_listModel->index(i), Qt::DisplayRole).toString().trimmed();
+        QTextDocument doc;
+        doc.setHtml(_listModel->data(_listModel->index(i), Qt::DisplayRole).toString());
+        const auto text = doc.toPlainText().trimmed();
+
         auto rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
         maxWidth = qMax(maxWidth, rcItem.width());
 
@@ -840,16 +902,61 @@ void OutputWidget::setCodepage(const QString& name)
 ///
 void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 {
-    const auto index = ui->listView->indexAt(pos);
-    if(!index.isValid()) return;
+    QModelIndex index = ui->listView->indexAt(pos);
+    if (!index.isValid())
+        return;
 
-    QInputDialog dlg(this);
-    dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressStringRole).toString()));
-    dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
-    if(dlg.exec() == QDialog::Accepted)
+    QMenu menu(this);
+
+    QAction* writeValueAction = menu.addAction(tr("Write Value"));
+    writeValueAction->setEnabled(_modbusClientState == ModbusDevice::ConnectedState);
+    connect(writeValueAction, &QAction::triggered, this, [this, index](){
+        emit ui->listView->doubleClicked(index);
+    });
+
+    QAction* addDescrAction = menu.addAction(tr("Add Description"));
+    connect(addDescrAction, &QAction::triggered, this, [this, index](){
+        QInputDialog dlg(this);
+        dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressStringRole).toString()));
+        dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
+        if(dlg.exec() == QDialog::Accepted) {
+            _listModel->setData(index, dlg.textValue(), DescriptionRole);
+        }
+    });
+
+    menu.addSeparator();
+
+    QAction* resetColorAction = menu.addAction(tr("Reset Color"));
+    connect(resetColorAction, &QAction::triggered, this, [this, index](){
+        _listModel->setData(index, QColor(), ColorRole);
+    });
+
+    menu.addSeparator();
+
+    struct ColorItem { QString name; QColor color; };
+    QVector<ColorItem> safeColors = {
+        { "Yellow", QColor(Qt::yellow) },
+        { "Cyan", QColor(Qt::cyan) },
+        { "Magenta", QColor(Qt::magenta) },
+        { "LightGreen", QColor(144, 238, 144) },
+        { "Orange", QColor(255, 165, 0) },
+        { "LightBlue", QColor(173, 216, 230) },
+        { "LightGray", QColor(Qt::lightGray) }
+    };
+
+    for (const auto &c : safeColors)
     {
-        _listModel->setData(index, dlg.textValue(), DescriptionRole);
+        QPixmap pixmap(16,16);
+        pixmap.fill(c.color);
+        QIcon icon(pixmap);
+
+        QAction* colorAction = menu.addAction(icon, c.name);
+        connect(colorAction, &QAction::triggered, this, [this, index, c](){
+            _listModel->setData(index, c.color, ColorRole);
+        });
     }
+
+    menu.exec(ui->listView->viewport()->mapToGlobal(pos));
 }
 
 ///
@@ -910,7 +1017,7 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 ///
 void OutputWidget::setUninitializedStatus()
 {
-    setStatus(tr("Data Uninitialized"));
+    setStatus(tr("Data Uninitialized"), _modbusClientState);
 }
 
 ///

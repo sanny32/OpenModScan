@@ -2903,27 +2903,27 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="908"/>
+        <location filename="../controls/outputwidget.cpp" line="909"/>
         <source>Write Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="914"/>
+        <location filename="../controls/outputwidget.cpp" line="915"/>
         <source>Add Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="917"/>
+        <location filename="../controls/outputwidget.cpp" line="918"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="926"/>
+        <location filename="../controls/outputwidget.cpp" line="927"/>
         <source>Reset Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1017"/>
+        <location filename="../controls/outputwidget.cpp" line="1018"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>

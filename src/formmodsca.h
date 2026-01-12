@@ -1,6 +1,7 @@
 #ifndef FORMMODSCA_H
 #define FORMMODSCA_H
 
+#include <QColor>
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
@@ -89,6 +90,9 @@ public:
 
     AddressDescriptionMap descriptionMap() const;
     void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+
+    AddressColorMap colorMap() const;
+    void setColor(QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
     void resetCtrs();
     uint numberOfPolls() const;
@@ -277,6 +281,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << frm->byteOrder();
     out << frm->simulationMap();
     out << frm->descriptionMap();
+    out << frm->colorMap();
     out << frm->codepage();
 
     return out;
@@ -359,6 +364,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
         in >> descriptionMap;
     }
 
+    AddressColorMap colorMap;
+    if(ver >= QVersionNumber(1, 9))
+    {
+        in >> colorMap;
+    }
+
     QString codepage;
     if(ver >= QVersionNumber(1, 6))
     {
@@ -389,6 +400,9 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
 
     for(auto&& k : descriptionMap.keys())
         frm->setDescription(k.first, k.second, descriptionMap[k]);
+
+    for(auto&& k : colorMap.keys())
+        frm->setColor(k.first, k.second, colorMap[k]);
 
     return in;
 }
@@ -480,6 +494,26 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
         }
 
         xml.writeEndElement(); // AddressDescriptionMap
+
+        {
+            const auto colorMap = frm->colorMap();
+            xml.writeStartElement("AddressColorMap");
+
+            for (auto it = colorMap.constBegin(); it != colorMap.constEnd(); ++it) {
+                const QPair<QModbusDataUnit::RegisterType, quint16>& key = it.key();
+                const QColor& clr = it.value();
+
+                if(clr.isValid() && key.first == dd.PointType)
+                {
+                    xml.writeStartElement("Color");
+                    xml.writeAttribute("Address", QString::number(key.second));
+                    xml.writeAttribute("Value", clr.name());
+                    xml.writeEndElement();
+                }
+            }
+
+            xml.writeEndElement(); // AddressColorMap
+        }
     }
 
     xml.writeEndElement(); // FormModScan
@@ -500,6 +534,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
     if (xml.isStartElement() && xml.name() == QLatin1String("FormModScan")) {
         DataDisplayMode ddm;
         DisplayDefinition dd;
+        QHash<quint16, QColor> colors;
         QHash<quint16, QString> descriptions;
         QHash<quint16, ModbusSimulationParams> simulations;
 
@@ -653,6 +688,24 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
                     }
                 }
             }
+            else if (xml.name() == QLatin1String("AddressColorMap")) {
+                while (xml.readNextStartElement()) {
+                    if (xml.name() == QLatin1String("Color")) {
+
+                        const QXmlStreamAttributes attributes = xml.attributes();
+                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
+
+                        if(ok) {
+                            const QString value = attributes.value("Value").toString();
+                            if(!value.isEmpty()) colors[address] = QColor(value);
+                        }
+                        xml.skipCurrentElement();
+
+                    } else {
+                        xml.skipCurrentElement();
+                    }
+                }
+            }
             else {
                 xml.skipCurrentElement();
             }
@@ -686,6 +739,14 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
                 while(it.hasNext()) {
                     const auto item = it.next();
                     frm->setDescription(dd.PointType, item.key(), item.value());
+                }
+            }
+
+            if(!colors.isEmpty()) {
+                QHashIterator it(colors);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    frm->setColor(dd.PointType, item.key(), item.value());
                 }
             }
         }

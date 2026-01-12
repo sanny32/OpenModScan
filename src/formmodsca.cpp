@@ -11,7 +11,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 8);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 9);
 
 ///
 /// \brief FormModSca::FormModSca
@@ -536,6 +536,26 @@ AddressDescriptionMap FormModSca::descriptionMap() const
 void FormModSca::setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
     ui->outputWidget->setDescription(type, addr, desc);
+}
+
+///
+/// \brief FormModSca::colorMap
+/// \return
+///
+AddressColorMap FormModSca::colorMap() const
+{
+    return ui->outputWidget->colorMap();
+}
+
+///
+/// \brief FormModSca::setColor
+/// \param type
+/// \param addr
+/// \param clr
+///
+void FormModSca::setColor(QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
+{
+    ui->outputWidget->setColor(type, addr, clr);
 }
 
 ///

@@ -1546,7 +1546,7 @@ FormModSca* MainWindow::loadMdiChild(const QString& filename)
                 return nullptr;
 
             bool created = false;
-            auto frm = findMdiChild(formId);
+            frm = findMdiChild(formId);
             if(!frm)
             {
                 created = true;

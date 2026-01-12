@@ -1602,6 +1602,11 @@ single-point  write functions 05 and 06.)</source>
         <source>Auto Simulation</source>
         <translation>自动仿真</translation>
     </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="20"/>
+        <source>15: Write Single Coil</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DialogWriteHoldingRegister</name>
@@ -1639,12 +1644,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="75"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="23"/>
+        <source>16: Write Holding Register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
         <source>Value, (HEX): </source>
         <translation>值（十六进制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="82"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="86"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1678,6 +1688,11 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="94"/>
         <source>Bit Pattern</source>
         <translation>各位的值</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.cpp" line="22"/>
+        <source>16: Write Holding Register Bits</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2334,17 +2349,17 @@ Valid Slave Responses: %2</source>
         <translation>所有文件(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1356"/>
+        <location filename="../mainwindow.cpp" line="1359"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1357"/>
+        <location filename="../mainwindow.cpp" line="1360"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1453"/>
+        <location filename="../mainwindow.cpp" line="1456"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕获错误：
@@ -2361,28 +2376,28 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../modbusclient.cpp" line="526"/>
-        <location filename="../modbusclient.cpp" line="703"/>
+        <location filename="../modbusclient.cpp" line="711"/>
         <source>Coil Write Failure</source>
         <translation>线圈写入失败</translation>
     </message>
     <message>
         <location filename="../modbusclient.cpp" line="530"/>
-        <location filename="../modbusclient.cpp" line="708"/>
+        <location filename="../modbusclient.cpp" line="716"/>
         <source>Register Write Failure</source>
         <translation>寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="569"/>
+        <location filename="../modbusclient.cpp" line="568"/>
         <source>Mask Write Register Failure</source>
         <translation>寄存器写入掩码失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="712"/>
+        <location filename="../modbusclient.cpp" line="720"/>
         <source>Mask Register Write Failure</source>
         <translation>掩码寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="730"/>
+        <location filename="../modbusclient.cpp" line="738"/>
         <source>Connection error. %1</source>
         <translation>连接错误：%1</translation>
     </message>
@@ -2901,12 +2916,27 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="847"/>
+        <location filename="../controls/outputwidget.cpp" line="911"/>
+        <source>Write Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="917"/>
+        <source>Add Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="920"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="913"/>
+        <location filename="../controls/outputwidget.cpp" line="929"/>
+        <source>Reset Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1020"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>

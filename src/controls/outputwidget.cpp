@@ -474,7 +474,6 @@ bool OutputWidget::eventFilter(QObject* obj, QEvent* event)
         event->type() == QEvent::Wheel)
     {
         auto we = static_cast<QWheelEvent*>(event);
-
         if (we->modifiers() & Qt::ControlModifier) {
 
             if (we->angleDelta().y() > 0)
@@ -486,10 +485,11 @@ bool OutputWidget::eventFilter(QObject* obj, QEvent* event)
 
             QFont font = ui->listView->font();
             font.setPointSizeF(_baseFontSize * _zoomPercent / 100.0);
+
             ui->listView->setFont(font);
             ui->labelStatus->setFont(font);
 
-            showZoomOverlay(font.pointSizeF());
+            showZoomOverlay();
 
             return true;
         }
@@ -502,11 +502,9 @@ bool OutputWidget::eventFilter(QObject* obj, QEvent* event)
 /// \brief OutputWidget::showZoomOverlay
 /// \param currentFontSize
 ///
-void OutputWidget::showZoomOverlay(qreal currentFontSize)
+void OutputWidget::showZoomOverlay()
 {
-    int percent = qRound((currentFontSize / _baseFontSize) * 100.0);
-
-    _zoomLabel->setText(tr("Zoom: %1%").arg(percent));
+    _zoomLabel->setText(tr("Zoom: %1%").arg(_zoomPercent));
     _zoomLabel->adjustSize();
 
     QRect r = ui->listView->viewport()->rect();
@@ -692,6 +690,10 @@ void OutputWidget::setFont(const QFont& font)
     ui->labelStatus->setFont(font);
     ui->logView->setFont(font);
     ui->modbusMsg->setFont(font);
+
+    _zoomPercent = 100;
+    _baseFontSize = ui->listView->font().pointSizeF();
+    if (_baseFontSize <= 0) _baseFontSize = 10.0;
 }
 
 ///

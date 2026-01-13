@@ -170,7 +170,7 @@ private:
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
-    void showZoomOverlay(qreal currentFontSize);
+    void showZoomOverlay();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
     QModelIndex getValueIndex(const QModelIndex& index) const;
 

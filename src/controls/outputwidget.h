@@ -3,13 +3,13 @@
 
 #include <QFile>
 #include <QWidget>
+#include <QLabel>
 #include <QDateTime>
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include <QPainter>
 #include <QStyledItemDelegate>
 #include "enums.h"
-#include "modbusdevice.h"
 #include "modbusmessage.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
@@ -159,6 +159,7 @@ signals:
 
 protected:
     void changeEvent(QEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private slots:
     void on_listView_doubleClicked(const QModelIndex& index);
@@ -169,13 +170,19 @@ private:
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
+    void showZoomOverlay(qreal currentFontSize);
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
     QModelIndex getValueIndex(const QModelIndex& index) const;
 
 private:
     Ui::OutputWidget *ui;
+    QLabel* _zoomLabel = nullptr;
+    QTimer* _zoomHideTimer = nullptr;
 
 private:
+    qreal   _baseFontSize = 0.0;
+    int _zoomPercent = 100;
+
     bool _displayHexAddresses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;

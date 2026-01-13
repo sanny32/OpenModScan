@@ -1604,7 +1604,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="20"/>
         <source>15: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>15: 寫入單線圈</translation>
     </message>
 </context>
 <context>
@@ -1645,7 +1645,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="23"/>
         <source>16: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>16: 寫入保持暫存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
@@ -1691,7 +1691,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.cpp" line="22"/>
         <source>16: Write Holding Register Bits</source>
-        <translation type="unfinished"></translation>
+        <translation>16: 寫入保持暫存器位</translation>
     </message>
 </context>
 <context>
@@ -2917,17 +2917,17 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/outputwidget.cpp" line="972"/>
         <source>Write Value to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>將值寫入 %1</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="979"/>
         <source>Add Description</source>
-        <translation type="unfinished"></translation>
+        <translation>添加描述</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="979"/>
         <source>Edit Description</source>
-        <translation type="unfinished"></translation>
+        <translation>編輯描述</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="982"/>
@@ -2937,7 +2937,42 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/outputwidget.cpp" line="991"/>
         <source>Remove Color</source>
-        <translation type="unfinished"></translation>
+        <translation>去除顏色</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1002"/>
+        <source>Yellow</source>
+        <translation>黃色的</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1003"/>
+        <source>Cyan</source>
+        <translation>青色</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1004"/>
+        <source>Magenta</source>
+        <translation>品紅</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1005"/>
+        <source>LightGreen</source>
+        <translation>淺綠色</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1006"/>
+        <source>Orange</source>
+        <translation>橘子</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1007"/>
+        <source>LightBlue</source>
+        <translation>淺藍色</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1008"/>
+        <source>LightGray</source>
+        <translation>淺灰色</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="1094"/>

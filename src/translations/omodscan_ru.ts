@@ -1593,7 +1593,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="20"/>
         <source>15: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>15: Запись дискретного выхода</translation>
     </message>
 </context>
 <context>
@@ -1634,7 +1634,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="23"/>
         <source>16: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Запись регистра хранения</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
@@ -1680,7 +1680,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.cpp" line="22"/>
         <source>16: Write Holding Register Bits</source>
-        <translation type="unfinished"></translation>
+        <translation>16: Записать биты регистра хранения</translation>
     </message>
 </context>
 <context>
@@ -2905,17 +2905,17 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/outputwidget.cpp" line="972"/>
         <source>Write Value to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать значение в %1</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="979"/>
         <source>Add Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить описание</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="979"/>
         <source>Edit Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактировать описание</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="982"/>
@@ -2925,7 +2925,42 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/outputwidget.cpp" line="991"/>
         <source>Remove Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить цвет</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1002"/>
+        <source>Yellow</source>
+        <translation>Желтый</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1003"/>
+        <source>Cyan</source>
+        <translation>Циан</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1004"/>
+        <source>Magenta</source>
+        <translation>Пурпурный</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1005"/>
+        <source>LightGreen</source>
+        <translation>Светло-зеленый</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1006"/>
+        <source>Orange</source>
+        <translation>Оранжевый</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1007"/>
+        <source>LightBlue</source>
+        <translation>Светло-синий</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="1008"/>
+        <source>LightGray</source>
+        <translation>Светло-серый</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="1094"/>

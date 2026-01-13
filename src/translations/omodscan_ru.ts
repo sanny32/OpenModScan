@@ -2905,7 +2905,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/outputwidget.cpp" line="972"/>
         <source>Write Value to %1</source>
-        <translation>Записать значение в %1</translation>
+        <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="979"/>

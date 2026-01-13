@@ -170,6 +170,7 @@ private:
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
+    QModelIndex getValueIndex(const QModelIndex& index) const;
 
 private:
     Ui::OutputWidget *ui;

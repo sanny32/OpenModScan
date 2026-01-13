@@ -2916,27 +2916,32 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="969"/>
-        <source>Write Value</source>
+        <location filename="../controls/outputwidget.cpp" line="972"/>
+        <source>Write Value to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="975"/>
+        <location filename="../controls/outputwidget.cpp" line="979"/>
         <source>Add Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="978"/>
+        <location filename="../controls/outputwidget.cpp" line="979"/>
+        <source>Edit Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="982"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="987"/>
+        <location filename="../controls/outputwidget.cpp" line="991"/>
         <source>Remove Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1080"/>
+        <location filename="../controls/outputwidget.cpp" line="1094"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>

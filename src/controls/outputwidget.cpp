@@ -966,14 +966,18 @@ void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 
     QMenu menu(this);
 
-    QAction* writeValueAction = menu.addAction(tr("Write Value"));
+    const auto idx = getValueIndex(index);
+    const auto address = _listModel->data(idx, AddressStringRole).toString();
+
+    QAction* writeValueAction = menu.addAction(tr("Write Value to %1").arg(address));
     writeValueAction->setEnabled(emit canWriteValue());
     connect(writeValueAction, &QAction::triggered, this, [this, index](){
         emit ui->listView->doubleClicked(index);
     });
 
-    QAction* addDescrAction = menu.addAction(tr("Add Description"));
-    connect(addDescrAction, &QAction::triggered, this, [this, index](){
+    const auto desc = _listModel->data(index, DescriptionRole).toString();
+    QAction* addDescrAction = menu.addAction(desc.isEmpty() ? tr("Add Description") : tr("Edit Description"));
+    connect(addDescrAction, &QAction::triggered, this, [this, index, address](){
         QInputDialog dlg(this);
         dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressStringRole).toString()));
         dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
@@ -1027,6 +1031,20 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 {
     if(!index.isValid()) return;
 
+    const auto idx = getValueIndex(index);
+    const auto address = _listModel->data(idx, AddressRole).toUInt();
+    const auto value = _listModel->data(idx, ValueRole);
+
+    emit itemDoubleClicked(address, value);
+}
+
+///
+/// \brief OutputWidget::getValueIndex
+/// \param index
+/// \return
+///
+QModelIndex OutputWidget::getValueIndex(const QModelIndex& index) const
+{
     QModelIndex idx = index;
     switch(_displayDefinition.PointType)
     {
@@ -1043,7 +1061,7 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
                 case DataDisplayMode::SwappedUInt32:
                     if(index.row() % 2)
                         idx = _listModel->index(index.row() - 1);
-                break;
+                    break;
 
                 case DataDisplayMode::DblFloat:
                 case DataDisplayMode::SwappedDbl:
@@ -1052,23 +1070,19 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
                 case DataDisplayMode::UInt64:
                 case DataDisplayMode::SwappedUInt64:
                     if(index.row() % 4)
-                       idx = _listModel->index(index.row() - index.row() % 4);
-                break;
+                        idx = _listModel->index(index.row() - index.row() % 4);
+                    break;
 
                 default:
-                break;
+                    break;
             }
         }
         break;
 
         default:
-        break;
+            break;
     }
-
-    const auto address = _listModel->data(idx, AddressRole).toUInt();
-    const auto value = _listModel->data(idx, ValueRole);
-
-    emit itemDoubleClicked(address, value);
+    return idx;
 }
 
 

@@ -180,7 +180,7 @@ private:
     QTimer* _zoomHideTimer = nullptr;
 
 private:
-    qreal   _baseFontSize = 0.0;
+    qreal _baseFontSize = 0.0;
     int _zoomPercent = 100;
 
     bool _displayHexAddresses;

@@ -2905,7 +2905,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/outputwidget.cpp" line="508"/>
         <source>Zoom: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличение: %1%</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="1057"/>

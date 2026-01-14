@@ -566,7 +566,7 @@
         <translation>TCP/IP 服务器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
         <source>Direct Connection to Serial Port</source>
         <translation>串行端口</translation>
     </message>
@@ -581,57 +581,62 @@
         <translation>端口：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="237"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
+        <source>Modbus RTU over TCP/IP Gateway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="242"/>
         <source>Configuration</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="263"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="268"/>
         <source>Baud Rate: </source>
         <translation>波特率： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="326"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="331"/>
         <source>Word Length: </source>
         <translation>数据位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="356"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="361"/>
         <source>Parity: </source>
         <translation>奇偶校验： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="376"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="381"/>
         <source>Stop Bits: </source>
         <translation>停止位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="411"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="416"/>
         <source>Hardware Flow Control</source>
         <translation>流控</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="420"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="425"/>
         <source>Flow Control Mode: </source>
         <translation>流控模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="440"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="445"/>
         <source>DTR Control: </source>
         <translation>DTR： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="463"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="468"/>
         <source>RTS Control: </source>
         <translation>RTS： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="513"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="518"/>
         <source>Protocol Selections</source>
         <translation>高级设置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.cpp" line="76"/>
+        <location filename="../dialogs/dialogconnectiondetails.cpp" line="85"/>
         <source>Lookup host failed: </source>
         <translation>连接失败： </translation>
     </message>
@@ -1836,22 +1841,27 @@ Valid Slave Responses: %2</source>
         <translation>响应：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="162"/>
+        <location filename="../controls/mainstatusbar.cpp" line="165"/>
+        <source>Modbus RTU over TCP/IP Gateway %1:%2  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="167"/>
         <source>Connecting to %1:%2...  </source>
         <translation>正在连接到 %1:%2...  </translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="166"/>
+        <location filename="../controls/mainstatusbar.cpp" line="172"/>
         <source>Connecting to %1...  </source>
         <translation>正在连接到 %1...  </translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="163"/>
+        <location filename="../controls/mainstatusbar.cpp" line="164"/>
         <source>Remote TCP/IP Server %1:%2  </source>
         <translation>远程 TCP/IP 服务器%1:%2  </translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="167"/>
+        <location filename="../controls/mainstatusbar.cpp" line="173"/>
         <source>Port %1:%2:%3:%4:%5  </source>
         <translation>端口 %1:%2:%3:%4:%5  </translation>
     </message>
@@ -2370,34 +2380,34 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusClient</name>
     <message>
-        <location filename="../modbusclient.cpp" line="144"/>
+        <location filename="../modbusclient.cpp" line="149"/>
         <source>Invalid Modbus Request</source>
         <translation>无效的 Modbus 请求</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="526"/>
-        <location filename="../modbusclient.cpp" line="711"/>
+        <location filename="../modbusclient.cpp" line="531"/>
+        <location filename="../modbusclient.cpp" line="716"/>
         <source>Coil Write Failure</source>
         <translation>线圈写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="530"/>
-        <location filename="../modbusclient.cpp" line="716"/>
+        <location filename="../modbusclient.cpp" line="535"/>
+        <location filename="../modbusclient.cpp" line="721"/>
         <source>Register Write Failure</source>
         <translation>寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="568"/>
+        <location filename="../modbusclient.cpp" line="573"/>
         <source>Mask Write Register Failure</source>
         <translation>寄存器写入掩码失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="720"/>
+        <location filename="../modbusclient.cpp" line="725"/>
         <source>Mask Register Write Failure</source>
         <translation>掩码寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="738"/>
+        <location filename="../modbusclient.cpp" line="743"/>
         <source>Connection error. %1</source>
         <translation>连接错误：%1</translation>
     </message>
@@ -2906,9 +2916,17 @@ Valid Slave Responses: %2</source>
     </message>
 </context>
 <context>
+    <name>ModbusRtuTcpClient</name>
+    <message>
+        <location filename="../modbusrtutcpclient.cpp" line="45"/>
+        <source>Invalid connection settings for TCP communication specified.</source>
+        <translation type="unfinished">指定的TCP通信连接设置无效。</translation>
+    </message>
+</context>
+<context>
     <name>ModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="44"/>
+        <location filename="../modbustcpclient.cpp" line="45"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的TCP通信连接设置无效。</translation>
     </message>
@@ -3037,11 +3055,13 @@ Byte Order: %2</source>
     <name>QModbusClient</name>
     <message>
         <location filename="../modbusclientprivate.cpp" line="207"/>
+        <location filename="../modbusrtutcpclient.cpp" line="123"/>
         <source>Device not connected.</source>
         <translation>设备未连接。</translation>
     </message>
     <message>
         <location filename="../modbusclientprivate.cpp" line="213"/>
+        <location filename="../modbusrtutcpclient.cpp" line="128"/>
         <source>Invalid Modbus request.</source>
         <translation>无效的Modbus请求。</translation>
     </message>
@@ -3061,21 +3081,28 @@ Byte Order: %2</source>
         <translation>收到无效响应。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="145"/>
+        <location filename="../modbustcpclient.cpp" line="146"/>
+        <location filename="../modbusrtutcpclient.cpp" line="230"/>
         <source>TCP socket error (%1).</source>
         <translation>TCP 套接字错误(%1)。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="271"/>
+        <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="564"/>
         <source>Request timeout.</source>
         <translation>请求超时。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="298"/>
+        <location filename="../modbustcpclient.cpp" line="299"/>
         <location filename="../modbusrtuclient.cpp" line="343"/>
+        <location filename="../modbusrtutcpclient.cpp" line="262"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>由于连接关闭，回复已中止。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtutcpclient.cpp" line="145"/>
+        <source>Could not write request to socket.</source>
+        <translation type="unfinished">无法将请求写入套接字。</translation>
     </message>
 </context>
 <context>
@@ -3129,7 +3156,7 @@ Byte Order: %2</source>
 <context>
     <name>QModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="223"/>
+        <location filename="../modbustcpclient.cpp" line="224"/>
         <source>Could not write request to socket.</source>
         <translation>无法将请求写入套接字。</translation>
     </message>

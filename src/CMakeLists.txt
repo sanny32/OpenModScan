@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.12.3
+    VERSION 1.13.0
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -133,6 +133,7 @@ set(SOURCES
     modbusclientprivate.cpp
     modbustcpclient.cpp
     modbusrtuclient.cpp
+    modbusrtutcpclient.cpp
     modbusdataunit.cpp
     modbusmessages/modbusmessage.cpp
     modbusreply.cpp
@@ -209,6 +210,7 @@ set(HEADERS
     modbusclient.h
     modbusclientprivate.h
     modbustcpclient.h
+    modbusrtutcpclient.h
     modbusreply.h
     modbusrtuclient.h
     modbusdataunit.h

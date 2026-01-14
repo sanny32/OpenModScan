@@ -5,6 +5,7 @@
 #include "modbusexception.h"
 #include "modbusclient.h"
 #include "modbustcpclient.h"
+#include "modbusrtutcpclient.h"
 #include "modbusrtuclient.h"
 
 ///
@@ -43,7 +44,11 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
     {
         case ConnectionType::Tcp:
         {
-            _modbusClient = new ModbusTcpClient(this);
+            if(cd.ModbusParams.Mode == TransmissionMode::IP)
+                _modbusClient = new ModbusTcpClient(this);
+            else
+                _modbusClient = new ModbusRtuTcpClient(this);
+
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);
             _modbusClient->setProperty("ConnectionDetails", QVariant::fromValue(cd));

@@ -566,7 +566,7 @@
         <translation>Удаленный TCP/IP Сервер</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
         <source>Direct Connection to Serial Port</source>
         <translation>Подключение к порту</translation>
     </message>
@@ -581,57 +581,62 @@
         <translation>Последовательный порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="237"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
+        <source>Modbus RTU over TCP/IP Gateway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="242"/>
         <source>Configuration</source>
         <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="263"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="268"/>
         <source>Baud Rate: </source>
         <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="326"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="331"/>
         <source>Word Length: </source>
         <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="356"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="361"/>
         <source>Parity: </source>
         <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="376"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="381"/>
         <source>Stop Bits: </source>
         <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="411"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="416"/>
         <source>Hardware Flow Control</source>
         <translation>Управление потоком</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="420"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="425"/>
         <source>Flow Control Mode: </source>
         <translation>Режим управления: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="440"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="445"/>
         <source>DTR Control: </source>
         <translation>Управление DTR: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="463"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="468"/>
         <source>RTS Control: </source>
         <translation>Управление RTS: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="513"/>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="518"/>
         <source>Protocol Selections</source>
         <translation>Настройки протокола</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.cpp" line="76"/>
+        <location filename="../dialogs/dialogconnectiondetails.cpp" line="85"/>
         <source>Lookup host failed: </source>
         <translation>Поиск хоста не удался: </translation>
     </message>
@@ -1824,22 +1829,27 @@ Valid Slave Responses: %2</source>
         <translation>Ответов: %1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="162"/>
+        <location filename="../controls/mainstatusbar.cpp" line="165"/>
+        <source>Modbus RTU over TCP/IP Gateway %1:%2  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="167"/>
         <source>Connecting to %1:%2...  </source>
         <translation>Подключение к %1:%2...  </translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="166"/>
+        <location filename="../controls/mainstatusbar.cpp" line="172"/>
         <source>Connecting to %1...  </source>
         <translation>Подключение к %1...  </translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="163"/>
+        <location filename="../controls/mainstatusbar.cpp" line="164"/>
         <source>Remote TCP/IP Server %1:%2  </source>
         <translation>Удаленный TCP/IP Сервер %1:%2  </translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="167"/>
+        <location filename="../controls/mainstatusbar.cpp" line="173"/>
         <source>Port %1:%2:%3:%4:%5  </source>
         <translation>Порт %1:%2:%3:%4:%5  </translation>
     </message>
@@ -2357,34 +2367,34 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusClient</name>
     <message>
-        <location filename="../modbusclient.cpp" line="144"/>
+        <location filename="../modbusclient.cpp" line="149"/>
         <source>Invalid Modbus Request</source>
         <translation>Некорректный запрос Modbus</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="526"/>
-        <location filename="../modbusclient.cpp" line="711"/>
+        <location filename="../modbusclient.cpp" line="531"/>
+        <location filename="../modbusclient.cpp" line="716"/>
         <source>Coil Write Failure</source>
         <translation>Ошибка записи в Coil регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="530"/>
-        <location filename="../modbusclient.cpp" line="716"/>
+        <location filename="../modbusclient.cpp" line="535"/>
+        <location filename="../modbusclient.cpp" line="721"/>
         <source>Register Write Failure</source>
         <translation>Ошибка записи в регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="568"/>
+        <location filename="../modbusclient.cpp" line="573"/>
         <source>Mask Write Register Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="720"/>
+        <location filename="../modbusclient.cpp" line="725"/>
         <source>Mask Register Write Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="738"/>
+        <location filename="../modbusclient.cpp" line="743"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -2893,9 +2903,17 @@ Valid Slave Responses: %2</source>
     </message>
 </context>
 <context>
+    <name>ModbusRtuTcpClient</name>
+    <message>
+        <location filename="../modbusrtutcpclient.cpp" line="45"/>
+        <source>Invalid connection settings for TCP communication specified.</source>
+        <translation type="unfinished">Указаны неверные параметры TCP соединения.</translation>
+    </message>
+</context>
+<context>
     <name>ModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="44"/>
+        <location filename="../modbustcpclient.cpp" line="45"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>Указаны неверные параметры TCP соединения.</translation>
     </message>
@@ -3024,11 +3042,13 @@ Byte Order: %2</source>
     <name>QModbusClient</name>
     <message>
         <location filename="../modbusclientprivate.cpp" line="207"/>
+        <location filename="../modbusrtutcpclient.cpp" line="123"/>
         <source>Device not connected.</source>
         <translation>Устройство не подключено.</translation>
     </message>
     <message>
         <location filename="../modbusclientprivate.cpp" line="213"/>
+        <location filename="../modbusrtutcpclient.cpp" line="128"/>
         <source>Invalid Modbus request.</source>
         <translation>Неверный запрос Modbus.</translation>
     </message>
@@ -3048,21 +3068,28 @@ Byte Order: %2</source>
         <translation>Получен некорректный ответ.</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="145"/>
+        <location filename="../modbustcpclient.cpp" line="146"/>
+        <location filename="../modbusrtutcpclient.cpp" line="230"/>
         <source>TCP socket error (%1).</source>
         <translation>Ошибка сокета TCP (%1).</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="271"/>
+        <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="564"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="298"/>
+        <location filename="../modbustcpclient.cpp" line="299"/>
         <location filename="../modbusrtuclient.cpp" line="343"/>
+        <location filename="../modbusrtutcpclient.cpp" line="262"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>Ответ прерван из-за закрытия соединения.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtutcpclient.cpp" line="145"/>
+        <source>Could not write request to socket.</source>
+        <translation type="unfinished">Не удалось записать запрос в сокет.</translation>
     </message>
 </context>
 <context>
@@ -3116,7 +3143,7 @@ Byte Order: %2</source>
 <context>
     <name>QModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="223"/>
+        <location filename="../modbustcpclient.cpp" line="224"/>
         <source>Could not write request to socket.</source>
         <translation>Не удалось записать запрос в сокет.</translation>
     </message>

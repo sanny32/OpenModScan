@@ -1,6 +1,7 @@
 #include <QUrl>
 #include <QDataStream>
 #include <QModbusClient>
+#include "qmodbusserialadu.h"
 #include "modbusrtutcpclient.h"
 #include "modbusmessage.h"
 
@@ -43,7 +44,7 @@ bool ModbusRtuTcpClient::open()
 
     if (!url.isValid()) {
         setError(tr("Invalid connection settings for TCP communication specified."), ModbusDevice::ConnectionError);
-        qCWarning(QT_MODBUS) << "(TCP client) Invalid host:" << url.host() << "or port:"
+        qCWarning(QT_MODBUS) << "(RTU over TCP client) Invalid host:" << url.host() << "or port:"
                              << url.port();
         return false;
     }
@@ -108,6 +109,24 @@ void ModbusRtuTcpClient::setConnectionParameter(ModbusDevice::ConnectionParamete
 }
 
 ///
+/// \brief ModbusRtuTcpClient::interFrameDelay
+/// \return
+///
+int ModbusRtuTcpClient::interFrameDelay() const
+{
+    return _interFrameDelayMilliseconds * 1000;
+}
+
+///
+/// \brief ModbusRtuTcpClient::setInterFrameDelay
+/// \param microseconds
+///
+void ModbusRtuTcpClient::setInterFrameDelay(int microseconds)
+{
+    _interFrameDelayMilliseconds = qCeil(qreal(microseconds) / 1000.);
+}
+
+///
 /// \brief ModbusRtuTcpClient::enqueueRequest
 /// \param requestGroupId
 /// \param request
@@ -129,73 +148,16 @@ ModbusReply* ModbusRtuTcpClient::enqueueRequest(int requestGroupId, const QModbu
         return nullptr;
     }
 
-    const QByteArray rtuFrame = wrapRtuFrame(request, serverAddress);
-
-    auto reply = new ModbusReply(type, serverAddress, this);
+    auto reply = new ModbusReply(serverAddress == 0 ? ModbusReply::Broadcast : type, serverAddress, this);
     reply->setRequestGroupId(requestGroupId);
-    reply->setTransactionId(0);
 
-    const auto msgReq = ModbusMessage::create(rtuFrame, ModbusMessage::Rtu, QDateTime::currentDateTime(), true);
-    emit modbusRequest(requestGroupId, msgReq);
+    QueueElement element(reply, request, unit, numberOfRetries() + 1);
+    element.adu = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, serverAddress, request);
+    _queue.enqueue(element);
 
-    const QueueElement element{ reply, request, unit, numberOfRetries(), timeout() };
-    _transactionStore.insert(0, element);
+    scheduleNextRequest(_interFrameDelayMilliseconds);
 
-    if (_socket->write(rtuFrame) != rtuFrame.size()) {
-        setError(QModbusClient::tr("Could not write request to socket."), ModbusDevice::WriteError);
-        return nullptr;
-    }
-
-    incrementTransactionId();
     return reply;
-}
-
-///
-/// \brief ModbusRtuTcpClient::wrapRtuFrame
-/// \param request
-/// \param serverAddress
-/// \return
-///
-QByteArray ModbusRtuTcpClient::wrapRtuFrame(const QModbusRequest &request, int serverAddress) const
-{
-    QByteArray frame;
-    QDataStream stream(&frame, QIODevice::WriteOnly);
-    stream << quint8(serverAddress) << request;
-
-    // Add CRC16 RTU
-    quint16 crc = QModbusAduRtu::calculateCRC(frame.data(), frame.length());
-    frame.append((crc >> 8) & 0xFF);
-    frame.append(crc & 0xFF);
-    return frame;
-}
-
-///
-/// \brief ModbusRtuTcpClient::unwrapRtuResponse
-/// \param frame
-/// \param serverAddress
-/// \return
-///
-QModbusResponse ModbusRtuTcpClient::unwrapRtuResponse(const QByteArray &frame, int serverAddress)
-{
-    if (frame.size() < 5) // minimum: addr+func+crc
-        return QModbusResponse();
-
-    quint16 crcReceived = (quint8(frame.at(frame.size() - 2)) << 8) | quint8(frame.at(frame.size() - 1));
-    QByteArray pduData = frame.left(frame.size() - 2);
-    quint16 crcCalc = QModbusAduRtu::calculateCRC(pduData.data(), pduData.length());
-
-    if (crcReceived != crcCalc)
-        return QModbusResponse(); // CRC error
-
-    QDataStream stream(pduData);
-    quint8 addr;
-    stream >> addr;
-    if (addr != serverAddress)
-        return QModbusResponse(); // invalid server address
-
-    QModbusResponse response;
-    stream >> response;
-    return response;
 }
 
 ///
@@ -203,7 +165,7 @@ QModbusResponse ModbusRtuTcpClient::unwrapRtuResponse(const QByteArray &frame, i
 ///
 void ModbusRtuTcpClient::on_connected()
 {
-    qCDebug(QT_MODBUS) << "(TCP client) Connected to" << _socket->peerAddress() << "on port" << _socket->peerPort();
+    qCDebug(QT_MODBUS) << "(RTU over TCP client) Connected to" << _socket->peerAddress() << "on port" << _socket->peerPort();
     _responseBuffer.clear();
     setState(ModbusDevice::ConnectedState);
 }
@@ -213,9 +175,8 @@ void ModbusRtuTcpClient::on_connected()
 ///
 void ModbusRtuTcpClient::on_disconnected()
 {
-    qCDebug(QT_MODBUS)  << "(TCP client) Connection closed.";
+    qCDebug(QT_MODBUS)  << "(RTU over TCP client) Connection closed.";
     setState(ModbusDevice::UnconnectedState);
-    cleanupTransactionStore();
 }
 
 ///
@@ -224,10 +185,75 @@ void ModbusRtuTcpClient::on_disconnected()
 void ModbusRtuTcpClient::on_errorOccurred(QAbstractSocket::SocketError)
 {
     if (_socket->state() == QAbstractSocket::UnconnectedState) {
-        cleanupTransactionStore();
         setState(ModbusDevice::UnconnectedState);
     }
-    setError(QModbusClient::tr("TCP socket error (%1).").arg(_socket->errorString()), ModbusDevice::ConnectionError);
+    setError(QModbusClient::tr("(RTU over TCP client) socket error (%1).").arg(_socket->errorString()), ModbusDevice::ConnectionError);
+}
+
+///
+/// \brief ModbusRtuTcpClient::scheduleNextRequest
+/// \param delay
+///
+void ModbusRtuTcpClient::scheduleNextRequest(int delay)
+{
+    if (_state == Idle && !_queue.isEmpty()) {
+        _state = WaitingForReplay;
+        QTimer::singleShot(delay, this, [this]() { processQueue(); });
+    }
+}
+
+///
+/// \brief ModbusRtuTcpClient::processQueue
+///
+void ModbusRtuTcpClient::processQueue()
+{
+    _responseBuffer.clear();
+
+    if (_queue.isEmpty())
+        return;
+    auto &current = _queue.first();
+
+    if (current.reply.isNull()) {
+        _queue.dequeue();
+        _state = Idle;
+        scheduleNextRequest(_interFrameDelayMilliseconds);
+    } else {
+
+        const auto msgReq = ModbusMessage::create(current.adu, ModbusMessage::Rtu, QDateTime::currentDateTime(), true);
+        emit modbusRequest(current.reply->requestGroupId(), msgReq);
+
+        current.bytesWritten = 0;
+        current.numberOfRetries--;
+
+        if (_socket->write(current.adu) != current.adu.size()) {
+            setError(QModbusClient::tr("Could not write request to socket."), ModbusDevice::WriteError);
+            return;
+        }
+
+        qCDebug(QT_MODBUS) << "(RTU over TCP client) Sent Serial PDU:" << current.requestPdu;
+        qCDebug(QT_MODBUS_LOW).noquote() << "(RTU over TCP client) Sent Serial ADU: 0x" + current.adu.toHex();
+    }
+}
+
+///
+/// \brief ModbusRtuTcpClient::canMatchRequestAndResponse
+/// \param response
+/// \param sendingServer
+/// \return
+///
+bool ModbusRtuTcpClient::canMatchRequestAndResponse(const QModbusResponse &response, int sendingServer) const
+{
+    if (_queue.isEmpty())
+        return false;
+    const auto &current = _queue.first();
+
+    if (current.reply.isNull())
+        return false;   // reply deleted
+    if (current.reply->serverAddress() != sendingServer)
+        return false;   // server mismatch
+    if (current.requestPdu.functionCode() != response.functionCode())
+        return false;   // request for different function code
+    return true;
 }
 
 ///
@@ -236,30 +262,92 @@ void ModbusRtuTcpClient::on_errorOccurred(QAbstractSocket::SocketError)
 void ModbusRtuTcpClient::on_readyRead()
 {
     _responseBuffer += _socket->readAll();
+    qCDebug(QT_MODBUS_LOW) << "(RTU over TCP client) Response buffer:" << _responseBuffer.toHex();
 
-    while (_responseBuffer.size() >= 5) {
-        quint8 serverAddr = quint8(_responseBuffer.at(0));
-        QModbusResponse resp = unwrapRtuResponse(_responseBuffer, serverAddr);
-
-        if (!resp.isValid())
-            return;
-
-        if (_transactionStore.contains(0))
-            processQueueElement(resp, ModbusMessage::Rtu, serverAddr, _transactionStore[0]);
-
-        _responseBuffer.remove(0, resp.size() + 3);
+    if (_responseBuffer.size() < 5) {
+        qCDebug(QT_MODBUS) << "(RTU over TCP client) Modbus ADU not complete";
+        return;
     }
-}
 
-///
-/// \brief ModbusRtuTcpClient::cleanupTransactionStore
-///
-void ModbusRtuTcpClient::cleanupTransactionStore()
-{
-    for (auto &elem : _transactionStore) {
-        if (!elem.reply.isNull())
-            elem.reply->setError(ModbusDevice::ReplyAbortedError,
-                                 QModbusClient::tr("Reply aborted due to connection closure."));
+    const QModbusSerialAdu tmpAdu(QModbusSerialAdu::Rtu, _responseBuffer);
+    int pduSizeWithoutFcode = QModbusResponse::calculateDataSize(tmpAdu.pdu());
+    if (pduSizeWithoutFcode < 0) {
+        // wait for more data
+        qCDebug(QT_MODBUS) << "(RTU over TCP client) Cannot calculate PDU size for function code:"
+                           << tmpAdu.pdu().functionCode() << ", delaying pending frame";
+        return;
     }
-    _transactionStore.clear();
+
+    // server address byte + function code byte + PDU size + 2 bytes CRC
+    int aduSize = 2 + pduSizeWithoutFcode + 2;
+    if (tmpAdu.rawSize() < aduSize) {
+        qCDebug(QT_MODBUS) << "(RTU over TCP client) Incomplete ADU received, ignoring";
+
+        if (!_queue.isEmpty() && !_queue.first().reply.isNull()) {
+            const auto msg = ModbusMessage::create(tmpAdu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+            emit modbusResponse(_queue.first().reply->requestGroupId(), msg);
+        }
+
+        return;
+    }
+
+    if (_queue.isEmpty())
+        return;
+    auto &current = _queue.first();
+
+    // Special case for Diagnostics:ReturnQueryData. The response has no
+    // length indicator and is just a simple echo of what we have send.
+    if (tmpAdu.pdu().functionCode() == QModbusPdu::Diagnostics) {
+        const QModbusResponse response = tmpAdu.pdu();
+        if (canMatchRequestAndResponse(response, tmpAdu.serverAddress())) {
+            quint16 subCode = 0xffff;
+            response.decodeData(&subCode);
+            if (subCode == Diagnostics::ReturnQueryData) {
+                if (response.data() != current.requestPdu.data())
+                    return; // echo does not match request yet
+                aduSize = 2 + response.dataSize() + 2;
+                if (tmpAdu.rawSize() < aduSize)
+                    return; // echo matches, probably checksum missing
+            }
+        }
+    }
+
+    const QModbusSerialAdu adu(QModbusSerialAdu::Rtu, _responseBuffer.left(aduSize));
+    _responseBuffer.remove(0, aduSize);
+
+    qCDebug(QT_MODBUS) << "(RTU over TCP client) Received ADU:" << adu.rawData().toHex();
+    if (QT_MODBUS().isDebugEnabled() && !_responseBuffer.isEmpty())
+        qCDebug(QT_MODBUS_LOW) << "(RTU over TCP client) Pending buffer:" << _responseBuffer.toHex();
+
+    // check CRC
+    if (!adu.matchingChecksum()) {
+        qCWarning(QT_MODBUS) << "(RTU over TCP client) Discarding response with wrong CRC, received:"
+                             << adu.checksum<quint16>() << ", calculated CRC:"
+                             << QModbusSerialAdu::calculateCRC(adu.data(), adu.size());
+        if (!current.reply.isNull()) {
+            current.reply->addIntermediateError(ModbusDevice::ResponseCrcError);
+
+            const auto msg = ModbusMessage::create(adu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+            emit modbusResponse(current.reply->requestGroupId(), msg);
+        }
+        return;
+    }
+
+    const QModbusResponse response = adu.pdu();
+    if (!canMatchRequestAndResponse(response, adu.serverAddress())) {
+        qCWarning(QT_MODBUS) << "(RTU over TCP client) Cannot match response with open request, "
+                                "ignoring";
+        if (!current.reply.isNull())
+            current.reply->addIntermediateError(ModbusDevice::ResponseRequestMismatch);
+        return;
+    }
+
+    _state = ProcessReply;
+    _responseTimer.stop();
+    current.m_timerId = INT_MIN;
+
+    processQueueElement(response, ModbusMessage::Rtu, adu.serverAddress(), _queue.dequeue());
+
+    _state = Idle;
+    scheduleNextRequest(_interFrameDelayMilliseconds);
 }

@@ -44,10 +44,13 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
     {
         case ConnectionType::Tcp:
         {
-            if(cd.ModbusParams.Mode == TransmissionMode::IP)
+            if(cd.ModbusParams.Mode == TransmissionMode::IP) {
                 _modbusClient = new ModbusTcpClient(this);
-            else
+            }
+            else {
                 _modbusClient = new ModbusRtuTcpClient(this);
+                qobject_cast<ModbusRtuTcpClient*>(_modbusClient)->setInterFrameDelay(cd.ModbusParams.InterFrameDelay);
+            }
 
             _modbusClient->setTimeout(cd.ModbusParams.SlaveResponseTimeOut);
             _modbusClient->setNumberOfRetries(cd.ModbusParams.NumberOfRetries);

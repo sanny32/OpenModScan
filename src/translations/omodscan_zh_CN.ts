@@ -2380,34 +2380,34 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusClient</name>
     <message>
-        <location filename="../modbusclient.cpp" line="149"/>
+        <location filename="../modbusclient.cpp" line="152"/>
         <source>Invalid Modbus Request</source>
         <translation>无效的 Modbus 请求</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="531"/>
-        <location filename="../modbusclient.cpp" line="716"/>
+        <location filename="../modbusclient.cpp" line="534"/>
+        <location filename="../modbusclient.cpp" line="719"/>
         <source>Coil Write Failure</source>
         <translation>线圈写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="535"/>
-        <location filename="../modbusclient.cpp" line="721"/>
+        <location filename="../modbusclient.cpp" line="538"/>
+        <location filename="../modbusclient.cpp" line="724"/>
         <source>Register Write Failure</source>
         <translation>寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="573"/>
+        <location filename="../modbusclient.cpp" line="576"/>
         <source>Mask Write Register Failure</source>
         <translation>寄存器写入掩码失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="725"/>
+        <location filename="../modbusclient.cpp" line="728"/>
         <source>Mask Register Write Failure</source>
         <translation>掩码寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="743"/>
+        <location filename="../modbusclient.cpp" line="746"/>
         <source>Connection error. %1</source>
         <translation>连接错误：%1</translation>
     </message>
@@ -2918,7 +2918,7 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusRtuTcpClient</name>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="45"/>
+        <location filename="../modbusrtutcpclient.cpp" line="46"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation type="unfinished">指定的TCP通信连接设置无效。</translation>
     </message>
@@ -3055,13 +3055,13 @@ Byte Order: %2</source>
     <name>QModbusClient</name>
     <message>
         <location filename="../modbusclientprivate.cpp" line="207"/>
-        <location filename="../modbusrtutcpclient.cpp" line="123"/>
+        <location filename="../modbusrtutcpclient.cpp" line="142"/>
         <source>Device not connected.</source>
         <translation>设备未连接。</translation>
     </message>
     <message>
         <location filename="../modbusclientprivate.cpp" line="213"/>
-        <location filename="../modbusrtutcpclient.cpp" line="128"/>
+        <location filename="../modbusrtutcpclient.cpp" line="147"/>
         <source>Invalid Modbus request.</source>
         <translation>无效的Modbus请求。</translation>
     </message>
@@ -3082,73 +3082,76 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="146"/>
-        <location filename="../modbusrtutcpclient.cpp" line="230"/>
         <source>TCP socket error (%1).</source>
         <translation>TCP 套接字错误(%1)。</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="272"/>
-        <location filename="../modbusrtuclient.cpp" line="564"/>
+        <location filename="../modbusrtuclient.cpp" line="428"/>
         <source>Request timeout.</source>
         <translation>请求超时。</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="299"/>
-        <location filename="../modbusrtuclient.cpp" line="343"/>
-        <location filename="../modbusrtutcpclient.cpp" line="262"/>
+        <location filename="../modbusrtuclient.cpp" line="207"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>由于连接关闭，回复已中止。</translation>
     </message>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="145"/>
+        <location filename="../modbusrtutcpclient.cpp" line="229"/>
         <source>Could not write request to socket.</source>
         <translation type="unfinished">无法将请求写入套接字。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtutcpclient.cpp" line="190"/>
+        <source>(RTU over TCP client) socket error (%1).</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="613"/>
+        <location filename="../modbusrtuclient.cpp" line="477"/>
         <source>Referenced serial device does not exist.</source>
         <translation>引用的串行设备不存在。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="617"/>
+        <location filename="../modbusrtuclient.cpp" line="481"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由于权限问题，无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="622"/>
+        <location filename="../modbusrtuclient.cpp" line="486"/>
         <source>Cannot open serial device.</source>
         <translation>无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="626"/>
+        <location filename="../modbusrtuclient.cpp" line="490"/>
         <source>Write error.</source>
         <translation>写入错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="629"/>
+        <location filename="../modbusrtuclient.cpp" line="493"/>
         <source>Read error.</source>
         <translation>读取错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="632"/>
+        <location filename="../modbusrtuclient.cpp" line="496"/>
         <source>Resource error.</source>
         <translation>资源错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="635"/>
+        <location filename="../modbusrtuclient.cpp" line="499"/>
         <source>Device operation is not supported error.</source>
         <translation>设备操作不受支持的错误信息。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="639"/>
+        <location filename="../modbusrtuclient.cpp" line="503"/>
         <source>Timeout error.</source>
         <translation>超时错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="642"/>
+        <location filename="../modbusrtuclient.cpp" line="506"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>

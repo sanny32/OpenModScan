@@ -817,6 +817,7 @@ void FormModSca::on_modbusConnected(const ConnectionDetails&)
     const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
     ui->outputWidget->setProtocol(protocol);
     ui->outputWidget->clearLogView();
+    ui->statisticWidget->resetCtrs();
 
     setPollState(PollState::Running);
 }

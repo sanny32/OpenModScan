@@ -301,95 +301,99 @@ bool ModbusRtuTcpClient::canMatchRequestAndResponse(const QModbusResponse &respo
 ///
 void ModbusRtuTcpClient::on_readyRead()
 {
-    _responseBuffer += _socket->readAll();
+    _responseBuffer += _socket->read(_socket->bytesAvailable());
     qCDebug(QT_MODBUS_LOW) << "(RTU over TCP client) Response buffer:" << _responseBuffer.toHex();
 
-    if (_responseBuffer.size() < 2) {
-        qCDebug(QT_MODBUS) << "(RTU over TCP client) Modbus ADU not complete";
-        return;
-    }
-
-    const QModbusSerialAdu tmpAdu(QModbusSerialAdu::Rtu, _responseBuffer);
-    int pduSizeWithoutFcode = QModbusResponse::calculateDataSize(tmpAdu.pdu());
-    if (pduSizeWithoutFcode < 0) {
-        // wait for more data
-        qCDebug(QT_MODBUS) << "(RTU over TCP client) Cannot calculate PDU size for function code:"
-                           << tmpAdu.pdu().functionCode() << ", delaying pending frame";
-        return;
-    }
-
-    // server address byte + function code byte + PDU size + 2 bytes CRC
-    int aduSize = 2 + pduSizeWithoutFcode + 2;
-    if (tmpAdu.rawSize() < aduSize) {
-        qCDebug(QT_MODBUS) << "(RTU over TCP client) Incomplete ADU received, ignoring";
-
-        if (!_queue.isEmpty() && !_queue.first().reply.isNull()) {
-            const auto msg = ModbusMessage::create(tmpAdu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
-            emit modbusResponse(_queue.first().reply->requestGroupId(), msg);
+    while (!_responseBuffer.isEmpty())
+    {
+        if (_responseBuffer.size() < 2) {
+            qCDebug(QT_MODBUS) << "(RTU over TCP client) Modbus ADU not complete";
+            return;
         }
 
-        return;
-    }
+        const QModbusSerialAdu tmpAdu(QModbusSerialAdu::Rtu, _responseBuffer);
+        int pduSizeWithoutFcode = QModbusResponse::calculateDataSize(tmpAdu.pdu());
+        if (pduSizeWithoutFcode < 0) {
+            // wait for more data
+            qCDebug(QT_MODBUS) << "(RTU over TCP client) Cannot calculate PDU size for function code:"
+                               << tmpAdu.pdu().functionCode() << ", delaying pending frame";
+            return;
+        }
 
-    if (_queue.isEmpty())
-        return;
-    auto &current = _queue.first();
+        // server address byte + function code byte + PDU size + 2 bytes CRC
+        int aduSize = 2 + pduSizeWithoutFcode + 2;
+        if (tmpAdu.rawSize() < aduSize) {
+            qCDebug(QT_MODBUS) << "(RTU over TCP client) Incomplete ADU received, ignoring";
 
-    // Special case for Diagnostics:ReturnQueryData. The response has no
-    // length indicator and is just a simple echo of what we have send.
-    if (tmpAdu.pdu().functionCode() == QModbusPdu::Diagnostics) {
-        const QModbusResponse response = tmpAdu.pdu();
-        if (canMatchRequestAndResponse(response, tmpAdu.serverAddress())) {
-            quint16 subCode = 0xffff;
-            response.decodeData(&subCode);
-            if (subCode == Diagnostics::ReturnQueryData) {
-                if (response.data() != current.requestPdu.data())
-                    return; // echo does not match request yet
-                aduSize = 2 + response.dataSize() + 2;
-                if (tmpAdu.rawSize() < aduSize)
-                    return; // echo matches, probably checksum missing
+            if (!_queue.isEmpty() && !_queue.first().reply.isNull()) {
+                const auto msg = ModbusMessage::create(tmpAdu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+                emit modbusResponse(_queue.first().reply->requestGroupId(), msg);
+            }
+
+            return;
+        }
+
+        if (_queue.isEmpty())
+            return;
+        auto &current = _queue.first();
+
+        // Special case for Diagnostics:ReturnQueryData. The response has no
+        // length indicator and is just a simple echo of what we have send.
+        if (tmpAdu.pdu().functionCode() == QModbusPdu::Diagnostics) {
+            const QModbusResponse response = tmpAdu.pdu();
+            if (canMatchRequestAndResponse(response, tmpAdu.serverAddress())) {
+                quint16 subCode = 0xffff;
+                response.decodeData(&subCode);
+                if (subCode == Diagnostics::ReturnQueryData) {
+                    if (response.data() != current.requestPdu.data())
+                        return; // echo does not match request yet
+                    aduSize = 2 + response.dataSize() + 2;
+                    if (tmpAdu.rawSize() < aduSize)
+                        return; // echo matches, probably checksum missing
+                }
             }
         }
-    }
 
-    const QModbusSerialAdu adu(QModbusSerialAdu::Rtu, _responseBuffer.left(aduSize));
-    _responseBuffer.remove(0, aduSize);
+        const QModbusSerialAdu adu(QModbusSerialAdu::Rtu, _responseBuffer.left(aduSize));
+        _responseBuffer.remove(0, aduSize);
 
-    qCDebug(QT_MODBUS) << "(RTU over TCP client) Received ADU:" << adu.rawData().toHex();
-    if (QT_MODBUS().isDebugEnabled() && !_responseBuffer.isEmpty())
-        qCDebug(QT_MODBUS_LOW) << "(RTU over TCP client) Pending buffer:" << _responseBuffer.toHex();
+        qCDebug(QT_MODBUS) << "(RTU over TCP client) Received ADU:" << adu.rawData().toHex();
+        if (QT_MODBUS().isDebugEnabled() && !_responseBuffer.isEmpty())
+            qCDebug(QT_MODBUS_LOW) << "(RTU over TCP client) Pending buffer:" << _responseBuffer.toHex();
 
-    // check CRC
-    if (!adu.matchingChecksum()) {
-        qCWarning(QT_MODBUS) << "(RTU over TCP client) Discarding response with wrong CRC, received:"
-                             << adu.checksum<quint16>() << ", calculated CRC:"
-                             << QModbusSerialAdu::calculateCRC(adu.data(), adu.size());
-        if (!current.reply.isNull()) {
-            current.reply->addIntermediateError(ModbusDevice::ResponseCrcError);
+        // check CRC
+        if (!adu.matchingChecksum()) {
+            qCWarning(QT_MODBUS) << "(RTU over TCP client) Discarding response with wrong CRC, received:"
+                                 << adu.checksum<quint16>() << ", calculated CRC:"
+                                 << QModbusSerialAdu::calculateCRC(adu.data(), adu.size());
+            if (!current.reply.isNull()) {
+                current.reply->addIntermediateError(ModbusDevice::ResponseCrcError);
 
-            const auto msg = ModbusMessage::create(adu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
-            emit modbusResponse(current.reply->requestGroupId(), msg);
+                const auto msg = ModbusMessage::create(adu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+                emit modbusResponse(current.reply->requestGroupId(), msg);
+            }
+            return;
         }
-        return;
+
+        const QModbusResponse response = adu.pdu();
+        if (!canMatchRequestAndResponse(response, adu.serverAddress())) {
+            qCWarning(QT_MODBUS) << "(RTU over TCP client) Cannot match response with open request, "
+                                    "ignoring";
+            if (!current.reply.isNull())
+                current.reply->addIntermediateError(ModbusDevice::ResponseRequestMismatch);
+            return;
+        }
+
+        _state = ProcessReply;
+        _responseTimer.stop();
+        current.m_timerId = INT_MIN;
+
+        processQueueElement(response, ModbusMessage::Rtu, adu.serverAddress(), _queue.dequeue());
     }
-
-    const QModbusResponse response = adu.pdu();
-    if (!canMatchRequestAndResponse(response, adu.serverAddress())) {
-        qCWarning(QT_MODBUS) << "(RTU over TCP client) Cannot match response with open request, "
-                                "ignoring";
-        if (!current.reply.isNull())
-            current.reply->addIntermediateError(ModbusDevice::ResponseRequestMismatch);
-        return;
-    }
-
-    _state = ProcessReply;
-    _responseTimer.stop();
-    current.m_timerId = INT_MIN;
-
-    processQueueElement(response, ModbusMessage::Rtu, adu.serverAddress(), _queue.dequeue());
 
     _state = Idle;
     scheduleNextRequest(_interFrameDelayMilliseconds);
+
 }
 
 ///

@@ -1,5 +1,7 @@
 #include <QUrl>
+#include <QtMath>
 #include <QDataStream>
+#include <QHostAddress>
 #include <QModbusClient>
 #include "qmodbusserialadu.h"
 #include "modbusrtutcpclient.h"

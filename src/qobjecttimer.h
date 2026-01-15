@@ -2,6 +2,7 @@
 #define QOBJECTTIMER_H
 
 #include <QObject>
+#include <QBasicTimer>
 #include <QTimerEvent>
 
 ///

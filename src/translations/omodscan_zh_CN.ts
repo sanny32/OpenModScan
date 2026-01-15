@@ -1786,7 +1786,7 @@ Valid Slave Responses: %2</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="830"/>
+        <location filename="../formmodsca.cpp" line="831"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>

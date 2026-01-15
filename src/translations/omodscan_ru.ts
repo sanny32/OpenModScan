@@ -1774,7 +1774,7 @@ Valid Slave Responses: %2</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="830"/>
+        <location filename="../formmodsca.cpp" line="831"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>

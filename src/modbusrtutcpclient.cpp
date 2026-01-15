@@ -173,16 +173,6 @@ void ModbusRtuTcpClient::setTurnaroundDelay(int turnaroundDelay)
 ModbusReply* ModbusRtuTcpClient::enqueueRequest(int requestGroupId, const QModbusRequest &request, int serverAddress,
                                                 const QModbusDataUnit &unit, ModbusReply::ReplyType type)
 {
-    if (!isOpen() || state() != ModbusDevice::ConnectedState) {
-        setError(QModbusClient::tr("Device not connected."), ModbusDevice::ConnectionError);
-        return nullptr;
-    }
-
-    if (!request.isValid()) {
-        setError(QModbusClient::tr("Invalid Modbus request."), ModbusDevice::ProtocolError);
-        return nullptr;
-    }
-
     auto reply = new ModbusReply(serverAddress == 0 ? ModbusReply::Broadcast : type, serverAddress, this);
     reply->setRequestGroupId(requestGroupId);
 
@@ -271,7 +261,9 @@ void ModbusRtuTcpClient::processQueue()
         current.bytesWritten = 0;
         current.numberOfRetries--;
 
-        if (_socket->write(current.adu) != current.adu.size()) {
+        const auto writtenBytes = _socket->write(current.adu);
+        if (writtenBytes == -1 || writtenBytes < current.adu.size()) {
+            qCDebug(QT_MODBUS) << "(TCP client) Cannot write request to socket.";
             setError(QModbusClient::tr("Could not write request to socket."), ModbusDevice::WriteError);
             return;
         }
@@ -310,7 +302,7 @@ void ModbusRtuTcpClient::on_readyRead()
     _responseBuffer += _socket->readAll();
     qCDebug(QT_MODBUS_LOW) << "(RTU over TCP client) Response buffer:" << _responseBuffer.toHex();
 
-    if (_responseBuffer.size() < 5) {
+    if (_responseBuffer.size() < 2) {
         qCDebug(QT_MODBUS) << "(RTU over TCP client) Modbus ADU not complete";
         return;
     }

@@ -3054,13 +3054,11 @@ Byte Order: %2</source>
     <name>QModbusClient</name>
     <message>
         <location filename="../modbusclientprivate.cpp" line="207"/>
-        <location filename="../modbusrtutcpclient.cpp" line="177"/>
         <source>Device not connected.</source>
         <translation>設備未連接。</translation>
     </message>
     <message>
         <location filename="../modbusclientprivate.cpp" line="213"/>
-        <location filename="../modbusrtutcpclient.cpp" line="182"/>
         <source>Invalid Modbus request.</source>
         <translation>無效的Modbus請求。</translation>
     </message>
@@ -3087,7 +3085,7 @@ Byte Order: %2</source>
     <message>
         <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="447"/>
+        <location filename="../modbusrtutcpclient.cpp" line="440"/>
         <source>Request timeout.</source>
         <translation>請求超時。</translation>
     </message>
@@ -3099,12 +3097,12 @@ Byte Order: %2</source>
         <translation>由於連線關閉，回覆已中止。</translation>
     </message>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="275"/>
+        <location filename="../modbusrtutcpclient.cpp" line="267"/>
         <source>Could not write request to socket.</source>
         <translation type="unfinished">無法將請求寫入套接字。</translation>
     </message>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="225"/>
+        <location filename="../modbusrtutcpclient.cpp" line="215"/>
         <source>(RTU over TCP client) socket error (%1).</source>
         <translation type="unfinished"></translation>
     </message>

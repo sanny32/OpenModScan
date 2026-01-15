@@ -2905,7 +2905,7 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusRtuTcpClient</name>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="49"/>
+        <location filename="../modbusrtutcpclient.cpp" line="51"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>Указаны неверные параметры TCP соединения.</translation>
     </message>
@@ -3067,26 +3067,26 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="146"/>
-        <location filename="../modbusrtutcpclient.cpp" line="215"/>
+        <location filename="../modbusrtutcpclient.cpp" line="217"/>
         <source>TCP socket error (%1).</source>
         <translation>Ошибка сокета TCP (%1).</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="439"/>
+        <location filename="../modbusrtutcpclient.cpp" line="441"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="299"/>
         <location filename="../modbusrtuclient.cpp" line="207"/>
-        <location filename="../modbusrtutcpclient.cpp" line="87"/>
+        <location filename="../modbusrtutcpclient.cpp" line="89"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>Ответ прерван из-за закрытия соединения.</translation>
     </message>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="267"/>
+        <location filename="../modbusrtutcpclient.cpp" line="269"/>
         <source>Could not write request to socket.</source>
         <translation>Не удалось записать запрос в сокет.</translation>
     </message>

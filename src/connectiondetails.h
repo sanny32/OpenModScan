@@ -345,7 +345,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, SerialConnectionPara
 ///
 struct ModbusProtocolSelections
 {
-    TransmissionMode Mode = TransmissionMode::RTU;
+    TransmissionMode Mode = TransmissionMode::IP;
     quint32 SlaveResponseTimeOut = 250;
     quint32 NumberOfRetries = 3;
     quint32 InterFrameDelay = 0;
@@ -353,7 +353,7 @@ struct ModbusProtocolSelections
 
     void normalize()
     {
-        Mode = qBound(TransmissionMode::ASCII, Mode, TransmissionMode::RTU);
+        Mode = qBound(TransmissionMode::ASCII, Mode, TransmissionMode::IP);
         SlaveResponseTimeOut = qBound(10U, SlaveResponseTimeOut, 300000U);
         NumberOfRetries = qBound(0U, NumberOfRetries, 10U);
         InterFrameDelay = qBound(0U, InterFrameDelay, 300000U);

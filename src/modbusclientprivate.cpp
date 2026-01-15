@@ -331,7 +331,6 @@ void ModbusClientPrivate::processQueueElement(const QModbusResponse& pdu, Modbus
     if (element.reply.isNull())
         return;
 
-    if(pdu.isValid())
     {
         const quint16 transactionId = element.reply->transactionId();
         const auto msg = ModbusMessage::create(pdu, protocolType, serverAddress, transactionId, QDateTime::currentDateTime(), false);

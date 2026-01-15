@@ -159,8 +159,14 @@ void MainStatusBar::updateConnectionInfo(const ConnectionDetails& cd, bool conne
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
+        {
+            const auto tmpl = cd.ModbusParams.Mode == TransmissionMode::IP ?
+                                      tr("Remote TCP/IP Server %1:%2  ") :
+                                      tr("Modbus RTU over TCP/IP Gateway %1:%2  ");
+
             info = connecting ? QString(tr("Connecting to %1:%2...  ").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort))) :
-                                QString(tr("Remote TCP/IP Server %1:%2  ")).arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
+                                QString(tmpl).arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
+        }
         break;
         case ConnectionType::Serial:
             info = connecting ? QString(tr("Connecting to %1...  ").arg(cd.SerialParams.PortName)) :

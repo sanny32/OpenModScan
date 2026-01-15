@@ -1,20 +1,21 @@
-#ifndef MODBUSRTUCLIENT_H
-#define MODBUSRTUCLIENT_H
+#ifndef MODBUSRTUTCPCLIENT_H
+#define MODBUSRTUTCPCLIENT_H
 
 #include <QQueue>
-#include <QSerialPort>
+#include <QTcpSocket>
 #include "qobjecttimer.h"
 #include "modbusclientprivate.h"
 
 ///
-/// \brief The ModbusRtuClient class
+/// \brief The ModbusRtuTcpClient class
+/// This class implements Modbus RTU over TCP.
 ///
-class ModbusRtuClient : public ModbusClientPrivate
+class ModbusRtuTcpClient : public ModbusClientPrivate
 {
     Q_OBJECT
 public:
-    explicit ModbusRtuClient(QObject *parent = nullptr);
-    ~ModbusRtuClient();
+    explicit ModbusRtuTcpClient(QObject *parent = nullptr);
+    ~ModbusRtuTcpClient();
 
     int interFrameDelay() const;
     void setInterFrameDelay(int microseconds);
@@ -25,26 +26,25 @@ public:
     QVariant connectionParameter(ModbusDevice::ConnectionParameter parameter) const override;
     void setConnectionParameter(ModbusDevice::ConnectionParameter parameter, const QVariant &value) override;
 
-    QIODevice *device() const override { return _serialPort; }
-
+    QIODevice *device() const override { return _socket; }
     bool isOpen() const override;
 
 protected:
     bool open() override;
     void close() override;
-
-    ModbusReply* enqueueRequest(int requestGroupId, const QModbusRequest &request, int serverAddress, const QModbusDataUnit &unit, ModbusReply::ReplyType type) override;
+    ModbusReply* enqueueRequest(int requestGroupId, const QModbusRequest &request, int serverAddress,
+                                const QModbusDataUnit &unit, ModbusReply::ReplyType type) override;
 
 private slots:
+    void on_connected();
+    void on_disconnected();
+    void on_errorOccurred(QAbstractSocket::SocketError error);
+    void on_stateChanged(QAbstractSocket::SocketState state);
     void on_readyRead();
-    void on_aboutToClose();
-    void on_responseTimeout(int timerId);
     void on_bytesWritten(qint64 bytes);
-    void on_error(QSerialPort::SerialPortError error);
+    void on_responseTimeout(int timerId);
 
 private:
-    void setupEnvironment();
-    void calculateInterFrameDelay();
     void scheduleNextRequest(int delay);
     void processQueue();
     bool canMatchRequestAndResponse(const QModbusResponse &response, int sendingServer) const;
@@ -57,14 +57,11 @@ private:
         ProcessReply
     } _state = Idle;
 
-    QString _comPort;
-    QSerialPort::DataBits _dataBits = QSerialPort::Data8;
-    QSerialPort::Parity _parity = QSerialPort::EvenParity;
-    QSerialPort::StopBits _stopBits = QSerialPort::OneStop;
-    QSerialPort::BaudRate _baudRate = QSerialPort::Baud19200;
+    int _networkPort = 502;
+    QString _networkAddress = QStringLiteral("127.0.0.1");
 
-    QSerialPort* _serialPort = nullptr;
     QObjectTimer _responseTimer;
+    QTcpSocket *_socket = nullptr;
     QByteArray _responseBuffer;
     QQueue<QueueElement> _queue;
 
@@ -74,4 +71,4 @@ private:
     int _turnaroundDelay = 100; // Recommended value is between 100 and 200 msec.
 };
 
-#endif // MODBUSRTUCLIENT_H
+#endif // MODBUSRTUTCPCLIENT_H

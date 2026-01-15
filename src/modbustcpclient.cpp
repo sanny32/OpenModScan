@@ -9,6 +9,7 @@
 /// \param parent
 ///
 ModbusTcpClient::ModbusTcpClient(QObject *parent)
+    : ModbusClientPrivate{parent}
 {
     _socket = new QTcpSocket(this);
     QObject::connect(_socket, &QAbstractSocket::connected, this, &ModbusTcpClient::on_connected);

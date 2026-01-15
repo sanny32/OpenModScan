@@ -223,7 +223,7 @@ inline QSettings& operator >>(QSettings& in, ByteOrder& order)
 enum class ConnectionType
 {
     Tcp = 0,
-    Serial
+    Serial,
 };
 Q_DECLARE_METATYPE(ConnectionType);
 DECLARE_ENUM_STRINGS(ConnectionType,
@@ -238,12 +238,14 @@ DECLARE_ENUM_STRINGS(ConnectionType,
 enum class TransmissionMode
 {
     ASCII = 0,
-    RTU
+    RTU,
+    IP
 };
 Q_DECLARE_METATYPE(TransmissionMode);
 DECLARE_ENUM_STRINGS(TransmissionMode,
                      {   TransmissionMode::ASCII, "ASCII"  },
-                     {   TransmissionMode::RTU,   "RTU"    }
+                     {   TransmissionMode::RTU,   "RTU"    },
+                     {   TransmissionMode::IP,    "IP"    }
 )
 
 

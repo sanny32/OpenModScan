@@ -30,13 +30,20 @@ DialogConnectionDetails::DialogConnectionDetails(ConnectionDetails& cd, QWidget 
     ui->comboBoxDTRControl->setCurrentValue(cd.SerialParams.SetDTR);
     ui->comboBoxRTSControl->setCurrentValue(cd.SerialParams.SetRTS);
 
+    ui->comboBoxConnectUsing->setItemData(0,  QVariant::fromValue(TransmissionMode::IP));
+    ui->comboBoxConnectUsing->setItemData(1,  QVariant::fromValue(TransmissionMode::RTU));
+    ui->comboBoxConnectUsing->setItemData(2,  QVariant::fromValue(TransmissionMode::RTU));
+
     if(cd.Type == ConnectionType::Tcp)
     {
-        ui->comboBoxConnectUsing->setCurrentIndex(0);
+        if(cd.ModbusParams.Mode == TransmissionMode::IP)
+            ui->comboBoxConnectUsing->setCurrentIndex(0);
+        else if(cd.ModbusParams.Mode == TransmissionMode::RTU)
+            ui->comboBoxConnectUsing->setCurrentIndex(1);
     }
     else
     {
-        ui->comboBoxConnectUsing->setCurrentIndex(1);
+        ui->comboBoxConnectUsing->setCurrentIndex(2);
     }
 
     ui->checkBoxExcludeVirtualPorts->setChecked(cd.ExcludeVirtualPorts);
@@ -58,6 +65,8 @@ void DialogConnectionDetails::accept()
 {
     _connectionDetails.Type = _connType;
     _connectionDetails.ExcludeVirtualPorts = ui->checkBoxExcludeVirtualPorts->isChecked();
+    _connectionDetails.ModbusParams.Mode = ui->comboBoxConnectUsing->currentData().value<TransmissionMode>();
+
     if(_connectionDetails.Type == ConnectionType::Tcp)
     {
         if(!QHostAddress(ui->comboBoxIPAddress->currentText()).isNull())
@@ -141,8 +150,8 @@ void DialogConnectionDetails::on_pushButtonProtocolSelections_clicked()
 /// \brief DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged
 ///
 void DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged(int index)
-{   
-    _connType = (index == 0) ? ConnectionType::Tcp : ConnectionType::Serial;
+{
+    _connType = (index < 2) ? ConnectionType::Tcp : ConnectionType::Serial;
     ui->comboBoxIPAddress->setEnabled(_connType == ConnectionType::Tcp);
     ui->lineEditServicePort->setEnabled(_connType == ConnectionType::Tcp);
     ui->comboBoxBaudRate->setEnabled(_connType == ConnectionType::Serial);
@@ -155,7 +164,7 @@ void DialogConnectionDetails::on_comboBoxConnectUsing_currentIndexChanged(int in
     const auto fc = ui->comboBoxFlowControl->currentFlowControl();
     ui->comboBoxRTSControl->setEnabled(_connType == ConnectionType::Serial && fc != QSerialPort::HardwareControl);
 
-    ui->connectionDetails->setCurrentIndex(index);
+    ui->connectionDetails->setCurrentIndex(index < 2 ? 0 : 1);
     validate();
 }
 

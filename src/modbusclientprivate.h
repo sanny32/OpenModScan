@@ -34,6 +34,7 @@ enum SubFunctionCode {
 };
 }
 
+
 ///
 /// \brief The ModbusClientPrivate class
 ///

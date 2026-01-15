@@ -583,7 +583,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
         <source>Modbus RTU over TCP/IP Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлюз Modbus RTU over TCP/IP</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="242"/>
@@ -1831,7 +1831,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="165"/>
         <source>Modbus RTU over TCP/IP Gateway %1:%2  </source>
-        <translation type="unfinished"></translation>
+        <translation>Шлюз Modbus RTU over TCP/IP %1:%2  </translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="167"/>
@@ -2907,7 +2907,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../modbusrtutcpclient.cpp" line="49"/>
         <source>Invalid connection settings for TCP communication specified.</source>
-        <translation type="unfinished">Указаны неверные параметры TCP соединения.</translation>
+        <translation>Указаны неверные параметры TCP соединения.</translation>
     </message>
 </context>
 <context>
@@ -3067,13 +3067,14 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="146"/>
+        <location filename="../modbusrtutcpclient.cpp" line="215"/>
         <source>TCP socket error (%1).</source>
         <translation>Ошибка сокета TCP (%1).</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="440"/>
+        <location filename="../modbusrtutcpclient.cpp" line="439"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
@@ -3087,12 +3088,7 @@ Byte Order: %2</source>
     <message>
         <location filename="../modbusrtutcpclient.cpp" line="267"/>
         <source>Could not write request to socket.</source>
-        <translation type="unfinished">Не удалось записать запрос в сокет.</translation>
-    </message>
-    <message>
-        <location filename="../modbusrtutcpclient.cpp" line="215"/>
-        <source>(RTU over TCP client) socket error (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось записать запрос в сокет.</translation>
     </message>
 </context>
 <context>

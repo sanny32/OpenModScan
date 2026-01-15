@@ -583,7 +583,7 @@
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
         <source>Modbus RTU over TCP/IP Gateway</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus RTU over TCP/IP 網關</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="242"/>
@@ -1842,7 +1842,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="165"/>
         <source>Modbus RTU over TCP/IP Gateway %1:%2  </source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus RTU over TCP/IP 網關 %1:%2  </translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="167"/>
@@ -2919,7 +2919,7 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../modbusrtutcpclient.cpp" line="49"/>
         <source>Invalid connection settings for TCP communication specified.</source>
-        <translation type="unfinished">指定的TCP通訊連線設定無效。</translation>
+        <translation>指定的TCP通訊連線設定無效。</translation>
     </message>
 </context>
 <context>
@@ -3079,13 +3079,14 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="146"/>
+        <location filename="../modbusrtutcpclient.cpp" line="215"/>
         <source>TCP socket error (%1).</source>
         <translation>TCP 套接字錯誤（%1）。</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="440"/>
+        <location filename="../modbusrtutcpclient.cpp" line="439"/>
         <source>Request timeout.</source>
         <translation>請求超時。</translation>
     </message>
@@ -3100,11 +3101,6 @@ Byte Order: %2</source>
         <location filename="../modbusrtutcpclient.cpp" line="267"/>
         <source>Could not write request to socket.</source>
         <translation type="unfinished">無法將請求寫入套接字。</translation>
-    </message>
-    <message>
-        <location filename="../modbusrtutcpclient.cpp" line="215"/>
-        <source>(RTU over TCP client) socket error (%1).</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

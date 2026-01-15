@@ -212,7 +212,7 @@ void ModbusRtuTcpClient::on_errorOccurred(QAbstractSocket::SocketError)
     if (_socket->state() == QAbstractSocket::UnconnectedState) {
         setState(ModbusDevice::UnconnectedState);
     }
-    setError(QModbusClient::tr("(RTU over TCP client) socket error (%1).").arg(_socket->errorString()), ModbusDevice::ConnectionError);
+    setError(QModbusClient::tr("TCP socket error (%1).").arg(_socket->errorString()), ModbusDevice::ConnectionError);
 }
 
 ///

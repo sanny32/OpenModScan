@@ -3074,7 +3074,7 @@ Byte Order: %2</source>
     <message>
         <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="441"/>
+        <location filename="../modbusrtutcpclient.cpp" line="445"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>

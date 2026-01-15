@@ -15,7 +15,7 @@ ModbusRtuClient::ModbusRtuClient(QObject *parent)
 {
     _serialPort = new QSerialPort(this);
 
-    QObject::connect(&_responseTimer, &Timer::timeout, this, &ModbusRtuClient::on_responseTimeout);
+    QObject::connect(&_responseTimer, &QObjectTimer::timeout, this, &ModbusRtuClient::on_responseTimeout);
     QObject::connect(_serialPort, &QSerialPort::readyRead, this, &ModbusRtuClient::on_readyRead);
     QObject::connect(_serialPort, &QSerialPort::errorOccurred, this, &ModbusRtuClient::on_error);
     QObject::connect(_serialPort, &QSerialPort::aboutToClose, this, &ModbusRtuClient::on_aboutToClose);

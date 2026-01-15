@@ -13,10 +13,13 @@ ModbusRtuTcpClient::ModbusRtuTcpClient(QObject *parent)
     : ModbusClientPrivate(parent)
 {
     _socket = new QTcpSocket(this);
+    connect(&_responseTimer, &QObjectTimer::timeout, this, &ModbusRtuTcpClient::on_responseTimeout);
     connect(_socket, &QAbstractSocket::connected, this, &ModbusRtuTcpClient::on_connected);
     connect(_socket, &QAbstractSocket::disconnected, this, &ModbusRtuTcpClient::on_disconnected);
     connect(_socket, &QAbstractSocket::errorOccurred, this, &ModbusRtuTcpClient::on_errorOccurred);
+    connect(_socket, &QAbstractSocket::stateChanged, this, &ModbusRtuTcpClient::on_stateChanged);
     connect(_socket, &QAbstractSocket::readyRead, this, &ModbusRtuTcpClient::on_readyRead);
+    connect(_socket, &QAbstractSocket::bytesWritten, this, &ModbusRtuTcpClient::on_bytesWritten);
 }
 
 ///
@@ -24,7 +27,7 @@ ModbusRtuTcpClient::ModbusRtuTcpClient(QObject *parent)
 ///
 ModbusRtuTcpClient::~ModbusRtuTcpClient()
 {
-    close();
+    ModbusRtuTcpClient::close();
 }
 
 ///
@@ -74,6 +77,20 @@ void ModbusRtuTcpClient::close()
         return;
 
     _socket->disconnectFromHost();
+
+    int numberOfAborts = 0;
+    while (!_queue.isEmpty()) {
+        // Finish each open reply and forget them
+        ModbusClientPrivate::QueueElement elem = _queue.dequeue();
+        if (!elem.reply.isNull()) {
+            elem.reply->setError(ModbusDevice::ReplyAbortedError,
+                                 QModbusClient::tr("Reply aborted due to connection closure."));
+            numberOfAborts++;
+        }
+    }
+
+    if (numberOfAborts > 0)
+        qCDebug(QT_MODBUS_LOW) << "(RTU over TCP client) Aborted replies:" << numberOfAborts;
 }
 
 ///
@@ -124,6 +141,24 @@ int ModbusRtuTcpClient::interFrameDelay() const
 void ModbusRtuTcpClient::setInterFrameDelay(int microseconds)
 {
     _interFrameDelayMilliseconds = qCeil(qreal(microseconds) / 1000.);
+}
+
+///
+/// \brief ModbusRtuTcpClient::turnaroundDelay
+/// \return
+///
+int ModbusRtuTcpClient::turnaroundDelay() const
+{
+    return _turnaroundDelay;
+}
+
+///
+/// \brief ModbusRtuTcpClient::setTurnaroundDelay
+/// \param turnaroundDelay
+///
+void ModbusRtuTcpClient::setTurnaroundDelay(int turnaroundDelay)
+{
+    _turnaroundDelay = turnaroundDelay;
 }
 
 ///
@@ -188,6 +223,17 @@ void ModbusRtuTcpClient::on_errorOccurred(QAbstractSocket::SocketError)
         setState(ModbusDevice::UnconnectedState);
     }
     setError(QModbusClient::tr("(RTU over TCP client) socket error (%1).").arg(_socket->errorString()), ModbusDevice::ConnectionError);
+}
+
+///
+/// \brief ModbusRtuTcpClient::on_stateChanged
+/// \param state
+///
+void ModbusRtuTcpClient::on_stateChanged(QAbstractSocket::SocketState state)
+{
+    if(state == QAbstractSocket::ClosingState) {
+        _responseTimer.stop();
+    }
 }
 
 ///
@@ -347,6 +393,60 @@ void ModbusRtuTcpClient::on_readyRead()
     current.m_timerId = INT_MIN;
 
     processQueueElement(response, ModbusMessage::Rtu, adu.serverAddress(), _queue.dequeue());
+
+    _state = Idle;
+    scheduleNextRequest(_interFrameDelayMilliseconds);
+}
+
+///
+/// \brief ModbusRtuTcpClient::on_bytesWritten
+/// \param bytes
+///
+void ModbusRtuTcpClient::on_bytesWritten(qint64 bytes)
+{
+    if (_queue.isEmpty())
+        return;
+    auto &current = _queue.first();
+
+    current.bytesWritten += bytes;
+    if (current.bytesWritten != current.adu.size())
+        return;
+
+    qCDebug(QT_MODBUS) << "(RTU over TCP client) Send successful:" << current.requestPdu;
+
+    if (!current.reply.isNull() && current.reply->type() == ModbusReply::Broadcast) {
+        _state = ProcessReply;
+        const int serverAddress = current.reply->serverAddress();
+        processQueueElement({}, ModbusMessage::Rtu, serverAddress, _queue.dequeue());
+        _state = Idle;
+        scheduleNextRequest(_turnaroundDelay);
+    } else {
+        current.m_timerId = _responseTimer.start(timeout());
+    }
+}
+
+///
+/// \brief ModbusRtuTcpClient::on_responseTimeout
+///
+void ModbusRtuTcpClient::on_responseTimeout(int timerId)
+{
+    _responseTimer.stop();
+    if (_state != State::WaitingForReplay || _queue.isEmpty())
+        return;
+    const auto &current = _queue.first();
+
+    if (current.m_timerId != timerId)
+        return;
+
+    qCDebug(QT_MODBUS) << "(RTU over TCP client) Receive timeout:" << current.requestPdu;
+
+    if (current.numberOfRetries <= 0) {
+        auto item = _queue.dequeue();
+        if (item.reply) {
+            item.reply->setError(ModbusDevice::TimeoutError,
+                                 QModbusClient::tr("Request timeout."));
+        }
+    }
 
     _state = Idle;
     scheduleNextRequest(_interFrameDelayMilliseconds);

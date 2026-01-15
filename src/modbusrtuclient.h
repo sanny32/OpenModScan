@@ -2,42 +2,9 @@
 #define MODBUSRTUCLIENT_H
 
 #include <QQueue>
-#include <QTimerEvent>
 #include <QSerialPort>
+#include "qobjecttimer.h"
 #include "modbusclientprivate.h"
-
-///
-/// \brief The Timer class
-///
-class Timer : public QObject
-{
-    Q_OBJECT
-
-public:
-    Timer() = default;
-    int start(int msec)
-    {
-        m_timer = QBasicTimer();
-        m_timer.start(msec, Qt::PreciseTimer, this);
-        return m_timer.timerId();
-    }
-    void stop() { m_timer.stop(); }
-    bool isActive() const { return m_timer.isActive(); }
-
-signals:
-    void timeout(int timerId);
-
-private:
-    void timerEvent(QTimerEvent *event) override
-    {
-        const auto id = m_timer.timerId();
-        if (event->timerId() == id)
-            emit timeout(id);
-    }
-
-private:
-    QBasicTimer m_timer;
-};
 
 ///
 /// \brief The ModbusRtuClient class
@@ -97,7 +64,7 @@ private:
     QSerialPort::BaudRate _baudRate = QSerialPort::Baud19200;
 
     QSerialPort* _serialPort = nullptr;
-    Timer _responseTimer;
+    QObjectTimer _responseTimer;
     QByteArray _responseBuffer;
     QQueue<QueueElement> _queue;
 

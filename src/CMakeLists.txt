@@ -251,6 +251,7 @@ set(HEADERS
     qmodbusadurtu.h
     qmodbusadutcp.h
     qmodbusserialadu.h
+    qobjecttimer.h
     qrange.h
     quintvalidator.h
     recentfileactionlist.h

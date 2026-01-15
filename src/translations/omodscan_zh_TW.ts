@@ -2917,7 +2917,7 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusRtuTcpClient</name>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="46"/>
+        <location filename="../modbusrtutcpclient.cpp" line="49"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation type="unfinished">指定的TCP通訊連線設定無效。</translation>
     </message>
@@ -3054,28 +3054,28 @@ Byte Order: %2</source>
     <name>QModbusClient</name>
     <message>
         <location filename="../modbusclientprivate.cpp" line="207"/>
-        <location filename="../modbusrtutcpclient.cpp" line="142"/>
+        <location filename="../modbusrtutcpclient.cpp" line="177"/>
         <source>Device not connected.</source>
         <translation>設備未連接。</translation>
     </message>
     <message>
         <location filename="../modbusclientprivate.cpp" line="213"/>
-        <location filename="../modbusrtutcpclient.cpp" line="147"/>
+        <location filename="../modbusrtutcpclient.cpp" line="182"/>
         <source>Invalid Modbus request.</source>
         <translation>無效的Modbus請求。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="345"/>
+        <location filename="../modbusclientprivate.cpp" line="344"/>
         <source>An invalid server address was received.</source>
         <translation>收到無效的伺服器位址。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="351"/>
+        <location filename="../modbusclientprivate.cpp" line="350"/>
         <source>Modbus Exception Response.</source>
         <translation>Modbus異常回應。</translation>
     </message>
     <message>
-        <location filename="../modbusclientprivate.cpp" line="363"/>
+        <location filename="../modbusclientprivate.cpp" line="362"/>
         <source>An invalid response has been received.</source>
         <translation>收到無效響應。</translation>
     </message>
@@ -3087,22 +3087,24 @@ Byte Order: %2</source>
     <message>
         <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
+        <location filename="../modbusrtutcpclient.cpp" line="447"/>
         <source>Request timeout.</source>
         <translation>請求超時。</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="299"/>
         <location filename="../modbusrtuclient.cpp" line="207"/>
+        <location filename="../modbusrtutcpclient.cpp" line="87"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>由於連線關閉，回覆已中止。</translation>
     </message>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="229"/>
+        <location filename="../modbusrtutcpclient.cpp" line="275"/>
         <source>Could not write request to socket.</source>
         <translation type="unfinished">無法將請求寫入套接字。</translation>
     </message>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="190"/>
+        <location filename="../modbusrtutcpclient.cpp" line="225"/>
         <source>(RTU over TCP client) socket error (%1).</source>
         <translation type="unfinished"></translation>
     </message>

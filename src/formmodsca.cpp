@@ -60,8 +60,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->comboBoxAddressBase->blockSignals(false);
 
     const auto dd = displayDefinition();
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
+    ui->outputWidget->setup(dd, protocol(), _dataSimulator->simulationMap(dd.DeviceId));
     ui->outputWidget->setFocus();
     connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSca::captureError);
     connect(ui->outputWidget, &OutputWidget::canWriteValue, this, [this] {
@@ -224,9 +223,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(false);
 
     ui->outputWidget->setStatus(tr("Data Uninitialized"));
-
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    ui->outputWidget->setup(dd, protocol, _dataSimulator->simulationMap(dd.DeviceId));
+    ui->outputWidget->setup(dd, protocol(), _dataSimulator->simulationMap(dd.DeviceId));
 
     setDisplayHexAddresses(dd.HexAddress);
 
@@ -639,6 +636,15 @@ void FormModSca::on_timeout()
 }
 
 ///
+/// \brief FormModSca::protocol
+/// \return
+///
+ModbusMessage::ProtocolType FormModSca::protocol() const
+{
+    return _modbusClient.protocolType();
+}
+
+///
 /// \brief FormModSca::beginUpdate
 ///
 void FormModSca::beginUpdate()
@@ -814,8 +820,7 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
 ///
 void FormModSca::on_modbusConnected(const ConnectionDetails&)
 {
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    ui->outputWidget->setProtocol(protocol);
+    ui->outputWidget->setProtocol(protocol());
     ui->outputWidget->clearLogView();
     ui->statisticWidget->resetCtrs();
 
@@ -837,7 +842,10 @@ void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    const auto cd = _modbusClient.connectionDetails();
+    const auto protocol = cd.Type == ConnectionType::Serial ?
+                              ModbusMessage::Rtu :(cd.ModbusParams.Mode == TransmissionMode::IP ?
+                                                                   ModbusMessage::Tcp : ModbusMessage::Rtu);
     ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
 
     beginUpdate();
@@ -849,8 +857,7 @@ void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+    ui->outputWidget->setup(displayDefinition(), protocol(), _dataSimulator->simulationMap(deviceId));
 
     beginUpdate();
 }
@@ -861,8 +868,7 @@ void FormModSca::on_lineEditLength_valueChanged(const QVariant&)
 void FormModSca::on_lineEditDeviceId_valueChanged(const QVariant&)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+    ui->outputWidget->setup(displayDefinition(), protocol(), _dataSimulator->simulationMap(deviceId));
 
     beginUpdate();
 }
@@ -886,8 +892,7 @@ void FormModSca::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 void FormModSca::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
-    ui->outputWidget->setup(displayDefinition(), protocol, _dataSimulator->simulationMap(deviceId));
+    ui->outputWidget->setup(displayDefinition(), protocol(), _dataSimulator->simulationMap(deviceId));
 
     emit pointTypeChanged(type);
 

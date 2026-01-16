@@ -23,8 +23,14 @@ public:
     bool isValid() const;
     ModbusDevice::State state() const;
 
-    ConnectionType connectionType() const {
-        return _connectionType;
+    ConnectionDetails connectionDetails() const {
+        return _connectionDetails;
+    }
+
+    ModbusMessage::ProtocolType protocolType() const {
+        return _connectionDetails.Type == ConnectionType::Serial ?
+                    ModbusMessage::Rtu :(_connectionDetails.ModbusParams.Mode == TransmissionMode::IP ?
+                            ModbusMessage::Tcp : ModbusMessage::Rtu);
     }
 
     bool isForcedModbus15And16Func() const;
@@ -60,7 +66,7 @@ private slots:
 
 private:
     ModbusClientPrivate* _modbusClient;
-    ConnectionType _connectionType;
+    ConnectionDetails _connectionDetails;
 };
 
 Q_DECLARE_METATYPE(QModbusDataUnit)

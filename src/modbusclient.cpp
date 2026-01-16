@@ -15,7 +15,6 @@
 ModbusClient::ModbusClient(QObject *parent)
     : QObject{parent}
     ,_modbusClient(nullptr)
-    ,_connectionType(ConnectionType::Serial)
 {
 }
 
@@ -81,7 +80,7 @@ void ModbusClient::connectDevice(const ConnectionDetails& cd)
 
     if(_modbusClient)
     {
-        _connectionType = cd.Type;
+        _connectionDetails = cd;
         connect(_modbusClient, &ModbusClientPrivate::stateChanged, this, &ModbusClient::on_stateChanged);
         connect(_modbusClient, &ModbusClientPrivate::errorOccurred, this, &ModbusClient::on_errorOccurred);
         connect(_modbusClient, &ModbusClientPrivate::modbusRequest, this, &ModbusClient::modbusRequest);

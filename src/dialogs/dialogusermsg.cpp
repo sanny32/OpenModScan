@@ -311,7 +311,7 @@ void DialogUserMsg::updateRequestInfo()
     request.setFunctionCode(ui->comboBoxFunction->currentFunctionCode());
     request.setData(ui->sendData->value());
 
-    const auto protocol = _modbusClient.connectionType() == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+    const auto protocol = _modbusClient.protocolType();
     auto msg = ModbusMessage::create(request, protocol, ui->lineEditSlaveAddress->value<int>(), 0, QDateTime::currentDateTime(), true);
     ui->requestInfo->setModbusMessage(msg);
 }

@@ -138,6 +138,7 @@ private slots:
     void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, QVariant value);
 
 private:
+    ModbusMessage::ProtocolType protocol() const;
     void beginUpdate();
     bool isValidReply(const ModbusReply* const reply) const;
 

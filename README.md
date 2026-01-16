@@ -40,9 +40,9 @@ Registers
   
   ![image](https://github.com/user-attachments/assets/798ed74a-c5fc-413f-a173-e223c9c7d3f3)
 
-- Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
+- Modbus Scanner (support protocols: Modbus RTU, Modbus TCP and Modbus RTU over TCP)
   
-  ![image](https://github.com/user-attachments/assets/17d5f43d-c341-455d-a9b8-67db50a35699)
+  <img width="803" height="719" alt="image" src="https://github.com/user-attachments/assets/77f14c57-2a13-42d4-a8a2-e718521a40c2" />
 
 - Modbus Message Parser
 

@@ -2,13 +2,7 @@
 #define MODBUSRTUSCANNER_H
 
 #include "modbusscanner.h"
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-#include <QModbusRtuSerialMaster>
-    typedef QModbusRtuSerialMaster QModbusRtuSerialClient;
-#else
-#include <QModbusRtuSerialClient>
-#endif
+#include "modbusrtuclient.h"
 
 class ModbusRtuScanner : public ModbusScanner
 {
@@ -20,15 +14,15 @@ public:
     void stopScan() override;
 
 private slots:
-    void on_errorOccurred(QModbusDevice::Error error);
-    void on_stateChanged(QModbusDevice::State state);
+    void on_errorOccurred(ModbusDevice::Error error);
+    void on_stateChanged(ModbusDevice::State state);
 
 private:
     void connectDevice(const ConnectionDetails& params);
     void sendRequest(int deviceId);
 
 private:
-    QModbusRtuSerialClient* _modbusClient;
+    ModbusRtuClient* _modbusClient;
 
 private:
     const ScanParams _params;

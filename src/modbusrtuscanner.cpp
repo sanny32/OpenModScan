@@ -6,11 +6,11 @@
 ///
 ModbusRtuScanner::ModbusRtuScanner(const ScanParams& params, QObject* parent)
     : ModbusScanner(parent)
-    ,_modbusClient(new QModbusRtuSerialClient(this))
+    ,_modbusClient(new ModbusRtuClient(this))
     ,_params(params)
 {
-    connect(_modbusClient, &QModbusClient::stateChanged, this, &ModbusRtuScanner::on_stateChanged);
-    connect(_modbusClient, &QModbusClient::errorOccurred, this, &ModbusRtuScanner::on_errorOccurred);
+    connect(_modbusClient, &ModbusRtuClient::stateChanged, this, &ModbusRtuScanner::on_stateChanged);
+    connect(_modbusClient, &ModbusRtuClient::errorOccurred, this, &ModbusRtuScanner::on_errorOccurred);
 
     auto serialPort = qobject_cast<QSerialPort*>(_modbusClient->device());
     QObject::connect(serialPort, &QSerialPort::readyRead, this,
@@ -44,10 +44,10 @@ void ModbusRtuScanner::stopScan()
 /// \brief ModbusRtuScanner::on_errorOccurred
 /// \param error
 ///
-void ModbusRtuScanner::on_errorOccurred(QModbusDevice::Error error)
+void ModbusRtuScanner::on_errorOccurred(ModbusDevice::Error error)
 {
-    if(error == QModbusDevice::ConnectionError &&
-        _modbusClient->state() == QModbusDevice::ConnectingState)
+    if(error == ModbusDevice::ConnectionError &&
+        _modbusClient->state() == ModbusDevice::ConnectingState)
     {
         stopScan();
         emit errorOccurred(_modbusClient->errorString());
@@ -58,9 +58,9 @@ void ModbusRtuScanner::on_errorOccurred(QModbusDevice::Error error)
 /// \brief ModbusRtuScanner::on_stateChanged
 /// \param state
 ///
-void ModbusRtuScanner::on_stateChanged(QModbusDevice::State state)
+void ModbusRtuScanner::on_stateChanged(ModbusDevice::State state)
 {
-    if(state == QModbusDevice::ConnectedState)
+    if(state == ModbusDevice::ConnectedState)
         sendRequest(_params.DeviceIds.from());
 }
 
@@ -73,11 +73,11 @@ void ModbusRtuScanner::connectDevice(const ConnectionDetails& cd)
     _modbusClient->disconnectDevice();
     _modbusClient->setNumberOfRetries(_params.RetryOnTimeout ? 1 : 0);
     _modbusClient->setTimeout(_params.Timeout);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
-    _modbusClient->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
+    _modbusClient->setConnectionParameter(ModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
+    _modbusClient->setConnectionParameter(ModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
+    _modbusClient->setConnectionParameter(ModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
+    _modbusClient->setConnectionParameter(ModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
+    _modbusClient->setConnectionParameter(ModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
     _modbusClient->connectDevice();
 }
 
@@ -113,14 +113,14 @@ void ModbusRtuScanner::sendRequest(int deviceId)
     {
         if (!reply->isFinished())
         {
-            connect(reply, &QModbusReply::finished, this, [this, reply, deviceId]()
+            connect(reply, &ModbusReply::finished, this, [this, reply, deviceId]()
                 {
                     const auto error = reply->error();
-                    if(error != QModbusDevice::TimeoutError &&
-                        error != QModbusDevice::ConnectionError &&
-                        error != QModbusDevice::ReplyAbortedError)
+                    if(error != ModbusDevice::TimeoutError &&
+                        error != ModbusDevice::ConnectionError &&
+                        error != ModbusDevice::ReplyAbortedError)
                     {
-                        if(error == QModbusDevice::ProtocolError)
+                        if(error == ModbusDevice::ProtocolError)
                         {
                             switch(reply->rawResult().exceptionCode())
                             {
@@ -140,7 +140,7 @@ void ModbusRtuScanner::sendRequest(int deviceId)
                     }
                     reply->deleteLater();
 
-                    if(error == QModbusDevice::TimeoutError)
+                    if(error == ModbusDevice::TimeoutError)
                         sendRequest(deviceId + 1);
                     else if(inProgress())
                         QTimer::singleShot(_params.Timeout, [this, deviceId] { sendRequest(deviceId + 1); });

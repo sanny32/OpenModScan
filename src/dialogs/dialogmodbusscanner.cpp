@@ -7,6 +7,7 @@
 #include "modbuslimits.h"
 #include "serialportutils.h"
 #include "modbusrtuscanner.h"
+#include "modbusrtutcpscanner.h"
 #include "modbustcpscanner.h"
 #include "dialogmodbusscanner.h"
 #include "ui_dialogmodbusscanner.h"
@@ -59,7 +60,6 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
     ui->progressBar->setAlignment(Qt::AlignCenter);
     ui->pushButtonScan->setIcon(_iconStart);
 
-    ui->radioButtonTCP->click();
     ui->comboBoxSerial->addItems(getAvailableSerialPorts());
 
     QHostAddress address, mask;
@@ -90,6 +90,8 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
+
+    on_comboBoxProtocols_modbusProtocolChanged(ui->comboBoxProtocols->currentModbusProtocol());
 }
 
 ///
@@ -119,7 +121,6 @@ void DialogModbusScanner::changeEvent(QEvent* event)
 void DialogModbusScanner::showEvent(QShowEvent* e)
 {
     QFixedSizeDialog::showEvent(e);
-    ui->radioButtonRTU->click();
 }
 
 ///
@@ -128,13 +129,13 @@ void DialogModbusScanner::showEvent(QShowEvent* e)
 void DialogModbusScanner::on_awake()
 {
     const bool inProgress = _scanner && _scanner->inProgress();
-    const bool rtuScanning = ui->radioButtonRTU->isChecked();
-    ui->comboBoxSerial->setEnabled(!inProgress && rtuScanning);
-    ui->groupBoxConnection->setEnabled(!inProgress);
-    ui->groupBoxBaudRate->setEnabled(!inProgress && rtuScanning);
-    ui->groupBoxDataBits->setEnabled(!inProgress && rtuScanning);
-    ui->groupBoxParity->setEnabled(!inProgress && rtuScanning);
-    ui->groupBoxStopBits->setEnabled(!inProgress && rtuScanning);
+    const bool useSerial = ui->comboBoxProtocols->currentModbusProtocol() == ModbusProtocolsComboBox::ModbusRtu;
+    ui->comboBoxSerial->setEnabled(!inProgress && useSerial);
+    ui->groupBoxProtocol->setEnabled(!inProgress);
+    ui->groupBoxBaudRate->setEnabled(!inProgress && useSerial);
+    ui->groupBoxDataBits->setEnabled(!inProgress && useSerial);
+    ui->groupBoxParity->setEnabled(!inProgress && useSerial);
+    ui->groupBoxStopBits->setEnabled(!inProgress && useSerial);
     ui->groupBoxDeviceId->setEnabled(!inProgress);
     ui->groupBoxTimeout->setEnabled(!inProgress);
     ui->groupBoxIPAddressRange->setEnabled(!inProgress);
@@ -142,7 +143,7 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxSubnetMask->setEnabled(!inProgress);
     ui->groupBoxRequest->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
-    ui->pushButtonScan->setEnabled((rtuScanning && ui->comboBoxSerial->count() > 0) || !rtuScanning);
+    ui->pushButtonScan->setEnabled((useSerial && ui->comboBoxSerial->count() > 0) || !useSerial);
     ui->pushButtonScan->setText(inProgress ? tr("Stop") : tr("Start"));
 }
 
@@ -174,6 +175,27 @@ void DialogModbusScanner::on_pushButtonClear_clicked()
 }
 
 ///
+/// \brief DialogModbusScanner::on_comboBoxProtocols_modbusProtocolChanged
+/// \param mbp
+///
+void DialogModbusScanner::on_comboBoxProtocols_modbusProtocolChanged(ModbusProtocolsComboBox::ModbusProtocol mbp)
+{
+    bool useSerial = (mbp == ModbusProtocolsComboBox::ModbusRtu);
+    ui->groupBoxIPAddressRange->setVisible(!useSerial);
+    ui->groupBoxPortRange->setVisible(!useSerial);
+    ui->groupBoxSubnetMask->setVisible(!useSerial);
+    ui->labelIPAddress->setVisible(!useSerial);
+    ui->labelPort->setVisible(!useSerial);
+    ui->groupBoxSerialPort->setVisible(useSerial);
+    ui->labelSpeed->setVisible(useSerial);
+    ui->labelDataBits->setVisible(useSerial);
+    ui->labelParity->setVisible(useSerial);
+    ui->labelStopBits->setVisible(useSerial);
+    ui->labelScanResultsDesc->setText(useSerial ? tr("PORT: Device Id (serial port settings)") : tr("Address: port (Device Id)"));
+    ui->comboBoxFunction->setCurrentFunctionCode(useSerial ? _rtuFuncCode :_tcpFuncCode);
+}
+
+///
 /// \brief DialogRtuScanner::on_errorOccurred
 /// \param error
 ///
@@ -188,10 +210,12 @@ void DialogModbusScanner::on_errorOccurred(const QString& error)
 ///
 void DialogModbusScanner::on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode funcCode)
 {
-    if(ui->radioButtonRTU->isChecked())
+    if(ui->comboBoxProtocols->currentModbusProtocol() == ModbusProtocolsComboBox::ModbusRtu) {
         _rtuFuncCode = funcCode;
-    else
+    }
+    else {
         _tcpFuncCode = funcCode;
+    }
 
     ui->spinBoxAddress->setEnabled(funcCode != QModbusPdu::ReportServerId);
     ui->spinBoxLength->setEnabled(funcCode != QModbusPdu::ReportServerId);
@@ -254,58 +278,28 @@ void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
 }
 
 ///
-/// \brief DialogModbusScanner::on_radioButtonRTU_clicked
-///
-void DialogModbusScanner::on_radioButtonRTU_clicked()
-{
-    ui->groupBoxIPAddressRange->setVisible(false);
-    ui->groupBoxSerialPort->setVisible(true);
-    ui->labelSpeed->setVisible(true);
-    ui->labelDataBits->setVisible(true);
-    ui->labelParity->setVisible(true);
-    ui->labelStopBits->setVisible(true);
-    ui->groupBoxPortRange->setVisible(false);
-    ui->groupBoxSubnetMask->setVisible(false);
-    ui->labelIPAddress->setVisible(false);
-    ui->labelPort->setVisible(false);
-    ui->labelScanResultsDesc->setText(tr("PORT: Device Id (serial port settings)"));
-    ui->comboBoxFunction->setCurrentFunctionCode(_rtuFuncCode);
-}
-
-///
-/// \brief DialogModbusScanner::on_radioButtonTCP_clicked
-///
-void DialogModbusScanner::on_radioButtonTCP_clicked()
-{
-    ui->groupBoxIPAddressRange->setVisible(true);
-    ui->groupBoxPortRange->setVisible(true);
-    ui->groupBoxSubnetMask->setVisible(true);
-    ui->labelIPAddress->setVisible(true);
-    ui->labelPort->setVisible(true);
-    ui->groupBoxSerialPort->setVisible(false);
-    ui->labelSpeed->setVisible(false);
-    ui->labelDataBits->setVisible(false);
-    ui->labelParity->setVisible(false);
-    ui->labelStopBits->setVisible(false);
-    ui->labelScanResultsDesc->setText(tr("Address: port (Device Id)"));
-    ui->comboBoxFunction->setCurrentFunctionCode(_tcpFuncCode);
-}
-
-///
 /// \brief DialogRtuScanner::startScan
 ///
 void DialogModbusScanner::startScan()
 {
     ScanParams params;
-    if(ui->radioButtonRTU->isChecked())
+
+    switch(ui->comboBoxProtocols->currentModbusProtocol())
     {
-        params = createSerialParams();
-        _scanner.reset(new ModbusRtuScanner(params, this));
-    }
-    else
-    {
-        params = createTcpParams();
-        _scanner.reset(new ModbusTcpScanner(params, this));
+        case ModbusProtocolsComboBox::ModbusTcp:
+            params = createTcpParams(TransmissionMode::IP);
+            _scanner.reset(new ModbusTcpScanner(params, this));
+        break;
+
+        case ModbusProtocolsComboBox::ModbusRtuTcp:
+            params = createTcpParams(TransmissionMode::RTU);
+            _scanner.reset(new ModbusRtuTcpScanner(params, this));
+        break;
+
+        case ModbusProtocolsComboBox::ModbusRtu:
+            params = createSerialParams(TransmissionMode::RTU);
+            _scanner.reset(new ModbusRtuScanner(params, this));
+        break;
     }
 
     if(params.ConnParams.empty())
@@ -377,7 +371,7 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
 {
     QString result;
     const auto id = QString("%1").arg(deviceId) + (dubious ? "?" : QString());
-    if(ui->radioButtonRTU->isChecked())
+    if(ui->comboBoxProtocols->currentModbusProtocol() == ModbusProtocolsComboBox::ModbusRtu)
     {
        result = QString("%1: %2 (%3,%4,%5,%6)").arg(cd.SerialParams.PortName,
                                                     id,
@@ -431,7 +425,7 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
 ///
 void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId, int progress)
 {
-    if(ui->radioButtonRTU->isChecked())
+    if(ui->comboBoxProtocols->currentModbusProtocol() == ModbusProtocolsComboBox::ModbusRtu)
     {
         ui->labelSpeed->setText(QString(tr("Baud Rate: %1")).arg(cd.SerialParams.BaudRate));
         ui->labelDataBits->setText(QString(tr("Data Bits: %1")).arg(cd.SerialParams.WordLength));
@@ -449,9 +443,11 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
 }
 
 ///
-/// \brief DialogRtuScanner::createSerialParams
+/// \brief DialogModbusScanner::createSerialParams
+/// \param mode
+/// \return
 ///
-const ScanParams DialogModbusScanner::createSerialParams() const
+const ScanParams DialogModbusScanner::createSerialParams(TransmissionMode mode) const
 {
     ScanParams params;
 
@@ -497,6 +493,7 @@ const ScanParams DialogModbusScanner::createSerialParams() const
                 {
                     ConnectionDetails cd;
                     cd.Type = ConnectionType::Serial;
+                    cd.ModbusParams.Mode = mode;
                     cd.SerialParams.PortName = ui->comboBoxSerial->currentText();
                     cd.SerialParams.BaudRate = baudRate;
                     cd.SerialParams.WordLength = wordLength;
@@ -522,9 +519,10 @@ const ScanParams DialogModbusScanner::createSerialParams() const
 
 ///
 /// \brief DialogModbusScanner::createTcpParams
+/// \param mode
 /// \return
 ///
-const ScanParams DialogModbusScanner::createTcpParams() const
+const ScanParams DialogModbusScanner::createTcpParams(TransmissionMode mode) const
 {
     ScanParams params;
 
@@ -570,6 +568,7 @@ const ScanParams DialogModbusScanner::createTcpParams() const
         {
             ConnectionDetails cd;
             cd.Type = ConnectionType::Tcp;
+            cd.ModbusParams.Mode = mode;
             cd.TcpParams.IPAddress = addr;
             cd.TcpParams.ServicePort = port;
             params.ConnParams.append(cd);

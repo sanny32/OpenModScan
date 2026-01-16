@@ -40,7 +40,8 @@ endif()
 
 
 # Define target
-add_executable(${PROJECT_NAME})
+add_executable(${PROJECT_NAME}
+    modbusrtutcpscanner.h)
 
 if(DEFINED ENV{GITHUB_REF})
     string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})
@@ -97,6 +98,7 @@ set(SOURCES
     controls/mainstatusbar.cpp
     controls/modbuslogwidget.cpp
     controls/modbusmessagewidget.cpp
+    controls/modbusprotocolscombobox.cpp
     controls/numericlineedit.cpp
     controls/paritytypecombobox.cpp
     controls/simulationmodecombobox.cpp
@@ -172,6 +174,7 @@ set(HEADERS
     controls/mainstatusbar.h
     controls/modbuslogwidget.h
     controls/modbusmessagewidget.h
+    controls/modbusprotocolscombobox.h
     controls/numericlineedit.h
     controls/paritytypecombobox.h
     controls/simulationmodecombobox.h
@@ -239,6 +242,7 @@ set(HEADERS
     modbusmessages/writesinglecoil.h
     modbusmessages/writesingleregister.h
     modbusrtuscanner.h
+    modbusrtutcpscanner.h
     modbusscanner.h
     modbussimulationparams.h
     modbustcpscanner.h

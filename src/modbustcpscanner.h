@@ -3,7 +3,7 @@
 
 #include <QQueue>
 #include <QTcpSocket>
-#include <QModbusTcpClient>
+#include "modbusclientprivate.h"
 #include "modbusscanner.h"
 
 ///
@@ -21,13 +21,16 @@ public:
 signals:
     void scanNext(QPrivateSignal);
 
+protected:
+    virtual ModbusClientPrivate* createClient();
+
 private slots:
     void on_scanNext(QPrivateSignal);
 
 private:
     void processSocket(QTcpSocket* sck, const ConnectionDetails& cd);
     void connectDevice(const ConnectionDetails& params);
-    void sendRequest(QModbusTcpClient* client, int deviceId);
+    void sendRequest(ModbusClientPrivate* client, int deviceId);
 
 private:
     const ScanParams _params;

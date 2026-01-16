@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
+    <width>732</width>
     <height>743</height>
    </rect>
   </property>
@@ -634,7 +634,7 @@
         <number>4</number>
        </property>
        <item>
-        <widget class="QGroupBox" name="groupBoxConnection">
+        <widget class="QGroupBox" name="groupBoxProtocol">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -642,7 +642,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Connection</string>
+          <string>Protocol</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <property name="topMargin">
@@ -652,18 +652,7 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QRadioButton" name="radioButtonRTU">
-            <property name="text">
-             <string notr="true">RTU</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="radioButtonTCP">
-            <property name="text">
-             <string notr="true">TCP</string>
-            </property>
-           </widget>
+           <widget class="ModbusProtocolsComboBox" name="comboBoxProtocols"/>
           </item>
          </layout>
         </widget>
@@ -1099,6 +1088,11 @@ font-weight: bold;</string>
    <class>FormattedSpinBox</class>
    <extends>QSpinBox</extends>
    <header>formattedspinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ModbusProtocolsComboBox</class>
+   <extends>QComboBox</extends>
+   <header>modbusprotocolscombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources>

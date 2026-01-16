@@ -6,6 +6,7 @@
 #include "modbusscanner.h"
 #include "qfixedsizedialog.h"
 #include "connectiondetails.h"
+#include "modbusprotocolscombobox.h"
 
 namespace Ui {
 class DialogModbusScanner;
@@ -44,9 +45,7 @@ private slots:
     void on_lineEditSubnetMask_editingFinished();
     void on_pushButtonScan_clicked();
     void on_pushButtonClear_clicked();
-    void on_radioButtonRTU_clicked();
-    void on_radioButtonTCP_clicked();
-
+    void on_comboBoxProtocols_modbusProtocolChanged(ModbusProtocolsComboBox::ModbusProtocol mbp);
 
 private:
     void startScan();
@@ -55,8 +54,8 @@ private:
     void clearScanTime();
     void clearProgress();
 
-    const ScanParams createSerialParams() const;
-    const ScanParams createTcpParams() const;
+    const ScanParams createSerialParams(TransmissionMode mode) const;
+    const ScanParams createTcpParams(TransmissionMode mode) const;
     const QModbusRequest createModbusRequest() const;
 
 private:

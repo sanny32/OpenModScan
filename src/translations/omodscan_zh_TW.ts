@@ -1759,7 +1759,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>數據未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="454"/>
+        <location filename="../formmodsca.cpp" line="472"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1768,7 +1768,7 @@ Length: %3</source>
 長度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="458"/>
+        <location filename="../formmodsca.cpp" line="476"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1777,29 +1777,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="461"/>
+        <location filename="../formmodsca.cpp" line="479"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>輪詢次數：%1
 有效的從站回應：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="663"/>
+        <location filename="../formmodsca.cpp" line="681"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="836"/>
+        <location filename="../formmodsca.cpp" line="854"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="629"/>
+        <location filename="../formmodsca.cpp" line="647"/>
         <source>No Responses from Slave Device</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="790"/>
+        <location filename="../formmodsca.cpp" line="808"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>
@@ -2991,72 +2991,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="518"/>
+        <location filename="../controls/outputwidget.cpp" line="510"/>
         <source>Zoom: %1%</source>
         <translation>飛漲： %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1067"/>
+        <location filename="../controls/outputwidget.cpp" line="1083"/>
         <source>Write Value to %1</source>
         <translation>將值寫入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1074"/>
+        <location filename="../controls/outputwidget.cpp" line="1090"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1074"/>
+        <location filename="../controls/outputwidget.cpp" line="1090"/>
         <source>Edit Description</source>
         <translation>編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1077"/>
+        <location filename="../controls/outputwidget.cpp" line="1093"/>
         <source>%1: Enter Description</source>
         <translation>%1：輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1086"/>
+        <location filename="../controls/outputwidget.cpp" line="1102"/>
         <source>Remove Color</source>
         <translation>去除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1097"/>
+        <location filename="../controls/outputwidget.cpp" line="1113"/>
         <source>Yellow</source>
         <translation>黃色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1098"/>
+        <location filename="../controls/outputwidget.cpp" line="1114"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1099"/>
+        <location filename="../controls/outputwidget.cpp" line="1115"/>
         <source>Magenta</source>
         <translation>品紅</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1100"/>
+        <location filename="../controls/outputwidget.cpp" line="1116"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1101"/>
+        <location filename="../controls/outputwidget.cpp" line="1117"/>
         <source>Orange</source>
         <translation>橘子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1102"/>
+        <location filename="../controls/outputwidget.cpp" line="1118"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1103"/>
+        <location filename="../controls/outputwidget.cpp" line="1119"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1189"/>
+        <location filename="../controls/outputwidget.cpp" line="1205"/>
         <source>Data Uninitialized</source>
         <translation>數據未初始化</translation>
     </message>

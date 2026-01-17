@@ -1748,7 +1748,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="454"/>
+        <location filename="../formmodsca.cpp" line="472"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1757,7 +1757,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="458"/>
+        <location filename="../formmodsca.cpp" line="476"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1766,29 +1766,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="461"/>
+        <location filename="../formmodsca.cpp" line="479"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="663"/>
+        <location filename="../formmodsca.cpp" line="681"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="836"/>
+        <location filename="../formmodsca.cpp" line="854"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="629"/>
+        <location filename="../formmodsca.cpp" line="647"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="790"/>
+        <location filename="../formmodsca.cpp" line="808"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -2979,72 +2979,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="518"/>
+        <location filename="../controls/outputwidget.cpp" line="510"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1067"/>
+        <location filename="../controls/outputwidget.cpp" line="1083"/>
         <source>Write Value to %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1074"/>
+        <location filename="../controls/outputwidget.cpp" line="1090"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1074"/>
+        <location filename="../controls/outputwidget.cpp" line="1090"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1077"/>
+        <location filename="../controls/outputwidget.cpp" line="1093"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1086"/>
+        <location filename="../controls/outputwidget.cpp" line="1102"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1097"/>
+        <location filename="../controls/outputwidget.cpp" line="1113"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1098"/>
+        <location filename="../controls/outputwidget.cpp" line="1114"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1099"/>
+        <location filename="../controls/outputwidget.cpp" line="1115"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1100"/>
+        <location filename="../controls/outputwidget.cpp" line="1116"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1101"/>
+        <location filename="../controls/outputwidget.cpp" line="1117"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1102"/>
+        <location filename="../controls/outputwidget.cpp" line="1118"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1103"/>
+        <location filename="../controls/outputwidget.cpp" line="1119"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1189"/>
+        <location filename="../controls/outputwidget.cpp" line="1205"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>

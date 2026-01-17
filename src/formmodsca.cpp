@@ -423,6 +423,24 @@ void FormModSca::setFont(const QFont& font)
 }
 
 ///
+/// \brief FormModSca::zoomPercent
+/// \return
+///
+int FormModSca::zoomPercent() const
+{
+    return ui->outputWidget->zoomPercent();
+}
+
+///
+/// \brief FormModSca::setZoomPercent
+/// \param zoomPercent
+///
+void FormModSca::setZoomPercent(int zoomPercent)
+{
+    ui->outputWidget->setZoomPercent(zoomPercent);
+}
+
+///
 /// \brief FormModSca::print
 /// \param printer
 ///
@@ -915,7 +933,6 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
     const auto zeroBasedAddress = dd.ZeroBasedAddress;
-    const auto addressSpace = dd.AddrSpace;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     auto simParams = _dataSimulator->simulationParams(dd.PointType, simAddr, dd.DeviceId);
 

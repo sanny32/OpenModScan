@@ -485,20 +485,12 @@ bool OutputWidget::eventFilter(QObject* obj, QEvent* event)
         event->type() == QEvent::Wheel)
     {
         auto we = static_cast<QWheelEvent*>(event);
-        if (we->modifiers() & Qt::ControlModifier) {
-
+        if (we->modifiers() & Qt::ControlModifier)
+        {
             if (we->angleDelta().y() > 0)
-                _zoomPercent += 10;
+                setZoomPercent(zoomPercent() + 10);
             else if (we->angleDelta().y() < 0)
-                _zoomPercent -= 10;
-
-            _zoomPercent = qBound(50, _zoomPercent, 300);
-
-            QFont font = ui->listView->font();
-            font.setPointSizeF(_baseFontSize * _zoomPercent / 100.0);
-
-            ui->listView->setFont(font);
-            ui->labelStatus->setFont(font);
+                setZoomPercent(zoomPercent() - 10);
 
             showZoomOverlay();
 
@@ -688,7 +680,7 @@ void OutputWidget::setStatusColor(const QColor& clr)
 ///
 QFont OutputWidget::font() const
 {
-    return ui->listView->font();
+    return ui->logView->font();
 }
 
 ///
@@ -705,6 +697,30 @@ void OutputWidget::setFont(const QFont& font)
     _zoomPercent = 100;
     _baseFontSize = ui->listView->font().pointSizeF();
     if (_baseFontSize <= 0) _baseFontSize = 10.0;
+}
+
+///
+/// \brief OutputWidget::zoomPercent
+/// \return
+///
+int OutputWidget::zoomPercent() const
+{
+    return _zoomPercent;
+}
+
+///
+/// \brief OutputWidget::setZoomPercent
+/// \param zoom
+///
+void OutputWidget::setZoomPercent(int zoomPercent)
+{
+    _zoomPercent = qBound(50, zoomPercent, 300);
+
+    QFont font = ui->listView->font();
+    font.setPointSizeF(_baseFontSize * _zoomPercent / 100.0);
+
+    ui->listView->setFont(font);
+    ui->labelStatus->setFont(font);
 }
 
 ///

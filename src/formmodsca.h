@@ -83,6 +83,9 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
+    int zoomPercent() const;
+    void setZoomPercent(int zoomPercent);
+
     void print(QPrinter* painter);
 
     ModbusSimulationMap simulationMap() const;
@@ -171,6 +174,7 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
     out.setValue("ForegroundColor", frm->foregroundColor());
     out.setValue("BackgroundColor", frm->backgroundColor());
     out.setValue("StatusColor", frm->statusColor());
+    out.setValue("ZoomPercent", frm->zoomPercent());
 
     const auto wnd = frm->parentWidget();
     out.setValue("ViewMaximized", wnd->isMaximized());
@@ -221,10 +225,11 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     wndSize = in.value("ViewSize").toSize();
 
     if(!version.isNull() || version >= QVersionNumber(1, 7)) {
-        frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
+        frm->setFont(in.value("Font", defaultMonospaceFont(10)).value<QFont>());
         frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
         frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
         frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+        frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
     }
 
     auto wnd = frm->parentWidget();
@@ -266,6 +271,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << frm->foregroundColor();
     out << frm->statusColor();
     out << frm->font();
+    out << frm->zoomPercent();
 
     const auto dd = frm->displayDefinition();
     out << dd.FormName;
@@ -325,6 +331,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
 
     QFont font;
     in >> font;
+
+    int zoomPercent = 100;
+    if(ver >= QVersionNumber(1, 9))
+    {
+        in >> zoomPercent;
+    }
 
     DisplayDefinition dd;
 
@@ -392,6 +404,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setForegroundColor(fgClr);
     frm->setStatusColor(stCrl);
     frm->setFont(font);
+    frm->setZoomPercent(zoomPercent);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
     frm->setCodepage(codepage);
@@ -452,6 +465,11 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
     xml.writeAttribute("Size", QString::number(font.pointSize()));
     xml.writeAttribute("Bold", boolToString(font.bold()));
     xml.writeAttribute("Italic", boolToString(font.italic()));
+    xml.writeEndElement();
+
+    xml.writeStartElement("Zoom");
+    const int zoom = frm->zoomPercent();
+    xml.writeAttribute("Value", QString("%1%").arg(zoom));
     xml.writeEndElement();
 
     const auto dd = frm->displayDefinition();
@@ -639,6 +657,15 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
 
                 frm->setFont(font);
                 xml.skipCurrentElement();
+            }
+            else if(xml.name() == QLatin1String("Zoom"))
+            {
+                const QXmlStreamAttributes zoomAttrs = xml.attributes();
+                if (zoomAttrs.hasAttribute("Value")) {
+                    bool ok; const int zoom = zoomAttrs.value("Value").toString().remove("%").toInt(&ok);
+                    if(ok) frm->setZoomPercent(zoom);
+                    xml.skipCurrentElement();
+                }
             }
             else if (xml.name() == QLatin1String("DisplayDefinition")) {
                 xml >> dd;

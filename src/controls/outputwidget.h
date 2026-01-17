@@ -125,6 +125,9 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
+    int zoomPercent() const;
+    void setZoomPercent(int zoomPercent);
+
     int dataViewColumnsDistance() const;
     void setDataViewColumnsDistance(int value);
 

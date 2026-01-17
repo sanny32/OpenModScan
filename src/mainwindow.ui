@@ -530,10 +530,10 @@
     <string>Float</string>
    </property>
    <property name="toolTip">
-    <string>Float</string>
+    <string>Float (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+0</string>
+    <string>Ctrl+0</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -548,10 +548,10 @@
     <string>Swapped Float</string>
    </property>
    <property name="toolTip">
-    <string>Swapped Float</string>
+    <string>Float (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+0</string>
+    <string>Ctrl+Alt+0</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -566,10 +566,10 @@
     <string>Double</string>
    </property>
    <property name="toolTip">
-    <string>Double</string>
+    <string>Double (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+-</string>
+    <string>Ctrl+-</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -584,10 +584,10 @@
     <string>Swapped Double</string>
    </property>
    <property name="toolTip">
-    <string>Swapped Double</string>
+    <string>Double (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+-</string>
+    <string>Ctrl+Alt+-</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -799,8 +799,11 @@
    <property name="text">
     <string>32-bit Integer</string>
    </property>
+   <property name="toolTip">
+    <string>32-bit Integer (MSRF)</string>
+   </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+6</string>
+    <string>Ctrl+6</string>
    </property>
   </action>
   <action name="actionSwappedInt32">
@@ -815,10 +818,10 @@
     <string>Swapped 32-bit Integer</string>
    </property>
    <property name="toolTip">
-    <string>Swapped 32-bit Integer</string>
+    <string>32-bit Integer (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+6</string>
+    <string>Ctrl+Alt+6</string>
    </property>
   </action>
   <action name="actionUInt32">
@@ -832,8 +835,11 @@
    <property name="text">
     <string>Unsigned 32-bit Integer</string>
    </property>
+   <property name="toolTip">
+    <string>Unsigned 32-bit Integer (MSRF)</string>
+   </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+7</string>
+    <string>Ctrl+7</string>
    </property>
   </action>
   <action name="actionSwappedUInt32">
@@ -848,10 +854,10 @@
     <string>Swapped Unsigned 32-bit Integer</string>
    </property>
    <property name="toolTip">
-    <string>Swapped Unsigned 32-bit Integer</string>
+    <string>Unsigned 32-bit Integer (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+7</string>
+    <string>Ctrl+Alt+7</string>
    </property>
   </action>
   <action name="actionMsgParser">
@@ -876,8 +882,11 @@
    <property name="text">
     <string>64-bit Integer</string>
    </property>
+   <property name="toolTip">
+    <string>64-bit Integer (MSRF)</string>
+   </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+8</string>
+    <string>Ctrl+8</string>
    </property>
   </action>
   <action name="actionSwappedInt64">
@@ -891,8 +900,11 @@
    <property name="text">
     <string>Swapped 64-bit Integer</string>
    </property>
+   <property name="toolTip">
+    <string>64-bit Integer (LSRF)</string>
+   </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+8</string>
+    <string>Ctrl+Alt+8</string>
    </property>
   </action>
   <action name="actionUInt64">
@@ -906,8 +918,11 @@
    <property name="text">
     <string>Unsigned 64-bit Integer</string>
    </property>
+   <property name="toolTip">
+    <string>Unsigned 64-bit Integer (MSRF)</string>
+   </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+9</string>
+    <string>Ctrl+9</string>
    </property>
   </action>
   <action name="actionSwappedUInt64">
@@ -921,8 +936,11 @@
    <property name="text">
     <string>Swapped Unsigned 64-bit Integer</string>
    </property>
+   <property name="toolTip">
+    <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+Alt+9</string>
+    <string>Ctrl+Alt+9</string>
    </property>
   </action>
   <action name="actionChineseCN">

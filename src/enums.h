@@ -120,18 +120,18 @@ enum class DataDisplayMode
     UInt16,
     Int16,
     Hex,
-    FloatingPt,
-    SwappedFP,
-    DblFloat,
-    SwappedDbl,
-    Int32,
-    SwappedInt32,
-    UInt32,
-    SwappedUInt32,
-    Int64,
-    SwappedInt64,
-    UInt64,
-    SwappedUInt64,
+    FloatingPt,     // MSRF
+    SwappedFP,      // LSRF
+    DblFloat,       // MSRF
+    SwappedDbl,     // LSRF
+    Int32,          // MSRF
+    SwappedInt32,   // LSRF
+    UInt32,         // MSRF
+    SwappedUInt32,  // LSRF
+    Int64,          // MSRF
+    SwappedInt64,   // LSRF
+    UInt64,         // MSRF
+    SwappedUInt64,  // LSRF
     Ansi
 };
 Q_DECLARE_METATYPE(DataDisplayMode);
@@ -192,6 +192,16 @@ DECLARE_ENUM_STRINGS(ByteOrder,
                      {   ByteOrder::Direct,    "Direct"    },
                      {   ByteOrder::Swapped,   "Swapped"   }
 )
+
+enum class WordOrder {
+    MSRF,  // Most Significant Register First (hi, lo)
+    LSRF   // Least Significant Register First (lo, hi)
+};
+Q_DECLARE_METATYPE(WordOrder);
+DECLARE_ENUM_STRINGS(WordOrder,
+                     {   WordOrder::MSRF,   "MSRF"   },
+                     {   WordOrder::LSRF,   "LSRF"   }
+                     )
 
 ///
 /// \brief operator <<

@@ -468,8 +468,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
     xml.writeEndElement();
 
     xml.writeStartElement("Zoom");
-    const int zoom = frm->zoomPercent();
-    xml.writeAttribute("Value", QString("%1%").arg(zoom));
+    xml.writeAttribute("Value", QString("%1%").arg(frm->zoomPercent()));
     xml.writeEndElement();
 
     const auto dd = frm->displayDefinition();
@@ -658,8 +657,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
                 frm->setFont(font);
                 xml.skipCurrentElement();
             }
-            else if(xml.name() == QLatin1String("Zoom"))
-            {
+            else if(xml.name() == QLatin1String("Zoom")) {
                 const QXmlStreamAttributes zoomAttrs = xml.attributes();
                 if (zoomAttrs.hasAttribute("Value")) {
                     bool ok; const int zoom = zoomAttrs.value("Value").toString().remove("%").toInt(&ok);

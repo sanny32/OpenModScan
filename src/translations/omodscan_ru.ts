@@ -1936,7 +1936,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="290"/>
-        <location filename="../mainwindow.ui" line="1016"/>
+        <location filename="../mainwindow.ui" line="1034"/>
         <source>Write Bar</source>
         <translation>Панель записи</translation>
     </message>
@@ -2046,6 +2046,26 @@ Valid Slave Responses: %2</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="533"/>
+        <source>Float (MSRF)</source>
+        <translation>С плавающей точкой (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="551"/>
+        <source>Float (LSRF)</source>
+        <translation>С плавающей точкой (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="569"/>
+        <source>Double (MSRF)</source>
+        <translation>Двойной точности (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="587"/>
+        <source>Double (LSRF)</source>
+        <translation>Двойной точности (LSRF)</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="607"/>
         <source>Write Multiple Coils</source>
         <translation>Записать регистры флагов</translation>
@@ -2103,90 +2123,128 @@ Valid Slave Responses: %2</source>
         <translation>32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="815"/>
+        <location filename="../mainwindow.ui" line="803"/>
+        <source>32-bit Integer (MSRF)</source>
+        <translation>32-бит целое (MSRF)</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="818"/>
         <source>Swapped 32-bit Integer</source>
         <translation>Перевернутое 32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="833"/>
+        <location filename="../mainwindow.ui" line="821"/>
+        <source>32-bit Integer (LSRF)</source>
+        <translation>32-бит целое (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="836"/>
         <source>Unsigned 32-bit Integer</source>
         <translation>Беззнаковое 32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="848"/>
-        <location filename="../mainwindow.ui" line="851"/>
+        <location filename="../mainwindow.ui" line="839"/>
+        <source>Unsigned 32-bit Integer (MSRF)</source>
+        <translation>Беззнаковое 32-бит целое (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="854"/>
         <source>Swapped Unsigned 32-bit Integer</source>
         <translation>Перевернутое беззнаковое 32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="877"/>
+        <location filename="../mainwindow.ui" line="857"/>
+        <source>Unsigned 32-bit Integer (LSRF)</source>
+        <translation>Беззнаковое 32-бит целое (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="883"/>
         <source>64-bit Integer</source>
         <translation>64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="892"/>
+        <location filename="../mainwindow.ui" line="886"/>
+        <source>64-bit Integer (MSRF)</source>
+        <translation>64-бит целое (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="901"/>
         <source>Swapped 64-bit Integer</source>
         <translation>Перевернутое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="907"/>
+        <location filename="../mainwindow.ui" line="904"/>
+        <source>64-bit Integer (LSRF)</source>
+        <translation>64-бит целое (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="919"/>
         <source>Unsigned 64-bit Integer</source>
         <translation>Беззнаковое 64-бит целое</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="922"/>
+        <source>Unsigned 64-bit Integer (MSRF)</source>
+        <translation>Беззнаковое 64-бит целое (MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="937"/>
         <source>Swapped Unsigned 64-bit Integer</source>
         <translation>Перевернутое беззнаковое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="948"/>
+        <location filename="../mainwindow.ui" line="940"/>
+        <source>Unsigned 64-bit Integer (LSRF)</source>
+        <translation>Беззнаковое 64-бит целое (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="966"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="961"/>
-        <location filename="../mainwindow.ui" line="1002"/>
+        <location filename="../mainwindow.ui" line="979"/>
+        <location filename="../mainwindow.ui" line="1020"/>
         <source>Write Holding Register</source>
         <translation>Записать регистр хранения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="972"/>
+        <location filename="../mainwindow.ui" line="990"/>
         <source>Write Holding Register Bits</source>
         <translation>Записать биты регистра хранения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="975"/>
+        <location filename="../mainwindow.ui" line="993"/>
         <source>06: Write Holding Register Bits</source>
         <translation>06: Записать биты регистра хранения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="987"/>
+        <location filename="../mainwindow.ui" line="1005"/>
         <source>Write Single Coil</source>
         <translation>Записать регистр флагов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="990"/>
+        <location filename="../mainwindow.ui" line="1008"/>
         <source>05: Write Single Coil</source>
         <translation>05: Запись одного дискретного выхода</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1005"/>
+        <location filename="../mainwindow.ui" line="1023"/>
         <source>06: Write Holding Register</source>
         <translation>06: Запись одного регистра хранения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1024"/>
+        <location filename="../mainwindow.ui" line="1042"/>
         <source>Tabbed View</source>
         <translation>Вид с вкладками</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1029"/>
+        <location filename="../mainwindow.ui" line="1047"/>
         <source>Close All</source>
         <translation>Закрыть все</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1032"/>
+        <location filename="../mainwindow.ui" line="1050"/>
         <source>Close All Windows</source>
         <translation>Закрыть все окна</translation>
     </message>
@@ -2278,8 +2336,8 @@ Valid Slave Responses: %2</source>
         <translation>Cканер MODBUS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="859"/>
-        <location filename="../mainwindow.ui" line="862"/>
+        <location filename="../mainwindow.ui" line="865"/>
+        <location filename="../mainwindow.ui" line="868"/>
         <source>Msg Parser</source>
         <translation>Анализатор сообщений</translation>
     </message>
@@ -2300,25 +2358,21 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="530"/>
-        <location filename="../mainwindow.ui" line="533"/>
         <source>Float</source>
         <translation>С плавающей точкой</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="548"/>
-        <location filename="../mainwindow.ui" line="551"/>
         <source>Swapped Float</source>
         <translation>Перевернутое с плавающей точкой</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="566"/>
-        <location filename="../mainwindow.ui" line="569"/>
         <source>Double</source>
         <translation>Двойной точности</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="584"/>
-        <location filename="../mainwindow.ui" line="587"/>
         <source>Swapped Double</source>
         <translation>Перевернутое двойной точности</translation>
     </message>
@@ -2925,72 +2979,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="507"/>
+        <location filename="../controls/outputwidget.cpp" line="518"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1056"/>
+        <location filename="../controls/outputwidget.cpp" line="1067"/>
         <source>Write Value to %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1063"/>
+        <location filename="../controls/outputwidget.cpp" line="1074"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1063"/>
+        <location filename="../controls/outputwidget.cpp" line="1074"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1066"/>
+        <location filename="../controls/outputwidget.cpp" line="1077"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1075"/>
+        <location filename="../controls/outputwidget.cpp" line="1086"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1086"/>
+        <location filename="../controls/outputwidget.cpp" line="1097"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1087"/>
+        <location filename="../controls/outputwidget.cpp" line="1098"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1088"/>
+        <location filename="../controls/outputwidget.cpp" line="1099"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1089"/>
+        <location filename="../controls/outputwidget.cpp" line="1100"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1090"/>
+        <location filename="../controls/outputwidget.cpp" line="1101"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1102"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1092"/>
+        <location filename="../controls/outputwidget.cpp" line="1103"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1178"/>
+        <location filename="../controls/outputwidget.cpp" line="1189"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>

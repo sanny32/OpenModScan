@@ -533,7 +533,7 @@
     <string>Float (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+0</string>
+    <string notr="true">Ctrl+0</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -551,7 +551,7 @@
     <string>Float (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+0</string>
+    <string notr="true">Ctrl+Alt+0</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -569,7 +569,7 @@
     <string>Double (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+-</string>
+    <string notr="true">Ctrl+-</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -587,7 +587,7 @@
     <string>Double (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+-</string>
+    <string notr="true">Ctrl+Alt+-</string>
    </property>
   </action>
   <action name="actionHexAddresses">
@@ -803,7 +803,7 @@
     <string>32-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+6</string>
+    <string notr="true">Ctrl+6</string>
    </property>
   </action>
   <action name="actionSwappedInt32">
@@ -821,7 +821,7 @@
     <string>32-bit Integer (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+6</string>
+    <string notr="true">Ctrl+Alt+6</string>
    </property>
   </action>
   <action name="actionUInt32">
@@ -839,7 +839,7 @@
     <string>Unsigned 32-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+7</string>
+    <string notr="true">Ctrl+7</string>
    </property>
   </action>
   <action name="actionSwappedUInt32">
@@ -857,7 +857,7 @@
     <string>Unsigned 32-bit Integer (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+7</string>
+    <string notr="true">Ctrl+Alt+7</string>
    </property>
   </action>
   <action name="actionMsgParser">
@@ -886,7 +886,7 @@
     <string>64-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+8</string>
+    <string notr="true">Ctrl+8</string>
    </property>
   </action>
   <action name="actionSwappedInt64">
@@ -904,7 +904,7 @@
     <string>64-bit Integer (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+8</string>
+    <string notr="true">Ctrl+Alt+8</string>
    </property>
   </action>
   <action name="actionUInt64">
@@ -922,7 +922,7 @@
     <string>Unsigned 64-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+9</string>
+    <string notr="true">Ctrl+9</string>
    </property>
   </action>
   <action name="actionSwappedUInt64">
@@ -940,7 +940,7 @@
     <string>Unsigned 64-bit Integer (LSRF)</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Alt+9</string>
+    <string notr="true">Ctrl+Alt+9</string>
    </property>
   </action>
   <action name="actionChineseCN">

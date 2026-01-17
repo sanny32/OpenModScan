@@ -1947,7 +1947,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="290"/>
-        <location filename="../mainwindow.ui" line="1016"/>
+        <location filename="../mainwindow.ui" line="1034"/>
         <source>Write Bar</source>
         <translation>寫吧</translation>
     </message>
@@ -2057,6 +2057,26 @@ Valid Slave Responses: %2</source>
         <translation>十六進制</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="533"/>
+        <source>Float (MSRF)</source>
+        <translation>浮點數（MSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="551"/>
+        <source>Float (LSRF)</source>
+        <translation>浮點數（LSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="569"/>
+        <source>Double (MSRF)</source>
+        <translation>雙倍（MSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="587"/>
+        <source>Double (LSRF)</source>
+        <translation>雙倍（LSRF）</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="607"/>
         <source>Write Multiple Coils</source>
         <translation>寫入多個線圈</translation>
@@ -2114,90 +2134,128 @@ Valid Slave Responses: %2</source>
         <translation>32位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="815"/>
+        <location filename="../mainwindow.ui" line="803"/>
+        <source>32-bit Integer (MSRF)</source>
+        <translation>32位整數（MSRF）</translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="818"/>
         <source>Swapped 32-bit Integer</source>
         <translation>32位整數（位元組交換）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="833"/>
+        <location filename="../mainwindow.ui" line="821"/>
+        <source>32-bit Integer (LSRF)</source>
+        <translation>32位整數（LSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="836"/>
         <source>Unsigned 32-bit Integer</source>
         <translation>無符號32位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="848"/>
-        <location filename="../mainwindow.ui" line="851"/>
+        <location filename="../mainwindow.ui" line="839"/>
+        <source>Unsigned 32-bit Integer (MSRF)</source>
+        <translation>無符號32位整數（MSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="854"/>
         <source>Swapped Unsigned 32-bit Integer</source>
         <translation>無符號32位整數（位元組交換）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="877"/>
+        <location filename="../mainwindow.ui" line="857"/>
+        <source>Unsigned 32-bit Integer (LSRF)</source>
+        <translation>無符號32位整數（LSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="883"/>
         <source>64-bit Integer</source>
         <translation>64位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="892"/>
+        <location filename="../mainwindow.ui" line="886"/>
+        <source>64-bit Integer (MSRF)</source>
+        <translation>64位整數（MSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="901"/>
         <source>Swapped 64-bit Integer</source>
         <translation>64位整數（位元組交換）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="907"/>
+        <location filename="../mainwindow.ui" line="904"/>
+        <source>64-bit Integer (LSRF)</source>
+        <translation>64位整數（LSRF）</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="919"/>
         <source>Unsigned 64-bit Integer</source>
         <translation>無符號64位整數</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="922"/>
+        <source>Unsigned 64-bit Integer (MSRF)</source>
+        <translation>無符號64位整數(MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="937"/>
         <source>Swapped Unsigned 64-bit Integer</source>
         <translation>無符號64位整數（位元組交換）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="948"/>
+        <location filename="../mainwindow.ui" line="940"/>
+        <source>Unsigned 64-bit Integer (LSRF)</source>
+        <translation>無符號64位整數(LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="966"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="961"/>
-        <location filename="../mainwindow.ui" line="1002"/>
+        <location filename="../mainwindow.ui" line="979"/>
+        <location filename="../mainwindow.ui" line="1020"/>
         <source>Write Holding Register</source>
         <translation>寫入保持暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="972"/>
+        <location filename="../mainwindow.ui" line="990"/>
         <source>Write Holding Register Bits</source>
         <translation>寫入保持暫存器位</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="975"/>
+        <location filename="../mainwindow.ui" line="993"/>
         <source>06: Write Holding Register Bits</source>
         <translation>06：寫入保持暫存器位</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="987"/>
+        <location filename="../mainwindow.ui" line="1005"/>
         <source>Write Single Coil</source>
         <translation>寫入單線圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="990"/>
+        <location filename="../mainwindow.ui" line="1008"/>
         <source>05: Write Single Coil</source>
         <translation>05: 寫入單線圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1005"/>
+        <location filename="../mainwindow.ui" line="1023"/>
         <source>06: Write Holding Register</source>
         <translation>06: 寫入保持暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1024"/>
+        <location filename="../mainwindow.ui" line="1042"/>
         <source>Tabbed View</source>
         <translation>標籤頁視圖</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1029"/>
+        <location filename="../mainwindow.ui" line="1047"/>
         <source>Close All</source>
         <translation>關閉所有</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1032"/>
+        <location filename="../mainwindow.ui" line="1050"/>
         <source>Close All Windows</source>
         <translation>關閉所有視窗</translation>
     </message>
@@ -2289,8 +2347,8 @@ Valid Slave Responses: %2</source>
         <translation>MODBUS 掃描器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="859"/>
-        <location filename="../mainwindow.ui" line="862"/>
+        <location filename="../mainwindow.ui" line="865"/>
+        <location filename="../mainwindow.ui" line="868"/>
         <source>Msg Parser</source>
         <translation>消息解析器</translation>
     </message>
@@ -2311,25 +2369,21 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="530"/>
-        <location filename="../mainwindow.ui" line="533"/>
         <source>Float</source>
         <translation>浮點數</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="548"/>
-        <location filename="../mainwindow.ui" line="551"/>
         <source>Swapped Float</source>
         <translation>浮點數（位元組交換）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="566"/>
-        <location filename="../mainwindow.ui" line="569"/>
         <source>Double</source>
         <translation>雙精度浮點數</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="584"/>
-        <location filename="../mainwindow.ui" line="587"/>
         <source>Swapped Double</source>
         <translation>雙精度浮點數（位元組交換）</translation>
     </message>
@@ -2937,72 +2991,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="507"/>
+        <location filename="../controls/outputwidget.cpp" line="518"/>
         <source>Zoom: %1%</source>
         <translation>飛漲： %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1056"/>
+        <location filename="../controls/outputwidget.cpp" line="1067"/>
         <source>Write Value to %1</source>
         <translation>將值寫入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1063"/>
+        <location filename="../controls/outputwidget.cpp" line="1074"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1063"/>
+        <location filename="../controls/outputwidget.cpp" line="1074"/>
         <source>Edit Description</source>
         <translation>編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1066"/>
+        <location filename="../controls/outputwidget.cpp" line="1077"/>
         <source>%1: Enter Description</source>
         <translation>%1：輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1075"/>
+        <location filename="../controls/outputwidget.cpp" line="1086"/>
         <source>Remove Color</source>
         <translation>去除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1086"/>
+        <location filename="../controls/outputwidget.cpp" line="1097"/>
         <source>Yellow</source>
         <translation>黃色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1087"/>
+        <location filename="../controls/outputwidget.cpp" line="1098"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1088"/>
+        <location filename="../controls/outputwidget.cpp" line="1099"/>
         <source>Magenta</source>
         <translation>品紅</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1089"/>
+        <location filename="../controls/outputwidget.cpp" line="1100"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1090"/>
+        <location filename="../controls/outputwidget.cpp" line="1101"/>
         <source>Orange</source>
         <translation>橘子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1102"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1092"/>
+        <location filename="../controls/outputwidget.cpp" line="1103"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1178"/>
+        <location filename="../controls/outputwidget.cpp" line="1189"/>
         <source>Data Uninitialized</source>
         <translation>數據未初始化</translation>
     </message>
@@ -3104,7 +3158,7 @@ Byte Order: %2</source>
     <message>
         <location filename="../modbusrtutcpclient.cpp" line="269"/>
         <source>Could not write request to socket.</source>
-        <translation type="unfinished">無法將請求寫入套接字。</translation>
+        <translation>無法將請求寫入套接字。</translation>
     </message>
 </context>
 <context>

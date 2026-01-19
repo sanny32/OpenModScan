@@ -527,7 +527,7 @@
      <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
    </property>
    <property name="text">
-    <string>Float</string>
+    <string>Float (MSRF)</string>
    </property>
    <property name="toolTip">
     <string>Float (MSRF)</string>
@@ -545,7 +545,7 @@
      <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Float</string>
+    <string>Float (LSRF)</string>
    </property>
    <property name="toolTip">
     <string>Float (LSRF)</string>
@@ -563,7 +563,7 @@
      <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
    </property>
    <property name="text">
-    <string>Double</string>
+    <string>Double (MSRF)</string>
    </property>
    <property name="toolTip">
     <string>Double (MSRF)</string>
@@ -581,7 +581,7 @@
      <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Double</string>
+    <string>Double (LSRF)</string>
    </property>
    <property name="toolTip">
     <string>Double (LSRF)</string>
@@ -797,7 +797,7 @@
      <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
    </property>
    <property name="text">
-    <string>32-bit Integer</string>
+    <string>32-bit Integer (MSRF)</string>
    </property>
    <property name="toolTip">
     <string>32-bit Integer (MSRF)</string>
@@ -815,7 +815,7 @@
      <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped 32-bit Integer</string>
+    <string>32-bit Integer (LSRF)</string>
    </property>
    <property name="toolTip">
     <string>32-bit Integer (LSRF)</string>
@@ -833,7 +833,7 @@
      <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
    </property>
    <property name="text">
-    <string>Unsigned 32-bit Integer</string>
+    <string>Unsigned 32-bit Integer (MSRF)</string>
    </property>
    <property name="toolTip">
     <string>Unsigned 32-bit Integer (MSRF)</string>
@@ -851,7 +851,7 @@
      <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Unsigned 32-bit Integer</string>
+    <string>Unsigned 32-bit Integer (LSRF)</string>
    </property>
    <property name="toolTip">
     <string>Unsigned 32-bit Integer (LSRF)</string>
@@ -880,7 +880,7 @@
      <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
    </property>
    <property name="text">
-    <string>64-bit Integer</string>
+    <string>64-bit Integer (MSRF)</string>
    </property>
    <property name="toolTip">
     <string>64-bit Integer (MSRF)</string>
@@ -898,7 +898,7 @@
      <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped 64-bit Integer</string>
+    <string>64-bit Integer (LSRF)</string>
    </property>
    <property name="toolTip">
     <string>64-bit Integer (LSRF)</string>
@@ -916,7 +916,7 @@
      <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
    </property>
    <property name="text">
-    <string>Unsigned 64-bit Integer</string>
+    <string>Unsigned 64-bit Integer (MSRF)</string>
    </property>
    <property name="toolTip">
     <string>Unsigned 64-bit Integer (MSRF)</string>
@@ -934,7 +934,7 @@
      <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
    </property>
    <property name="text">
-    <string>Swapped Unsigned 64-bit Integer</string>
+    <string>Unsigned 64-bit Integer (LSRF)</string>
    </property>
    <property name="toolTip">
     <string>Unsigned 64-bit Integer (LSRF)</string>

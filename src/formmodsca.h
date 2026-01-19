@@ -512,26 +512,26 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
         }
 
         xml.writeEndElement(); // AddressDescriptionMap
+    }
 
-        {
-            const auto colorMap = frm->colorMap();
-            xml.writeStartElement("AddressColorMap");
+    {
+        const auto colorMap = frm->colorMap();
+        xml.writeStartElement("AddressColorMap");
 
-            for (auto it = colorMap.constBegin(); it != colorMap.constEnd(); ++it) {
-                const QPair<QModbusDataUnit::RegisterType, quint16>& key = it.key();
-                const QColor& clr = it.value();
+        for (auto it = colorMap.constBegin(); it != colorMap.constEnd(); ++it) {
+            const QPair<QModbusDataUnit::RegisterType, quint16>& key = it.key();
+            const QColor& clr = it.value();
 
-                if(clr.isValid() && key.first == dd.PointType)
-                {
-                    xml.writeStartElement("Color");
-                    xml.writeAttribute("Address", QString::number(key.second));
-                    xml.writeAttribute("Value", clr.name());
-                    xml.writeEndElement();
-                }
+            if(clr.isValid() && key.first == dd.PointType)
+            {
+                xml.writeStartElement("Color");
+                xml.writeAttribute("Address", QString::number(key.second));
+                xml.writeAttribute("Value", clr.name());
+                xml.writeEndElement();
             }
-
-            xml.writeEndElement(); // AddressColorMap
         }
+
+        xml.writeEndElement(); // AddressColorMap
     }
 
     xml.writeEndElement(); // FormModScan

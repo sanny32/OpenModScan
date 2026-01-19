@@ -2058,21 +2058,25 @@ Valid Slave Responses: %2</source>
         <translation>十六进制</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="530"/>
         <location filename="../mainwindow.ui" line="533"/>
         <source>Float (MSRF)</source>
         <translation>浮点数（MSRF）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="548"/>
         <location filename="../mainwindow.ui" line="551"/>
         <source>Float (LSRF)</source>
         <translation>浮点数（LSRF）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="566"/>
         <location filename="../mainwindow.ui" line="569"/>
         <source>Double (MSRF)</source>
         <translation>双倍（MSRF）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="584"/>
         <location filename="../mainwindow.ui" line="587"/>
         <source>Double (LSRF)</source>
         <translation>双倍（LSRF）</translation>
@@ -2130,81 +2134,81 @@ Valid Slave Responses: %2</source>
         <translation>交换字节 (0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="800"/>
         <source>32-bit Integer</source>
-        <translation>32位整数</translation>
+        <translation type="vanished">32位整数</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="800"/>
         <location filename="../mainwindow.ui" line="803"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="818"/>
         <source>Swapped 32-bit Integer</source>
-        <translation>32位整数（交换字节）</translation>
+        <translation type="vanished">32位整数（交换字节）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="818"/>
         <location filename="../mainwindow.ui" line="821"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="836"/>
         <source>Unsigned 32-bit Integer</source>
-        <translation>无符号32位整数</translation>
+        <translation type="vanished">无符号32位整数</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="836"/>
         <location filename="../mainwindow.ui" line="839"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>无符号32位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="854"/>
         <source>Swapped Unsigned 32-bit Integer</source>
-        <translation>无符号32位整数（交换字节）</translation>
+        <translation type="vanished">无符号32位整数（交换字节）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="854"/>
         <location filename="../mainwindow.ui" line="857"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>无符号32位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="883"/>
         <source>64-bit Integer</source>
-        <translation>64位整数</translation>
+        <translation type="vanished">64位整数</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="883"/>
         <location filename="../mainwindow.ui" line="886"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="901"/>
         <source>Swapped 64-bit Integer</source>
-        <translation>64位整数（交换字节）</translation>
+        <translation type="vanished">64位整数（交换字节）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="901"/>
         <location filename="../mainwindow.ui" line="904"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="919"/>
         <source>Unsigned 64-bit Integer</source>
-        <translation>无符号64位整数</translation>
+        <translation type="vanished">无符号64位整数</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="919"/>
         <location filename="../mainwindow.ui" line="922"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>无符号64位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="937"/>
         <source>Swapped Unsigned 64-bit Integer</source>
-        <translation>无符号64位整数（交换字节）</translation>
+        <translation type="vanished">无符号64位整数（交换字节）</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="937"/>
         <location filename="../mainwindow.ui" line="940"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>无符号64位整数（LSRF）</translation>
@@ -2369,24 +2373,20 @@ Valid Slave Responses: %2</source>
         <translation>16位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="530"/>
         <source>Float</source>
-        <translation>浮点数</translation>
+        <translation type="vanished">浮点数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="548"/>
         <source>Swapped Float</source>
-        <translation>浮点数（交换字节）</translation>
+        <translation type="vanished">浮点数（交换字节）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="566"/>
         <source>Double</source>
-        <translation>双精度浮点数</translation>
+        <translation type="vanished">双精度浮点数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="584"/>
         <source>Swapped Double</source>
-        <translation>双精度浮点数（字节交换）</translation>
+        <translation type="vanished">双精度浮点数（字节交换）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="732"/>

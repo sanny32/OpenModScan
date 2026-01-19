@@ -305,7 +305,6 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 // MSRF
                 itemData.ValueStr = formatDoubleValue(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                       byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-
             break;
 
             case DataDisplayMode::SwappedDbl:
@@ -324,7 +323,6 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 // LSRF
                 itemData.ValueStr = formatInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
                                               (i%2) || (i+1>=rowCount()), itemData.Value);
-
             break;
 
             case DataDisplayMode::UInt32:

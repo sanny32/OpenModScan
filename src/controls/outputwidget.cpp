@@ -426,7 +426,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     _baseFontSize = ui->listView->font().pointSizeF();
     if (_baseFontSize <= 0) _baseFontSize = 10.0;
 
-    _zoomLabel = new QLabel(ui->listView->viewport());
+    _zoomLabel = new QLabel(this);
     _zoomLabel->setVisible(false);
     _zoomLabel->setAlignment(Qt::AlignCenter);
     _zoomLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -508,12 +508,15 @@ void OutputWidget::showZoomOverlay()
     _zoomLabel->setText(tr("Zoom: %1%").arg(_zoomPercent));
     _zoomLabel->adjustSize();
 
-    QRect r = ui->listView->viewport()->rect();
-    QPoint center = r.center() - QPoint(_zoomLabel->width() / 2, _zoomLabel->height() / 2);
+    if(!_zoomLabel->isVisible())
+    {
+        const QPoint centerInThis = ui->listView->viewport()->mapTo(this, ui->listView->viewport()->rect().center());
+        const QPoint center = centerInThis - QPoint(_zoomLabel->width() / 2, _zoomLabel->height() / 2);
 
-    _zoomLabel->move(center);
-    _zoomLabel->show();
-    _zoomLabel->raise();
+        _zoomLabel->move(center);
+        _zoomLabel->show();
+        _zoomLabel->raise();
+    }
 
     _zoomHideTimer->start(800);
 }

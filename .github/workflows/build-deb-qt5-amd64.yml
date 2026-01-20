@@ -45,7 +45,7 @@ jobs:
       - name: Extract version from CMakeLists.txt
         id: extract_version
         run: |
-          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' omodscan/CMakeLists.txt)
+          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
 
           if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
@@ -107,7 +107,7 @@ jobs:
 
       - name: Configure project
         run: |
-            cmake omodscan -B ${{ env.BUILD_DIR }} \
+            cmake src -B ${{ env.BUILD_DIR }} \
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
@@ -128,8 +128,8 @@ jobs:
           
       - name: Copy files to DEB_SRC_DIR
         run: |
-          cp -r .pkg/deb/* ${{ env.DEB_SRC_DIR }}/debian
-          cp -r .pkg/usr/* ${{ env.DEB_SRC_DIR }}/usr
+          cp -r .github/linux/deb/* ${{ env.DEB_SRC_DIR }}/debian
+          cp -r .github/linux/usr/* ${{ env.DEB_SRC_DIR }}/usr
          
       - name: Install cqtdeployer from sources
         run: |

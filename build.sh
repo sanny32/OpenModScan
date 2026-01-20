@@ -22,7 +22,7 @@ INSTALL_CMD=""
 SEARCH_CMD=""
 
 case "$ID" in
-    debian|ubuntu|linuxmint|astra)
+    debian|ubuntu|linuxmint|zorin|astra)
         DISTRO="debian-based"
         CHECK_CMD="dpkg -s"
         INSTALL_CMD="apt install -y"
@@ -215,13 +215,13 @@ get_packages() {
 
     case "$DISTRO" in
         debian-based)
-            general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config"
+            general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
             ;;
         rhel-based)
-            general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
+            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build pkg-config libxcbutil-cursor libcups-devel"
             ;;
         suse-based)
             general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
@@ -494,6 +494,16 @@ CXX_COMPILER=$(select_max_gpp)
 BUILD_TYPE=Release
 
 # ==========================
+# Setup cmake options
+# ==========================
+CMAKE_QT_OPTION="-DUSE_QT5=OFF -DUSE_QT6=OFF"
+if [ "$QT_CHOICE" = "qt5" ]; then
+    CMAKE_QT_OPTION="-DUSE_QT5=ON"
+elif [ "$QT_CHOICE" = "qt6" ]; then
+    CMAKE_QT_OPTION="-DUSE_QT6=ON"
+fi
+
+# ==========================
 # Build project
 # ==========================
 SANITIZED_QT_VERSION=$(echo "$QT_VERSION" | tr '.' '_' | tr ' ' '_')
@@ -501,7 +511,10 @@ BUILD_DIR="build-omodscan-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../omodscan -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" -DCMAKE_CXX_COMPILER=${CXX_COMPILER} -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+cmake ../src -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
+      -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
+      -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+      ${CMAKE_QT_OPTION}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
 echo ""

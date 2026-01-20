@@ -47,7 +47,7 @@ jobs:
 
       - name: Extract version from CMakeLists.txt
         run: |
-          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" omodscan\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
+          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" src\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
         shell: cmd
 
       - name: Convert version for dev branch
@@ -112,7 +112,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake omodscan -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
         shell: cmd
 
       - name: Build
@@ -170,10 +170,10 @@ jobs:
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ env.APP_VERSION }}" ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
-           /DICON_FILE="%CD%\omodscan\res\omodscan.ico" ^
-           /DLICENSE_FILE="%CD%\omodscan\res\license.txt" ^
+           /DICON_FILE="%CD%\src\res\omodscan.ico" ^
+           /DLICENSE_FILE="%CD%\src\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
-           %CD%\.nsis\installer-win64.nsi
+           %CD%\.github\win32\installer-win64.nsi
         shell: cmd
 
       - name: Upload Installer

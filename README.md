@@ -40,9 +40,9 @@ Registers
   
   ![image](https://github.com/user-attachments/assets/798ed74a-c5fc-413f-a173-e223c9c7d3f3)
 
-- Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
+- Modbus Scanner (support protocols: Modbus RTU, Modbus TCP and Modbus RTU over TCP)
   
-  ![image](https://github.com/user-attachments/assets/17d5f43d-c341-455d-a9b8-67db50a35699)
+  <img width="803" height="719" alt="image" src="https://github.com/user-attachments/assets/77f14c57-2a13-42d4-a8a2-e718521a40c2" />
 
 - Modbus Message Parser
 
@@ -106,6 +106,7 @@ The following minimum operating system versions are supported for OpenModScan:
 - Debian Linux 11
 - Ubuntu Linux 22.04
 - Mint Linux 22
+- Zorin OS 18
 - Fedora Linux 41
 - Rocky Linux 9.7
 - OpenSuse Linux 15.6
@@ -120,19 +121,19 @@ Below are the methods for installing the OpenModScan for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodscan_1.12.2_x86.exe`
-- For 64-bit Windows: `qt5-omodscan_1.12.2_x64.exe` or `qt6-omodscan_1.12.2_x64.exe`
+- For 32-bit Windows: `qt5-omodscan_1.13.0_x86.exe`
+- For 64-bit Windows: `qt5-omodscan_1.13.0_x64.exe` or `qt6-omodscan_1.13.0_x64.exe`
 
 
-## Debian/Ubintu/Mint/Astra Linux
+## Debian/Ubintu/Mint/Zorin/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodscan_1.12.2-1_amd64.deb
+sudo apt install ./qt6-omodscan_1.13.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodscan_1.12.2-1_amd64.deb
+sudo apt install ./qt5-omodscan_1.13.0-1_amd64.deb
 ```
 
 ### Remove
@@ -149,7 +150,7 @@ sudo apt remove qt5-omodscan
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodscan_1.12.2-1.x86_64.rpm
+sudo dnf install ./qt6-omodscan_1.13.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -162,7 +163,7 @@ sudo dnf remove qt6-omodscan
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodscan_1.12.2-1.x86_64.rpm
+apt-get install ./qt6-omodscan_1.13.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -179,7 +180,7 @@ sudo rpm --import qt6-omodscan.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodscan_1.12.2-1.x86_64.rpm
+sudo zypper install ./qt6-omodscan_1.13.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -211,7 +212,7 @@ flatpak uninstall --user io.github.sanny32.omodscan
 ```
 
 # MIT License
-Copyright 2025 Alexandr Ananev [mail@ananev.org]
+Copyright 2023-2026 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

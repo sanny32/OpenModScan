@@ -125,7 +125,7 @@ Run the installer:
 - For 64-bit Windows: `qt5-omodscan_1.13.0_x64.exe` or `qt6-omodscan_1.13.0_x64.exe`
 
 
-## Debian/Ubintu/Mint/Zorin/Astra Linux
+## Debian/Ubuntu/Mint/Zorin/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash

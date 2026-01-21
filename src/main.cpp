@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
-    w.loadSettings(profile);
-    w.show();
+    w.show(profile);
+
     return a.exec();
 }

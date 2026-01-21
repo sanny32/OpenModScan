@@ -22,9 +22,7 @@ public:
     ~MainWindow();
 
     void setLanguage(const QString& lang);
-
-    void loadSettings(const QString& filename);
-    void saveSettings();
+    void show(const QString& profile);
 
 signals:
     void modbusClientChanged(QModbusClient* cli);
@@ -32,7 +30,6 @@ signals:
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
-    void showEvent(QShowEvent* e) override;
     bool eventFilter(QObject* obj, QEvent* e) override;
 
 private slots:
@@ -152,6 +149,9 @@ private:
     void loadConfig(const QString& filename);
     void saveConfig(const QString& filename, SerializationFormat format);
 
+    void loadProfile(const QString& filename);
+    void saveProfile();
+
 private:
     Ui::MainWindow *ui;
 
@@ -160,7 +160,6 @@ private:
     QTranslator _appTranslator;
 
 private:
-    bool _shown;
     bool _autoStart;
     int _windowCounter;
 

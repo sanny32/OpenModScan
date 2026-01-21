@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
-    ,_shown(false)
     ,_autoStart(false)
     ,_windowCounter(0)
     ,_selectedPrinter(nullptr)
@@ -110,6 +109,21 @@ void MainWindow::setLanguage(const QString& lang)
 }
 
 ///
+/// \brief MainWindow::show
+/// \param profile
+///
+void MainWindow::show(const QString& profile)
+{
+    loadProfile(profile);
+
+    if(_windowCounter == 0) {
+        ui->actionNew->trigger();
+    }
+
+    QMainWindow::show();
+}
+
+///
 /// \brief MainWindow::changeEvent
 /// \param event
 ///
@@ -129,7 +143,7 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    saveSettings();
+    saveProfile();
 
     ui->mdiArea->closeAllSubWindows();
     if (ui->mdiArea->currentSubWindow())
@@ -138,23 +152,6 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 
     QMainWindow::closeEvent(event);
-}
-
-///
-/// \brief MainWindow::showEvent
-/// \param e
-///
-void MainWindow::showEvent(QShowEvent* e)
-{
-    QMainWindow::showEvent(e);
-
-    if(!_shown) {
-        _shown = true;
-
-        if(_windowCounter == 0) {
-            ui->actionNew->trigger();
-        }
-    }
 }
 
 ///
@@ -1868,7 +1865,7 @@ static bool canWriteFile(const QString& filePath)
     }
 
     const QString dirPath = QFileInfo(filePath).absolutePath();
-    return QFileInfo(dirPath).isWritable() || checkPathIsWritable(dirPath);
+    return checkPathIsWritable(dirPath);
 }
 
 ///
@@ -1887,12 +1884,13 @@ static QString getSettingsFilePath()
 }
 
 ///
-/// \brief MainWindow::loadSettings
+/// \brief MainWindow::loadProfile
 /// \param filename
 ///
-void MainWindow::loadSettings(const QString& filename)
+void MainWindow::loadProfile(const QString& filename)
 {
     _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
+    QMessageBox::information(nullptr, "", _profile);
     if(!QFile::exists(_profile)) return;
 
     QSettings m(_profile, QSettings::IniFormat, this);
@@ -1966,9 +1964,9 @@ void MainWindow::loadSettings(const QString& filename)
 }
 
 ///
-/// \brief MainWindow::saveSettings
+/// \brief MainWindow::saveProfile
 ///
-void MainWindow::saveSettings()
+void MainWindow::saveProfile()
 {
     const QString filepath = _profile.isEmpty() ? getSettingsFilePath() : _profile;
     QSettings m(filepath, QSettings::IniFormat, this);

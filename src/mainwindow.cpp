@@ -1833,7 +1833,7 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
 /// \param path
 /// \return
 ///
-bool checkPathIsWritable(const QString& path)
+static bool checkPathIsWritable(const QString& path)
 {
     const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
     if(!QFile(filepath).open(QFile::WriteOnly)) return false;
@@ -1843,17 +1843,32 @@ bool checkPathIsWritable(const QString& path)
 }
 
 ///
+/// \brief canWriteFile
+/// \param filePath
+/// \return
+///
+static bool canWriteFile(const QString& filePath)
+{
+    QFile file(filePath);
+
+    if (file.exists()) {
+        return file.open(QIODevice::WriteOnly | QIODevice::Append);
+    }
+
+    const QString dirPath = QFileInfo(filePath).absolutePath();
+    return QFileInfo(dirPath).isWritable() || checkPathIsWritable(dirPath);
+}
+
+///
 /// \brief getSettingsFilePath
 /// \return
 ///
-QString getSettingsFilePath()
+static QString getSettingsFilePath()
 {
     const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    const QString appFilePath = QDir(qApp->applicationDirPath()).filePath(filename);
 
-    const QString appDirPath = qApp->applicationDirPath();
-    const QString appFilePath = QDir(appDirPath).filePath(filename);
-
-    if (QFileInfo(appDirPath).isWritable() || checkPathIsWritable(appDirPath))
+    if (canWriteFile(appFilePath))
         return appFilePath;
 
     return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(filename);

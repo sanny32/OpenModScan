@@ -1890,7 +1890,6 @@ static QString getSettingsFilePath()
 void MainWindow::loadProfile(const QString& filename)
 {
     _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
-    QMessageBox::information(nullptr, "", _profile);
     if(!QFile::exists(_profile)) return;
 
     QSettings m(_profile, QSettings::IniFormat, this);

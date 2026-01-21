@@ -73,12 +73,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
-
-    loadSettings();
-
-    if(_windowCounter == 0) {
-        ui->actionNew->trigger();
-    }
 }
 
 ///
@@ -1863,7 +1857,7 @@ static bool canWriteFile(const QString& filePath)
 /// \brief getSettingsFilePath
 /// \return
 ///
-static QString getSettingsFilePath()
+QString getSettingsFilePath()
 {
     const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
     const QString appFilePath = QDir(qApp->applicationDirPath()).filePath(filename);
@@ -1876,10 +1870,11 @@ static QString getSettingsFilePath()
 
 ///
 /// \brief MainWindow::loadSettings
+/// \param filename
 ///
-void MainWindow::loadSettings()
+void MainWindow::loadSettings(const QString& filename)
 {
-    const QString filepath = getSettingsFilePath();
+    const QString filepath = filename.isEmpty() ? getSettingsFilePath() : filename;
     if(!QFile::exists(filepath)) return;
 
     QSettings m(filepath, QSettings::IniFormat, this);
@@ -1947,8 +1942,7 @@ void MainWindow::loadSettings()
         }
     }
 
-    if(_autoStart)
-    {
+    if(_autoStart) {
         loadConfig(_fileAutoStart);
     }
 }

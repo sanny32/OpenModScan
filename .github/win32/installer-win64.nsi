@@ -17,9 +17,21 @@
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
   !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} has been installed on your computer."
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
+  !define MUI_FINISHPAGE_RUN LaunchWithProfile
+  !define MUI_FINISHPAGE_RUN_FUNCTION 
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
+
+Function LaunchWithProfile
+  StrCpy $0 "$INSTDIR\${APPFILE}"
+  ${GetFileName} "$0" $1
+  ${GetBaseName} $1 $2
+  StrCpy $3 "$2.ini"
+  StrCpy $4 "$LOCALAPPDATA\Open ModScan"
+  StrCpy $5 "$4\$3"
+  ExecWait '"$0" --profile "$5"'
+FunctionEnd
+
 
 #--------------------------------
 # Variables

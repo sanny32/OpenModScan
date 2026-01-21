@@ -1,5 +1,7 @@
 #include <QApplication>
+#include <QMessageBox>
 #include "mainwindow.h"
+#include "cmdlineparser.h"
 
 ///
 /// \brief The PaletteGuard class
@@ -50,6 +52,70 @@ public:
 };
 
 ///
+/// \brief isConsoleOutputAvailable
+/// \return
+///
+static inline bool isConsoleOutputAvailable()
+{
+#ifdef Q_OS_WIN
+    return false;
+#else
+    return true;
+#endif
+}
+
+///
+/// \brief showVersion
+///
+static inline void showVersion()
+{
+    const auto version = QString("%1\n").arg(APP_VERSION);
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(version));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
+    }
+    else {
+        fputs(qPrintable(version), stdout);
+        fflush(stdout);
+    }
+}
+
+///
+/// \brief showErrorMessage
+/// \param message
+///
+static void showErrorMessage(const QString &message)
+{
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Critical, APP_NAME, qPrintable(message));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
+    }
+    else {
+        fputs(qPrintable(message), stderr);
+        fflush(stderr);
+    }
+}
+
+///
+/// \brief showHelp
+/// \param helpText
+///
+static inline void showHelp(const QString& helpText)
+{
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(helpText));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
+    }
+    else {
+        fputs(qPrintable(helpText), stdout);
+        fflush(stdout);
+    }
+}
+
+///
 /// \brief main
 /// \param argc
 /// \param argv
@@ -69,7 +135,19 @@ int main(int argc, char *argv[])
     a.installEventFilter(new PaletteGuard(&a));
 #endif
 
+    CmdLineParser parser;
+    if(!parser.parse(a.arguments())) {
+        showErrorMessage(parser.errorText() + QLatin1Char('\n'));
+        return EXIT_FAILURE;
+    }
+
+    QString profile;
+    if(parser.isSet(CmdLineParser::_profile)) {
+        profile = parser.value(CmdLineParser::_profile);
+    }
+
     MainWindow w;
+    w.loadSettings(profile);
     w.show();
     return a.exec();
 }

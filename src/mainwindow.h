@@ -23,6 +23,9 @@ public:
 
     void setLanguage(const QString& lang);
 
+    void loadSettings(const QString& filename);
+    void saveSettings();
+
 signals:
     void modbusClientChanged(QModbusClient* cli);
 
@@ -147,9 +150,6 @@ private:
 
     void loadConfig(const QString& filename);
     void saveConfig(const QString& filename, SerializationFormat format);
-
-    void loadSettings();
-    void saveSettings();
 
 private:
     Ui::MainWindow *ui;

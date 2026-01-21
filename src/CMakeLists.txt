@@ -81,6 +81,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # Source files
 set(SOURCES
     ansimenu.cpp
+    cmdlineparser.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
     controls/booleancombobox.cpp
@@ -156,6 +157,7 @@ set(HEADERS
     ansimenu.h
     ansiutils.h
     byteorderutils.h
+    cmdlineparser.h
     connectiondetails.h
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h

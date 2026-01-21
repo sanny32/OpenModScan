@@ -2,7 +2,6 @@
 # Includes
 
   !include "MUI2.nsh"
-  !include "UAC.nsh"
   !include "LogicLib.nsh"
   !include "FileFunc.nsh"
 
@@ -18,14 +17,9 @@
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
   !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} has been installed on your computer."
-  !define MUI_FINISHPAGE_RUN
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
-  !define MUI_FINISHPAGE_RUN_FUNCTION RunApp
   !define MUI_FINISHPAGE_RUN_CHECKED
-
-Function RunApp
-  !insertmacro UAC_AsUser_ExecShell "$INSTDIR\${APPFILE}"
-FunctionEnd
 
 #--------------------------------
 # Variables

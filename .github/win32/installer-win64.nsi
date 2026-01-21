@@ -2,6 +2,7 @@
 # Includes
 
   !include "MUI2.nsh"
+  !include "UAC.nsh"
   !include "LogicLib.nsh"
   !include "FileFunc.nsh"
 
@@ -23,7 +24,7 @@
   !define MUI_FINISHPAGE_RUN_CHECKED
 
 Function RunApp
-  ExecShell "open" "$INSTDIR\${APPFILE}"
+  !insertmacro UAC_AsUser_ExecShell "$INSTDIR\${APPFILE}"
 FunctionEnd
 
 #--------------------------------

@@ -32,6 +32,7 @@ signals:
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
+    void showEvent(QShowEvent* e) override;
     bool eventFilter(QObject* obj, QEvent* e) override;
 
 private slots:
@@ -159,8 +160,10 @@ private:
     QTranslator _appTranslator;
 
 private:
-    int _windowCounter;
+    bool _shown;
     bool _autoStart;
+    int _windowCounter;
+
     QString _fileAutoStart;
     ConnectionDetails _connParams;
     ModbusClient _modbusClient;
@@ -172,6 +175,7 @@ private:
     QPrinter* _selectedPrinter;
     DataSimulator* _dataSimulator;
     QString _savePath;
+    QString _profile;
 
     quint32 _lastWriteSingleCoilAddress = 0;
     quint32 _lastWriteHoldingRegisterAddress = 0;

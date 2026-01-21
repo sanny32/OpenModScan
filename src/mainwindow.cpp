@@ -32,8 +32,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
-    ,_windowCounter(0)
+    ,_shown(false)
     ,_autoStart(false)
+    ,_windowCounter(0)
     ,_selectedPrinter(nullptr)
     ,_dataSimulator(new DataSimulator(this))
 {
@@ -137,6 +138,23 @@ void MainWindow::closeEvent(QCloseEvent* event)
     }
 
     QMainWindow::closeEvent(event);
+}
+
+///
+/// \brief MainWindow::showEvent
+/// \param e
+///
+void MainWindow::showEvent(QShowEvent* e)
+{
+    QMainWindow::showEvent(e);
+
+    if(!_shown) {
+        _shown = true;
+
+        if(_windowCounter == 0) {
+            ui->actionNew->trigger();
+        }
+    }
 }
 
 ///
@@ -1854,10 +1872,10 @@ static bool canWriteFile(const QString& filePath)
 }
 
 ///
-/// \brief getSettingsFilePath
+/// \brief MainWindow::getSettingsFilePath
 /// \return
 ///
-QString getSettingsFilePath()
+static QString getSettingsFilePath()
 {
     const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
     const QString appFilePath = QDir(qApp->applicationDirPath()).filePath(filename);
@@ -1874,10 +1892,10 @@ QString getSettingsFilePath()
 ///
 void MainWindow::loadSettings(const QString& filename)
 {
-    const QString filepath = filename.isEmpty() ? getSettingsFilePath() : filename;
-    if(!QFile::exists(filepath)) return;
+    _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
+    if(!QFile::exists(_profile)) return;
 
-    QSettings m(filepath, QSettings::IniFormat, this);
+    QSettings m(_profile, QSettings::IniFormat, this);
 
     const auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
     setGeometry(geometry);
@@ -1952,7 +1970,7 @@ void MainWindow::loadSettings(const QString& filename)
 ///
 void MainWindow::saveSettings()
 {
-    const QString filepath = getSettingsFilePath();
+    const QString filepath = _profile.isEmpty() ? getSettingsFilePath() : _profile;
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.clear();

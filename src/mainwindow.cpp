@@ -1829,17 +1829,42 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
 }
 
 ///
+/// \brief checkPathIsWritable
+/// \param path
+/// \return
+///
+bool checkPathIsWritable(const QString& path)
+{
+    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
+    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
+
+    QFile::remove(filepath);
+    return true;
+}
+
+///
+/// \brief getSettingsFilePath
+/// \return
+///
+QString getSettingsFilePath()
+{
+    const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+
+    const QString appDirPath = qApp->applicationDirPath();
+    const QString appFilePath = QDir(appDirPath).filePath(filename);
+
+    if (QFileInfo(appDirPath).isWritable() || checkPathIsWritable(appDirPath))
+        return appFilePath;
+
+    return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(filename);
+}
+
+///
 /// \brief MainWindow::loadSettings
 ///
 void MainWindow::loadSettings()
 {
-    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
-    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
-
-    if(!QFile::exists(filepath))
-        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-                                         QDir::separator(), filename);
-
+    const QString filepath = getSettingsFilePath();
     if(!QFile::exists(filepath)) return;
 
     QSettings m(filepath, QSettings::IniFormat, this);
@@ -1914,31 +1939,11 @@ void MainWindow::loadSettings()
 }
 
 ///
-/// \brief checkPathIsWritable
-/// \param path
-/// \return
-///
-bool checkPathIsWritable(const QString& path)
-{
-    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
-    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
-
-    QFile::remove(filepath);
-    return true;
-}
-
-///
 /// \brief MainWindow::saveSettings
 ///
 void MainWindow::saveSettings()
 {
-    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
-    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
-
-    if(!QFileInfo(qApp->applicationDirPath()).isWritable() || !checkPathIsWritable(qApp->applicationDirPath()))
-        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-                                         QDir::separator(), filename);
-
+    const QString filepath = getSettingsFilePath();
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.clear();

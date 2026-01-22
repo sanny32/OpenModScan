@@ -32,7 +32,8 @@ Function LaunchWithProfile
   StrCpy $3 "$2.ini"
   StrCpy $4 "$LOCALAPPDATA\Open ModScan"
   StrCpy $5 "$4\$3"
-  ExecShell "open" "$0" "--profile \"$5\"" "SW_SHOWNORMAL"
+  StrCpy $6 "\"--profile\" \"$5\""
+  ExecShell "open" "$0 $6" SW_SHOWNORMAL
 FunctionEnd
 
 #--------------------------------

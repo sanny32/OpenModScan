@@ -1,4 +1,5 @@
 #include <QFile>
+#include <QDate>
 #include <QStyle>
 #include <QTabBar>
 #include <QScrollArea>
@@ -78,6 +79,9 @@ DialogAbout::DialogAbout(QWidget *parent) :
 
     ui->labelName->setText(APP_NAME);
     ui->labelVersion->setText(tr("Version: <b>%1</b> %2").arg(APP_VERSION, arch()));
+
+    const auto copyright = QString(ui->labelCopyright->text()).arg(QDate::currentDate().year());
+    ui->labelCopyright->setText(copyright);
 
     {
         auto vboxLayout = new QVBoxLayout();
@@ -265,11 +269,15 @@ void DialogAbout::on_labelLicense_clicked()
 {
     QString license;
     QFile f(":/res/license.txt");
-    if(f.open(QFile::ReadOnly))
+    if(f.open(QFile::ReadOnly)) {
         license = f.readAll();
+    }
 
-    if(license.isEmpty())
+    if(license.isEmpty()) {
         return;
+    }
+
+    license = QString(license).arg(QDate::currentDate().year());
 
     auto dlg = new QDialog(this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);

@@ -163,6 +163,13 @@ jobs:
           choco install nsis -y
         shell: cmd
 
+      - name: Replace %1 with current year in license.txt
+        shell: pwsh
+        run: |
+          $year = (Get-Date).Year
+          $path = "${{ github.workspace }}\src\res\license.txt"
+          (Get-Content $path) -replace '%1', $year | Set-Content $path -Encoding UTF8
+          
       - name: Build NSIS installer
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^

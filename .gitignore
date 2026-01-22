@@ -58,4 +58,4 @@ CMakeLists.txt.user*
 *.qtds
 *.ts text eol=lf
 *.log
-
+src/res/license.txt

@@ -18,11 +18,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(const QString& profile, QWidget *parent = nullptr);
     ~MainWindow();
 
     void setLanguage(const QString& lang);
-    void show(const QString& profile);
 
 signals:
     void modbusClientChanged(QModbusClient* cli);

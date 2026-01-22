@@ -26,9 +26,10 @@
 
 ///
 /// \brief MainWindow::MainWindow
+/// \param profile
 /// \param parent
 ///
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(const QString& profile, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
@@ -73,6 +74,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
+
+    loadProfile(profile);
+
+    if(_windowCounter == 0) {
+        ui->actionNew->trigger();
+    }
 }
 
 ///
@@ -106,21 +113,6 @@ void MainWindow::setLanguage(const QString& lang)
         if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang)))
             qApp->installTranslator(&_qtTranslator);
     }
-}
-
-///
-/// \brief MainWindow::show
-/// \param profile
-///
-void MainWindow::show(const QString& profile)
-{
-    loadProfile(profile);
-
-    if(_windowCounter == 0) {
-        ui->actionNew->trigger();
-    }
-
-    QMainWindow::show();
 }
 
 ///

@@ -146,8 +146,8 @@ int main(int argc, char *argv[])
         profile = parser.value(CmdLineParser::_profile);
     }
 
-    MainWindow w;
-    w.show(profile);
+    MainWindow w(profile);
+    w.show();
 
     return a.exec();
 }

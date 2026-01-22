@@ -30,10 +30,10 @@ Function LaunchWithProfile
   ${GetFileName} "$0" $1
   ${GetBaseName} $1 $2
   StrCpy $3 "$2.ini"
-  StrCpy $4 "$LOCALAPPDATA\Open ModScan"
+  StrCpy $4 "$LOCALAPPDATA\${NAME}"
   StrCpy $5 "$4\$3"
-  StrCpy $6 "\"--profile\" \"$5\""
-  ExecShell "open" "$0 $6" SW_SHOWNORMAL
+  Exec '"$0" --profile "$5"'
+  Sleep 300
 FunctionEnd
 
 #--------------------------------

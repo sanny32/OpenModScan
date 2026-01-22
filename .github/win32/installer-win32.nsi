@@ -18,6 +18,7 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "$NSISDIR\Contrib\Graphics\Wizard\nsis3-vintage.bmp"
   !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} (x86) has been installed on your computer."
   !define MUI_FINISHPAGE_RUN
   !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
@@ -75,6 +76,7 @@ FunctionEnd
 # Pages
   
   # Installer pages
+  !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES

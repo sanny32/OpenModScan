@@ -288,7 +288,7 @@ void DialogAbout::on_labelLicense_clicked()
     auto buttonBox = new QDialogButtonBox(dlg);
     buttonBox->setOrientation(Qt::Horizontal);
     buttonBox->setStandardButtons(QDialogButtonBox::Close);
-    QObject::connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
 
     auto textEdit = new QPlainTextEdit(dlg);
     textEdit->setReadOnly(true);

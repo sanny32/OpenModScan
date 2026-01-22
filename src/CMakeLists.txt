@@ -22,6 +22,16 @@ list(GET VERSION_LIST 0 VERSION_MAJOR)
 list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
 
+# Define current year
+string(TIMESTAMP CURRENT_YEAR "%Y")
+
+# Generate license.txt
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt
+    @ONLY
+)
+
 if(USE_QT5)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools REQUIRED)
 elseif(USE_QT6)
@@ -38,10 +48,8 @@ if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
     message(FATAL_ERROR "One or more Qt development packages not found. Please install Qt5 or Qt6 development packages.")
 endif()
 
-
 # Define target
-add_executable(${PROJECT_NAME}
-    modbusrtutcpscanner.h)
+add_executable(${PROJECT_NAME})
 
 if(DEFINED ENV{GITHUB_REF})
     string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})
@@ -69,6 +77,7 @@ endif()
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
+add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
 # Include directories
 target_include_directories(${PROJECT_NAME} PRIVATE

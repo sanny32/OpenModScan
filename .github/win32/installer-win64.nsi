@@ -56,7 +56,17 @@ FunctionEnd
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES64\${NAME}"
   RequestExecutionLevel admin
-  ManifestDPIAwareness "PerMonitorV2,System"
+  ManifestDPIAware true
+  #ManifestDPIAwareness "PerMonitorV2,System"
+  SetCompressor /SOLID lzma
+  SetCompressorDictSize 64
+  VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
+  VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
+  VIAddVersionKey /LANG=0 "ProductName"      "${NAME}"
+  VIAddVersionKey /LANG=0 "FileDescription"  "${NAME}"
+  VIAddVersionKey /LANG=0 "LegalCopyright"   "Copyright (c) ${COPYRIGHT}"
 
 #--------------------------------
 # Pages

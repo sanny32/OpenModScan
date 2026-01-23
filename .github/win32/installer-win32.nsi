@@ -52,6 +52,25 @@ FunctionEnd
   Var RebootRequired
 
 #--------------------------------
+# General
+
+  Name "${NAME} v${VERSION} (x86)"
+  OutFile "${OUTPUT_FILE}"
+  InstallDir "$PROGRAMFILES\${NAME}"
+  RequestExecutionLevel admin
+  ManifestDPIAware true
+  #ManifestDPIAwareness "PerMonitorV2,System"
+  SetCompressor /SOLID lzma
+  SetCompressorDictSize 64
+  VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
+  VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
+  VIAddVersionKey /LANG=0 "ProductName"      "${NAME}"
+  VIAddVersionKey /LANG=0 "FileDescription"  "${NAME}"
+  VIAddVersionKey /LANG=0 "LegalCopyright"   "Copyright (c) ${COPYRIGHT}"
+
+#--------------------------------
 
 !macro SetDisplayName un
 Function ${un}SetDisplayName
@@ -73,15 +92,6 @@ FunctionEnd
 Function un.onInit
   Call un.SetDisplayName
 FunctionEnd
-
-#--------------------------------
-# General
-
-  Name "${NAME} v${VERSION} (x86)"
-  OutFile "${OUTPUT_FILE}"
-  InstallDir "$PROGRAMFILES\${NAME}"
-  RequestExecutionLevel admin 
-  ManifestDPIAwareness "PerMonitorV2,System"
 
 #--------------------------------
 # Pages

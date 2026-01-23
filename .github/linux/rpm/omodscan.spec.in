@@ -15,12 +15,15 @@ An Open Source Modbus Master (Client) Utility
 
 %build
 
-
 %install
 %{__mkdir_p} %{buildroot}/opt
 %{__cp} -r %{_sourcedir}/omodscan/opt/* %{buildroot}/opt
 %{__mkdir_p} %{buildroot}/usr
 %{__cp} -r %{_sourcedir}/omodscan/usr/* %{buildroot}/usr
+
+# AppStream (screenshots)
+%{__mkdir_p} %{buildroot}/usr/share/appdata/omdoscan
+%{__cp} -r %{_sourcedir}/omodscan/usr/share/appdata/* %{buildroot}/usr/share/appdata/omdoscan/
 
 %post
 if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then
@@ -51,4 +54,9 @@ rm -f /usr/bin/omodscan
 /usr/share/icons/hicolor/64x64/apps/omodscan.png
 /usr/share/icons/hicolor/32x32/apps/omodscan.png
 /usr/share/icons/hicolor/16x16/apps/omodscan.png
+
+# AppStream (screenshots)
+%{__mkdir_p} %{buildroot}/usr/share/appdata/omdoscan
+%{__cp} -r %{_sourcedir}/omodscan/usr/share/appdata/* %{buildroot}/usr/share/appdata/omdoscan/
+
 %caps(cap_net_bind_service=+ep) /opt/OpenModScan/bin/omodscan

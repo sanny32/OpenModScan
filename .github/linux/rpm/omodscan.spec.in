@@ -45,12 +45,11 @@ rm -f /usr/bin/omodscan
 
 %files
 /opt/OpenModScan
-/usr/share/applications/omodscan.desktop
-/usr/share/icons/hicolor/128x128/apps/omodscan.png
-/usr/share/icons/hicolor/64x64/apps/omodscan.png
-/usr/share/icons/hicolor/32x32/apps/omodscan.png
-/usr/share/icons/hicolor/16x16/apps/omodscan.png
-/usr/share/appdata/
-/usr/share/appdata/*
+/usr/share/Applications
+/usr/share/applications/*
+/usr/share/icons
+/usr/share/icons/*
+/usr/share/appdata/omodscan
+/usr/share/appdata/omodscan*
 
 %caps(cap_net_bind_service=+ep) /opt/OpenModScan/bin/omodscan

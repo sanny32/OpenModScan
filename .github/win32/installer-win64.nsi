@@ -56,7 +56,7 @@ FunctionEnd
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES64\${NAME}"
   RequestExecutionLevel admin
-  ManifestDPIAware true
+  ManifestDPIAwareness "PerMonitorV2,System"
 
 #--------------------------------
 # Pages

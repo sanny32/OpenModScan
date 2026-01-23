@@ -80,8 +80,8 @@ FunctionEnd
   Name "${NAME} v${VERSION} (x86)"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES\${NAME}"
-  RequestExecutionLevel admin
-  ManifestDPIAware true  
+  RequestExecutionLevel admin 
+  ManifestDPIAwareness "PerMonitorV2,System"
 
 #--------------------------------
 # Pages

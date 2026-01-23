@@ -45,7 +45,7 @@ rm -f /usr/bin/omodscan
 
 %files
 /opt/OpenModScan
-/usr/share/Applications
+/usr/share/applications
 /usr/share/applications/*
 /usr/share/icons
 /usr/share/icons/*

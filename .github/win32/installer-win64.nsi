@@ -34,6 +34,15 @@ Function LaunchWithProfile
   Sleep 300
 FunctionEnd
 
+  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
+  !ifndef VERSIONBUILD
+    !define VERSIONBUILD "0"
+  !endif
+  !ifndef VERSIONPATCH
+    !define VERSIONPATCH "0"
+    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
+  !endif
+  !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
 
 #--------------------------------
 # Variables

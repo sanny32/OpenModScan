@@ -6,7 +6,6 @@
   !include "FileFunc.nsh"
   !include "x64.nsh"
 
-
 #--------------------------------
 # Custom defines
   !define MUI_ICON ${ICON_FILE}
@@ -82,6 +81,7 @@ FunctionEnd
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES\${NAME}"
   RequestExecutionLevel admin
+  ManifestDPIAware true  
 
 #--------------------------------
 # Pages

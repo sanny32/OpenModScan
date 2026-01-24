@@ -49,7 +49,7 @@ rm -f /usr/bin/omodscan
 /usr/share/applications/*
 /usr/share/icons
 /usr/share/icons/*
-/usr/share/appdata/omodscan
-/usr/share/appdata/omodscan*
+/usr/share/appdata/metainfo
+/usr/share/appdata/metainfo/*
 
 %caps(cap_net_bind_service=+ep) /opt/OpenModScan/bin/omodscan

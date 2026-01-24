@@ -1,0 +1,31 @@
+<component type="desktop-application">
+  <id>omodscan.desktop</id>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <name>Open ModScan</name>
+  <summary>An Open Source Modbus Master (Client) Utility</summary>
+
+  <description>
+   <p>
+      Open ModScan is an open source Modbus master (client) utility
+      for testing and debugging Modbus TCP and RTU devices.
+   </p>
+  </description>
+
+  <developer>
+    <name>Alexandr Ananev</name>
+  </developer>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/dev/.github/screenshots/omodscan.main.png</image>
+      <caption>Main window</caption>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://github.com/sanny32/OpenModScan</url>
+
+  <launchable type="desktop-id">omodscan.desktop</launchable>
+</component>

@@ -194,9 +194,9 @@ jobs:
       - name: Create metainfo file
         run: |
           sed -e "s|@REF_NAME@|${{ env.GITHUB_REF_NAME }}|g" \
-              ${{ env.BUILD_RPM_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.BUILD_RPM_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
-          rm ${{ env.BUILD_RPM_DIR }}//usr/share/metainfo/omodscan.metainfo.xml.in
-          cat -n ${{ env.BUILD_RPM_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
+              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml
+          rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan//usr/share/metainfo/omodscan.metainfo.xml.in
+          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/opt/OpenModScan/bin/omodscan"

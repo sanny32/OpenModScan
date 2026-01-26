@@ -9,6 +9,7 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
+        default: dev
       tag:
         description: 'Checkout tag'
         required: false
@@ -215,6 +216,13 @@ jobs:
           rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
           cat -n ${{ env.DEB_SRC_DIR }}/debian/rules
 
+      - name: Create metainfo file
+        run: |
+          sed -e "s|@REF_NAME@|${{ env.GITHUB_REF_NAME }}|g" \
+              ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
+          rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
+          
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModScan/bin/omodscan"
 

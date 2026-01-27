@@ -23,7 +23,9 @@
    </p>
   </description>
 
-  <developer>
+  <icon type="stock">io.github.sanny32.omodscan</icon>
+
+  <developer id="io.github.sanny32">
     <name>Alexandr Ananev</name>
   </developer>
   <update_contact>mail@ananev.org</update_contact>
@@ -50,4 +52,10 @@
   <url type="homepage">https://github.com/sanny32/OpenModScan</url>
 
   <launchable type="desktop-id">io.github.sanny32.omodscan.desktop</launchable>
+
+  <categories>
+    <category>Utility</category>
+  </categories>
+
+  <content_rating type="oars-1.1"/>
 </component>

@@ -6,6 +6,9 @@
 
   <name>Open ModScan</name>
   <summary>An Open Source Modbus Master (Client) Utility</summary>
+  <summary xml:lang="zh_TW">一款開源的 Modbus 主站（客戶端）實用程式</summary>
+  <summary xml:lang="zh_CN">一款开源的 Modbus 主站（客户端）实用程序</summary>
+  <summary xml:lang="ru">Программа Modbus Master (клиент) с открытым исходным кодом</summary>
 
   <description>
    <p>

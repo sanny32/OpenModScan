@@ -1,5 +1,5 @@
 <component type="desktop-application">
-  <id>omodscan</id>
+  <id>io.github.sanny32.omodscan</id>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>

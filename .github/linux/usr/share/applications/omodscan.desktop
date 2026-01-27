@@ -2,7 +2,7 @@
 Name=Open ModScan
 Comment=An Open Source Modbus Master (Client) Utility
 Exec=/opt/OpenModScan/omodscan.sh
-Icon=io.github.sanny32.omodscan
+Icon=omodscan
 Terminal=false
 Type=Application
 Categories=Utility;

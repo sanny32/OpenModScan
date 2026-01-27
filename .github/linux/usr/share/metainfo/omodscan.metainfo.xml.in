@@ -1,5 +1,5 @@
 <component type="desktop-application">
-  <id>io.github.sanny32.omodscan</id>
+  <id>omodscan</id>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
@@ -22,8 +22,6 @@
       предназначенная для тестирования и отладки устройств Modbus TCP и RTU.
    </p>
   </description>
-
-  <icon type="stock">io.github.sanny32.omodscan</icon>
 
   <developer id="io.github.sanny32">
     <name>Alexandr Ananev</name>
@@ -51,7 +49,7 @@
 
   <url type="homepage">https://github.com/sanny32/OpenModScan</url>
 
-  <launchable type="desktop-id">io.github.sanny32.omodscan.desktop</launchable>
+  <launchable type="desktop-id">omodscan.desktop</launchable>
 
   <categories>
     <category>Utility</category>

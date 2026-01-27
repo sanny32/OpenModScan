@@ -1,5 +1,5 @@
 <component type="desktop-application">
-  <id>omodscan.desktop</id>
+  <id>omodscan</id>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
@@ -42,6 +42,10 @@
       <caption>Modbus scanner window</caption>
     </screenshot>
   </screenshots>
+
+  <provides>
+    <binary>omodscan</binary>
+  </provides>
 
   <url type="homepage">https://github.com/sanny32/OpenModScan</url>
 

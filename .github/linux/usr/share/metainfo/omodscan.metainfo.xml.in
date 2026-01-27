@@ -12,16 +12,31 @@
       Open ModScan is an open source Modbus master (client) utility
       for testing and debugging Modbus TCP and RTU devices.
    </p>
+   <p xml:lang="zh_TW">Open ModScan 是一个开源的 Modbus 主站（客户端）实用程序，用于测试和调试 Modbus TCP 和 RTU 设备。</p>
+   <p xml:lang="zh_CN">Open ModScan 是一個開源的 Modbus 主站（客戶端）實用程序，用於測試和調試 Modbus TCP 和 RTU 設備。</p>
+   <p xml:lang="ru">
+      Open ModScan — это программа с открытым исходным кодом для работы с устройствами по протоколу Modbus,
+      предназначенная для тестирования и отладки устройств Modbus TCP и RTU.
+   </p>
   </description>
 
   <developer>
     <name>Alexandr Ananev</name>
   </developer>
+  <update_contact>mail@ananev.org</update_contact>
 
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.main.png</image>
       <caption>Main window</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.log.png</image>
+      <caption>Log window</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.scanner.png</image>
+      <caption>Modbus scanner window</caption>
     </screenshot>
   </screenshots>
 

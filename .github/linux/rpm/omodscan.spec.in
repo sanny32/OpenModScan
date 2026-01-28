@@ -9,7 +9,8 @@ Packager:       Alexandr Ananev <mail@ananev.org>
 Source0:        SOURCES/omodscan
 
 %description
-An Open Source Modbus Master (Client) Utility
+Open ModScan is an open source Modbus master (client) utility
+for testing and debugging Modbus TCP and RTU devices.
 
 %global _build_id_links none
 

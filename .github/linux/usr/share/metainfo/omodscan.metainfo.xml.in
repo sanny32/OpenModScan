@@ -30,21 +30,21 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.main.png</image>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan-main.png</image>
       <caption>Main window</caption>
       <caption xml:lang="zh_TW">主視窗</caption>
       <caption xml:lang="zh_CN">主窗口</caption>
       <caption xml:lang="ru">Главное окно</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.log.png</image>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan-log.png</image>
       <caption>Log window</caption>
       <caption xml:lang="zh_TW">日誌視窗</caption>
       <caption xml:lang="zh_CN">日志窗口</caption>
       <caption xml:lang="ru">Окно логирования</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.scanner.png</image>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan-scanner.png</image>
       <caption>Modbus scanner window</caption>
       <caption xml:lang="zh_TW">Modbus 掃描器視窗</caption>
       <caption xml:lang="zh_CN">Modbus 扫描仪窗口</caption>

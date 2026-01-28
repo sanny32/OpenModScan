@@ -5,6 +5,7 @@ Summary:        An Open Source Modbus Master (Client) Utility
 Group:          Applications/Utility
 License:        MIT
 URL:            https://github.com/sanny32/OpenModScan
+Packager:       Alexandr Ananev <mail@ananev.org>
 Source0:        SOURCES/omodscan
 
 %description
@@ -54,5 +55,3 @@ rm -f /usr/bin/omodscan
 /usr/share/metainfo/*
 
 %caps(cap_net_bind_service=+ep) /opt/OpenModScan/bin/omodscan
-
-%icon /usr/share/icons/hicolor/128x128/apps/omodscan.png

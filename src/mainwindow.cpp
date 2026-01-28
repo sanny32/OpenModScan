@@ -25,6 +25,43 @@
 #include "ui_mainwindow.h"
 
 ///
+/// \brief availableTranslations
+/// \return
+///
+static QStringList availableTranslations()
+{
+    QStringList locales;
+    const QStringList files = QDir(":/translations").entryList(QStringList() << "*.qm", QDir::Files);
+
+    for (auto file : files) {
+        locales << file.remove("omodscan_").remove(".qm");
+    }
+
+    return locales;
+}
+
+///
+/// \brief translationLang
+/// \return
+///
+static QString translationLang()
+{
+    const QStringList locales = availableTranslations();
+    const QString sysLocale = QLocale::system().name();
+
+    for (const QString &pattern : locales) {
+        const QString regexPattern = QString("%1.*").arg(pattern);
+        QRegularExpression re("^" + regexPattern + "$", QRegularExpression::CaseInsensitiveOption);
+
+        if(re.match(sysLocale).hasMatch()) {
+            return pattern;
+        }
+    }
+
+    return "en";
+}
+
+///
 /// \brief MainWindow::MainWindow
 /// \param profile
 /// \param parent
@@ -32,7 +69,7 @@
 MainWindow::MainWindow(const QString& profile, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    ,_lang("en")
+    ,_lang(translationLang())
     ,_autoStart(false)
     ,_windowCounter(0)
     ,_selectedPrinter(nullptr)
@@ -40,6 +77,7 @@ MainWindow::MainWindow(const QString& profile, QWidget *parent)
 {
     ui->setupUi(this);
 
+    setLanguage(_lang);
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
@@ -1914,7 +1952,7 @@ void MainWindow::loadProfile(const QString& filename)
     _autoStart = m.value("AutoStart").toBool();
     _fileAutoStart = m.value("StartUpFile").toString();
 
-    _lang = m.value("Language", "en").toString();
+    _lang = m.value("Language", translationLang()).toString();
     setLanguage(_lang);
 
     _savePath = m.value("SavePath").toString();

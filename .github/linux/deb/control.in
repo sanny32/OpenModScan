@@ -10,3 +10,4 @@ Package: @PACKAGE_NAME@
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: An Open Source Modbus Master (Client) Utility.
+License: MIT

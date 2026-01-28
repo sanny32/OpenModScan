@@ -1,8 +1,9 @@
 [Desktop Entry]
 Name=Open ModScan
 Comment=An Open Source Modbus Master (Client) Utility
-Comment[zh_TW]=一款開源的 Modbus 主站（客戶端）實用程式
+Comment[zh]=一款开源的 Modbus 主站（客户端）实用程序
 Comment[zh_CN]=一款开源的 Modbus 主站（客户端）实用程序
+Comment[zh_TW]=一款開源的 Modbus 主站（客戶端）實用程式
 Comment[ru]=Программа Modbus Master (клиент) с открытым исходным кодом
 Exec=omodscan
 Icon=omodscan

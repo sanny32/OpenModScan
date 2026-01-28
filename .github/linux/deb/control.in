@@ -9,6 +9,7 @@ Standards-Version: 4.6.2
 Package: @PACKAGE_NAME@
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: An Open Source Modbus Master (Client) Utility.
+Description: An Open Source Modbus Master (Client) Utility
  OpenModScan is an open source Modbus master (client) utility
  for testing and debugging Modbus TCP and RTU devices.
+ 

@@ -1,5 +1,5 @@
 <component type="desktop-application">
-  <id>omodscan</id>
+  <id>omodscan.desktop</id>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
@@ -23,7 +23,7 @@
    </p>
   </description>
 
-  <developer id="io.github.sanny32">
+  <developer id="sanny32">
     <name>Alexandr Ananev</name>
   </developer>
   <update_contact>mail@ananev.org</update_contact>
@@ -32,14 +32,23 @@
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.main.png</image>
       <caption>Main window</caption>
+      <caption xml:lang="zh_TW">主視窗</caption>
+      <caption xml:lang="zh_CN">主窗口</caption>
+      <caption xml:lang="ru">Главное окно</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.log.png</image>
       <caption>Log window</caption>
+      <caption xml:lang="zh_TW">日誌視窗</caption>
+      <caption xml:lang="zh_CN">日志窗口</caption>
+      <caption xml:lang="ru">Окно логирования</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/sanny32/OpenModScan/refs/heads/@REF_NAME@/.github/screenshots/omodscan.scanner.png</image>
       <caption>Modbus scanner window</caption>
+      <caption xml:lang="zh_TW">Modbus 掃描器視窗</caption>
+      <caption xml:lang="zh_CN">Modbus 扫描仪窗口</caption>
+      <caption xml:lang="ru">Окно сканера Modbus</caption>
     </screenshot>
   </screenshots>
 
@@ -48,12 +57,7 @@
   </provides>
 
   <url type="homepage">https://github.com/sanny32/OpenModScan</url>
-
-  <launchable type="desktop-id">omodscan.desktop</launchable>
-
-  <categories>
-    <category>Utility</category>
-  </categories>
+  <url type="bugtracker">https://github.com/sanny32/OpenModScan/issues</url>
 
   <content_rating type="oars-1.1"/>
 </component>

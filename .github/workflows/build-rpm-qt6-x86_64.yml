@@ -203,9 +203,9 @@ jobs:
         run: |
           sed -e "s|@APP_EXEC@|omodscan|g" \
               -e "s|@APP_ICON@|omodscan|g" \
-              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop
-          rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop.in
-          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop
+              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop
+          rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop.in
+          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/opt/OpenModScan/bin/omodscan"

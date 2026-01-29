@@ -202,9 +202,9 @@ jobs:
         run: |
           sed -e "s|@APP_EXEC@|omodscan|g" \
               -e "s|@APP_ICON@|omodscan|g" \
-              ${{ env.DEB_SRC_DIR }}/usr/share/application/omodscan.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/application/omodscan.desktop
-          rm ${{ env.DEB_SRC_DIR }}/usr/share/application/omodscan.desktop.in
-          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/application/omodscan.desktop
+              ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop
+          rm ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop.in
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModScan/bin/omodscan"

@@ -76,6 +76,6 @@ modules:
       - type: file
         path: ../usr/share/icons/hicolor/128x128/apps/omodscan.png
       - type: file
-        path: ../usr/share/applications/omodscan.desktop
+        path: ../usr/share/applications/omodscan.desktop.in
       - type: file
-        path: ../usr/share/metainfo/omodscan.metainfo.xml
+        path: ../usr/share/metainfo/omodscan.metainfo.xml.in

@@ -220,6 +220,7 @@ jobs:
         run: |
           sed -e "s|@REF_NAME@|${{ github.ref_name }}|g" \
               -e "s|@COMPONENT_ID@|omodscan.desktop|g" \
+              -e "s|@APP_ICON@|omodscan|g" \
               ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
           rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in
           cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml

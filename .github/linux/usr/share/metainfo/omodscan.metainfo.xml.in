@@ -4,6 +4,8 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
 
+  <icon type="cached">@APP_ICON@</icon>
+
   <name>Open ModScan</name>
   <summary>An Open Source Modbus Master (Client) Utility</summary>
   <summary xml:lang="zh_TW">一款開源的 Modbus 主站（客戶端）實用程式</summary>

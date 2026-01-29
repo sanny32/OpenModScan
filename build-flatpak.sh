@@ -47,23 +47,31 @@ fi
 
 echo ""
 
+# Detect Git branch name 
+if [ -z "${REF_NAME:-}" ]; then
+    REF_NAME="$(git rev-parse --abbrev-ref HEAD)"
+    if [ -z "$REF_NAME" ]; then
+       echo -e "\033[33mWarning: failed to detect Git branch name. Using 'main' as fallback.\033[0m"
+       REF_NAME="main"
+    else
+       echo "Detected Git branch: $REF_NAME"
+    fi   
+fi
+
 # Create desktop file
 sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
     -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
     ../usr/share/applications/omodscan.desktop.in > ../usr/share/applications/omodscan.desktop
     
 # Create mainfo file
-REF_NAME=$(git -C src rev-parse --abbrev-ref HEAD)
 sed -e "s|@REF_NAME@|$REF_NAME|g" \
     -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
+    -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
     ../usr/share/metainfo/omodscan.metainfo.xml.in > ../usr/share/metainfo/omodscan.metainfo.xml
 
 # Build project
 echo -e "\033[32mBuilding flatpak project...\033[0m"
-if [ -z "${BRANCH_NAME:-}" ]; then
-    BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
-fi
-sed -i "s|branch: main|branch: ${BRANCH_NAME}|" io.github.sanny32.omodscan.yaml
+sed -i "s|branch: main|branch: ${REF_NAME}|" io.github.sanny32.omodscan.yaml
 
 $FB_APP --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yaml
 echo -e "Done\n"

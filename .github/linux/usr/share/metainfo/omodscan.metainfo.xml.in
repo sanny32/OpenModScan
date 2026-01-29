@@ -10,6 +10,8 @@
   <summary xml:lang="zh_CN">一款开源的 Modbus 主站（客户端）实用程序</summary>
   <summary xml:lang="ru">Программа Modbus Master (клиент) с открытым исходным кодом</summary>
 
+  <icon type="cached">@APP_ICON@</icon>
+
   <description>
    <p>
       Open ModScan is an open source Modbus master (client) utility

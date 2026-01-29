@@ -65,6 +65,7 @@ modules:
           REF_NAME=$(git -C src rev-parse --abbrev-ref HEAD)
           sed -e "s|@REF_NAME@|$REF_NAME|g" \
               -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
+              -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
               ../.github/linux/usr/share/metainfo/omodscan.metainfo.xml.in > ../.github/linux/usr/share/metainfo/omodscan.metainfo.xml
           rm ../.github/linux/usr/share/metainfo/omodscan.metainfo.xml.in
 

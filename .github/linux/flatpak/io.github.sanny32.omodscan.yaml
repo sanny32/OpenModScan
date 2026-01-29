@@ -53,7 +53,7 @@ modules:
         - cmake --build ../build -- -j$(nproc)
     post-install:
       - install -D ../build/omodscan /app/bin/omodscan
-      - install -Dm644 ../../usr/share/icons/hicolor/128x128/omodscan.png -t /app/share/icons/hicolor/128x128/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../../usr/share/icons/hicolor/128x128/apps/omodscan.png -t /app/share/icons/hicolor/128x128/apps/io.github.sanny32.omodscan.png
       - install -Dm644 ../../usr/share/applications/omodscan.desktop -t /app/share/applications/io.github.sanny32.omodscan.desktop
       - install -Dm644 ../../usr/share/metainfo/omodscan.metainfo.xml -t /app/share/metainfo/io.github.sanny32.omodscan.metainfo.xml
     subdir: src
@@ -62,8 +62,8 @@ modules:
         url: https://github.com/sanny32/OpenModScan.git
         branch: main
       - type: file
-        path: ../../linux/usr/share/icons/hicolor/128x128/omodscan.png
+        path: ../usr/share/icons/hicolor/128x128/apps/omodscan.png
       - type: file
-        path: ../../linux/usr/share/applications/omodscan.desktop
+        path: ../usr/share/applications/omodscan.desktop
       - type: file
-        path: ../../linux/usr/share/metainfo/omodscan.metainfo.xml
+        path: ../usr/share/metainfo/omodscan.metainfo.xml

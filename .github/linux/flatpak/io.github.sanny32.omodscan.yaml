@@ -67,10 +67,16 @@ modules:
         rm ../.github/linux/usr/share/metainfo/omodscan.metainfo.xml.in
 
       - install -D ../build/omodscan /app/bin/omodscan
-      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/128x128/apps/omodscan.png  -t  /app/share/icons/hicolor/128x128/apps/io.github.sanny32.omodscan.png
-      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/64x64/apps/omodscan.png    -t  /app/share/icons/hicolor/64x64/apps/io.github.sanny32.omodscan.png
-      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/32x32/apps/omodscan.png    -t  /app/share/icons/hicolor/32x32/apps/io.github.sanny32.omodscan.png
-      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/16x16/apps/omodscan.png    -t  /app/share/icons/hicolor/16x16/apps/io.github.sanny32.omodscan.png
+      
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/128x128/apps/omodscan.png  -t   /app/share/icons/hicolor/128x128/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/64x64/apps/omodscan.png    -t   /app/share/icons/hicolor/64x64/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/32x32/apps/omodscan.png    -t   /app/share/icons/hicolor/32x32/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/16x16/apps/omodscan.png    -t   /app/share/icons/hicolor/16x16/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/128x128/apps/omodscan.png  -t   /app/share/app-info/icons/flatpak/128x128/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/64x64/apps/omodscan.png    -t   /app/share/app-info/icons/flatpak/64x64/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/32x32/apps/omodscan.png    -t   /app/share/app-info/icons/flatpak/32x32/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/16x16/apps/omodscan.png    -t   /app/share/app-info/icons/flatpak/16x16/io.github.sanny32.omodscan.png
+
       - install -Dm644 ../.github/linux/usr/share/applications/omodscan.desktop            -t  /app/share/applications/io.github.sanny32.omodscan.desktop
       - install -Dm644 ../.github/linux/usr/share/metainfo/omodscan.metainfo.xml           -t  /app/share/metainfo/io.github.sanny32.omodscan.metainfo.xml
     subdir: src

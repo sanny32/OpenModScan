@@ -52,6 +52,9 @@ modules:
         - cmake -DCMAKE_BUILD_TYPE=Release -B ../build
         - cmake --build ../build -- -j$(nproc)
 
+        - ls ../.github/linux/usr/share/applications/
+        - ls ../.github/linux/usr/share/metainfo
+
         - sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
               -e "s|@APP_ICON@|io.github.sanny32.omodscan.png|g" \
               ../.github/linux/usr/share/applications/omodscan.desktop.in > ../.github/linux/usr/share/applications/omodscan.desktop

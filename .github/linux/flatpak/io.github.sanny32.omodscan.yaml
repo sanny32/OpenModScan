@@ -62,8 +62,8 @@ modules:
         url: https://github.com/sanny32/OpenModScan.git
         branch: main
       - type: file
-        path: ../usr/share/icons/hicolor/128x128/omodscan.png
+        path: ../../usr/share/icons/hicolor/128x128/omodscan.png
       - type: file
-        path: ../usr/share/applications/omodscan.desktop
+        path: ../../usr/share/applications/omodscan.desktop
       - type: file
-        path: ../usr/share/metainfo/omodscan.metainfo.xml
+        path: ../../usr/share/metainfo/omodscan.metainfo.xml

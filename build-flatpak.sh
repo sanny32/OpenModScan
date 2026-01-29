@@ -59,7 +59,7 @@ echo -e "Done\n"
 
 # Create flatpak bundle
 echo -e "\033[32mCreating flatpak bundle...\033[0m"
-flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
+flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable || exit 1
 echo -e "Done\n"
 
 # Cleanup

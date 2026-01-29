@@ -194,9 +194,18 @@ jobs:
       - name: Create metainfo file
         run: |
           sed -e "s|@REF_NAME@|${{ github.ref_name }}|g" \
+              -e "s|@COMPONENT_ID@|omodscan.desktop|g" \
               ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml
           rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml.in
           cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml
+
+      - name: Create desktop file
+        run: |
+          sed -e "s|@APP_EXEC@|omodscan|g" \
+              -e "s|@APP_ICON@|omodscan|g" \
+              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop
+          rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop.in
+          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/application/omodscan.desktop
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/opt/OpenModScan/bin/omodscan"

@@ -47,6 +47,18 @@ fi
 
 echo ""
 
+# Create desktop file
+sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
+    -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
+    ../usr/share/applications/omodscan.desktop.in > ../usr/share/applications/omodscan.desktop
+    
+# Create mainfo file
+REF_NAME=$(git -C src rev-parse --abbrev-ref HEAD)
+sed -e "s|@REF_NAME@|$REF_NAME|g" \
+    -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
+    -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
+    ../usr/share/metainfo/omodscan.metainfo.xml.in > ../usr/share/metainfo/omodscan.metainfo.xml
+
 # Build project
 echo -e "\033[32mBuilding flatpak project...\033[0m"
 if [ -z "${BRANCH_NAME:-}" ]; then
@@ -65,6 +77,8 @@ echo -e "Done\n"
 # Cleanup
 echo -e "\033[32mCleanup...\033[0m"
 rm -rf build repo .flatpak-builder
+rm -rf ../usr/share/applications/omodscan.desktop
+rm -rf ../usr/share/metainfo/omodscan.metainfo.xml
 echo "Done"
 
 # Move bundle to script directory

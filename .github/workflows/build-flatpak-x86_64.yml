@@ -55,17 +55,17 @@ jobs:
         run: |
           sed -e "s|@REF_NAME@|${{ github.ref_name }}|g" \
               -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
-              ../usr/share/metainfo/omodscan.metainfo.xml.in > ../usr/share/metainfo/omodscan.metainfo.xml
-          rm ../usr/share/metainfo/omodscan.metainfo.xml.in
-          cat -n ../usr/share/metainfo/omodscan.metainfo.xml
+              .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in > .github/linux/usr/share/metainfo/omodscan.metainfo.xml
+          rm .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in
+          cat -n .github/linux/usr/share/metainfo/omodscan.metainfo.xml
 
       - name: Create desktop file
         run: |
           sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
               -e "s|@APP_ICON@|io.github.sanny32.omodscan.png|g" \
-              ../usr/share/applications/omodscan.desktop.in > ../usr/share/applications/omodscan.desktop
-          rm ../usr/share/applications/omodscan.desktop.in
-          cat -n ../usr/share/applications/omodscan.desktop
+              .github/linux/usr/share/applications/omodscan.desktop.in > .github/linux/usr/share/applications/omodscan.desktop
+          rm .github/linux/usr/share/applications/omodscan.desktop.in
+          cat -n .github/linux/usr/share/applications/omodscan.desktop
 
       - name: Build Flatpak
         run: |

@@ -57,7 +57,7 @@ modules:
 
         - |
           sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
-              -e "s|@APP_ICON@|io.github.sanny32.omodscan.png|g" \
+              -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
               ../.github/linux/usr/share/applications/omodscan.desktop.in > ../.github/linux/usr/share/applications/omodscan.desktop
           rm ../.github/linux/usr/share/applications/omodscan.desktop.in
    
@@ -71,9 +71,9 @@ modules:
     post-install:
       - install -D ../build/omodscan /app/bin/omodscan
       - install -Dm644 ../.github/linux/usr/share/icons/hicolor/128x128/apps/omodscan.png  -t  /app/share/icons/hicolor/128x128/apps/io.github.sanny32.omodscan.png
-#      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/64x64/apps/omodscan.png    -t  /app/share/icons/hicolor/64x64/apps/io.github.sanny32.omodscan.png
-#      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/32x32/apps/omodscan.png    -t  /app/share/icons/hicolor/32x32/apps/io.github.sanny32.omodscan.png
-#      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/16x16/apps/omodscan.png    -t  /app/share/icons/hicolor/16x16/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/64x64/apps/omodscan.png    -t  /app/share/icons/hicolor/64x64/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/32x32/apps/omodscan.png    -t  /app/share/icons/hicolor/32x32/apps/io.github.sanny32.omodscan.png
+      - install -Dm644 ../.github/linux/usr/share/icons/hicolor/16x16/apps/omodscan.png    -t  /app/share/icons/hicolor/16x16/apps/io.github.sanny32.omodscan.png
       - install -Dm644 ../.github/linux/usr/share/applications/omodscan.desktop            -t  /app/share/applications/io.github.sanny32.omodscan.desktop
       - install -Dm644 ../.github/linux/usr/share/metainfo/omodscan.metainfo.xml           -t  /app/share/metainfo/io.github.sanny32.omodscan.metainfo.xml
     subdir: src
@@ -83,12 +83,12 @@ modules:
         branch: main
       - type: file
         path: ../usr/share/icons/hicolor/128x128/apps/omodscan.png
-#      - type: file
-#        path: ../usr/share/icons/hicolor/64x64/apps/omodscan.png
-#      - type: file
-#        path: ../usr/share/icons/hicolor/32x32/apps/omodscan.png
-#      - type: file
-#        path: ../usr/share/icons/hicolor/16x16/apps/omodscan.png
+      - type: file
+        path: ../usr/share/icons/hicolor/64x64/apps/omodscan.png
+      - type: file
+        path: ../usr/share/icons/hicolor/32x32/apps/omodscan.png
+      - type: file
+        path: ../usr/share/icons/hicolor/16x16/apps/omodscan.png
       - type: file
         path: ../usr/share/applications/omodscan.desktop.in
       - type: file

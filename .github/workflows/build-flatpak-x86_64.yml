@@ -51,6 +51,22 @@ jobs:
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install -y flathub org.kde.Sdk//6.9
 
+      - name: Create metainfo file
+        run: |
+          sed -e "s|@REF_NAME@|${{ github.ref_name }}|g" \
+              -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
+              .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in > .github/linux/usr/share/metainfo/omodscan.metainfo.xml
+          rm .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in
+          cat -n .github/linux/usr/share/metainfo/omodscan.metainfo.xml
+
+      - name: Create desktop file
+        run: |
+          sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
+              -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
+              .github/linux/usr/share/applications/omodscan.desktop.in > .github/linux/usr/share/applications/omodscan.desktop
+          rm .github/linux/usr/share/applications/omodscan.desktop.in
+          cat -n .github/linux/usr/share/applications/omodscan.desktop
+
       - name: Build Flatpak
         run: |
           cd .github/linux/flatpak

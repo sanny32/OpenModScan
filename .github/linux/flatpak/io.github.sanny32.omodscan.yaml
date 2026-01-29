@@ -51,19 +51,6 @@ modules:
     build-commands:
         - cmake -DCMAKE_BUILD_TYPE=Release -B ../build
         - cmake --build ../build -- -j$(nproc)
-         
-         # Create desktop file
-        - sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
-              -e "s|@APP_ICON@|io.github.sanny32.omodscan.png|g" \
-              ../usr/share/applications/omodscan.desktop.in > ../usr/share/applications/omodscan.desktop
-        - rm ../usr/share/applications/omodscan.desktop.in
-
-        # Create metainfo file
-        - sed -e "s|@REF_NAME@|stable|g" \
-              -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
-              ../usr/share/metainfo/omodscan.metainfo.xml.in > ../usr/share/metainfo/omodscan.metainfo.xml
-        - rm ../usr/share/metainfo/omodscan.metainfo.xml.in
-
     post-install:
       - install -D ../build/omodscan /app/bin/omodscan
       - install -Dm644 ../../usr/share/icons/hicolor/128x128/omodscan.png -t /app/share/icons/hicolor/128x128/apps/io.github.sanny32.omodscan.png
@@ -77,6 +64,6 @@ modules:
       - type: file
         path: ../usr/share/icons/hicolor/128x128/omodscan.png
       - type: file
-        path: ../usr/share/applications/omodscan.desktop.in
+        path: ../usr/share/applications/omodscan.desktop
       - type: file
-        path: ../usr/share/metainfo/omodscan.metainfo.xml.in
+        path: ../usr/share/metainfo/omodscan.metainfo.xml

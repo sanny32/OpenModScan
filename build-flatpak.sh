@@ -96,6 +96,11 @@ $FB_APP --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yam
 echo -e "Done\n"
 
 # Create flatpak bundle
+if [ "$REF_NAME" = "dev" ]; then
+    FLATPAK_CHANNEL="unstable"
+else
+    FLATPAK_CHANNEL="stable"
+fi
 echo -e "\033[32mCreating flatpak bundle...\033[0m"
 flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan $FLATPAK_CHANNEL || exit 1
 echo -e "Done\n"

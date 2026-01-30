@@ -1,10 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>@COMPONENT_ID@</id>
 
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
-
-  <icon type="cached">@APP_ICON@</icon>
 
   <name>Open ModScan</name>
   <summary>An Open Source Modbus Master (Client) Utility</summary>
@@ -60,6 +59,10 @@
 
   <url type="homepage">https://github.com/sanny32/OpenModScan</url>
   <url type="bugtracker">https://github.com/sanny32/OpenModScan/issues</url>
+  
+   <releases>
+    <release version="@APP_VERSION@" date="@BUILD_DATE@" />
+  </releases>
 
   <content_rating type="oars-1.1"/>
 </component>

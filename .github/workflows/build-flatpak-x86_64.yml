@@ -44,7 +44,14 @@ jobs:
             if [ -n "${{ github.event.inputs.tag }}" ]; then
               REF_TYPE="tag"
             fi
-            sed -i "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" .github/linux/flatpak/io.github.sanny32.omodscan.yaml
+            if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
+              FLATPAK_CHANNEL="unstable"
+            else
+              FLATPAK_CHANNEL="stable"
+            fi
+            sed -i -e "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" \
+                   -e "s|branch: stable|branch: ${FLATPAK_CHANNEL}|" \
+                   .github/linux/flatpak/io.github.sanny32.omodscan.yaml
 
       - name: Prepare Flatpak
         run: |

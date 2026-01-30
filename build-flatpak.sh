@@ -36,8 +36,6 @@ if verlt "$FB_VERSION" "1.4"; then
     FB_APP="flatpak run org.flatpak.Builder"
 fi
 
-cd .github/linux/flatpak || exit 1
-
 # Install required runtimes and tools
 if flatpak info --user org.kde.Sdk//6.9 > /dev/null 2>&1; then
     flatpak --user update -y org.kde.Sdk//6.9 || exit 1
@@ -54,31 +52,52 @@ if [ -z "${REF_NAME:-}" ]; then
        echo -e "\033[33mWarning: failed to detect Git branch name. Using 'main' as fallback.\033[0m"
        REF_NAME="main"
     else
-       echo "Detected Git branch: $REF_NAME"
+       echo -e "Detected Git branch: $REF_NAME\n"
     fi   
 fi
+
+# Extract version
+FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+if [ "$REF_NAME" = "dev" ]; then
+   MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
+   APP_VERSION="${MAJOR_MINOR}~dev"
+else
+  APP_VERSION="$FULL_VERSION"
+fi
+echo -e "Extracted version: $APP_VERSION\n"
+
+cd .github/linux/flatpak || exit 1
 
 # Create desktop file
 sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
     -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
     ../usr/share/applications/omodscan.desktop.in > ../usr/share/applications/omodscan.desktop
     
-# Create mainfo file
+# Create metainfo file
 sed -e "s|@REF_NAME@|$REF_NAME|g" \
     -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
-    -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
+    -e "s|@APP_VERSION@|$APP_VERSION|g" \
+    -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
     ../usr/share/metainfo/omodscan.metainfo.xml.in > ../usr/share/metainfo/omodscan.metainfo.xml
+
+# Select flatpak channel
+if [ "$REF_NAME" = "dev" ]; then
+    FLATPAK_CHANNEL="unstable"
+else
+    FLATPAK_CHANNEL="stable"
+fi
 
 # Build project
 echo -e "\033[32mBuilding flatpak project...\033[0m"
-sed -i "s|branch: main|branch: ${REF_NAME}|" io.github.sanny32.omodscan.yaml
-
+sed -i -e "s|branch: main|branch: ${REF_NAME}|" \
+       -e "s|branch: stable|branch: ${FLATPAK_CHANNEL}|" \
+       io.github.sanny32.omodscan.yaml
 $FB_APP --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yaml
 echo -e "Done\n"
 
 # Create flatpak bundle
 echo -e "\033[32mCreating flatpak bundle...\033[0m"
-flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable || exit 1
+flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan $FLATPAK_CHANNEL || exit 1
 echo -e "Done\n"
 
 # Cleanup

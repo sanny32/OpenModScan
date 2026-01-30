@@ -63,7 +63,7 @@ sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
     -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
     ../usr/share/applications/omodscan.desktop.in > ../usr/share/applications/omodscan.desktop
     
-# Create mainfo file
+# Create metainfo file
 sed -e "s|@REF_NAME@|$REF_NAME|g" \
     -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
     -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \

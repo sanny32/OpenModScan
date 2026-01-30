@@ -38,19 +38,25 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
+      - name: Setup flatpak channel
+        run: |
+            if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
+              FLATPAK_CHANNEL="unstable"
+            else
+              FLATPAK_CHANNEL="stable"
+            fi
+            echo "FLATPAK_CHANNEL=$FLATPAK_CHANNEL" >> $GITHUB_ENV
+            echo "Selected flatpak channel: $FLATPAK_CHANNEL"
+
       - name: Set Flatpak manifest branch
         run: |
             REF_TYPE="branch"
             if [ -n "${{ github.event.inputs.tag }}" ]; then
               REF_TYPE="tag"
             fi
-            if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
-              FLATPAK_CHANNEL="unstable"
-            else
-              FLATPAK_CHANNEL="stable"
-            fi
+            
             sed -i -e "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" \
-                   -e "s|branch: stable|branch: ${FLATPAK_CHANNEL}|" \
+                   -e "s|branch: stable|branch: ${{ env.FLATPAK_CHANNEL }}|" \
                    .github/linux/flatpak/io.github.sanny32.omodscan.yaml
 
       - name: Extract version from CMakeLists.txt
@@ -97,7 +103,7 @@ jobs:
           echo ""
           flatpak-builder --repo=repo --force-clean --disable-rofiles-fuse --verbose build io.github.sanny32.omodscan.yaml
           echo ""
-          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
+          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan ${{ env.FLATPAK_CHANNEL }}
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4

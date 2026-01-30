@@ -66,7 +66,6 @@ sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
 # Create metainfo file
 sed -e "s|@REF_NAME@|$REF_NAME|g" \
     -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
-    -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
     ../usr/share/metainfo/omodscan.metainfo.xml.in > ../usr/share/metainfo/omodscan.metainfo.xml
 
 # Build project

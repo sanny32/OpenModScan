@@ -46,6 +46,20 @@ jobs:
             fi
             sed -i "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" .github/linux/flatpak/io.github.sanny32.omodscan.yaml
 
+      - name: Extract version from CMakeLists.txt
+        run: |
+          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+
+          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
+            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
+            APP_VERSION="${MAJOR_MINOR}~dev"
+          else
+            APP_VERSION="$FULL_VERSION"
+          fi
+
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "Extracted version: $APP_VERSION"
+
       - name: Prepare Flatpak
         run: |
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -55,6 +69,8 @@ jobs:
         run: |
           sed -e "s|@REF_NAME@|${{ github.ref_name }}|g" \
               -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
+              -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
+              -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
               .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in > .github/linux/usr/share/metainfo/omodscan.metainfo.xml
           rm .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in
           cat -n .github/linux/usr/share/metainfo/omodscan.metainfo.xml

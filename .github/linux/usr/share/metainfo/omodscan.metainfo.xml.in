@@ -59,6 +59,10 @@
 
   <url type="homepage">https://github.com/sanny32/OpenModScan</url>
   <url type="bugtracker">https://github.com/sanny32/OpenModScan/issues</url>
+  
+   <releases>
+    <release version="@APP_VERSION@" date="@BUILD_DATE@" />
+  </releases>
 
   <content_rating type="oars-1.1"/>
 </component>

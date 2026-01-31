@@ -63,13 +63,19 @@ jobs:
           set SIGNING_POLICY_SLUG=none
           if "${{ github.event_name }}"=="push" (
             if "${{ github.ref_type }}"=="tag" (
-              set SIGNING_POLICY_SLUG=release-signing
+              for /f %%i in ('echo "${{ github.ref_name }}" ^| find /i "test"') do set TAG_HAS_TEST=1
+              if not defined TAG_HAS_TEST (
+                set SIGNING_POLICY_SLUG=release-signing
+              )
             )
           )
           if "${{ github.event_name }}"=="workflow_dispatch" (
             if "${{ github.event.inputs.signing }}"=="true" (
               if not "${{ github.event.inputs.tag }}"=="" (
-                set SIGNING_POLICY_SLUG=release-signing
+                echo "%{{ github.event.inputs.tag }}%" | find /i "test" >nul
+                if errorlevel 1 (
+                  set SIGNING_POLICY_SLUG=release-signing
+                )
               ) else (
                 set SIGNING_POLICY_SLUG=test-signing
               )

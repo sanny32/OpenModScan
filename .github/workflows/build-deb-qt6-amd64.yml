@@ -218,7 +218,19 @@ jobs:
 
       - name: Create metainfo file
         run: |
-          sed -e "s|@REF_NAME@|${{ github.ref_name }}|g" \
+          if [[ "${{ github.ref_type }}" == "tag" ]] || [[ "${{ github.event.inputs.tag }}" ]]; then
+            REF_TYPE="tags"
+            if [[ "${{ github.event.inputs.tag }}" ]]; then
+              REF_NAME="${{ github.event.inputs.tag }}"
+            else
+              REF_NAME="${{ github.ref_name }}"
+            fi
+          else
+            REF_TYPE="heads"
+            REF_NAME="${{ github.ref_name }}"
+          fi
+          sed -e "s|@REF_NAME@|${REF_NAME}|g" \
+              -e "s|@REF_TYPE@|${REF_TYPE}|g" \
               -e "s|@COMPONENT_ID@|omodscan.desktop|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
               -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \

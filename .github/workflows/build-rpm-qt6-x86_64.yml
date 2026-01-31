@@ -193,9 +193,9 @@ jobs:
 
       - name: Create metainfo file
         run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]] || [[ "${{ github.event.inputs.tag }}" ]]; then
+          if [[ "${{ github.ref_type }}" == "tag" ]] || [ -n "${{ github.event.inputs.tag }}" ]; then
             REF_TYPE="tags"
-            if [[ "${{ github.event.inputs.tag }}" ]]; then
+            if [ -n "${{ github.event.inputs.tag }}" ]; then
               REF_NAME="${{ github.event.inputs.tag }}"
             else
               REF_NAME="${{ github.ref_name }}"

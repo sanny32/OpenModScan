@@ -45,7 +45,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
-      - name: Determaine ref_type and ref_name
+      - name: Determine ref_type and ref_name
         run: |
           if [[ "${{ github.ref_type }}" == "tag" ]] || [ -n "${{ github.event.inputs.tag }}" ]; then
             REF_TYPE="tags"

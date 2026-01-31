@@ -40,7 +40,7 @@ jobs:
 
       - name: Determine ref_type and ref_name
         run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]] || [ -n "${{ github.event.inputs.tag }}" ]; then
+          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
             REF_TYPE="tags"
             if [ -n "${{ github.event.inputs.tag }}" ]; then
               REF_NAME="${{ github.event.inputs.tag }}"

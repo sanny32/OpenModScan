@@ -5,6 +5,7 @@
   !include "LogicLib.nsh"
   !include "FileFunc.nsh"
   !include "WinVer.nsh"
+  !include "x64.nsh"
 
 #--------------------------------
 # Custom defines
@@ -83,6 +84,14 @@ FunctionEnd
 
 Function CheckWindowsVersion
   Exch $0
+
+   ${IfNot} ${RunningX64}
+    MessageBox MB_ICONSTOP|MB_OK \
+      "This application requires 64-bit version of Windows.$\r$\n$\r$\n\
+      Your operating system (32-bit) is not supported.$\r$\n\
+      Installation cannot continue."
+    Quit
+  ${EndIf}
   
   ${If} $0 == "10"
     ${IfNot} ${AtLeastWin10}

@@ -4,6 +4,7 @@
   !include "MUI2.nsh"
   !include "LogicLib.nsh"
   !include "FileFunc.nsh"
+  !include "WinVer.nsh"
   !include "x64.nsh"
 
 #--------------------------------
@@ -59,7 +60,6 @@ FunctionEnd
   InstallDir "$PROGRAMFILES\${NAME}"
   RequestExecutionLevel admin
   ManifestDPIAware true
-  #ManifestDPIAwareness "PerMonitorV2,System"
   SetCompressor /SOLID lzma
   SetCompressorDictSize 64
   VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
@@ -85,8 +85,57 @@ FunctionEnd
 !insertmacro SetDisplayName ""
 !insertmacro SetDisplayName "un."
 
+#--------------------------------
+# Windows Version Check Function
+
+Function ShowVersionError
+  Exch $0
+  MessageBox MB_ICONSTOP|MB_OK \
+    "This application requires Windows $0 or newer.$\r$\n$\r$\n\
+    Your operating system is not supported.$\r$\n\
+    Installation cannot continue."
+  Pop $0
+  Quit
+FunctionEnd
+
+Function CheckWindowsVersion
+  Exch $0
+  
+  ${If} $0 == "10"
+    ${IfNot} ${AtLeastWin10}
+      Push "10"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "8"
+    ${IfNot} ${AtLeastWin8}
+      Push "8"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "8.1"
+    ${IfNot} ${AtLeastWin8.1}
+      Push "8.1"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "7"
+    ${IfNot} ${AtLeastWin7}
+      Push "7"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "11"
+    ${IfNot} ${AtLeastWin10}
+      Push "10"
+      Call ShowVersionError
+    ${EndIf}
+  ${EndIf}
+  
+  Pop $0
+FunctionEnd
+
 Function .onInit
   Call SetDisplayName
+
+  Push ${MIN_WINDOWS_VERSION}
+  Call CheckWindowsVersion
 FunctionEnd
 
 Function un.onInit

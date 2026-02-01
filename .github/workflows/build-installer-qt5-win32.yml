@@ -178,6 +178,7 @@ jobs:
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ env.APP_VERSION }}" ^
+           /DMIN_WINDOWS_VERSION=7 ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\src\res\omodscan.ico" ^
            /DWELCOMEFINISHPAGE_BITMAP="%CD%\.github\win32\nsis3-omodscan.bmp" ^

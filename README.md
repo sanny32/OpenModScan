@@ -112,7 +112,7 @@ The following minimum operating system versions are supported for OpenModScan:
 - <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Rocky_Linux_logo.svg/960px-Rocky_Linux_logo.svg.png" width="16" height="16"> **Rocky Linux 9.7**
 - <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/OpenSUSE_Logo.svg" width="16" height="16"> **OpenSuse Linux 15.6**
 - <img src="https://www.altlinux.org/Images.www.altlinux.org/c/c5/Logo_alt_company.png" width="16" height="16"> **Alt Linux 11**
-- <img width="16" height="16" src="https://github.com/user-attachments/assets/7d52237f-a732-4973-b292-c5834fdc809c" /> **Astra Linux 1.7**
+- <img width="18" height="18" src="https://github.com/user-attachments/assets/7d52237f-a732-4973-b292-c5834fdc809c" /> **Astra Linux 1.7**
 - <img width="16" height="16" src="https://github.com/user-attachments/assets/e8a6e06e-b43f-42b4-8d8d-fea4aa858cb0" /> **RedOS 8**
 
 # Install from [binary distributions](https://github.com/sanny32/OpenModScan/releases/latest)

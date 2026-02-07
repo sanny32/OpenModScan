@@ -103,7 +103,7 @@ If you need to specify Qt framework major version (5 or 6), you can do it in the
 
 The following minimum operating system versions are supported for OpenModScan:
 
-- <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Windows_logo_-_2021.svg" width="16" height="16"> **Microsoft Windows 7**
+- <img src="https://upload.wikimedia.org/wikipedia/ru/archive/3/33/20200302132354%21Windows_7_logo.svg" width="16" height="16"> **Microsoft Windows 7**
 - <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Debian-OpenLogo.svg" width="16" height="16"> **Debian Linux 11**
 - <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/UbuntuCoF.svg" width="16" height="16"> **Ubuntu Linux 22.04**
 - <img width="16" height="16" src="https://github.com/user-attachments/assets/bf804432-d951-47e0-8f75-52835a2c723f" /> **Mint Linux 22**
@@ -119,14 +119,14 @@ The following minimum operating system versions are supported for OpenModScan:
 
 Below are the methods for installing the OpenModScan for different OS
 
-## Microsoft Windows
+## <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Windows_logo_-_2021.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
 - For 32-bit Windows: `qt5-omodscan_1.13.0_x86.exe`
 - For 64-bit Windows: `qt5-omodscan_1.13.0_x64.exe` or `qt6-omodscan_1.13.0_x64.exe`
 
 
-## Debian/Ubuntu/Mint/Zorin/Astra Linux
+## <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Debian-OpenLogo.svg" width="20" height="20"> Debian / <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/UbuntuCoF.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="https://github.com/user-attachments/assets/bf804432-d951-47e0-8f75-52835a2c723f" /> Mint / <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Zorin_Logomark.svg/120px-Zorin_Logomark.svg.png" width="20" height="20"> Zorin / <img width="22" height="22" src="https://github.com/user-attachments/assets/7d52237f-a732-4973-b292-c5834fdc809c" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
@@ -147,7 +147,7 @@ or for Qt5 package:
 sudo apt remove qt5-omodscan
 ```
 
-## RedHat/Fedora/Rocky/RedOS Linux
+## <img src="https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg" width="24" height="24"> RedHat / <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Fedora_icon_%282021%29.svg" width="20" height="20"> Fedora / <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Rocky_Linux_logo.svg/960px-Rocky_Linux_logo.svg.png" width="20" height="20"> Rocky / <img width="20" height="20" src="https://github.com/user-attachments/assets/e8a6e06e-b43f-42b4-8d8d-fea4aa858cb0" /> RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash
@@ -160,7 +160,7 @@ To remove the RPM package run:
 sudo dnf remove qt6-omodscan
 ```
 
-## Alt Linux
+## <img src="https://www.altlinux.org/Images.www.altlinux.org/c/c5/Logo_alt_company.png" width="24" height="24"> Alt Linux
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
@@ -173,7 +173,7 @@ To remove the RPM package run as root user:
 apt-get remove qt6-omodscan
 ```
 
-## SUSE/OpenSUSE Linux
+## <img width="20" height="20" src="https://github.com/user-attachments/assets/04967844-610a-493e-ac9b-b21aa6b88e65" /> SUSE / <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/OpenSUSE_Logo.svg" width="24" height="24" /> OpenSUSE Linux
 ### Install
 Import qt6-omodscan.rpm.pubkey to rpm repository:
 ```bash
@@ -190,7 +190,7 @@ To remove the RPM package run:
 sudo zypper remove qt6-omodscan
 ```
 
-## Flatpak
+## <img width="18" height="20" src="https://github.com/user-attachments/assets/c5cede56-a6be-421a-8611-e99f7c9a3b1e" /> Flatpak
 ### Install
 Install flatpak package run the followning commands:
 ```bash
@@ -211,7 +211,11 @@ To remove the flatpak package run:
 ```bash
 flatpak uninstall --user io.github.sanny32.omodscan
 ```
-
+# Code Signing Sponsor
+Windows binaries for this project are signed thanks to **SignPath Foundation**.
+*   🔐 **Free code signing service:** [SignPath.io](https://signpath.io)
+*   📜 **Certificate provider:** [SignPath Foundation](https://signpath.org)
+  
 # MIT License
 Copyright 2023-2026 Alexandr Ananev [mail@ananev.org]
 
@@ -220,10 +224,5 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-# Code Signing Sponsor
-Windows binaries for this project are signed thanks to **SignPath Foundation**.
-*   🔐 **Free code signing service:** [SignPath.io](https://signpath.io)
-*   📜 **Certificate provider:** [SignPath Foundation](https://signpath.org)
 
 

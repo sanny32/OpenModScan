@@ -122,19 +122,19 @@ Below are the methods for installing the OpenModScan for different OS
 ## <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Windows_logo_-_2021.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodscan_1.13.0_x86.exe`
-- For 64-bit Windows: `qt5-omodscan_1.13.0_x64.exe` or `qt6-omodscan_1.13.0_x64.exe`
+- For 32-bit Windows: `qt5-omodscan_1.13.1_x86.exe`
+- For 64-bit Windows: `qt5-omodscan_1.13.1_x64.exe` or `qt6-omodscan_1.13.1_x64.exe`
 
 
 ## <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Debian-OpenLogo.svg" width="20" height="20"> Debian / <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/UbuntuCoF.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="https://github.com/user-attachments/assets/bf804432-d951-47e0-8f75-52835a2c723f" /> Mint / <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Zorin_Logomark.svg/120px-Zorin_Logomark.svg.png" width="20" height="20"> Zorin / <img width="22" height="22" src="https://github.com/user-attachments/assets/7d52237f-a732-4973-b292-c5834fdc809c" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodscan_1.13.0-1_amd64.deb
+sudo apt install ./qt6-omodscan_1.13.1-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodscan_1.13.0-1_amd64.deb
+sudo apt install ./qt5-omodscan_1.13.1-1_amd64.deb
 ```
 
 ### Remove
@@ -151,7 +151,7 @@ sudo apt remove qt5-omodscan
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodscan_1.13.0-1.x86_64.rpm
+sudo dnf install ./qt6-omodscan_1.13.1-1.x86_64.rpm
 ```
 
 ### Remove
@@ -164,7 +164,7 @@ sudo dnf remove qt6-omodscan
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodscan_1.13.0-1.x86_64.rpm
+apt-get install ./qt6-omodscan_1.13.1-1.x86_64.rpm
 ```
 
 ### Remove
@@ -181,7 +181,7 @@ sudo rpm --import qt6-omodscan.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodscan_1.13.0-1.x86_64.rpm
+sudo zypper install ./qt6-omodscan_1.13.1-1.x86_64.rpm
 ```
 
 ### Remove

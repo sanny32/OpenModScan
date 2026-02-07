@@ -104,7 +104,7 @@ If you need to specify Qt framework major version (5 or 6), you can do it in the
 The following minimum operating system versions are supported for OpenModScan:
 
 - <img src="https://upload.wikimedia.org/wikipedia/ru/archive/3/33/20200302132354%21Windows_7_logo.svg" width="16" height="16"> **Microsoft Windows 7**
-- <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Debian-OpenLogo.svg" width="16" height="16"> **Debian Linux 11**
+- <img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Openlogo-debianV2.svg" width="16" height="16"> **Debian Linux 11**
 - <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/UbuntuCoF.svg" width="16" height="16"> **Ubuntu Linux 22.04**
 - <img width="16" height="16" src="https://github.com/user-attachments/assets/bf804432-d951-47e0-8f75-52835a2c723f" /> **Mint Linux 22**
 - <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Zorin_Logomark.svg/120px-Zorin_Logomark.svg.png" width="16" height="16"> **Zorin OS 18**
@@ -126,7 +126,7 @@ Run the installer:
 - For 64-bit Windows: `qt5-omodscan_1.13.1_x64.exe` or `qt6-omodscan_1.13.1_x64.exe`
 
 
-## <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Debian-OpenLogo.svg" width="20" height="20"> Debian / <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/UbuntuCoF.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="https://github.com/user-attachments/assets/bf804432-d951-47e0-8f75-52835a2c723f" /> Mint / <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Zorin_Logomark.svg/120px-Zorin_Logomark.svg.png" width="20" height="20"> Zorin / <img width="22" height="22" src="https://github.com/user-attachments/assets/7d52237f-a732-4973-b292-c5834fdc809c" /> Astra Linux
+## <img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Openlogo-debianV2.svg" width="20" height="20"> Debian / <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/UbuntuCoF.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="https://github.com/user-attachments/assets/bf804432-d951-47e0-8f75-52835a2c723f" /> Mint / <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Zorin_Logomark.svg/120px-Zorin_Logomark.svg.png" width="20" height="20"> Zorin / <img width="22" height="22" src="https://github.com/user-attachments/assets/7d52237f-a732-4973-b292-c5834fdc809c" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash

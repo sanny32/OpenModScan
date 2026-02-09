@@ -33,8 +33,8 @@ if [ ! -f /etc/udev/rules.d/99-omodsim.rules ]; then
 fi
 udevadm trigger
 
-xdg-desktop-menu forceupdate || true
 ln -sf /opt/OpenModScan/omodscan.sh /usr/bin/omodscan
+xdg-desktop-menu forceupdate || true
 
 %postun
 if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then

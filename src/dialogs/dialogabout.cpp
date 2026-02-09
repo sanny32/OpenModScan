@@ -79,6 +79,9 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui->labelName->setText(APP_NAME);
     ui->labelVersion->setText(tr("Version: <b>%1</b> %2").arg(APP_VERSION, arch()));
 
+    const auto copyright = QString(ui->labelCopyright->text()).arg(BUILD_YEAR);
+    ui->labelCopyright->setText(copyright);
+
     {
         auto vboxLayout = new QVBoxLayout();
         vboxLayout->setContentsMargins(0, 0, 0, 0);
@@ -265,11 +268,13 @@ void DialogAbout::on_labelLicense_clicked()
 {
     QString license;
     QFile f(":/res/license.txt");
-    if(f.open(QFile::ReadOnly))
+    if(f.open(QFile::ReadOnly)) {
         license = f.readAll();
+    }
 
-    if(license.isEmpty())
+    if(license.isEmpty()) {
         return;
+    }
 
     auto dlg = new QDialog(this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -280,7 +285,7 @@ void DialogAbout::on_labelLicense_clicked()
     auto buttonBox = new QDialogButtonBox(dlg);
     buttonBox->setOrientation(Qt::Horizontal);
     buttonBox->setStandardButtons(QDialogButtonBox::Close);
-    QObject::connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    QObject::connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
 
     auto textEdit = new QPlainTextEdit(dlg);
     textEdit->setReadOnly(true);

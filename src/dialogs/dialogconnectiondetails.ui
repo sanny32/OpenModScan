@@ -216,7 +216,7 @@
          </item>
          <item>
           <property name="text">
-           <string>Modbus RTU over TCP/IP Gateway</string>
+           <string>Modbus RTU/IP Gateway</string>
           </property>
          </item>
          <item>

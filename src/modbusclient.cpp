@@ -341,9 +341,11 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, float value,
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
 
     if(swapped)
-        breakFloat(value, values[1], values[0], order);
-    else
+        // LSRF
         breakFloat(value, values[0], values[1], order);
+    else
+        // MSRF
+        breakFloat(value, values[1], values[0], order);
 
     data.setValues(values);
     return data;
@@ -363,9 +365,11 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, qint32 value
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 2);
 
     if(swapped)
-        breakInt32(value, values[1], values[0], order);
-    else
+        // LSRF
         breakInt32(value, values[0], values[1], order);
+    else
+        // MSRF
+        breakInt32(value, values[1], values[0], order);
 
     data.setValues(values);
     return data;
@@ -385,9 +389,11 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, qint64 value
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 4);
 
     if(swapped)
-        breakInt64(value, values[3], values[2], values[1], values[0], order);
-    else
+        // LSRF
         breakInt64(value, values[0], values[1], values[2], values[3], order);
+    else
+        // MSRF
+        breakInt64(value, values[3], values[2], values[1], values[0], order);
 
     data.setValues(values);
     return data;
@@ -407,9 +413,12 @@ QModbusDataUnit createHoldingRegistersDataUnit(int newStartAddress, double value
     auto data = QModbusDataUnit(QModbusDataUnit::HoldingRegisters, newStartAddress, 4);
 
     if(swapped)
-        breakDouble(value, values[3], values[2], values[1], values[0], order);
-    else
+        // LSRF
         breakDouble(value, values[0], values[1], values[2], values[3], order);
+    else
+        // MSRF
+        breakDouble(value, values[3], values[2], values[1], values[0], order);
+
 
     data.setValues(values);
     return data;

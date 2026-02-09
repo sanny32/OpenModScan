@@ -25,20 +25,59 @@
 #include "ui_mainwindow.h"
 
 ///
+/// \brief availableTranslations
+/// \return
+///
+static QStringList availableTranslations()
+{
+    QStringList locales;
+    const QStringList files = QDir(":/translations").entryList(QStringList() << "*.qm", QDir::Files);
+
+    for (auto file : files) {
+        locales << file.remove("omodscan_").remove(".qm");
+    }
+
+    return locales;
+}
+
+///
+/// \brief translationLang
+/// \return
+///
+static QString translationLang()
+{
+    const QStringList locales = availableTranslations();
+    const QString sysLocale = QLocale::system().name();
+
+    for (const QString &pattern : locales) {
+        const QString regexPattern = QString("%1.*").arg(pattern);
+        QRegularExpression re("^" + regexPattern + "$", QRegularExpression::CaseInsensitiveOption);
+
+        if(re.match(sysLocale).hasMatch()) {
+            return pattern;
+        }
+    }
+
+    return "en";
+}
+
+///
 /// \brief MainWindow::MainWindow
+/// \param profile
 /// \param parent
 ///
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(const QString& profile, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    ,_lang("en")
-    ,_windowCounter(0)
+    ,_lang(translationLang())
     ,_autoStart(false)
+    ,_windowCounter(0)
     ,_selectedPrinter(nullptr)
     ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
 
+    setLanguage(_lang);
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_modbusClient, ui->mdiArea));
@@ -74,7 +113,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
 
-    loadSettings();
+    loadProfile(profile);
 
     if(_windowCounter == 0) {
         ui->actionNew->trigger();
@@ -134,7 +173,7 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    saveSettings();
+    saveProfile();
 
     ui->mdiArea->closeAllSubWindows();
     if (ui->mdiArea->currentSubWindow())
@@ -1829,20 +1868,61 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
 }
 
 ///
-/// \brief MainWindow::loadSettings
+/// \brief checkPathIsWritable
+/// \param path
+/// \return
 ///
-void MainWindow::loadSettings()
+static bool checkPathIsWritable(const QString& path)
 {
-    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
-    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
+    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
 
-    if(!QFile::exists(filepath))
-        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-                                         QDir::separator(), filename);
+    QFile::remove(filepath);
+    return true;
+}
 
-    if(!QFile::exists(filepath)) return;
+///
+/// \brief canWriteFile
+/// \param filePath
+/// \return
+///
+static bool canWriteFile(const QString& filePath)
+{
+    QFile file(filePath);
 
-    QSettings m(filepath, QSettings::IniFormat, this);
+    if (file.exists()) {
+        return file.open(QIODevice::WriteOnly | QIODevice::Append);
+    }
+
+    const QString dirPath = QFileInfo(filePath).absolutePath();
+    return checkPathIsWritable(dirPath);
+}
+
+///
+/// \brief MainWindow::getSettingsFilePath
+/// \return
+///
+static QString getSettingsFilePath()
+{
+    const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    const QString appFilePath = QDir(qApp->applicationDirPath()).filePath(filename);
+
+    if (canWriteFile(appFilePath))
+        return appFilePath;
+
+    return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(filename);
+}
+
+///
+/// \brief MainWindow::loadProfile
+/// \param filename
+///
+void MainWindow::loadProfile(const QString& filename)
+{
+    _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
+    if(!QFile::exists(_profile)) return;
+
+    QSettings m(_profile, QSettings::IniFormat, this);
 
     const auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
     setGeometry(geometry);
@@ -1872,7 +1952,7 @@ void MainWindow::loadSettings()
     _autoStart = m.value("AutoStart").toBool();
     _fileAutoStart = m.value("StartUpFile").toString();
 
-    _lang = m.value("Language", "en").toString();
+    _lang = m.value("Language", translationLang()).toString();
     setLanguage(_lang);
 
     _savePath = m.value("SavePath").toString();
@@ -1907,38 +1987,17 @@ void MainWindow::loadSettings()
         }
     }
 
-    if(_autoStart)
-    {
+    if(_autoStart) {
         loadConfig(_fileAutoStart);
     }
 }
 
 ///
-/// \brief checkPathIsWritable
-/// \param path
-/// \return
+/// \brief MainWindow::saveProfile
 ///
-bool checkPathIsWritable(const QString& path)
+void MainWindow::saveProfile()
 {
-    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
-    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
-
-    QFile::remove(filepath);
-    return true;
-}
-
-///
-/// \brief MainWindow::saveSettings
-///
-void MainWindow::saveSettings()
-{
-    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
-    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
-
-    if(!QFileInfo(qApp->applicationDirPath()).isWritable() || !checkPathIsWritable(qApp->applicationDirPath()))
-        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-                                         QDir::separator(), filename);
-
+    const QString filepath = _profile.isEmpty() ? getSettingsFilePath() : _profile;
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.clear();

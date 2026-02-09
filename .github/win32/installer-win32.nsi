@@ -4,8 +4,8 @@
   !include "MUI2.nsh"
   !include "LogicLib.nsh"
   !include "FileFunc.nsh"
+  !include "WinVer.nsh"
   !include "x64.nsh"
-
 
 #--------------------------------
 # Custom defines
@@ -18,16 +18,57 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModScan/releases"
 
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "${WELCOMEFINISHPAGE_BITMAP}"
   !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} (x86) has been installed on your computer."
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
+  !define MUI_FINISHPAGE_RUN
+  !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
+
+Function LaunchWithProfile
+  StrCpy $0 "$INSTDIR\${APPFILE}"
+  ${GetFileName} "$0" $1
+  ${GetBaseName} $1 $2
+  StrCpy $3 "$2.ini"
+  StrCpy $4 "$LOCALAPPDATA\${NAME}"
+  StrCpy $5 "$4\$3"
+  Exec '"$0" --profile "$5"'
+  Sleep 300
+FunctionEnd
+
+  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
+  !ifndef VERSIONBUILD
+    !define VERSIONBUILD "0"
+  !endif
+  !ifndef VERSIONPATCH
+    !define VERSIONPATCH "0"
+    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
+  !endif
+  !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
 
 #--------------------------------
 # Variables
 
   Var /GLOBAL DISPLAYNAME
   Var RebootRequired
+
+#--------------------------------
+# General
+
+  Name "${NAME} v${VERSION} (x86)"
+  OutFile "${OUTPUT_FILE}"
+  InstallDir "$PROGRAMFILES\${NAME}"
+  RequestExecutionLevel admin
+  ManifestDPIAware true
+  SetCompressor /SOLID lzma
+  SetCompressorDictSize 64
+  VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
+  VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
+  VIAddVersionKey /LANG=0 "ProductName"      "${NAME}"
+  VIAddVersionKey /LANG=0 "FileDescription"  "${NAME}"
+  VIAddVersionKey /LANG=0 "LegalCopyright"   "Copyright (c) ${COPYRIGHT}"
 
 #--------------------------------
 
@@ -44,8 +85,57 @@ FunctionEnd
 !insertmacro SetDisplayName ""
 !insertmacro SetDisplayName "un."
 
+#--------------------------------
+# Windows Version Check Function
+
+Function ShowVersionError
+  Exch $0
+  MessageBox MB_ICONSTOP|MB_OK \
+    "This application requires Windows $0 or newer.$\r$\n$\r$\n\
+    Your operating system is not supported.$\r$\n\
+    Installation cannot continue."
+  Pop $0
+  Quit
+FunctionEnd
+
+Function CheckWindowsVersion
+  Exch $0
+  
+  ${If} $0 == "10"
+    ${IfNot} ${AtLeastWin10}
+      Push "10"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "8"
+    ${IfNot} ${AtLeastWin8}
+      Push "8"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "8.1"
+    ${IfNot} ${AtLeastWin8.1}
+      Push "8.1"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "7"
+    ${IfNot} ${AtLeastWin7}
+      Push "7"
+      Call ShowVersionError
+    ${EndIf}
+  ${ElseIf} $0 == "11"
+    ${IfNot} ${AtLeastWin10}
+      Push "10"
+      Call ShowVersionError
+    ${EndIf}
+  ${EndIf}
+  
+  Pop $0
+FunctionEnd
+
 Function .onInit
   Call SetDisplayName
+
+  Push ${MIN_WINDOWS_VERSION}
+  Call CheckWindowsVersion
 FunctionEnd
 
 Function un.onInit
@@ -53,17 +143,10 @@ Function un.onInit
 FunctionEnd
 
 #--------------------------------
-# General
-
-  Name "${NAME} v${VERSION} (x86)"
-  OutFile "${OUTPUT_FILE}"
-  InstallDir "$PROGRAMFILES\${NAME}"
-  RequestExecutionLevel admin
-
-#--------------------------------
 # Pages
   
   # Installer pages
+  !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES

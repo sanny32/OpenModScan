@@ -138,6 +138,19 @@
     </message>
 </context>
 <context>
+    <name>CmdLineParser</name>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="9"/>
+        <source>Load settings profile from ini file.</source>
+        <translation>从ini文件加载设置配置文件。</translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="9"/>
+        <source>file path</source>
+        <translation>文件路径</translation>
+    </message>
+</context>
+<context>
     <name>ConnectionComboBox</name>
     <message>
         <source>Remote TCP/IP Server</source>
@@ -262,63 +275,63 @@
         <translation>版本：&lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="88"/>
+        <location filename="../dialogs/dialogabout.cpp" line="91"/>
         <source>Using %1 and built against %2</source>
         <translation>使用 %1 并针对 %2 构建</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="89"/>
+        <location filename="../dialogs/dialogabout.cpp" line="92"/>
         <source>Cross-platform application development framework.</source>
         <translation>跨平台应用程序开发框架。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="96"/>
-        <location filename="../dialogs/dialogabout.cpp" line="103"/>
+        <location filename="../dialogs/dialogabout.cpp" line="99"/>
+        <location filename="../dialogs/dialogabout.cpp" line="106"/>
         <source>Underlying platform.</source>
         <translation>底层平台。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="116"/>
+        <location filename="../dialogs/dialogabout.cpp" line="119"/>
         <source>Author and Maintainer</source>
         <translation>作者和维护者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="129"/>
+        <location filename="../dialogs/dialogabout.cpp" line="132"/>
         <source>Russian</source>
         <translation>俄语</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="133"/>
+        <location filename="../dialogs/dialogabout.cpp" line="136"/>
         <source>Traditional  Chinese</source>
         <translation>传统中文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="138"/>
-        <location filename="../dialogs/dialogabout.cpp" line="143"/>
+        <location filename="../dialogs/dialogabout.cpp" line="141"/>
+        <location filename="../dialogs/dialogabout.cpp" line="146"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="225"/>
+        <location filename="../dialogs/dialogabout.cpp" line="228"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>访问组件主页
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="246"/>
+        <location filename="../dialogs/dialogabout.cpp" line="249"/>
         <source>Email contributer: %1</source>
         <translation>电子邮件贡献者：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="251"/>
+        <location filename="../dialogs/dialogabout.cpp" line="254"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>访问 GitHub 用户主页
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="255"/>
+        <location filename="../dialogs/dialogabout.cpp" line="258"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>访问用户主页
@@ -341,7 +354,7 @@
         <translation type="vanished">Qt %1 （构建版本 %2）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="277"/>
+        <location filename="../dialogs/dialogabout.cpp" line="282"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>
@@ -566,6 +579,11 @@
         <translation>TCP/IP 服务器</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
+        <source>Modbus RTU/IP Gateway</source>
+        <translation>Modbus RTU/IP网关</translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
         <source>Direct Connection to Serial Port</source>
         <translation>串行端口</translation>
@@ -581,9 +599,8 @@
         <translation>端口：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
         <source>Modbus RTU over TCP/IP Gateway</source>
-        <translation>Modbus RTU over TCP/IP 网关</translation>
+        <translation type="vanished">Modbus RTU over TCP/IP 网关</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="242"/>
@@ -2399,35 +2416,35 @@ Valid Slave Responses: %2</source>
         <translation>地址扫描</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="361"/>
-        <location filename="../mainwindow.cpp" line="437"/>
-        <location filename="../mainwindow.cpp" line="442"/>
-        <location filename="../mainwindow.cpp" line="550"/>
-        <location filename="../mainwindow.cpp" line="576"/>
+        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="476"/>
+        <location filename="../mainwindow.cpp" line="481"/>
+        <location filename="../mainwindow.cpp" line="589"/>
+        <location filename="../mainwindow.cpp" line="615"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="362"/>
-        <location filename="../mainwindow.cpp" line="433"/>
-        <location filename="../mainwindow.cpp" line="443"/>
-        <location filename="../mainwindow.cpp" line="551"/>
-        <location filename="../mainwindow.cpp" line="577"/>
+        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="472"/>
+        <location filename="../mainwindow.cpp" line="482"/>
+        <location filename="../mainwindow.cpp" line="590"/>
+        <location filename="../mainwindow.cpp" line="616"/>
         <source>All files (*)</source>
         <translation>所有文件(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1359"/>
+        <location filename="../mainwindow.cpp" line="1398"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1360"/>
+        <location filename="../mainwindow.cpp" line="1399"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1456"/>
+        <location filename="../mainwindow.cpp" line="1495"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕获错误：

@@ -138,6 +138,19 @@
     </message>
 </context>
 <context>
+    <name>CmdLineParser</name>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="9"/>
+        <source>Load settings profile from ini file.</source>
+        <translation>Загрузить профиль настроек из ini-файла.</translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="9"/>
+        <source>file path</source>
+        <translation>путь к файлу</translation>
+    </message>
+</context>
+<context>
     <name>ConnectionComboBox</name>
     <message>
         <source>Remote TCP/IP Server</source>
@@ -262,63 +275,63 @@
         <translation>Версия: &lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="88"/>
+        <location filename="../dialogs/dialogabout.cpp" line="91"/>
         <source>Using %1 and built against %2</source>
         <translation>%1 (собрано с версией %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="89"/>
+        <location filename="../dialogs/dialogabout.cpp" line="92"/>
         <source>Cross-platform application development framework.</source>
         <translation>Среда для разработки кросс-платформенных приложений.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="96"/>
-        <location filename="../dialogs/dialogabout.cpp" line="103"/>
+        <location filename="../dialogs/dialogabout.cpp" line="99"/>
+        <location filename="../dialogs/dialogabout.cpp" line="106"/>
         <source>Underlying platform.</source>
         <translation>Базовая платформа.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="116"/>
+        <location filename="../dialogs/dialogabout.cpp" line="119"/>
         <source>Author and Maintainer</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="129"/>
+        <location filename="../dialogs/dialogabout.cpp" line="132"/>
         <source>Russian</source>
         <translation>Русский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="133"/>
+        <location filename="../dialogs/dialogabout.cpp" line="136"/>
         <source>Traditional  Chinese</source>
         <translation>Традиционный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="138"/>
-        <location filename="../dialogs/dialogabout.cpp" line="143"/>
+        <location filename="../dialogs/dialogabout.cpp" line="141"/>
+        <location filename="../dialogs/dialogabout.cpp" line="146"/>
         <source>Simplified Chinese</source>
         <translation>Упрощенный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="225"/>
+        <location filename="../dialogs/dialogabout.cpp" line="228"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="246"/>
+        <location filename="../dialogs/dialogabout.cpp" line="249"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="251"/>
+        <location filename="../dialogs/dialogabout.cpp" line="254"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="255"/>
+        <location filename="../dialogs/dialogabout.cpp" line="258"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя
@@ -341,7 +354,7 @@
         <translation type="vanished">Qt %1 (собрано на версии %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="277"/>
+        <location filename="../dialogs/dialogabout.cpp" line="282"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
@@ -566,6 +579,11 @@
         <translation>Удаленный TCP/IP Сервер</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
+        <source>Modbus RTU/IP Gateway</source>
+        <translation>Шлюз Modbus RTU/IP</translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="224"/>
         <source>Direct Connection to Serial Port</source>
         <translation>Подключение к порту</translation>
@@ -581,9 +599,8 @@
         <translation>Последовательный порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogconnectiondetails.ui" line="219"/>
         <source>Modbus RTU over TCP/IP Gateway</source>
-        <translation>Шлюз Modbus RTU over TCP/IP</translation>
+        <translation type="vanished">Шлюз Modbus RTU over TCP/IP</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="242"/>
@@ -2387,35 +2404,35 @@ Valid Slave Responses: %2</source>
         <translation>Сканирование адресов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="361"/>
-        <location filename="../mainwindow.cpp" line="437"/>
-        <location filename="../mainwindow.cpp" line="442"/>
-        <location filename="../mainwindow.cpp" line="550"/>
-        <location filename="../mainwindow.cpp" line="576"/>
+        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="476"/>
+        <location filename="../mainwindow.cpp" line="481"/>
+        <location filename="../mainwindow.cpp" line="589"/>
+        <location filename="../mainwindow.cpp" line="615"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="362"/>
-        <location filename="../mainwindow.cpp" line="433"/>
-        <location filename="../mainwindow.cpp" line="443"/>
-        <location filename="../mainwindow.cpp" line="551"/>
-        <location filename="../mainwindow.cpp" line="577"/>
+        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="472"/>
+        <location filename="../mainwindow.cpp" line="482"/>
+        <location filename="../mainwindow.cpp" line="590"/>
+        <location filename="../mainwindow.cpp" line="616"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1359"/>
+        <location filename="../mainwindow.cpp" line="1398"/>
         <source>%1 was not found</source>
         <translation>%1 не найден</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1360"/>
+        <location filename="../mainwindow.cpp" line="1399"/>
         <source>Failed to open %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1456"/>
+        <location filename="../mainwindow.cpp" line="1495"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>Ошибка:

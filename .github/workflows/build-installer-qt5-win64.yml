@@ -63,13 +63,19 @@ jobs:
           set SIGNING_POLICY_SLUG=none
           if "${{ github.event_name }}"=="push" (
             if "${{ github.ref_type }}"=="tag" (
-              set SIGNING_POLICY_SLUG=release-signing
+              for /f %%i in ('echo "${{ github.ref_name }}" ^| find /i "test"') do set TAG_HAS_TEST=1
+              if not defined TAG_HAS_TEST (
+                set SIGNING_POLICY_SLUG=release-signing
+              )
             )
           )
           if "${{ github.event_name }}"=="workflow_dispatch" (
             if "${{ github.event.inputs.signing }}"=="true" (
               if not "${{ github.event.inputs.tag }}"=="" (
-                set SIGNING_POLICY_SLUG=release-signing
+                echo "%{{ github.event.inputs.tag }}%" | find /i "test" >nul
+                if errorlevel 1 (
+                  set SIGNING_POLICY_SLUG=release-signing
+                )
               ) else (
                 set SIGNING_POLICY_SLUG=test-signing
               )
@@ -155,6 +161,8 @@ jobs:
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe" ^
             --release ^
+            --no-angle ^
+            --no-quick ^
             --no-opengl-sw ^
             --no-system-d3d-compiler ^
             --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins"
@@ -164,13 +172,15 @@ jobs:
         run: |
           choco install nsis -y
         shell: cmd
-
+          
       - name: Build NSIS installer
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ env.APP_VERSION }}" ^
+           /DMIN_WINDOWS_VERSION=7 ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\src\res\omodscan.ico" ^
+           /DWELCOMEFINISHPAGE_BITMAP="%CD%\.github\win32\nsis3-omodscan.bmp" ^
            /DLICENSE_FILE="%CD%\src\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt5-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
            %CD%\.github\win32\installer-win64.nsi

@@ -4,17 +4,18 @@ Release:        1%{?dist}
 Summary:        An Open Source Modbus Master (Client) Utility
 Group:          Applications/Utility
 License:        MIT
+URL:            https://github.com/sanny32/OpenModScan
+Packager:       Alexandr Ananev <mail@ananev.org>
 Source0:        SOURCES/omodscan
 
 %description
-An Open Source Modbus Master (Client) Utility
+Open ModScan is an open source Modbus master (client) utility for testing and debugging Modbus TCP and RTU devices.
 
 %global _build_id_links none
 
 %prep
 
 %build
-
 
 %install
 %{__mkdir_p} %{buildroot}/opt
@@ -46,9 +47,11 @@ rm -f /usr/bin/omodscan
 
 %files
 /opt/OpenModScan
-/usr/share/applications/omodscan.desktop
-/usr/share/icons/hicolor/128x128/apps/omodscan.png
-/usr/share/icons/hicolor/64x64/apps/omodscan.png
-/usr/share/icons/hicolor/32x32/apps/omodscan.png
-/usr/share/icons/hicolor/16x16/apps/omodscan.png
+/usr/share/applications
+/usr/share/applications/*
+/usr/share/icons
+/usr/share/icons/*
+/usr/share/metainfo
+/usr/share/metainfo/*
+
 %caps(cap_net_bind_service=+ep) /opt/OpenModScan/bin/omodscan

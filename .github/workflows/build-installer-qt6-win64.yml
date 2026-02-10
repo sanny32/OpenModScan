@@ -126,7 +126,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: omodscan.exe
+          name: omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Signing Executable
@@ -147,7 +147,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
-          name: omodscan-signed.exe
+          name: omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Deploy Qt dependencies using windeployqt

@@ -23,47 +23,102 @@ DataSimulator::~DataSimulator()
 }
 
 ///
-/// \brief DataSimulator::startSimulation
+/// \brief DataSimulator::canStartSimulation
 /// \param mode
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \return
+///
+bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
+{
+    const auto count = registersCount(mode);
+
+    const auto it = _simulationMap.find({ deviceId, type, addr });
+    if(it != _simulationMap.end() && it->Params.Mode != SimulationMode::Disabled)
+        return true;
+
+    for(int i = 1; i < count; ++i)
+    {
+        if(hasSimulation(deviceId, type, addr + i))
+            return false;
+    }
+
+    return true;
+}
+
+///
+/// \brief DataSimulator::startSimulation
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \param params
 ///
-void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const ModbusSimulationParams& params)
+void DataSimulator::startSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
     QVariant value;
     switch (params.Mode)
     {
-        case SimulationMode::Increment:
-            value = params.IncrementParams.Range.from();
-            emit dataSimulated(mode, type, addr, deviceId, value);
+    case SimulationMode::Increment:
+        value = params.IncrementParams.Range.from();
+        emit dataSimulated(params.DataMode, deviceId, type, addr, value);
         break;
 
-        case SimulationMode::Decrement:
-            value = params.DecrementParams.Range.to();
-            emit dataSimulated(mode, type, addr, deviceId, value);
+    case SimulationMode::Decrement:
+        value = params.DecrementParams.Range.to();
+        emit dataSimulated(params.DataMode, deviceId, type, addr, value);
         break;
 
-        default:
+    default:
         break;
     }
 
-    _simulationMap.insert({ type, addr, deviceId}, { mode, params, value });
+
+    QVector<quint16> addresses;
+    for(int i = 0; i < registersCount(params.DataMode); ++i) {
+        addresses << addr + i;
+    }
+
+    for(int i = 0; i < addresses.length(); ++i) {
+        const ModbusSimulationMapKey key = { deviceId, type, addresses[i] };
+        ModbusSimulationParams simParams = params;
+
+        if(i != 0) {
+            simParams.Mode = SimulationMode::Disabled;
+        }
+
+        _simulationMap[key] = { params.DataMode, simParams, value };
+    }
 
     scheduleNextRun();
-    emit simulationStarted(type, addr, deviceId);
+    emit simulationStarted(params.DataMode, deviceId, type, addresses);
 }
 
 ///
 /// \brief DataSimulator::stopSimulation
+/// \param deviceId
 /// \param type
 /// \param addr
 ///
-void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId)
+void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr)
 {
-    _simulationMap.remove({ type, addr, deviceId});
-    emit simulationStopped(type, addr, deviceId);
+    const ModbusSimulationMapKey key = { deviceId, type, addr };
 
+    if(!_simulationMap.contains(key))
+        return;
+
+    const auto mode = _simulationMap[key].Mode;
+
+    QVector<quint16> addresses;
+    for(int i = 0; i < registersCount(mode); ++i) {
+        addresses << addr + i;
+    }
+
+    for(auto&& a : addresses) {
+        _simulationMap.remove({ deviceId, type, a});
+    }
+
+    emit simulationStopped(mode, deviceId, type, addresses);
     scheduleNextRun();
 }
 
@@ -102,32 +157,50 @@ void DataSimulator::restartSimulations()
     {
         const auto mode = _simulationMap[key].Mode;
         const auto params = _simulationMap[key].Params;
-        startSimulation(mode, key.Type, key.Address,  key.DeviceId, params);
+        startSimulation(key.DeviceId, key.Type, key.Address, params);
     }
 }
 
 ///
 /// \brief DataSimulator::simulationParams
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \return
 ///
-ModbusSimulationParams DataSimulator::simulationParams(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId) const
+ModbusSimulationParams DataSimulator::simulationParams(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    const auto it = _simulationMap.find({type, addr, deviceId});
-    return (it != _simulationMap.end()) ? it->Params : ModbusSimulationParams();
+    const auto it = _simulationMap.find({ deviceId, type, addr});
+
+    if(it == _simulationMap.end()) {
+        return ModbusSimulationParams();
+    }
+
+    return it->Params;
+}
+
+///
+/// \brief DataSimulator::hasSimulation
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \return
+///
+bool DataSimulator::hasSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
+{
+    const auto mode = simulationParams(deviceId, type, addr).Mode;
+    return mode != SimulationMode::Off;
 }
 
 ///
 /// \brief DataSimulator::simulationMap
 /// \return
 ///
-ModbusSimulationMap DataSimulator::simulationMap(quint8 deviceId) const
+ModbusSimulationMap2 DataSimulator::simulationMap() const
 {
-    ModbusSimulationMap map;
+    ModbusSimulationMap2 map;
     for(auto&& key : _simulationMap.keys())
-        if(key.DeviceId == deviceId)
-            map[{key.Type, key.Address}] = _simulationMap[key].Params;
+        map[key] = _simulationMap[key].Params;
 
     return map;
 }
@@ -176,24 +249,30 @@ void DataSimulator::on_timeout()
         const auto params = sim.Params;
         const auto interval = params.Interval;
 
-        if (interval <= 0 || sim.NextRunTime > currentTime) continue;
+        if (interval <= 0 ||
+            sim.NextRunTime > currentTime ||
+            params.Mode == SimulationMode::Disabled ||
+            params.Mode == SimulationMode::Off)
+        {
+            continue;
+        }
 
         switch(params.Mode)
         {
             case SimulationMode::Random:
-                randomSimulation(mode, key.Type, key.Address, key.DeviceId, params.RandomParams);
+                randomSimulation(mode, key.DeviceId, key.Type, key.Address, params.RandomParams);
                 break;
 
             case SimulationMode::Increment:
-                incrementSimulation(mode, key.Type, key.Address, key.DeviceId, params.IncrementParams);
+                incrementSimulation(mode, key.DeviceId, key.Type, key.Address, params.IncrementParams);
                 break;
 
             case SimulationMode::Decrement:
-                decrementSimailation(mode, key.Type, key.Address, key.DeviceId, params.DecrementParams);
+                decrementSimailation(mode, key.DeviceId, key.Type, key.Address, params.DecrementParams);
                 break;
 
             case SimulationMode::Toggle:
-                toggleSimulation(key.Type, key.Address, key.DeviceId);
+                toggleSimulation(key.DeviceId, key.Type, key.Address);
                 break;
 
             default:
@@ -221,19 +300,19 @@ T generateRandom(const QRange<double>& range)
 ///
 /// \brief DataSimulator::randomSimulation
 /// \param mode
+/// \param deviceId
 /// \param type
 /// \param addr
-/// \param order
 /// \param params
 ///
-void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const RandomSimulationParams& params)
+void DataSimulator::randomSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
+    auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
     switch(type)
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
-            value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
+            value = generateRandom<quint16>(0, 2);
         break;
 
         case QModbusDataUnit::HoldingRegisters:
@@ -285,7 +364,7 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, type, addr, deviceId, value);
+        emit dataSimulated(mode, deviceId, type, addr, value);
 }
 
 template<typename T>
@@ -299,59 +378,60 @@ T incrementValue(T value, T step, const QRange<double>& range)
 ///
 /// \brief DataSimulator::incrementSimulation
 /// \param mode
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \param params
 ///
-void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const IncrementSimulationParams& params)
+void DataSimulator::incrementSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
+    auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
     switch(mode)
     {
         case DataDisplayMode::Int16:
             value = incrementValue<qint16>(value.toInt(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::Binary:
         case DataDisplayMode::UInt16:
         case DataDisplayMode::Hex:
         case DataDisplayMode::Ansi:
             value = incrementValue<quint16>(value.toUInt(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::Int32:
         case DataDisplayMode::SwappedInt32:
             value = incrementValue<qint32>(value.toInt(),  params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
             value = incrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
             value = incrementValue<float>(value.toFloat(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
             value = incrementValue<double>(value.toDouble(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::Int64:
         case DataDisplayMode::SwappedInt64:
             value = incrementValue<qint64>(value.toLongLong(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
             value = incrementValue<quint64>(value.toULongLong(), params.Step, params.Range);
-        break;
+            break;
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, type, addr, deviceId, value);
+        emit dataSimulated(mode, deviceId, type, addr, value);
 }
 
 template<typename T>
@@ -365,26 +445,26 @@ T decrementValue(T value, T step, const QRange<double>& range)
 ///
 /// \brief DataSimulator::decrementSimailation
 /// \param mode
+/// \param deviceId
 /// \param type
 /// \param addr
-/// \param order
 /// \param params
 ///
-void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, const DecrementSimulationParams& params)
+void DataSimulator::decrementSimailation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
+    auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
     switch(mode)
     {
         case DataDisplayMode::Int16:
             value = decrementValue<qint16>(value.toInt(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::Binary:
         case DataDisplayMode::UInt16:
         case DataDisplayMode::Hex:
         case DataDisplayMode::Ansi:
             value = decrementValue<quint16>(value.toUInt(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::Int32:
         case DataDisplayMode::SwappedInt32:
@@ -394,42 +474,43 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
             value = decrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
             value = decrementValue<float>(value.toFloat(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
             value = decrementValue<double>(value.toDouble(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::Int64:
         case DataDisplayMode::SwappedInt64:
             value = decrementValue<qint64>(value.toLongLong(), params.Step, params.Range);
-        break;
+            break;
 
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
             value = decrementValue<quint64>(value.toULongLong(), params.Step, params.Range);
-        break;
+            break;
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, type, addr, deviceId, value);
+        emit dataSimulated(mode, deviceId, type, addr, value);
 }
 
 ///
 /// \brief DataSimulator::toggleSimulation
+/// \param deviceId
 /// \param type
 /// \param addr
 ///
-void DataSimulator::toggleSimulation(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId)
+void DataSimulator::toggleSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr)
 {
-    auto&& value = _simulationMap[{ type, addr, deviceId}].CurrentValue;
+    auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
     value = !value.toBool();
 
-    emit dataSimulated(DataDisplayMode::Binary, type, addr, deviceId, value);
+    emit dataSimulated(DataDisplayMode::Binary, deviceId, type, addr, value);
 }

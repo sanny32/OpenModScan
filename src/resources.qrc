@@ -22,8 +22,6 @@
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
         <file>translations/omodscan_ru.qm</file>
-        <file>res/pointGreen.png</file>
-        <file>res/pointEmpty.png</file>
         <file>res/actionInt32.png</file>
         <file>res/actionSwappedInt32.png</file>
         <file>res/actionSwappedUInt32.png</file>
@@ -52,5 +50,8 @@
         <file>res/emblem-mail.svg</file>
         <file>translations/omodscan_zh_CN.qm</file>
         <file>translations/omodscan_zh_TW.qm</file>
+        <file>res/iconSimulation16bit.png</file>
+        <file>res/iconSimulation32bit.png</file>
+        <file>res/iconSimulation64bit.png</file>
     </qresource>
 </RCC>

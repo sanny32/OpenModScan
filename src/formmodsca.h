@@ -88,14 +88,14 @@ public:
 
     void print(QPrinter* painter);
 
-    ModbusSimulationMap simulationMap() const;
+    ModbusSimulationMap2 simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
-    AddressDescriptionMap descriptionMap() const;
-    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+    AddressDescriptionMap2 descriptionMap() const;
+    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
-    AddressColorMap colorMap() const;
-    void setColor(QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+    AddressColorMap2 colorMap() const;
+    void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
     void resetCtrs();
     uint numberOfPolls() const;
@@ -136,9 +136,9 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
-    void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
-    void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, quint8 deviceId, QVariant value);
+    void on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
+    void on_simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
+    void on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value);
 
 private:
     ModbusMessage::ProtocolType protocol() const;
@@ -304,6 +304,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
 {
     if(!frm) return in;
     const auto ver = frm->property("Version").value<QVersionNumber>();
+    in.device()->setProperty("Form_Version", QVariant::fromValue(ver));
 
     bool isMaximized;
     in >> isMaximized;
@@ -365,22 +366,41 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
 
     ByteOrder byteOrder = ByteOrder::Direct;
     ModbusSimulationMap simulationMap;
+    ModbusSimulationMap2 simulationMap2;
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
-        in >> simulationMap;
+
+        if(ver >= QVersionNumber(1, 10)) {
+            in >> simulationMap2;
+        }
+        else {
+            in >> simulationMap;
+        }
     }
 
     AddressDescriptionMap descriptionMap;
+    AddressDescriptionMap2 descriptionMap2;
     if(ver >= QVersionNumber(1, 2))
     {
-        in >> descriptionMap;
+        if(ver >= QVersionNumber(1, 10)) {
+            in >> descriptionMap2;
+        }
+        else {
+            in >> descriptionMap;
+        }
     }
 
     AddressColorMap colorMap;
+    AddressColorMap2 colorMap2;
     if(ver >= QVersionNumber(1, 9))
     {
-        in >> colorMap;
+        if(ver >= QVersionNumber(1, 10)) {
+            in >> colorMap2;
+        }
+        else {
+            in >> colorMap;
+        }
     }
 
     QString codepage;
@@ -409,14 +429,26 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setByteOrder(byteOrder);
     frm->setCodepage(codepage);
 
-    for(auto&& k : simulationMap.keys())
-        frm->startSimulation(k.first, k.second,  simulationMap[k]);
+    if(ver >= QVersionNumber(1,10)) {
+        for(auto&& k : simulationMap2.keys())
+            frm->startSimulation(k.Type, k.Address, simulationMap2[k]);
 
-    for(auto&& k : descriptionMap.keys())
-        frm->setDescription(k.first, k.second, descriptionMap[k]);
+        for(auto&& k : descriptionMap2.keys())
+            frm->setDescription(k.DeviceId, k.Type, k.Address, descriptionMap2[k]);
 
-    for(auto&& k : colorMap.keys())
-        frm->setColor(k.first, k.second, colorMap[k]);
+        for(auto&& k : colorMap2.keys())
+            frm->setColor(k.DeviceId, k.Type, k.Address, colorMap2[k]);
+    }
+    else {
+        for(auto&& k : simulationMap.keys())
+            frm->startSimulation(k.first, k.second,  simulationMap[k]);
+
+        for(auto&& k : descriptionMap.keys())
+            frm->setDescription(dd.DeviceId, k.first, k.second, descriptionMap[k]);
+
+        for(auto&& k : colorMap.keys())
+            frm->setColor(dd.DeviceId, k.first, k.second, colorMap[k]);
+    }
 
     return in;
 }
@@ -479,13 +511,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
         xml.writeStartElement("ModbusSimulationMap");
 
         for (auto it = simulationMap.constBegin(); it != simulationMap.constEnd(); ++it) {
-            const QPair<QModbusDataUnit::RegisterType, quint16>& key = it.key();
+            const auto& key = it.key();
             const ModbusSimulationParams& params = it.value();
 
-            if(params.Mode != SimulationMode::Off && key.first == dd.PointType)
+            if(params.Mode != SimulationMode::Off && params.Mode != SimulationMode::Disabled && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
             {
                 xml.writeStartElement("Simulation");
-                xml.writeAttribute("Address", QString::number(key.second + (dd.ZeroBasedAddress ? 0 : 1)));
+                xml.writeAttribute("Address", QString::number(key.Address + (dd.ZeroBasedAddress ? 0 : 1)));
                 xml << params;
                 xml.writeEndElement();
             }
@@ -499,13 +531,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
         xml.writeStartElement("AddressDescriptionMap");
 
         for (auto it = descriptionMap.constBegin(); it != descriptionMap.constEnd(); ++it) {
-            const QPair<QModbusDataUnit::RegisterType, quint16>& key = it.key();
+            const auto& key = it.key();
             const QString& description = it.value();
 
-            if(!description.isEmpty() && key.first == dd.PointType)
+            if(!description.isEmpty() && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
             {
                 xml.writeStartElement("Description");
-                xml.writeAttribute("Address", QString::number(key.second));
+                xml.writeAttribute("Address", QString::number(key.Address));
                 xml.writeCDATA(description);
                 xml.writeEndElement();
             }
@@ -519,13 +551,13 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
         xml.writeStartElement("AddressColorMap");
 
         for (auto it = colorMap.constBegin(); it != colorMap.constEnd(); ++it) {
-            const QPair<QModbusDataUnit::RegisterType, quint16>& key = it.key();
+            const auto& key = it.key();
             const QColor& clr = it.value();
 
-            if(clr.isValid() && key.first == dd.PointType)
+            if(clr.isValid() && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
             {
                 xml.writeStartElement("Color");
-                xml.writeAttribute("Address", QString::number(key.second));
+                xml.writeAttribute("Address", QString::number(key.Address));
                 xml.writeAttribute("Value", clr.name());
                 xml.writeEndElement();
             }
@@ -764,7 +796,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
                 QHashIterator it(descriptions);
                 while(it.hasNext()) {
                     const auto item = it.next();
-                    frm->setDescription(dd.PointType, item.key(), item.value());
+                    frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
                 }
             }
 
@@ -772,7 +804,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
                 QHashIterator it(colors);
                 while(it.hasNext()) {
                     const auto item = it.next();
-                    frm->setColor(dd.PointType, item.key(), item.value());
+                    frm->setColor(dd.DeviceId, dd.PointType, item.key(), item.value());
                 }
             }
         }

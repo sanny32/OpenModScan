@@ -19,7 +19,39 @@ class OutputWidget;
 }
 
 class OutputWidget;
+
+///
+/// \brief The QEmptyPixmap class
+///
+class QEmptyPixmap : public QPixmap {
+public:
+    QEmptyPixmap(const QSize& size) :
+        QPixmap(size) {
+        fill(Qt::transparent);
+    }
+};
+
+///
+/// \brief The ItemMapKey class
+///
+struct ItemMapKey {
+    quint8 DeviceId;
+    QModbusDataUnit::RegisterType Type;
+    quint16 Address;
+
+    bool operator<(const  ItemMapKey &other) const {
+        if (DeviceId != other.DeviceId)
+            return DeviceId < other.DeviceId;
+        if (Type != other.Type)
+            return Type < other.Type;
+        return Address < other.Address;
+    }
+};
+
+typedef QMap<ItemMapKey, QColor> AddressColorMap2;
 typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QColor> AddressColorMap;
+
+typedef QMap<ItemMapKey, QString> AddressDescriptionMap2;
 typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QString> AddressDescriptionMap;
 
 ///
@@ -32,6 +64,15 @@ class OutputListModel : public QAbstractListModel
     friend class OutputWidget;
 
 public:
+    enum SimulationIconType
+    {
+        SimulationIconNone,
+        SimulationIcon16Bit,
+        SimulationIcon32Bit,
+        SimulationIcon64Bit
+    };
+    Q_ENUM(SimulationIconType)
+
     explicit OutputListModel(OutputWidget* parent);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -52,7 +93,10 @@ public:
         _columnsDistance = qMax(1, value);
     }
 
-    QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
+    QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
+
+private:
+    bool isItemSimulated(const int row) const;
 
 private:
     struct ItemData
@@ -62,14 +106,17 @@ private:
         QString ValueStr;
         QString Description;
         bool Simulated = false;
+        SimulationIconType SimulationIcon = SimulationIconNone;
         QColor BgColor;
         QColor FgColor;
     };
 
     OutputWidget* _parentWidget;
     QModbusDataUnit _lastData;
-    QIcon _iconPointGreen;
-    QIcon _iconPointEmpty;
+    const QPixmap _iconSimulation16Bit;
+    const QPixmap _iconSimulation32Bit;
+    const QPixmap _iconSimulation64Bit;
+    const QEmptyPixmap _iconSimulationOff;
     int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };
@@ -89,7 +136,7 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap& simulations);
+    void setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap2& simulations);
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
@@ -144,13 +191,13 @@ public:
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
     void updateData(const QModbusDataUnit& data);
 
-    AddressColorMap colorMap() const;
-    void setColor(QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+    AddressColorMap2 colorMap() const;
+    void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
-    AddressDescriptionMap descriptionMap() const;
-    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+    AddressDescriptionMap2 descriptionMap() const;
+    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
-    void setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+    void setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 public slots:
     void clearLogView();
@@ -194,9 +241,38 @@ private:
     QString _codepage;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
-    AddressColorMap _colorMap;
-    AddressDescriptionMap _descriptionMap;
+    AddressColorMap2 _colorMap;
+    AddressDescriptionMap2 _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };
+
+///
+/// \brief operator <<
+/// \param out
+/// \param key
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const ItemMapKey& key)
+{
+    out << key.DeviceId;
+    out << key.Type;
+    out << key.Address;
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param params
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, ItemMapKey& key)
+{
+    in >> key.DeviceId;
+    in >> key.Type;
+    in >> key.Address;
+    return in;
+}
 
 #endif // OUTPUTWIDGET_H

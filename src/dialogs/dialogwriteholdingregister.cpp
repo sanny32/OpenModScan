@@ -5,6 +5,37 @@
 #include "ui_dialogwriteholdingregister.h"
 
 ///
+/// \brief The SimButtonColors class
+///
+struct SimButtonColors
+{
+    QString base;
+    QString hover;
+    QString pressed;
+    QString border;
+};
+
+///
+/// \brief simColors
+/// \param registersCount
+/// \return
+///
+static SimButtonColors simColors(DataDisplayMode mode)
+{
+    switch(registersCount(mode))
+    {
+    case 2:
+        return { "#5680D0", "#4E75C0", "#466AB0", "#3E5FA0" };
+
+    case 4:
+        return { "#D74D9D", "#C9458F", "#BB3D81", "#A73573" };
+
+    default:
+        return { "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" };
+    }
+}
+
+///
 /// \brief DialogWriteHoldingRegister::DialogWriteHoldingRegister
 /// \param params
 /// \param simParams
@@ -32,30 +63,38 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
 
-    if(simParams.Mode == SimulationMode::Disabled)
+    switch(simParams.Mode)
     {
-        delete ui->pushButtonSimulation;
-        delete ui->horizontalLayoutSimulation;
-    }
-    else if(simParams.Mode != SimulationMode::Off)
-    {
-        QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
-        iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
-        iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        case SimulationMode::Disabled:
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setEnabled(false);
+            break;
 
-        QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
-        textLabel->setAlignment(Qt::AlignCenter);
-        textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        case SimulationMode::Off:
+            break;
 
-        auto layout = new QHBoxLayout(ui->pushButtonSimulation);
-        layout->setContentsMargins(4,0,4,0);
-        layout->addWidget(iconLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-        layout->addWidget(textLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+        default:
+        {
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
 
-        ui->pushButtonSimulation->setText(QString());
-        ui->pushButtonSimulation->setLayout(layout);
+            const auto c = simColors(simParams.DataMode);
+            ui->pushButtonSimulation->setStyleSheet(QString(R"(
+                    QPushButton {
+                        color: white;
+                        padding: 4px 12px;
+                        background-color: %1;
+                        border: 1px solid %2;
+                        border-radius: 4px;
+                    }
+                    QPushButton:hover {
+                        background-color: %3;
+                    }
+                    QPushButton:pressed {
+                        background-color: %4;
+                    }
+                )").arg(c.base, c.border, c.hover, c.pressed));
+        }
+        break;
     }
 
     switch(params.DisplayMode)
@@ -93,18 +132,21 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         case DataDisplayMode::SwappedFP:
             ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
             ui->lineEditValue->setValue(params.Value.toFloat());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
             ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditValue->setValue(params.Value.toDouble());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::Int32:
         case DataDisplayMode::SwappedInt32:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
             ui->lineEditValue->setValue(params.Value.toInt());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::UInt32:
@@ -112,12 +154,14 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(params.Value.toUInt());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::Int64:
         case DataDisplayMode::SwappedInt64:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
             ui->lineEditValue->setValue(params.Value.toLongLong());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::UInt64:
@@ -125,8 +169,30 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(params.Value.toULongLong());
+            ui->controlBitPattern->setEnabled(false);
         break;
     }
+
+    if(ui->controlBitPattern->isEnabled())
+    {
+        ui->controlBitPattern->setValue(_writeParams.Value.toUInt());
+
+        connect(ui->lineEditValue, QOverload<const QVariant&>::of(&NumericLineEdit::valueChanged), this, [this](const QVariant& value) {
+            ui->controlBitPattern->setValue(value.toUInt());
+        });
+
+        connect(ui->controlBitPattern, &BitPatternControl::valueChanged, this, [this](quint16 value) {
+            ui->lineEditValue->setValue(value);
+        });
+    }
+    else
+    {
+        delete ui->controlBitPattern;
+        delete ui->groupBoxBitPattern;
+        delete ui->labelBitPattern;
+        adjustSize();
+    }
+
     ui->lineEditValue->setFocus();
 }
 

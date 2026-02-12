@@ -134,6 +134,7 @@ void DialogAutoSimulation::accept()
     {
         _params.Mode = ui->comboBoxSimulationType->currentSimulationMode();
         _params.Interval = ui->lineEditInterval->value<int>();
+        _params.DataMode = _displayMode;
 
         switch(_params.Mode)
         {

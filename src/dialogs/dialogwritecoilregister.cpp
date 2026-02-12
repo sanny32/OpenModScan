@@ -32,30 +32,34 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
 
-    if(simParams.Mode == SimulationMode::Disabled)
+    switch(simParams.Mode)
     {
-        delete ui->pushButtonSimulation;
-        delete ui->horizontalLayoutSimulation;
-    }
-    else if(simParams.Mode != SimulationMode::Off)
-    {
-        QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
-        iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
-        iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        case SimulationMode::Disabled:
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setEnabled(false);
+            break;
 
-        QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
-        textLabel->setAlignment(Qt::AlignCenter);
-        textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        case SimulationMode::Off:
+            break;
 
-        auto layout = new QHBoxLayout(ui->pushButtonSimulation);
-        layout->setContentsMargins(4,0,4,0);
-        layout->addWidget(iconLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-        layout->addWidget(textLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-
-        ui->pushButtonSimulation->setText(QString());
-        ui->pushButtonSimulation->setLayout(layout);
+        default:
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setStyleSheet(R"(
+                        QPushButton {
+                            color: white;
+                            padding: 4px 12px;
+                            background-color: #4CAF50;
+                            border: 1px solid #3e8e41;
+                            border-radius: 4px;
+                        }
+                        QPushButton:hover {
+                            background-color: #45a049;
+                        }
+                        QPushButton:pressed {
+                            background-color: #3e8e41;
+                        }
+                    )");
+            break;
     }
 
 

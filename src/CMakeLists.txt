@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.13.1
+    VERSION 1.13.2
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -93,6 +93,7 @@ set(SOURCES
     cmdlineparser.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
+    controls/bitpatterncontrol.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/byteordercombobox.cpp
@@ -170,6 +171,7 @@ set(HEADERS
     connectiondetails.h
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
+    controls/bitpatterncontrol.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/byteordercombobox.h
@@ -278,6 +280,7 @@ set(HEADERS
 
 # UI Forms
 set(UI_FILES
+    controls/bitpatterncontrol.ui
     controls/outputwidget.ui
     controls/statisticwidget.ui
     dialogs/dialogmsgparser.ui

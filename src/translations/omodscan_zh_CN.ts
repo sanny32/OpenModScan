@@ -3042,72 +3042,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="554"/>
+        <location filename="../controls/outputwidget.cpp" line="550"/>
         <source>Zoom: %1%</source>
         <translation>飞涨： %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1151"/>
+        <location filename="../controls/outputwidget.cpp" line="1147"/>
         <source>Write Value to %1</source>
         <translation>将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1158"/>
+        <location filename="../controls/outputwidget.cpp" line="1154"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1158"/>
+        <location filename="../controls/outputwidget.cpp" line="1154"/>
         <source>Edit Description</source>
         <translation>编辑描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1161"/>
+        <location filename="../controls/outputwidget.cpp" line="1157"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1170"/>
+        <location filename="../controls/outputwidget.cpp" line="1166"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1181"/>
+        <location filename="../controls/outputwidget.cpp" line="1177"/>
         <source>Yellow</source>
         <translation>黄色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1182"/>
+        <location filename="../controls/outputwidget.cpp" line="1178"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1183"/>
+        <location filename="../controls/outputwidget.cpp" line="1179"/>
         <source>Magenta</source>
         <translation>品红</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1184"/>
+        <location filename="../controls/outputwidget.cpp" line="1180"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1185"/>
+        <location filename="../controls/outputwidget.cpp" line="1181"/>
         <source>Orange</source>
         <translation>橙子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1186"/>
+        <location filename="../controls/outputwidget.cpp" line="1182"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1187"/>
+        <location filename="../controls/outputwidget.cpp" line="1183"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1273"/>
+        <location filename="../controls/outputwidget.cpp" line="1269"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>

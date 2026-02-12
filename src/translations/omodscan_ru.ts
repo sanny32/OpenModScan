@@ -110,6 +110,14 @@
     </message>
 </context>
 <context>
+    <name>BitPatternControl</name>
+    <message>
+        <location filename="../controls/bitpatterncontrol.ui" line="14"/>
+        <source>Bit Pattern</source>
+        <translation type="unfinished">Битовый шаблон</translation>
+    </message>
+</context>
+<context>
     <name>BooleanComboBox</name>
     <message>
         <location filename="../controls/booleancombobox.cpp" line="10"/>
@@ -1612,14 +1620,24 @@ single-point  write functions 05 and 06.)</source>
         <translation>Вкл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="180"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="133"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Auto Simulation</source>
-        <translation>Симуляция</translation>
+        <translation type="vanished">Симуляция</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="20"/>
         <source>15: Write Single Coil</source>
         <translation>15: Запись дискретного выхода</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="38"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="46"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1638,7 +1656,7 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Узел: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="35"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="38"/>
         <source>Device Id: </source>
         <translation>Узел: </translation>
     </message>
@@ -1653,22 +1671,37 @@ single-point  write functions 05 and 06.)</source>
         <translation>Значение: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="186"/>
-        <source>Auto Simulation</source>
-        <translation>Симуляция</translation>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="151"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="23"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="173"/>
+        <source>Bit Pattern: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto Simulation</source>
+        <translation type="vanished">Симуляция</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="54"/>
         <source>16: Write Holding Register</source>
         <translation>16: Запись регистра хранения</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="69"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="78"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="118"/>
         <source>Value, (HEX): </source>
         <translation>Значение, (Шестн): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="86"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="125"/>
         <source>Value, (ANSI): </source>
         <translation>Знвчение, (ANSI): </translation>
     </message>
@@ -1699,7 +1732,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="94"/>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="91"/>
         <source>Bit Pattern</source>
         <translation>Битовый шаблон</translation>
     </message>
@@ -1790,22 +1823,22 @@ Valid Slave Responses: %2</source>
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="681"/>
+        <location filename="../formmodsca.cpp" line="687"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="854"/>
+        <location filename="../formmodsca.cpp" line="860"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="647"/>
+        <location filename="../formmodsca.cpp" line="653"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="808"/>
+        <location filename="../formmodsca.cpp" line="814"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -2405,34 +2438,34 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="476"/>
-        <location filename="../mainwindow.cpp" line="481"/>
-        <location filename="../mainwindow.cpp" line="589"/>
-        <location filename="../mainwindow.cpp" line="615"/>
+        <location filename="../mainwindow.cpp" line="475"/>
+        <location filename="../mainwindow.cpp" line="480"/>
+        <location filename="../mainwindow.cpp" line="588"/>
+        <location filename="../mainwindow.cpp" line="614"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="401"/>
-        <location filename="../mainwindow.cpp" line="472"/>
-        <location filename="../mainwindow.cpp" line="482"/>
-        <location filename="../mainwindow.cpp" line="590"/>
-        <location filename="../mainwindow.cpp" line="616"/>
+        <location filename="../mainwindow.cpp" line="471"/>
+        <location filename="../mainwindow.cpp" line="481"/>
+        <location filename="../mainwindow.cpp" line="589"/>
+        <location filename="../mainwindow.cpp" line="615"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1398"/>
+        <location filename="../mainwindow.cpp" line="1397"/>
         <source>%1 was not found</source>
         <translation>%1 не найден</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1399"/>
+        <location filename="../mainwindow.cpp" line="1398"/>
         <source>Failed to open %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1495"/>
+        <location filename="../mainwindow.cpp" line="1494"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>Ошибка:
@@ -2447,29 +2480,29 @@ Valid Slave Responses: %2</source>
         <translation>Некорректный запрос Modbus</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="533"/>
-        <location filename="../modbusclient.cpp" line="718"/>
+        <location filename="../modbusclient.cpp" line="542"/>
+        <location filename="../modbusclient.cpp" line="727"/>
         <source>Coil Write Failure</source>
         <translation>Ошибка записи в Coil регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="537"/>
-        <location filename="../modbusclient.cpp" line="723"/>
+        <location filename="../modbusclient.cpp" line="546"/>
+        <location filename="../modbusclient.cpp" line="732"/>
         <source>Register Write Failure</source>
         <translation>Ошибка записи в регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="575"/>
+        <location filename="../modbusclient.cpp" line="584"/>
         <source>Mask Write Register Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="727"/>
+        <location filename="../modbusclient.cpp" line="736"/>
         <source>Mask Register Write Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="745"/>
+        <location filename="../modbusclient.cpp" line="754"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -2996,72 +3029,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="508"/>
+        <location filename="../controls/outputwidget.cpp" line="554"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1084"/>
+        <location filename="../controls/outputwidget.cpp" line="1151"/>
         <source>Write Value to %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1158"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1158"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1094"/>
+        <location filename="../controls/outputwidget.cpp" line="1161"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1103"/>
+        <location filename="../controls/outputwidget.cpp" line="1170"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1114"/>
+        <location filename="../controls/outputwidget.cpp" line="1181"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1115"/>
+        <location filename="../controls/outputwidget.cpp" line="1182"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1116"/>
+        <location filename="../controls/outputwidget.cpp" line="1183"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1117"/>
+        <location filename="../controls/outputwidget.cpp" line="1184"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1118"/>
+        <location filename="../controls/outputwidget.cpp" line="1185"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1119"/>
+        <location filename="../controls/outputwidget.cpp" line="1186"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1120"/>
+        <location filename="../controls/outputwidget.cpp" line="1187"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1206"/>
+        <location filename="../controls/outputwidget.cpp" line="1273"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>

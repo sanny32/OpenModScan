@@ -110,6 +110,14 @@
     </message>
 </context>
 <context>
+    <name>BitPatternControl</name>
+    <message>
+        <location filename="../controls/bitpatterncontrol.ui" line="14"/>
+        <source>Bit Pattern</source>
+        <translation type="unfinished">各位的值</translation>
+    </message>
+</context>
+<context>
     <name>BooleanComboBox</name>
     <message>
         <location filename="../controls/booleancombobox.cpp" line="10"/>
@@ -1624,14 +1632,24 @@ single-point  write functions 05 and 06.)</source>
         <translation>开</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="180"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="133"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Auto Simulation</source>
-        <translation>自动仿真</translation>
+        <translation type="vanished">自动仿真</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="20"/>
         <source>15: Write Single Coil</source>
         <translation>15: 写入单线圈</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="38"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="46"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1650,7 +1668,7 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="35"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="38"/>
         <source>Device Id: </source>
         <translation>设备地址： </translation>
     </message>
@@ -1665,22 +1683,37 @@ single-point  write functions 05 and 06.)</source>
         <translation>值： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="186"/>
-        <source>Auto Simulation</source>
-        <translation>自动仿真</translation>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="151"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="23"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="173"/>
+        <source>Bit Pattern: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto Simulation</source>
+        <translation type="vanished">自动仿真</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="54"/>
         <source>16: Write Holding Register</source>
         <translation>16: 写入保持寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="69"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="78"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="118"/>
         <source>Value, (HEX): </source>
         <translation>值（十六进制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="86"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="125"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1711,7 +1744,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>寄存器地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="94"/>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="91"/>
         <source>Bit Pattern</source>
         <translation>各位的值</translation>
     </message>
@@ -1802,22 +1835,22 @@ Valid Slave Responses: %2</source>
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="681"/>
+        <location filename="../formmodsca.cpp" line="687"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="854"/>
+        <location filename="../formmodsca.cpp" line="860"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="647"/>
+        <location filename="../formmodsca.cpp" line="653"/>
         <source>No Responses from Slave Device</source>
         <translation>设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="808"/>
+        <location filename="../formmodsca.cpp" line="814"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>
@@ -2417,34 +2450,34 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="476"/>
-        <location filename="../mainwindow.cpp" line="481"/>
-        <location filename="../mainwindow.cpp" line="589"/>
-        <location filename="../mainwindow.cpp" line="615"/>
+        <location filename="../mainwindow.cpp" line="475"/>
+        <location filename="../mainwindow.cpp" line="480"/>
+        <location filename="../mainwindow.cpp" line="588"/>
+        <location filename="../mainwindow.cpp" line="614"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="401"/>
-        <location filename="../mainwindow.cpp" line="472"/>
-        <location filename="../mainwindow.cpp" line="482"/>
-        <location filename="../mainwindow.cpp" line="590"/>
-        <location filename="../mainwindow.cpp" line="616"/>
+        <location filename="../mainwindow.cpp" line="471"/>
+        <location filename="../mainwindow.cpp" line="481"/>
+        <location filename="../mainwindow.cpp" line="589"/>
+        <location filename="../mainwindow.cpp" line="615"/>
         <source>All files (*)</source>
         <translation>所有文件(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1398"/>
+        <location filename="../mainwindow.cpp" line="1397"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1399"/>
+        <location filename="../mainwindow.cpp" line="1398"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1495"/>
+        <location filename="../mainwindow.cpp" line="1494"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕获错误：
@@ -2460,29 +2493,29 @@ Valid Slave Responses: %2</source>
         <translation>无效的 Modbus 请求</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="533"/>
-        <location filename="../modbusclient.cpp" line="718"/>
+        <location filename="../modbusclient.cpp" line="542"/>
+        <location filename="../modbusclient.cpp" line="727"/>
         <source>Coil Write Failure</source>
         <translation>线圈写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="537"/>
-        <location filename="../modbusclient.cpp" line="723"/>
+        <location filename="../modbusclient.cpp" line="546"/>
+        <location filename="../modbusclient.cpp" line="732"/>
         <source>Register Write Failure</source>
         <translation>寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="575"/>
+        <location filename="../modbusclient.cpp" line="584"/>
         <source>Mask Write Register Failure</source>
         <translation>寄存器写入掩码失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="727"/>
+        <location filename="../modbusclient.cpp" line="736"/>
         <source>Mask Register Write Failure</source>
         <translation>掩码寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="745"/>
+        <location filename="../modbusclient.cpp" line="754"/>
         <source>Connection error. %1</source>
         <translation>连接错误：%1</translation>
     </message>
@@ -3009,72 +3042,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="508"/>
+        <location filename="../controls/outputwidget.cpp" line="554"/>
         <source>Zoom: %1%</source>
         <translation>飞涨： %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1084"/>
+        <location filename="../controls/outputwidget.cpp" line="1151"/>
         <source>Write Value to %1</source>
         <translation>将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1158"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1158"/>
         <source>Edit Description</source>
         <translation>编辑描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1094"/>
+        <location filename="../controls/outputwidget.cpp" line="1161"/>
         <source>%1: Enter Description</source>
         <translation>%1：输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1103"/>
+        <location filename="../controls/outputwidget.cpp" line="1170"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1114"/>
+        <location filename="../controls/outputwidget.cpp" line="1181"/>
         <source>Yellow</source>
         <translation>黄色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1115"/>
+        <location filename="../controls/outputwidget.cpp" line="1182"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1116"/>
+        <location filename="../controls/outputwidget.cpp" line="1183"/>
         <source>Magenta</source>
         <translation>品红</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1117"/>
+        <location filename="../controls/outputwidget.cpp" line="1184"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1118"/>
+        <location filename="../controls/outputwidget.cpp" line="1185"/>
         <source>Orange</source>
         <translation>橙子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1119"/>
+        <location filename="../controls/outputwidget.cpp" line="1186"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1120"/>
+        <location filename="../controls/outputwidget.cpp" line="1187"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1206"/>
+        <location filename="../controls/outputwidget.cpp" line="1273"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>

@@ -438,8 +438,7 @@ void MainWindow::on_actionSave_triggered()
     if(filename.isEmpty())
         ui->actionSaveAs->trigger();
     else {
-        const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ? SerializationFormat::Xml : SerializationFormat::Binary;
-        saveMdiChild(frm, format);
+        saveMdiChild(frm, SerializationFormat::Xml);
     }
 }
 
@@ -451,7 +450,7 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    saveAs(frm, static_cast<SerializationFormat>(-1));
+    saveAs(frm, SerializationFormat::Xml);
 }
 
 ///

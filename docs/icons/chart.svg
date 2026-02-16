@@ -1,0 +1,34 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Qt style chart icon with site blue colors -->
+  <defs>
+    <linearGradient id="qtBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5b9bd5"/>
+      <stop offset="100%" style="stop-color:#4a8bc2"/>
+    </linearGradient>
+    <linearGradient id="qtGray" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f5f5f5"/>
+      <stop offset="100%" style="stop-color:#e8e8e8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background frame -->
+  <rect x="8" y="8" width="48" height="48" fill="url(#qtGray)" stroke="#c0c0c0" stroke-width="1.5" rx="2"/>
+
+  <!-- Chart area -->
+  <rect x="14" y="14" width="36" height="36" fill="#ffffff" stroke="#d0d0d0" stroke-width="1"/>
+
+  <!-- Grid lines -->
+  <line x1="16" y1="24" x2="48" y2="24" stroke="#e8e8e8" stroke-width="1"/>
+  <line x1="16" y1="32" x2="48" y2="32" stroke="#e8e8e8" stroke-width="1"/>
+  <line x1="16" y1="40" x2="48" y2="40" stroke="#e8e8e8" stroke-width="1"/>
+
+  <!-- Chart bars with Qt blue gradient -->
+  <rect x="20" y="38" width="6" height="10" fill="url(#qtBlue)" rx="1"/>
+  <rect x="29" y="30" width="6" height="18" fill="url(#qtBlue)" rx="1"/>
+  <rect x="38" y="22" width="6" height="26" fill="url(#qtBlue)" rx="1"/>
+
+  <!-- Highlights on bars -->
+  <rect x="20" y="38" width="6" height="3" fill="#6aaae0" opacity="0.6" rx="1"/>
+  <rect x="29" y="30" width="6" height="3" fill="#6aaae0" opacity="0.6" rx="1"/>
+  <rect x="38" y="22" width="6" height="3" fill="#6aaae0" opacity="0.6" rx="1"/>
+</svg>

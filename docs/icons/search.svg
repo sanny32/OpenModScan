@@ -1,0 +1,24 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Qt style search icon with site blue colors -->
+  <defs>
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f4fd"/>
+      <stop offset="100%" style="stop-color:#d0e8f7"/>
+    </linearGradient>
+    <linearGradient id="handleGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7a7a7a"/>
+      <stop offset="100%" style="stop-color:#5a5a5a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Magnifying glass lens -->
+  <circle cx="26" cy="26" r="15" fill="url(#glassGrad)" stroke="#4a90d9" stroke-width="2.5"/>
+  <circle cx="26" cy="26" r="12" fill="none" stroke="#5b9bd5" stroke-width="1.5"/>
+
+  <!-- Glass shine effect -->
+  <ellipse cx="22" cy="22" rx="5" ry="7" fill="#ffffff" opacity="0.5"/>
+
+  <!-- Handle -->
+  <line x1="37" y1="37" x2="52" y2="52" stroke="url(#handleGrad)" stroke-width="7" stroke-linecap="round"/>
+  <line x1="37" y1="37" x2="52" y2="52" stroke="#909090" stroke-width="5" stroke-linecap="round"/>
+</svg>

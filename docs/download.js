@@ -31,17 +31,6 @@ function updateDownloadLinks(release) {
         flatpak: assets.find(a => a.name.match(/io\.github\.sanny32\.omodscan.*\.flatpak$/i))
     };
 
-    // Log found files
-    console.log('Matched files:', {
-        'Windows x64 Qt6': files.winx64Qt6?.name || 'NOT FOUND',
-        'Windows x64 Qt5': files.winx64Qt5?.name || 'NOT FOUND',
-        'Windows x86 Qt5': files.winx86?.name || 'NOT FOUND',
-        'DEB Qt6': files.debQt6?.name || 'NOT FOUND',
-        'DEB Qt5': files.debQt5?.name || 'NOT FOUND',
-        'RPM Qt6': files.rpmQt6?.name || 'NOT FOUND',
-        'Flatpak': files.flatpak?.name || 'NOT FOUND'
-    });
-
     // Helper function to update link
     function updateLink(id, file, name) {
         const link = document.getElementById(id);

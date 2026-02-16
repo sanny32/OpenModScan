@@ -50,6 +50,7 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
+.claude
 .directory
 *.bat
 *.qmake.stash

@@ -10,13 +10,10 @@ async function fetchLatestRelease() {
         }
 
         const release = await response.json();
-        console.log('Release data received:', release.tag_name);
-        console.log('Available assets:', release.assets.map(a => a.name));
         updateDownloadLinks(release);
     } catch (error) {
         console.error('Error fetching release:', error);
         console.warn('Download links will point to releases page instead of direct downloads');
-        // Keep default links if API fails
     }
 }
 
@@ -50,7 +47,6 @@ function updateDownloadLinks(release) {
         const link = document.getElementById(id);
         if (link && file) {
             link.href = file.browser_download_url;
-            console.log(`✓ Updated ${name}: ${file.browser_download_url}`);
         } else if (link && !file) {
             console.warn(`✗ File not found for ${name}`);
         }
@@ -69,8 +65,6 @@ function updateDownloadLinks(release) {
     if (release.tag_name) {
         updateVersionDisplay(release.tag_name);
     }
-
-    console.log('✓ Download links updated successfully');
 }
 
 function updateVersionDisplay(version) {

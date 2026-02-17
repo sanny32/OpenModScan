@@ -1,35 +1,20 @@
 <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
-  <!-- Modbus Functions icon - database/registers style -->
-  <defs>
-    <linearGradient id="diskGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff"/>
-      <stop offset="30%" style="stop-color:#6aaae0"/>
-      <stop offset="60%" style="stop-color:#4a90d9"/>
-      <stop offset="100%" style="stop-color:#3b7db8"/>
-    </linearGradient>
-    <linearGradient id="sideGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#4a90d9"/>
-      <stop offset="100%" style="stop-color:#2e6da4"/>
-    </linearGradient>
-  </defs>
+  <!-- Modbus Functions icon - database/registers style - flat -->
 
   <!-- Bottom section body -->
-  <path d="M12 44 L12 50 Q12 56 32 56 Q52 56 52 50 L52 44" fill="url(#sideGrad)"/>
-  <ellipse cx="32" cy="44" rx="20" ry="6" fill="url(#diskGrad)"/>
-  <ellipse cx="32" cy="44" rx="20" ry="6" fill="none" stroke="#2e6da4" stroke-width="1"/>
-  <ellipse cx="32" cy="44" rx="14" ry="3.5" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.3"/>
+  <path d="M12 44 L12 50 Q12 56 32 56 Q52 56 52 50 L52 44" fill="#238636"/>
+  <ellipse cx="32" cy="44" rx="20" ry="6" fill="#3aad55"/>
+  <ellipse cx="32" cy="44" rx="20" ry="6" fill="none" stroke="#1a6b2d" stroke-width="1"/>
 
   <!-- Middle section body -->
-  <path d="M12 30 L12 36 Q12 42 32 42 Q52 42 52 36 L52 30" fill="url(#sideGrad)"/>
-  <ellipse cx="32" cy="30" rx="20" ry="6" fill="url(#diskGrad)"/>
-  <ellipse cx="32" cy="30" rx="20" ry="6" fill="none" stroke="#2e6da4" stroke-width="1"/>
-  <ellipse cx="32" cy="30" rx="14" ry="3.5" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.3"/>
+  <path d="M12 30 L12 36 Q12 42 32 42 Q52 42 52 36 L52 30" fill="#238636"/>
+  <ellipse cx="32" cy="30" rx="20" ry="6" fill="#3aad55"/>
+  <ellipse cx="32" cy="30" rx="20" ry="6" fill="none" stroke="#1a6b2d" stroke-width="1"/>
 
   <!-- Top section body -->
-  <path d="M12 16 L12 22 Q12 28 32 28 Q52 28 52 22 L52 16" fill="url(#sideGrad)"/>
-  <ellipse cx="32" cy="16" rx="20" ry="6" fill="url(#diskGrad)"/>
-  <ellipse cx="32" cy="16" rx="20" ry="6" fill="none" stroke="#2e6da4" stroke-width="1"/>
+  <path d="M12 16 L12 22 Q12 28 32 28 Q52 28 52 22 L52 16" fill="#238636"/>
+  <ellipse cx="32" cy="16" rx="20" ry="6" fill="#3aad55"/>
+  <ellipse cx="32" cy="16" rx="20" ry="6" fill="none" stroke="#1a6b2d" stroke-width="1"/>
   <!-- Top highlight -->
-  <ellipse cx="28" cy="14" rx="12" ry="3.5" fill="#fff" opacity="0.35"/>
-  <ellipse cx="32" cy="16" rx="14" ry="3.5" fill="none" stroke="#fff" stroke-width="0.8" opacity="0.3"/>
+  <ellipse cx="28" cy="14" rx="12" ry="3.5" fill="#fff" opacity="0.25"/>
 </svg>

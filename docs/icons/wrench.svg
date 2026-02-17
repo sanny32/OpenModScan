@@ -1,26 +1,15 @@
 <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
-  <!-- User Message icon - stylized U letter -->
-  <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#f5f5f5"/>
-      <stop offset="100%" style="stop-color:#e8e8e8"/>
-    </linearGradient>
-    <linearGradient id="uGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#5b9bd5"/>
-      <stop offset="50%" style="stop-color:#4a90d9"/>
-      <stop offset="100%" style="stop-color:#3b7db8"/>
-    </linearGradient>
-  </defs>
+  <!-- User Message icon - stylized U letter - flat -->
 
   <!-- Message frame -->
-  <rect x="8" y="8" width="48" height="48" fill="url(#bgGrad)" stroke="#c0c0c0" stroke-width="1.5" rx="3"/>
+  <rect x="8" y="8" width="48" height="48" fill="#f0f0f0" stroke="#c0c0c0" stroke-width="1.5" rx="3"/>
   <rect x="10" y="10" width="44" height="44" fill="#ffffff" stroke="#d8d8d8" stroke-width="1" rx="2"/>
 
   <!-- Title bar accent -->
-  <rect x="10" y="10" width="44" height="6" fill="#4a90d9" rx="2"/>
-  <rect x="10" y="14" width="44" height="2" fill="#4a90d9"/>
+  <rect x="10" y="10" width="44" height="6" fill="#2ea043" rx="2"/>
+  <rect x="10" y="14" width="44" height="2" fill="#2ea043"/>
 
   <!-- Stylized U letter -->
   <path d="M22 24 L22 40 Q22 48 32 48 Q42 48 42 40 L42 24"
-        fill="none" stroke="url(#uGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+        fill="none" stroke="#2ea043" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

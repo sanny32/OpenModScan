@@ -1,26 +1,17 @@
 <svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
-  <!-- Qt style document icon with site blue colors -->
-  <defs>
-    <linearGradient id="docGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff"/>
-      <stop offset="100%" style="stop-color:#f8f8f8"/>
-    </linearGradient>
-  </defs>
-
-  <!-- Document shadow -->
-  <path d="M 18 10 L 44 10 L 52 18 L 52 56 L 18 56 Z" fill="#d0d0d0" opacity="0.3"/>
+  <!-- Qt style document icon - flat -->
 
   <!-- Main document body -->
-  <path d="M 16 8 L 42 8 L 50 16 L 50 54 L 16 54 Z" fill="url(#docGrad)" stroke="#a0a0a0" stroke-width="1.5"/>
+  <path d="M 16 8 L 42 8 L 50 16 L 50 54 L 16 54 Z" fill="#ffffff" stroke="#a0a0a0" stroke-width="1.5"/>
 
   <!-- Folded corner -->
   <path d="M 42 8 L 42 16 L 50 16" fill="none" stroke="#a0a0a0" stroke-width="1.5"/>
   <path d="M 42 8 L 42 16 L 50 16 Z" fill="#e0e0e0"/>
 
-  <!-- Text lines with Qt blue -->
-  <line x1="22" y1="24" x2="44" y2="24" stroke="#4a90d9" stroke-width="2" stroke-linecap="round"/>
-  <line x1="22" y1="30" x2="44" y2="30" stroke="#4a90d9" stroke-width="2" stroke-linecap="round"/>
-  <line x1="22" y1="36" x2="38" y2="36" stroke="#5b9bd5" stroke-width="2" stroke-linecap="round"/>
-  <line x1="22" y1="42" x2="44" y2="42" stroke="#5b9bd5" stroke-width="2" stroke-linecap="round"/>
-  <line x1="22" y1="48" x2="34" y2="48" stroke="#6aaae0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Text lines with green -->
+  <line x1="22" y1="24" x2="44" y2="24" stroke="#2ea043" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="30" x2="44" y2="30" stroke="#2ea043" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="36" x2="38" y2="36" stroke="#3aad55" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="42" x2="44" y2="42" stroke="#3aad55" stroke-width="2" stroke-linecap="round"/>
+  <line x1="22" y1="48" x2="34" y2="48" stroke="#4cc068" stroke-width="2" stroke-linecap="round"/>
 </svg>

@@ -66,6 +66,7 @@ body {
 
 .nav-menu {
     display: flex;
+    align-items: center;
     list-style: none;
     gap: 2rem;
 }
@@ -81,6 +82,20 @@ body {
 
 .nav-menu a:hover {
     background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-github {
+    display: flex;
+    align-items: center;
+}
+
+.nav-github svg {
+    opacity: 0.85;
+    transition: opacity 0.3s;
+}
+
+.nav-github:hover svg {
+    opacity: 1;
 }
 
 /* Hero Section */

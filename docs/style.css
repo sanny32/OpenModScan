@@ -669,7 +669,7 @@ button:focus {
 
 .modal-body {
     padding: 0.5rem;
-    background: #c0c0c0;
+    background: #dfdfdf;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -678,7 +678,6 @@ button:focus {
 .modal-body img {
     max-width: 100%;
     max-height: calc(90vh - 60px);
-    border: 1px solid #000000;
     display: block;
     animation: none;
 }

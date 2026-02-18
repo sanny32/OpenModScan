@@ -77,7 +77,7 @@ body {
     font-weight: 500;
     transition: all 0.3s;
     padding: 0.5rem 1rem;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 .nav-menu a:hover {
@@ -140,6 +140,7 @@ body {
     border: 1px solid;
     cursor: pointer;
     font-size: 0.95rem;
+    border-radius: 4px;
 }
 
 .btn-primary {
@@ -217,7 +218,7 @@ body {
     padding: 1.75rem;
     background: var(--bg-color);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 8px;
     transition: all 0.2s;
 }
 
@@ -268,20 +269,28 @@ body {
 }
 
 .screenshot-item {
-    text-align: center;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+}
+
+.screenshot-item:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
 }
 
 .screenshot-item img {
     width: 100%;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
-    margin-bottom: 1rem;
+    display: block;
+    border-radius: 0;
+    border: none;
+    margin-bottom: 0;
 }
 
-.screenshot-item p {
-    font-weight: 500;
-    color: var(--text-light);
-}
 
 /* Download Section */
 .download {
@@ -321,6 +330,7 @@ body {
     font-weight: 500;
     color: var(--text-light);
     transition: all 0.2s;
+    border-radius: 100px;
 }
 
 .tab-btn:hover {
@@ -361,7 +371,7 @@ body {
 .card {
     background: var(--bg-white);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .card-header {
@@ -448,11 +458,12 @@ body {
     font-weight: 500;
     text-align: center;
     transition: all 0.2s;
-    display: flex;   
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     border: 1px solid;
+    border-radius: 4px;
 }
 
 .btn-download {
@@ -552,22 +563,31 @@ body {
     line-height: 1.5;
     overflow-x: auto;
     margin-bottom: 0.75rem;
+    border-radius: 8px;
 }
 
-/* Copy button styling */
+/* Copy button styling — GitHub-style */
 .install-instructions .copy-btn {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    border: none;
+    top: 6px;
+    right: 6px;
+    border: 1px solid transparent;
     background: transparent;
-    padding: 2px 6px;
+    padding: 4px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
-    gap: 4px;
-    font-size: 0.75rem;
-    color: #ffffff;
+    justify-content: center;
+    color: #8b949e;
     cursor: pointer;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+
+.install-instructions .copy-btn:hover {
+    background: rgba(46, 160, 67, 0.15);
+    border-color: rgba(46, 160, 67, 0.35);
+    color: var(--primary-color);
 }
 
 .install-instructions .copy-btn svg {
@@ -577,12 +597,28 @@ body {
 }
 
 .install-instructions .copy-btn.copied {
-    background: #ffffff !important;       
-    color: #1e1e1e !important;
-    border: 1px solid #2ea043cc !important;
-    opacity: 1 !important;
+    color: var(--primary-color);
+    border-color: rgba(46, 160, 67, 0.4);
+    background: rgba(46, 160, 67, 0.1);
     pointer-events: none;
-    transition: all 0.3s ease;
+}
+
+.install-instructions .copy-btn.copied::after {
+    content: 'Copied!';
+    position: absolute;
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--text-color);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    white-space: nowrap;
+    padding: 4px 10px;
+    border-radius: 4px;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* RPM distro sub-sections */
@@ -615,7 +651,7 @@ body {
     text-align: center;
     padding: 2rem;
     background: var(--bg-white);
-    border-radius: 4px;
+    border-radius: 8px;
     border: 1px solid var(--border-color);
     margin-top: 0;
 }
@@ -817,14 +853,9 @@ button:focus {
 /* Screenshot modal cursor */
 .screenshot-item img {
     cursor: pointer;
-    transition: transform 0.3s;
 }
 
-.screenshot-item img:hover {
-    transform: scale(1.02);
-}
-
-/* Modal - Windows 95 style */
+/* Modal - Windows 11 style */
 .modal {
     display: none;
     position: fixed;
@@ -833,61 +864,61 @@ button:focus {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    animation: fadeIn 0.3s;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
 }
 
 .modal.active {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 1.5rem;
 }
 
 .modal-content {
-    background: #c0c0c0;
-    border: 2px solid #a0a0a0;
+    position: relative;
+    border-radius: 8px;
     max-width: 90%;
-    max-height: 90%;
-    animation: fadeInUp 0.3s;
-}
-
-.modal-header {
-    background: #2ea043;
-    color: white;
-    padding: 0.5rem 0.75rem;
+    max-height: 90vh;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-}
-
-.modal-title {
-    font-size: 0.9rem;
+    box-shadow:
+        0 32px 64px rgba(0, 0, 0, 0.32),
+        0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.2s ease-out;
+    overflow: hidden;
 }
 
 .modal-close {
-    background: #c0c0c0;
-    border: 1px solid #808080;
-    width: 24px;
-    height: 24px;
-    font-size: 1.2rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.45);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1.1rem;
     line-height: 1;
     cursor: pointer;
-    font-weight: bold;
-    color: #000000;
+    color: #fff;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.15s;
+    z-index: 10;
+    backdrop-filter: blur(4px);
 }
 
 .modal-close:hover {
-    background: #dfdfdf;
+    background: rgba(196, 43, 28, 0.85);
 }
 
 .modal-body {
-    padding: 0.5rem;
-    background: #dfdfdf;
+    padding: 0;
+    background: #000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -895,7 +926,7 @@ button:focus {
 
 .modal-body img {
     max-width: 100%;
-    max-height: calc(90vh - 60px);
+    max-height: 90vh;
     display: block;
     animation: none;
 }

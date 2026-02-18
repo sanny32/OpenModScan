@@ -70,6 +70,9 @@ function updateDownloadLinks(release) {
     updateLink('rpm-pubkey-link', files.rpmPubkey, 'RPM Public Key');
     updateLink('flatpak-link', files.flatpak, 'Flatpak');
 
+    // Update all install commands with actual file names
+    updateInstallCommands(files);
+
     // Update version display if available
     if (release.tag_name) {
         updateVersionDisplay(release.tag_name);
@@ -84,8 +87,57 @@ function updateVersionDisplay(version) {
     }
 }
 
+function updateInstallCommands(files) {
+    if (files.debQt5) { 
+        const debName = files.debQt5.name;
+        document.querySelectorAll('.qt5-deb-package-name').forEach(el => {
+            el.textContent = debName;
+        });
+    }
+
+    if (files.debQt6) { 
+        const debName = files.debQt6.name;
+        document.querySelectorAll('.qt6-deb-package-name').forEach(el => {
+            el.textContent = debName;
+        });
+    }
+
+    if (files.rpmQt6) { 
+        const rpmName = files.rpmQt6.name;
+        document.querySelectorAll('.qt6-rpm-package-name').forEach(el => {
+            el.textContent = rpmName;
+        });
+    }
+}
+
+function initCopyButtons() {
+  document.querySelectorAll('.install-instructions .code-block .copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const codeEl = btn.closest('.code-block').querySelector('code');
+        if (!codeEl) return;
+
+        navigator.clipboard.writeText(codeEl.innerText.trim()).then(() => {
+            btn.classList.add('copied');
+            btn.innerText = 'Copied!';
+
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = `
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/>
+                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+                    </svg>
+                `;
+            }, 1500);
+        });
+    });
+});
+}
+
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
     initTabs();
     fetchLatestRelease();
+    initCopyButtons();
 });

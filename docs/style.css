@@ -418,6 +418,18 @@ body {
     margin-bottom: 0.75rem;
 }
 
+.download-item-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+}
+
+
 .download-item:last-child {
     margin-bottom: 0;
 }
@@ -436,7 +448,10 @@ body {
     font-weight: 500;
     text-align: center;
     transition: all 0.2s;
-    display: block;
+    display: flex;   
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     border: 1px solid;
 }
 
@@ -511,16 +526,6 @@ body {
     font-size: 0.9rem;
 }
 
-.install-instructions pre {
-    background: #1e1e1e;
-    color: #e8e8e8;
-    padding: 0.65rem 1rem;
-    overflow-x: auto;
-    margin-bottom: 0.75rem;
-    font-size: 0.82rem;
-    line-height: 1.5;
-}
-
 .install-instructions code {
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
@@ -530,6 +535,54 @@ body {
     color: var(--text-light);
     font-style: italic;
     margin-top: 0.5rem;
+}
+
+/* Copy button for install instructions */
+.install-instructions .code-block {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.install-instructions .code-block pre {
+    padding: 0.65rem 2.5rem 0.65rem 1rem;
+    background: #1e1e1e;
+    color: #e8e8e8;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+}
+
+/* Copy button styling */
+.install-instructions .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: transparent;
+    padding: 2px 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.install-instructions .copy-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.install-instructions .copy-btn.copied {
+    background: #ffffff !important;       
+    color: #1e1e1e !important;
+    border: 1px solid #2ea043cc !important;
+    opacity: 1 !important;
+    pointer-events: none;
+    transition: all 0.3s ease;
 }
 
 /* RPM distro sub-sections */

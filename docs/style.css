@@ -890,31 +890,39 @@ button:focus {
     overflow: hidden;
 }
 
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.45);
+
+.modal-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.4);
     border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    font-size: 1.1rem;
-    line-height: 1;
-    cursor: pointer;
     color: #fff;
-    padding: 0;
+    width: 48px;
+    height: 64px;
+    border-radius: 4px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.15s;
-    z-index: 10;
+    padding: 0;
+    transition: background 0.15s, opacity 0.15s;
+    z-index: 1001;
     backdrop-filter: blur(4px);
+    user-select: none;
 }
 
-.modal-close:hover {
-    background: rgba(196, 43, 28, 0.85);
+.modal-nav:hover {
+    background: rgba(0, 0, 0, 0.65);
 }
+
+.modal-nav.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-prev { left: 1rem; }
+.modal-next { right: 1rem; }
 
 .modal-body {
     padding: 0;

@@ -1,3 +1,21 @@
+// Tab switching
+function initTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var tabId = this.getAttribute('data-tab');
+
+            tabButtons.forEach(function(b) { b.classList.remove('active'); });
+            tabPanels.forEach(function(p) { p.classList.remove('active'); });
+
+            this.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        });
+    });
+}
+
 // Fetch latest release information from GitHub
 async function fetchLatestRelease() {
     const GITHUB_API = 'https://api.github.com/repos/sanny32/OpenModScan/releases/latest';
@@ -28,6 +46,7 @@ function updateDownloadLinks(release) {
         debQt6: assets.find(a => a.name.match(/qt6-omodscan_.*_amd64\.deb$/i)),
         debQt5: assets.find(a => a.name.match(/qt5-omodscan_.*_amd64\.deb$/i)),
         rpmQt6: assets.find(a => a.name.match(/qt6-omodscan-.*\.x86_64\.rpm$/i)),
+        rpmPubkey: assets.find(a => a.name.match(/qt6-omodscan\.rpm\.pubkey$/i)),
         flatpak: assets.find(a => a.name.match(/io\.github\.sanny32\.omodscan.*\.flatpak$/i))
     };
 
@@ -48,6 +67,7 @@ function updateDownloadLinks(release) {
     updateLink('deb-qt6-link', files.debQt6, 'DEB Qt6');
     updateLink('deb-qt5-link', files.debQt5, 'DEB Qt5');
     updateLink('rpm-qt6-link', files.rpmQt6, 'RPM Qt6');
+    updateLink('rpm-pubkey-link', files.rpmPubkey, 'RPM Public Key');
     updateLink('flatpak-link', files.flatpak, 'Flatpak');
 
     // Update version display if available
@@ -64,5 +84,8 @@ function updateVersionDisplay(version) {
     }
 }
 
-// Load release information when page loads
-document.addEventListener('DOMContentLoaded', fetchLatestRelease);
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initTabs();
+    fetchLatestRelease();
+});

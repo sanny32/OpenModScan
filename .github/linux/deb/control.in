@@ -1,0 +1,14 @@
+Source: @PACKAGE_SOURCE@
+Section: utils
+Priority: optional
+Maintainer: Alexandr Ananev <mail@ananev.org>
+Homepage: https://github.com/sanny32/OpenModScan
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.6.2
+
+Package: @PACKAGE_NAME@
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: An Open Source Modbus Master (Client) Utility
+ Open ModScan is an open source Modbus master (client) utility for testing and debugging Modbus TCP and RTU devices.
+

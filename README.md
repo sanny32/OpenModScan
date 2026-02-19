@@ -40,9 +40,9 @@ Registers
   
   ![image](https://github.com/user-attachments/assets/798ed74a-c5fc-413f-a173-e223c9c7d3f3)
 
-- Modbus Scanner (supports both Modbus RTU and Modbus TCP scanning)
+- Modbus Scanner (support protocols: Modbus RTU, Modbus TCP and Modbus RTU over TCP)
   
-  ![image](https://github.com/user-attachments/assets/17d5f43d-c341-455d-a9b8-67db50a35699)
+  <img width="803" height="719" alt="image" src="https://github.com/user-attachments/assets/77f14c57-2a13-42d4-a8a2-e718521a40c2" />
 
 - Modbus Message Parser
 
@@ -102,37 +102,39 @@ If you need to specify Qt framework major version (5 or 6), you can do it in the
 # About supported operating systems
 
 The following minimum operating system versions are supported for OpenModScan:
-- Microsoft Windows 7
-- Debian Linux 11
-- Ubuntu Linux 22.04
-- Mint Linux 22
-- Fedora Linux 41
-- Rocky Linux 9.7
-- OpenSuse Linux 15.6
-- Alt Linux 11
-- Astra Linux 1.7
-- RedOS 8
+
+- <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
+- <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
+- <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
+- <img src="docs/icons/logo_mint.png" width="16" height="16" /> **Mint Linux 22**
+- <img src="docs/icons/logo_zorin.png" width="16" height="16"> **Zorin OS 18**
+- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 41**
+- <img src="docs/icons/logo_rocky.png" width="16" height="16" /> **Rocky Linux 9.7**
+- <img src="docs/icons/logo_opensuse.svg" width="16" height="16" /> **OpenSuse Linux 15.6**
+- <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
+- <img src="docs/icons/logo_astra.png" width="18" height="18" /> **Astra Linux 1.7**
+- <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
 
 # Install from [binary distributions](https://github.com/sanny32/OpenModScan/releases/latest)
 
 Below are the methods for installing the OpenModScan for different OS
 
-## Microsoft Windows
+## <img src="docs/icons/logo_windows.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodscan_1.12.2_x86.exe`
-- For 64-bit Windows: `qt5-omodscan_1.12.2_x64.exe` or `qt6-omodscan_1.12.2_x64.exe`
+- For 32-bit Windows: `qt5-omodscan_1.13.2_x86.exe`
+- For 64-bit Windows: `qt5-omodscan_1.13.2_x64.exe` or `qt6-omodscan_1.13.2_x64.exe`
 
 
-## Debian/Ubintu/Mint/Astra Linux
+## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian / <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint / <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin / <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodscan_1.12.2-1_amd64.deb
+sudo apt install ./qt6-omodscan_1.13.2-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodscan_1.12.2-1_amd64.deb
+sudo apt install ./qt5-omodscan_1.13.2-1_amd64.deb
 ```
 
 ### Remove
@@ -145,11 +147,11 @@ or for Qt5 package:
 sudo apt remove qt5-omodscan
 ```
 
-## RedHat/Fedora/Rocky/RedOS Linux
+## <img src="docs/icons/logo_redhat.svg" width="24" height="24"> RedHat / <img src="docs/icons/logo_fedora.svg" width="20" height="20"> Fedora / <img src="docs/icons/logo_rocky.png" width="20" height="20"> Rocky / <img width="20" height="20" src="docs/icons/logo_redos.png" /> RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodscan_1.12.2-1.x86_64.rpm
+sudo dnf install ./qt6-omodscan_1.13.2-1.x86_64.rpm
 ```
 
 ### Remove
@@ -158,11 +160,11 @@ To remove the RPM package run:
 sudo dnf remove qt6-omodscan
 ```
 
-## Alt Linux
+## <img src="docs/icons/logo_alt.png" width="24" height="24"> Alt Linux
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodscan_1.12.2-1.x86_64.rpm
+apt-get install ./qt6-omodscan_1.13.2-1.x86_64.rpm
 ```
 
 ### Remove
@@ -171,7 +173,7 @@ To remove the RPM package run as root user:
 apt-get remove qt6-omodscan
 ```
 
-## SUSE/OpenSUSE Linux
+## <img width="20" height="20" src="docs/icons/logo_suse.png" /> SUSE / <img src="docs/icons/logo_opensuse.svg" width="24" height="24" /> OpenSUSE Linux
 ### Install
 Import qt6-omodscan.rpm.pubkey to rpm repository:
 ```bash
@@ -179,7 +181,7 @@ sudo rpm --import qt6-omodscan.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodscan_1.12.2-1.x86_64.rpm
+sudo zypper install ./qt6-omodscan_1.13.2-1.x86_64.rpm
 ```
 
 ### Remove
@@ -188,7 +190,7 @@ To remove the RPM package run:
 sudo zypper remove qt6-omodscan
 ```
 
-## Flatpak
+## <img width="18" height="20" src="docs/icons/logo_flatpak.svg" /> Flatpak
 ### Install
 Install flatpak package run the followning commands:
 ```bash
@@ -209,13 +211,18 @@ To remove the flatpak package run:
 ```bash
 flatpak uninstall --user io.github.sanny32.omodscan
 ```
-
+# Code Signing Sponsor
+Windows binaries for this project are signed thanks to **SignPath Foundation**.
+*   🔐 **Free code signing service:** [SignPath.io](https://signpath.io)
+*   📜 **Certificate provider:** [SignPath Foundation](https://signpath.org)
+  
 # MIT License
-Copyright 2025 Alexandr Ananev [mail@ananev.org]
+Copyright 2023-2026 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 

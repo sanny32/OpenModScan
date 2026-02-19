@@ -9,6 +9,7 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
+        default: dev
       tag:
         description: 'Checkout tag'
         required: false
@@ -42,12 +43,30 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
+      - name: Determine ref_type and ref_name
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
+            REF_TYPE="tags"
+            if [ -n "${{ github.event.inputs.tag }}" ]; then
+              REF_NAME="${{ github.event.inputs.tag }}"
+            else
+              REF_NAME="${{ github.ref_name }}"
+            fi
+          else
+            REF_TYPE="heads"
+            REF_NAME="${{ github.ref_name }}"
+          fi
+          echo "REF_TYPE=$REF_TYPE" >> $GITHUB_ENV
+          echo "REF_NAME=$REF_NAME" >> $GITHUB_ENV
+          echo "Ref name is: $REF_NAME"
+          echo "Ref type is: $REF_TYPE"
+
       - name: Extract version from CMakeLists.txt
         id: extract_version
         run: |
-          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' omodscan/CMakeLists.txt)
+          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
 
-          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
+          if [ "${{ env.REF_NAME }}" = "dev" ] || { [ "${{ github.event.inputs.branch }}" = "dev" ] && [ -z "${{ github.event.inputs.tag }}" ]; }; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
@@ -107,7 +126,7 @@ jobs:
 
       - name: Configure project
         run: |
-            cmake omodscan -B ${{ env.BUILD_DIR }} \
+            cmake src -B ${{ env.BUILD_DIR }} \
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
@@ -128,8 +147,8 @@ jobs:
           
       - name: Copy files to DEB_SRC_DIR
         run: |
-          cp -r .pkg/deb/* ${{ env.DEB_SRC_DIR }}/debian
-          cp -r .pkg/usr/* ${{ env.DEB_SRC_DIR }}/usr
+          cp -r .github/linux/deb/* ${{ env.DEB_SRC_DIR }}/debian
+          cp -r .github/linux/usr/* ${{ env.DEB_SRC_DIR }}/usr
          
       - name: Install cqtdeployer from sources
         run: |
@@ -188,6 +207,25 @@ jobs:
               ${{ env.DEB_SRC_DIR }}/debian/rules.in > ${{ env.DEB_SRC_DIR }}/debian/rules
           rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
           cat -n ${{ env.DEB_SRC_DIR }}/debian/rules
+
+      - name: Create metainfo file
+        run: |
+          sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
+              -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
+              -e "s|@COMPONENT_ID@|omodscan.desktop|g" \
+              -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
+              -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
+              ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
+          rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
+
+      - name: Create desktop file
+        run: |
+          sed -e "s|@APP_EXEC@|omodscan|g" \
+              -e "s|@APP_ICON@|omodscan|g" \
+              ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop
+          rm ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop.in
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModScan/bin/omodscan"

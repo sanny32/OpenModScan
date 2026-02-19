@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Open ModScan
-Comment=An Open Source Modbus Master (Client) Utility
-Exec=/opt/OpenModScan/omodscan.sh
-Icon=omodscan
-Terminal=false
-Type=Application
-Categories=Utility;
-StartupNotify=true

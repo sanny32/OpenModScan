@@ -10,6 +10,7 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
+        default: dev
       tag:
         description: 'Checkout tag'
         required: false
@@ -37,32 +38,98 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
-      - name: Set Flatpak manifest branch
+      - name: Determine ref_type and ref_name
         run: |
-            REF_TYPE="branch"
+          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
+            REF_TYPE="tags"
             if [ -n "${{ github.event.inputs.tag }}" ]; then
-              REF_TYPE="tag"
+              REF_NAME="${{ github.event.inputs.tag }}"
+            else
+              REF_NAME="${{ github.ref_name }}"
             fi
-            sed -i "s|branch: main|$REF_TYPE: ${GITHUB_REF_NAME}|" .flatpak/io.github.sanny32.omodscan.yaml
+          else
+            REF_TYPE="heads"
+            REF_NAME="${{ github.ref_name }}"
+          fi
+          echo "REF_TYPE=$REF_TYPE" >> $GITHUB_ENV
+          echo "REF_NAME=$REF_NAME" >> $GITHUB_ENV
+          echo "Ref name is: $REF_NAME"
+          echo "Ref type is: $REF_TYPE"
+
+      - name: Setup flatpak channel
+        run: |
+            if [ "${{ env.REF_NAME }}" = "dev" ] || { [ "${{ github.event.inputs.branch }}" = "dev" ] && [ -z "${{ github.event.inputs.tag }}" ]; }; then
+              FLATPAK_CHANNEL="unstable"
+            else
+              FLATPAK_CHANNEL="stable"
+            fi
+            echo "FLATPAK_CHANNEL=$FLATPAK_CHANNEL" >> $GITHUB_ENV
+            echo "Selected flatpak channel: $FLATPAK_CHANNEL"
+
+      - name: Set Flatpak manifest ref
+        run: |
+            REF="branch"
+            if [ "${{ env.REF_TYPE }}" = "tags" ]; then
+              REF="tag"
+            fi
+            
+            sed -i -e "s|branch: main|$REF: ${{ env.REF_NAME }}|g" \
+                   -e "s|branch: stable|branch: ${{ env.FLATPAK_CHANNEL }}|g" \
+                   .github/linux/flatpak/io.github.sanny32.omodscan.yaml
+
+      - name: Extract version from CMakeLists.txt
+        run: |
+          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+
+          if [ "${{ env.REF_NAME }}" = "dev" ] || { [ "${{ github.event.inputs.branch }}" = "dev" ] && [ -z "${{ github.event.inputs.tag }}" ]; }; then
+            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
+            APP_VERSION="${MAJOR_MINOR}~dev"
+          else
+            APP_VERSION="$FULL_VERSION"
+          fi
+
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "Extracted version: $APP_VERSION"
 
       - name: Prepare Flatpak
         run: |
           flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
           flatpak install -y flathub org.kde.Sdk//6.9
 
+      - name: Create metainfo file
+        run: |
+          sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
+              -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
+              -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
+              -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
+              -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
+              .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in > .github/linux/usr/share/metainfo/omodscan.metainfo.xml
+          rm .github/linux/usr/share/metainfo/omodscan.metainfo.xml.in
+          cat -n .github/linux/usr/share/metainfo/omodscan.metainfo.xml
+
+      - name: Create desktop file
+        run: |
+          sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
+              -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
+              .github/linux/usr/share/applications/omodscan.desktop.in > .github/linux/usr/share/applications/omodscan.desktop
+          rm .github/linux/usr/share/applications/omodscan.desktop.in
+          cat -n .github/linux/usr/share/applications/omodscan.desktop
+
       - name: Build Flatpak
         run: |
-          cd .flatpak
+          cd .github/linux/flatpak
           flatpak info org.kde.Sdk//6.9
+          echo ""
           flatpak-builder --repo=repo --force-clean --disable-rofiles-fuse --verbose build io.github.sanny32.omodscan.yaml
-          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan stable
+          echo ""
+          flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan ${{ env.FLATPAK_CHANNEL }}
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
         with:
           name: io.github.sanny32.omodscan.flatpak
           path: |
-            .flatpak/io.github.sanny32.omodscan.flatpak
+            .github/linux/flatpak/io.github.sanny32.omodscan.flatpak
 
       - name: Create or update GitHub Release and upload FLATPAK
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
@@ -72,6 +139,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Open ModScan ${{ env.APP_VERSION }}
           files: |
-            .flatpak/io.github.sanny32.omodscan.flatpak
+            .github/linux/flatpak/io.github.sanny32.omodscan.flatpak
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OpenModScan - Free and open-source Modbus Master (Client) utility supporting Modbus-TCP and Modbus-RTU protocols">
+    <meta name="keywords" content="Modbus, ModbusTCP, ModbusRTU, Modbus Master, Modbus Client, OpenModScan">
+    <meta name="author" content="Alexandr Ananev">
+    <title>OpenModScan - Free Modbus Master Client</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="logo.png" alt="OpenModScan Logo" class="logo">
+                    <span class="brand-name">OpenModScan</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#screenshots">Screenshots</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li>
+                        <a href="https://github.com/sanny32/OpenModScan" target="_blank" class="nav-github">
+                            <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Free and powerful Modbus utility</h1>
+                    <p class="hero-subtitle">Professional Modbus Master (Client) supporting both Modbus-TCP and Modbus-RTU protocols</p>
+                    <div class="hero-buttons">
+                        <a href="#download" class="btn btn-primary">Download</a>
+                        <a href="https://github.com/sanny32/OpenModScan" target="_blank" class="btn btn-secondary">View on GitHub</a>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <img src="https://img.shields.io/github/downloads/sanny32/OpenModScan/total?logo=github&style=for-the-badge" alt="Downloads">
+                        </div>
+                        <div class="stat-item">
+                            <img src="https://img.shields.io/github/v/release/sanny32/OpenModScan?logo=github&style=for-the-badge" alt="Version">
+                        </div>
+                        <div class="stat-item">
+                            <img src="https://img.shields.io/github/license/sanny32/OpenModScan?style=for-the-badge" alt="License">
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image-wrapper">
+                    <div class="hero-image">
+                        <img src="screenshot-main.png" alt="OpenModScan Screenshot">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="icons/coils.svg" alt="Coils Icon"></div>
+                        <h3>Modbus Functions</h3>
+                        <p>Support for all standard Modbus functions: Read/Write Coils, Discrete Inputs, Holding Registers, Input Registers</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="icons/search.svg" alt="Search Icon"></div>
+                        <h3>Device Scanner</h3>
+                        <p>Built-in Modbus device scanner with support for RTU, TCP and RTU over TCP protocols</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="icons/document.svg" alt="Document Icon"></div>
+                        <h3>Message Logging</h3>
+                        <p>Comprehensive logging of all Modbus communication with message parsing capabilities</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="icons/wrench.svg" alt="Wrench Icon"></div>
+                        <h3>Custom Messages</h3>
+                        <p>Send custom Modbus messages for advanced testing and debugging scenarios</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="icons/modbus.svg" alt="Network Icon"></div>
+                        <h3>Modbus Protocols</h3>
+                        <p>Full support for both Modbus-TCP (Ethernet) and Modbus-RTU (Serial) protocols</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><img src="icons/computer.svg" alt="Computer Icon"></div>
+                        <h3>Cross-Platform</h3>
+                        <p>Available for Windows and Linux with native performance on both platforms</p>
+                    </div>
+                </div>
+
+                <div id="screenshots" class="screenshots">
+                    <h3>Screenshots</h3>
+                    <div class="screenshot-grid">
+                        <div class="screenshot-item">
+                            <img src="screenshot-main.png" alt="Main Interface">
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="screenshot-log.png" alt="Message Logging">
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="screenshot-scanner.png" alt="Device Scanner">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="download" class="download">
+            <div class="container">
+                <h2>Download OpenModScan</h2>
+                <p class="download-subtitle">Get the latest version for your platform</p>
+
+                <div class="tab-nav">
+                    <button class="tab-btn active" data-tab="windows">
+                        <svg class="tab-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                        </svg>
+                        Windows
+                    </button>
+                    <button class="tab-btn" data-tab="deb">
+                        <svg class="tab-icon" viewBox="-60 -75 210 260" fill="currentColor">
+                            <path d="M64.525 62.053c-4.125.058.78 2.125 6.165 2.954 1.488-1.161 2.838-2.336 4.04-3.479-3.354.821-6.765.838-10.205.525m22.14-5.52c2.457-3.389 4.246-7.102 4.878-10.939-.551 2.736-2.035 5.099-3.435 7.592-7.711 4.854-.726-2.883-.004-5.824-8.29 10.436-1.138 6.257-1.439 9.171m8.174-21.265c.497-7.428-1.462-5.08-2.121-2.245.766.4 1.377 5.237 2.121 2.245M48.883-66.264c2.201.395 4.757.698 4.398 1.224 2.407-.528 2.954-1.015-4.398-1.224"/>
+                            <path d="m53.281-65.04-1.556.32 1.448-.127.108-.193"/>
+                            <path d="M121.93 38.085c.247 6.671-1.95 9.907-3.932 15.637l-3.564 1.781c-2.919 5.666.282 3.598-1.807 8.105-4.556 4.049-13.823 12.67-16.789 13.457-2.163-.047 1.469-2.554 1.943-3.537-6.097 4.188-4.894 6.285-14.217 8.83l-.273-.607C60.29 92.569 28.344 71.129 28.765 41.875c-.246 1.857-.698 1.393-1.208 2.144-1.186-15.052 6.952-30.17 20.675-36.343 13.427-6.646 29.163-3.918 38.78 5.044C81.73 5.8 71.217-1.534 58.757-.848c-12.208.193-23.625 7.95-27.436 16.369-6.253 3.938-6.979 15.177-9.704 17.233-3.665 26.943 6.896 38.583 24.762 52.275 2.812 1.896.792 2.184 1.173 3.627-5.936-2.779-11.372-6.976-15.841-12.114 2.372 3.473 4.931 6.847 8.239 9.499-5.596-1.897-13.074-13.563-15.256-14.038 9.647 17.274 39.142 30.295 54.587 23.836-7.146.263-16.226.146-24.256-2.822-3.371-1.734-7.958-5.331-7.14-6.003 21.079 7.875 42.854 5.965 61.09-8.655 4.641-3.614 9.709-9.761 11.173-9.846-2.206 3.317.377 1.596-1.318 4.523 4.625-7.456-2.008-3.035 4.779-12.877l2.507 3.453c-.931-6.188 7.687-13.704 6.813-23.492 1.975-2.994 2.206 3.22.107 10.107 2.912-7.64.767-8.867 1.516-15.171.81 2.118 1.867 4.37 2.412 6.606-1.895-7.382 1.948-12.433 2.898-16.724-.937-.415-2.928 3.264-3.383-5.457.065-3.788 1.054-1.985 1.435-2.917-.744-.427-2.694-3.33-3.88-8.9.86-1.308 2.3 3.393 3.47 3.586-.753-4.429-2.049-7.805-2.103-11.202-3.421-7.149-1.211.953-3.985-3.069-3.641-11.357 3.021-2.637 3.47-7.796 5.52 7.995 8.667 20.387 10.11 25.519-1.103-6.258-2.883-12.32-5.058-18.185 1.677.705-2.699-12.875 2.18-3.882-5.21-19.172-22.302-37.087-38.025-45.493 1.924 1.76 4.354 3.971 3.481 4.317-7.819-4.656-6.444-5.018-7.565-6.985-6.369-2.591-6.788.208-11.007.004-12.005-6.368-14.318-5.69-25.368-9.681l.502 2.349c-7.953-2.649-9.265 1.005-17.862.009-.523-.409 2.753-1.479 5.452-1.871-7.69 1.015-7.329-1.515-14.854.279 1.855-1.301 3.815-2.162 5.793-3.269-6.271.381-14.971 3.649-12.286.677C20.144-62.46 1.976-56.053-8.218-46.494l-.321-2.142c-4.672 5.608-20.371 16.748-21.622 24.011l-1.249.291c-2.431 4.116-4.004 8.781-5.932 13.016-3.18 5.417-4.661 2.085-4.208 2.934-6.253 12.679-9.359 23.332-12.043 32.069 1.912 2.858.046 17.206.769 28.688-3.141 56.709 39.8 111.77 86.737 124.48 6.88 2.459 17.11 2.364 25.813 2.618-10.268-2.937-11.595-1.556-21.595-5.044-7.215-3.398-8.797-7.277-13.907-11.711l2.022 3.573c-10.021-3.547-5.829-4.39-13.982-6.972l2.16-2.82c-3.249-.246-8.604-5.475-10.069-8.371l-3.553.14c-4.27-5.269-6.545-9.063-6.379-12.005l-1.148 2.047c-1.301-2.235-15.709-19.759-8.234-15.679-1.389-1.271-3.235-2.067-5.237-5.703l1.522-1.739c-3.597-4.627-6.621-10.562-6.391-12.536 1.919 2.592 3.25 3.075 4.568 3.52-9.083-22.539-9.593-1.242-16.474-22.942l1.456-.116c-1.116-1.682-1.793-3.506-2.69-5.298l.633-6.313c-6.541-7.562-1.829-32.151-.887-45.637.655-5.485 5.459-11.322 9.114-20.477l-2.227-.384C-27.316-2.419-7.271-24.81 2.011-23.658c4.499-5.649-.892-.02-1.772-1.443 9.878-10.223 12.984-7.222 19.65-9.061 7.19-4.268-6.17 1.664-2.761-1.628 12.427-3.174 8.808-7.216 25.021-8.828 1.71.973-3.969 1.503-5.395 2.766 10.354-5.066 32.769-3.914 47.326 2.811 16.895 7.896 35.873 31.232 36.622 53.189l.852.229c-.431 8.729 1.336 18.822-1.727 28.094l2.1-4.385"/>
+                            <path d="m19.5 67.715-.578 2.893c2.71 3.683 4.861 7.673 8.323 10.552-2.49-4.863-4.341-6.872-7.745-13.445m6.409-.251c-1.435-1.587-2.284-3.497-3.235-5.4.909 3.345 2.771 6.219 4.504 9.143l-1.269-3.743m113.411-24.65-.605 1.52c-1.111 7.892-3.511 15.701-7.189 22.941 4.06-7.639 6.69-15.995 7.79-24.461M49.698-68.243c2.789-1.022 6.855-.56 9.814-1.233-3.855.324-7.693.517-11.484 1.005l1.67.228m-97.917 52.067c.642 5.951-4.477 8.26 1.134 4.337 3.007-6.773-1.175-1.87-1.134-4.337m-6.593 27.538c1.292-3.967 1.526-6.349 2.02-8.645-3.571 4.566-1.643 5.539-2.02 8.645"/>
+                        </svg>
+                        Linux DEB
+                    </button>
+                    <button class="tab-btn" data-tab="rpm">
+                        <svg class="tab-icon" viewBox="0 0 192.30001 146" fill="currentColor">
+                            <path d="m 128,84 c 12.5,0 30.6,-2.6 30.6,-17.5 a 19.53,19.53 0 0 0 -0.3,-3.4 L 150.9,30.7 C 149.2,23.6 147.7,20.3 135.2,14.1 125.5,9.1 104.4,1 98.1,1 92.2,1 90.5,8.5 83.6,8.5 76.9,8.5 72,2.9 65.7,2.9 c -6,0 -9.9,4.1 -12.9,12.5 0,0 -8.4,23.7 -9.5,27.2 a 6.15,6.15 0 0 0 -0.2,1.9 C 43,53.7 79.3,83.9 128,84 m 32.5,-11.4 c 1.7,8.2 1.7,9.1 1.7,10.1 0,14 -15.7,21.8 -36.4,21.8 C 79,104.5 38.1,77.1 38.1,59 a 18.35,18.35 0 0 1 1.5,-7.3 C 22.8,52.5 1,55.5 1,74.7 1,106.2 75.6,145 134.6,145 c 45.3,0 56.7,-20.5 56.7,-36.7 0,-12.7 -11,-27.1 -30.8,-35.7"/>
+                            <path fill="currentColor" opacity="0.5" d="m 160.5,72.6 c 1.7,8.2 1.7,9.1 1.7,10.1 0,14 -15.7,21.8 -36.4,21.8 C 79,104.5 38.1,77.1 38.1,59 a 18.35,18.35 0 0 1 1.5,-7.3 l 3.7,-9.1 a 6.15,6.15 0 0 0 -0.2,1.9 c 0,9.2 36.3,39.4 84.9,39.4 12.5,0 30.6,-2.6 30.6,-17.5 A 19.53,19.53 0 0 0 158.3,63 Z"/>
+                        </svg>
+                        Linux RPM
+                    </button>
+                    <button class="tab-btn" data-tab="flatpak">
+                        <svg class="tab-icon" viewBox="1.18 0 21.65 24" fill="currentColor">
+                            <path d="M12 0c-.556 0-1.111.144-1.61.432l-7.603 4.39a3.22 3.22 0 0 0-1.61 2.788v8.78c0 1.151.612 2.212 1.61 2.788l7.603 4.39a3.22 3.22 0 0 0 3.22 0l7.603-4.39a3.22 3.22 0 0 0 1.61-2.788V7.61a3.22 3.22 0 0 0-1.61-2.788L13.61.432A3.2 3.2 0 0 0 12 0m0 2.358c.15 0 .299.039.431.115l7.604 4.39c.132.077.24.187.315.316L12 12v9.642a.86.86 0 0 1-.431-.116l-7.604-4.39a.87.87 0 0 1-.431-.746V7.61c0-.153.041-.302.116-.43L12 12Z"/>
+                        </svg>
+                        Flatpak
+                    </button>
+                </div>
+
+                <!-- Windows Tab -->
+                <div class="tab-panel active" id="tab-windows">
+                    <div class="tab-columns">
+                        <div class="card">
+                            <div class="card-header">
+                                <svg class="card-header-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+                                </svg>
+                                <h3>Windows Installer</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download" id="win-x64-qt6-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download Windows Installer
+                                        <span class="arch-tag">x64</span><span class="btn-badge">Qt6</span>
+                                    </a>
+                                </div>
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download-alt" id="win-x64-qt5-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download Windows Installer
+                                        <span class="arch-tag">x64</span><span class="btn-badge">Qt5</span>
+                                    </a>
+                                </div>
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download-alt" id="win-x86-qt5-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download Windows Installer
+                                        <span class="arch-tag">x86</span><span class="btn-badge">Qt5</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>System Requirements</h3>
+                            </div>
+                            <div class="card-body">
+                                <ul class="req-list">
+                                    <li>Windows 7 or newer for Qt5 packages</li>
+                                    <li>Windows 10 or newer for Qt6 packages</li>
+                                    <li>32-bit (x86) or 64-bit (x64) processor</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Linux DEB Tab -->
+                <div class="tab-panel" id="tab-deb">
+                    <div class="tab-columns">
+                        <div class="card">
+                            <div class="card-header">
+                                <svg class="card-header-icon" viewBox="-60 -75 210 260" fill="currentColor">
+                                   <path d="M64.525 62.053c-4.125.058.78 2.125 6.165 2.954 1.488-1.161 2.838-2.336 4.04-3.479-3.354.821-6.765.838-10.205.525m22.14-5.52c2.457-3.389 4.246-7.102 4.878-10.939-.551 2.736-2.035 5.099-3.435 7.592-7.711 4.854-.726-2.883-.004-5.824-8.29 10.436-1.138 6.257-1.439 9.171m8.174-21.265c.497-7.428-1.462-5.08-2.121-2.245.766.4 1.377 5.237 2.121 2.245M48.883-66.264c2.201.395 4.757.698 4.398 1.224 2.407-.528 2.954-1.015-4.398-1.224"/>
+                                   <path d="m53.281-65.04-1.556.32 1.448-.127.108-.193"/>
+                                   <path d="M121.93 38.085c.247 6.671-1.95 9.907-3.932 15.637l-3.564 1.781c-2.919 5.666.282 3.598-1.807 8.105-4.556 4.049-13.823 12.67-16.789 13.457-2.163-.047 1.469-2.554 1.943-3.537-6.097 4.188-4.894 6.285-14.217 8.83l-.273-.607C60.29 92.569 28.344 71.129 28.765 41.875c-.246 1.857-.698 1.393-1.208 2.144-1.186-15.052 6.952-30.17 20.675-36.343 13.427-6.646 29.163-3.918 38.78 5.044C81.73 5.8 71.217-1.534 58.757-.848c-12.208.193-23.625 7.95-27.436 16.369-6.253 3.938-6.979 15.177-9.704 17.233-3.665 26.943 6.896 38.583 24.762 52.275 2.812 1.896.792 2.184 1.173 3.627-5.936-2.779-11.372-6.976-15.841-12.114 2.372 3.473 4.931 6.847 8.239 9.499-5.596-1.897-13.074-13.563-15.256-14.038 9.647 17.274 39.142 30.295 54.587 23.836-7.146.263-16.226.146-24.256-2.822-3.371-1.734-7.958-5.331-7.14-6.003 21.079 7.875 42.854 5.965 61.09-8.655 4.641-3.614 9.709-9.761 11.173-9.846-2.206 3.317.377 1.596-1.318 4.523 4.625-7.456-2.008-3.035 4.779-12.877l2.507 3.453c-.931-6.188 7.687-13.704 6.813-23.492 1.975-2.994 2.206 3.22.107 10.107 2.912-7.64.767-8.867 1.516-15.171.81 2.118 1.867 4.37 2.412 6.606-1.895-7.382 1.948-12.433 2.898-16.724-.937-.415-2.928 3.264-3.383-5.457.065-3.788 1.054-1.985 1.435-2.917-.744-.427-2.694-3.33-3.88-8.9.86-1.308 2.3 3.393 3.47 3.586-.753-4.429-2.049-7.805-2.103-11.202-3.421-7.149-1.211.953-3.985-3.069-3.641-11.357 3.021-2.637 3.47-7.796 5.52 7.995 8.667 20.387 10.11 25.519-1.103-6.258-2.883-12.32-5.058-18.185 1.677.705-2.699-12.875 2.18-3.882-5.21-19.172-22.302-37.087-38.025-45.493 1.924 1.76 4.354 3.971 3.481 4.317-7.819-4.656-6.444-5.018-7.565-6.985-6.369-2.591-6.788.208-11.007.004-12.005-6.368-14.318-5.69-25.368-9.681l.502 2.349c-7.953-2.649-9.265 1.005-17.862.009-.523-.409 2.753-1.479 5.452-1.871-7.69 1.015-7.329-1.515-14.854.279 1.855-1.301 3.815-2.162 5.793-3.269-6.271.381-14.971 3.649-12.286.677C20.144-62.46 1.976-56.053-8.218-46.494l-.321-2.142c-4.672 5.608-20.371 16.748-21.622 24.011l-1.249.291c-2.431 4.116-4.004 8.781-5.932 13.016-3.18 5.417-4.661 2.085-4.208 2.934-6.253 12.679-9.359 23.332-12.043 32.069 1.912 2.858.046 17.206.769 28.688-3.141 56.709 39.8 111.77 86.737 124.48 6.88 2.459 17.11 2.364 25.813 2.618-10.268-2.937-11.595-1.556-21.595-5.044-7.215-3.398-8.797-7.277-13.907-11.711l2.022 3.573c-10.021-3.547-5.829-4.39-13.982-6.972l2.16-2.82c-3.249-.246-8.604-5.475-10.069-8.371l-3.553.14c-4.27-5.269-6.545-9.063-6.379-12.005l-1.148 2.047c-1.301-2.235-15.709-19.759-8.234-15.679-1.389-1.271-3.235-2.067-5.237-5.703l1.522-1.739c-3.597-4.627-6.621-10.562-6.391-12.536 1.919 2.592 3.25 3.075 4.568 3.52-9.083-22.539-9.593-1.242-16.474-22.942l1.456-.116c-1.116-1.682-1.793-3.506-2.69-5.298l.633-6.313c-6.541-7.562-1.829-32.151-.887-45.637.655-5.485 5.459-11.322 9.114-20.477l-2.227-.384C-27.316-2.419-7.271-24.81 2.011-23.658c4.499-5.649-.892-.02-1.772-1.443 9.878-10.223 12.984-7.222 19.65-9.061 7.19-4.268-6.17 1.664-2.761-1.628 12.427-3.174 8.808-7.216 25.021-8.828 1.71.973-3.969 1.503-5.395 2.766 10.354-5.066 32.769-3.914 47.326 2.811 16.895 7.896 35.873 31.232 36.622 53.189l.852.229c-.431 8.729 1.336 18.822-1.727 28.094l2.1-4.385"/>
+                                   <path d="m19.5 67.715-.578 2.893c2.71 3.683 4.861 7.673 8.323 10.552-2.49-4.863-4.341-6.872-7.745-13.445m6.409-.251c-1.435-1.587-2.284-3.497-3.235-5.4.909 3.345 2.771 6.219 4.504 9.143l-1.269-3.743m113.411-24.65-.605 1.52c-1.111 7.892-3.511 15.701-7.189 22.941 4.06-7.639 6.69-15.995 7.79-24.461M49.698-68.243c2.789-1.022 6.855-.56 9.814-1.233-3.855.324-7.693.517-11.484 1.005l1.67.228m-97.917 52.067c.642 5.951-4.477 8.26 1.134 4.337 3.007-6.773-1.175-1.87-1.134-4.337m-6.593 27.538c1.292-3.967 1.526-6.349 2.02-8.645-3.571 4.566-1.643 5.539-2.02 8.645"/>
+                                </svg>
+                                <h3>Linux DEB Packages</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download" id="deb-qt6-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download DEB Package
+                                        <span class="arch-tag">amd64</span><span class="btn-badge">Qt6</span>
+                                    </a>
+                                </div>
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download-alt" id="deb-qt5-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download DEB Package
+                                        <span class="arch-tag">amd64</span><span class="btn-badge">Qt5</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header card-header-tabs">
+                                <button class="card-subtab active" data-subtab="install">Install</button>
+                                <button class="card-subtab" data-subtab="remove">Remove</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="install-instructions">
+                                    <div class="subtab-panel active" data-subtab="install">
+                                        <p>Qt6 package</p>
+                                        <div class="code-block">
+                                            <pre><code>sudo apt install ./<span class="qt6-deb-package-name">qt6-omodscan_1.13.1-1_amd64.deb</span></code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <p>Qt5 package</p>
+                                        <div class="code-block">
+                                            <pre><code>sudo apt install ./<span class="qt5-deb-package-name">qt5-omodscan_1.13.1-1_amd64.deb</span></code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="subtab-panel" data-subtab="remove">
+                                        <p>Qt6 package</p>
+                                        <div class="code-block">
+                                            <pre><code>sudo apt remove qt6-omodscan</code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <p>Qt5 package</p>
+                                        <div class="code-block">
+                                            <pre><code>sudo apt remove qt5-omodscan</code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Linux RPM Tab -->
+                <div class="tab-panel" id="tab-rpm">
+                    <div class="tab-columns">
+                        <div class="card">
+                            <div class="card-header">
+                                <svg class="card-header-icon" viewBox="0 0 192.30001 146" fill="currentColor">
+                                    <path fill="#2ea043" d="m 128,84 c 12.5,0 30.6,-2.6 30.6,-17.5 a 19.53,19.53 0 0 0 -0.3,-3.4 L 150.9,30.7 C 149.2,23.6 147.7,20.3 135.2,14.1 125.5,9.1 104.4,1 98.1,1 92.2,1 90.5,8.5 83.6,8.5 76.9,8.5 72,2.9 65.7,2.9 c -6,0 -9.9,4.1 -12.9,12.5 0,0 -8.4,23.7 -9.5,27.2 a 6.15,6.15 0 0 0 -0.2,1.9 C 43,53.7 79.3,83.9 128,84 m 32.5,-11.4 c 1.7,8.2 1.7,9.1 1.7,10.1 0,14 -15.7,21.8 -36.4,21.8 C 79,104.5 38.1,77.1 38.1,59 a 18.35,18.35 0 0 1 1.5,-7.3 C 22.8,52.5 1,55.5 1,74.7 1,106.2 75.6,145 134.6,145 c 45.3,0 56.7,-20.5 56.7,-36.7 0,-12.7 -11,-27.1 -30.8,-35.7"/>
+                                    <path fill="#238636" d="m 160.5,72.6 c 1.7,8.2 1.7,9.1 1.7,10.1 0,14 -15.7,21.8 -36.4,21.8 C 79,104.5 38.1,77.1 38.1,59 a 18.35,18.35 0 0 1 1.5,-7.3 l 3.7,-9.1 a 6.15,6.15 0 0 0 -0.2,1.9 c 0,9.2 36.3,39.4 84.9,39.4 12.5,0 30.6,-2.6 30.6,-17.5 A 19.53,19.53 0 0 0 158.3,63 Z"/>
+                                </svg>
+                                <h3>Linux RPM Packages</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download" id="rpm-qt6-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download RPM Package
+                                        <span class="arch-tag">x86_64</span><span class="btn-badge">Qt6</span>
+                                    </a>
+                                </div>
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download-alt" id="rpm-pubkey-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download RPM Public Key
+                                        <span class="btn-badge">GPG</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header card-header-tabs">
+                                <button class="card-subtab active" data-subtab="install">Install</button>
+                                <button class="card-subtab" data-subtab="remove">Remove</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="install-instructions">
+                                    <div class="subtab-panel active" data-subtab="install">
+                                        <div class="rpm-distro-section">
+                                            <h4>
+                                                <img src="icons/logo_fedora.svg" width="20" height="20" alt="Fedora"> Fedora
+                                                <span class="distro-sep">·</span>
+                                                <img src="icons/logo_rocky.png" width="20" height="20" alt="Rocky"> Rocky
+                                                <span class="distro-sep">·</span>
+                                                <img src="icons/logo_redos.png" width="20" height="20" alt="RedOS"> RedOS
+                                            </h4>
+                                            <div class="code-block">
+                                                <pre><code>sudo dnf install ./<span class="qt6-rpm-package-name">qt6-omodscan_1.13.1-1.x86_64.rpm</span></code></pre>
+                                                <button class="copy-btn">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="rpm-distro-section">
+                                            <h4>
+                                                <img src="icons/logo_suse.png" width="20" height="20" alt="SUSE"> SUSE
+                                                <span class="distro-sep">·</span>
+                                                <img src="icons/logo_opensuse.svg" width="20" height="20" alt="OpenSUSE"> OpenSUSE
+                                            </h4>
+                                            <p>Import public key and install</p>
+                                            <div class="code-block">
+                                                <pre><code>sudo rpm --import qt6-omodscan.rpm.pubkey</code></pre>
+                                                <button class="copy-btn">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="code-block">
+                                                <pre><code>sudo zypper install ./<span class="qt6-rpm-package-name">qt6-omodscan_1.13.1-1.x86_64.rpm</span></code></pre>
+                                                <button class="copy-btn">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="rpm-distro-section">
+                                            <h4>
+                                                <img src="icons/logo_alt.png" width="20" height="20" alt="Alt Linux">
+                                                Alt Linux
+                                            </h4>
+                                            <p>Run as root user</p>
+                                            <div class="code-block">
+                                                <pre><code>apt-get install ./<span class="qt6-rpm-package-name">qt6-omodscan_1.13.1-1.x86_64.rpm</span></code></pre>
+                                                <button class="copy-btn">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="subtab-panel" data-subtab="remove">
+                                        <div class="rpm-distro-section">
+                                            <h4>
+                                                <img src="icons/logo_fedora.svg" width="20" height="20" alt="Fedora"> Fedora
+                                                <span class="distro-sep">·</span>
+                                                <img src="icons/logo_rocky.png" width="20" height="20" alt="Rocky"> Rocky
+                                                <span class="distro-sep">·</span>
+                                                <img src="icons/logo_redos.png" width="20" height="20" alt="RedOS"> RedOS
+                                            </h4>
+                                            <div class="code-block">
+                                                <pre><code>sudo dnf remove qt6-omodscan</code></pre>
+                                                <button class="copy-btn">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="rpm-distro-section">
+                                            <h4>
+                                                <img src="icons/logo_suse.png" width="20" height="20" alt="SUSE"> SUSE
+                                                <span class="distro-sep">·</span>
+                                                <img src="icons/logo_opensuse.svg" width="20" height="20" alt="OpenSUSE"> OpenSUSE
+                                            </h4>
+                                            <div class="code-block">
+                                                <pre><code>sudo zypper remove qt6-omodscan</code></pre>
+                                                <button class="copy-btn">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="rpm-distro-section">
+                                            <h4>
+                                                <img src="icons/logo_alt.png" width="20" height="20" alt="Alt Linux">
+                                                Alt Linux
+                                            </h4>
+                                            <p>Run as root user</p>
+                                            <div class="code-block">
+                                                <pre><code>apt-get remove qt6-omodscan</code></pre>
+                                                <button class="copy-btn">
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                        <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flatpak Tab -->
+                <div class="tab-panel" id="tab-flatpak">
+                    <div class="tab-columns">
+                        <div class="card">
+                            <div class="card-header">
+                                <svg class="card-header-icon" viewBox="1.18 0 21.65 24" fill="currentColor">
+                                    <path d="M12 0c-.556 0-1.111.144-1.61.432l-7.603 4.39a3.22 3.22 0 0 0-1.61 2.788v8.78c0 1.151.612 2.212 1.61 2.788l7.603 4.39a3.22 3.22 0 0 0 3.22 0l7.603-4.39a3.22 3.22 0 0 0 1.61-2.788V7.61a3.22 3.22 0 0 0-1.61-2.788L13.61.432A3.2 3.2 0 0 0 12 0m0 2.358c.15 0 .299.039.431.115l7.604 4.39c.132.077.24.187.315.316L12 12v9.642a.86.86 0 0 1-.431-.116l-7.604-4.39a.87.87 0 0 1-.431-.746V7.61c0-.153.041-.302.116-.43L12 12Z"/>
+                                </svg>
+                                <h3>Flatpak Packages</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModScan/releases/latest" class="btn btn-download" id="flatpak-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        Download Flatpak bundle
+                                        <span class="arch-tag">x86_64</span><span class="btn-badge">Qt6</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header card-header-tabs">
+                                <button class="card-subtab active" data-subtab="install">Install</button>
+                                <button class="card-subtab" data-subtab="remove">Remove</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="install-instructions">
+                                    <div class="subtab-panel active" data-subtab="install">
+                                        <div class="code-block">
+                                            <pre><code>flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo</code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="code-block">
+                                            <pre><code>flatpak install --user io.github.sanny32.omodscan.flatpak</code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="tip-box">
+                                            <svg class="tip-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <path d="M12 16v-4"/>
+                                                <path d="M12 8h.01"/>
+                                            </svg>
+                                            <div class="tip-box-content">
+                                                <p>For serial port connections, add the user to the <code>dialout</code> group, then log in again or reboot</p>
+                                                <div class="code-block">
+                                                    <pre><code>sudo usermod -a -G dialout $USER</code></pre>
+                                                    <button class="copy-btn">
+                                                        <svg viewBox="0 0 16 16">
+                                                            <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                            <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="subtab-panel" data-subtab="remove">
+                                        <div class="code-block">
+                                            <pre><code>flatpak uninstall --user io.github.sanny32.omodscan</code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="build-info">
+                    <h3>Build from Source</h3>
+                    <p>OpenModScan is open source and can be built from source code. Visit the <a href="https://github.com/sanny32/OpenModScan#building">GitHub repository</a> for build instructions.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>OpenModScan</h4>
+                    <p>Free and open-source Modbus Master utility</p>
+                    <p class="copyright">&copy; 2023-2026 Alexandr Ananev</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="https://github.com/sanny32/OpenModScan">GitHub Repository</a></li>
+                        <li><a href="https://github.com/sanny32/OpenModScan/releases">Releases</a></li>
+                        <li><a href="https://github.com/sanny32/OpenModScan/issues">Report Issues</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>License</h4>
+                    <p>Licensed under MIT License</p>
+                    <p>Free to use, modify and distribute</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Code Signing</h4>
+                    <p>Windows binaries signed by</p>
+                    <a href="https://signpath.org">SignPath Foundation</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <button class="modal-nav modal-prev" id="modalPrev"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="">
+            </div>
+        </div>
+        <button class="modal-nav modal-next" id="modalNext"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+
+    <script src="download.js"></script>
+    <script src="screenshots.js"></script>
+</body>
+</html>

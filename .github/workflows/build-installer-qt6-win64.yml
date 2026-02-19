@@ -47,7 +47,7 @@ jobs:
 
       - name: Extract version from CMakeLists.txt
         run: |
-          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" omodscan\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
+          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" src\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
         shell: cmd
 
       - name: Convert version for dev branch
@@ -63,13 +63,19 @@ jobs:
           set SIGNING_POLICY_SLUG=none
           if "${{ github.event_name }}"=="push" (
             if "${{ github.ref_type }}"=="tag" (
-              set SIGNING_POLICY_SLUG=release-signing
+              for /f %%i in ('echo "${{ github.ref_name }}" ^| find /i "test"') do set TAG_HAS_TEST=1
+              if not defined TAG_HAS_TEST (
+                set SIGNING_POLICY_SLUG=release-signing
+              )
             )
           )
           if "${{ github.event_name }}"=="workflow_dispatch" (
             if "${{ github.event.inputs.signing }}"=="true" (
               if not "${{ github.event.inputs.tag }}"=="" (
-                set SIGNING_POLICY_SLUG=release-signing
+                echo "%{{ github.event.inputs.tag }}%" | find /i "test" >nul
+                if errorlevel 1 (
+                  set SIGNING_POLICY_SLUG=release-signing
+                )
               ) else (
                 set SIGNING_POLICY_SLUG=test-signing
               )
@@ -107,7 +113,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake omodscan -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
         shell: cmd
 
       - name: Build
@@ -120,7 +126,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: omodscan.exe
+          name: omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Signing Executable
@@ -141,7 +147,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
-          name: omodscan-signed.exe
+          name: omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
 
       - name: Deploy Qt dependencies using windeployqt
@@ -151,6 +157,8 @@ jobs:
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe" ^
             --release ^
             --no-opengl-sw ^
+            --no-system-d3d-compiler ^
+            --no-system-dxc-compiler ^
             --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
             --skip-plugin-types help,generic,networkinformation,qmltooling,tls ^
             --exclude-plugins qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql
@@ -165,11 +173,13 @@ jobs:
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ env.APP_VERSION }}" ^
+           /DMIN_WINDOWS_VERSION=10 ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
-           /DICON_FILE="%CD%\omodscan\res\omodscan.ico" ^
-           /DLICENSE_FILE="%CD%\omodscan\res\license.txt" ^
+           /DICON_FILE="%CD%\src\res\omodscan.ico" ^
+           /DWELCOMEFINISHPAGE_BITMAP="%CD%\.github\win32\nsis3-omodscan.bmp" ^
+           /DLICENSE_FILE="%CD%\src\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt6-omodscan-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
-           %CD%\.nsis\installer-win64.nsi
+           %CD%\.github\win32\installer-win64.nsi
         shell: cmd
 
       - name: Upload Installer

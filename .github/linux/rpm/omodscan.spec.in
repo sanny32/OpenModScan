@@ -1,0 +1,57 @@
+Name:           @PACKAGE_NAME@
+Version:        @APP_VERSION@
+Release:        1%{?dist}
+Summary:        An Open Source Modbus Master (Client) Utility
+Group:          Applications/Utility
+License:        MIT
+URL:            https://github.com/sanny32/OpenModScan
+Packager:       Alexandr Ananev <mail@ananev.org>
+Source0:        SOURCES/omodscan
+
+%description
+Open ModScan is an open source Modbus master (client) utility for testing and debugging Modbus TCP and RTU devices.
+
+%global _build_id_links none
+
+%prep
+
+%build
+
+%install
+%{__mkdir_p} %{buildroot}/opt
+%{__cp} -r %{_sourcedir}/omodscan/opt/* %{buildroot}/opt
+%{__mkdir_p} %{buildroot}/usr
+%{__cp} -r %{_sourcedir}/omodscan/usr/* %{buildroot}/usr
+
+%post
+if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then
+    rm -f /etc/udev/rules.d/99-omodscan.rules
+fi
+if [ ! -f /etc/udev/rules.d/99-omodsim.rules ]; then
+    printf  "KERNEL==\"ttyS[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
+    printf  "KERNEL==\"ttyUSB[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
+fi
+udevadm trigger
+
+ln -sf /opt/OpenModScan/omodscan.sh /usr/bin/omodscan
+xdg-desktop-menu forceupdate || true
+
+%postun
+if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then
+    rm -f /etc/udev/rules.d/99-omodscan.rules
+    udevadm trigger
+fi
+
+xdg-desktop-menu forceupdate || true
+rm -f /usr/bin/omodscan
+
+%files
+/opt/OpenModScan
+/usr/share/applications
+/usr/share/applications/*
+/usr/share/icons
+/usr/share/icons/*
+/usr/share/metainfo
+/usr/share/metainfo/*
+
+%caps(cap_net_bind_service=+ep) /opt/OpenModScan/bin/omodscan

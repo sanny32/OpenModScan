@@ -1,0 +1,183 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QTranslator>
+#include "ansimenu.h"
+#include "modbusclient.h"
+#include "formmodsca.h"
+#include "windowactionlist.h"
+#include "recentfileactionlist.h"
+
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow(const QString& profile, QWidget *parent = nullptr);
+    ~MainWindow();
+
+    void setLanguage(const QString& lang);
+
+signals:
+    void modbusClientChanged(QModbusClient* cli);
+
+protected:
+    void changeEvent(QEvent* event) override;
+    void closeEvent(QCloseEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* e) override;
+
+private slots:
+    void on_awake();
+
+    /* File menu slots */
+    void on_actionNew_triggered();
+    void on_actionOpen_triggered();
+    void on_actionClose_triggered();
+    void on_actionCloseAll_triggered();
+    void on_actionSave_triggered();
+    void on_actionSaveAs_triggered();
+    void on_actionPrint_triggered();
+    void on_actionPrintSetup_triggered();
+    void on_actionExit_triggered();
+
+    /* Connection menu slots */
+    void on_actionConnect_triggered();
+    void on_actionDisconnect_triggered();
+    void on_actionQuickConnect_triggered();
+    void on_actionEnable_triggered();
+    void on_actionDisable_triggered();
+    void on_actionSaveConfig_triggered();
+    void on_actionRestoreNow_triggered();
+    void on_actionModbusScanner_triggered();
+
+    /* Setup menu slots*/
+    void on_actionDataDefinition_triggered();
+    void on_actionShowData_triggered();
+    void on_actionShowTraffic_triggered();
+    void on_actionBinary_triggered();
+    void on_actionUInt16_triggered();
+    void on_actionInt16_triggered();
+    void on_actionInt32_triggered();
+    void on_actionSwappedInt32_triggered();
+    void on_actionUInt32_triggered();
+    void on_actionSwappedUInt32_triggered();
+    void on_actionInt64_triggered();
+    void on_actionSwappedInt64_triggered();
+    void on_actionUInt64_triggered();
+    void on_actionSwappedUInt64_triggered();
+    void on_actionHex_triggered();
+    void on_actionAnsi_triggered();
+    void on_actionFloatingPt_triggered();
+    void on_actionSwappedFP_triggered();
+    void on_actionDblFloat_triggered();
+    void on_actionSwappedDbl_triggered();
+    void on_actionSwapBytes_triggered();
+    void on_actionHexAddresses_triggered();
+    void on_actionMsgParser_triggered();
+    void on_actionAddressScan_triggered();
+    void on_actionTextCapture_triggered();
+    void on_actionCaptureOff_triggered();
+    void on_actionResetCtrs_triggered();
+
+    /* Write slots */
+    void on_actionWriteSingleCoil_triggered();
+    void on_actionWriteHoldingRegister_triggered();
+    void on_actionWriteHoldingRegisterValue_triggered();
+    void on_actionWriteHoldingRegisterBits_triggered();
+    void on_actionForceCoils_triggered();
+    void on_actionPresetRegs_triggered();
+    void on_actionMaskWrite_triggered();
+    void on_actionUserMsg_triggered();
+
+    /* View menu slots */
+    void on_actionTabbedView_triggered();
+    void on_actionToolbar_triggered();
+    void on_actionStatusBar_triggered();
+    void on_actionDisplayBar_triggered();
+    void on_actionWriteBar_triggered();
+    void on_actionBackground_triggered();
+    void on_actionForeground_triggered();
+    void on_actionStatus_triggered();
+    void on_actionFont_triggered();
+
+    /* Language menu slots */
+    void on_actionEnglish_triggered();
+    void on_actionRussian_triggered();
+    void on_actionChineseCN_triggered();
+    void on_actionChineseTW_triggered();
+
+    /* Window menu slots */
+    void on_actionCascade_triggered();
+    void on_actionTile_triggered();
+    void on_actionWindows_triggered();
+
+    /* Help menu slots */
+    void on_actionAbout_triggered();
+
+    void on_modbusError(const QString& error, int requestId);
+    void on_modbusConnectionError(const QString& error);
+    void on_modbusConnected(const ConnectionDetails& cd);
+    void on_modbusDisconnected(const ConnectionDetails& cd);
+
+    void updateMenuWindow();
+    void openFile(const QString& filename);
+    void windowActivate(QMdiSubWindow* wnd);
+    void setCodepage(const QString& name);
+
+private:
+    void updateMenuAction(QAction* a);
+    void addRecentFile(const QString& filename);
+    void updateDataDisplayMode(DataDisplayMode mode);
+
+    FormModSca* createMdiChild(int id);
+    FormModSca* currentMdiChild() const;
+    FormModSca* findMdiChild(int id) const;
+    FormModSca* firstMdiChild() const;
+
+    FormModSca* loadMdiChild(const QString& filename);
+    void saveMdiChild(FormModSca* frm, SerializationFormat format);
+    void closeMdiChild(FormModSca* frm);
+
+    void saveAs(FormModSca* frm, SerializationFormat format);
+
+    void loadConfig(const QString& filename);
+    void saveConfig(const QString& filename, SerializationFormat format);
+
+    void loadProfile(const QString& filename);
+    void saveProfile();
+
+private:
+    Ui::MainWindow *ui;
+
+    QString _lang;
+    QTranslator _qtTranslator;
+    QTranslator _appTranslator;
+
+private:
+    bool _autoStart;
+    int _windowCounter;
+
+    QString _fileAutoStart;
+    ConnectionDetails _connParams;
+    ModbusClient _modbusClient;
+
+    AnsiMenu* _ansiMenu;
+    QAction* _actionWriteHoldingRegister;
+    WindowActionList* _windowActionList;
+    RecentFileActionList* _recentFileActionList;
+    QPrinter* _selectedPrinter;
+    DataSimulator* _dataSimulator;
+    QString _savePath;
+    QString _profile;
+
+    quint32 _lastWriteSingleCoilAddress = 0;
+    quint32 _lastWriteHoldingRegisterAddress = 0;
+    quint32 _lastWriteHoldingRegisterBitsAddress = 0;
+    quint32 _lastMaskWriteRegisterAddress = 0;
+};
+#endif // MAINWINDOW_H

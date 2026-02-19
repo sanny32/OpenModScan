@@ -50,6 +50,7 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
+.claude
 .directory
 *.bat
 *.qmake.stash
@@ -58,6 +59,8 @@ CMakeLists.txt.user*
 *.qtds
 *.ts text eol=lf
 *.log
-/.flatpak/build
-/.flatpak/.flatpak-builder
-/.flatpak/io.github.sanny32.omodscan.flatpak
+src/res/license.txt
+/docs/PROJECT_SUMMARY.md
+/docs/README.md
+/docs/SITE_STRUCTURE.md
+/docs/DEPLOYMENT.md

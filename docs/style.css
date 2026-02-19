@@ -572,6 +572,7 @@ body {
     padding: 0;
     border: none;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .install-instructions h4 {
@@ -601,26 +602,49 @@ body {
 /* Copy button for install instructions */
 .install-instructions .code-block {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: #1e1e1e;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
     width: 100%;
 }
 
 .install-instructions .code-block pre {
-    padding: 0.65rem 2.5rem 0.65rem 1rem;
-    background: #1e1e1e;
+    padding: 0.65rem 1rem;
+    background: transparent;
     color: #e8e8e8;
     font-size: 0.82rem;
     line-height: 1.5;
     overflow-x: auto;
-    margin-bottom: 0.75rem;
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
     border-radius: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
+
+.install-instructions .code-block pre::-webkit-scrollbar {
+    height: 4px;
+}
+
+.install-instructions .code-block pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.install-instructions .code-block pre::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 2px;
 }
 
 /* Copy button styling — GitHub-style */
 .install-instructions .copy-btn {
-    position: absolute;
-    top: 6px;
-    right: 6px;
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 6px;
+    margin-right: 6px;
     border: 1px solid transparent;
     background: transparent;
     padding: 4px;

@@ -135,9 +135,24 @@ function initCopyButtons() {
 }
 
 
+// Card inner subtabs (Install / Remove)
+function initSubtabs() {
+    document.querySelectorAll('.card-subtab').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var card = btn.closest('.card');
+            var subtab = btn.getAttribute('data-subtab');
+            card.querySelectorAll('.card-subtab').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            card.querySelectorAll('.subtab-panel').forEach(function(p) { p.classList.remove('active'); });
+            card.querySelector('.subtab-panel[data-subtab="' + subtab + '"]').classList.add('active');
+        });
+    });
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
     initTabs();
+    initSubtabs();
     fetchLatestRelease();
     initCopyButtons();
 });

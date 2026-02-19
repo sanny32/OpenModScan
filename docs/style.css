@@ -444,11 +444,20 @@ body {
     margin-bottom: 0;
 }
 
-.download-item-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 0.4rem;
+.btn-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.22);
+    letter-spacing: 0.03em;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.btn-download-alt .btn-badge {
+    background: rgba(46, 160, 67, 0.1);
+    color: var(--primary-color);
 }
 
 .btn-download,
@@ -517,11 +526,52 @@ body {
     background-position: center;
 }
 
+/* Card inner subtabs */
+.card-header-tabs {
+    padding: 0;
+    gap: 0;
+}
+
+.card-subtab {
+    padding: 0.85rem 1.25rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-light);
+    transition: color 0.15s, border-color 0.15s;
+    font-family: inherit;
+}
+
+.card-subtab:hover {
+    color: var(--primary-color);
+}
+
+.card-subtab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.subtab-panel {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.subtab-panel.active {
+    visibility: visible;
+    pointer-events: auto;
+}
+
 /* Install instructions */
 .install-instructions {
     margin: 0;
     padding: 0;
     border: none;
+    display: grid;
 }
 
 .install-instructions h4 {
@@ -621,6 +671,45 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
+/* Tip / info box */
+.tip-box {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    background: rgba(46, 160, 67, 0.06);
+    border: 1px solid rgba(46, 160, 67, 0.25);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.tip-box-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--primary-color);
+    margin-top: 0.1rem;
+}
+
+.tip-box-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.tip-box-content p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.tip-box-content p:last-child {
+    margin-bottom: 0;
+}
+
+.tip-box-content .code-block {
+    margin-top: 0.5rem;
+}
+
 /* RPM distro sub-sections */
 .rpm-distro-section {
     padding-top: 1rem;
@@ -645,6 +734,14 @@ body {
 
 .rpm-distro-section > h4 img {
     object-fit: contain;
+}
+
+.distro-sep {
+    color: var(--border-dark);
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin: 0 0.2rem;
+    line-height: 1;
 }
 
 .build-info {

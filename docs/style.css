@@ -455,6 +455,27 @@ body {
     flex-shrink: 0;
 }
 
+.arch-tag {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 100px;
+    border: 1px solid currentColor;
+    opacity: 0.75;
+    letter-spacing: 0;
+    flex-shrink: 0;
+}
+
+.btn-download .arch-tag,
+.btn-download-alt .arch-tag {
+    margin-left: auto;
+}
+
+.arch-tag + .btn-badge {
+    margin-left: 0.3rem;
+}
+
 .btn-download-alt .btn-badge {
     background: rgba(46, 160, 67, 0.1);
     color: var(--primary-color);

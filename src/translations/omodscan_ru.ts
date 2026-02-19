@@ -1996,9 +1996,19 @@ Valid Slave Responses: %2</source>
         <translation>Новый</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="315"/>
+        <source>Ctrl+N</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="324"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="327"/>
+        <source>Ctrl+O</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="332"/>
@@ -2011,6 +2021,11 @@ Valid Slave Responses: %2</source>
         <translation>Сохранить</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="344"/>
+        <source>Ctrl+S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="349"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
@@ -2019,6 +2034,11 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="358"/>
         <source>Print...</source>
         <translation>Печать...</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="361"/>
+        <source>Ctrl+P</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="366"/>
@@ -2091,9 +2111,29 @@ Valid Slave Responses: %2</source>
         <translation>Двоичный</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="473"/>
+        <source>Ctrl+1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="485"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="488"/>
+        <source>Ctrl+2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="503"/>
+        <source>Ctrl+5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="518"/>
+        <source>Ctrl+4</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="530"/>
@@ -2102,10 +2142,20 @@ Valid Slave Responses: %2</source>
         <translation>С плавающей точкой (MSRF)</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="536"/>
+        <source>Ctrl+0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="548"/>
         <location filename="../mainwindow.ui" line="551"/>
         <source>Float (LSRF)</source>
         <translation>С плавающей точкой (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="554"/>
+        <source>Ctrl+Alt+0</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="566"/>
@@ -2114,10 +2164,20 @@ Valid Slave Responses: %2</source>
         <translation>Двойной точности (MSRF)</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="572"/>
+        <source>Ctrl+-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="584"/>
         <location filename="../mainwindow.ui" line="587"/>
         <source>Double (LSRF)</source>
         <translation>Двойной точности (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="590"/>
+        <source>Ctrl+Alt+-</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="607"/>
@@ -2170,6 +2230,21 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="777"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>Порядок байт (0xAB → 0xBA)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="889"/>
+        <source>Ctrl+8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="907"/>
+        <source>Ctrl+Alt+8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="925"/>
+        <source>Ctrl+9</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>32-bit Integer</source>
@@ -2250,6 +2325,11 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="940"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>Беззнаковое 64-бит целое (LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="943"/>
+        <source>Ctrl+Alt+9</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="966"/>
@@ -2388,6 +2468,26 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="785"/>
         <source>MODBUS Scanner</source>
         <translation>Cканер MODBUS</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="806"/>
+        <source>Ctrl+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="824"/>
+        <source>Ctrl+Alt+6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="842"/>
+        <source>Ctrl+7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="860"/>
+        <source>Ctrl+Alt+7</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="865"/>

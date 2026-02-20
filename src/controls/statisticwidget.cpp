@@ -34,6 +34,7 @@ void StatisticWidget::changeEvent(QEvent* event)
     {
         ui->retranslateUi(this);
         setPollState(_pollState);
+        updateStatistic();
     }
 
     QWidget::changeEvent(event);

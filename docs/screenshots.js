@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add click event to all screenshots
     screenshots.forEach((screenshot, index) => {
         screenshot.addEventListener('click', function() {
+            if (window.innerWidth <= 768) return;
             showModal(index);
         });
     });

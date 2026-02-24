@@ -80,10 +80,10 @@ function updateDownloadLinks(release) {
 }
 
 function updateVersionDisplay(version) {
-    // Update the download subtitle to include version
-    const subtitle = document.querySelector('.download-subtitle');
-    if (subtitle) {
-        subtitle.textContent = `Get the latest version (${version}) for your platform`;
+    if (window.updateSubtitleWithVersion) {
+        window.updateSubtitleWithVersion(version);
+    } else {
+        window.releaseVersion = version;
     }
 }
 

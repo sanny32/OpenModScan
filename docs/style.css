@@ -98,6 +98,112 @@ body {
     opacity: 1;
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1.5rem;
+}
+
+/* Language Dropdown */
+.lang-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.lang-dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.92);
+    padding: 0.3rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.lang-dropdown-btn:hover,
+.lang-dropdown.open .lang-dropdown-btn {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+}
+
+.lang-chevron {
+    transition: transform 0.2s;
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+.lang-dropdown.open .lang-chevron {
+    transform: rotate(180deg);
+}
+
+.lang-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.08);
+    list-style: none;
+    padding: 0.25rem;
+    min-width: 158px;
+    z-index: 200;
+    animation: fadeIn 0.15s ease-out;
+}
+
+.lang-dropdown.open .lang-dropdown-menu {
+    display: block;
+}
+
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-color);
+    transition: background 0.15s;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.lang-option:hover {
+    background: var(--bg-color);
+}
+
+.lang-option.active {
+    color: var(--primary-color);
+    font-weight: 600;
+    background: rgba(46, 160, 67, 0.08);
+}
+
+.lang-flag {
+    width: 20px;
+    height: 15px;
+    flex-shrink: 0;
+    vertical-align: middle;
+    display: inline-block;
+    border-radius: 2px;
+}
+
 /* Hero Section */
 .hero {
     padding: 4rem 0;

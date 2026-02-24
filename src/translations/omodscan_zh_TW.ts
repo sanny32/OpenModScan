@@ -3314,23 +3314,23 @@ Byte Order: %2</source>
         <translation>暫停</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="101"/>
-        <location filename="../controls/statisticwidget.cpp" line="105"/>
+        <location filename="../controls/statisticwidget.cpp" line="102"/>
+        <location filename="../controls/statisticwidget.cpp" line="106"/>
         <source>Pause Polling</source>
         <translation>暫停投票</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="109"/>
+        <location filename="../controls/statisticwidget.cpp" line="110"/>
         <source>Resume Polling</source>
         <translation>恢復投票</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="143"/>
+        <location filename="../controls/statisticwidget.cpp" line="144"/>
         <source>Number of Polls: %1</source>
         <translation>輪詢次數：%1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="144"/>
+        <location filename="../controls/statisticwidget.cpp" line="145"/>
         <source>Valid Slave Responses: %1</source>
         <translation>有效的從站回應：%1</translation>
     </message>

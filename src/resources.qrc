@@ -53,5 +53,7 @@
         <file>res/iconSimulation16bit.png</file>
         <file>res/iconSimulation32bit.png</file>
         <file>res/iconSimulation64bit.png</file>
+        <file>res/icon-export.svg</file>
+        <file>res/icon-import.svg</file>
     </qresource>
 </RCC>

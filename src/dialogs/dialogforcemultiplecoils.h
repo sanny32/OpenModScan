@@ -1,15 +1,15 @@
 #ifndef DIALOGFORCEMULTIPLECOILS_H
 #define DIALOGFORCEMULTIPLECOILS_H
 
-#include <QDialog>
 #include <QTableWidgetItem>
 #include "modbuswriteparams.h"
+#include "qadjustedsizedialog.h"
 
 namespace Ui {
 class DialogForceMultipleCoils;
 }
 
-class DialogForceMultipleCoils : public QDialog
+class DialogForceMultipleCoils : public QAdjustedSizeDialog
 {
     Q_OBJECT
 

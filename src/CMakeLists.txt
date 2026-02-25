@@ -153,6 +153,7 @@ set(SOURCES
     modbusrtuscanner.cpp
     modbusscanner.cpp
     modbustcpscanner.cpp
+    qadjustedsizedialog.cpp
     qfixedsizedialog.cpp
     qhexvalidator.cpp
     qint64validator.cpp
@@ -261,6 +262,7 @@ set(HEADERS
     modbustcpscanner.h
     modbuswriteparams.h
     numericutils.h
+    qadjustedsizedialog.h
     qfixedsizedialog.h
     qhexvalidator.h
     qint64validator.h

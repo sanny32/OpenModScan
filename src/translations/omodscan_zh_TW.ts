@@ -825,7 +825,7 @@
         <translation type="vanished">16：強制多個暫存器的值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="28"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="159"/>
         <source>Set Values to</source>
         <translation>將值設為</translation>
     </message>
@@ -834,19 +834,26 @@
         <translation type="vanished">從裝置： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="70"/>
         <source>Length: </source>
-        <translation>長度： </translation>
+        <translation type="vanished">長度： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="100"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="81"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="104"/>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Set Random Values</source>
-        <translation>設置隨機值</translation>
+        <translation type="vanished">設置隨機值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="87"/>
         <source>Set Values to 0</source>
-        <translation>將值設置為 0</translation>
+        <translation type="vanished">將值設置為 0</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
@@ -854,29 +861,100 @@
         <translation>16: 寫入多個暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="56"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="40"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="47"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="126"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="139"/>
+        <source>Random</source>
+        <translation type="unfinished">隨機</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="349"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Device Id: </source>
-        <translation>裝置地址： </translation>
+        <translation type="vanished">裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="63"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="27"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">地址：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="28"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>長度：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">長度：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="29"/>
         <source>Device Id: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>裝置地址： &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">裝置地址： &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="634"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="715"/>
+        <source>CSV files (*.csv)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="641"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="726"/>
+        <source>Error</source>
+        <translation type="unfinished">錯誤</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="682"/>
+        <source>Import error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="682"/>
+        <source>Invalid value: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="691"/>
+        <source>No data found in file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="691"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation type="obsolete">地址</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="obsolete">狀態</translation>
     </message>
     <message>
         <source>Slave Device: &lt;b&gt;%1&lt;/b&gt;</source>

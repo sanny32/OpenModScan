@@ -34,6 +34,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
     recolorButtonIcon(ui->pushButtonExport, Qt::red);
     recolorButtonIcon(ui->pushButtonImport, Qt::darkGreen);
+    recolorButtonIcon(ui->pushButtonValue, Qt::darkMagenta);
 
     switch(_writeParams.DisplayMode)
     {

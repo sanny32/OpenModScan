@@ -55,5 +55,8 @@
         <file>res/iconSimulation64bit.png</file>
         <file>res/icon-export.svg</file>
         <file>res/icon-import.svg</file>
+        <file>res/icon-random.svg</file>
+        <file>res/icon-reset.svg</file>
+        <file>res/icon-constant.svg</file>
     </qresource>
 </RCC>

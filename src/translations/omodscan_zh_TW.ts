@@ -825,9 +825,8 @@
         <translation type="vanished">16：強制多個暫存器的值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="159"/>
         <source>Set Values to</source>
-        <translation>將值設為</translation>
+        <translation type="vanished">將值設為</translation>
     </message>
     <message>
         <source>Slave Device: </source>
@@ -881,12 +880,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="139"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="143"/>
         <source>Random</source>
         <translation type="unfinished">隨機</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="349"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="167"/>
+        <source>Constant Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="361"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -911,40 +915,40 @@
         <translation type="vanished">裝置地址： &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="634"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="715"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="635"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="716"/>
         <source>CSV files (*.csv)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="641"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="726"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="642"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="727"/>
         <source>Error</source>
         <translation type="unfinished">錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="682"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="683"/>
         <source>Import error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="682"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="683"/>
         <source>Invalid value: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="691"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="692"/>
         <source>No data found in file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="691"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="692"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="698"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="698"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation type="unfinished"></translation>
     </message>

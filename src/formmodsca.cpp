@@ -938,11 +938,6 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
     const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
-    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
-    const auto pointType = ui->comboBoxModbusPointType->currentPointType();
-    const auto zeroBasedAddress = dd.ZeroBasedAddress;
-    const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
-    auto simParams = _dataSimulator->simulationParams(deviceId, pointType, simAddr);
 
     switch(dd.PointType)
     {
@@ -959,19 +954,11 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.ZeroBasedAddress = dd.ZeroBasedAddress;
             params.LeadingZeros = dd.LeadingZeros;
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
+            params.Client = &_modbusClient;
 
-            DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);
-            switch(dlg.exec())
-            {
-                case QDialog::Accepted:
-                    _modbusClient.writeRegister(dd.PointType, params, _formId);
-                break;
-
-                case 2:
-                    if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
-                    else _dataSimulator->startSimulation(deviceId, pointType, simAddr, simParams);
-                break;
-            }
+            DialogWriteCoilRegister dlg(params, displayHexAddresses(), _dataSimulator, _parent);
+            if(dlg.exec() == QDialog::Accepted)
+                _modbusClient.writeRegister(dd.PointType, params, _formId);
         }
         break;
 
@@ -988,6 +975,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.ZeroBasedAddress = dd.ZeroBasedAddress;
             params.LeadingZeros = dd.LeadingZeros;
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
+            params.Client = &_modbusClient;
 
             if(mode == DataDisplayMode::Binary)
             {
@@ -997,22 +985,9 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             }
             else
             {
-                if(!_dataSimulator->canStartSimulation(mode, deviceId, pointType, simAddr)) {
-                    simParams.Mode = SimulationMode::Disabled;
-                }
-
-                DialogWriteHoldingRegister dlg(params, simParams, displayHexAddresses(), _parent);
-                switch(dlg.exec())
-                {
-                    case QDialog::Accepted:
-                        _modbusClient.writeRegister(dd.PointType, params, _formId);
-                    break;
-
-                    case 2:
-                        if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
-                        else _dataSimulator->startSimulation(deviceId, pointType, simAddr, simParams);
-                    break;
-                }
+                DialogWriteHoldingRegister dlg(params, displayHexAddresses(), _dataSimulator, _parent);
+                if(dlg.exec() == QDialog::Accepted)
+                    _modbusClient.writeRegister(dd.PointType, params, _formId);
             }
         }
         break;

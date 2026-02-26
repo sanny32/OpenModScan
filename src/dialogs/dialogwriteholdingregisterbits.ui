@@ -86,7 +86,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="CheckableGroupBox" name="groupBox">
      <property name="title">
       <string>Bit Pattern</string>
      </property>
@@ -134,6 +134,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>CheckableGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>checkablegroupbox.h</header>
+  </customwidget>
   <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>

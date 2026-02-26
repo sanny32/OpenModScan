@@ -860,7 +860,7 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
 
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
-    params.Address = _lastWriteSingleCoilAddress;
+    params.Address = _lastWriteSingleCoilAddress + (dd.ZeroBasedAddress ? 0 : 1);
     params.Value = value;
     params.DisplayMode = mode;
     params.AddrSpace = dd.AddrSpace;
@@ -869,14 +869,13 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
+    params.Client = &_modbusClient;
 
-    auto simParams = _dataSimulator->simulationParams(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
-
-    DialogWriteCoilRegister dlg(params, simParams, frm->displayHexAddresses(), this);
+    DialogWriteCoilRegister dlg(params, frm->displayHexAddresses(), _dataSimulator, this);
 
     if(dlg.exec() == QDialog::Accepted)
     {
-        _lastWriteSingleCoilAddress = params.Address;
+        _lastWriteSingleCoilAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
         _modbusClient.writeRegister(QModbusDataUnit::Coils, params, frm->formId());
     }
 }
@@ -909,7 +908,7 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
 
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
-    params.Address = _lastWriteHoldingRegisterAddress;
+    params.Address = _lastWriteHoldingRegisterAddress + (dd.ZeroBasedAddress ? 0 : 1);
     params.Value = value;
     params.DisplayMode = mode;
     params.AddrSpace = dd.AddrSpace;
@@ -918,14 +917,12 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
+    params.Client = &_modbusClient;
 
-    auto simParams = _dataSimulator->simulationParams(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
-
-    DialogWriteHoldingRegister dlg(params, simParams, frm->displayHexAddresses(), this);
-
+    DialogWriteHoldingRegister dlg(params, frm->displayHexAddresses(), _dataSimulator, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _lastWriteHoldingRegisterAddress = params.Address;
+        _lastWriteHoldingRegisterAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
         _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, frm->formId());
     }
 }
@@ -950,7 +947,7 @@ void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
 
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
-    params.Address = _lastWriteHoldingRegisterBitsAddress;
+    params.Address = _lastWriteHoldingRegisterBitsAddress + (dd.ZeroBasedAddress ? 0 : 1);
     params.Value = value;
     params.DisplayMode = mode;
     params.AddrSpace = dd.AddrSpace;
@@ -962,10 +959,9 @@ void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
     params.Client = &_modbusClient;
 
     DialogWriteHoldingRegisterBits dlg(params, frm->displayHexAddresses(), this);
-
     if(dlg.exec() == QDialog::Accepted)
     {
-        _lastWriteHoldingRegisterBitsAddress = params.Address;
+        _lastWriteHoldingRegisterBitsAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
         _modbusClient.writeRegister(dd.PointType, params, frm->formId());
     }
 }
@@ -1056,12 +1052,12 @@ void MainWindow::on_actionMaskWrite_triggered()
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    ModbusMaskWriteParams params = { dd.DeviceId, _lastMaskWriteRegisterAddress, 0xFFFF, 0, dd.ZeroBasedAddress, dd.LeadingZeros };
+    ModbusMaskWriteParams params = { dd.DeviceId, _lastMaskWriteRegisterAddress + (dd.ZeroBasedAddress ? 0 : 1), 0xFFFF, 0, dd.ZeroBasedAddress, dd.LeadingZeros };
 
     DialogMaskWriteRegiter dlg(params, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _lastMaskWriteRegisterAddress = params.Address;
+        _lastMaskWriteRegisterAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
         _modbusClient.maskWriteRegister(params, 0);
     }
 }

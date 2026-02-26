@@ -20,9 +20,10 @@ public:
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant& value);
+    void on_lineEditNode_valueChanged(const QVariant& value);
 
 private:
-    void setValue(const quint16 value);
+    void readValue(int address, int deviceId);
 
 private:
     Ui::DialogWriteHoldingRegisterBits *ui;

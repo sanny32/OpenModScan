@@ -175,6 +175,7 @@ private:
     QString _savePath;
     QString _profile;
 
+    // addressed with Base0
     quint32 _lastWriteSingleCoilAddress = 0;
     quint32 _lastWriteHoldingRegisterAddress = 0;
     quint32 _lastWriteHoldingRegisterBitsAddress = 0;

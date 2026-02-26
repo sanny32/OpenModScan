@@ -1056,22 +1056,22 @@
         <translation type="vanished">節點： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="31"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="28"/>
         <source>Device Id: </source>
         <translation>裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="60"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="57"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="94"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="91"/>
         <source>AND Mask</source>
         <translation>與遮罩</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="426"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="137"/>
         <source>OR Mask</source>
         <translation>或遮罩</translation>
     </message>
@@ -1789,6 +1789,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="133"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="89"/>
         <source>Auto Simulation: OFF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1797,13 +1798,13 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">自動模擬</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="20"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="26"/>
         <source>15: Write Single Coil</source>
         <translation>15: 寫入單線圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="38"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="46"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="83"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="95"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1840,6 +1841,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="151"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="214"/>
         <source>Auto Simulation: OFF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1853,23 +1855,23 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">自動模擬</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="54"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="58"/>
         <source>16: Write Holding Register</source>
         <translation>16: 寫入保持暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="69"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="78"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="208"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="221"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="118"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="98"/>
         <source>Value, (HEX): </source>
         <translation>值（十六進制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="125"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="105"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1905,7 +1907,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>位模式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.cpp" line="22"/>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.cpp" line="31"/>
         <source>16: Write Holding Register Bits</source>
         <translation>16: 寫入保持暫存器位</translation>
     </message>
@@ -2623,17 +2625,17 @@ Valid Slave Responses: %2</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1397"/>
+        <location filename="../mainwindow.cpp" line="1393"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1398"/>
+        <location filename="../mainwindow.cpp" line="1394"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1494"/>
+        <location filename="../mainwindow.cpp" line="1490"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕獲錯誤：

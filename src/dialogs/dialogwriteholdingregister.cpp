@@ -1,5 +1,8 @@
 #include <float.h>
 #include "modbuslimits.h"
+#include "modbusclient.h"
+#include "waitcursor.h"
+#include "datasimulator.h"
 #include "dialogautosimulation.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
@@ -24,29 +27,30 @@ static SimButtonColors simColors(DataDisplayMode mode)
 {
     switch(registersCount(mode))
     {
-    case 2:
-        return { "#5680D0", "#4E75C0", "#466AB0", "#3E5FA0" };
+        case 2:
+            return { "#5680D0", "#4E75C0", "#466AB0", "#3E5FA0" };
 
-    case 4:
-        return { "#D74D9D", "#C9458F", "#BB3D81", "#A73573" };
+        case 4:
+            return { "#D74D9D", "#C9458F", "#BB3D81", "#A73573" };
 
-    default:
-        return { "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" };
+        default:
+            return { "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" };
     }
 }
 
 ///
 /// \brief DialogWriteHoldingRegister::DialogWriteHoldingRegister
 /// \param params
-/// \param simParams
-/// \param mode
+/// \param hexAddress
+/// \param dataSimulator
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget* parent) :
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, bool hexAddress,
+                                                       DataSimulator* dataSimulator, QWidget* parent) :
       QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
     ,_writeParams(params)
-    ,_simParams(simParams)
+    ,_dataSimulator(dataSimulator)
 {
     ui->setupUi(this);
 
@@ -63,39 +67,15 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
 
-    switch(simParams.Mode)
+    if(_dataSimulator != nullptr)
     {
-        case SimulationMode::Disabled:
-            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setEnabled(false);
-        break;
-
-        case SimulationMode::Off:
-        break;
-
-        default:
-        {
-            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-
-            const auto c = simColors(simParams.DataMode);
-            ui->pushButtonSimulation->setStyleSheet(QString(R"(
-                    QPushButton {
-                        color: white;
-                        padding: 4px 12px;
-                        background-color: %1;
-                        border: 1px solid %2;
-                        border-radius: 4px;
-                    }
-                    QPushButton:hover {
-                        background-color: %3;
-                    }
-                    QPushButton:pressed {
-                        background-color: %4;
-                    }
-                )").arg(c.base, c.border, c.hover, c.pressed));
+        const int simAddr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(params.DeviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        if(!_dataSimulator->canStartSimulation(params.DisplayMode, params.DeviceId, QModbusDataUnit::HoldingRegisters, simAddr)) {
+            _simParams.Mode = SimulationMode::Disabled;
         }
-        break;
     }
+    updateSimulationButton();
 
     switch(params.DisplayMode)
     {
@@ -217,10 +197,119 @@ void DialogWriteHoldingRegister::accept()
 }
 
 ///
+/// \brief DialogWriteHoldingRegister::updateSimulationButton
+///
+void DialogWriteHoldingRegister::updateSimulationButton()
+{
+    switch(_simParams.Mode)
+    {
+        case SimulationMode::Disabled:
+            ui->pushButtonSimulation->setEnabled(false);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+        break;
+
+        case SimulationMode::Off:
+            ui->pushButtonSimulation->setEnabled(true);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
+            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+        break;
+
+        default:
+        {
+            ui->pushButtonSimulation->setEnabled(true);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+
+            const auto c = simColors(_simParams.DataMode);
+            ui->pushButtonSimulation->setStyleSheet(QString(R"(
+                    QPushButton {
+                        color: white;
+                        padding: 4px 12px;
+                        background-color: %1;
+                        border: 1px solid %2;
+                        border-radius: 4px;
+                    }
+                    QPushButton:hover {
+                        background-color: %3;
+                    }
+                    QPushButton:pressed {
+                        background-color: %4;
+                    }
+                )").arg(c.base, c.border, c.hover, c.pressed));
+        }
+        break;
+    }
+}
+
+///
+/// \brief DialogWriteHoldingRegister::updateValue
+///
+void DialogWriteHoldingRegister::updateValue()
+{
+    ModbusClient* cli = _writeParams.Client;
+    if(cli == nullptr || cli->state() != ModbusDevice::ConnectedState) return;
+
+    WaitCursor wait(this);
+    const quint8 deviceId = ui->lineEditNode->value<int>();
+    const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+    const quint16 rawValue = cli->syncReadRegister(QModbusDataUnit::HoldingRegisters, simAddr, deviceId);
+    ui->lineEditValue->setValue(rawValue);
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_lineEditAddress_valueChanged
+/// \param value
+///
+void DialogWriteHoldingRegister::on_lineEditAddress_valueChanged(const QVariant& value)
+{
+    if(_dataSimulator != nullptr)
+    {
+        const quint8 deviceId = ui->lineEditNode->value<int>();
+        const int simAddr = value.toInt() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(deviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        if(!_dataSimulator->canStartSimulation(_writeParams.DisplayMode, deviceId, QModbusDataUnit::HoldingRegisters, simAddr)) {
+            _simParams.Mode = SimulationMode::Disabled;
+        }
+        updateSimulationButton();
+    }
+    updateValue();
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_lineEditNode_valueChanged
+/// \param value
+///
+void DialogWriteHoldingRegister::on_lineEditNode_valueChanged(const QVariant& value)
+{
+    if(_dataSimulator != nullptr)
+    {
+        const quint8 deviceId = value.toUInt();
+        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(deviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        if(!_dataSimulator->canStartSimulation(_writeParams.DisplayMode, deviceId, QModbusDataUnit::HoldingRegisters, simAddr)) {
+            _simParams.Mode = SimulationMode::Disabled;
+        }
+        updateSimulationButton();
+    }
+    updateValue();
+}
+
+///
 /// \brief DialogWriteHoldingRegister::on_pushButtonSimulation_clicked
 ///
 void DialogWriteHoldingRegister::on_pushButtonSimulation_clicked()
 {
+    if(_dataSimulator == nullptr) return;
+
     DialogAutoSimulation dlg(_writeParams.DisplayMode, _simParams, this);
-    if(dlg.exec() == QDialog::Accepted) done(2);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        const quint8 deviceId = ui->lineEditNode->value<int>();
+        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        if(_simParams.Mode == SimulationMode::Off)
+            _dataSimulator->stopSimulation(deviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        else
+            _dataSimulator->startSimulation(deviceId, QModbusDataUnit::HoldingRegisters, simAddr, _simParams);
+        done(2);
+    }
 }

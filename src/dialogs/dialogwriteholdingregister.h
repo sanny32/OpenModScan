@@ -6,6 +6,8 @@
 #include "modbussimulationparams.h"
 #include "qfixedsizedialog.h"
 
+class DataSimulator;
+
 namespace Ui {
 class DialogWriteHoldingRegister;
 }
@@ -18,20 +20,29 @@ class DialogWriteHoldingRegister : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteHoldingRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogWriteHoldingRegister(ModbusWriteParams& params, bool hexAddress,
+                                        DataSimulator* dataSimulator = nullptr,
+                                        QWidget *parent = nullptr);
     ~DialogWriteHoldingRegister();
 
     void accept() override;
 
 private slots:
     void on_pushButtonSimulation_clicked();
+    void on_lineEditAddress_valueChanged(const QVariant& value);
+    void on_lineEditNode_valueChanged(const QVariant& value);
+
+private:
+    void updateSimulationButton();
+    void updateValue();
 
 private:
     Ui::DialogWriteHoldingRegister *ui;
 
 private:
     ModbusWriteParams& _writeParams;
-    ModbusSimulationParams& _simParams;
+    ModbusSimulationParams _simParams;
+    DataSimulator* _dataSimulator;
 };
 
 #endif // DIALOGWRITEHOLDINGREGISTER_H

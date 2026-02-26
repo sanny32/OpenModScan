@@ -41,7 +41,7 @@ private slots:
     void on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode funcCode);
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
-    void on_lineEditIPAddressFrom_editingFinished();
+    void on_comboBoxIPAddressFrom_currentTextChanged(const QString& text);
     void on_lineEditSubnetMask_editingFinished();
     void on_pushButtonScan_clicked();
     void on_pushButtonClear_clicked();

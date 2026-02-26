@@ -739,7 +739,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="IpAddressLineEdit" name="lineEditIPAddressFrom">
+           <widget class="QComboBox" name="comboBoxIPAddressFrom">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -754,9 +754,12 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>120</width>
+              <width>140</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

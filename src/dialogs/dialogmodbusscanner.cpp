@@ -4,6 +4,7 @@
 #include <QHostInfo>
 #include <QNetworkInterface>
 #include <QAbstractEventDispatcher>
+#include <QRegularExpressionValidator>
 #include "modbuslimits.h"
 #include "serialportutils.h"
 #include "modbusrtuscanner.h"
@@ -44,6 +45,18 @@ inline QString Parity_toString(QSerialPort::Parity parity)
 }
 
 ///
+/// \brief cidrToMask
+/// \param prefix
+/// \return
+///
+static QHostAddress cidrToMask(int prefix)
+{
+    if(prefix <= 0) return QHostAddress(quint32(0));
+    if(prefix >= 32) return QHostAddress(quint32(0xFFFFFFFF));
+    return QHostAddress(quint32(0xFFFFFFFF << (32 - prefix)));
+}
+
+///
 /// \brief DialogModbusScanner::DialogModbusScanner
 /// \param hexAddress
 /// \param parent
@@ -62,22 +75,35 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
 
     ui->comboBoxSerial->addItems(getAvailableSerialPorts());
 
+    const QString ipRange = "(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])";
+    const QString ipPattern = ipRange + "(\\." + ipRange + ")" + "(\\." + ipRange + ")" + "(\\." + ipRange + ")";
+    const QString cidrPattern = "\\/([0-9]|[12][0-9]|3[0-2])";
+    const QRegularExpression maskReg("^(?:" + ipPattern + "|" + cidrPattern + ")$");
+    ui->lineEditSubnetMask->setValidator(new QRegularExpressionValidator(maskReg, this));
+
     QHostAddress address, mask;
     for(auto&& eth : QNetworkInterface::allInterfaces()) {
         if((eth.flags() & QNetworkInterface::IsRunning) && !(eth.flags() & QNetworkInterface::IsLoopBack)){
             for (auto&& entry : eth.addressEntries()) {
                 if(entry.ip().protocol() == QAbstractSocket::IPv4Protocol){
-                    address = entry.ip();
-                    mask = entry.netmask();
-                    break;
+                    const auto a = entry.ip().toIPv4Address();
+                    const auto m = entry.netmask().toIPv4Address();
+                    ui->comboBoxIPAddressFrom->addItem(QHostAddress((a & m) + 1).toString());
+                    if(address.isNull()) {
+                        address = entry.ip();
+                        mask = entry.netmask();
+                    }
                 }
             }
         }
     }
 
-    ui->lineEditIPAddressFrom->setValue(address);
-    ui->lineEditIPAddressTo->setValue(address);
     ui->lineEditSubnetMask->setValue(mask);
+
+    const auto addr = address.toIPv4Address();
+    const auto msk = mask.toIPv4Address();
+    ui->comboBoxIPAddressFrom->setCurrentText(QHostAddress((addr & msk) + 1).toString());
+    ui->lineEditIPAddressTo->setValue((addr | ~msk) - 1);
 
     ui->comboBoxFunction->addItem(QModbusPdu::ReadCoils);
     ui->comboBoxFunction->addItem(QModbusPdu::ReadDiscreteInputs);
@@ -249,11 +275,11 @@ void DialogModbusScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 }
 
 ///
-/// \brief DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished
+/// \brief DialogModbusScanner::on_comboBoxIPAddressFrom_currentTextChanged
 ///
-void DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished()
+void DialogModbusScanner::on_comboBoxIPAddressFrom_currentTextChanged(const QString& text)
 {
-    const auto address = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    const auto address = QHostAddress(text).toIPv4Address();
     if(address == 0) return;
 
     const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
@@ -267,13 +293,24 @@ void DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished()
 ///
 void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
 {
-    const auto address = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    const auto maskText = ui->lineEditSubnetMask->text().trimmed();
+    if(maskText.startsWith('/'))
+    {
+        bool ok = false;
+        const int prefix = maskText.mid(1).toInt(&ok);
+        if(ok && prefix >= 0 && prefix <= 32) {
+            ui->lineEditSubnetMask->setValue(cidrToMask(prefix));
+        }
+        return;
+    }
+
+    const auto address = QHostAddress(ui->comboBoxIPAddressFrom->currentText()).toIPv4Address();
     if(address == 0) return;
 
     const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
     if(mask == 0) return;
 
-    ui->lineEditIPAddressFrom->setValue((address & mask) + 1);
+    ui->comboBoxIPAddressFrom->setCurrentText(QHostAddress((address & mask) + 1).toString());
     ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
 }
 
@@ -527,7 +564,7 @@ const ScanParams DialogModbusScanner::createTcpParams(TransmissionMode mode) con
     ScanParams params;
 
     const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
-    auto addressFrom = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    auto addressFrom = QHostAddress(ui->comboBoxIPAddressFrom->currentText()).toIPv4Address();
     auto addressTo = ui->lineEditIPAddressTo->value().toIPv4Address();
 
     if(addressFrom == 0 || addressTo == 0)

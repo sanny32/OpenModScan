@@ -1056,24 +1056,32 @@
         <translation type="vanished">節點： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="28"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="23"/>
         <source>Device Id: </source>
         <translation>裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="57"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="52"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="91"/>
-        <source>AND Mask</source>
-        <translation>與遮罩</translation>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="151"/>
+        <source>AND Mask:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="137"/>
+        <location filename="../dialogs/dialogmaskwriteregiter.ui" line="158"/>
+        <source>OR Mask:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AND Mask</source>
+        <translation type="vanished">與遮罩</translation>
+    </message>
+    <message>
         <source>OR Mask</source>
-        <translation>或遮罩</translation>
+        <translation type="vanished">或遮罩</translation>
     </message>
 </context>
 <context>
@@ -2621,17 +2629,17 @@ Valid Slave Responses: %2</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1349"/>
+        <location filename="../mainwindow.cpp" line="1375"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1350"/>
+        <location filename="../mainwindow.cpp" line="1376"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1446"/>
+        <location filename="../mainwindow.cpp" line="1472"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕獲錯誤：

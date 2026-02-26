@@ -94,6 +94,7 @@ set(SOURCES
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
     controls/bitpatterncontrol.cpp
+    controls/checkablegroupbox.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/byteordercombobox.cpp
@@ -173,6 +174,7 @@ set(HEADERS
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
     controls/bitpatterncontrol.h
+    controls/checkablegroupbox.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/byteordercombobox.h

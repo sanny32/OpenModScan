@@ -3,6 +3,8 @@
 
 #include "qfixedsizedialog.h"
 #include "modbuswriteparams.h"
+#include "checkablegroupbox.h"
+#include "bitpatterncontrol.h"
 
 namespace Ui {
 class DialogMaskWriteRegiter;

@@ -2,7 +2,7 @@
 #define DIALOGUSERMSG_H
 
 #include <QModbusRequest>
-#include <QDialog>
+#include "qadjustedsizedialog.h"
 #include "modbusclient.h"
 #include "modbusmessage.h"
 #include "displaydefinition.h"
@@ -12,7 +12,7 @@ namespace Ui {
 class DialogUserMsg;
 }
 
-class DialogUserMsg : public QDialog
+class DialogUserMsg : public QAdjustedSizeDialog
 {
     Q_OBJECT
 

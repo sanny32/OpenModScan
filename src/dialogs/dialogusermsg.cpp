@@ -15,15 +15,11 @@
 /// \param parent
 ///
 DialogUserMsg::DialogUserMsg(const DisplayDefinition& dd, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
-    : QDialog(parent)
+    : QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogUserMsg)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
-
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
 
     ui->lineEditSlaveAddress->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());

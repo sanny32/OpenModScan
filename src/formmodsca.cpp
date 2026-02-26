@@ -957,6 +957,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.Order = byteOrder();
             params.Codepage = codepage();
             params.ZeroBasedAddress = dd.ZeroBasedAddress;
+            params.LeadingZeros = dd.LeadingZeros;
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
 
             DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);

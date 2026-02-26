@@ -228,6 +228,54 @@ quint16 ModbusClient::syncReadRegister(QModbusDataUnit::RegisterType pointType, 
 }
 
 ///
+/// \brief ModbusClient::syncReadRegisters
+/// \param pointType
+/// \param address
+/// \param count
+/// \param server
+/// \return
+///
+QVector<quint16> ModbusClient::syncReadRegisters(QModbusDataUnit::RegisterType pointType, int address, int count, int server)
+{
+    if(_modbusClient == nullptr || state() != ModbusDevice::ConnectedState)
+    {
+        return {};
+    }
+
+    const QModbusDataUnit dataUnit(pointType, address, count);
+    const auto request = createReadRequest(dataUnit);
+    if(!request.isValid()) return {};
+
+    auto reply = _modbusClient->sendReadRequest(dataUnit, server);
+    if(!reply) return {};
+
+    QEventLoop loop;
+    QTimer timer;
+
+    QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    QObject::connect(reply, &ModbusReply::finished, &loop, &QEventLoop::quit);
+
+    timer.setSingleShot(true);
+    timer.start(timeout());
+
+    loop.exec();
+    if (!timer.isActive())
+    {
+        reply->deleteLater();
+        return {};
+    }
+
+    const auto result = reply->result();
+    reply->deleteLater();
+
+    QVector<quint16> values;
+    for(int i = 0; i < count; i++)
+        values.append(result.value(i));
+
+    return values;
+}
+
+///
 /// \brief createWriteRequest
 /// \param data
 /// \param useMultipleWriteFunc

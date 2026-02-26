@@ -276,6 +276,7 @@ set(HEADERS
     recentfileactionlist.h
     serialportutils.h
     tscrollarea.h
+    uiutils.h
     waitcursor.h
     windowactionlist.h
 )

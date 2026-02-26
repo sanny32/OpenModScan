@@ -22,6 +22,9 @@ public:
 private slots:
     void on_pushButton0_clicked();
     void on_pushButton1_clicked();
+    void on_pushButtonRandom_clicked();
+    void on_pushButtonImport_clicked();
+    void on_pushButtonExport_clicked();
     void on_tableWidget_itemDoubleClicked(QTableWidgetItem *item);
 
 private:

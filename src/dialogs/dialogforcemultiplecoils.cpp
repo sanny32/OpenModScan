@@ -1,5 +1,10 @@
 #include <QtMath>
+#include <QFile>
+#include <QFileDialog>
 #include <QLineEdit>
+#include <QMessageBox>
+#include <QRandomGenerator>
+#include "uiutils.h"
 #include "formatutils.h"
 #include "dialogforcemultiplecoils.h"
 #include "ui_dialogforcemultiplecoils.h"
@@ -18,19 +23,21 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, in
     ,_hexAddress(hexAddress)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress)));
-    ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
-    ui->labelSlaveDevice->setText(QString(tr("Device Id: <b>%1</b>")).arg(params.DeviceId, 3, 10, QLatin1Char('0')));
+    ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress)));
+    ui->labelLength->setText(QString(ui->labelLength->text()).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(params.DeviceId, 3, 10, QLatin1Char('0')));
+    ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
+        formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress),
+        formatAddress(QModbusDataUnit::Coils, params.Address + length - 1, params.AddrSpace, _hexAddress)));
+
+    recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
+    recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
 
     updateTableWidget();
-    adjustSize();
 }
 
 ///
@@ -74,6 +81,128 @@ void DialogForceMultipleCoils::on_pushButton1_clicked()
     }
 
     updateTableWidget();
+}
+
+///
+/// \brief DialogForceMultipleCoils::on_pushButtonRandom_clicked
+///
+void DialogForceMultipleCoils::on_pushButtonRandom_clicked()
+{
+    for(auto& v : _data)
+    {
+        v = (QRandomGenerator::global()->bounded(0, 2) != 0);
+    }
+
+    updateTableWidget();
+}
+
+///
+/// \brief DialogForceMultipleCoils::on_pushButtonImport_clicked
+///
+void DialogForceMultipleCoils::on_pushButtonImport_clicked()
+{
+    auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("CSV files (*.csv)"));
+    if(filename.isEmpty())
+        return;
+
+    QFile file(filename);
+    if(!file.open(QFile::ReadOnly))
+    {
+        QMessageBox::critical(this, tr("Error"), file.errorString());
+        return;
+    }
+
+    QTextStream ts(&file);
+
+    QVector<quint16> newData;
+    bool headerSkipped = false;
+
+    while(!ts.atEnd())
+    {
+        QString line = ts.readLine().trimmed();
+        if(line.isEmpty()) {
+            continue;
+        }
+
+        if(!headerSkipped)
+        {
+            headerSkipped = true;
+            continue;
+        }
+
+        const QStringList parts = line.split(";");
+        if(parts.size() < 2) {
+            continue;
+        }
+
+        const auto valueStr = parts[1].trimmed();
+
+        bool ok = false;
+        const quint16 value = (valueStr.toUShort(&ok, 10) != 0);
+
+        if(!ok)
+        {
+            QMessageBox::warning(this, tr("Import error"), tr("Invalid value: %1").arg(valueStr));
+            return;
+        }
+
+        newData.append(value);
+    }
+
+    if(newData.isEmpty())
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("No data found in file."));
+        return;
+    }
+
+    if(newData.size() != _data.size())
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("Imported data size (%1) does not match current size (%2).").arg(newData.size()).arg(_data.size()));
+    }
+
+    for(int i = 0; i < _data.size(); ++i) {
+        if(i < newData.size()) {
+            _data[i] = newData[i];
+        }
+    }
+
+    updateTableWidget();
+
+}
+
+///
+/// \brief DialogForceMultipleCoils::on_pushButtonExport_clicked
+///
+void DialogForceMultipleCoils::on_pushButtonExport_clicked()
+{
+    auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("CSV files (*.csv)"));
+    if(filename.isEmpty()) return;
+
+    if(!filename.endsWith(".csv", Qt::CaseInsensitive))
+    {
+        filename += ".csv";
+    }
+
+    QFile file(filename);
+    if(!file.open(QFile::WriteOnly))
+    {
+        QMessageBox::critical(this, tr("Error"), file.errorString());
+        return;
+    }
+
+    QTextStream ts(&file);
+    ts.setGenerateByteOrderMark(true);
+
+    const char* delim = ";";
+    ts << "Address" << delim << "Value" << "\n";
+
+    for(int i = 0; i < _data.size(); i++)
+    {
+        ts << formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress)
+        << delim
+        << QString::number(_data[i])
+        << "\n";
+    }
 }
 
 ///

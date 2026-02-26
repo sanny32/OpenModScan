@@ -771,52 +771,127 @@
         <translation>15: 写入多个线圈</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="47"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="81"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="104"/>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="126"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="143"/>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
+        <source>Random</source>
+        <translation type="unfinished">随机</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="226"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Slave Device: </source>
         <translation type="vanished">设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="43"/>
         <source>Device Id: </source>
-        <translation>设备地址： </translation>
+        <translation type="vanished">设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="50"/>
         <source>Address: </source>
-        <translation>寄存器地址： </translation>
+        <translation type="vanished">寄存器地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="74"/>
         <source>Set Values to 0</source>
-        <translation>将值设置为 0</translation>
+        <translation type="vanished">将值设置为 0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="81"/>
         <source>Set Values to 1</source>
-        <translation>将值设置为 1</translation>
+        <translation type="vanished">将值设置为 1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="60"/>
         <source>Length: </source>
-        <translation>长度： </translation>
+        <translation type="vanished">长度： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="25"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>寄存器地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">寄存器地址：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="26"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>长度：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">长度：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="27"/>
         <source>Device Id: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>设备地址： &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">设备地址： &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Slave Device: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="vanished">设备地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="104"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="178"/>
+        <source>CSV files (*.csv)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="111"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="189"/>
+        <source>Error</source>
+        <translation type="unfinished">错误</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
+        <source>Import error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
+        <source>Invalid value: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="154"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="160"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="154"/>
+        <source>No data found in file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="160"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -916,40 +991,40 @@
         <translation type="vanished">设备地址： &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="635"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="716"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="631"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="712"/>
         <source>CSV files (*.csv)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="642"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="727"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="638"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="723"/>
         <source>Error</source>
         <translation type="unfinished">错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="683"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Import error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="683"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Invalid value: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="692"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="688"/>
         <source>No data found in file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="692"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="698"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="688"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="694"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="698"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="694"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation type="unfinished"></translation>
     </message>

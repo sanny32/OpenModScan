@@ -61,7 +61,6 @@ private:
     void updateTableWidget();
     QLineEdit* createLineEdit();
     NumericLineEdit* createNumEdit(int idx);
-    void recolorButtonIcon(QPushButton* btn, const QColor& color);
 
 private:
     Ui::DialogForceMultipleRegisters *ui;

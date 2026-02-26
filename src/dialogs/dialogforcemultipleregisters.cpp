@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QRandomGenerator>
 #include <QFileDialog>
+#include "uiutils.h"
 #include "formatutils.h"
 #include "numericutils.h"
 #include "numericlineedit.h"
@@ -32,9 +33,9 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
         formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, params.AddrSpace, _hexAddress),
         formatAddress(QModbusDataUnit::HoldingRegisters, params.Address + length - 1, params.AddrSpace, _hexAddress)));
 
-    recolorButtonIcon(ui->pushButtonExport, Qt::red);
-    recolorButtonIcon(ui->pushButtonImport, Qt::darkGreen);
-    recolorButtonIcon(ui->pushButtonValue, Qt::darkMagenta);
+    recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
+    recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);
+    recolorPushButtonIcon(ui->pushButtonValue, Qt::darkMagenta);
 
     switch(_writeParams.DisplayMode)
     {
@@ -515,12 +516,7 @@ void DialogForceMultipleRegisters::accept()
 ///
 void DialogForceMultipleRegisters::on_pushButton0_clicked()
 {
-    for(auto& v : _data)
-    {
-        v = 0;
-    }
-
-    updateTableWidget();
+    applyToAll(ValueOperation::Set, 0);
 }
 
 ///
@@ -952,29 +948,3 @@ void DialogForceMultipleRegisters::updateTableWidget()
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
 
-///
-/// \brief DialogForceMultipleRegisters::recolorButtonIcon
-/// \param btn
-/// \param color
-///
-void DialogForceMultipleRegisters::recolorButtonIcon(QPushButton* btn, const QColor& color)
-{
-    if (!btn) return;
-
-    QIcon origIcon = btn->icon();
-    if (origIcon.isNull()) return;
-
-    QSize iconSize = btn->iconSize();
-    if (!iconSize.isValid())
-        iconSize = btn->size();
-
-    QPixmap pixmap = origIcon.pixmap(iconSize);
-    if (pixmap.isNull()) return;
-
-    QPainter painter(&pixmap);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
-    painter.fillRect(pixmap.rect(), color);
-    painter.end();
-
-    btn->setIcon(QIcon(pixmap));
-}

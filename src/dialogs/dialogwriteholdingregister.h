@@ -5,6 +5,8 @@
 #include "modbuswriteparams.h"
 #include "modbussimulationparams.h"
 #include "qfixedsizedialog.h"
+#include "checkablegroupbox.h"
+#include "bitpatterncontrol.h"
 
 class DataSimulator;
 

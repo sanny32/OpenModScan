@@ -142,7 +142,7 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QGroupBox" name="groupBoxBitPattern">
+    <widget class="CheckableGroupBox" name="groupBoxBitPattern">
      <property name="title">
       <string/>
      </property>
@@ -206,6 +206,12 @@
    <class>BitPatternControl</class>
    <extends>QWidget</extends>
    <header>bitpatterncontrol.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CheckableGroupBox</class>
+   <extends>QGroupBox</extends>
+   <header>checkablegroupbox.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

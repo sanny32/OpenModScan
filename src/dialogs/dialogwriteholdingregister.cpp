@@ -8,6 +8,14 @@
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
 
+namespace {
+    Qt::CheckState toCheckState(quint16 val) {
+        if (val == 0xFFFF) return Qt::Checked;
+        if (val == 0x0000) return Qt::Unchecked;
+        return Qt::PartiallyChecked;
+    }
+}
+
 ///
 /// \brief The SimButtonColors class
 ///
@@ -155,6 +163,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     if(ui->controlBitPattern->isEnabled())
     {
         ui->controlBitPattern->setValue(_writeParams.Value.toUInt());
+        ui->groupBoxBitPattern->setCheckState(toCheckState(_writeParams.Value.toUInt()));
 
         connect(ui->lineEditValue, QOverload<const QVariant&>::of(&NumericLineEdit::valueChanged), this, [this](const QVariant& value) {
             ui->controlBitPattern->setValue(value.toUInt());
@@ -162,6 +171,11 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
         connect(ui->controlBitPattern, &BitPatternControl::valueChanged, this, [this](quint16 value) {
             ui->lineEditValue->setValue(value);
+            ui->groupBoxBitPattern->setCheckState(toCheckState(value));
+        });
+
+        connect(ui->groupBoxBitPattern, &CheckableGroupBox::checkStateChanged, this, [this](Qt::CheckState state) {
+            ui->controlBitPattern->setValue(state == Qt::Checked ? 0xFFFF : 0x0000);
         });
     }
     else

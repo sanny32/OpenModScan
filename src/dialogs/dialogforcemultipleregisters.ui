@@ -343,7 +343,7 @@
       <bool>false</bool>
      </property>
      <property name="cornerButtonEnabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>false</bool>

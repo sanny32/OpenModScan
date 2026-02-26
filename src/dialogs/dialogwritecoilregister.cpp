@@ -37,10 +37,10 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
         case SimulationMode::Disabled:
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
             ui->pushButtonSimulation->setEnabled(false);
-            break;
+        break;
 
         case SimulationMode::Off:
-            break;
+        break;
 
         default:
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));

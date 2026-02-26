@@ -858,8 +858,6 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     const auto codepage = frm->codepage();
     const quint16 value = _modbusClient.syncReadRegister(QModbusDataUnit::Coils, _lastWriteSingleCoilAddress, dd.DeviceId);
 
-    ModbusSimulationParams simParams(SimulationMode::Disabled);
-
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
     params.Address = _lastWriteSingleCoilAddress;
@@ -871,6 +869,8 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
+
+    auto simParams = _dataSimulator->simulationParams(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
 
     DialogWriteCoilRegister dlg(params, simParams, frm->displayHexAddresses(), this);
 
@@ -907,8 +907,6 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     const auto codepage = frm->codepage();
     const quint16 value = _modbusClient.syncReadRegister(QModbusDataUnit::HoldingRegisters, _lastWriteHoldingRegisterAddress, dd.DeviceId);
 
-    ModbusSimulationParams simParams(SimulationMode::Disabled);
-
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
     params.Address = _lastWriteHoldingRegisterAddress;
@@ -920,6 +918,8 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
+
+    auto simParams = _dataSimulator->simulationParams(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
 
     DialogWriteHoldingRegister dlg(params, simParams, frm->displayHexAddresses(), this);
 

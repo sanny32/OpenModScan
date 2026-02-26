@@ -8,7 +8,6 @@
 #include "dialogconnectiondetails.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
-#include "dialogwriteholdingregisterbits.h"
 #include "dialogmaskwriteregiter.h"
 #include "dialogsetuppresetdata.h"
 #include "dialogforcemultiplecoils.h"
@@ -19,6 +18,7 @@
 #include "dialogmodbusscanner.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
+#include "numericutils.h"
 #include "mainstatusbar.h"
 #include "mainwindow.h"
 #include "waitcursor.h"
@@ -86,13 +86,6 @@ MainWindow::MainWindow(const QString& profile, QWidget *parent)
     connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
     ui->actionAnsi->setMenu(_ansiMenu);
     qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionAnsi))->setPopupMode(QToolButton::DelayedPopup);
-
-    _actionWriteHoldingRegister = ui->actionWriteHoldingRegisterValue;
-    auto menuWriteHoldingRegiters = new QMenu(this);
-    menuWriteHoldingRegiters->addAction(ui->actionWriteHoldingRegisterValue);
-    menuWriteHoldingRegiters->addAction(ui->actionWriteHoldingRegisterBits);
-    ui->actionWriteHoldingRegister->setMenu(menuWriteHoldingRegiters);
-    qobject_cast<QToolButton*>(ui->toolBarWrite->widgetForAction(ui->actionWriteHoldingRegister))->setPopupMode(QToolButton::DelayedPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -251,8 +244,6 @@ void MainWindow::on_awake()
 
     ui->actionWriteSingleCoil->setEnabled(state == ModbusDevice::ConnectedState);
     ui->actionWriteHoldingRegister->setEnabled(state == ModbusDevice::ConnectedState);
-    ui->actionWriteHoldingRegisterValue->setEnabled(state == ModbusDevice::ConnectedState);
-    ui->actionWriteHoldingRegisterBits->setEnabled(state == ModbusDevice::ConnectedState);
     ui->actionForceCoils->setEnabled(state == ModbusDevice::ConnectedState);
     ui->actionPresetRegs->setEnabled(state == ModbusDevice::ConnectedState);
     ui->actionMaskWrite->setEnabled(state == ModbusDevice::ConnectedState);
@@ -847,36 +838,39 @@ void MainWindow::on_actionHexAddresses_triggered()
 ///
 void MainWindow::on_actionWriteSingleCoil_triggered()
 {
-    WaitCursor wait(this);
+    int formId = 0;
+    DisplayDefinition dd;
+    ByteOrder byteOrder = ByteOrder::Direct;
+    bool hexAddresses = false;
 
     auto frm = currentMdiChild();
-    if(!frm) return;
+    if(frm)
+    {
+        formId = frm->formId();
+        dd = frm->displayDefinition();
+        byteOrder = frm->byteOrder();
+        hexAddresses = frm->displayHexAddresses();
+    }
 
-    const auto dd = frm->displayDefinition();
-    const auto mode = frm->dataDisplayMode();
-    const auto byteOrder = frm->byteOrder();
-    const auto codepage = frm->codepage();
+    WaitCursor wait(this);
     const quint16 value = _modbusClient.syncReadRegister(QModbusDataUnit::Coils, _lastWriteSingleCoilAddress, dd.DeviceId);
 
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
     params.Address = _lastWriteSingleCoilAddress + (dd.ZeroBasedAddress ? 0 : 1);
     params.Value = value;
-    params.DisplayMode = mode;
     params.AddrSpace = dd.AddrSpace;
     params.Order = byteOrder;
-    params.Codepage = codepage;
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
     params.LeadingZeros = dd.LeadingZeros;
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
     params.Client = &_modbusClient;
 
-    DialogWriteCoilRegister dlg(params, frm->displayHexAddresses(), _dataSimulator, this);
-
+    DialogWriteCoilRegister dlg(params, hexAddresses, _dataSimulator, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteSingleCoilAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
-        _modbusClient.writeRegister(QModbusDataUnit::Coils, params, frm->formId());
+        _modbusClient.writeRegister(QModbusDataUnit::Coils, params, formId);
     }
 }
 
@@ -885,31 +879,32 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
 ///
 void MainWindow::on_actionWriteHoldingRegister_triggered()
 {
-    _actionWriteHoldingRegister->trigger();
-}
-
-///
-/// \brief MainWindow::on_actionWriteHoldingRegisterValue_triggered
-///
-void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
-{
-    WaitCursor wait(this);
-
-    _actionWriteHoldingRegister = ui->actionWriteHoldingRegisterValue;
+    int formId = 0;
+    DisplayDefinition dd;
+    ByteOrder byteOrder = ByteOrder::Direct;
+    DataDisplayMode mode = DataDisplayMode::Hex;
+    QString codepage;
+    bool hexAddresses = false;
 
     auto frm = currentMdiChild();
-    if(!frm) return;
+    if(frm)
+    {
+        formId = frm->formId();
+        dd = frm->displayDefinition();
+        //mode = frm->dataDisplayMode();
+        byteOrder = frm->byteOrder();
+        codepage = frm->codepage();
+        hexAddresses = frm->displayHexAddresses();
+    }
 
-    const auto dd = frm->displayDefinition();
-    const auto mode = frm->dataDisplayMode();
-    const auto byteOrder = frm->byteOrder();
-    const auto codepage = frm->codepage();
-    const quint16 value = _modbusClient.syncReadRegister(QModbusDataUnit::HoldingRegisters, _lastWriteHoldingRegisterAddress, dd.DeviceId);
+    WaitCursor wait(this);
+    const int count = registersCount(mode);
+    const auto regs = _modbusClient.syncReadRegisters(QModbusDataUnit::HoldingRegisters, _lastWriteHoldingRegisterAddress, count, dd.DeviceId);
 
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
     params.Address = _lastWriteHoldingRegisterAddress + (dd.ZeroBasedAddress ? 0 : 1);
-    params.Value = value;
+    params.Value = makeValue(regs, mode, byteOrder);
     params.DisplayMode = mode;
     params.AddrSpace = dd.AddrSpace;
     params.Order = byteOrder;
@@ -919,50 +914,11 @@ void MainWindow::on_actionWriteHoldingRegisterValue_triggered()
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
     params.Client = &_modbusClient;
 
-    DialogWriteHoldingRegister dlg(params, frm->displayHexAddresses(), _dataSimulator, this);
+    DialogWriteHoldingRegister dlg(params, hexAddresses, _dataSimulator, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteHoldingRegisterAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
-        _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, frm->formId());
-    }
-}
-
-///
-/// \brief MainWindow::on_actionWriteHoldingRegisterBits_triggered
-///
-void MainWindow::on_actionWriteHoldingRegisterBits_triggered()
-{
-    WaitCursor wait(this);
-
-    _actionWriteHoldingRegister = ui->actionWriteHoldingRegisterBits;
-
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    const auto dd = frm->displayDefinition();
-    const auto mode = frm->dataDisplayMode();
-    const auto byteOrder = frm->byteOrder();
-    const auto codepage = frm->codepage();
-    const quint16 value = _modbusClient.syncReadRegister(dd.PointType, _lastWriteHoldingRegisterBitsAddress, dd.DeviceId);
-
-    ModbusWriteParams params;
-    params.DeviceId = dd.DeviceId;
-    params.Address = _lastWriteHoldingRegisterBitsAddress + (dd.ZeroBasedAddress ? 0 : 1);
-    params.Value = value;
-    params.DisplayMode = mode;
-    params.AddrSpace = dd.AddrSpace;
-    params.Order = byteOrder;
-    params.Codepage = codepage;
-    params.ZeroBasedAddress = dd.ZeroBasedAddress;
-    params.LeadingZeros = dd.LeadingZeros;
-    params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
-    params.Client = &_modbusClient;
-
-    DialogWriteHoldingRegisterBits dlg(params, frm->displayHexAddresses(), this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        _lastWriteHoldingRegisterBitsAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
-        _modbusClient.writeRegister(dd.PointType, params, frm->formId());
+        _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, formId);
     }
 }
 

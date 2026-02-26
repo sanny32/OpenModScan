@@ -974,28 +974,6 @@
     <string notr="true">中國人</string>
    </property>
   </action>
-  <action name="actionWriteHoldingRegisterValue">
-   <property name="text">
-    <string>Write Holding Register</string>
-   </property>
-   <property name="toolTip">
-    <string notr="true">06: Write Holding Register</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="actionWriteHoldingRegisterBits">
-   <property name="text">
-    <string>Write Holding Register Bits</string>
-   </property>
-   <property name="toolTip">
-    <string>06: Write Holding Register Bits</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
   <action name="actionWriteSingleCoil">
    <property name="icon">
     <iconset resource="resources.qrc">

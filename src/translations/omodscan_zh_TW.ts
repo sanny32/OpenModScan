@@ -1763,32 +1763,36 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">節點： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="28"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="23"/>
         <source>Device Id: </source>
         <translation>裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="35"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="52"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="91"/>
         <source>Value</source>
-        <translation>狀態</translation>
+        <translation type="vanished">狀態</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="110"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="84"/>
+        <source>Value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="108"/>
         <source>Off</source>
         <translation>關</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="117"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="115"/>
         <source>On</source>
         <translation>開</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="133"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="134"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="89"/>
         <source>Auto Simulation: OFF</source>
         <translation type="unfinished"></translation>
@@ -1825,28 +1829,28 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">節點： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="38"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="23"/>
         <source>Device Id: </source>
         <translation>裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="85"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="52"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="117"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="84"/>
         <source>Value: </source>
         <translation>值： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="151"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="214"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="118"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="213"/>
         <source>Auto Simulation: OFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="173"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="140"/>
         <source>Bit Pattern: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1855,23 +1859,23 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">自動模擬</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="58"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="59"/>
         <source>16: Write Holding Register</source>
         <translation>16: 寫入保持暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="208"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="221"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="207"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="220"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="98"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="97"/>
         <source>Value, (HEX): </source>
         <translation>值（十六進制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="105"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="104"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1883,33 +1887,28 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">寫入暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="14"/>
         <source>06: Write Holding Register Bits</source>
-        <translation>06: 寫入保持暫存器位</translation>
+        <translation type="vanished">06: 寫入保持暫存器位</translation>
     </message>
     <message>
         <source>Node: </source>
         <translation type="vanished">節點： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="28"/>
         <source>Device Id: </source>
-        <translation>裝置地址： </translation>
+        <translation type="vanished">裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="35"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="91"/>
         <source>Bit Pattern</source>
-        <translation>位模式</translation>
+        <translation type="vanished">位模式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.cpp" line="31"/>
         <source>16: Write Holding Register Bits</source>
-        <translation>16: 寫入保持暫存器位</translation>
+        <translation type="vanished">16: 寫入保持暫存器位</translation>
     </message>
 </context>
 <context>
@@ -1958,17 +1957,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>暫存器類型</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="76"/>
+        <location filename="../formmodsca.cpp" line="75"/>
         <source>Device polling paused...</source>
         <translation>設備輪詢已暫停...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="225"/>
+        <location filename="../formmodsca.cpp" line="224"/>
         <source>Data Uninitialized</source>
         <translation>數據未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="472"/>
+        <location filename="../formmodsca.cpp" line="471"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1977,7 +1976,7 @@ Length: %3</source>
 長度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="476"/>
+        <location filename="../formmodsca.cpp" line="475"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1986,29 +1985,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="479"/>
+        <location filename="../formmodsca.cpp" line="478"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>輪詢次數：%1
 有效的從站回應：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="687"/>
+        <location filename="../formmodsca.cpp" line="686"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="860"/>
+        <location filename="../formmodsca.cpp" line="859"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="653"/>
+        <location filename="../formmodsca.cpp" line="652"/>
         <source>No Responses from Slave Device</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="814"/>
+        <location filename="../formmodsca.cpp" line="813"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>
@@ -2156,7 +2155,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="290"/>
-        <location filename="../mainwindow.ui" line="1034"/>
+        <location filename="../mainwindow.ui" line="1012"/>
         <source>Write Bar</source>
         <translation>寫吧</translation>
     </message>
@@ -2427,48 +2426,45 @@ Valid Slave Responses: %2</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="979"/>
-        <location filename="../mainwindow.ui" line="1020"/>
+        <location filename="../mainwindow.ui" line="998"/>
         <source>Write Holding Register</source>
         <translation>寫入保持暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="990"/>
         <source>Write Holding Register Bits</source>
-        <translation>寫入保持暫存器位</translation>
+        <translation type="vanished">寫入保持暫存器位</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="993"/>
         <source>06: Write Holding Register Bits</source>
-        <translation>06：寫入保持暫存器位</translation>
+        <translation type="vanished">06：寫入保持暫存器位</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1005"/>
+        <location filename="../mainwindow.ui" line="983"/>
         <source>Write Single Coil</source>
         <translation>寫入單線圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1008"/>
+        <location filename="../mainwindow.ui" line="986"/>
         <source>05: Write Single Coil</source>
         <translation>05: 寫入單線圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1023"/>
+        <location filename="../mainwindow.ui" line="1001"/>
         <source>06: Write Holding Register</source>
         <translation>06: 寫入保持暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1042"/>
+        <location filename="../mainwindow.ui" line="1020"/>
         <source>Tabbed View</source>
         <translation>標籤頁視圖</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1047"/>
+        <location filename="../mainwindow.ui" line="1025"/>
         <source>Close All</source>
         <translation>關閉所有</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1050"/>
+        <location filename="../mainwindow.ui" line="1028"/>
         <source>Close All Windows</source>
         <translation>關閉所有視窗</translation>
     </message>
@@ -2607,35 +2603,35 @@ Valid Slave Responses: %2</source>
         <translation>地址掃描</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="475"/>
-        <location filename="../mainwindow.cpp" line="480"/>
-        <location filename="../mainwindow.cpp" line="588"/>
-        <location filename="../mainwindow.cpp" line="614"/>
+        <location filename="../mainwindow.cpp" line="391"/>
+        <location filename="../mainwindow.cpp" line="466"/>
+        <location filename="../mainwindow.cpp" line="471"/>
+        <location filename="../mainwindow.cpp" line="579"/>
+        <location filename="../mainwindow.cpp" line="605"/>
         <source>XML files (*.xml)</source>
         <translation>XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="401"/>
-        <location filename="../mainwindow.cpp" line="471"/>
-        <location filename="../mainwindow.cpp" line="481"/>
-        <location filename="../mainwindow.cpp" line="589"/>
-        <location filename="../mainwindow.cpp" line="615"/>
+        <location filename="../mainwindow.cpp" line="392"/>
+        <location filename="../mainwindow.cpp" line="462"/>
+        <location filename="../mainwindow.cpp" line="472"/>
+        <location filename="../mainwindow.cpp" line="580"/>
+        <location filename="../mainwindow.cpp" line="606"/>
         <source>All files (*)</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1393"/>
+        <location filename="../mainwindow.cpp" line="1349"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1394"/>
+        <location filename="../mainwindow.cpp" line="1350"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1490"/>
+        <location filename="../mainwindow.cpp" line="1446"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕獲錯誤：
@@ -2651,29 +2647,29 @@ Valid Slave Responses: %2</source>
         <translation>無效的 Modbus 要求</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="542"/>
-        <location filename="../modbusclient.cpp" line="727"/>
+        <location filename="../modbusclient.cpp" line="590"/>
+        <location filename="../modbusclient.cpp" line="775"/>
         <source>Coil Write Failure</source>
         <translation>線圈寫入失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="546"/>
-        <location filename="../modbusclient.cpp" line="732"/>
+        <location filename="../modbusclient.cpp" line="594"/>
+        <location filename="../modbusclient.cpp" line="780"/>
         <source>Register Write Failure</source>
         <translation>暫存器寫入失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="584"/>
+        <location filename="../modbusclient.cpp" line="632"/>
         <source>Mask Write Register Failure</source>
         <translation>暫存器寫入遮罩失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="736"/>
+        <location filename="../modbusclient.cpp" line="784"/>
         <source>Mask Register Write Failure</source>
         <translation>遮罩暫存器寫入失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="754"/>
+        <location filename="../modbusclient.cpp" line="802"/>
         <source>Connection error. %1</source>
         <translation>連繫錯誤：%1</translation>
     </message>

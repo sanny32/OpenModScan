@@ -87,8 +87,6 @@ private slots:
     /* Write slots */
     void on_actionWriteSingleCoil_triggered();
     void on_actionWriteHoldingRegister_triggered();
-    void on_actionWriteHoldingRegisterValue_triggered();
-    void on_actionWriteHoldingRegisterBits_triggered();
     void on_actionForceCoils_triggered();
     void on_actionPresetRegs_triggered();
     void on_actionMaskWrite_triggered();
@@ -167,7 +165,6 @@ private:
     ModbusClient _modbusClient;
 
     AnsiMenu* _ansiMenu;
-    QAction* _actionWriteHoldingRegister;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QPrinter* _selectedPrinter;

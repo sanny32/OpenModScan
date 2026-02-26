@@ -1,5 +1,6 @@
 #include <float.h>
 #include "modbuslimits.h"
+#include "numericutils.h"
 #include "modbusclient.h"
 #include "waitcursor.h"
 #include "datasimulator.h"
@@ -79,9 +80,6 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
 
     switch(params.DisplayMode)
     {
-        case DataDisplayMode::Binary:
-        break;
-
         case DataDisplayMode::UInt16:
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
@@ -93,6 +91,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setValue(params.Value.toInt());
         break;
 
+        case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->labelValue->setText(tr("Value, (HEX): "));
@@ -252,8 +251,10 @@ void DialogWriteHoldingRegister::updateValue()
     WaitCursor wait(this);
     const quint8 deviceId = ui->lineEditNode->value<int>();
     const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
-    const quint16 rawValue = cli->syncReadRegister(QModbusDataUnit::HoldingRegisters, simAddr, deviceId);
-    ui->lineEditValue->setValue(rawValue);
+    const int count = registersCount(_writeParams.DisplayMode);
+    const auto regs = cli->syncReadRegisters(QModbusDataUnit::HoldingRegisters, simAddr, count, deviceId);
+    const auto value = makeValue(regs, _writeParams.DisplayMode, _writeParams.Order);
+    if(value.isValid()) ui->lineEditValue->setValue(value);
 }
 
 ///

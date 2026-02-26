@@ -138,7 +138,6 @@ set(SOURCES
     dialogs/dialogwindowsmanager.cpp
     dialogs/dialogwritecoilregister.cpp
     dialogs/dialogwriteholdingregister.cpp
-    dialogs/dialogwriteholdingregisterbits.cpp
     formmodsca.cpp
     htmldelegate.cpp
     main.cpp
@@ -218,7 +217,6 @@ set(HEADERS
     dialogs/dialogwindowsmanager.h
     dialogs/dialogwritecoilregister.h
     dialogs/dialogwriteholdingregister.h
-    dialogs/dialogwriteholdingregisterbits.h
     displaydefinition.h
     enums.h
     fontutils.h
@@ -307,7 +305,6 @@ set(UI_FILES
     dialogs/dialogwindowsmanager.ui
     dialogs/dialogwritecoilregister.ui
     dialogs/dialogwriteholdingregister.ui
-    dialogs/dialogwriteholdingregisterbits.ui
     formmodsca.ui
     mainwindow.ui
 )

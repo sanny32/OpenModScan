@@ -7,7 +7,6 @@
 #include "mainwindow.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
-#include "dialogwriteholdingregisterbits.h"
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
@@ -977,18 +976,9 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
             params.Client = &_modbusClient;
 
-            if(mode == DataDisplayMode::Binary)
-            {
-                DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), _parent);
-                if(dlg.exec() == QDialog::Accepted)
-                    _modbusClient.writeRegister(dd.PointType, params, _formId);
-            }
-            else
-            {
-                DialogWriteHoldingRegister dlg(params, displayHexAddresses(), _dataSimulator, _parent);
-                if(dlg.exec() == QDialog::Accepted)
-                    _modbusClient.writeRegister(dd.PointType, params, _formId);
-            }
+            DialogWriteHoldingRegister dlg(params, displayHexAddresses(), _dataSimulator, _parent);
+            if(dlg.exec() == QDialog::Accepted)
+                _modbusClient.writeRegister(dd.PointType, params, _formId);
         }
         break;
 

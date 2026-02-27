@@ -474,7 +474,7 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
        item->setData(Qt::UserRole + 2, dubious);
 
        ui->listWidget->insertItem(insertRow, item);
-       ui->listWidget->scrollToItem(item);
+       ui->listWidget->scrollToBottom();
     }
     else if(foundItem->data(Qt::UserRole + 2).toBool() && !dubious)
     {

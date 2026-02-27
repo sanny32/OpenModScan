@@ -126,7 +126,7 @@ Run the installer:
 - For 64-bit Windows: `qt5-omodscan_1.13.2_x64.exe` or `qt6-omodscan_1.13.2_x64.exe`
 
 
-## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian / <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint / <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin / <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
+## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian ● <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu ● <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint ● <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin ● <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
@@ -147,7 +147,7 @@ or for Qt5 package:
 sudo apt remove qt5-omodscan
 ```
 
-## <img src="docs/icons/logo_redhat.svg" width="24" height="24"> RedHat / <img src="docs/icons/logo_fedora.svg" width="20" height="20"> Fedora / <img src="docs/icons/logo_rocky.png" width="20" height="20"> Rocky / <img width="20" height="20" src="docs/icons/logo_redos.png" /> RedOS Linux
+## <img src="docs/icons/logo_redhat.svg" width="24" height="24"> RedHat ● <img src="docs/icons/logo_fedora.svg" width="20" height="20"> Fedora ● <img src="docs/icons/logo_rocky.png" width="20" height="20"> Rocky ● <img width="20" height="20" src="docs/icons/logo_redos.png" /> RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash
@@ -173,7 +173,7 @@ To remove the RPM package run as root user:
 apt-get remove qt6-omodscan
 ```
 
-## <img width="20" height="20" src="docs/icons/logo_suse.png" /> SUSE / <img src="docs/icons/logo_opensuse.svg" width="24" height="24" /> OpenSUSE Linux
+## <img width="20" height="20" src="docs/icons/logo_suse.png" /> SUSE ● <img src="docs/icons/logo_opensuse.svg" width="24" height="24" /> OpenSUSE Linux
 ### Install
 Import qt6-omodscan.rpm.pubkey to rpm repository:
 ```bash

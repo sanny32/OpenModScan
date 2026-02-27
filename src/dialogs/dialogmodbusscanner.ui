@@ -454,7 +454,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
-           <normaloff>:/res/iconClear.png</normaloff>:/res/iconClear.png</iconset>
+           <normaloff>:/res/icon-clear.svg</normaloff>:/res/icon-clear.svg</iconset>
          </property>
         </widget>
        </item>

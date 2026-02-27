@@ -68,8 +68,8 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
     , ui(new Ui::DialogModbusScanner)
     ,_rtuFuncCode(QModbusPdu::ReportServerId)
     ,_tcpFuncCode(QModbusPdu::ReadHoldingRegisters)
-    ,_iconStart(":/res/iconScanStart.png")
-    ,_iconStop(":/res/iconScanStop.png")
+    ,_iconStart(":/res/icon-start.svg")
+    ,_iconStop(":/res/icon-stop.svg")
 {
     ui->setupUi(this);
     ui->progressBar->setAlignment(Qt::AlignCenter);

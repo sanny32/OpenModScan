@@ -504,7 +504,7 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
     }
 
     ui->labelDeviceId->setText(QString(tr("Device Id: %1")).arg(deviceId));
-    ui->progressBar->setValue(progress);
+    ui->progressBar->setValue(qMax(ui->progressBar->value(), progress));
 }
 
 ///

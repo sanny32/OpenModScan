@@ -3,7 +3,7 @@
 
 #include <QTimer>
 #include <QHostAddress>
-#include <QListWidgetItem>
+#include <QTreeWidgetItem>
 #include "modbusscanner.h"
 #include "qfixedsizedialog.h"
 #include "connectiondetails.h"
@@ -41,7 +41,7 @@ private slots:
 
     void on_comboBoxFunction_functionCodeChanged(QModbusPdu::FunctionCode funcCode);
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
-    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
     void on_comboBoxIPAddressFrom_currentTextChanged(const QString& text);
     void on_comboBoxSubnetMask_activated(int index);
     void on_pushButtonScan_clicked();

@@ -227,7 +227,11 @@ void DialogModbusScanner::on_pushButtonScan_clicked()
 ///
 void DialogModbusScanner::on_pushButtonClear_clicked()
 {
-    ui->treeWidget->clear();
+    if(ui->treeWidget->topLevelItemCount() > 0)
+    {
+        const auto result = QMessageBox::question(this, windowTitle(), tr("Clear scan results?"));
+        if(result == QMessageBox::Yes) ui->treeWidget->clear();
+    }
 }
 
 ///
@@ -357,11 +361,7 @@ QHostAddress DialogModbusScanner::subnetMask() const
 ///
 void DialogModbusScanner::startScan()
 {
-    if(ui->treeWidget->topLevelItemCount() > 0)
-    {
-        const auto result = QMessageBox::question(this, windowTitle(), tr("Clear previous scan results?"));
-        if(result == QMessageBox::Yes) ui->treeWidget->clear();
-    }
+    ui->pushButtonClear->click();
 
     WaitCursor wait(this);
     QApplication::processEvents();

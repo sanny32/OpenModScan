@@ -26,9 +26,9 @@
         <file>res/actionSwappedInt32.png</file>
         <file>res/actionSwappedUInt32.png</file>
         <file>res/actionUInt32.png</file>
-        <file>res/iconScanStart.png</file>
-        <file>res/iconScanStop.png</file>
-        <file>res/iconClear.png</file>
+        <file>res/icon-start.svg</file>
+        <file>res/icon-stop.svg</file>
+        <file>res/icon-clear.svg</file>
         <file>res/actionInt64.png</file>
         <file>res/actionUInt64.png</file>
         <file>res/actionSwappedInt64.png</file>

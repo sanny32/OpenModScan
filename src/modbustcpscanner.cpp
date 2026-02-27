@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QTimer>
 #include <QTcpSocket>
 #include "modbustcpclient.h"
 #include "modbustcpscanner.h"
@@ -29,15 +30,28 @@ void ModbusTcpScanner::startScan()
     for(auto&& cd : _params.ConnParams)
     {
         QTcpSocket* socket = new QTcpSocket(this);
+        auto processed = QSharedPointer<bool>::create(false);
 
-        connect(socket, &QAbstractSocket::connected, this, [this, socket, cd]{
-            processSocket(socket, cd);
-        }, Qt::QueuedConnection);
-        connect(socket, &QAbstractSocket::errorOccurred, this, [this, socket, cd](QAbstractSocket::SocketError){
-            processSocket(socket, cd);
+        auto processOnce = [this, socket, cd, processed]{
+            if(!*processed) { *processed = true; processSocket(socket, cd); }
+        };
+
+        // After connect: send a probe byte so that the firewall/router
+        // will RST phantom connections (no real host behind the IP).
+        connect(socket, &QAbstractSocket::connected, this, [socket]{
+            socket->write("\x00", 1);
         }, Qt::QueuedConnection);
 
-        socket->connectToHost(cd.TcpParams.IPAddress, cd.TcpParams.ServicePort, QIODevice::ReadOnly, QAbstractSocket::IPv4Protocol);
+        // RST or connection refused → immediately rejected
+        connect(socket, &QAbstractSocket::disconnected, this, processOnce, Qt::QueuedConnection);
+        connect(socket, &QAbstractSocket::errorOccurred, this, [processOnce](QAbstractSocket::SocketError){
+            processOnce();
+        }, Qt::QueuedConnection);
+
+        // If still connected after 200 ms → treat as a real host
+        QTimer::singleShot(200, this, [processOnce]{ processOnce(); });
+
+        socket->connectToHost(cd.TcpParams.IPAddress, cd.TcpParams.ServicePort, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
     }
 }
 

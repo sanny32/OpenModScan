@@ -42,7 +42,7 @@ void ModbusTcpScanner::startScan()
         // will RST phantom connections (no real host behind the IP).
         connect(socket, &QAbstractSocket::connected, this, [socket]{
             socket->write("\x00", 1);
-        }, Qt::QueuedConnection);
+        });
 
         // RST or connection refused → immediately rejected
         connect(socket, &QAbstractSocket::disconnected, this, processOnce, Qt::QueuedConnection);
@@ -105,9 +105,7 @@ void ModbusTcpScanner::on_scanNext(QPrivateSignal)
     if(!inProgress())
         return;
 
-    const int MAX_CONCURRENT = _params.MaxConcurrentConnections;
-
-    while(!_connParams.isEmpty() && _activeConnections < MAX_CONCURRENT)
+    while(!_connParams.isEmpty() && _activeConnections < _params.MaxConcurrentConnections)
     {
         _activeConnections++;
         connectDevice(_connParams.dequeue());
@@ -204,7 +202,12 @@ void ModbusTcpScanner::sendRequest(ModbusClientPrivate* client, int deviceId)
                     if(error == ModbusDevice::TimeoutError)
                         sendRequest(client, deviceId + 1);
                     else
-                        QTimer::singleShot(_params.Timeout, [this, client, deviceId] { sendRequest(client, deviceId + 1); });
+                        QTimer::singleShot(_params.Timeout, this,
+                                           [this, client, deviceId] {
+                                               if (!inProgress())
+                                                   return;
+                                               sendRequest(client, deviceId + 1);
+                                           });
                 });
         }
         else

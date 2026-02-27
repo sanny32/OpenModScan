@@ -166,6 +166,7 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxTimeout->setEnabled(!inProgress);
     ui->groupBoxIPAddressRange->setEnabled(!inProgress);
     ui->groupBoxPortRange->setEnabled(!inProgress);
+    ui->groupBoxMaxConnections->setEnabled(!inProgress);
     ui->groupBoxSubnetMask->setEnabled(!inProgress);
     ui->groupBoxRequest->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
@@ -210,6 +211,7 @@ void DialogModbusScanner::on_comboBoxProtocols_modbusProtocolChanged(ModbusProto
     ui->groupBoxIPAddressRange->setVisible(!useSerial);
     ui->groupBoxPortRange->setVisible(!useSerial);
     ui->groupBoxSubnetMask->setVisible(!useSerial);
+    ui->groupBoxMaxConnections->setVisible(!useSerial);
     ui->labelIPAddress->setVisible(!useSerial);
     ui->labelPort->setVisible(!useSerial);
     ui->groupBoxSerialPort->setVisible(useSerial);
@@ -439,13 +441,39 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
 
     if(!foundItem)
     {
-       auto item = new QListWidgetItem(ui->listWidget);
+       const bool useSerial = (ui->comboBoxProtocols->currentModbusProtocol() == ModbusProtocolsComboBox::ModbusRtu);
+       int insertRow = ui->listWidget->count();
+       for(int i = 0; i < ui->listWidget->count(); ++i)
+       {
+           const auto existItem = ui->listWidget->item(i);
+           const auto existCd = existItem->data(Qt::UserRole).value<ConnectionDetails>();
+           const int existDeviceId = existItem->data(Qt::UserRole + 1).toInt();
+
+           bool before = false;
+           if(useSerial)
+           {
+               before = cd.SerialParams.PortName < existCd.SerialParams.PortName ||
+                       (cd.SerialParams.PortName == existCd.SerialParams.PortName && deviceId < existDeviceId);
+           }
+           else
+           {
+               const auto ipA = QHostAddress(cd.TcpParams.IPAddress).toIPv4Address();
+               const auto ipB = QHostAddress(existCd.TcpParams.IPAddress).toIPv4Address();
+               before = ipA < ipB ||
+                       (ipA == ipB && cd.TcpParams.ServicePort < existCd.TcpParams.ServicePort) ||
+                       (ipA == ipB && cd.TcpParams.ServicePort == existCd.TcpParams.ServicePort && deviceId < existDeviceId);
+           }
+
+           if(before) { insertRow = i; break; }
+       }
+
+       auto item = new QListWidgetItem();
        item->setText(result);
        item->setData(Qt::UserRole, QVariant::fromValue(cd));
        item->setData(Qt::UserRole + 1, deviceId);
        item->setData(Qt::UserRole + 2, dubious);
 
-       ui->listWidget->addItem(item);
+       ui->listWidget->insertItem(insertRow, item);
        ui->listWidget->scrollToItem(item);
     }
     else if(foundItem->data(Qt::UserRole + 2).toBool() && !dubious)
@@ -615,6 +643,7 @@ const ScanParams DialogModbusScanner::createTcpParams(TransmissionMode mode) con
     params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();
     params.RetryOnTimeout = ui->checkBoxRetryOnTimeout->isChecked();
+    params.MaxConcurrentConnections = ui->spinBoxMaxConnections->value();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
 
     return params;

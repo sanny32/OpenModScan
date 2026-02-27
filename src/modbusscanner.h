@@ -10,6 +10,7 @@ struct ScanParams
 {
     int Timeout = 1000;
     bool RetryOnTimeout = false;
+    int MaxConcurrentConnections = 10;
     QRange<int> DeviceIds = {1, 10};
     QModbusRequest Request;
     QList<ConnectionDetails> ConnParams;

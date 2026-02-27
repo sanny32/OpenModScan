@@ -13,6 +13,7 @@ ModbusTcpScanner::ModbusTcpScanner(const ScanParams& params, QObject *parent)
     : ModbusScanner{parent}
     ,_params(params)
     ,_processedSocketCount(0)
+    ,_activeConnections(0)
 {
     connect(this, &ModbusTcpScanner::scanNext, this, &ModbusTcpScanner::on_scanNext);
 }
@@ -26,6 +27,7 @@ void ModbusTcpScanner::startScan()
 
     _connParams.clear();
     _processedSocketCount = 0;
+    _activeConnections = 0;
 
     for(auto&& cd : _params.ConnParams)
     {
@@ -103,10 +105,16 @@ void ModbusTcpScanner::on_scanNext(QPrivateSignal)
     if(!inProgress())
         return;
 
-    if(_connParams.isEmpty())
-        stopScan();
-    else
+    const int MAX_CONCURRENT = _params.MaxConcurrentConnections;
+
+    while(!_connParams.isEmpty() && _activeConnections < MAX_CONCURRENT)
+    {
+        _activeConnections++;
         connectDevice(_connParams.dequeue());
+    }
+
+    if(_activeConnections == 0)
+        stopScan();
 }
 
 ///
@@ -150,6 +158,7 @@ void ModbusTcpScanner::sendRequest(ModbusClientPrivate* client, int deviceId)
     if(deviceId > _params.DeviceIds.to())
     {
         client->deleteLater();
+        _activeConnections--;
         emit scanNext(QPrivateSignal());
 
         return;

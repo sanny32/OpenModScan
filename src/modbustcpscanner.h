@@ -35,6 +35,7 @@ private:
 private:
     const ScanParams _params;
     int _processedSocketCount;
+    int _activeConnections;
     QQueue<ConnectionDetails> _connParams;
 };
 

@@ -1136,47 +1136,47 @@
         <translation>端口范围</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="953"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1009"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scanning:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;扫描中：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="960"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1016"/>
         <source>Address: </source>
         <translation>IP地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="967"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1023"/>
         <source>Port: </source>
         <translation>端口： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="974"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1030"/>
         <source>Baud Rate: </source>
         <translation>波特率： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="981"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1037"/>
         <source>Data Bits: </source>
         <translation>数据位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="988"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1044"/>
         <source>Parity: </source>
         <translation>奇偶校验： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="995"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1051"/>
         <source>Stop Bits: </source>
         <translation>停止位： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="1002"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1058"/>
         <source>Device Id: </source>
         <translation>设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="1046"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1102"/>
         <source>Scan Time</source>
         <translation>扫描耗时</translation>
     </message>
@@ -1260,7 +1260,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="424"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="220"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="222"/>
         <source>PORT: Device Id (serial port settings)</source>
         <translation>端口：设备地址（串口配置）</translation>
     </message>
@@ -1275,7 +1275,17 @@
         <translation>协议</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="935"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="931"/>
+        <source>Max Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="946"/>
+        <source>Parallel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="991"/>
         <source>Scan</source>
         <translation>扫描</translation>
     </message>
@@ -1290,92 +1300,92 @@
         <translation>1校验</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="173"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="174"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="173"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="174"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="220"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="222"/>
         <source>Address: port (Device Id)</source>
         <translation>IP地址：端口（设备地址）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="360"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="362"/>
         <source>Clear previous scan results?</source>
         <translation>清除扫描结果？</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="392"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="394"/>
         <source>Baud Rate:</source>
         <translation>波特率：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="393"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="395"/>
         <source>Data Bits:</source>
         <translation>数据位：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="394"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="396"/>
         <source>Parity:</source>
         <translation>奇偶校验：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="395"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="397"/>
         <source>Stop Bits:</source>
         <translation>停止位：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="396"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="398"/>
         <source>Address:</source>
         <translation>地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="397"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="399"/>
         <source>Port:</source>
         <translation>端口：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="398"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="400"/>
         <source>Device Id:</source>
         <translation>设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="467"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="495"/>
         <source>Baud Rate: %1</source>
         <translation>波特率：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="468"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="496"/>
         <source>Data Bits: %1</source>
         <translation>数据位：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="469"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="497"/>
         <source>Parity: %1</source>
         <translation>奇偶校验：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="470"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="498"/>
         <source>Stop Bits: %1</source>
         <translation>停止位：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="474"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="502"/>
         <source>Address: %1</source>
         <translation>地址：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="475"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="503"/>
         <source>Port: %1</source>
         <translation>端口：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="478"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="506"/>
         <source>Device Id: %1</source>
         <translation>设备地址：%1</translation>
     </message>

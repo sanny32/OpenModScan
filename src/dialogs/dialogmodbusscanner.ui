@@ -807,7 +807,7 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="IpAddressLineEdit" name="lineEditSubnetMask">
+           <widget class="QComboBox" name="comboBoxSubnetMask">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -819,6 +819,9 @@
               <width>0</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

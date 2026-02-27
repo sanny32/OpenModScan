@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QHeaderView>
 #include <QMessageBox>
 #include <QSerialPortInfo>
 #include <QHostInfo>
@@ -73,6 +74,8 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
     ui->setupUi(this);
     ui->progressBar->setAlignment(Qt::AlignCenter);
     ui->pushButtonScan->setIcon(_iconStart);
+    ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
     ui->comboBoxSerial->addItems(getAvailableSerialPorts());
 
@@ -245,8 +248,9 @@ void DialogModbusScanner::on_comboBoxProtocols_modbusProtocolChanged(ModbusProto
     ui->labelDataBits->setVisible(useSerial);
     ui->labelParity->setVisible(useSerial);
     ui->labelStopBits->setVisible(useSerial);
-    ui->labelScanResultsDesc->setText(useSerial ? tr("PORT ▸ Device Id (port settings)") : tr("Address ▸ port (Device Id)"));
     ui->comboBoxFunction->setCurrentFunctionCode(useSerial ? _rtuFuncCode :_tcpFuncCode);
+    ui->treeWidget->setHeaderLabels(useSerial ? QStringList{tr("Device ID"), tr("Port Settings")}
+                                              : QStringList{tr("Port"), tr("Device ID")});
 }
 
 ///
@@ -446,13 +450,15 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
     const auto id = QString::number(deviceId) + (dubious ? "?" : QString());
 
     const QString groupKey = useSerial ? cd.SerialParams.PortName : cd.TcpParams.IPAddress;
-    const QString childText = useSerial
-        ? QString("%1 (%2,%3,%4,%5)").arg(id,
-                                          QString::number(cd.SerialParams.BaudRate),
-                                          QString::number(cd.SerialParams.WordLength),
-                                          Parity_toString(cd.SerialParams.Parity),
-                                          QString::number(cd.SerialParams.StopBits))
-        : QString("%1 (%2)").arg(QString::number(cd.TcpParams.ServicePort), id);
+    const QString childCol0 = useSerial
+        ? id
+        : QString::number(cd.TcpParams.ServicePort);
+    const QString childCol1 = useSerial
+        ? QString("%1,%2,%3,%4").arg(QString::number(cd.SerialParams.BaudRate),
+                                     QString::number(cd.SerialParams.WordLength),
+                                     Parity_toString(cd.SerialParams.Parity),
+                                     QString::number(cd.SerialParams.StopBits))
+        : id;
 
     // Find or create sorted top-level parent item
     QTreeWidgetItem* parentItem = nullptr;
@@ -468,6 +474,10 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
     {
         parentItem = new QTreeWidgetItem();
         parentItem->setText(0, groupKey);
+
+        QFont boldFont = parentItem->font(0);
+        boldFont.setBold(true);
+        parentItem->setFont(0, boldFont);
 
         int insertPos = ui->treeWidget->topLevelItemCount();
         for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i)
@@ -498,7 +508,8 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
     if(!childItem)
     {
         childItem = new QTreeWidgetItem();
-        childItem->setText(0, childText);
+        childItem->setText(0, childCol0);
+        childItem->setText(1, childCol1);
         childItem->setData(0, Qt::UserRole, QVariant::fromValue(cd));
         childItem->setData(0, Qt::UserRole + 1, deviceId);
         childItem->setData(0, Qt::UserRole + 2, dubious);
@@ -519,7 +530,8 @@ void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int device
     }
     else if(childItem->data(0, Qt::UserRole + 2).toBool() && !dubious)
     {
-        childItem->setText(0, childText);
+        childItem->setText(0, childCol0);
+        childItem->setText(1, childCol1);
         childItem->setData(0, Qt::UserRole + 2, false);
     }
 }

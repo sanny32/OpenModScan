@@ -1105,69 +1105,69 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="160"/>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="730"/>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="880"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="883"/>
         <source>from</source>
         <translation>с</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="189"/>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="737"/>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="887"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="890"/>
         <source>to</source>
         <translation>по</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="797"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="800"/>
         <source>Subnet Mask</source>
         <translation>Маска подсети</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="834"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="837"/>
         <source>Port Range</source>
         <translation>Диапазон портов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="950"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="953"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Scanning:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Сканирование:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="957"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="960"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="964"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="967"/>
         <source>Port: </source>
         <translation>Порт: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="971"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="974"/>
         <source>Baud Rate: </source>
         <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="978"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="981"/>
         <source>Data Bits: </source>
         <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="985"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="988"/>
         <source>Parity: </source>
         <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="992"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="995"/>
         <source>Stop Bits: </source>
         <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="999"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1002"/>
         <source>Device Id: </source>
         <translation>Узел: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="1043"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="1046"/>
         <source>Scan Time</source>
         <translation>Вермя сканирования</translation>
     </message>
@@ -1183,19 +1183,19 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="77"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="25"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="26"/>
         <source>None</source>
         <translation>Нет</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="87"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="31"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="32"/>
         <source>Odd</source>
         <translation>Нечет</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="94"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="28"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="29"/>
         <source>Even</source>
         <translation>Чёт</translation>
     </message>
@@ -1251,7 +1251,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="424"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="194"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="220"/>
         <source>PORT: Device Id (serial port settings)</source>
         <translation>Порт: Узел (параметры порта)</translation>
     </message>
@@ -1266,107 +1266,107 @@
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="932"/>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="935"/>
         <source>Scan</source>
         <translation>Сканировать</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="34"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="35"/>
         <source>Space</source>
         <translation>Пробел</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="37"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="38"/>
         <source>Mark</source>
         <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="147"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="173"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="147"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="173"/>
         <source>Start</source>
         <translation>Старт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="194"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="220"/>
         <source>Address: port (Device Id)</source>
         <translation>Адрес: порт (Узел)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="323"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="360"/>
         <source>Clear previous scan results?</source>
         <translation>Очистить результаты предыдущего сканирования?</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="355"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="392"/>
         <source>Baud Rate:</source>
         <translation>Скорость бит/с:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="356"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="393"/>
         <source>Data Bits:</source>
         <translation>Биты данных:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="357"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="394"/>
         <source>Parity:</source>
         <translation>Четность:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="358"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="395"/>
         <source>Stop Bits:</source>
         <translation>Стоповые биты:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="359"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="396"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="360"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="397"/>
         <source>Port:</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="361"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="398"/>
         <source>Device Id:</source>
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="430"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="467"/>
         <source>Baud Rate: %1</source>
         <translation>Скорость бит/с: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="431"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="468"/>
         <source>Data Bits: %1</source>
         <translation>Биты данных: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="432"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="469"/>
         <source>Parity: %1</source>
         <translation>Четность: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="433"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="470"/>
         <source>Stop Bits: %1</source>
         <translation>Стоповые биты: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="437"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="474"/>
         <source>Address: %1</source>
         <translation>Адрес: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="438"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="475"/>
         <source>Port: %1</source>
         <translation>Порт: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="441"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="478"/>
         <source>Device Id: %1</source>
         <translation>Узел: %1</translation>
     </message>
@@ -1842,7 +1842,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="213"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="227"/>
         <source>Auto Simulation: OFF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1856,23 +1856,23 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Симуляция</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="59"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="67"/>
         <source>16: Write Holding Register</source>
         <translation>16: Запись регистра хранения</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="207"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="220"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="221"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="234"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="97"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="105"/>
         <source>Value, (HEX): </source>
         <translation>Значение, (Шестн): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="104"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="112"/>
         <source>Value, (ANSI): </source>
         <translation>Знвчение, (ANSI): </translation>
     </message>

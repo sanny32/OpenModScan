@@ -50,9 +50,9 @@
         <file>res/emblem-mail.svg</file>
         <file>translations/omodscan_zh_CN.qm</file>
         <file>translations/omodscan_zh_TW.qm</file>
-        <file>res/iconSimulation16bit.png</file>
-        <file>res/iconSimulation32bit.png</file>
-        <file>res/iconSimulation64bit.png</file>
+        <file>res/icon-simulation-16bit.svg</file>
+        <file>res/icon-simulation-32bit.svg</file>
+        <file>res/icon-simulation-64bit.svg</file>
         <file>res/icon-export.svg</file>
         <file>res/icon-import.svg</file>
         <file>res/icon-random.svg</file>

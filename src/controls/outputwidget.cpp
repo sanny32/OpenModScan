@@ -1,3 +1,4 @@
+#include <QIcon>
 #include <QMenu>
 #include <QWheelEvent>
 #include <QDateTime>
@@ -75,16 +76,28 @@ QString normalizeHtml(const QString& s)
 }
 
 ///
+/// \brief emptyPixmap
+/// \param size
+/// \return
+///
+static QPixmap emptyPixmap(const QSize& size)
+{
+    QPixmap pm(size);
+    pm.fill(Qt::transparent);
+    return pm;
+}
+
+///
 /// \brief OutputListModel::OutputListModel
 /// \param parent
 ///
 OutputListModel::OutputListModel(OutputWidget* parent)
     : QAbstractListModel(parent)
     ,_parentWidget(parent)
-    ,_iconSimulation16Bit(QPixmap(":/res/iconSimulation16bit.png"))
-    ,_iconSimulation32Bit(QPixmap(":/res/iconSimulation32bit.png"))
-    ,_iconSimulation64Bit(QPixmap(":/res/iconSimulation64bit.png"))
-    ,_iconSimulationOff(_iconSimulation16Bit.size())
+    ,_iconSimulation16Bit(QIcon(":/res/icon-simulation-16bit.svg").pixmap(10, 10))
+    ,_iconSimulation32Bit(QIcon(":/res/icon-simulation-32bit.svg").pixmap(10, 10))
+    ,_iconSimulation64Bit(QIcon(":/res/icon-simulation-64bit.svg").pixmap(10, 10))
+    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size()))
 {
 }
 

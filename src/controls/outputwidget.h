@@ -21,17 +21,6 @@ class OutputWidget;
 class OutputWidget;
 
 ///
-/// \brief The QEmptyPixmap class
-///
-class QEmptyPixmap : public QPixmap {
-public:
-    QEmptyPixmap(const QSize& size) :
-        QPixmap(size) {
-        fill(Qt::transparent);
-    }
-};
-
-///
 /// \brief The ItemMapKey class
 ///
 struct ItemMapKey {
@@ -116,7 +105,7 @@ private:
     const QPixmap _iconSimulation16Bit;
     const QPixmap _iconSimulation32Bit;
     const QPixmap _iconSimulation64Bit;
-    const QEmptyPixmap _iconSimulationOff;
+    const QPixmap _iconSimulationOff;
     int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };

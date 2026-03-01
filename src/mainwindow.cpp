@@ -882,7 +882,7 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     int formId = 0;
     DisplayDefinition dd;
     ByteOrder byteOrder = ByteOrder::Direct;
-    DataDisplayMode mode = DataDisplayMode::Hex;
+    DataDisplayMode mode = DataDisplayMode::UInt16;
     QString codepage;
     bool hexAddresses = false;
 
@@ -891,7 +891,8 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     {
         formId = frm->formId();
         dd = frm->displayDefinition();
-        //mode = frm->dataDisplayMode();
+        if(frm->dataDisplayMode() == DataDisplayMode::Hex)
+            mode = DataDisplayMode::Hex;
         byteOrder = frm->byteOrder();
         codepage = frm->codepage();
         hexAddresses = frm->displayHexAddresses();

@@ -198,7 +198,7 @@ void DialogForceMultipleCoils::on_pushButtonExport_clicked()
 
     for(int i = 0; i < _data.size(); i++)
     {
-        ts << formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress)
+        ts << formatAddress(QModbusDataUnit::Coils, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress)
         << delim
         << QString::number(_data[i])
         << "\n";

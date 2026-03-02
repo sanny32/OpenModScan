@@ -27,6 +27,7 @@ public:
     void accept() override;
 
 private slots:
+    void on_lineEditPointAddress_valueChanged(const QVariant&);
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
 
 private:

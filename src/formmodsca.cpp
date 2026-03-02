@@ -44,7 +44,7 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->lineEditAddress->blockSignals(false);
 
     ui->lineEditLength->blockSignals(true);
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(1, true));
     ui->lineEditLength->setValue(50);
     ui->lineEditLength->blockSignals(false);
 
@@ -214,6 +214,8 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditAddress->blockSignals(false);
 
     ui->lineEditLength->blockSignals(true);
+    ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress));
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLength->blockSignals(false);
 
@@ -864,6 +866,16 @@ void FormModSca::on_modbusDisconnected(const ConnectionDetails&)
 ///
 void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 {
+    const bool zeroBased = ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0;
+    const int address = ui->lineEditAddress->value<int>();
+    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased);
+
+    ui->lineEditLength->setInputRange(lenRange);
+    if(ui->lineEditLength->value<int>() > lenRange.to()) {
+        ui->lineEditLength->setValue(lenRange.to());
+        ui->lineEditLength->update();
+    }
+
     const quint8 deviceId = ui->lineEditDeviceId->value<int>();
     const auto cd = _modbusClient.connectionDetails();
     const auto protocol = cd.Type == ConnectionType::Serial ?

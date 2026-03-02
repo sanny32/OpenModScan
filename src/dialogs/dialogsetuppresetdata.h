@@ -30,9 +30,13 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_lineEditAddress_valueChanged(const QVariant&);
+
 private:
     Ui::DialogSetupPresetData *ui;
     SetupPresetParams& _params;
+    QModbusDataUnit::RegisterType _pointType;
 };
 
 #endif // DIALOGSETUPPRESETDATA_H

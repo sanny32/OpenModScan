@@ -22,7 +22,7 @@ signals:
     void valueChanged(quint16 value);
 
 private slots:
-    void on_checkStateChanged(int);
+    void on_checkStateChanged(Qt::CheckState);
 
 private:
     Ui::BitPatternControl *ui;

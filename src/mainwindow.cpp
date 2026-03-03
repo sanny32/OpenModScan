@@ -1500,7 +1500,18 @@ FormModSca* MainWindow::createMdiChild(int id)
 ///
 FormModSca* MainWindow::currentMdiChild() const
 {
-    const auto wnd = ui->mdiArea->currentSubWindow();
+    auto wnd = ui->mdiArea->currentSubWindow();
+    if(!wnd && ui->mdiArea->viewMode() == QMdiArea::TabbedView) {
+        // Qt5: d->active may still be null on the first event loop iteration
+        // because _q_currentTabChanged is posted via QueuedConnection while
+        // awake() fires before posted events are processed. Read the tab bar
+        // directly to get the correct subwindow.
+        const auto tabBar = ui->mdiArea->findChild<QTabBar*>();
+        const auto list = ui->mdiArea->subWindowList();
+        const auto idx = tabBar ? tabBar->currentIndex() : -1;
+        if(idx >= 0 && idx < list.size())
+            wnd = list.at(idx);
+    }
     return wnd ? qobject_cast<FormModSca*>(wnd->widget()) : nullptr;
 }
 

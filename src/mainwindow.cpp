@@ -1168,11 +1168,22 @@ void MainWindow::setCodepage(const QString& name)
 void MainWindow::on_actionTabbedView_triggered()
 {
     if(ui->mdiArea->viewMode() == QMdiArea::SubWindowView) {
-        ui->mdiArea->setViewMode(QMdiArea::TabbedView);
+        setViewMode(QMdiArea::TabbedView);
     }
     else {
-        ui->mdiArea->setViewMode(QMdiArea::SubWindowView);
+        setViewMode(QMdiArea::SubWindowView);
     }
+}
+
+///
+/// \brief MainWindow::setViewMode
+/// \param mode
+///
+void MainWindow::setViewMode(QMdiArea::ViewMode mode)
+{
+    ui->mdiArea->setViewMode(mode);
+    if(auto tabBar = ui->mdiArea->findChild<QTabBar*>())
+        tabBar->setExpanding(false);
 }
 
 ///
@@ -1911,7 +1922,7 @@ void MainWindow::loadProfile(const QString& filename)
     }
 
     const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::SubWindowView).toInt(), 1);
-    ui->mdiArea->setViewMode(viewMode);
+    setViewMode(viewMode);
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
 

@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QMdiArea>
 #include <QMainWindow>
 #include <QTranslator>
 #include "ansimenu.h"
@@ -142,6 +143,7 @@ private:
     void closeMdiChild(FormModSca* frm);
 
     void saveAs(FormModSca* frm, SerializationFormat format);
+    void setViewMode(QMdiArea::ViewMode mode);
 
     void loadConfig(const QString& filename);
     void saveConfig(const QString& filename, SerializationFormat format);

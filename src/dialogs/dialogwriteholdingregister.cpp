@@ -55,8 +55,8 @@ static SimButtonColors simColors(DataDisplayMode mode)
 /// \param parent
 ///
 DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, bool hexAddress,
-                                                       DataSimulator* dataSimulator, QWidget* parent) :
-      QFixedSizeDialog(parent)
+                                                       DataSimulator* dataSimulator, QWidget* parent)
+    : QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
     ,_writeParams(params)
     ,_dataSimulator(dataSimulator)

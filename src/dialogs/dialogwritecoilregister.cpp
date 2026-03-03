@@ -14,9 +14,9 @@
 /// \param parent
 ///
 DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, bool hexAddress,
-                                                 DataSimulator* dataSimulator, QWidget *parent) :
-    QFixedSizeDialog(parent),
-    ui(new Ui::DialogWriteCoilRegister)
+                                                 DataSimulator* dataSimulator, QWidget *parent)
+    : QFixedSizeDialog(parent),
+      ui(new Ui::DialogWriteCoilRegister)
     ,_writeParams(params)
     ,_dataSimulator(dataSimulator)
 {

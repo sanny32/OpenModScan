@@ -38,7 +38,7 @@ Registers
 ## Extended Featues
 - Modbus Address Scan
   
-  ![image](https://github.com/user-attachments/assets/798ed74a-c5fc-413f-a173-e223c9c7d3f3)
+  <img width="952" height="519" alt="image" src=".github/assets/omodscan-address-scan.png" />
 
 - Modbus Scanner (support protocols: Modbus RTU, Modbus TCP and Modbus RTU over TCP)
   

@@ -101,7 +101,7 @@ MainWindow::MainWindow(const QString& profile, QWidget *parent)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
-    connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError);
+    connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError, Qt::QueuedConnection);
     connect(&_modbusClient, &ModbusClient::modbusConnectionError, this, &MainWindow::on_modbusConnectionError);
     connect(&_modbusClient, &ModbusClient::modbusConnected, this, &MainWindow::on_modbusConnected);
     connect(&_modbusClient, &ModbusClient::modbusDisconnected, this, &MainWindow::on_modbusDisconnected);
@@ -838,7 +838,6 @@ void MainWindow::on_actionHexAddresses_triggered()
 ///
 void MainWindow::on_actionWriteSingleCoil_triggered()
 {
-    int formId = 0;
     DisplayDefinition dd;
     ByteOrder byteOrder = ByteOrder::Direct;
     bool hexAddresses = false;
@@ -846,7 +845,6 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     auto frm = currentMdiChild();
     if(frm)
     {
-        formId = frm->formId();
         dd = frm->displayDefinition();
         byteOrder = frm->byteOrder();
         hexAddresses = frm->displayHexAddresses();
@@ -870,7 +868,7 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteSingleCoilAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
-        _modbusClient.writeRegister(QModbusDataUnit::Coils, params, formId);
+        _modbusClient.writeRegister(QModbusDataUnit::Coils, params, 0);
     }
 }
 
@@ -879,7 +877,6 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
 ///
 void MainWindow::on_actionWriteHoldingRegister_triggered()
 {
-    int formId = 0;
     DisplayDefinition dd;
     ByteOrder byteOrder = ByteOrder::Direct;
     DataDisplayMode mode = DataDisplayMode::UInt16;
@@ -889,10 +886,10 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     auto frm = currentMdiChild();
     if(frm)
     {
-        formId = frm->formId();
         dd = frm->displayDefinition();
-        if(frm->dataDisplayMode() == DataDisplayMode::Hex)
+        if(frm->dataDisplayMode() == DataDisplayMode::Hex) {
             mode = DataDisplayMode::Hex;
+        }
         byteOrder = frm->byteOrder();
         codepage = frm->codepage();
         hexAddresses = frm->displayHexAddresses();
@@ -919,7 +916,7 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteHoldingRegisterAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
-        _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, formId);
+        _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
     }
 }
 

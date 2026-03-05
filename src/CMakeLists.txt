@@ -32,6 +32,13 @@ configure_file(
     @ONLY
 )
 
+# Generate README.md
+configure_file(
+    ${CMAKE_SOURCE_DIR}/../README.md.in
+    ${CMAKE_SOURCE_DIR}/../README.md
+    @ONLY
+)
+
 if(USE_QT5)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort LinguistTools REQUIRED)
 elseif(USE_QT6)

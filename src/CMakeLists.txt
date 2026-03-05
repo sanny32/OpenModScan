@@ -125,6 +125,7 @@ set(SOURCES
     controls/numericcombobox.cpp
     controls/outputwidget.cpp
     controls/pointtypecombobox.cpp
+    controls/transpscrollarea.cpp
     datasimulator.cpp
     dialogs/dialogmsgparser.cpp
     dialogs/dialogabout.cpp
@@ -166,7 +167,6 @@ set(SOURCES
     qint64validator.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
-    tscrollarea.cpp
     windowactionlist.cpp
 )
 
@@ -204,6 +204,7 @@ set(HEADERS
     controls/numericcombobox.h
     controls/outputwidget.h
     controls/pointtypecombobox.h
+    controls/transpscrollarea.h
     datasimulator.h
     dialogs/dialogmsgparser.h
     dialogs/dialogabout.h
@@ -282,7 +283,6 @@ set(HEADERS
     quintvalidator.h
     recentfileactionlist.h
     serialportutils.h
-    tscrollarea.h
     uiutils.h
     waitcursor.h
     windowactionlist.h

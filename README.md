@@ -6,9 +6,9 @@
 
 OpenModScan is a free and open-source Modbus Master (Client) utility supporting both Modbus-TCP and Modbus-RTU protocols.
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/9454af59-2c08-4a62-9706-0fb1e668e67b" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodscan-main.png" />
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/bc0cdbd3-0a67-4477-b09f-f75ced9dfa12" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodscan-connect.png" />
 
 
 ## Features
@@ -32,7 +32,7 @@ Registers
 
 ## Modbus Logging
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/23226306-85d1-464d-ad74-4c007665c7ef" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodscan-log.png" />
 
     
 ## Extended Featues
@@ -42,15 +42,15 @@ Registers
 
 - Modbus Scanner (support protocols: Modbus RTU, Modbus TCP and Modbus RTU over TCP)
   
-  <img width="803" height="719" alt="image" src="https://github.com/user-attachments/assets/77f14c57-2a13-42d4-a8a2-e718521a40c2" />
+  <img width="803" height="719" alt="image" src=".github/assets/omodscan-scanner.png" />
 
 - Modbus Message Parser
 
-  <img width="674" height="463" alt="image" src="https://github.com/user-attachments/assets/9d7a53ef-dda2-4d7f-bfb0-c3337e2ca40b" />
+  <img width="674" height="463" alt="image" src=".github/assets/omodscan-msg-parser.png" />
 
 - Modbus User Message
 
-  <img width="529" height="722" alt="image" src="https://github.com/user-attachments/assets/1aa3aadb-1462-4989-afa9-0ad131d5faa7" />
+  <img width="529" height="722" alt="image" src=".github/assets/omodscan-user-msg.png" />
 
 
 # Building

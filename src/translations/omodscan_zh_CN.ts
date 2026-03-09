@@ -114,7 +114,7 @@
     <message>
         <location filename="../controls/bitpatterncontrol.ui" line="14"/>
         <source>Bit Pattern</source>
-        <translation type="unfinished">各位的值</translation>
+        <translation>各位的值</translation>
     </message>
 </context>
 <context>
@@ -773,47 +773,47 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;设备 ID：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="47"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;长度：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="81"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>进口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="104"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>出口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="126"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>重置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="143"/>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>放</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
         <source>Random</source>
-        <translation type="unfinished">随机</translation>
+        <translation>随机</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="226"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 结束地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Slave Device: </source>
@@ -859,39 +859,39 @@
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="104"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="178"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV 文件 (*.csv)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="111"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="189"/>
         <source>Error</source>
-        <translation type="unfinished">错误</translation>
+        <translation>错误</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
         <source>Import error</source>
-        <translation type="unfinished"></translation>
+        <translation>导入错误</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
         <source>Invalid value: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无效值：%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="154"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="160"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="154"/>
         <source>No data found in file.</source>
-        <translation type="unfinished"></translation>
+        <translation>文件中未找到数据。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="160"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>导入的数据大小（%1）与当前大小（%2）不匹配。</translation>
     </message>
 </context>
 <context>
@@ -915,12 +915,12 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="81"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>进口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="104"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>出口</translation>
     </message>
     <message>
         <source>Set Random Values</source>
@@ -938,37 +938,37 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;设备 ID：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="40"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="47"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;长度：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="126"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>重置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="143"/>
         <source>Random</source>
-        <translation type="unfinished">随机</translation>
+        <translation>随机</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="167"/>
         <source>Constant Value</source>
-        <translation type="unfinished"></translation>
+        <translation>常数值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="361"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 结束地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Device Id: </source>
@@ -994,39 +994,39 @@
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="631"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="712"/>
         <source>CSV files (*.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV 文件 (*.csv)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="638"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="723"/>
         <source>Error</source>
-        <translation type="unfinished">错误</translation>
+        <translation>错误</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Import error</source>
-        <translation type="unfinished"></translation>
+        <translation>导入错误</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Invalid value: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无效值：%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="688"/>
         <source>No data found in file.</source>
-        <translation type="unfinished"></translation>
+        <translation>文件中未找到数据。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="688"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="694"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="694"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>导入的数据大小（%1）与当前大小（%2）不匹配。</translation>
     </message>
     <message>
         <source>Address</source>
@@ -1069,12 +1069,12 @@
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="151"/>
         <source>AND Mask:</source>
-        <translation type="unfinished"></translation>
+        <translation>与掩码写入:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="158"/>
         <source>OR Mask:</source>
-        <translation type="unfinished"></translation>
+        <translation>或掩码写入:</translation>
     </message>
     <message>
         <source>AND Mask</source>
@@ -1266,14 +1266,14 @@
         <location filename="../dialogs/dialogmodbusscanner.ui" line="435"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="440"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="256"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <source>Device ID</source>
-        <translation type="unfinished">设备地址</translation>
+        <translation>设备地址</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="460"/>
@@ -1288,12 +1288,12 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="955"/>
         <source>Max Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>最大连接数</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="970"/>
         <source>Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation>平行线</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="1015"/>
@@ -1327,7 +1327,7 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="256"/>
         <source>Port Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>端口设置</translation>
     </message>
     <message>
         <source>Clear previous scan results?</source>
@@ -1336,7 +1336,7 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="232"/>
         <source>Clear scan results?</source>
-        <translation type="unfinished"></translation>
+        <translation>扫描结果清晰吗？</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="432"/>
@@ -1817,7 +1817,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="84"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>值：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="108"/>
@@ -1833,7 +1833,7 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="134"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="89"/>
         <source>Auto Simulation: OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：关闭</translation>
     </message>
     <message>
         <source>Auto Simulation</source>
@@ -1848,7 +1848,7 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="83"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="95"/>
         <source>Auto Simulation: ON</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：开启</translation>
     </message>
 </context>
 <context>
@@ -1885,12 +1885,12 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="118"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="227"/>
         <source>Auto Simulation: OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：关闭</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="140"/>
         <source>Bit Pattern: </source>
-        <translation type="unfinished"></translation>
+        <translation>各位的值: </translation>
     </message>
     <message>
         <source>Auto Simulation</source>
@@ -1905,7 +1905,7 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="221"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="234"/>
         <source>Auto Simulation: ON</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：开启</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="105"/>
@@ -2659,17 +2659,17 @@ Valid Slave Responses: %2</source>
         <translation>所有文件(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1387"/>
+        <location filename="../mainwindow.cpp" line="1384"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1388"/>
+        <location filename="../mainwindow.cpp" line="1385"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1484"/>
+        <location filename="../mainwindow.cpp" line="1481"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕获错误：

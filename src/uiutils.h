@@ -5,6 +5,11 @@
 #include <QPainter>
 #include <QPushButton>
 
+///
+/// \brief recolorPushButtonIcon
+/// \param btn
+/// \param color
+///
 inline void recolorPushButtonIcon(QPushButton* btn, const QColor& color)
 {
     if (!btn) return;

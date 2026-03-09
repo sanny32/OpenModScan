@@ -32,7 +32,7 @@ env:
 
   # SingPath variables
   PROJECT_SLUG: OpenModScan
-  ORGANIZAITION_ID: 2bd9d721-94a7-4c7d-aab8-b81dd84670a5
+  ORGANIZATION_ID: 2bd9d721-94a7-4c7d-aab8-b81dd84670a5
   ARTIFACT_CONF_SLUG: exe-zip
 
 jobs:
@@ -140,7 +140,7 @@ jobs:
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          organization-id: '${{ env.ORGANIZATION_ID }}'
           project-slug: '${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
@@ -200,7 +200,7 @@ jobs:
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          organization-id: '${{ env.ORGANIZATION_ID }}'
           project-slug: '${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}

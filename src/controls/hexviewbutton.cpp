@@ -27,8 +27,5 @@ HexViewButton::HexViewButton(QWidget* parent)
     setCursor(Qt::ArrowCursor);
     setIcon(QIcon(":/res/icon-hex.svg"));
     setToolTip(tr("Hex View"));
-
-    auto* s = new HexButtonStyle(style());
-    s->setParent(this);
-    setStyle(s);
+    setStyle(new HexButtonStyle(style()));
 }

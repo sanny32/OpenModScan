@@ -22,7 +22,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     : QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
-    ,_hexAddress(dd.HexAddress || dd.HexViewAddress)
+    ,_hexAddress(dd.HexAddress)
     ,_hexViewDeviceId(dd.HexViewDeviceId)
     ,_hexViewLength(dd.HexViewLength)
 {
@@ -36,12 +36,12 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
         : QString::number(length);
 
     ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
-        formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, params.AddrSpace, _hexAddress)));
+        formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
     ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
     ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
     ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
-        formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, params.AddrSpace, _hexAddress),
-        formatAddress(QModbusDataUnit::HoldingRegisters, params.Address + length - 1, params.AddrSpace, _hexAddress)));
+        formatAddress(QModbusDataUnit::HoldingRegisters, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress),
+        formatAddress(QModbusDataUnit::HoldingRegisters, params.Address + length - 1, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
 
     recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
     recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);

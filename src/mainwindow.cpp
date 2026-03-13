@@ -956,7 +956,7 @@ void MainWindow::on_actionForceCoils_triggered()
     params.LeadingZeros = dd.LeadingZeros;
     params.Value = QVariant::fromValue(data);
 
-    DialogForceMultipleCoils dlg(params, presetParams.Length, dd.HexAddress, this);
+    DialogForceMultipleCoils dlg(params, presetParams.Length, dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _modbusClient.writeRegister(QModbusDataUnit::Coils, params, 0);
@@ -1008,7 +1008,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.LeadingZeros = dd.LeadingZeros;
     params.Value = QVariant::fromValue(data);
 
-    DialogForceMultipleRegisters dlg(params, presetParams.Length, dd.HexAddress, this);
+    DialogForceMultipleRegisters dlg(params, presetParams.Length, dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);

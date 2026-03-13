@@ -13,20 +13,30 @@
 /// \brief DialogForceMultipleCoils::DialogForceMultipleCoils
 /// \param params
 /// \param length
-/// \param hexAddress
+/// \param dd
 /// \param parent
 ///
-DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent)
+DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, int length, const DisplayDefinition& dd, QWidget *parent)
     : QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleCoils)
     ,_writeParams(params)
-    ,_hexAddress(hexAddress)
+    ,_hexAddress(dd.HexAddress || dd.HexViewAddress)
+    ,_hexViewDeviceId(dd.HexViewDeviceId)
+    ,_hexViewLength(dd.HexViewLength)
 {
     ui->setupUi(this);
 
-    ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress)));
-    ui->labelLength->setText(QString(ui->labelLength->text()).arg(length, 3, 10, QLatin1Char('0')));
-    ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(params.DeviceId, 3, 10, QLatin1Char('0')));
+    const auto deviceIdStr = _hexViewDeviceId
+        ? QString("0x%1").arg(QString::number(params.DeviceId, 16).toUpper(), 2, '0')
+        : QString("%1").arg(params.DeviceId, 3, 10, QLatin1Char('0'));
+    const auto lengthStr = _hexViewLength
+        ? QString("0x%1").arg(QString::number(length, 16).toUpper(), 4, '0')
+        : QString("%1").arg(length, 3, 10, QLatin1Char('0'));
+
+    ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
+        formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress)));
+    ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
+    ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
     ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
         formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress),
         formatAddress(QModbusDataUnit::Coils, params.Address + length - 1, params.AddrSpace, _hexAddress)));

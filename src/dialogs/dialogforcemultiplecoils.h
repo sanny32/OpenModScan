@@ -4,6 +4,7 @@
 #include <QTableWidgetItem>
 #include "modbuswriteparams.h"
 #include "qadjustedsizedialog.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class DialogForceMultipleCoils;
@@ -14,7 +15,7 @@ class DialogForceMultipleCoils : public QAdjustedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleCoils(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogForceMultipleCoils(ModbusWriteParams& params, int length, const DisplayDefinition& dd, QWidget *parent = nullptr);
     ~DialogForceMultipleCoils();
 
     void accept() override;
@@ -35,6 +36,8 @@ private:
     QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
     bool _hexAddress;
+    bool _hexViewDeviceId;
+    bool _hexViewLength;
 };
 
 #endif // DIALOGFORCEMULTIPLECOILS_H

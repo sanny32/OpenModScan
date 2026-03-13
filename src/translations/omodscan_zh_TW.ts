@@ -855,40 +855,40 @@
         <translation type="vanished">從裝置：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="104"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="178"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="114"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 檔案 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="111"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="189"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="121"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="199"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="155"/>
         <source>Import error</source>
         <translation>導入錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="155"/>
         <source>Invalid value: %1</source>
         <translation>無效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="154"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="160"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="164"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="154"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="164"/>
         <source>No data found in file.</source>
         <translation>文件中未找到資料。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="160"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>導入的資料大小（%1）與目前大小（%2）不符。</translation>
     </message>
@@ -990,40 +990,40 @@
         <translation type="vanished">裝置地址： &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="631"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="712"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="641"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="722"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 檔案 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="638"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="723"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="648"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="689"/>
         <source>Import error</source>
         <translation>導入錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="689"/>
         <source>Invalid value: %1</source>
         <translation>無效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="688"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="698"/>
         <source>No data found in file.</source>
         <translation>文件中未找到資料。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="688"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="694"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="698"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="704"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="694"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="704"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>導入的資料大小（%1）與目前大小（%2）不符。</translation>
     </message>

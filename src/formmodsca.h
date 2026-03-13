@@ -284,6 +284,9 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << dd.ZeroBasedAddress;
     out << dd.DataViewColumnsDistance;
     out << dd.LeadingZeros;
+    out << dd.HexViewAddress;
+    out << dd.HexViewDeviceId;
+    out << dd.HexViewLength;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -362,6 +365,11 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     if(ver >= QVersionNumber(1, 8)) {
         in >> dd.DataViewColumnsDistance;
         in >> dd.LeadingZeros;
+    }
+    if(ver >= QVersionNumber(1, 11)) {
+        in >> dd.HexViewAddress;
+        in >> dd.HexViewDeviceId;
+        in >> dd.HexViewLength;
     }
 
     ByteOrder byteOrder = ByteOrder::Direct;

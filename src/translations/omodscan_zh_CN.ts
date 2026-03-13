@@ -172,37 +172,37 @@
 <context>
     <name>CsvExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Device Id</source>
         <translation>设备地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Length</source>
         <translation>长度</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Point Type</source>
         <translation>寄存器类型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Registers on Query</source>
         <translation>查询中的寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Address Base</source>
         <translation>基地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Byte Order</source>
         <translation>字节序</translation>
     </message>
@@ -406,7 +406,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="466"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
         <source>Scan</source>
         <translation>扫描</translation>
     </message>
@@ -446,17 +446,17 @@
         <translation>仅显示有效响应</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="466"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="659"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="665"/>
         <source>Pdf files (*.pdf);;CSV files (*.csv)</source>
         <translation>Pdf 文件 (*.pdf);;CSV 文件 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="736"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="742"/>
         <source>No connection to MODBUS device!</source>
         <translation>没有连接到 MODBUS 设备！</translation>
     </message>
@@ -1672,12 +1672,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>长度： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="32"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
         <source>15: WRITE MULTIPLE COILS</source>
         <translation>15: 写入多个线圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="35"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="39"/>
         <source>16: WRITE MULTIPLE REGISTERS</source>
         <translation>16: 写入多个寄存器</translation>
     </message>
@@ -1831,7 +1831,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="89"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="93"/>
         <source>Auto Simulation: OFF</source>
         <translation>自动模拟：关闭</translation>
     </message>
@@ -1845,8 +1845,8 @@ single-point  write functions 05 and 06.)</source>
         <translation>15: 写入单线圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="83"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="95"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="87"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="99"/>
         <source>Auto Simulation: ON</source>
         <translation>自动模拟：开启</translation>
     </message>
@@ -1883,7 +1883,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="227"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="231"/>
         <source>Auto Simulation: OFF</source>
         <translation>自动模拟：关闭</translation>
     </message>
@@ -1902,18 +1902,18 @@ single-point  write functions 05 and 06.)</source>
         <translation>16: 写入保持寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="221"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="234"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="225"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="238"/>
         <source>Auto Simulation: ON</source>
         <translation>自动模拟：开启</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="105"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="109"/>
         <source>Value, (HEX): </source>
         <translation>值（十六进制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="112"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="116"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1995,17 +1995,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>功能码：寄存器类型</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="75"/>
+        <location filename="../formmodsca.cpp" line="78"/>
         <source>Device polling paused...</source>
         <translation>设备轮询已暂停...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="226"/>
+        <location filename="../formmodsca.cpp" line="235"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="473"/>
+        <location filename="../formmodsca.cpp" line="482"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -2014,7 +2014,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="477"/>
+        <location filename="../formmodsca.cpp" line="486"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -2023,31 +2023,39 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="480"/>
+        <location filename="../formmodsca.cpp" line="489"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>轮询次数：%1
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="688"/>
+        <location filename="../formmodsca.cpp" line="697"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="861"/>
+        <location filename="../formmodsca.cpp" line="870"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="654"/>
+        <location filename="../formmodsca.cpp" line="663"/>
         <source>No Responses from Slave Device</source>
         <translation>设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="815"/>
+        <location filename="../formmodsca.cpp" line="824"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
+    </message>
+</context>
+<context>
+    <name>HexViewButton</name>
+    <message>
+        <location filename="../controls/hexviewbutton.cpp" line="29"/>
+        <source>Hex View</source>
+        <translation type="unfinished">十六进制视图</translation>
     </message>
 </context>
 <context>
@@ -3232,6 +3240,13 @@ Valid Slave Responses: %2</source>
     </message>
 </context>
 <context>
+    <name>NumericLineEdit</name>
+    <message>
+        <source>Hex View</source>
+        <translation type="vanished">十六进制视图</translation>
+    </message>
+</context>
+<context>
     <name>OutputWidget</name>
     <message>
         <location filename="../controls/outputwidget.cpp" line="563"/>
@@ -3325,26 +3340,26 @@ Valid Slave Responses: %2</source>
 <context>
     <name>PdfExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="986"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="992"/>
         <source>Error. Failed to write PDF file!</source>
         <translation>错误：保存为PDF失败！</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1039"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1045"/>
         <source>Address Base: %1
 Start Address: %2</source>
         <translation>基地址：%1
 起始地址：%2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1042"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1048"/>
         <source>Device Id: %1		Length: %2
 Point Type: [%3]</source>
         <translation>设备地址%1		长度%2
 寄存器类型：[%3]</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1045"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1051"/>
         <source>Registers on Query: %1
 Byte Order: %2</source>
         <translation>请求中的寄存器：%1

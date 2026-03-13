@@ -3,6 +3,7 @@
 
 #include <QModbusDataUnit>
 #include "qfixedsizedialog.h"
+#include "displaydefinition.h"
 
 struct SetupPresetParams
 {
@@ -25,7 +26,7 @@ class DialogSetupPresetData : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogSetupPresetData(SetupPresetParams& params, QModbusDataUnit::RegisterType pointType, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogSetupPresetData(SetupPresetParams& params, QModbusDataUnit::RegisterType pointType, const DisplayDefinition& dd, QWidget *parent = nullptr);
     ~DialogSetupPresetData();
 
     void accept() override;

@@ -14,7 +14,7 @@ namespace {
 /// \brief DialogMaskWriteRegiter::DialogMaskWriteRegiter
 /// \param parent
 ///
-DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, bool hexAddress, QWidget *parent) :
+DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, const DisplayDefinition& dd, QWidget *parent) :
       QFixedSizeDialog(parent)
     , ui(new Ui::DialogMaskWriteRegiter)
     ,_writeParams(params)
@@ -24,11 +24,15 @@ DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, bo
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);
+    ui->lineEditNode->setHexButtonVisible(true);
+    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
+    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     ui->controlAndMask->setValue(params.AndMask);
     ui->controlOrMask->setValue(params.OrMask);

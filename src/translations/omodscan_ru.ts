@@ -172,37 +172,37 @@
 <context>
     <name>CsvExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Device Id</source>
         <translation>Узел</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Start Address</source>
         <translation>Начальный адрес</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Length</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Point Type</source>
         <translation>Тип регистров</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Registers on Query</source>
         <translation>Количество регистров в запросе</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1219"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
         <source>Byte Order</source>
         <translation>Порядок байт</translation>
     </message>
@@ -406,7 +406,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="466"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
         <source>Scan</source>
         <translation>Сканировать</translation>
     </message>
@@ -446,17 +446,17 @@
         <translation>Показывать только корректные ответы</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="466"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="659"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="665"/>
         <source>Pdf files (*.pdf);;CSV files (*.csv)</source>
         <translation>Pdf файлы (*.pdf);;CSV файлы (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="736"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="742"/>
         <source>No connection to MODBUS device!</source>
         <translation>Нет соединения с MODBUS устройством!</translation>
     </message>
@@ -1660,12 +1660,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>Количество точек: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="32"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
         <source>15: WRITE MULTIPLE COILS</source>
         <translation>15: Запись нескольких дискретных выходов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="35"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="39"/>
         <source>16: WRITE MULTIPLE REGISTERS</source>
         <translation>16: Запись нескольких регистров</translation>
     </message>
@@ -1819,7 +1819,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="89"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="93"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: ВЫКЛ</translation>
     </message>
@@ -1833,8 +1833,8 @@ single-point  write functions 05 and 06.)</source>
         <translation>15: Запись дискретного выхода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="83"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="95"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="87"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="99"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: ВКЛ</translation>
     </message>
@@ -1871,7 +1871,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="227"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="231"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: ВЫКЛ</translation>
     </message>
@@ -1890,18 +1890,18 @@ single-point  write functions 05 and 06.)</source>
         <translation>16: Запись регистра хранения</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="221"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="234"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="225"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="238"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: ВКЛ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="105"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="109"/>
         <source>Value, (HEX): </source>
         <translation>Значение, (Шестн): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="112"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="116"/>
         <source>Value, (ANSI): </source>
         <translation>Знвчение, (ANSI): </translation>
     </message>
@@ -1983,17 +1983,17 @@ single-point  write functions 05 and 06.)</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="75"/>
+        <location filename="../formmodsca.cpp" line="78"/>
         <source>Device polling paused...</source>
         <translation>Опрос устройства приостановлен...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="226"/>
+        <location filename="../formmodsca.cpp" line="235"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="473"/>
+        <location filename="../formmodsca.cpp" line="482"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -2002,7 +2002,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="477"/>
+        <location filename="../formmodsca.cpp" line="486"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -2011,31 +2011,39 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="480"/>
+        <location filename="../formmodsca.cpp" line="489"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="688"/>
+        <location filename="../formmodsca.cpp" line="697"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="861"/>
+        <location filename="../formmodsca.cpp" line="870"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="654"/>
+        <location filename="../formmodsca.cpp" line="663"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="815"/>
+        <location filename="../formmodsca.cpp" line="824"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
+    </message>
+</context>
+<context>
+    <name>HexViewButton</name>
+    <message>
+        <location filename="../controls/hexviewbutton.cpp" line="29"/>
+        <source>Hex View</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3219,6 +3227,13 @@ Valid Slave Responses: %2</source>
     </message>
 </context>
 <context>
+    <name>NumericLineEdit</name>
+    <message>
+        <source>Hex View</source>
+        <translation type="vanished">Шестнадцатеричный вид</translation>
+    </message>
+</context>
+<context>
     <name>OutputWidget</name>
     <message>
         <location filename="../controls/outputwidget.cpp" line="563"/>
@@ -3312,26 +3327,26 @@ Valid Slave Responses: %2</source>
 <context>
     <name>PdfExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="986"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="992"/>
         <source>Error. Failed to write PDF file!</source>
         <translation>Ошибка. Не удалось записать PDF файл!</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1039"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1045"/>
         <source>Address Base: %1
 Start Address: %2</source>
         <translation>Адресация: %1
 Начальный адрес: %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1042"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1048"/>
         <source>Device Id: %1		Length: %2
 Point Type: [%3]</source>
         <translation>Узел: %1		Количество: %2
 Тип регистров: [%3]</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1045"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1051"/>
         <source>Registers on Query: %1
 Byte Order: %2</source>
         <translation>Количество регистров в запросе: %1

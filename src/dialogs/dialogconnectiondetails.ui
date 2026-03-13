@@ -87,7 +87,7 @@
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>25</height>
+                  <height>26</height>
                  </size>
                 </property>
                 <property name="maximumSize">
@@ -108,6 +108,12 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>26</height>
+                 </size>
                 </property>
                 <property name="editable">
                  <bool>true</bool>
@@ -135,6 +141,12 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>26</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -206,7 +218,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>25</height>
+           <height>26</height>
           </size>
          </property>
          <item>
@@ -274,7 +286,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>25</height>
+            <height>26</height>
            </size>
           </property>
           <property name="editable">
@@ -337,7 +349,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>25</height>
+            <height>26</height>
            </size>
           </property>
           <property name="currentIndex">
@@ -367,7 +379,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>25</height>
+            <height>26</height>
            </size>
           </property>
           <property name="currentIndex">
@@ -387,7 +399,7 @@
           <property name="minimumSize">
            <size>
             <width>90</width>
-            <height>25</height>
+            <height>26</height>
            </size>
           </property>
           <item>
@@ -431,7 +443,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>25</height>
+             <height>26</height>
             </size>
            </property>
            <property name="currentIndex">
@@ -457,7 +469,7 @@
            <property name="minimumSize">
             <size>
              <width>90</width>
-             <height>25</height>
+             <height>26</height>
             </size>
            </property>
           </widget>
@@ -480,7 +492,7 @@
            <property name="minimumSize">
             <size>
              <width>90</width>
-             <height>25</height>
+             <height>26</height>
             </size>
            </property>
           </widget>

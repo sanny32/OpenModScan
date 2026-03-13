@@ -2,6 +2,9 @@
 #include <QProxyStyle>
 #include "hexviewbutton.h"
 
+///
+/// \brief The HexButtonStyle class
+///
 class HexButtonStyle : public QProxyStyle
 {
 public:

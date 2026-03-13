@@ -136,7 +136,7 @@
        <item>
         <widget class="QGroupBox" name="groupBoxDeviceId">
          <property name="title">
-          <string>Device Id</string>
+          <string>Device ID</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
           <property name="labelAlignment">
@@ -1085,7 +1085,7 @@ font-weight: bold;</string>
          <item>
           <widget class="QLabel" name="labelDeviceId">
            <property name="text">
-            <string>Device Id: </string>
+            <string>Device ID: </string>
            </property>
           </widget>
          </item>

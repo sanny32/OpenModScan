@@ -173,7 +173,7 @@
     <name>CsvExporter</name>
     <message>
         <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
-        <source>Device Id</source>
+        <source>Device ID</source>
         <translation>Узел</translation>
     </message>
     <message>
@@ -401,7 +401,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="190"/>
-        <source>Device Id:</source>
+        <source>Device ID:</source>
         <translation>Узел:</translation>
     </message>
     <message>
@@ -749,7 +749,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="317"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>Узел: </translation>
     </message>
     <message>
@@ -767,7 +767,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Устройство: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -815,7 +815,7 @@
         <translation type="vanished">Устройство: </translation>
     </message>
     <message>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation type="vanished">Узел: </translation>
     </message>
     <message>
@@ -843,7 +843,7 @@
         <translation type="vanished">Количество: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>Device Id: &lt;b&gt;%1&lt;/b&gt;</source>
+        <source>Device ID: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="vanished">Узел: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
@@ -928,7 +928,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Устройство: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -962,7 +962,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Конечный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation type="vanished">Узел: </translation>
     </message>
     <message>
@@ -978,7 +978,7 @@
         <translation type="vanished">Количество: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <source>Device Id: &lt;b&gt;%1&lt;/b&gt;</source>
+        <source>Device ID: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="vanished">Узел: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
@@ -1049,7 +1049,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="23"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>Узел: </translation>
     </message>
     <message>
@@ -1163,7 +1163,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="1088"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>Узел: </translation>
     </message>
     <message>
@@ -1206,7 +1206,10 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="139"/>
-        <source>Device Id</source>
+        <location filename="../dialogs/dialogmodbusscanner.ui" line="446"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="256"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
+        <source>Device ID</source>
         <translation>Узел</translation>
     </message>
     <message>
@@ -1250,7 +1253,7 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Результаты:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>PORT: Device Id (serial port settings)</source>
+        <source>PORT: Device ID (serial port settings)</source>
         <translation type="vanished">Порт: Узел (параметры порта)</translation>
     </message>
     <message>
@@ -1258,13 +1261,6 @@
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <source>Port</source>
         <translation>Порт</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogmodbusscanner.ui" line="446"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="256"/>
-        <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
-        <source>Device ID</source>
-        <translation>Устройство</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="466"/>
@@ -1312,7 +1308,7 @@
         <translation>Старт</translation>
     </message>
     <message>
-        <source>Address: port (Device Id)</source>
+        <source>Address: port (Device ID)</source>
         <translation type="vanished">Адрес: порт (Узел)</translation>
     </message>
     <message>
@@ -1361,7 +1357,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="438"/>
-        <source>Device Id:</source>
+        <source>Device ID:</source>
         <translation>Узел:</translation>
     </message>
     <message>
@@ -1396,7 +1392,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="560"/>
-        <source>Device Id: %1</source>
+        <source>Device ID: %1</source>
         <translation>Узел: %1</translation>
     </message>
 </context>
@@ -1646,7 +1642,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>Узел: </translation>
     </message>
     <message>
@@ -1687,7 +1683,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="27"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>Узел: </translation>
     </message>
     <message>
@@ -1790,7 +1786,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="23"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>Узел: </translation>
     </message>
     <message>
@@ -1856,7 +1852,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="23"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>Узел: </translation>
     </message>
     <message>
@@ -1921,7 +1917,7 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Узел: </translation>
     </message>
     <message>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation type="vanished">Узел: </translation>
     </message>
     <message>
@@ -1974,7 +1970,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../formmodsca.ui" line="186"/>
-        <source>Device Id:</source>
+        <source>Device ID:</source>
         <translation>Узел:</translation>
     </message>
     <message>
@@ -2003,7 +1999,7 @@ Length: %3</source>
     </message>
     <message>
         <location filename="../formmodsca.cpp" line="486"/>
-        <source>Device Id: %1
+        <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
         <translation>Узел: %1
@@ -3340,7 +3336,7 @@ Start Address: %2</source>
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.cpp" line="1048"/>
-        <source>Device Id: %1		Length: %2
+        <source>Device ID: %1		Length: %2
 Point Type: [%3]</source>
         <translation>Узел: %1		Количество: %2
 Тип регистров: [%3]</translation>

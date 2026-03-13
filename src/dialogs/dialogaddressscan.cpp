@@ -1045,7 +1045,7 @@ void PdfExporter::paintPageHeader(int& yPos, QPainter& painter)
     const auto text1 = QString(tr("Address Base: %1\nStart Address: %2")).arg(_addressBase, _startAddress);
     auto rc1 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text1);
 
-    const auto text2 = QString(tr("Device Id: %1\t\tLength: %2\nPoint Type: [%3]")).arg(_deviceId, _length, _pointType);
+    const auto text2 = QString(tr("Device ID: %1\t\tLength: %2\nPoint Type: [%3]")).arg(_deviceId, _length, _pointType);
     auto rc2 = painter.boundingRect(_pageRect, Qt::TextWordWrap, text2);
 
     const auto text3 = QString(tr("Registers on Query: %1\nByte Order: %2")).arg(_regsOnQuery, _byteOrder);
@@ -1222,7 +1222,7 @@ void CsvExporter::exportCsv(const QString& filename)
     ts.setGenerateByteOrderMark(true);
 
     const char* delim = ";";
-    const auto header = QString("%2%1%3%1%4%1%5%1%6%1%7%1%8").arg(delim, tr("Address Base"), tr("Start Address"), tr("Device Id"), tr("Length"), tr("Point Type"), tr("Registers on Query"), tr("Byte Order"));
+    const auto header = QString("%2%1%3%1%4%1%5%1%6%1%7%1%8").arg(delim, tr("Address Base"), tr("Start Address"), tr("Device ID"), tr("Length"), tr("Point Type"), tr("Registers on Query"), tr("Byte Order"));
     ts << header << "\n";
 
     const auto headerData = QString("%2%1%3%1%4%1%5%1%6%1%7%1%8").arg(delim, _addressBase, _startAddress, _deviceId, _length, _pointType, _regsOnQuery, _byteOrder);

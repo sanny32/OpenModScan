@@ -2666,17 +2666,17 @@ Valid Slave Responses: %2</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1384"/>
+        <location filename="../mainwindow.cpp" line="1390"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1385"/>
+        <location filename="../mainwindow.cpp" line="1391"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1481"/>
+        <location filename="../mainwindow.cpp" line="1487"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕獲錯誤：

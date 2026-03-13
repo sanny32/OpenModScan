@@ -1180,7 +1180,13 @@ void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 {
     ui->mdiArea->setViewMode(mode);
     if(auto tabBar = ui->mdiArea->findChild<QTabBar*>())
+    {
         tabBar->setExpanding(false);
+        connect(tabBar, &QTabBar::tabBarDoubleClicked, this, [this](int)
+        {
+            ui->actionDataDefinition->trigger();
+        });
+    }
 }
 
 ///

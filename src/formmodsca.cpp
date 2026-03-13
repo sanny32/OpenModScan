@@ -10,7 +10,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 10);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 11);
 
 ///
 /// \brief FormModSca::FormModSca
@@ -41,17 +41,20 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
     ui->lineEditAddress->setLeadingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
     ui->lineEditAddress->setValue(1);
+    ui->lineEditAddress->setHexButtonVisible(true);
     ui->lineEditAddress->blockSignals(false);
 
     ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(1, true));
     ui->lineEditLength->setValue(50);
+    ui->lineEditLength->setHexButtonVisible(true);
     ui->lineEditLength->blockSignals(false);
 
     ui->lineEditDeviceId->blockSignals(true);
     ui->lineEditDeviceId->setLeadingZeroes(true);
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
+    ui->lineEditDeviceId->setHexButtonVisible(true);
     ui->lineEditDeviceId->blockSignals(false);
 
     ui->comboBoxAddressBase->blockSignals(true);
@@ -183,6 +186,9 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.HexAddress = displayHexAddresses();
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
     dd.LeadingZeros = ui->lineEditDeviceId->leadingZeroes();
+    dd.HexViewAddress  = ui->lineEditAddress->hexView();
+    dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
+    dd.HexViewLength   = ui->lineEditLength->hexView();
 
     return dd;
 }
@@ -202,6 +208,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditDeviceId->blockSignals(false);
+    ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
 
     ui->comboBoxAddressBase->blockSignals(true);
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
@@ -212,12 +219,14 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditAddress->blockSignals(false);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress));
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLength->blockSignals(false);
+    ui->lineEditLength->setHexView(dd.HexViewLength);
 
     ui->comboBoxModbusPointType->blockSignals(true);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
@@ -967,7 +976,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
             params.Client = &_modbusClient;
 
-            DialogWriteCoilRegister dlg(params, displayHexAddresses(), _dataSimulator, _parent);
+            DialogWriteCoilRegister dlg(params, displayDefinition(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
                 _modbusClient.writeRegister(dd.PointType, params, _formId);
         }
@@ -988,7 +997,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
             params.Client = &_modbusClient;
 
-            DialogWriteHoldingRegister dlg(params, displayHexAddresses(), _dataSimulator, _parent);
+            DialogWriteHoldingRegister dlg(params, displayDefinition(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
                 _modbusClient.writeRegister(dd.PointType, params, _formId);
         }

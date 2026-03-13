@@ -54,7 +54,7 @@ static SimButtonColors simColors(DataDisplayMode mode)
 /// \param dataSimulator
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, bool hexAddress,
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, const DisplayDefinition& dd,
                                                        DataSimulator* dataSimulator, QWidget* parent)
     : QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
@@ -70,11 +70,15 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);
+    ui->lineEditNode->setHexButtonVisible(true);
+    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
+    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     if(_dataSimulator != nullptr)
     {

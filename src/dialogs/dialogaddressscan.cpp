@@ -412,8 +412,14 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLength->setInputRange(2, 65530);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
+    ui->lineEditStartAddress->setHexButtonVisible(true);
+    ui->lineEditStartAddress->setHexView(dd.HexViewAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
+    ui->lineEditSlaveAddress->setHexButtonVisible(true);
+    ui->lineEditSlaveAddress->setHexView(dd.HexViewDeviceId);
     ui->lineEditLength->setValue(999);
+    ui->lineEditLength->setHexButtonVisible(true);
+    ui->lineEditLength->setHexView(dd.HexViewLength);
     ui->tabWidget->setCurrentIndex(0);
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
     ui->comboBoxByteOrder->setCurrentByteOrder(order);

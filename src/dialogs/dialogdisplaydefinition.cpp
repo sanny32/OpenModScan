@@ -34,8 +34,14 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditScanRate->setValue(dd.ScanRate);
     ui->lineEditPointAddress->setValue(dd.PointAddress);
+    ui->lineEditPointAddress->setHexButtonVisible(true);
+    ui->lineEditPointAddress->setHexView(dd.HexViewAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
+    ui->lineEditSlaveAddress->setHexButtonVisible(true);
+    ui->lineEditSlaveAddress->setHexView(dd.HexViewDeviceId);
     ui->lineEditLength->setValue(dd.Length);
+    ui->lineEditLength->setHexButtonVisible(true);
+    ui->lineEditLength->setHexView(dd.HexViewLength);
     ui->lineEditLogLimit->setValue(dd.LogViewLimit);
 
     ui->buttonBox->setFocus();

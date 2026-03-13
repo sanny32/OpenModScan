@@ -2,6 +2,7 @@
 #define DIALOGWRITECOILREGISTER_H
 
 #include "qfixedsizedialog.h"
+#include "displaydefinition.h"
 #include "modbuswriteparams.h"
 #include "modbussimulationparams.h"
 
@@ -19,7 +20,7 @@ class DialogWriteCoilRegister : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteCoilRegister(ModbusWriteParams& params, bool hexAddress,
+    explicit DialogWriteCoilRegister(ModbusWriteParams& params, const DisplayDefinition& dd,
                                      DataSimulator* dataSimulator = nullptr,
                                      QWidget *parent = nullptr);
     ~DialogWriteCoilRegister();

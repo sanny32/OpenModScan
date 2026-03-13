@@ -119,6 +119,7 @@ set(SOURCES
     controls/modbusmessagewidget.cpp
     controls/modbusprotocolscombobox.cpp
     controls/numericlineedit.cpp
+    controls/hexviewbutton.cpp
     controls/paritytypecombobox.cpp
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp

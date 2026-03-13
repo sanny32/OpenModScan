@@ -2,6 +2,7 @@
 #define DIALOGWRITEHOLDINGREGISTER_H
 
 #include "enums.h"
+#include "displaydefinition.h"
 #include "modbuswriteparams.h"
 #include "modbussimulationparams.h"
 #include "qfixedsizedialog.h"
@@ -22,7 +23,7 @@ class DialogWriteHoldingRegister : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteHoldingRegister(ModbusWriteParams& params, bool hexAddress,
+    explicit DialogWriteHoldingRegister(ModbusWriteParams& params, const DisplayDefinition& dd,
                                         DataSimulator* dataSimulator = nullptr,
                                         QWidget *parent = nullptr);
     ~DialogWriteHoldingRegister();

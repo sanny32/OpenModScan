@@ -435,7 +435,7 @@ void DialogModbusScanner::clearProgress()
     ui->labelStopBits->setText(QString(tr("Stop Bits:")));
     ui->labelIPAddress->setText(QString(tr("Address:")));
     ui->labelPort->setText(QString(tr("Port:")));
-    ui->labelDeviceId->setText(QString(tr("Device Id:")));
+    ui->labelDeviceId->setText(QString(tr("Device ID:")));
 }
 
 ///
@@ -557,7 +557,7 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
         ui->labelPort->setText(QString(tr("Port: %1")).arg(cd.TcpParams.ServicePort));
     }
 
-    ui->labelDeviceId->setText(QString(tr("Device Id: %1")).arg(deviceId));
+    ui->labelDeviceId->setText(QString(tr("Device ID: %1")).arg(deviceId));
     ui->progressBar->setValue(qMax(ui->progressBar->value(), progress));
 }
 

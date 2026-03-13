@@ -59,6 +59,7 @@
         <file>res/icon-reset.svg</file>
         <file>res/icon-hex.svg</file>
         <file>res/icon-constant.svg</file>
+        <file>res/icon-hex.svg</file>
     </qresource>
 </RCC>
 

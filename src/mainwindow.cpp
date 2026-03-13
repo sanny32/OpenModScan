@@ -864,7 +864,7 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
     params.Client = &_modbusClient;
 
-    DialogWriteCoilRegister dlg(params, hexAddresses, _dataSimulator, this);
+    DialogWriteCoilRegister dlg(params, dd, _dataSimulator, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteSingleCoilAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
@@ -912,7 +912,7 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
     params.Client = &_modbusClient;
 
-    DialogWriteHoldingRegister dlg(params, hexAddresses, _dataSimulator, this);
+    DialogWriteHoldingRegister dlg(params, dd, _dataSimulator, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastWriteHoldingRegisterAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
@@ -936,7 +936,7 @@ void MainWindow::on_actionForceCoils_triggered()
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.LeadingZeros };
 
     {
-        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, dd.HexAddress, this);
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, dd, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
 
@@ -956,7 +956,7 @@ void MainWindow::on_actionForceCoils_triggered()
     params.LeadingZeros = dd.LeadingZeros;
     params.Value = QVariant::fromValue(data);
 
-    DialogForceMultipleCoils dlg(params, presetParams.Length, dd.HexAddress, this);
+    DialogForceMultipleCoils dlg(params, presetParams.Length, dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _modbusClient.writeRegister(QModbusDataUnit::Coils, params, 0);
@@ -985,7 +985,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.LeadingZeros };
 
     {
-        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, dd.HexAddress, this);
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, dd, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
 
@@ -1008,7 +1008,7 @@ void MainWindow::on_actionPresetRegs_triggered()
     params.LeadingZeros = dd.LeadingZeros;
     params.Value = QVariant::fromValue(data);
 
-    DialogForceMultipleRegisters dlg(params, presetParams.Length, dd.HexAddress, this);
+    DialogForceMultipleRegisters dlg(params, presetParams.Length, dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
@@ -1030,7 +1030,7 @@ void MainWindow::on_actionMaskWrite_triggered()
 
     ModbusMaskWriteParams params = { dd.DeviceId, _lastMaskWriteRegisterAddress + (dd.ZeroBasedAddress ? 0 : 1), 0xFFFF, 0, dd.ZeroBasedAddress, dd.LeadingZeros };
 
-    DialogMaskWriteRegiter dlg(params, dd.HexAddress, this);
+    DialogMaskWriteRegiter dlg(params, dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _lastMaskWriteRegisterAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
@@ -1180,7 +1180,13 @@ void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 {
     ui->mdiArea->setViewMode(mode);
     if(auto tabBar = ui->mdiArea->findChild<QTabBar*>())
+    {
         tabBar->setExpanding(false);
+        connect(tabBar, &QTabBar::tabBarDoubleClicked, this, [this](int)
+        {
+            ui->actionDataDefinition->trigger();
+        });
+    }
 }
 
 ///

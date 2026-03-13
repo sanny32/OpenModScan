@@ -25,6 +25,9 @@ struct DisplayDefinition
     AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     quint16 DataViewColumnsDistance = 16;
     bool LeadingZeros = true;
+    bool HexViewAddress  = false;
+    bool HexViewDeviceId = false;
+    bool HexViewLength   = false;
 
     void normalize()
     {
@@ -53,6 +56,9 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/ZeroBasedAddress",      dd.ZeroBasedAddress);
     out.setValue("DisplayDefinition/HexAddress",            dd.HexAddress);
     out.setValue("DisplayDefinition/AutoscrollLog",         dd.AutoscrollLog);
+    out.setValue("DisplayDefinition/HexViewAddress",        dd.HexViewAddress);
+    out.setValue("DisplayDefinition/HexViewDeviceId",       dd.HexViewDeviceId);
+    out.setValue("DisplayDefinition/HexViewLength",         dd.HexViewLength);
 
     return out;
 }
@@ -77,6 +83,9 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
+    dd.HexViewAddress  = in.value("DisplayDefinition/HexViewAddress",  false).toBool();
+    dd.HexViewDeviceId = in.value("DisplayDefinition/HexViewDeviceId", false).toBool();
+    dd.HexViewLength   = in.value("DisplayDefinition/HexViewLength",   false).toBool();
 
     dd.normalize();
     return in;
@@ -101,6 +110,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinit
     xml.writeAttribute("ZeroBasedAddress", boolToString(dd.ZeroBasedAddress));
     xml.writeAttribute("HexAddress", boolToString(dd.HexAddress));
     xml.writeAttribute("AutoscrollLog", boolToString(dd.AutoscrollLog));
+    xml.writeAttribute("HexViewAddress",  boolToString(dd.HexViewAddress));
+    xml.writeAttribute("HexViewDeviceId", boolToString(dd.HexViewDeviceId));
+    xml.writeAttribute("HexViewLength",   boolToString(dd.HexViewLength));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
     xml.writeEndElement();
@@ -159,6 +171,13 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& d
         if (attributes.hasAttribute("HexAddress")) {
             dd.HexAddress = stringToBool(attributes.value("HexAddress").toString());
         }
+
+        if (attributes.hasAttribute("HexViewAddress"))
+            dd.HexViewAddress = stringToBool(attributes.value("HexViewAddress").toString());
+        if (attributes.hasAttribute("HexViewDeviceId"))
+            dd.HexViewDeviceId = stringToBool(attributes.value("HexViewDeviceId").toString());
+        if (attributes.hasAttribute("HexViewLength"))
+            dd.HexViewLength = stringToBool(attributes.value("HexViewLength").toString());
 
         if (attributes.hasAttribute("AutoscrollLog")) {
             dd.AutoscrollLog = stringToBool(attributes.value("AutoscrollLog").toString());

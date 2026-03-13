@@ -47,6 +47,8 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     const int maxLen = qMin(typeMax, 65536 - offset);
     ui->lineEditNumberOfPoints->setInputRange(1, qMax(1, maxLen));
     ui->lineEditNumberOfPoints->setValue(params.Length);
+    ui->lineEditNumberOfPoints->setHexButtonVisible(true);
+    ui->lineEditNumberOfPoints->setHexView(dd.HexViewLength);
 
     ui->buttonBox->setFocus();
 }

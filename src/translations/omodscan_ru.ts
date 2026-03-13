@@ -1650,12 +1650,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>Узел: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="104"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="122"/>
         <source>Number of Points: </source>
         <translation>Количество точек: </translation>
     </message>
@@ -1691,42 +1691,42 @@ single-point  write functions 05 and 06.)</source>
         <translation>Узел: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="53"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="59"/>
         <source>Function: </source>
         <translation>Функция: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="106"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
         <source>Show Data in</source>
         <translation>Отображать данные в формате</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="118"/>
         <source>Decimal</source>
         <translation>Десятичный</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="119"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="125"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="131"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
         <source>Request</source>
         <translation>Запрос</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="143"/>
         <source>Send Data: </source>
         <translation>Данные запроса: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="183"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="189"/>
         <source>Make Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="170"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="176"/>
         <source>Enter bytes value separated by spaces</source>
         <translation>Введите значение в байтах, разделенное пробелами</translation>
     </message>
@@ -1735,12 +1735,12 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">Введите значение в байтах, разделенное пробелами</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="211"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="217"/>
         <source>Response Buffer</source>
         <translation>Ответ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="291"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="297"/>
         <source>Send</source>
         <translation>Отправить</translation>
     </message>

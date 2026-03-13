@@ -1662,12 +1662,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
         <source>Address: </source>
         <translation>寄存器地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="104"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="122"/>
         <source>Number of Points: </source>
         <translation>长度： </translation>
     </message>
@@ -1703,42 +1703,42 @@ single-point  write functions 05 and 06.)</source>
         <translation>设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="53"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="59"/>
         <source>Function: </source>
         <translation>功能码： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="106"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
         <source>Show Data in</source>
         <translation>数据显示格式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="118"/>
         <source>Decimal</source>
         <translation>十进制</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="119"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="125"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="131"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
         <source>Request</source>
         <translation>请求</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="143"/>
         <source>Send Data: </source>
         <translation>要发送的数据： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="183"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="189"/>
         <source>Make Data</source>
         <translation>制作数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="170"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="176"/>
         <source>Enter bytes value separated by spaces</source>
         <translation>输入字节值，值之间用空格分隔</translation>
     </message>
@@ -1747,12 +1747,12 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">输入字节值，值之间用空格分隔</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="211"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="217"/>
         <source>Response Buffer</source>
         <translation>响应</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="291"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="297"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>

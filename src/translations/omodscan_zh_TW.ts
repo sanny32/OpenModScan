@@ -1661,12 +1661,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="104"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="122"/>
         <source>Number of Points: </source>
         <translation>點數： </translation>
     </message>
@@ -1702,42 +1702,42 @@ single-point  write functions 05 and 06.)</source>
         <translation>裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="53"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="59"/>
         <source>Function: </source>
         <translation>功能： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="106"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
         <source>Show Data in</source>
         <translation>數據顯示格式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="112"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="118"/>
         <source>Decimal</source>
         <translation>十進制</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="119"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="125"/>
         <source>Hex</source>
         <translation>十六進制</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="131"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
         <source>Request</source>
         <translation>要求</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="137"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="143"/>
         <source>Send Data: </source>
         <translation>傳送數據： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="183"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="189"/>
         <source>Make Data</source>
         <translation>製作數據</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="170"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="176"/>
         <source>Enter bytes value separated by spaces</source>
         <translation>請輸入以空格分隔的位元組值</translation>
     </message>
@@ -1746,12 +1746,12 @@ single-point  write functions 05 and 06.)</source>
         <translation type="vanished">輸入位元組值，值之間用空格分隔</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="211"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="217"/>
         <source>Response Buffer</source>
         <translation>回應緩衝區</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogusermsg.ui" line="291"/>
+        <location filename="../dialogs/dialogusermsg.ui" line="297"/>
         <source>Send</source>
         <translation>傳送</translation>
     </message>

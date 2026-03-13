@@ -286,7 +286,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case HexMode:
         {
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
-            const QString prefix = QStringLiteral("0x");
+            const QString prefix = hasFocus() ? QString() : QStringLiteral("0x");
             if(_paddingZeroes)
             {
                 const auto text = prefix + QStringLiteral("%1").arg(value.toUInt(), _paddingZeroWidth, 16, QLatin1Char('0')).toUpper();

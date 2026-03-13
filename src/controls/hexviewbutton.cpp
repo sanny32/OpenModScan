@@ -1,5 +1,19 @@
 #include <QIcon>
+#include <QProxyStyle>
 #include "hexviewbutton.h"
+
+class HexButtonStyle : public QProxyStyle
+{
+public:
+    using QProxyStyle::QProxyStyle;
+
+    int pixelMetric(PixelMetric m, const QStyleOption* opt = nullptr, const QWidget* w = nullptr) const override
+    {
+        if(m == PM_ButtonShiftHorizontal || m == PM_ButtonShiftVertical)
+            return 0;
+        return QProxyStyle::pixelMetric(m, opt, w);
+    }
+};
 
 ///
 /// \brief HexViewButton::HexViewButton
@@ -13,4 +27,8 @@ HexViewButton::HexViewButton(QWidget* parent)
     setCursor(Qt::ArrowCursor);
     setIcon(QIcon(":/res/icon-hex.svg"));
     setToolTip(tr("Hex View"));
+
+    auto* s = new HexButtonStyle(style());
+    s->setParent(this);
+    setStyle(s);
 }

@@ -2041,7 +2041,7 @@ Valid Slave Responses: %2</source>
 <context>
     <name>HexViewButton</name>
     <message>
-        <location filename="../controls/hexviewbutton.cpp" line="15"/>
+        <location filename="../controls/hexviewbutton.cpp" line="29"/>
         <source>Hex View</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1969,27 +1969,27 @@ single-point  write functions 05 and 06.)</source>
 <context>
     <name>FormModSca</name>
     <message>
-        <location filename="../formmodsca.ui" line="83"/>
+        <location filename="../formmodsca.ui" line="84"/>
         <source>Start Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsca.ui" line="118"/>
+        <location filename="../formmodsca.ui" line="107"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsca.ui" line="135"/>
+        <location filename="../formmodsca.ui" line="124"/>
         <source>Length:</source>
         <translation>長度：</translation>
     </message>
     <message>
-        <location filename="../formmodsca.ui" line="206"/>
+        <location filename="../formmodsca.ui" line="186"/>
         <source>Device Id:</source>
         <translation>裝置地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsca.ui" line="272"/>
+        <location filename="../formmodsca.ui" line="236"/>
         <source>MODBUS Point Type</source>
         <translation>暫存器類型</translation>
     </message>
@@ -3511,12 +3511,12 @@ Byte Order: %2</source>
         <translation>有效的從站回應：0</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="69"/>
+        <location filename="../controls/statisticwidget.ui" line="80"/>
         <source>Reset Ctrs</source>
         <translation>重設計數器</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="91"/>
+        <location filename="../controls/statisticwidget.ui" line="102"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>

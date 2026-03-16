@@ -722,7 +722,7 @@
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="286"/>
         <source>Autoscroll Log View</source>
         <translatorcomment>自动滚动日志视图</translatorcomment>
-        <translation></translation>
+        <translation>自动滚动日志视图</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="302"/>
@@ -2052,7 +2052,7 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/numericlineedit.cpp" line="29"/>
         <location filename="../controls/hexviewbutton.cpp" line="32"/>
         <source>Hex View</source>
-        <translation type="unfinished">十六进制视图</translation>
+        <translation>十六进制视图</translation>
     </message>
 </context>
 <context>

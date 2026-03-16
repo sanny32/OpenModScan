@@ -2040,7 +2040,7 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/numericlineedit.cpp" line="29"/>
         <location filename="../controls/hexviewbutton.cpp" line="32"/>
         <source>Hex View</source>
-        <translation type="unfinished"></translation>
+        <translation>Шестн. вид</translation>
     </message>
 </context>
 <context>

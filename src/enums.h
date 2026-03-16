@@ -180,6 +180,36 @@ inline QSettings& operator >>(QSettings& in, DataDisplayMode& mode)
 }
 
 ///
+/// \brief registersCount
+/// \param mode
+/// \return
+///
+inline static int registersCount(DataDisplayMode mode)
+{
+    switch(mode)
+    {
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
+            return 2;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            return 4;
+
+        default:
+            return 1;
+    }
+}
+
+///
 /// \brief The ByteOrder enum
 ///
 enum class ByteOrder

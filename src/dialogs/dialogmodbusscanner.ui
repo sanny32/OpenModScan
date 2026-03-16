@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>732</width>
-    <height>743</height>
+    <height>817</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -136,14 +136,14 @@
        <item>
         <widget class="QGroupBox" name="groupBoxDeviceId">
          <property name="title">
-          <string>Device Id</string>
+          <string>Device ID</string>
          </property>
          <layout class="QFormLayout" name="formLayout">
           <property name="labelAlignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="formAlignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
           </property>
           <property name="verticalSpacing">
            <number>2</number>
@@ -172,7 +172,7 @@
             <property name="minimumSize">
              <size>
               <width>60</width>
-              <height>0</height>
+              <height>26</height>
              </size>
             </property>
             <property name="minimum">
@@ -201,7 +201,7 @@
             <property name="minimumSize">
              <size>
               <width>60</width>
-              <height>0</height>
+              <height>26</height>
              </size>
             </property>
             <property name="minimum">
@@ -241,15 +241,22 @@
            </widget>
           </item>
           <item>
-           <widget class="FunctionCodeComboBox" name="comboBoxFunction"/>
+           <widget class="FunctionCodeComboBox" name="comboBoxFunction">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item>
            <layout class="QFormLayout" name="formLayout_3">
             <property name="labelAlignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
             <property name="formAlignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
             </property>
             <item row="0" column="0">
              <widget class="QLabel" name="labelAddress">
@@ -271,7 +278,7 @@
                 <property name="minimumSize">
                  <size>
                   <width>62</width>
-                  <height>0</height>
+                  <height>26</height>
                  </size>
                 </property>
                 <property name="minimum">
@@ -293,6 +300,12 @@
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>26</height>
+                 </size>
+                </property>
                 <property name="currentIndex">
                  <number>-1</number>
                 </property>
@@ -311,7 +324,7 @@
               <property name="minimumSize">
                <size>
                 <width>62</width>
-                <height>0</height>
+                <height>26</height>
                </size>
               </property>
               <property name="minimum">
@@ -349,7 +362,7 @@
           <item>
            <layout class="QFormLayout" name="formLayout_5">
             <property name="formAlignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
             </property>
             <property name="verticalSpacing">
              <number>2</number>
@@ -365,7 +378,7 @@
               <property name="minimumSize">
                <size>
                 <width>80</width>
-                <height>0</height>
+                <height>26</height>
                </size>
               </property>
               <property name="minimum">
@@ -419,14 +432,21 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="labelScanResultsDesc">
-         <property name="text">
-          <string>PORT: Device Id (serial port settings)</string>
+        <widget class="QTreeWidget" name="treeWidget">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
          </property>
+         <column>
+          <property name="text">
+           <string>Port</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Device ID</string>
+          </property>
+         </column>
         </widget>
-       </item>
-       <item>
-        <widget class="QListWidget" name="listWidget"/>
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonClear">
@@ -447,7 +467,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
-           <normaloff>:/res/iconClear.png</normaloff>:/res/iconClear.png</iconset>
+           <normaloff>:/res/icon-clear.svg</normaloff>:/res/icon-clear.svg</iconset>
          </property>
         </widget>
        </item>
@@ -458,7 +478,7 @@
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -477,10 +497,10 @@
           </size>
          </property>
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="standardButtons">
-          <set>QDialogButtonBox::Close</set>
+          <set>QDialogButtonBox::StandardButton::Close</set>
          </property>
         </widget>
        </item>
@@ -652,7 +672,14 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="ModbusProtocolsComboBox" name="comboBoxProtocols"/>
+           <widget class="ModbusProtocolsComboBox" name="comboBoxProtocols">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -689,7 +716,7 @@
             <property name="minimumSize">
              <size>
               <width>120</width>
-              <height>25</height>
+              <height>26</height>
              </size>
             </property>
            </widget>
@@ -710,10 +737,10 @@
          </property>
          <layout class="QFormLayout" name="formLayout_4">
           <property name="labelAlignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="formAlignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
           </property>
           <property name="verticalSpacing">
            <number>2</number>
@@ -739,7 +766,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="IpAddressLineEdit" name="lineEditIPAddressFrom">
+           <widget class="QComboBox" name="comboBoxIPAddressFrom">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -749,14 +776,17 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>25</height>
+              <height>26</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>120</width>
+              <width>140</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -771,7 +801,7 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>25</height>
+              <height>26</height>
              </size>
             </property>
             <property name="maximumSize">
@@ -804,7 +834,7 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="IpAddressLineEdit" name="lineEditSubnetMask">
+           <widget class="QComboBox" name="comboBoxSubnetMask">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -814,8 +844,11 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>25</height>
+              <height>26</height>
              </size>
+            </property>
+            <property name="editable">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -835,10 +868,10 @@
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <property name="labelAlignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
           </property>
           <property name="formAlignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
           </property>
           <property name="verticalSpacing">
            <number>2</number>
@@ -910,6 +943,62 @@
             </property>
             <property name="value">
              <number>502</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxMaxConnections">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Max Connections</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_6">
+          <property name="verticalSpacing">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelMaxConnections">
+            <property name="text">
+             <string>Parallel</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBoxMaxConnections">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>60</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>10</number>
             </property>
            </widget>
           </item>
@@ -996,14 +1085,14 @@ font-weight: bold;</string>
          <item>
           <widget class="QLabel" name="labelDeviceId">
            <property name="text">
-            <string>Device Id: </string>
+            <string>Device ID: </string>
            </property>
           </widget>
          </item>
          <item>
           <spacer name="verticalSpacer_2">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -1018,10 +1107,10 @@ font-weight: bold;</string>
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Preferred</enum>
+          <enum>QSizePolicy::Policy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1055,7 +1144,7 @@ font-weight: bold;</string>
              <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;00:00:00&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="alignment">
-             <set>Qt::AlignCenter</set>
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1070,14 +1159,14 @@ font-weight: bold;</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AddressBaseComboBox</class>
-   <extends>QComboBox</extends>
-   <header>addressbasecombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>FunctionCodeComboBox</class>
    <extends>QComboBox</extends>
    <header>functioncodecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AddressBaseComboBox</class>
+   <extends>QComboBox</extends>
+   <header>addressbasecombobox.h</header>
   </customwidget>
   <customwidget>
    <class>IpAddressLineEdit</class>

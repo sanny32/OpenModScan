@@ -9,37 +9,46 @@
 /// \param hexAddress
 /// \param parent
 ///
-DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, bool hexAddress, QWidget *parent) :
+DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, const DisplayDefinition& dd, QWidget *parent) :
      QFixedSizeDialog(parent)
     , ui(new Ui::DialogSetupPresetData)
-    ,_params(params)
+    , _params(params)
+    , _pointType(pointType)
 {
     ui->setupUi(this);
 
     ui->lineEditSlaveDevice->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditSlaveDevice->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveDevice->setValue(params.DeviceId);
+    ui->lineEditSlaveDevice->setHexButtonVisible(true);
+    ui->lineEditSlaveDevice->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.PointAddress);
-
-    ui->lineEditNumberOfPoints->setValue(params.Length);
+    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
             setWindowTitle(tr("15: WRITE MULTIPLE COILS"));
-            ui->lineEditNumberOfPoints->setInputRange(1, 1968);
         break;
         case QModbusDataUnit::HoldingRegisters:
             setWindowTitle(tr("16: WRITE MULTIPLE REGISTERS"));
-            ui->lineEditNumberOfPoints->setInputRange(1, 123);
         break;
         default:
         break;
     }
+
+    const int typeMax = (pointType == QModbusDataUnit::Coils) ? 1968 : 123;
+    const int offset = params.PointAddress - (params.ZeroBasedAddress ? 0 : 1);
+    const int maxLen = qMin(typeMax, 65536 - offset);
+    ui->lineEditNumberOfPoints->setInputRange(1, qMax(1, maxLen));
+    ui->lineEditNumberOfPoints->setValue(params.Length);
+    ui->lineEditNumberOfPoints->setHexButtonVisible(true);
+    ui->lineEditNumberOfPoints->setHexView(dd.HexViewLength);
 
     ui->buttonBox->setFocus();
 }
@@ -52,6 +61,22 @@ DialogSetupPresetData::~DialogSetupPresetData()
     delete ui;
 }
 
+
+///
+/// \brief DialogSetupPresetData::on_lineEditAddress_valueChanged
+///
+void DialogSetupPresetData::on_lineEditAddress_valueChanged(const QVariant&)
+{
+    const int address = ui->lineEditAddress->value<int>();
+    const int offset = address - (_params.ZeroBasedAddress ? 0 : 1);
+    const int typeMax = (_pointType == QModbusDataUnit::Coils) ? 1968 : 123;
+    const int maxLen = qMin(typeMax, 65536 - offset);
+    const int newMax = qMax(1, maxLen);
+
+    ui->lineEditNumberOfPoints->setInputRange(1, newMax);
+    if(ui->lineEditNumberOfPoints->value<int>() > newMax)
+        ui->lineEditNumberOfPoints->setValue(newMax);
+}
 
 ///
 /// \brief DialogSetupPresetData::accept

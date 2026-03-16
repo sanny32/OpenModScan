@@ -15,15 +15,11 @@
 /// \param parent
 ///
 DialogUserMsg::DialogUserMsg(const DisplayDefinition& dd, QModbusPdu::FunctionCode func, DataDisplayMode mode, ModbusClient& client, QWidget *parent)
-    : QDialog(parent)
+    : QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogUserMsg)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
-
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
 
     ui->lineEditSlaveAddress->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
@@ -276,14 +272,16 @@ void DialogUserMsg::on_modbusResponse(int requestGroupId, QSharedPointer<const M
 ///
 void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
 {
-    if(checked)
-    {
-        ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::HexMode);
-        ui->sendData->setInputMode(ByteListTextEdit::HexMode);
-        ui->requestInfo->setDataDisplayMode(DataDisplayMode::Hex);
-        ui->responseBuffer->setInputMode(ByteListTextEdit::HexMode);
-        ui->responseInfo->setDataDisplayMode(DataDisplayMode::Hex);
-    }
+    if(!checked)
+        return;
+
+    ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::HexMode);
+    ui->sendData->setInputMode(ByteListTextEdit::HexMode);
+    ui->requestInfo->setDataDisplayMode(DataDisplayMode::Hex);
+    ui->responseBuffer->setInputMode(ByteListTextEdit::HexMode);
+    ui->responseInfo->setDataDisplayMode(DataDisplayMode::Hex);
+    ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::HexMode);
+    ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
 }
 
 ///
@@ -292,14 +290,16 @@ void DialogUserMsg::on_radioButtonHex_clicked(bool checked)
 ///
 void DialogUserMsg::on_radioButtonDecimal_clicked(bool checked)
 {
-    if(checked)
-    {
-        ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::DecMode);
-        ui->sendData->setInputMode(ByteListTextEdit::DecMode);
-        ui->requestInfo->setDataDisplayMode(DataDisplayMode::UInt16);
-        ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
-        ui->responseInfo->setDataDisplayMode(DataDisplayMode::UInt16);
-    }
+    if(!checked)
+        return;
+
+    ui->comboBoxFunction->setInputMode(FunctionCodeComboBox::DecMode);
+    ui->sendData->setInputMode(ByteListTextEdit::DecMode);
+    ui->requestInfo->setDataDisplayMode(DataDisplayMode::UInt16);
+    ui->responseBuffer->setInputMode(ByteListTextEdit::DecMode);
+    ui->responseInfo->setDataDisplayMode(DataDisplayMode::UInt16);
+    ui->lineEditSlaveAddress->setInputMode(NumericLineEdit::Int32Mode);
+    ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
 }
 
 ///

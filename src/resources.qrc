@@ -22,15 +22,13 @@
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
         <file>translations/omodscan_ru.qm</file>
-        <file>res/pointGreen.png</file>
-        <file>res/pointEmpty.png</file>
         <file>res/actionInt32.png</file>
         <file>res/actionSwappedInt32.png</file>
         <file>res/actionSwappedUInt32.png</file>
         <file>res/actionUInt32.png</file>
-        <file>res/iconScanStart.png</file>
-        <file>res/iconScanStop.png</file>
-        <file>res/iconClear.png</file>
+        <file>res/icon-start.svg</file>
+        <file>res/icon-stop.svg</file>
+        <file>res/icon-clear.svg</file>
         <file>res/actionInt64.png</file>
         <file>res/actionUInt64.png</file>
         <file>res/actionSwappedInt64.png</file>
@@ -52,5 +50,16 @@
         <file>res/emblem-mail.svg</file>
         <file>translations/omodscan_zh_CN.qm</file>
         <file>translations/omodscan_zh_TW.qm</file>
+        <file>res/icon-simulation-16bit.svg</file>
+        <file>res/icon-simulation-32bit.svg</file>
+        <file>res/icon-simulation-64bit.svg</file>
+        <file>res/icon-export.svg</file>
+        <file>res/icon-import.svg</file>
+        <file>res/icon-random.svg</file>
+        <file>res/icon-reset.svg</file>
+        <file>res/icon-hex.svg</file>
+        <file>res/icon-constant.svg</file>
+        <file>res/icon-hex.svg</file>
     </qresource>
 </RCC>
+

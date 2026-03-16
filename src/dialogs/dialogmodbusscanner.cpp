@@ -1,9 +1,12 @@
 #include <QDateTime>
+#include <QHeaderView>
 #include <QMessageBox>
 #include <QSerialPortInfo>
 #include <QHostInfo>
 #include <QNetworkInterface>
 #include <QAbstractEventDispatcher>
+#include <QRegularExpressionValidator>
+#include "waitcursor.h"
 #include "modbuslimits.h"
 #include "serialportutils.h"
 #include "modbusrtuscanner.h"
@@ -44,6 +47,18 @@ inline QString Parity_toString(QSerialPort::Parity parity)
 }
 
 ///
+/// \brief cidrToMask
+/// \param prefix
+/// \return
+///
+static QHostAddress cidrToMask(int prefix)
+{
+    if(prefix <= 0) return QHostAddress(quint32(0));
+    if(prefix >= 32) return QHostAddress(quint32(0xFFFFFFFF));
+    return QHostAddress(quint32(0xFFFFFFFF << (32 - prefix)));
+}
+
+///
 /// \brief DialogModbusScanner::DialogModbusScanner
 /// \param hexAddress
 /// \param parent
@@ -53,31 +68,64 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
     , ui(new Ui::DialogModbusScanner)
     ,_rtuFuncCode(QModbusPdu::ReportServerId)
     ,_tcpFuncCode(QModbusPdu::ReadHoldingRegisters)
-    ,_iconStart(":/res/iconScanStart.png")
-    ,_iconStop(":/res/iconScanStop.png")
+    ,_iconStart(":/res/icon-start.svg")
+    ,_iconStop(":/res/icon-stop.svg")
 {
     ui->setupUi(this);
     ui->progressBar->setAlignment(Qt::AlignCenter);
     ui->pushButtonScan->setIcon(_iconStart);
+    ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
     ui->comboBoxSerial->addItems(getAvailableSerialPorts());
+
+    const QVector<QPair<int, QString>> popularMasks = {
+        { 8,  "255.0.0.0"},
+        {16,  "255.255.0.0"},
+        {24,  "255.255.255.0"},
+        {25,  "255.255.255.128"},
+        {26,  "255.255.255.192"},
+        {27,  "255.255.255.224"},
+        {28,  "255.255.255.240"},
+        {29,  "255.255.255.248"},
+        {30,  "255.255.255.252"},
+        {32,  "255.255.255.255"},
+    };
+    for(const auto& [prefix, dotted] : popularMasks)
+        ui->comboBoxSubnetMask->addItem(QString("/%1").arg(prefix), dotted);
+
+    const QString ipRange = "(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])";
+    const QString ipPattern = ipRange + "(\\." + ipRange + ")" + "(\\." + ipRange + ")" + "(\\." + ipRange + ")";
+    const QRegularExpression maskReg("^" + ipPattern + "$");
+    ui->comboBoxSubnetMask->lineEdit()->setValidator(new QRegularExpressionValidator(maskReg, this));
 
     QHostAddress address, mask;
     for(auto&& eth : QNetworkInterface::allInterfaces()) {
         if((eth.flags() & QNetworkInterface::IsRunning) && !(eth.flags() & QNetworkInterface::IsLoopBack)){
             for (auto&& entry : eth.addressEntries()) {
                 if(entry.ip().protocol() == QAbstractSocket::IPv4Protocol){
-                    address = entry.ip();
-                    mask = entry.netmask();
-                    break;
+                    const auto a = entry.ip().toIPv4Address();
+                    const auto m = entry.netmask().toIPv4Address();
+                    ui->comboBoxIPAddressFrom->addItem(QHostAddress((a & m) + 1).toString());
+                    if(address.isNull()) {
+                        address = entry.ip();
+                        mask = entry.netmask();
+                    }
                 }
             }
         }
     }
 
-    ui->lineEditIPAddressFrom->setValue(address);
-    ui->lineEditIPAddressTo->setValue(address);
-    ui->lineEditSubnetMask->setValue(mask);
+    const auto maskStr = mask.toString();
+    const int maskIdx = ui->comboBoxSubnetMask->findData(maskStr);
+    if(maskIdx >= 0)
+        ui->comboBoxSubnetMask->setCurrentIndex(maskIdx);
+    ui->comboBoxSubnetMask->setCurrentText(maskStr);
+
+    const auto addr = address.toIPv4Address();
+    const auto msk = mask.toIPv4Address();
+    ui->comboBoxIPAddressFrom->setCurrentText(QHostAddress((addr & msk) + 1).toString());
+    ui->lineEditIPAddressTo->setValue((addr | ~msk) - 1);
 
     ui->comboBoxFunction->addItem(QModbusPdu::ReadCoils);
     ui->comboBoxFunction->addItem(QModbusPdu::ReadDiscreteInputs);
@@ -87,6 +135,17 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
     ui->comboBoxFunction->setCurrentFunctionCode(QModbusPdu::ReadHoldingRegisters);
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
     ui->spinBoxAddress->setDisplayIntegerBase(hexAddress ? 16 : 10);
+
+    connect(ui->comboBoxSubnetMask->lineEdit(), &QLineEdit::editingFinished, this, [this]() {
+        const auto address = QHostAddress(ui->comboBoxIPAddressFrom->currentText()).toIPv4Address();
+        if(address == 0) return;
+
+        const auto mask = subnetMask().toIPv4Address();
+        if(mask == 0) return;
+
+        ui->comboBoxIPAddressFrom->setCurrentText(QHostAddress((address & mask) + 1).toString());
+        ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
+    });
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
@@ -140,6 +199,7 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxTimeout->setEnabled(!inProgress);
     ui->groupBoxIPAddressRange->setEnabled(!inProgress);
     ui->groupBoxPortRange->setEnabled(!inProgress);
+    ui->groupBoxMaxConnections->setEnabled(!inProgress);
     ui->groupBoxSubnetMask->setEnabled(!inProgress);
     ui->groupBoxRequest->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
@@ -152,8 +212,6 @@ void DialogModbusScanner::on_awake()
 ///
 void DialogModbusScanner::on_pushButtonScan_clicked()
 {
-    setCursor(Qt::WaitCursor);
-
     if(_scanner && _scanner->inProgress())
     {
         stopScan();
@@ -162,8 +220,6 @@ void DialogModbusScanner::on_pushButtonScan_clicked()
     {
         startScan();
     }
-
-    setCursor(Qt::ArrowCursor);
 }
 
 ///
@@ -171,7 +227,11 @@ void DialogModbusScanner::on_pushButtonScan_clicked()
 ///
 void DialogModbusScanner::on_pushButtonClear_clicked()
 {
-    ui->listWidget->clear();
+    if(ui->treeWidget->topLevelItemCount() > 0)
+    {
+        const auto result = QMessageBox::question(this, windowTitle(), tr("Clear scan results?"));
+        if(result == QMessageBox::Yes) ui->treeWidget->clear();
+    }
 }
 
 ///
@@ -184,6 +244,7 @@ void DialogModbusScanner::on_comboBoxProtocols_modbusProtocolChanged(ModbusProto
     ui->groupBoxIPAddressRange->setVisible(!useSerial);
     ui->groupBoxPortRange->setVisible(!useSerial);
     ui->groupBoxSubnetMask->setVisible(!useSerial);
+    ui->groupBoxMaxConnections->setVisible(!useSerial);
     ui->labelIPAddress->setVisible(!useSerial);
     ui->labelPort->setVisible(!useSerial);
     ui->groupBoxSerialPort->setVisible(useSerial);
@@ -191,8 +252,9 @@ void DialogModbusScanner::on_comboBoxProtocols_modbusProtocolChanged(ModbusProto
     ui->labelDataBits->setVisible(useSerial);
     ui->labelParity->setVisible(useSerial);
     ui->labelStopBits->setVisible(useSerial);
-    ui->labelScanResultsDesc->setText(useSerial ? tr("PORT: Device Id (serial port settings)") : tr("Address: port (Device Id)"));
     ui->comboBoxFunction->setCurrentFunctionCode(useSerial ? _rtuFuncCode :_tcpFuncCode);
+    ui->treeWidget->setHeaderLabels(useSerial ? QStringList{tr("Device ID"), tr("Port Settings")}
+                                              : QStringList{tr("Port"), tr("Device ID")});
 }
 
 ///
@@ -234,47 +296,64 @@ void DialogModbusScanner::on_comboBoxAddressBase_addressBaseChanged(AddressBase 
 }
 
 ///
-/// \brief DialogRtuScanner::on_listWidget_itemDoubleClicked
+/// \brief DialogModbusScanner::on_treeWidget_itemDoubleClicked
 /// \param item
+/// \param column
 ///
-void DialogModbusScanner::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+void DialogModbusScanner::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int)
 {
+    if(!item || item->parent() == nullptr) return;
+
     stopScan();
 
-    const auto deviceId = item->data(Qt::UserRole + 1).toInt();
-    const auto params = item->data(Qt::UserRole).value<ConnectionDetails>();
+    const auto deviceId = item->data(0, Qt::UserRole + 1).toInt();
+    const auto params = item->data(0, Qt::UserRole).value<ConnectionDetails>();
 
     emit attemptToConnect(params, deviceId);
     close();
 }
 
 ///
-/// \brief DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished
+/// \brief DialogModbusScanner::on_comboBoxIPAddressFrom_currentTextChanged
 ///
-void DialogModbusScanner::on_lineEditIPAddressFrom_editingFinished()
+void DialogModbusScanner::on_comboBoxIPAddressFrom_currentTextChanged(const QString& text)
 {
-    const auto address = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    const auto address = QHostAddress(text).toIPv4Address();
     if(address == 0) return;
 
-    const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
+    const auto mask = subnetMask().toIPv4Address();
     if(mask == 0) return;
 
     ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
 }
 
 ///
-/// \brief DialogModbusScanner::on_lineEditSubnetMask_editingFinished
+/// \brief DialogModbusScanner::on_comboBoxSubnetMask_activated
+/// \param index
 ///
-void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
+void DialogModbusScanner::on_comboBoxSubnetMask_activated(int index)
 {
-    const auto address = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    const auto dotted = ui->comboBoxSubnetMask->itemData(index).toString();
+    if(!dotted.isEmpty())
+        ui->comboBoxSubnetMask->setCurrentText(dotted);
+
+    const auto address = QHostAddress(ui->comboBoxIPAddressFrom->currentText()).toIPv4Address();
     if(address == 0) return;
 
-    const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
+    const auto mask = subnetMask().toIPv4Address();
     if(mask == 0) return;
 
-    ui->lineEditIPAddressFrom->setValue((address & mask) + 1);
+    ui->comboBoxIPAddressFrom->setCurrentText(QHostAddress((address & mask) + 1).toString());
     ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
+}
+
+///
+/// \brief DialogModbusScanner::subnetMask
+/// \return
+///
+QHostAddress DialogModbusScanner::subnetMask() const
+{
+    return QHostAddress(ui->comboBoxSubnetMask->currentText().trimmed());
 }
 
 ///
@@ -282,8 +361,12 @@ void DialogModbusScanner::on_lineEditSubnetMask_editingFinished()
 ///
 void DialogModbusScanner::startScan()
 {
-    ScanParams params;
+    ui->pushButtonClear->click();
 
+    WaitCursor wait(this);
+    QApplication::processEvents();
+
+    ScanParams params;
     switch(ui->comboBoxProtocols->currentModbusProtocol())
     {
         case ModbusProtocolsComboBox::ModbusTcp:
@@ -317,12 +400,6 @@ void DialogModbusScanner::startScan()
     clearScanTime();
     clearProgress();
     ui->progressBar->setValue(0);
-
-    if(ui->listWidget->count() > 0)
-    {
-        const auto result = QMessageBox::question(this, windowTitle(), tr("Clear previous scan results?"));
-        if(result == QMessageBox::Yes) ui->listWidget->clear();
-    }
 
     _scanner->startScan();
     ui->pushButtonScan->setIcon(_iconStop);
@@ -358,7 +435,7 @@ void DialogModbusScanner::clearProgress()
     ui->labelStopBits->setText(QString(tr("Stop Bits:")));
     ui->labelIPAddress->setText(QString(tr("Address:")));
     ui->labelPort->setText(QString(tr("Port:")));
-    ui->labelDeviceId->setText(QString(tr("Device Id:")));
+    ui->labelDeviceId->setText(QString(tr("Device ID:")));
 }
 
 ///
@@ -369,51 +446,93 @@ void DialogModbusScanner::clearProgress()
 ///
 void DialogModbusScanner::on_deviceFound(const ConnectionDetails& cd, int deviceId, bool dubious)
 {
-    QString result;
-    const auto id = QString("%1").arg(deviceId) + (dubious ? "?" : QString());
-    if(ui->comboBoxProtocols->currentModbusProtocol() == ModbusProtocolsComboBox::ModbusRtu)
-    {
-       result = QString("%1: %2 (%3,%4,%5,%6)").arg(cd.SerialParams.PortName,
-                                                    id,
-                                                    QString::number(cd.SerialParams.BaudRate),
-                                                    QString::number(cd.SerialParams.WordLength),
-                                                    Parity_toString(cd.SerialParams.Parity),
-                                                    QString::number(cd.SerialParams.StopBits));
-    }
-    else
-    {
-       result = QString("%1: %2 (%3)").arg(cd.TcpParams.IPAddress,
-                                           QString::number(cd.TcpParams.ServicePort),
-                                           id);
-    }
+    const bool useSerial = (ui->comboBoxProtocols->currentModbusProtocol() == ModbusProtocolsComboBox::ModbusRtu);
+    const auto id = QString::number(deviceId) + (dubious ? "?" : QString());
 
-    QListWidgetItem* foundItem = nullptr;
-    for(int i = 0; i < ui->listWidget->count(); ++i)
+    const QString groupKey = useSerial ? cd.SerialParams.PortName : cd.TcpParams.IPAddress;
+    const QString childCol0 = useSerial
+        ? id
+        : QString::number(cd.TcpParams.ServicePort);
+    const QString childCol1 = useSerial
+        ? QString("%1,%2,%3,%4").arg(QString::number(cd.SerialParams.BaudRate),
+                                     QString::number(cd.SerialParams.WordLength),
+                                     Parity_toString(cd.SerialParams.Parity),
+                                     QString::number(cd.SerialParams.StopBits))
+        : id;
+
+    // Find or create sorted top-level parent item
+    QTreeWidgetItem* parentItem = nullptr;
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i)
     {
-       auto item = ui->listWidget->item(i);
-       if(item &&
-          item->data(Qt::UserRole).value<ConnectionDetails>() == cd &&
-          item->data(Qt::UserRole + 1).toInt() == deviceId)
-       {
-            foundItem = item;
+        if(ui->treeWidget->topLevelItem(i)->text(0) == groupKey)
+        {
+            parentItem = ui->treeWidget->topLevelItem(i);
             break;
-       }
+        }
+    }
+    if(!parentItem)
+    {
+        parentItem = new QTreeWidgetItem();
+        parentItem->setText(0, groupKey);
+
+        QFont boldFont = parentItem->font(0);
+        boldFont.setBold(true);
+        parentItem->setFont(0, boldFont);
+
+        int insertPos = ui->treeWidget->topLevelItemCount();
+        for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i)
+        {
+            const QString existKey = ui->treeWidget->topLevelItem(i)->text(0);
+            const bool before = useSerial
+                ? groupKey < existKey
+                : QHostAddress(groupKey).toIPv4Address() < QHostAddress(existKey).toIPv4Address();
+            if(before) { insertPos = i; break; }
+        }
+        ui->treeWidget->insertTopLevelItem(insertPos, parentItem);
+        parentItem->setExpanded(true);
     }
 
-    if(!foundItem)
+    // Find existing child item for this connection + deviceId
+    QTreeWidgetItem* childItem = nullptr;
+    for(int i = 0; i < parentItem->childCount(); ++i)
     {
-       auto item = new QListWidgetItem(ui->listWidget);
-       item->setText(result);
-       item->setData(Qt::UserRole, QVariant::fromValue(cd));
-       item->setData(Qt::UserRole + 1, deviceId);
-       item->setData(Qt::UserRole + 2, dubious);
-
-       ui->listWidget->addItem(item);
-       ui->listWidget->scrollToItem(item);
+        auto child = parentItem->child(i);
+        if(child->data(0, Qt::UserRole).value<ConnectionDetails>() == cd &&
+           child->data(0, Qt::UserRole + 1).toInt() == deviceId)
+        {
+            childItem = child;
+            break;
+        }
     }
-    else if(foundItem->data(Qt::UserRole + 2).toBool() && !dubious)
+
+    if(!childItem)
     {
-        foundItem->setText(result);
+        childItem = new QTreeWidgetItem();
+        childItem->setText(0, childCol0);
+        childItem->setText(1, childCol1);
+        childItem->setData(0, Qt::UserRole, QVariant::fromValue(cd));
+        childItem->setData(0, Qt::UserRole + 1, deviceId);
+        childItem->setData(0, Qt::UserRole + 2, dubious);
+
+        int insertPos = parentItem->childCount();
+        for(int i = 0; i < parentItem->childCount(); ++i)
+        {
+            const auto existCd = parentItem->child(i)->data(0, Qt::UserRole).value<ConnectionDetails>();
+            const int existDevId = parentItem->child(i)->data(0, Qt::UserRole + 1).toInt();
+            const bool before = useSerial
+                ? deviceId < existDevId
+                : (cd.TcpParams.ServicePort < existCd.TcpParams.ServicePort ||
+                  (cd.TcpParams.ServicePort == existCd.TcpParams.ServicePort && deviceId < existDevId));
+            if(before) { insertPos = i; break; }
+        }
+        parentItem->insertChild(insertPos, childItem);
+        ui->treeWidget->scrollToBottom();
+    }
+    else if(childItem->data(0, Qt::UserRole + 2).toBool() && !dubious)
+    {
+        childItem->setText(0, childCol0);
+        childItem->setText(1, childCol1);
+        childItem->setData(0, Qt::UserRole + 2, false);
     }
 }
 
@@ -438,8 +557,8 @@ void DialogModbusScanner::on_progress(const ConnectionDetails& cd, int deviceId,
         ui->labelPort->setText(QString(tr("Port: %1")).arg(cd.TcpParams.ServicePort));
     }
 
-    ui->labelDeviceId->setText(QString(tr("Device Id: %1")).arg(deviceId));
-    ui->progressBar->setValue(progress);
+    ui->labelDeviceId->setText(QString(tr("Device ID: %1")).arg(deviceId));
+    ui->progressBar->setValue(qMax(ui->progressBar->value(), progress));
 }
 
 ///
@@ -526,8 +645,11 @@ const ScanParams DialogModbusScanner::createTcpParams(TransmissionMode mode) con
 {
     ScanParams params;
 
-    const auto mask = ui->lineEditSubnetMask->value().toIPv4Address();
-    auto addressFrom = ui->lineEditIPAddressFrom->value().toIPv4Address();
+    const auto mask = subnetMask().toIPv4Address();
+    if(mask == 0)
+        return params;
+
+    auto addressFrom = QHostAddress(ui->comboBoxIPAddressFrom->currentText()).toIPv4Address();
     auto addressTo = ui->lineEditIPAddressTo->value().toIPv4Address();
 
     if(addressFrom == 0 || addressTo == 0)
@@ -578,6 +700,7 @@ const ScanParams DialogModbusScanner::createTcpParams(TransmissionMode mode) con
     params.Request = createModbusRequest();
     params.Timeout = ui->spinBoxTimeout->value();
     params.RetryOnTimeout = ui->checkBoxRetryOnTimeout->isChecked();
+    params.MaxConcurrentConnections = ui->spinBoxMaxConnections->value();
     params.DeviceIds = QRange<int>(ui->spinBoxDeviceIdFrom->value(), ui->spinBoxDeviceIdTo->value());
 
     return params;

@@ -452,7 +452,7 @@ if verlt "$QT_VERSION" "$MIN_QT_VERSION"; then
     echo "Error: Qt >= $MIN_QT_VERSION is required, but found $QT_VERSION" >&2
     exit 1
 else
-    echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
+    echo "Using Qt $QT_VERSION from: $CMAKE_PREFIX"
 fi
 
 # ==========================

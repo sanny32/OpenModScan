@@ -217,7 +217,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="TScrollArea" name="scrollAreaComponents">
+        <widget class="TranspScrollArea" name="scrollAreaComponents">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -259,7 +259,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="TScrollArea" name="scrollAreaAuthors">
+        <widget class="TranspScrollArea" name="scrollAreaAuthors">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -301,7 +301,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="TScrollArea" name="scrollAreaTranslation">
+        <widget class="TranspScrollArea" name="scrollAreaTranslation">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -349,9 +349,9 @@
    <header>clickablelabel.h</header>
   </customwidget>
   <customwidget>
-   <class>TScrollArea</class>
+   <class>TranspScrollArea</class>
    <extends>QScrollArea</extends>
-   <header>tscrollarea.h</header>
+   <header>transpscrollarea.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

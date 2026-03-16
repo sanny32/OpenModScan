@@ -1,21 +1,65 @@
 #include <float.h>
 #include "modbuslimits.h"
+#include "numericutils.h"
+#include "modbusclient.h"
+#include "waitcursor.h"
+#include "datasimulator.h"
 #include "dialogautosimulation.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
 
+namespace {
+    Qt::CheckState toCheckState(quint16 val) {
+        if (val == 0xFFFF) return Qt::Checked;
+        if (val == 0x0000) return Qt::Unchecked;
+        return Qt::PartiallyChecked;
+    }
+}
+
+///
+/// \brief The SimButtonColors class
+///
+struct SimButtonColors
+{
+    QString base;
+    QString hover;
+    QString pressed;
+    QString border;
+};
+
+///
+/// \brief simColors
+/// \param registersCount
+/// \return
+///
+static SimButtonColors simColors(DataDisplayMode mode)
+{
+    switch(registersCount(mode))
+    {
+        case 2:
+            return { "#5680D0", "#4E75C0", "#466AB0", "#3E5FA0" };
+
+        case 4:
+            return { "#D74D9D", "#C9458F", "#BB3D81", "#A73573" };
+
+        default:
+            return { "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" };
+    }
+}
+
 ///
 /// \brief DialogWriteHoldingRegister::DialogWriteHoldingRegister
 /// \param params
-/// \param simParams
-/// \param mode
+/// \param hexAddress
+/// \param dataSimulator
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget* parent) :
-      QFixedSizeDialog(parent)
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params, const DisplayDefinition& dd,
+                                                       DataSimulator* dataSimulator, QWidget* parent)
+    : QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
     ,_writeParams(params)
-    ,_simParams(simParams)
+    ,_dataSimulator(dataSimulator)
 {
     ui->setupUi(this);
 
@@ -26,43 +70,28 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);
+    ui->lineEditNode->setHexButtonVisible(true);
+    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
+    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
-    if(simParams.Mode == SimulationMode::Disabled)
+    if(_dataSimulator != nullptr)
     {
-        delete ui->pushButtonSimulation;
-        delete ui->horizontalLayoutSimulation;
+        const int simAddr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(params.DeviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        if(!_dataSimulator->canStartSimulation(params.DisplayMode, params.DeviceId, QModbusDataUnit::HoldingRegisters, simAddr)) {
+            _simParams.Mode = SimulationMode::Disabled;
+        }
     }
-    else if(simParams.Mode != SimulationMode::Off)
-    {
-        QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
-        iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
-        iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-
-        QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
-        textLabel->setAlignment(Qt::AlignCenter);
-        textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-
-        auto layout = new QHBoxLayout(ui->pushButtonSimulation);
-        layout->setContentsMargins(4,0,4,0);
-        layout->addWidget(iconLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-        layout->addWidget(textLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-
-        ui->pushButtonSimulation->setText(QString());
-        ui->pushButtonSimulation->setLayout(layout);
-    }
+    updateSimulationButton();
 
     switch(params.DisplayMode)
     {
-        case DataDisplayMode::Binary:
-        break;
-
         case DataDisplayMode::UInt16:
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
@@ -74,6 +103,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setValue(params.Value.toInt());
         break;
 
+        case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->labelValue->setText(tr("Value, (HEX): "));
@@ -93,18 +123,21 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         case DataDisplayMode::SwappedFP:
             ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
             ui->lineEditValue->setValue(params.Value.toFloat());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
             ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditValue->setValue(params.Value.toDouble());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::Int32:
         case DataDisplayMode::SwappedInt32:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
             ui->lineEditValue->setValue(params.Value.toInt());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::UInt32:
@@ -112,12 +145,14 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(params.Value.toUInt());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::Int64:
         case DataDisplayMode::SwappedInt64:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
             ui->lineEditValue->setValue(params.Value.toLongLong());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::UInt64:
@@ -125,8 +160,36 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(params.Value.toULongLong());
+            ui->controlBitPattern->setEnabled(false);
         break;
     }
+
+    if(ui->controlBitPattern->isEnabled())
+    {
+        ui->controlBitPattern->setValue(_writeParams.Value.toUInt());
+        ui->groupBoxBitPattern->setCheckState(toCheckState(_writeParams.Value.toUInt()));
+
+        connect(ui->lineEditValue, QOverload<const QVariant&>::of(&NumericLineEdit::valueChanged), this, [this](const QVariant& value) {
+            ui->controlBitPattern->setValue(value.toUInt());
+        });
+
+        connect(ui->controlBitPattern, &BitPatternControl::valueChanged, this, [this](quint16 value) {
+            ui->lineEditValue->setValue(value);
+            ui->groupBoxBitPattern->setCheckState(toCheckState(value));
+        });
+
+        connect(ui->groupBoxBitPattern, &CheckableGroupBox::checkStateChanged, this, [this](Qt::CheckState state) {
+            ui->controlBitPattern->setValue(state == Qt::Checked ? 0xFFFF : 0x0000);
+        });
+    }
+    else
+    {
+        delete ui->controlBitPattern;
+        delete ui->groupBoxBitPattern;
+        delete ui->labelBitPattern;
+        adjustSize();
+    }
+
     ui->lineEditValue->setFocus();
 }
 
@@ -151,10 +214,121 @@ void DialogWriteHoldingRegister::accept()
 }
 
 ///
+/// \brief DialogWriteHoldingRegister::updateSimulationButton
+///
+void DialogWriteHoldingRegister::updateSimulationButton()
+{
+    switch(_simParams.Mode)
+    {
+        case SimulationMode::Disabled:
+            ui->pushButtonSimulation->setEnabled(false);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+        break;
+
+        case SimulationMode::Off:
+            ui->pushButtonSimulation->setEnabled(true);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
+            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+        break;
+
+        default:
+        {
+            ui->pushButtonSimulation->setEnabled(true);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+
+            const auto c = simColors(_simParams.DataMode);
+            ui->pushButtonSimulation->setStyleSheet(QString(R"(
+                    QPushButton {
+                        color: white;
+                        padding: 4px 12px;
+                        background-color: %1;
+                        border: 1px solid %2;
+                        border-radius: 4px;
+                    }
+                    QPushButton:hover {
+                        background-color: %3;
+                    }
+                    QPushButton:pressed {
+                        background-color: %4;
+                    }
+                )").arg(c.base, c.border, c.hover, c.pressed));
+        }
+        break;
+    }
+}
+
+///
+/// \brief DialogWriteHoldingRegister::updateValue
+///
+void DialogWriteHoldingRegister::updateValue()
+{
+    ModbusClient* cli = _writeParams.Client;
+    if(cli == nullptr || cli->state() != ModbusDevice::ConnectedState) return;
+
+    WaitCursor wait(this);
+    const quint8 deviceId = ui->lineEditNode->value<int>();
+    const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+    const int count = registersCount(_writeParams.DisplayMode);
+    const auto regs = cli->syncReadRegisters(QModbusDataUnit::HoldingRegisters, simAddr, count, deviceId);
+    const auto value = makeValue(regs, _writeParams.DisplayMode, _writeParams.Order);
+    if(value.isValid()) ui->lineEditValue->setValue(value);
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_lineEditAddress_valueChanged
+/// \param value
+///
+void DialogWriteHoldingRegister::on_lineEditAddress_valueChanged(const QVariant& value)
+{
+    if(_dataSimulator != nullptr)
+    {
+        const quint8 deviceId = ui->lineEditNode->value<int>();
+        const int simAddr = value.toInt() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(deviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        if(!_dataSimulator->canStartSimulation(_writeParams.DisplayMode, deviceId, QModbusDataUnit::HoldingRegisters, simAddr)) {
+            _simParams.Mode = SimulationMode::Disabled;
+        }
+        updateSimulationButton();
+    }
+    updateValue();
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_lineEditNode_valueChanged
+/// \param value
+///
+void DialogWriteHoldingRegister::on_lineEditNode_valueChanged(const QVariant& value)
+{
+    if(_dataSimulator != nullptr)
+    {
+        const quint8 deviceId = value.toUInt();
+        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(deviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        if(!_dataSimulator->canStartSimulation(_writeParams.DisplayMode, deviceId, QModbusDataUnit::HoldingRegisters, simAddr)) {
+            _simParams.Mode = SimulationMode::Disabled;
+        }
+        updateSimulationButton();
+    }
+    updateValue();
+}
+
+///
 /// \brief DialogWriteHoldingRegister::on_pushButtonSimulation_clicked
 ///
 void DialogWriteHoldingRegister::on_pushButtonSimulation_clicked()
 {
+    if(_dataSimulator == nullptr) return;
+
     DialogAutoSimulation dlg(_writeParams.DisplayMode, _simParams, this);
-    if(dlg.exec() == QDialog::Accepted) done(2);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        const quint8 deviceId = ui->lineEditNode->value<int>();
+        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        if(_simParams.Mode == SimulationMode::Off)
+            _dataSimulator->stopSimulation(deviceId, QModbusDataUnit::HoldingRegisters, simAddr);
+        else
+            _dataSimulator->startSimulation(deviceId, QModbusDataUnit::HoldingRegisters, simAddr, _simParams);
+        done(2);
+    }
 }

@@ -1,4 +1,7 @@
 #include "modbuslimits.h"
+#include "modbusclient.h"
+#include "waitcursor.h"
+#include "datasimulator.h"
 #include "dialogcoilsimulation.h"
 #include "dialogwritecoilregister.h"
 #include "ui_dialogwritecoilregister.h"
@@ -6,13 +9,16 @@
 ///
 /// \brief DialogWriteCoilRegister::DialogWriteCoilRegister
 /// \param params
+/// \param hexAddress
+/// \param dataSimulator
 /// \param parent
 ///
-DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, ModbusSimulationParams& simParams, bool hexAddress, QWidget *parent) :
-    QFixedSizeDialog(parent),
-    ui(new Ui::DialogWriteCoilRegister)
+DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, const DisplayDefinition& dd,
+                                                 DataSimulator* dataSimulator, QWidget *parent)
+    : QFixedSizeDialog(parent),
+      ui(new Ui::DialogWriteCoilRegister)
     ,_writeParams(params)
-    ,_simParams(simParams)
+    ,_dataSimulator(dataSimulator)
 {
     ui->setupUi(this);
 
@@ -23,41 +29,25 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, Modb
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);
+    ui->lineEditNode->setHexButtonVisible(true);
+    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
+    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
 
-    if(simParams.Mode == SimulationMode::Disabled)
+    if(_dataSimulator != nullptr)
     {
-        delete ui->pushButtonSimulation;
-        delete ui->horizontalLayoutSimulation;
+        const int simAddr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(params.DeviceId, QModbusDataUnit::Coils, simAddr);
     }
-    else if(simParams.Mode != SimulationMode::Off)
-    {
-        QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
-        iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
-        iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-
-        QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
-        textLabel->setAlignment(Qt::AlignCenter);
-        textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-
-        auto layout = new QHBoxLayout(ui->pushButtonSimulation);
-        layout->setContentsMargins(4,0,4,0);
-        layout->addWidget(iconLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-        layout->addWidget(textLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
-
-        ui->pushButtonSimulation->setText(QString());
-        ui->pushButtonSimulation->setLayout(layout);
-    }
-
+    updateSimulationButton();
 
     if(ui->radioButtonOff->isChecked())
         ui->radioButtonOn->setFocus();
@@ -86,10 +76,110 @@ void DialogWriteCoilRegister::accept()
 }
 
 ///
+/// \brief DialogWriteCoilRegister::updateSimulationButton
+///
+void DialogWriteCoilRegister::updateSimulationButton()
+{
+    switch(_simParams.Mode)
+    {
+        case SimulationMode::Disabled:
+            ui->pushButtonSimulation->setEnabled(false);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+        break;
+
+        case SimulationMode::Off:
+            ui->pushButtonSimulation->setEnabled(true);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
+            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+        break;
+
+        default:
+            ui->pushButtonSimulation->setEnabled(true);
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setStyleSheet(R"(
+                        QPushButton {
+                            color: white;
+                            padding: 4px 12px;
+                            background-color: #4CAF50;
+                            border: 1px solid #3e8e41;
+                            border-radius: 4px;
+                        }
+                        QPushButton:hover {
+                            background-color: #45a049;
+                        }
+                        QPushButton:pressed {
+                            background-color: #3e8e41;
+                        }
+                    )");
+        break;
+    }
+}
+
+///
+/// \brief DialogWriteCoilRegister::updateValue
+///
+void DialogWriteCoilRegister::updateValue()
+{
+    ModbusClient* cli = _writeParams.Client;
+    if(cli == nullptr || cli->state() != ModbusDevice::ConnectedState) return;
+
+    WaitCursor wait(this);
+    const quint8 deviceId = ui->lineEditNode->value<int>();
+    const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+    const bool coilValue = cli->syncReadRegister(QModbusDataUnit::Coils, simAddr, deviceId) != 0;
+    ui->radioButtonOn->setChecked(coilValue);
+    ui->radioButtonOff->setChecked(!coilValue);
+}
+
+///
+/// \brief DialogWriteCoilRegister::on_lineEditAddress_valueChanged
+/// \param value
+///
+void DialogWriteCoilRegister::on_lineEditAddress_valueChanged(const QVariant& value)
+{
+    if(_dataSimulator != nullptr)
+    {
+        const quint8 deviceId = ui->lineEditNode->value<int>();
+        const int simAddr = value.toInt() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(deviceId, QModbusDataUnit::Coils, simAddr);
+        updateSimulationButton();
+    }
+    updateValue();
+}
+
+///
+/// \brief DialogWriteCoilRegister::on_lineEditNode_valueChanged
+/// \param value
+///
+void DialogWriteCoilRegister::on_lineEditNode_valueChanged(const QVariant& value)
+{
+    if(_dataSimulator != nullptr)
+    {
+        const quint8 deviceId = value.toUInt();
+        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        _simParams = _dataSimulator->simulationParams(deviceId, QModbusDataUnit::Coils, simAddr);
+        updateSimulationButton();
+    }
+    updateValue();
+}
+
+///
 /// \brief DialogWriteCoilRegister::on_pushButtonSimulation_clicked
 ///
 void DialogWriteCoilRegister::on_pushButtonSimulation_clicked()
 {
+    if(_dataSimulator == nullptr) return;
+
     DialogCoilSimulation dlg(_simParams, this);
-    if(dlg.exec() == QDialog::Accepted) done(2);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        const quint8 deviceId = ui->lineEditNode->value<int>();
+        const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        if(_simParams.Mode == SimulationMode::Off)
+            _dataSimulator->stopSimulation(deviceId, QModbusDataUnit::Coils, simAddr);
+        else
+            _dataSimulator->startSimulation(deviceId, QModbusDataUnit::Coils, simAddr, _simParams);
+        done(2);
+    }
 }

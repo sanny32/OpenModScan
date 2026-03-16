@@ -1,20 +1,21 @@
 #ifndef DIALOGFORCEMULTIPLECOILS_H
 #define DIALOGFORCEMULTIPLECOILS_H
 
-#include <QDialog>
 #include <QTableWidgetItem>
 #include "modbuswriteparams.h"
+#include "qadjustedsizedialog.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class DialogForceMultipleCoils;
 }
 
-class DialogForceMultipleCoils : public QDialog
+class DialogForceMultipleCoils : public QAdjustedSizeDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleCoils(ModbusWriteParams& params, int length, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogForceMultipleCoils(ModbusWriteParams& params, int length, const DisplayDefinition& dd, QWidget *parent = nullptr);
     ~DialogForceMultipleCoils();
 
     void accept() override;
@@ -22,6 +23,9 @@ public:
 private slots:
     void on_pushButton0_clicked();
     void on_pushButton1_clicked();
+    void on_pushButtonRandom_clicked();
+    void on_pushButtonImport_clicked();
+    void on_pushButtonExport_clicked();
     void on_tableWidget_itemDoubleClicked(QTableWidgetItem *item);
 
 private:
@@ -32,6 +36,8 @@ private:
     QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
     bool _hexAddress;
+    bool _hexViewDeviceId;
+    bool _hexViewLength;
 };
 
 #endif // DIALOGFORCEMULTIPLECOILS_H

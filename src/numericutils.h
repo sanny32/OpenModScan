@@ -3,6 +3,8 @@
 
 #include <QtGlobal>
 #include <QtEndian>
+#include <QVector>
+#include <QVariant>
 #include "byteorderutils.h"
 #include "qdebug.h"
 
@@ -239,7 +241,7 @@ inline qint64 makeInt64(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, 
 /// \param order
 /// \return
 ///
-inline qint64 makeUInt64(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, ByteOrder order)
+inline quint64 makeUInt64(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, ByteOrder order)
 {
      return (quint64)makeInt64(lolo, lohi, hilo, hihi, order);
 }
@@ -266,6 +268,69 @@ inline double makeDouble(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi,
     v.asUint16[3] = toByteOrderValue(hihi, order);
 
     return v.asDouble;
+}
+
+///
+/// \brief makeValue
+/// \param regs
+/// \param mode
+/// \param order
+/// \return
+///
+inline QVariant makeValue(const QVector<quint16>& regs, DataDisplayMode mode, ByteOrder order)
+{
+    const int count = registersCount(mode);
+    if(regs.size() < count) return QVariant();
+
+    switch(mode)
+    {
+        case DataDisplayMode::Binary:
+        case DataDisplayMode::UInt16:
+        case DataDisplayMode::Hex:
+        case DataDisplayMode::Ansi:
+            return regs[0];
+
+        case DataDisplayMode::Int16:
+            return (qint16)regs[0];
+
+        case DataDisplayMode::FloatingPt:
+            return makeFloat(regs[1], regs[0], order);
+
+        case DataDisplayMode::SwappedFP:
+            return makeFloat(regs[0], regs[1], order);
+
+        case DataDisplayMode::Int32:
+            return makeInt32(regs[1], regs[0], order);
+
+        case DataDisplayMode::SwappedInt32:
+            return makeInt32(regs[0], regs[1], order);
+
+        case DataDisplayMode::UInt32:
+            return makeUInt32(regs[1], regs[0], order);
+
+        case DataDisplayMode::SwappedUInt32:
+            return makeUInt32(regs[0], regs[1], order);
+
+        case DataDisplayMode::DblFloat:
+            return  makeDouble(regs[3], regs[2], regs[1], regs[0], order);
+
+        case DataDisplayMode::SwappedDbl:
+            return  makeDouble(regs[0], regs[1], regs[2], regs[3], order);
+
+        case DataDisplayMode::Int64:
+            return makeInt64(regs[3], regs[2], regs[1], regs[0], order);
+
+        case DataDisplayMode::SwappedInt64:
+            return makeInt64(regs[0], regs[1], regs[2], regs[3], order);
+
+        case DataDisplayMode::UInt64:
+            return makeUInt64(regs[3], regs[2], regs[1], regs[0], order);
+
+        case DataDisplayMode::SwappedUInt64:
+            return makeUInt64(regs[0], regs[1], regs[2], regs[3], order);
+    }
+
+    return QVariant();
 }
 
 #endif // NUMERICUTILS_H

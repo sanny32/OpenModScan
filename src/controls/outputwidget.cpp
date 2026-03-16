@@ -1,3 +1,4 @@
+#include <QIcon>
 #include <QMenu>
 #include <QWheelEvent>
 #include <QDateTime>
@@ -6,7 +7,7 @@
 #include <QTextDocument>
 #include <QInputDialog>
 #include "fontutils.h"
-#include "htmldelegate.h"
+#include "datadelegate.h"
 #include "formatutils.h"
 #include "outputwidget.h"
 #include "modbusmessages.h"
@@ -75,14 +76,28 @@ QString normalizeHtml(const QString& s)
 }
 
 ///
+/// \brief emptyPixmap
+/// \param size
+/// \return
+///
+static QPixmap emptyPixmap(const QSize& size)
+{
+    QPixmap pm(size);
+    pm.fill(Qt::transparent);
+    return pm;
+}
+
+///
 /// \brief OutputListModel::OutputListModel
 /// \param parent
 ///
 OutputListModel::OutputListModel(OutputWidget* parent)
     : QAbstractListModel(parent)
     ,_parentWidget(parent)
-    ,_iconPointGreen(QIcon(":/res/pointGreen.png"))
-    ,_iconPointEmpty(QIcon(":/res/pointEmpty.png"))
+    ,_iconSimulation16Bit(QIcon(":/res/icon-simulation-16bit.svg").pixmap(10, 10))
+    ,_iconSimulation32Bit(QIcon(":/res/icon-simulation-32bit.svg").pixmap(10, 10))
+    ,_iconSimulation64Bit(QIcon(":/res/icon-simulation-64bit.svg").pixmap(10, 10))
+    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size()))
 {
 }
 
@@ -121,31 +136,29 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
         {
-            const auto fg = itemData.FgColor.isValid() ? itemData.FgColor : _parentWidget->foregroundColor();
-            const auto bg = itemData.BgColor.isValid() ? itemData.BgColor : _parentWidget->backgroundColor();
-
-            const QString base = QString("%1: %2").arg(addrStr, itemData.ValueStr);
-            const int targetLen = base.length() + _columnsDistance;
-
-            QString descr = itemData.Description;
-            if (!descr.isEmpty())
+            QString descr;
+            if (!itemData.Description.isEmpty())
             {
-                const QString prefix = "; ";
-                const int freeSpace = targetLen - (base.length() + prefix.length());
-
+                const auto freeSpace = _columnsDistance - 2;
                 if (freeSpace > 0)
                 {
-                    if (descr.length() > freeSpace)
-                        descr = descr.left(freeSpace - 4) + "...";
-
-                    descr = prefix + descr;
+                    descr = QStringLiteral("; ");
+                    if (itemData.Description.length() > freeSpace)
+                    {
+                        if (freeSpace > 3)
+                        {
+                            descr += itemData.Description.left(freeSpace - 3);
+                            descr += QStringLiteral("...");
+                        }
+                    }
+                    else
+                    {
+                        descr += itemData.Description;
+                    }
                 }
             }
-
-            const int pad = targetLen - (base.length() + descr.length());
-            return QString(
-                       "<span style=\"background-color:%1; color:%2\">%3</span><span>%4%5</span>"
-                       ).arg(bg.name(), fg.name(), normalizeHtml(base), normalizeHtml(descr), (pad > 0) ? htmlPad(pad) : "");
+            const auto pad = _columnsDistance - descr.length();
+            return addrStr + QStringLiteral(": ") + itemData.ValueStr + descr + QStringLiteral(" ").repeated(pad);
         }
 
         case CaptureRole:
@@ -167,7 +180,23 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             return itemData.BgColor;
 
         case Qt::DecorationRole:
-            return itemData.Simulated ? _iconPointGreen : _iconPointEmpty;
+        {
+            if(itemData.ValueStr.isEmpty())
+                return _iconSimulationOff;
+
+            switch(simulationIcon(row))
+            {
+                case SimulationIcon16Bit:
+                    return _iconSimulation16Bit;
+                case SimulationIcon32Bit:
+                    return _iconSimulation32Bit;
+                case SimulationIcon64Bit:
+                    return _iconSimulation64Bit;
+
+                default:
+                    return _iconSimulationOff;
+            }
+        }
     }
 
     return QVariant();
@@ -195,6 +224,10 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
             emit dataChanged(index, index, QVector<int>() << role);
         return true;
 
+        case Qt::DecorationRole:
+            _mapItems[index.row()].SimulationIcon = value.value<SimulationIconType>();
+            emit dataChanged(index, index, QVector<int>() << role);
+        return true;
 
         case DescriptionRole:
             _mapItems[index.row()].Description = value.toString();
@@ -367,18 +400,38 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 }
 
 ///
+/// \brief OutputListModel::simulationIcon
+/// \param row
+/// \return
+///
+OutputListModel::SimulationIconType OutputListModel::simulationIcon(int row) const
+{
+    const auto mode = _parentWidget->dataDisplayMode();
+    for(int i = 0; i < registersCount(mode); ++i)
+    {
+        if(row + i >= rowCount())
+            return SimulationIconNone;
+
+        if(_mapItems[row + i].Simulated)
+            return _mapItems[row + i].SimulationIcon;
+    }
+
+    return SimulationIconNone;
+}
+
+///
 /// \brief OutputListModel::find
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \return
 ///
-QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 addr) const
+QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    const auto dd = _parentWidget->_displayDefinition;
-
-    if(dd.PointType != type)
+    if(_parentWidget->_displayDefinition.PointType != type || _parentWidget->_displayDefinition.DeviceId != deviceId)
         return QModelIndex();
 
+    const auto dd =  _parentWidget->_displayDefinition;
     const int row = addr - (dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
     if(row >= 0 && row < rowCount())
         return index(row);
@@ -402,7 +455,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setModel(_listModel.get());
-    ui->listView->setItemDelegate(new HtmlDelegate(this));
+    ui->listView->setItemDelegate(new DataDelegate(this));
     ui->labelStatus->setAutoFillBackground(true);
 
     setFont(defaultMonospaceFont());
@@ -536,7 +589,7 @@ QVector<quint16> OutputWidget::data() const
 /// \param protocol
 /// \param simulations
 ///
-void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap& simulations)
+void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolType protocol, const ModbusSimulationMap2& simulations)
 {
     _descriptionMap.insert(descriptionMap());
     _colorMap.insert(colorMap());
@@ -553,13 +606,13 @@ void OutputWidget::setup(const DisplayDefinition& dd, ModbusMessage::ProtocolTyp
     _listModel->clear();
 
     for(auto&& key : simulations.keys())
-        _listModel->setData(_listModel->find(key.first, key.second), true, SimulationRole);
+        _listModel->setData(_listModel->find(key.DeviceId, key.Type, key.Address), true, SimulationRole);
 
     for(auto&& key : _descriptionMap.keys())
-        setDescription(key.first, key.second, _descriptionMap[key]);
+        setDescription(key.DeviceId, key.Type, key.Address, _descriptionMap[key]);
 
     for(auto&& key : _colorMap.keys())
-        setColor(key.first, key.second, _colorMap[key]);
+        setColor(key.DeviceId, key.Type, key.Address, _colorMap[key]);
 
     _listModel->update();
 
@@ -872,14 +925,14 @@ void OutputWidget::updateData(const QModbusDataUnit& data)
 /// \brief OutputWidget::colorMap
 /// \return
 ///
-AddressColorMap OutputWidget::colorMap() const
+AddressColorMap2 OutputWidget::colorMap() const
 {
-    AddressColorMap colorMap;
+    AddressColorMap2 colorMap;
     for(int i = 0; i < _listModel->rowCount(); i++)
     {
         const auto clr = _listModel->data(_listModel->index(i), ColorRole).value<QColor>();
         const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
-        colorMap[{_displayDefinition.PointType, addr }] = clr;
+        colorMap[{_displayDefinition.DeviceId, _displayDefinition.PointType, addr }] = clr;
     }
     return colorMap;
 }
@@ -890,23 +943,23 @@ AddressColorMap OutputWidget::colorMap() const
 /// \param addr
 /// \param clr
 ///
-void OutputWidget::setColor(QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
+void OutputWidget::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
 {
-     _listModel->setData(_listModel->find(type, addr), clr, ColorRole);
+     _listModel->setData(_listModel->find(deviceId, type, addr), clr, ColorRole);
 }
 
 ///
 /// \brief OutputWidget::descriptionMap
 /// \return
 ///
-AddressDescriptionMap OutputWidget::descriptionMap() const
+AddressDescriptionMap2 OutputWidget::descriptionMap() const
 {
-    AddressDescriptionMap descriptionMap;
+    AddressDescriptionMap2 descriptionMap;
     for(int i = 0; i < _listModel->rowCount(); i++)
     {
         const auto desc = _listModel->data(_listModel->index(i), DescriptionRole).toString();
         const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
-        descriptionMap[{_displayDefinition.PointType, addr }] = desc;
+        descriptionMap[{_displayDefinition.DeviceId, _displayDefinition.PointType, addr }] = desc;
     }
     return descriptionMap;
 }
@@ -917,20 +970,41 @@ AddressDescriptionMap OutputWidget::descriptionMap() const
 /// \param addr
 /// \param desc
 ///
-void OutputWidget::setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+void OutputWidget::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
-    _listModel->setData(_listModel->find(type, addr), desc, DescriptionRole);
+    _listModel->setData(_listModel->find(deviceId, type, addr), desc, DescriptionRole);
 }
 
 ///
 /// \brief OutputWidget::setSimulated
+/// \param mode
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \param on
 ///
-void OutputWidget::setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
 {
-    _listModel->setData(_listModel->find(type, addr), on, SimulationRole);
+    const auto index = _listModel->find(deviceId, type, addr);
+    _listModel->setData(index, on, SimulationRole);
+
+    if(on) {
+        switch(registersCount(mode))
+        {
+        case 1:
+            _listModel->setData(index, OutputListModel::SimulationIcon16Bit, Qt::DecorationRole);
+            break;
+        case 2:
+            _listModel->setData(index, OutputListModel::SimulationIcon32Bit, Qt::DecorationRole);
+            break;
+        case 4:
+            _listModel->setData(index, OutputListModel::SimulationIcon64Bit, Qt::DecorationRole);
+            break;
+        }
+    }
+    else {
+        _listModel->setData(index, OutputListModel::SimulationIconNone, Qt::DecorationRole);
+    }
 }
 
 ///

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.13.1
+    VERSION 1.14.0
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -29,6 +29,13 @@ string(TIMESTAMP CURRENT_YEAR "%Y")
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt.in
     ${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt
+    @ONLY
+)
+
+# Generate README.md
+configure_file(
+    ${CMAKE_SOURCE_DIR}/../README.md.in
+    ${CMAKE_SOURCE_DIR}/../README.md
     @ONLY
 )
 
@@ -91,8 +98,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 set(SOURCES
     ansimenu.cpp
     cmdlineparser.cpp
+    datadelegate.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
+    controls/bitpatterncontrol.cpp
+    controls/checkablegroupbox.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/byteordercombobox.cpp
@@ -110,12 +120,14 @@ set(SOURCES
     controls/modbusmessagewidget.cpp
     controls/modbusprotocolscombobox.cpp
     controls/numericlineedit.cpp
+    controls/hexviewbutton.cpp
     controls/paritytypecombobox.cpp
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp
     controls/numericcombobox.cpp
     controls/outputwidget.cpp
     controls/pointtypecombobox.cpp
+    controls/transpscrollarea.cpp
     datasimulator.cpp
     dialogs/dialogmsgparser.cpp
     dialogs/dialogabout.cpp
@@ -136,7 +148,6 @@ set(SOURCES
     dialogs/dialogwindowsmanager.cpp
     dialogs/dialogwritecoilregister.cpp
     dialogs/dialogwriteholdingregister.cpp
-    dialogs/dialogwriteholdingregisterbits.cpp
     formmodsca.cpp
     htmldelegate.cpp
     main.cpp
@@ -152,12 +163,12 @@ set(SOURCES
     modbusrtuscanner.cpp
     modbusscanner.cpp
     modbustcpscanner.cpp
+    qadjustedsizedialog.cpp
     qfixedsizedialog.cpp
     qhexvalidator.cpp
     qint64validator.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
-    tscrollarea.cpp
     windowactionlist.cpp
 )
 
@@ -167,9 +178,12 @@ set(HEADERS
     ansiutils.h
     byteorderutils.h
     cmdlineparser.h
+    datadelegate.h
     connectiondetails.h
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
+    controls/bitpatterncontrol.h
+    controls/checkablegroupbox.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/byteordercombobox.h
@@ -193,6 +207,7 @@ set(HEADERS
     controls/numericcombobox.h
     controls/outputwidget.h
     controls/pointtypecombobox.h
+    controls/transpscrollarea.h
     datasimulator.h
     dialogs/dialogmsgparser.h
     dialogs/dialogabout.h
@@ -213,7 +228,6 @@ set(HEADERS
     dialogs/dialogwindowsmanager.h
     dialogs/dialogwritecoilregister.h
     dialogs/dialogwriteholdingregister.h
-    dialogs/dialogwriteholdingregisterbits.h
     displaydefinition.h
     enums.h
     fontutils.h
@@ -259,6 +273,7 @@ set(HEADERS
     modbustcpscanner.h
     modbuswriteparams.h
     numericutils.h
+    qadjustedsizedialog.h
     qfixedsizedialog.h
     qhexvalidator.h
     qint64validator.h
@@ -271,13 +286,14 @@ set(HEADERS
     quintvalidator.h
     recentfileactionlist.h
     serialportutils.h
-    tscrollarea.h
+    uiutils.h
     waitcursor.h
     windowactionlist.h
 )
 
 # UI Forms
 set(UI_FILES
+    controls/bitpatterncontrol.ui
     controls/outputwidget.ui
     controls/statisticwidget.ui
     dialogs/dialogmsgparser.ui
@@ -299,7 +315,6 @@ set(UI_FILES
     dialogs/dialogwindowsmanager.ui
     dialogs/dialogwritecoilregister.ui
     dialogs/dialogwriteholdingregister.ui
-    dialogs/dialogwriteholdingregisterbits.ui
     formmodsca.ui
     mainwindow.ui
 )

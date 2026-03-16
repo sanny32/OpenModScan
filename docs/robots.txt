@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sanny32.github.io/OpenModScan/sitemap.xml

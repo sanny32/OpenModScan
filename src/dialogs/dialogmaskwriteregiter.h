@@ -2,7 +2,10 @@
 #define DIALOGMASKWRITEREGITER_H
 
 #include "qfixedsizedialog.h"
+#include "displaydefinition.h"
 #include "modbuswriteparams.h"
+#include "checkablegroupbox.h"
+#include "bitpatterncontrol.h"
 
 namespace Ui {
 class DialogMaskWriteRegiter;
@@ -13,7 +16,7 @@ class DialogMaskWriteRegiter : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogMaskWriteRegiter(ModbusMaskWriteParams& params, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogMaskWriteRegiter(ModbusMaskWriteParams& params, const DisplayDefinition& dd, QWidget *parent = nullptr);
     ~DialogMaskWriteRegiter();
 
     void accept() override;

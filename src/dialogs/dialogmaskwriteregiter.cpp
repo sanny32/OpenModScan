@@ -2,11 +2,19 @@
 #include "dialogmaskwriteregiter.h"
 #include "ui_dialogmaskwriteregiter.h"
 
+namespace {
+    Qt::CheckState toCheckState(quint16 val) {
+        if (val == 0xFFFF) return Qt::Checked;
+        if (val == 0x0000) return Qt::Unchecked;
+        return Qt::PartiallyChecked;
+    }
+}
+
 ///
 /// \brief DialogMaskWriteRegiter::DialogMaskWriteRegiter
 /// \param parent
 ///
-DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, bool hexAddress, QWidget *parent) :
+DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, const DisplayDefinition& dd, QWidget *parent) :
       QFixedSizeDialog(parent)
     , ui(new Ui::DialogMaskWriteRegiter)
     ,_writeParams(params)
@@ -16,20 +24,36 @@ DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, bo
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);
+    ui->lineEditNode->setHexButtonVisible(true);
+    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
+    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
-    for (int i = 0; i < 16; i++)
-    {
-        auto ctrlAnd = findChild<QCheckBox*>(QString("checkBoxAnd%1").arg(i));
-        if(ctrlAnd) ctrlAnd->setChecked(params.AndMask >> i & 1);
+    ui->controlAndMask->setValue(params.AndMask);
+    ui->controlOrMask->setValue(params.OrMask);
 
-        auto ctrlOr = findChild<QCheckBox*>(QString("checkBoxOr%1").arg(i));
-        if(ctrlOr) ctrlOr->setChecked(params.OrMask >> i & 1);
-    }
+    ui->groupBoxAndMask->setCheckState(toCheckState(params.AndMask));
+    ui->groupBoxOrMask->setCheckState(toCheckState(params.OrMask));
+
+    connect(ui->groupBoxAndMask, &CheckableGroupBox::checkStateChanged, this, [this](Qt::CheckState state) {
+        ui->controlAndMask->setValue(state == Qt::Checked ? 0xFFFF : 0x0000);
+    });
+    connect(ui->groupBoxOrMask, &CheckableGroupBox::checkStateChanged, this, [this](Qt::CheckState state) {
+        ui->controlOrMask->setValue(state == Qt::Checked ? 0xFFFF : 0x0000);
+    });
+
+    connect(ui->controlAndMask, &BitPatternControl::valueChanged, this, [this](quint16 val) {
+        ui->groupBoxAndMask->setCheckState(toCheckState(val));
+    });
+    connect(ui->controlOrMask, &BitPatternControl::valueChanged, this, [this](quint16 val) {
+        ui->groupBoxOrMask->setCheckState(toCheckState(val));
+    });
+
     ui->buttonBox->setFocus();
 }
 
@@ -46,18 +70,8 @@ DialogMaskWriteRegiter::~DialogMaskWriteRegiter()
 ///
 void DialogMaskWriteRegiter::accept()
 {
-    quint16 maskAnd = 0, maskOr = 0;
-    for (int i = 0; i < 16; i++)
-    {
-        auto ctrlAnd = findChild<QCheckBox*>(QString("checkBoxAnd%1").arg(i));
-        if(ctrlAnd) maskAnd |= ctrlAnd->isChecked() << i;
-
-        auto ctrlOr = findChild<QCheckBox*>(QString("checkBoxOr%1").arg(i));
-        if(ctrlOr) maskOr |= ctrlOr->isChecked() << i;
-
-    }
-    _writeParams.AndMask = maskAnd;
-    _writeParams.OrMask = maskOr;
+    _writeParams.AndMask = ui->controlAndMask->value();
+    _writeParams.OrMask = ui->controlOrMask->value();
     _writeParams.Address = ui->lineEditAddress->value<int>();
     _writeParams.DeviceId = ui->lineEditNode->value<int>();
 

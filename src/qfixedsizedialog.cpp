@@ -24,10 +24,10 @@ void QFixedSizeDialog::showEvent(QShowEvent* e)
         _shown = true;
         setFixedSize(sizeHint());
 
-        if(parentWidget() != nullptr)
+        if(auto pw = parentWidget() ? parentWidget()->window() : nullptr)
         {
-            const auto rc = parentWidget()->frameGeometry();
-            move(rc.center() - rect().center());
+            const auto center = pw->mapToGlobal(pw->rect().center());
+            setGeometry(center.x() - width() / 2, center.y() - height() / 2, width(), height());
         }
     }
 }

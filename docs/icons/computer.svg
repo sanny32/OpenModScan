@@ -1,0 +1,25 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Qt style computer monitor icon - flat -->
+
+  <!-- Monitor outer frame -->
+  <rect x="12" y="14" width="40" height="30" fill="#e8e8e8" stroke="#a0a0a0" stroke-width="1.5" rx="2"/>
+
+  <!-- Screen bezel -->
+  <rect x="15" y="17" width="34" height="24" fill="#2a2a2a" stroke="#808080" stroke-width="1" rx="1"/>
+
+  <!-- Screen content -->
+  <rect x="17" y="19" width="30" height="20" fill="#1e1e1e"/>
+
+  <!-- Window on screen -->
+  <rect x="19" y="21" width="12" height="10" fill="#3c3c3c" stroke="#505050" stroke-width="0.5" rx="1"/>
+  <rect x="19" y="21" width="12" height="3" fill="#2ea043"/>
+
+  <!-- Green accent lines on screen -->
+  <line x1="33" y1="23" x2="43" y2="23" stroke="#3aad55" stroke-width="1"/>
+  <line x1="33" y1="26" x2="43" y2="26" stroke="#2ea043" stroke-width="1"/>
+  <line x1="33" y1="29" x2="40" y2="29" stroke="#4cc068" stroke-width="1"/>
+
+  <!-- Monitor stand -->
+  <rect x="28" y="44" width="8" height="6" fill="#c0c0c0" stroke="#a0a0a0" stroke-width="1" rx="1"/>
+  <rect x="20" y="50" width="24" height="4" fill="#c0c0c0" stroke="#a0a0a0" stroke-width="1" rx="1"/>
+</svg>

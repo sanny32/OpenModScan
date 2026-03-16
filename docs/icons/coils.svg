@@ -1,0 +1,20 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Modbus Functions icon - database/registers style - flat -->
+
+  <!-- Bottom section body -->
+  <path d="M12 44 L12 50 Q12 56 32 56 Q52 56 52 50 L52 44" fill="#238636"/>
+  <ellipse cx="32" cy="44" rx="20" ry="6" fill="#3aad55"/>
+  <ellipse cx="32" cy="44" rx="20" ry="6" fill="none" stroke="#1a6b2d" stroke-width="1"/>
+
+  <!-- Middle section body -->
+  <path d="M12 30 L12 36 Q12 42 32 42 Q52 42 52 36 L52 30" fill="#238636"/>
+  <ellipse cx="32" cy="30" rx="20" ry="6" fill="#3aad55"/>
+  <ellipse cx="32" cy="30" rx="20" ry="6" fill="none" stroke="#1a6b2d" stroke-width="1"/>
+
+  <!-- Top section body -->
+  <path d="M12 16 L12 22 Q12 28 32 28 Q52 28 52 22 L52 16" fill="#238636"/>
+  <ellipse cx="32" cy="16" rx="20" ry="6" fill="#3aad55"/>
+  <ellipse cx="32" cy="16" rx="20" ry="6" fill="none" stroke="#1a6b2d" stroke-width="1"/>
+  <!-- Top highlight -->
+  <ellipse cx="28" cy="14" rx="12" ry="3.5" fill="#fff" opacity="0.25"/>
+</svg>

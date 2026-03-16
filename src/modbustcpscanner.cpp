@@ -1,4 +1,5 @@
 #include <QDateTime>
+#include <QTimer>
 #include <QTcpSocket>
 #include "modbustcpclient.h"
 #include "modbustcpscanner.h"
@@ -12,6 +13,7 @@ ModbusTcpScanner::ModbusTcpScanner(const ScanParams& params, QObject *parent)
     : ModbusScanner{parent}
     ,_params(params)
     ,_processedSocketCount(0)
+    ,_activeConnections(0)
 {
     connect(this, &ModbusTcpScanner::scanNext, this, &ModbusTcpScanner::on_scanNext);
 }
@@ -25,19 +27,33 @@ void ModbusTcpScanner::startScan()
 
     _connParams.clear();
     _processedSocketCount = 0;
+    _activeConnections = 0;
 
     for(auto&& cd : _params.ConnParams)
     {
         QTcpSocket* socket = new QTcpSocket(this);
+        auto processed = QSharedPointer<bool>::create(false);
 
-        connect(socket, &QAbstractSocket::connected, this, [this, socket, cd]{
-            processSocket(socket, cd);
-        }, Qt::QueuedConnection);
-        connect(socket, &QAbstractSocket::errorOccurred, this, [this, socket, cd](QAbstractSocket::SocketError){
-            processSocket(socket, cd);
+        auto processOnce = [this, socket, cd, processed]{
+            if(!*processed) { *processed = true; processSocket(socket, cd); }
+        };
+
+        // After connect: send a probe byte so that the firewall/router
+        // will RST phantom connections (no real host behind the IP).
+        connect(socket, &QAbstractSocket::connected, this, [socket]{
+            socket->write("\x00", 1);
+        });
+
+        // RST or connection refused → immediately rejected
+        connect(socket, &QAbstractSocket::disconnected, this, processOnce, Qt::QueuedConnection);
+        connect(socket, &QAbstractSocket::errorOccurred, this, [processOnce](QAbstractSocket::SocketError){
+            processOnce();
         }, Qt::QueuedConnection);
 
-        socket->connectToHost(cd.TcpParams.IPAddress, cd.TcpParams.ServicePort, QIODevice::ReadOnly, QAbstractSocket::IPv4Protocol);
+        // If still connected after 200 ms → treat as a real host
+        QTimer::singleShot(200, this, [processOnce]{ processOnce(); });
+
+        socket->connectToHost(cd.TcpParams.IPAddress, cd.TcpParams.ServicePort, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
     }
 }
 
@@ -89,10 +105,14 @@ void ModbusTcpScanner::on_scanNext(QPrivateSignal)
     if(!inProgress())
         return;
 
-    if(_connParams.isEmpty())
-        stopScan();
-    else
+    while(!_connParams.isEmpty() && _activeConnections < _params.MaxConcurrentConnections)
+    {
+        _activeConnections++;
         connectDevice(_connParams.dequeue());
+    }
+
+    if(_activeConnections == 0)
+        stopScan();
 }
 
 ///
@@ -136,6 +156,7 @@ void ModbusTcpScanner::sendRequest(ModbusClientPrivate* client, int deviceId)
     if(deviceId > _params.DeviceIds.to())
     {
         client->deleteLater();
+        _activeConnections--;
         emit scanNext(QPrivateSignal());
 
         return;
@@ -181,7 +202,12 @@ void ModbusTcpScanner::sendRequest(ModbusClientPrivate* client, int deviceId)
                     if(error == ModbusDevice::TimeoutError)
                         sendRequest(client, deviceId + 1);
                     else
-                        QTimer::singleShot(_params.Timeout, [this, client, deviceId] { sendRequest(client, deviceId + 1); });
+                        QTimer::singleShot(_params.Timeout, this,
+                                           [this, client, deviceId] {
+                                               if (!inProgress())
+                                                   return;
+                                               sendRequest(client, deviceId + 1);
+                                           });
                 });
         }
         else

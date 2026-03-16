@@ -17,7 +17,7 @@
    <item>
     <layout class="QFormLayout" name="formLayout_2">
      <property name="formAlignment">
-      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
      </property>
      <property name="horizontalSpacing">
       <number>30</number>
@@ -54,7 +54,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>25</height>
+           <height>26</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -75,7 +75,7 @@
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -104,15 +104,21 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>26</height>
+          </size>
+         </property>
         </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
+          <enum>QSizePolicy::Policy::Fixed</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -133,7 +139,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout_4">
       <property name="formAlignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
       </property>
       <property name="leftMargin">
        <number>30</number>
@@ -159,7 +165,7 @@
         <property name="minimumSize">
          <size>
           <width>25</width>
-          <height>0</height>
+          <height>26</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -210,7 +216,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <property name="formAlignment">
-       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
       </property>
       <property name="leftMargin">
        <number>30</number>
@@ -241,7 +247,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>25</height>
+            <height>26</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -262,7 +268,7 @@
         <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -297,7 +303,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="formAlignment">
-       <set>Qt::AlignHCenter|Qt::AlignTop</set>
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
       </property>
       <property name="leftMargin">
        <number>30</number>
@@ -308,7 +314,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="labelSlaveAddress">
         <property name="text">
-         <string>Device Id: </string>
+         <string>Device ID: </string>
         </property>
        </widget>
       </item>
@@ -323,7 +329,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -345,7 +351,7 @@
         <property name="minimumSize">
          <size>
           <width>150</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
        </widget>
@@ -368,7 +374,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -397,7 +403,7 @@
         <property name="minimumSize">
          <size>
           <width>100</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
        </widget>
@@ -420,7 +426,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -450,10 +456,10 @@
       </size>
      </property>
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
      <property name="centerButtons">
       <bool>true</bool>

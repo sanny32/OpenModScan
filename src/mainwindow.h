@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QMdiArea>
 #include <QMainWindow>
 #include <QTranslator>
 #include "ansimenu.h"
@@ -87,8 +88,6 @@ private slots:
     /* Write slots */
     void on_actionWriteSingleCoil_triggered();
     void on_actionWriteHoldingRegister_triggered();
-    void on_actionWriteHoldingRegisterValue_triggered();
-    void on_actionWriteHoldingRegisterBits_triggered();
     void on_actionForceCoils_triggered();
     void on_actionPresetRegs_triggered();
     void on_actionMaskWrite_triggered();
@@ -144,6 +143,7 @@ private:
     void closeMdiChild(FormModSca* frm);
 
     void saveAs(FormModSca* frm, SerializationFormat format);
+    void setViewMode(QMdiArea::ViewMode mode);
 
     void loadConfig(const QString& filename);
     void saveConfig(const QString& filename, SerializationFormat format);
@@ -167,7 +167,6 @@ private:
     ModbusClient _modbusClient;
 
     AnsiMenu* _ansiMenu;
-    QAction* _actionWriteHoldingRegister;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QPrinter* _selectedPrinter;
@@ -175,6 +174,7 @@ private:
     QString _savePath;
     QString _profile;
 
+    // addressed with Base0
     quint32 _lastWriteSingleCoilAddress = 0;
     quint32 _lastWriteHoldingRegisterAddress = 0;
     quint32 _lastWriteHoldingRegisterBitsAddress = 0;

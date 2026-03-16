@@ -46,7 +46,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>25</height>
+           <height>26</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -75,7 +75,7 @@
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>25</height>
+           <height>26</height>
           </size>
          </property>
          <property name="maximumSize">
@@ -113,7 +113,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>25</height>
+             <height>26</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -148,7 +148,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>25</height>
+             <height>26</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -179,7 +179,7 @@
          <property name="minimumSize">
           <size>
            <width>160</width>
-           <height>25</height>
+           <height>26</height>
           </size>
          </property>
         </widget>
@@ -187,7 +187,7 @@
        <item row="0" column="0">
         <widget class="QLabel" name="labelDeviceId">
          <property name="text">
-          <string>Device Id:</string>
+          <string>Device ID:</string>
          </property>
         </widget>
        </item>
@@ -381,6 +381,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>26</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>60</width>
@@ -435,7 +441,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>25</height>
+             <height>26</height>
             </size>
            </property>
            <property name="sizeAdjustPolicy">

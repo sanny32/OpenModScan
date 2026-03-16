@@ -1,0 +1,11 @@
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Qt style search icon with site green colors - flat -->
+
+  <!-- Magnifying glass lens -->
+  <circle cx="26" cy="26" r="15" fill="#e8fde8" stroke="#2ea043" stroke-width="2.5"/>
+  <circle cx="26" cy="26" r="12" fill="none" stroke="#3aad55" stroke-width="1.5"/>
+
+  <!-- Handle -->
+  <line x1="37" y1="37" x2="52" y2="52" stroke="#6a6a6a" stroke-width="7" stroke-linecap="round"/>
+  <line x1="37" y1="37" x2="52" y2="52" stroke="#909090" stroke-width="5" stroke-linecap="round"/>
+</svg>

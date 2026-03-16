@@ -1,11 +1,11 @@
 #include <QPalette>
-#include "tscrollarea.h"
+#include "transpscrollarea.h"
 
 ///
-/// \brief TScrollArea::TScrollArea
+/// \brief TranspScrollArea::TranspScrollArea
 /// \param parent
 ///
-TScrollArea::TScrollArea(QWidget* parent)
+TranspScrollArea::TranspScrollArea(QWidget* parent)
     : QScrollArea(parent)
 {
     setAutoFillBackground(true);

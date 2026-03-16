@@ -47,6 +47,7 @@ public:
     void maskWriteRegister(const ModbusMaskWriteParams& params, int requestGroupId);
 
     quint16 syncReadRegister(QModbusDataUnit::RegisterType pointType, int address, int server);
+    QVector<quint16> syncReadRegisters(QModbusDataUnit::RegisterType pointType, int address, int count, int server);
 
 signals:
     void modbusRequest(int requestGroupId, QSharedPointer<const ModbusMessage> msg);

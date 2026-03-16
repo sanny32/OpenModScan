@@ -3,6 +3,7 @@
 
 #include <QDataStream>
 #include <QXmlStreamReader>
+#include <QVersionNumber>
 #include "qrange.h"
 #include "enums.h"
 
@@ -237,6 +238,7 @@ struct ModbusSimulationParams
     IncrementSimulationParams IncrementParams;
     DecrementSimulationParams DecrementParams;
     quint32 Interval = 1000;
+    DataDisplayMode DataMode = DataDisplayMode::Hex;
 };
 Q_DECLARE_METATYPE(ModbusSimulationParams)
 
@@ -253,6 +255,7 @@ inline QDataStream& operator <<(QDataStream& out, const ModbusSimulationParams& 
     out << params.IncrementParams;
     out << params.DecrementParams;
     out << params.Interval;
+    out << params.DataMode;
 
     return out;
 }
@@ -270,6 +273,13 @@ inline QDataStream& operator >>(QDataStream& in, ModbusSimulationParams& params)
     in >> params.IncrementParams;
     in >> params.DecrementParams;
     in >> params.Interval;
+
+    if (in.device()->property("Form_Version").isValid() &&
+        in.device()->property("Form_Version").value<QVersionNumber>() >= QVersionNumber(1, 10))
+    {
+        in >> params.DataMode;
+    }
+
     return in;
 }
 
@@ -284,6 +294,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusSimulati
     xml.writeStartElement("ModbusSimulationParams");
     xml.writeAttribute("Mode", enumToString<SimulationMode>(params.Mode));
     xml.writeAttribute("Interval", QString::number(params.Interval));
+    xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(params.DataMode));
 
     switch(params.Mode) {
     case SimulationMode::Random:
@@ -320,6 +331,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
             if (ok) {
                 params.Interval = interval;
             }
+        }
+
+        if (attributes.hasAttribute("DataDisplayMode")) {
+            params.DataMode = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString(), DataDisplayMode::Hex);
         }
 
         while (xml.readNextStartElement()) {

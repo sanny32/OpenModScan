@@ -995,8 +995,11 @@ footer {
 
 @media (max-width: 768px) {
     .nav-menu {
-        gap: 1rem;
-        font-size: 0.9rem;
+        display: none;
+    }
+
+    .screenshots {
+        display: none;
     }
 
     .hero-content h1 {
@@ -1099,8 +1102,10 @@ button:focus {
 }
 
 /* Screenshot modal cursor */
-.screenshot-item img {
-    cursor: pointer;
+@media (min-width: 769px) {
+    .screenshot-item img {
+        cursor: pointer;
+    }
 }
 
 /* Modal - Windows 11 style */

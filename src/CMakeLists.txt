@@ -98,6 +98,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 set(SOURCES
     ansimenu.cpp
     cmdlineparser.cpp
+    datadelegate.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
     controls/bitpatterncontrol.cpp
@@ -177,6 +178,7 @@ set(HEADERS
     ansiutils.h
     byteorderutils.h
     cmdlineparser.h
+    datadelegate.h
     connectiondetails.h
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h

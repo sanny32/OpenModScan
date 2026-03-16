@@ -7,7 +7,7 @@
 #include <QTextDocument>
 #include <QInputDialog>
 #include "fontutils.h"
-#include "htmldelegate.h"
+#include "datadelegate.h"
 #include "formatutils.h"
 #include "outputwidget.h"
 #include "modbusmessages.h"
@@ -136,31 +136,29 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
         {
-            const auto fg = itemData.FgColor.isValid() ? itemData.FgColor : _parentWidget->foregroundColor();
-            const auto bg = itemData.BgColor.isValid() ? itemData.BgColor : _parentWidget->backgroundColor();
-
-            const QString base = QString("%1: %2").arg(addrStr, itemData.ValueStr);
-            const int targetLen = base.length() + _columnsDistance;
-
-            QString descr = itemData.Description;
-            if (!descr.isEmpty())
+            QString descr;
+            if (!itemData.Description.isEmpty())
             {
-                const QString prefix = "; ";
-                const int freeSpace = targetLen - (base.length() + prefix.length());
-
+                const auto freeSpace = _columnsDistance - 2;
                 if (freeSpace > 0)
                 {
-                    if (descr.length() > freeSpace)
-                        descr = descr.left(freeSpace - 4) + "...";
-
-                    descr = prefix + descr;
+                    descr = QStringLiteral("; ");
+                    if (itemData.Description.length() > freeSpace)
+                    {
+                        if (freeSpace > 3)
+                        {
+                            descr += itemData.Description.left(freeSpace - 3);
+                            descr += QStringLiteral("...");
+                        }
+                    }
+                    else
+                    {
+                        descr += itemData.Description;
+                    }
                 }
             }
-
-            const int pad = targetLen - (base.length() + descr.length());
-            return QString(
-                       "<span style=\"background-color:%1; color:%2\">%3</span><span>%4%5</span>"
-                       ).arg(bg.name(), fg.name(), normalizeHtml(base), normalizeHtml(descr), (pad > 0) ? htmlPad(pad) : "");
+            const auto pad = _columnsDistance - descr.length();
+            return addrStr + QStringLiteral(": ") + itemData.ValueStr + descr + QStringLiteral(" ").repeated(pad);
         }
 
         case CaptureRole:
@@ -188,15 +186,15 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
 
             switch(simulationIcon(row))
             {
-            case SimulationIcon16Bit:
-                return _iconSimulation16Bit;
-            case SimulationIcon32Bit:
-                return _iconSimulation32Bit;
-            case SimulationIcon64Bit:
-                return _iconSimulation64Bit;
+                case SimulationIcon16Bit:
+                    return _iconSimulation16Bit;
+                case SimulationIcon32Bit:
+                    return _iconSimulation32Bit;
+                case SimulationIcon64Bit:
+                    return _iconSimulation64Bit;
 
-            default:
-                return _iconSimulationOff;
+                default:
+                    return _iconSimulationOff;
             }
         }
     }
@@ -457,7 +455,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setModel(_listModel.get());
-    ui->listView->setItemDelegate(new HtmlDelegate(this));
+    ui->listView->setItemDelegate(new DataDelegate(this));
     ui->labelStatus->setAutoFillBackground(true);
 
     setFont(defaultMonospaceFont());

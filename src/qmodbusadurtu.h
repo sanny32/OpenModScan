@@ -10,6 +10,9 @@
 class QModbusAduRtu : public QModbusAdu
 {
 public:
+    /// Minimum RTU frame size: address(1) + function(1) + data(0+) + CRC(2)
+    static constexpr int MinRtuFrameSize = 4;
+
     explicit QModbusAduRtu(const QByteArray& rawData)
         : QModbusAdu()
     {
@@ -21,6 +24,8 @@ public:
     /// \return
     ///
     bool isValid() const override {
+        if (_data.size() < MinRtuFrameSize)
+            return false;
         return matchingChecksum() && _pdu.isValid();
     }
 
@@ -30,8 +35,13 @@ public:
     ///
     void setRawData(const QByteArray& data) override {
         _data = data;
-        _pdu.setFunctionCode(QModbusPdu::FunctionCode((quint8)_data[1]));
-        _pdu.setData(_data.mid(2, _data.size() - 4));
+        if (_data.size() >= MinRtuFrameSize) {
+            _pdu.setFunctionCode(QModbusPdu::FunctionCode(quint8(_data[1])));
+            _pdu.setData(_data.mid(2, _data.size() - MinRtuFrameSize));
+        } else {
+            _pdu.setFunctionCode(QModbusPdu::Invalid);  // reset to invalid state
+            _pdu.setData(QByteArray());
+        }
     }
 
     ///
@@ -39,6 +49,9 @@ public:
     /// \return
     ///
     quint8 serverAddress() const override {
+        if (_data.isEmpty())
+            return 0;
+
         return quint8(_data[0]);
     }
 
@@ -47,7 +60,10 @@ public:
     /// \return
     ///
     quint16 checksum() const {
-        return makeUInt16(_data[_data.size() - 1], _data[_data.size() - 2], ByteOrder::Direct);
+        if (_data.size() >= MinRtuFrameSize) {
+            return makeUInt16(_data[_data.size() - 1], _data[_data.size() - 2], ByteOrder::Direct);
+        }
+        return 0;
     }
 
     ///
@@ -55,9 +71,12 @@ public:
     /// \return
     ///
     quint16 calcChecksum() const {
-        const auto size = _data.size() - 2; // two bytes, CRC
-        const auto data = _data.left(size);
-        return calculateCRC(data, size);
+        if (_data.size() < MinRtuFrameSize)
+            return 0;
+
+        const int crcDataSize = _data.size() - 2;
+        const QByteArray crcData = _data.left(crcDataSize);
+        return calculateCRC(crcData.constData(), crcDataSize);
     }
 
     ///
@@ -68,7 +87,10 @@ public:
         return checksum() == calcChecksum();
     }
 
-    inline static quint16 calculateCRC(const char* data, qint32 len){
+    inline static quint16 calculateCRC(const char* data, qint32 len) {
+        if (len <= 0 || data == nullptr)
+            return 0;
+
         quint16 crc = 0xFFFF;
         while (len--) {
             const quint8 c = *data++;
@@ -82,12 +104,12 @@ public:
             }
             crc &= 0xFFFF;
         }
-        crc = crc_reflect(crc & 0xFFFF, 16) ^ 0x0000;
-        return (crc >> 8) | (crc << 8); // swap bytes
+        crc = crc_reflect(crc, 16);
+        return (crc >> 8) | (crc << 8);  // swap bytes
     }
 
 private:
-    inline static quint16 crc_reflect(quint16 data, qint32 len){
+    inline static quint16 crc_reflect(quint16 data, qint32 len) {
         quint16 ret = data & 0x01;
         for (qint32 i = 1; i < len; i++) {
             data >>= 1;

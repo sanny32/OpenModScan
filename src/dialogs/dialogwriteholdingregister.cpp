@@ -170,6 +170,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         ui->groupBoxBitPattern->setCheckState(toCheckState(_writeParams.Value.toUInt()));
 
         connect(ui->lineEditValue, QOverload<const QVariant&>::of(&NumericLineEdit::valueChanged), this, [this](const QVariant& value) {
+            QSignalBlocker blocker(ui->controlBitPattern);
             ui->controlBitPattern->setValue(value.toUInt());
         });
 

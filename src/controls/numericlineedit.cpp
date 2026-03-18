@@ -297,12 +297,6 @@ void NumericLineEdit::internalSetValue(QVariant value)
                 if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
-            else if(_leadingZeroes)
-            {
-                const auto text = QStringLiteral("%1").arg(value.toInt(), _leadingZeroWidth, 10, QLatin1Char('0'));
-                if(text != QLineEdit::text())
-                    QLineEdit::setText(text);
-            }
             else
             {
                 const auto text = QString::number(value.toInt());
@@ -388,12 +382,6 @@ void NumericLineEdit::internalSetValue(QVariant value)
                 const auto uval = static_cast<quint64>(value.toLongLong());
                 const QString prefix = hasFocus() ? QString() : QStringLiteral("0x");
                 const auto text = prefix + QStringLiteral("%1").arg(uval, _leadingZeroWidth, 16, QLatin1Char('0')).toUpper();
-                if(text != QLineEdit::text())
-                    QLineEdit::setText(text);
-            }
-            else if(_leadingZeroes)
-            {
-                const auto text = QStringLiteral("%1").arg(value.toLongLong(), _leadingZeroWidth, 10, QLatin1Char('0'));
                 if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
@@ -760,7 +748,6 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             else
             {
                 const int nums = QString::number(top.toInt()).length();
-                _leadingZeroWidth = qMax(1, nums);
                 setMaxLength(qMax(2, nums + 1));
                 setValidator(new QIntValidator(bottom.toInt(), top.toInt(), this));
             }
@@ -814,7 +801,6 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             else
             {
                 const int nums = QString::number(top.toLongLong()).length();
-                _leadingZeroWidth = qMax(1, nums);
                 setMaxLength(qMax(2, nums + 1));
                 setValidator(new QInt64Validator(bottom.toLongLong(), top.toLongLong(), this));
             }

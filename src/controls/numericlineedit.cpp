@@ -70,6 +70,7 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
     ,_hexButton(new HexViewButton(this))
     ,_hexView(false)
     ,_hexButtonVisible(false)
+    ,_allowEmptyValue(false)
 {
     connect(_hexButton, &QToolButton::toggled, this, &NumericLineEdit::on_hexViewToggled);
 
@@ -93,6 +94,7 @@ NumericLineEdit::NumericLineEdit(NumericLineEdit::InputMode mode, QWidget *paren
     ,_hexButton(new HexViewButton(this))
     ,_hexView(false)
     ,_hexButtonVisible(false)
+    ,_allowEmptyValue(false)
 {
     connect(_hexButton, &QToolButton::toggled, this, &NumericLineEdit::on_hexViewToggled);
 
@@ -188,7 +190,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
         _hexButton->blockSignals(false);
     }
 
-    updateHexButton();
+    updateButtons();
     emit rangeChanged(_minValue, _maxValue);
 }
 
@@ -249,15 +251,22 @@ bool NumericLineEdit::isHexViewApplicable() const
 }
 
 ///
-/// \brief NumericLineEdit::updateHexButton
+/// \brief NumericLineEdit::updateButtons
 ///
-void NumericLineEdit::updateHexButton()
+void NumericLineEdit::updateButtons()
 {
-    const bool visible = _hexButtonVisible && isHexViewApplicable();
-    _hexButton->setVisible(visible);
+    const int h = height() > 8 ? height() - 8 : 16;
 
-    const int btnWidth = visible ? (height() > 8 ? height() - 8 : 16) : 0;
-    const int margin   = visible ? btnWidth + 6 : 0;
+    const bool hexVisible = _hexButtonVisible && isHexViewApplicable();
+    _hexButton->setVisible(hexVisible);
+
+    if(hexVisible)
+    {
+        _hexButton->setGeometry(width() - h - 4, 4, h, h);
+        _hexButton->setIconSize(QSize(h, h));
+    }
+
+    const int margin = hexVisible ? h + 6 : 0;
     setTextMargins(0, 0, margin, 0);
 }
 
@@ -276,7 +285,44 @@ bool NumericLineEdit::hexButtonVisible() const
 void NumericLineEdit::setHexButtonVisible(bool visible)
 {
     _hexButtonVisible = visible;
-    updateHexButton();
+    updateButtons();
+}
+
+///
+/// \brief NumericLineEdit::allowEmptyValue
+///
+bool NumericLineEdit::allowEmptyValue() const
+{
+    return _allowEmptyValue;
+}
+
+///
+/// \brief NumericLineEdit::setAllowEmptyValue
+/// \param allow
+///
+void NumericLineEdit::setAllowEmptyValue(bool allow)
+{
+    _allowEmptyValue = allow;
+    setClearButtonEnabled(allow);
+    if(!allow && !_value.isValid())
+        internalSetValue(_minValue);
+}
+
+///
+/// \brief NumericLineEdit::isEmpty
+///
+bool NumericLineEdit::isEmpty() const
+{
+    return !_value.isValid();
+}
+
+///
+/// \brief NumericLineEdit::clearValue
+///
+void NumericLineEdit::clearValue()
+{
+    if(_allowEmptyValue)
+        internalSetValue(QVariant());
 }
 
 ///
@@ -285,6 +331,20 @@ void NumericLineEdit::setHexButtonVisible(bool visible)
 ///
 void NumericLineEdit::internalSetValue(QVariant value)
 {
+    if(!value.isValid() && _allowEmptyValue)
+    {
+        const auto oldValue = _value;
+        _value = QVariant();
+        if(!QLineEdit::text().isEmpty())
+            QLineEdit::setText(QString());
+        if(oldValue.isValid())
+        {
+            emit valueChanged(_value);
+            emit valueChanged(oldValue, _value);
+        }
+        return;
+    }
+
     switch(_inputMode)
     {
         case Int32Mode:
@@ -432,6 +492,9 @@ void NumericLineEdit::internalSetValue(QVariant value)
 ///
 void NumericLineEdit::updateValue()
 {
+    if(QLineEdit::text().isEmpty() && _allowEmptyValue)
+        return;
+
     switch(_inputMode)
     {
         case Int32Mode:
@@ -554,7 +617,10 @@ void NumericLineEdit::updateValue()
 ///
 void NumericLineEdit::focusInEvent(QFocusEvent* e)
 {
-    internalSetValue(_value);
+    internalSetValue(_value); // sets text without "0x" prefix first
+    // Reduce max length after text is updated to avoid truncation via setMaxLength
+    if(_inputMode == HexMode || _hexView)
+        setMaxLength(_leadingZeroWidth);
     QLineEdit::focusInEvent(e);
 }
 
@@ -564,6 +630,9 @@ void NumericLineEdit::focusInEvent(QFocusEvent* e)
 ///
 void NumericLineEdit::focusOutEvent(QFocusEvent* e)
 {
+    // Restore max length before updateValue so setText("0x...") is not truncated
+    if(_inputMode == HexMode || _hexView)
+        setMaxLength(_leadingZeroWidth + 2);
     updateValue();
     QLineEdit::focusOutEvent(e);
 }
@@ -584,10 +653,7 @@ void NumericLineEdit::keyPressEvent(QKeyEvent* e)
 void NumericLineEdit::resizeEvent(QResizeEvent* e)
 {
     QLineEdit::resizeEvent(e);
-    const int h = height() - 8;
-    _hexButton->setGeometry(width() - h - 4, 4, h, h);
-    _hexButton->setIconSize(QSize(h, h));
-    updateHexButton();
+    updateButtons();
 }
 
 ///
@@ -603,6 +669,18 @@ void NumericLineEdit::on_editingFinished()
 ///
 void NumericLineEdit::on_textChanged(const QString& text)
 {
+    if(text.isEmpty() && _allowEmptyValue)
+    {
+        if(_value.isValid())
+        {
+            const auto oldValue = _value;
+            _value = QVariant();
+            emit valueChanged(_value);
+            emit valueChanged(oldValue, _value);
+        }
+        return;
+    }
+
     QVariant value;
     switch(_inputMode)
     {

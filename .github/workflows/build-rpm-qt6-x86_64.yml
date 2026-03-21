@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
@@ -255,7 +255,7 @@ jobs:
           fi
 
       - name: Upload RPM package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: success()
         with:
           name: ${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}
@@ -268,7 +268,7 @@ jobs:
           echo "$GPG_PUBLIC_KEY" > ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
 
       - name: Upload public GPG key
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
           path: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey

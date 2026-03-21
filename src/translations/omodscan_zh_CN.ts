@@ -1879,7 +1879,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="231"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="232"/>
         <source>Auto Simulation: OFF</source>
         <translation>自动模拟：关闭</translation>
     </message>
@@ -1898,8 +1898,8 @@ single-point  write functions 05 and 06.)</source>
         <translation>16: 写入保持寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="225"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="238"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="226"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="239"/>
         <source>Auto Simulation: ON</source>
         <translation>自动模拟：开启</translation>
     </message>

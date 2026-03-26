@@ -6,11 +6,13 @@
     <message>
         <location filename="../controls/addressbasecombobox.cpp" line="11"/>
         <location filename="../controls/addressbasecombobox.cpp" line="30"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="30"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
         <location filename="../controls/addressbasecombobox.cpp" line="12"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
@@ -21,11 +23,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="12"/>
         <location filename="../ansimenu.cpp" line="53"/>
+        <location filename="../ansimenu.cpp" line="53"/>
         <source>Arabic</source>
         <translation>阿拉伯语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="13"/>
+        <location filename="../ansimenu.cpp" line="54"/>
         <location filename="../ansimenu.cpp" line="54"/>
         <source>Baltic</source>
         <translation>波罗的语</translation>
@@ -33,11 +37,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="14"/>
         <location filename="../ansimenu.cpp" line="55"/>
+        <location filename="../ansimenu.cpp" line="55"/>
         <source>Celtic</source>
         <translation>凯尔特语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="15"/>
+        <location filename="../ansimenu.cpp" line="56"/>
         <location filename="../ansimenu.cpp" line="56"/>
         <source>Cyrillic</source>
         <translation>西里尔语</translation>
@@ -45,11 +51,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="16"/>
         <location filename="../ansimenu.cpp" line="57"/>
+        <location filename="../ansimenu.cpp" line="57"/>
         <source>Central European</source>
         <translation>中欧</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="17"/>
+        <location filename="../ansimenu.cpp" line="58"/>
         <location filename="../ansimenu.cpp" line="58"/>
         <source>Chinese</source>
         <translation>简体中文</translation>
@@ -57,11 +65,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="18"/>
         <location filename="../ansimenu.cpp" line="59"/>
+        <location filename="../ansimenu.cpp" line="59"/>
         <source>Eastern European</source>
         <translation>东欧</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="19"/>
+        <location filename="../ansimenu.cpp" line="60"/>
         <location filename="../ansimenu.cpp" line="60"/>
         <source>Greek</source>
         <translation>希腊语</translation>
@@ -69,11 +79,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="20"/>
         <location filename="../ansimenu.cpp" line="61"/>
+        <location filename="../ansimenu.cpp" line="61"/>
         <source>Hebrew</source>
         <translation>希伯来语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="21"/>
+        <location filename="../ansimenu.cpp" line="62"/>
         <location filename="../ansimenu.cpp" line="62"/>
         <source>Japanese</source>
         <translation>日语</translation>
@@ -81,11 +93,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="22"/>
         <location filename="../ansimenu.cpp" line="63"/>
+        <location filename="../ansimenu.cpp" line="63"/>
         <source>Korean</source>
         <translation>韩语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="23"/>
+        <location filename="../ansimenu.cpp" line="64"/>
         <location filename="../ansimenu.cpp" line="64"/>
         <source>Thai</source>
         <translation>泰语</translation>
@@ -93,17 +107,20 @@
     <message>
         <location filename="../ansimenu.cpp" line="24"/>
         <location filename="../ansimenu.cpp" line="65"/>
+        <location filename="../ansimenu.cpp" line="65"/>
         <source>Turkish</source>
         <translation>土耳其语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="25"/>
         <location filename="../ansimenu.cpp" line="66"/>
+        <location filename="../ansimenu.cpp" line="66"/>
         <source>Western European</source>
         <translation>西欧</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="26"/>
+        <location filename="../ansimenu.cpp" line="67"/>
         <location filename="../ansimenu.cpp" line="67"/>
         <source>Vietnamese</source>
         <translation>越南语</translation>
@@ -135,11 +152,13 @@
     <message>
         <location filename="../controls/byteordercombobox.cpp" line="11"/>
         <location filename="../controls/byteordercombobox.cpp" line="25"/>
+        <location filename="../controls/byteordercombobox.cpp" line="25"/>
         <source>Direct</source>
         <translation>直接的</translation>
     </message>
     <message>
         <location filename="../controls/byteordercombobox.cpp" line="12"/>
+        <location filename="../controls/byteordercombobox.cpp" line="26"/>
         <location filename="../controls/byteordercombobox.cpp" line="26"/>
         <source>Swapped</source>
         <translation>已交换</translation>
@@ -295,6 +314,7 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="99"/>
         <location filename="../dialogs/dialogabout.cpp" line="106"/>
+        <location filename="../dialogs/dialogabout.cpp" line="106"/>
         <source>Underlying platform.</source>
         <translation>底层平台。</translation>
     </message>
@@ -315,6 +335,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="141"/>
+        <location filename="../dialogs/dialogabout.cpp" line="146"/>
         <location filename="../dialogs/dialogabout.cpp" line="146"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
@@ -406,6 +427,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
         <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
         <source>Scan</source>
         <translation>扫描</translation>
@@ -858,11 +880,13 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="114"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 文件 (*.csv)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="121"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="199"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="199"/>
         <source>Error</source>
         <translation>错误</translation>
@@ -879,6 +903,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="164"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
         <source>Warning</source>
         <translation>警告</translation>
@@ -993,11 +1018,13 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="641"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="722"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="722"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 文件 (*.csv)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="648"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
         <source>Error</source>
         <translation>错误</translation>
@@ -1019,6 +1046,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="698"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="704"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="704"/>
         <source>Warning</source>
         <translation>警告</translation>
@@ -1193,17 +1221,20 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="77"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="28"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="28"/>
         <source>None</source>
         <translation>无校验</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="87"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="34"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="34"/>
         <source>Odd</source>
         <translation>奇校验</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="94"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="31"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="31"/>
         <source>Even</source>
         <translation>偶校验</translation>
@@ -1216,6 +1247,8 @@
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="139"/>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="446"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="256"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="256"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <source>Device ID</source>
@@ -1267,6 +1300,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="441"/>
+        <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <source>Port</source>
         <translation>端口</translation>
@@ -1828,6 +1862,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="134"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="93"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="93"/>
         <source>Auto Simulation: OFF</source>
         <translation>自动模拟：关闭</translation>
     </message>
@@ -1842,6 +1877,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="87"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="99"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="99"/>
         <source>Auto Simulation: ON</source>
         <translation>自动模拟：开启</translation>
@@ -1880,6 +1916,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="118"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="232"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="232"/>
         <source>Auto Simulation: OFF</source>
         <translation>自动模拟：关闭</translation>
     </message>
@@ -1899,6 +1936,7 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="226"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="239"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="239"/>
         <source>Auto Simulation: ON</source>
         <translation>自动模拟：开启</translation>
@@ -2031,7 +2069,7 @@ Valid Slave Responses: %2</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="870"/>
+        <location filename="../formmodsca.cpp" line="875"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
@@ -2050,6 +2088,7 @@ Valid Slave Responses: %2</source>
     <name>HexViewButton</name>
     <message>
         <location filename="../controls/numericlineedit.cpp" line="29"/>
+        <location filename="../controls/hexviewbutton.cpp" line="32"/>
         <location filename="../controls/hexviewbutton.cpp" line="32"/>
         <source>Hex View</source>
         <translation>十六进制视图</translation>
@@ -2085,11 +2124,13 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="49"/>
         <location filename="../controls/mainstatusbar.cpp" line="129"/>
+        <location filename="../controls/mainstatusbar.cpp" line="129"/>
         <source>Polls: %1</source>
         <translation>发送：%1</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="55"/>
+        <location filename="../controls/mainstatusbar.cpp" line="144"/>
         <location filename="../controls/mainstatusbar.cpp" line="144"/>
         <source>Resps: %1</source>
         <translation>响应：%1</translation>
@@ -2651,11 +2692,19 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.cpp" line="471"/>
         <location filename="../mainwindow.cpp" line="579"/>
         <location filename="../mainwindow.cpp" line="605"/>
+        <location filename="../mainwindow.cpp" line="466"/>
+        <location filename="../mainwindow.cpp" line="471"/>
+        <location filename="../mainwindow.cpp" line="579"/>
+        <location filename="../mainwindow.cpp" line="605"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="392"/>
+        <location filename="../mainwindow.cpp" line="462"/>
+        <location filename="../mainwindow.cpp" line="472"/>
+        <location filename="../mainwindow.cpp" line="580"/>
+        <location filename="../mainwindow.cpp" line="606"/>
         <location filename="../mainwindow.cpp" line="462"/>
         <location filename="../mainwindow.cpp" line="472"/>
         <location filename="../mainwindow.cpp" line="580"/>
@@ -2692,11 +2741,13 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../modbusclient.cpp" line="590"/>
         <location filename="../modbusclient.cpp" line="775"/>
+        <location filename="../modbusclient.cpp" line="775"/>
         <source>Coil Write Failure</source>
         <translation>线圈写入失败</translation>
     </message>
     <message>
         <location filename="../modbusclient.cpp" line="594"/>
+        <location filename="../modbusclient.cpp" line="780"/>
         <location filename="../modbusclient.cpp" line="780"/>
         <source>Register Write Failure</source>
         <translation>寄存器写入失败</translation>
@@ -2722,11 +2773,13 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/modbuslogwidget.cpp" line="148"/>
         <location filename="../controls/modbuslogwidget.cpp" line="194"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="194"/>
         <source>Copy Text</source>
         <translation>复制文本</translation>
     </message>
     <message>
         <location filename="../controls/modbuslogwidget.cpp" line="163"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="195"/>
         <location filename="../controls/modbuslogwidget.cpp" line="195"/>
         <source>Copy Bytes</source>
         <translation>复制字节</translation>
@@ -2895,6 +2948,9 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="337"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="356"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="375"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="337"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="356"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="375"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
@@ -2904,11 +2960,16 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="338"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="357"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="376"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="319"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="338"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="357"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="376"/>
         <source>Length</source>
         <translation>长度</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="268"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="273"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="273"/>
         <source>Checksum</source>
         <translation>校验和</translation>
@@ -2920,6 +2981,17 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="326"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="345"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="364"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="383"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="474"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="492"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="515"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="534"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="545"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="553"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="622"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="640"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="345"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="364"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="383"/>
@@ -2948,6 +3020,8 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="365"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="414"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="422"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="414"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="422"/>
         <source>Register Value</source>
         <translation>寄存器值</translation>
     </message>
@@ -2959,17 +3033,20 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="394"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="402"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="402"/>
         <source>Output Address</source>
         <translation>输出地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="395"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="403"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="403"/>
         <source>Output Value</source>
         <translation>输出值</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="413"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="421"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="421"/>
         <source>Register Address</source>
         <translation>寄存器地址</translation>
@@ -2981,6 +3058,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="441"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="449"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="449"/>
         <source>Sub-function</source>
         <translation>子功能</translation>
@@ -2994,17 +3072,26 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="565"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="573"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="650"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="450"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="535"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="546"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="554"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="565"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="573"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="650"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="460"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="475"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="475"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="476"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="476"/>
         <source>Event Count</source>
         <translation>事件计数</translation>
@@ -3024,11 +3111,15 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="513"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="523"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="513"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="523"/>
         <source>Starting Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="491"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
         <source>Quantity of Outputs</source>
         <translation>输出数量</translation>
@@ -3041,11 +3132,13 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="514"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="524"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="524"/>
         <source>Quantity of Registers</source>
         <translation>寄存器数量</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="516"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="623"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="623"/>
         <source>Registers Value</source>
         <translation>寄存器值</translation>
@@ -3063,17 +3156,20 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="584"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="594"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="594"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="585"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="595"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="595"/>
         <source>And Mask</source>
         <translation>与掩码</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="586"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="596"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="596"/>
         <source>Or Mask</source>
         <translation>或掩码</translation>
@@ -3126,11 +3222,13 @@ Valid Slave Responses: %2</source>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="37"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="93"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="93"/>
         <source>Copy Text</source>
         <translation>复制文本</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="53"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="94"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="94"/>
         <source>Copy Values</source>
         <translation>复制值</translation>
@@ -3393,6 +3491,7 @@ Byte Order: %2</source>
     <message>
         <location filename="../modbustcpclient.cpp" line="146"/>
         <location filename="../modbusrtutcpclient.cpp" line="217"/>
+        <location filename="../modbusrtutcpclient.cpp" line="217"/>
         <source>TCP socket error (%1).</source>
         <translation>TCP 套接字错误(%1)。</translation>
     </message>
@@ -3400,11 +3499,15 @@ Byte Order: %2</source>
         <location filename="../modbustcpclient.cpp" line="272"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
         <location filename="../modbusrtutcpclient.cpp" line="445"/>
+        <location filename="../modbusrtuclient.cpp" line="428"/>
+        <location filename="../modbusrtutcpclient.cpp" line="445"/>
         <source>Request timeout.</source>
         <translation>请求超时。</translation>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="299"/>
+        <location filename="../modbusrtuclient.cpp" line="207"/>
+        <location filename="../modbusrtutcpclient.cpp" line="89"/>
         <location filename="../modbusrtuclient.cpp" line="207"/>
         <location filename="../modbusrtutcpclient.cpp" line="89"/>
         <source>Reply aborted due to connection closure.</source>
@@ -3477,6 +3580,7 @@ Byte Order: %2</source>
     <message>
         <location filename="../controls/simulationmodecombobox.cpp" line="42"/>
         <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
+        <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
         <source>Random</source>
         <translation>随机</translation>
     </message>
@@ -3520,6 +3624,7 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../controls/statisticwidget.cpp" line="102"/>
+        <location filename="../controls/statisticwidget.cpp" line="106"/>
         <location filename="../controls/statisticwidget.cpp" line="106"/>
         <source>Pause Polling</source>
         <translation>暂停轮询</translation>

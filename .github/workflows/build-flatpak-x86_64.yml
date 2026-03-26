@@ -34,7 +34,7 @@ jobs:
           apt install -y flatpak-builder flatpak
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
@@ -125,7 +125,7 @@ jobs:
           flatpak build-bundle repo io.github.sanny32.omodscan.flatpak io.github.sanny32.omodscan ${{ env.FLATPAK_CHANNEL }}
 
       - name: Upload bundle artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: io.github.sanny32.omodscan.flatpak
           path: |

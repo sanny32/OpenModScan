@@ -168,11 +168,21 @@
     <name>CmdLineParser</name>
     <message>
         <location filename="../cmdlineparser.cpp" line="9"/>
+        <source>Displays help on commandline options.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="12"/>
+        <source>Displays version information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="15"/>
         <source>Load settings profile from ini file.</source>
         <translation>Загрузить профиль настроек из ini-файла.</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="9"/>
+        <location filename="../cmdlineparser.cpp" line="15"/>
         <source>file path</source>
         <translation>путь к файлу</translation>
     </message>

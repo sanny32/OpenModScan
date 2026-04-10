@@ -14,6 +14,8 @@ public:
     explicit CmdLineParser();
 
 public:
+    static constexpr const char* _help =     "help";
+    static constexpr const char* _version =  "version";
     static constexpr const char* _profile =  "profile";
 };
 

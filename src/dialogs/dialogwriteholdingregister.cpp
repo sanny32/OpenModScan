@@ -4,6 +4,9 @@
 #include "modbusclient.h"
 #include "waitcursor.h"
 #include "datasimulator.h"
+#include "checkablegroupbox.h"
+#include "bitpatterncontrol.h"
+#include "dialogpulsemode.h"
 #include "dialogautosimulation.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
@@ -17,9 +20,9 @@ namespace {
 }
 
 ///
-/// \brief The SimButtonColors class
+/// \brief The ButtonColors class
 ///
-struct SimButtonColors
+struct ButtonColors
 {
     QString base;
     QString hover;
@@ -32,7 +35,7 @@ struct SimButtonColors
 /// \param registersCount
 /// \return
 ///
-static SimButtonColors simColors(DataDisplayMode mode)
+static ButtonColors simColors(DataDisplayMode mode)
 {
     switch(registersCount(mode))
     {
@@ -89,6 +92,8 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         }
     }
     updateSimulationButton();
+
+    updatePulseButton();
 
     switch(params.DisplayMode)
     {
@@ -215,6 +220,37 @@ void DialogWriteHoldingRegister::accept()
 }
 
 ///
+/// \brief DialogWriteHoldingRegister::updatePulseButton
+///
+void DialogWriteHoldingRegister::updatePulseButton()
+{
+    const auto& puleParams = _writeParams.PusleParams;
+    if(puleParams.Enabled) {
+        ui->pushButtonPulse->setText(tr("Pulse: ON"));
+
+        ButtonColors c = { "#F0A43A", "#E2952E", "#D58422", "#B96E16" };
+        ui->pushButtonSimulation->setStyleSheet(QString(R"(
+                    QPushButton {
+                        color: white;
+                        padding: 4px 12px;
+                        background-color: %1;
+                        border: 1px solid %2;
+                        border-radius: 4px;
+                    }
+                    QPushButton:hover {
+                        background-color: %3;
+                    }
+                    QPushButton:pressed {
+                        background-color: %4;
+                    }
+                )").arg(c.base, c.border, c.hover, c.pressed));
+    }
+    else {
+        ui->pushButtonPulse->setText(tr("Pulse: OFF"));
+    }
+}
+
+///
 /// \brief DialogWriteHoldingRegister::updateSimulationButton
 ///
 void DialogWriteHoldingRegister::updateSimulationButton()
@@ -312,6 +348,18 @@ void DialogWriteHoldingRegister::on_lineEditNode_valueChanged(const QVariant& va
         updateSimulationButton();
     }
     updateValue();
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_pushButtonPulse_clicked
+///
+void DialogWriteHoldingRegister::on_pushButtonPulse_clicked()
+{
+    DialogPulseMode dlg(_writeParams.PusleParams, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        updatePulseButton();
+    }
 }
 
 ///

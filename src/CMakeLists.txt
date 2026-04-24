@@ -56,8 +56,7 @@ if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
 endif()
 
 # Define target
-add_executable(${PROJECT_NAME}
-    dialogs/dialogpulsemode.h dialogs/dialogpulsemode.cpp dialogs/dialogpulsemode.ui)
+add_executable(${PROJECT_NAME})
 
 if(DEFINED ENV{GITHUB_REF})
     string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})
@@ -144,6 +143,7 @@ set(SOURCES
     dialogs/dialogmodbusscanner.cpp
     dialogs/dialogprintsettings.cpp
     dialogs/dialogprotocolselections.cpp
+    dialogs/dialogpulsemode.cpp
     dialogs/dialogsetuppresetdata.cpp
     dialogs/dialogusermsg.cpp
     dialogs/dialogwindowsmanager.cpp
@@ -224,6 +224,7 @@ set(HEADERS
     dialogs/dialogmodbusscanner.h
     dialogs/dialogprintsettings.h
     dialogs/dialogprotocolselections.h
+    dialogs/dialogpulsemode.h
     dialogs/dialogsetuppresetdata.h
     dialogs/dialogusermsg.h
     dialogs/dialogwindowsmanager.h
@@ -311,6 +312,7 @@ set(UI_FILES
     dialogs/dialogmodbusscanner.ui
     dialogs/dialogprintsettings.ui
     dialogs/dialogprotocolselections.ui
+    dialogs/dialogpulsemode.ui
     dialogs/dialogsetuppresetdata.ui
     dialogs/dialogusermsg.ui
     dialogs/dialogwindowsmanager.ui

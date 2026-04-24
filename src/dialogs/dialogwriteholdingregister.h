@@ -6,8 +6,6 @@
 #include "modbuswriteparams.h"
 #include "modbussimulationparams.h"
 #include "qfixedsizedialog.h"
-#include "checkablegroupbox.h"
-#include "bitpatterncontrol.h"
 
 class DataSimulator;
 
@@ -31,11 +29,13 @@ public:
     void accept() override;
 
 private slots:
+    void on_pushButtonPulse_clicked();
     void on_pushButtonSimulation_clicked();
     void on_lineEditAddress_valueChanged(const QVariant& value);
     void on_lineEditNode_valueChanged(const QVariant& value);
 
 private:
+    void updatePulseButton();
     void updateSimulationButton();
     void updateValue();
 

@@ -7,6 +7,19 @@
 class ModbusClient;
 
 ///
+/// \brief The PulseParams class
+///
+struct PulseParams
+{
+    bool Enabled = false;
+    int Duration = 500;
+    enum RestoreMode {
+        Previous = 0,
+        Zero
+    } Restore;
+};
+
+///
 /// \brief The ModbusWriteParams class
 ///
 struct ModbusWriteParams
@@ -18,6 +31,7 @@ struct ModbusWriteParams
     AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     ByteOrder Order;
     QString Codepage;
+    PulseParams PusleParams;
     bool ZeroBasedAddress;
     bool LeadingZeros = false;
     bool ForceModbus15And16Func = false;

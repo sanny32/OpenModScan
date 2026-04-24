@@ -1,22 +1,29 @@
 #ifndef DIALOGPULSEMODE_H
 #define DIALOGPULSEMODE_H
 
-#include <QDialog>
+#include "qfixedsizedialog.h"
+#include "modbuswriteparams.h"
 
 namespace Ui {
 class DialogPulseMode;
 }
 
-class DialogPulseMode : public QDialog
+///
+/// \brief The DialogPulseMode class
+///
+class DialogPulseMode : public QFixedSizeDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogPulseMode(QWidget *parent = nullptr);
+    explicit DialogPulseMode(PulseParams& params, QWidget *parent = nullptr);
     ~DialogPulseMode();
 
 private:
     Ui::DialogPulseMode *ui;
+
+private:
+    PulseParams& _params;
 };
 
 #endif // DIALOGPULSEMODE_H

@@ -56,7 +56,8 @@ if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
 endif()
 
 # Define target
-add_executable(${PROJECT_NAME})
+add_executable(${PROJECT_NAME}
+    dialogs/dialogpulsemode.h dialogs/dialogpulsemode.cpp dialogs/dialogpulsemode.ui)
 
 if(DEFINED ENV{GITHUB_REF})
     string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})

@@ -335,7 +335,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::PrintS
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
-        SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
     )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
 elseif(Qt5_FOUND AND EXISTS ${Qt5_LUPDATE_EXECUTABLE})

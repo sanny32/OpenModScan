@@ -2,9 +2,11 @@
 #include "modbusclient.h"
 #include "waitcursor.h"
 #include "datasimulator.h"
+#include "dialogpulsemode.h"
 #include "dialogcoilsimulation.h"
 #include "dialogwritecoilregister.h"
 #include "ui_dialogwritecoilregister.h"
+
 
 ///
 /// \brief DialogWriteCoilRegister::DialogWriteCoilRegister
@@ -117,6 +119,35 @@ void DialogWriteCoilRegister::updateSimulationButton()
 }
 
 ///
+/// \brief DialogWriteCoilRegister::updatePulseButton
+///
+void DialogWriteCoilRegister::updatePulseButton()
+{
+    if( _writeParams.PusleParams.Enabled) {
+        ui->pushButtonPulse->setText(tr("Pulse: ON"));
+        ui->pushButtonPulse->setStyleSheet(QString(R"(
+                    QPushButton {
+                        color: white;
+                        padding: 4px 12px;
+                        background-color: %1;
+                        border: 1px solid %2;
+                        border-radius: 4px;
+                    }
+                    QPushButton:hover {
+                        background-color: %3;
+                    }
+                    QPushButton:pressed {
+                        background-color: %4;
+                    }
+                )").arg("#F0A43A", "#B96E16", "#E2952E", "#D58422"));
+    }
+    else {
+        ui->pushButtonPulse->setText(tr("Pulse: OFF"));
+        ui->pushButtonPulse->setStyleSheet("padding: 4px 12px;");
+    }
+}
+
+///
 /// \brief DialogWriteCoilRegister::updateValue
 ///
 void DialogWriteCoilRegister::updateValue()
@@ -162,6 +193,18 @@ void DialogWriteCoilRegister::on_lineEditNode_valueChanged(const QVariant& value
         updateSimulationButton();
     }
     updateValue();
+}
+
+///
+/// \brief DialogWriteCoilRegister::on_pushButtonPulse_clicked
+///
+void DialogWriteCoilRegister::on_pushButtonPulse_clicked()
+{
+    DialogPulseMode dlg(_writeParams.PusleParams, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        updatePulseButton();
+    }
 }
 
 ///

@@ -19,6 +19,8 @@ public:
     explicit DialogPulseMode(PulseParams& params, QWidget *parent = nullptr);
     ~DialogPulseMode();
 
+    void accept() override;
+
 private:
     Ui::DialogPulseMode *ui;
 

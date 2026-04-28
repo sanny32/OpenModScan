@@ -131,7 +131,7 @@
         <string notr="true">padding: 4px 12px;</string>
        </property>
        <property name="text">
-        <string>Pluse: OFF</string>
+        <string>Pulse: OFF</string>
        </property>
       </widget>
      </item>

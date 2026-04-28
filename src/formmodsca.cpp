@@ -958,6 +958,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
     const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
+    const auto pointType = dd.PointType;
 
     switch(dd.PointType)
     {
@@ -978,7 +979,19 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
             DialogWriteCoilRegister dlg(params, displayDefinition(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
-                _modbusClient.writeRegister(dd.PointType, params, _formId);
+            {
+                _modbusClient.writeRegister(pointType, params, _formId);
+                if(params.PusleParams.Enabled) {
+                    auto restoreParams = params;
+                    switch(params.PusleParams.Restore) {
+                        case PulseParams::Zero:     restoreParams.Value = 0;     break;
+                        case PulseParams::Previous: restoreParams.Value = value; break;
+                    }
+                    QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams, pointType]() {
+                        _modbusClient.writeRegister(pointType, restoreParams, _formId);
+                    });
+                }
+            }
         }
         break;
 
@@ -999,7 +1012,19 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
             DialogWriteHoldingRegister dlg(params, displayDefinition(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
-                _modbusClient.writeRegister(dd.PointType, params, _formId);
+            {
+                _modbusClient.writeRegister(pointType, params, _formId);
+                if(params.PusleParams.Enabled) {
+                    auto restoreParams = params;
+                    switch(params.PusleParams.Restore) {
+                        case PulseParams::Zero:     restoreParams.Value = 0;     break;
+                        case PulseParams::Previous: restoreParams.Value = value; break;
+                    }
+                    QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams, pointType]() {
+                        _modbusClient.writeRegister(pointType, restoreParams, _formId);
+                    });
+                }
+            }
         }
         break;
 

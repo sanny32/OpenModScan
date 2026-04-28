@@ -224,12 +224,11 @@ void DialogWriteHoldingRegister::accept()
 ///
 void DialogWriteHoldingRegister::updatePulseButton()
 {
-    const auto& puleParams = _writeParams.PusleParams;
-    if(puleParams.Enabled) {
+    if(_writeParams.PusleParams.Enabled) {
         ui->pushButtonPulse->setText(tr("Pulse: ON"));
 
         ButtonColors c = { "#F0A43A", "#E2952E", "#D58422", "#B96E16" };
-        ui->pushButtonSimulation->setStyleSheet(QString(R"(
+        ui->pushButtonPulse->setStyleSheet(QString(R"(
                     QPushButton {
                         color: white;
                         padding: 4px 12px;
@@ -247,6 +246,7 @@ void DialogWriteHoldingRegister::updatePulseButton()
     }
     else {
         ui->pushButtonPulse->setText(tr("Pulse: OFF"));
+        ui->pushButtonPulse->setStyleSheet("padding: 4px 12px;");
     }
 }
 

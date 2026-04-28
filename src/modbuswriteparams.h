@@ -13,11 +13,14 @@ struct PulseParams
 {
     bool Enabled = false;
     int Duration = 500;
+
     enum RestoreMode {
         Previous = 0,
         Zero
-    } Restore;
+    } Restore = Previous;
 };
+
+Q_DECLARE_METATYPE(PulseParams::RestoreMode);
 
 ///
 /// \brief The ModbusWriteParams class

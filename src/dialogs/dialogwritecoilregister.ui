@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
+    <width>424</width>
     <height>160</height>
    </rect>
   </property>
@@ -14,9 +14,6 @@
    <string>05: Write Single Coil</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <property name="labelAlignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
    <item row="0" column="0">
     <widget class="QLabel" name="labelNode">
      <property name="text">
@@ -136,14 +133,30 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="pushButtonPulse">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">padding: 4px 12px;</string>
+       </property>
+       <property name="text">
+        <string>Pulse: OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>13</width>
+         <height>32</height>
         </size>
        </property>
       </spacer>

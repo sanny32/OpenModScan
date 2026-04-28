@@ -66,7 +66,7 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QComboBox" name="comboBoxDuration">
+    <widget class="NumericComboBox" name="comboBoxDuration">
      <property name="editable">
       <bool>true</bool>
      </property>
@@ -99,6 +99,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>NumericComboBox</class>
+   <extends>QComboBox</extends>
+   <header>numericcombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -1,8 +1,6 @@
 #include <float.h>
-#include <QApplication>
 #include <QMenu>
 #include <QSignalBlocker>
-#include <QStyle>
 #include <QtGlobal>
 #include "modbuslimits.h"
 #include "numericutils.h"
@@ -11,6 +9,8 @@
 #include "datasimulator.h"
 #include "checkablegroupbox.h"
 #include "bitpatterncontrol.h"
+#include "coloredpushbutton.h"
+#include "coloredtoolbutton.h"
 #include "dialogpulsemode.h"
 #include "dialogautosimulation.h"
 #include "dialogwriteholdingregister.h"
@@ -23,81 +23,14 @@ namespace {
         return Qt::PartiallyChecked;
     }
 
-    bool isFusionStyle()
-    {
-        return qApp != nullptr
-            && qApp->style() != nullptr
-            && qApp->style()->objectName().compare("fusion", Qt::CaseInsensitive) == 0;
-    }
-
-    QString buttonBackground(const QString& top, const QString& bottom)
-    {
-        return QString("qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 %1, stop:1 %2)")
-            .arg(top, bottom);
-    }
-
-    QString pulseButtonOnStyle()
-    {
-        const bool fusionStyle = isFusionStyle();
-
-        const QString normalBackground = fusionStyle
-            ? buttonBackground("#F6B85F", "#F0A43A")
-            : "#F0A43A";
-        const QString hoverBackground = fusionStyle
-            ? buttonBackground("#F3AA4E", "#E2952E")
-            : "#E2952E";
-        const QString pressedBackground = fusionStyle
-            ? buttonBackground("#D58422", "#C8751D")
-            : "#D58422";
-
-        return QString(R"(
-                    QToolButton {
-                        color: white;
-                        padding: 0px 12px 0px 2px;
-                        background-color: %1;
-                        border: 1px solid %2;
-                        border-radius: 4px;
-                    }
-                    QToolButton:hover {
-                        background-color: %3;
-                    }
-                    QToolButton:pressed {
-                        background-color: %4;
-                    }
-                    QToolButton::menu-button {
-                        width: 12px;
-                        border-left: 1px solid %2;
-                    }
-                    QToolButton::menu-arrow {
-                        width: 10px;
-                        height: 10px;
-                    }
-                )").arg(normalBackground, "#B96E16", hoverBackground, pressedBackground);
-    }
-
-    QString pulseButtonOffStyle()
-    {
-        return "padding: 0px 12px;";
-    }
 }
-
-///
-/// \brief The ButtonColors class
-///
-struct ButtonColors
-{
-    QString base;
-    QString hover;
-    QString pressed;
-    QString border;
-};
 
 ///
 /// \brief simColors
 /// \param registersCount
 /// \return
 ///
-static ButtonColors simColors(DataDisplayMode mode)
+static ColoredPushButton::Colors simColors(DataDisplayMode mode)
 {
     switch(registersCount(mode))
     {
@@ -110,40 +43,6 @@ static ButtonColors simColors(DataDisplayMode mode)
         default:
             return { "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" };
     }
-}
-
-///
-/// \brief coloredPushButtonStyle
-/// \param colors
-/// \return
-///
-static QString coloredPushButtonStyle(const ButtonColors& colors)
-{
-    const QString normalBackground = isFusionStyle()
-        ? buttonBackground(colors.base, colors.hover)
-        : colors.base;
-    const QString hoverBackground = isFusionStyle()
-        ? buttonBackground(colors.hover, colors.pressed)
-        : colors.hover;
-    const QString pressedBackground = isFusionStyle()
-        ? buttonBackground(colors.pressed, colors.border)
-        : colors.pressed;
-
-    return QString(R"(
-                    QPushButton {
-                        color: white;
-                        padding: 4px 12px;
-                        background-color: %1;
-                        border: 1px solid %2;
-                        border-radius: 4px;
-                    }
-                    QPushButton:hover {
-                        background-color: %3;
-                    }
-                    QPushButton:pressed {
-                        background-color: %4;
-                    }
-                )").arg(normalBackground, colors.border, hoverBackground, pressedBackground);
 }
 
 ///
@@ -340,11 +239,11 @@ void DialogWriteHoldingRegister::setupPulseButton()
     const auto currentStyleSheet = ui->toolButtonPulse->styleSheet();
 
     ui->toolButtonPulse->setText(tr("Pulse: OFF"));
-    ui->toolButtonPulse->setStyleSheet(pulseButtonOffStyle());
+    ui->toolButtonPulse->clearColors();
     const int offWidth = ui->toolButtonPulse->sizeHint().width();
 
     ui->toolButtonPulse->setText(tr("Pulse: ON"));
-    ui->toolButtonPulse->setStyleSheet(pulseButtonOnStyle());
+    ui->toolButtonPulse->setColors({ "#F0A43A", "#E2952E", "#D58422", "#B96E16" });
     const int onWidth = ui->toolButtonPulse->sizeHint().width();
 
     ui->toolButtonPulse->setMinimumWidth(qMax(offWidth, onWidth));
@@ -359,11 +258,11 @@ void DialogWriteHoldingRegister::updatePulseButton()
 {
     if(_writeParams.PusleParams.Enabled) {
         ui->toolButtonPulse->setText(tr("Pulse: ON"));
-        ui->toolButtonPulse->setStyleSheet(pulseButtonOnStyle());
+        ui->toolButtonPulse->setColors({ "#F0A43A", "#E2952E", "#D58422", "#B96E16" });
     }
     else {
         ui->toolButtonPulse->setText(tr("Pulse: OFF"));
-        ui->toolButtonPulse->setStyleSheet(pulseButtonOffStyle());
+        ui->toolButtonPulse->clearColors();
     }
 }
 
@@ -377,13 +276,13 @@ void DialogWriteHoldingRegister::updateSimulationButton()
         case SimulationMode::Disabled:
             ui->pushButtonSimulation->setEnabled(false);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         case SimulationMode::Off:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         default:
@@ -392,7 +291,7 @@ void DialogWriteHoldingRegister::updateSimulationButton()
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
 
             const auto c = simColors(_simParams.DataMode);
-            ui->pushButtonSimulation->setStyleSheet(coloredPushButtonStyle(c));
+            ui->pushButtonSimulation->setColors(c);
         }
         break;
     }

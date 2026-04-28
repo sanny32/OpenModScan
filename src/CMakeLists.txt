@@ -107,6 +107,8 @@ set(SOURCES
     controls/bytelisttextedit.cpp
     controls/byteordercombobox.cpp
     controls/clickablelabel.cpp
+    controls/coloredpushbutton.cpp
+    controls/coloredtoolbutton.cpp
     controls/serialportcombobox.cpp
     controls/customlineedit.cpp
     controls/flowcontroltypecombobox.cpp
@@ -189,6 +191,8 @@ set(HEADERS
     controls/bytelisttextedit.h
     controls/byteordercombobox.h
     controls/clickablelabel.h
+    controls/coloredpushbutton.h
+    controls/coloredtoolbutton.h
     controls/serialportcombobox.h
     controls/customlineedit.h
     controls/flowcontroltypecombobox.h

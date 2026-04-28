@@ -117,7 +117,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonSimulation">
+      <widget class="ColoredPushButton" name="pushButtonSimulation">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -133,7 +133,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButtonPulse">
+      <widget class="ColoredToolButton" name="toolButtonPulse">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -202,7 +202,17 @@
    </property>
   </action>
  </widget>
- <customwidgets>
+  <customwidgets>
+  <customwidget>
+   <class>ColoredPushButton</class>
+   <extends>QPushButton</extends>
+   <header>coloredpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColoredToolButton</class>
+   <extends>QToolButton</extends>
+   <header>coloredtoolbutton.h</header>
+  </customwidget>
   <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>

@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QMenu>
+#include <QSignalBlocker>
 #include <QStyle>
 #include <QtGlobal>
 #include "modbuslimits.h"
@@ -140,18 +141,23 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, cons
         setWindowTitle(tr("15: Write Single Coil"));
     }
 
-    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditNode->setValue(params.DeviceId);
-    ui->lineEditNode->setHexButtonVisible(true);
-    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+    {
+        QSignalBlocker nodeBlocker(ui->lineEditNode);
+        QSignalBlocker addressBlocker(ui->lineEditAddress);
 
-    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditAddress->setValue(params.Address);
-    ui->lineEditAddress->setHexButtonVisible(true);
-    ui->lineEditAddress->setHexView(dd.HexViewAddress);
+        ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+        ui->lineEditNode->setValue(params.DeviceId);
+        ui->lineEditNode->setHexButtonVisible(true);
+        ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+
+        ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+        ui->lineEditAddress->setValue(params.Address);
+        ui->lineEditAddress->setHexButtonVisible(true);
+        ui->lineEditAddress->setHexView(dd.HexViewAddress);
+    }
 
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());

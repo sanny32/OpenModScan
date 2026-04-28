@@ -1,6 +1,7 @@
 #include <float.h>
 #include <QApplication>
 #include <QMenu>
+#include <QSignalBlocker>
 #include <QStyle>
 #include <QtGlobal>
 #include "modbuslimits.h"
@@ -165,18 +166,23 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         setWindowTitle(tr("16: Write Holding Register"));
     }
 
-    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditNode->setValue(params.DeviceId);
-    ui->lineEditNode->setHexButtonVisible(true);
-    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+    {
+        QSignalBlocker nodeBlocker(ui->lineEditNode);
+        QSignalBlocker addressBlocker(ui->lineEditAddress);
 
-    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditAddress->setValue(params.Address);
-    ui->lineEditAddress->setHexButtonVisible(true);
-    ui->lineEditAddress->setHexView(dd.HexViewAddress);
+        ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+        ui->lineEditNode->setValue(params.DeviceId);
+        ui->lineEditNode->setHexButtonVisible(true);
+        ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+
+        ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+        ui->lineEditAddress->setValue(params.Address);
+        ui->lineEditAddress->setHexButtonVisible(true);
+        ui->lineEditAddress->setHexView(dd.HexViewAddress);
+    }
 
     if(_dataSimulator != nullptr)
     {

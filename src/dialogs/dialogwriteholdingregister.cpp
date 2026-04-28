@@ -1,4 +1,8 @@
 #include <float.h>
+#include <QApplication>
+#include <QMenu>
+#include <QStyle>
+#include <QtGlobal>
 #include "modbuslimits.h"
 #include "numericutils.h"
 #include "modbusclient.h"
@@ -16,6 +20,52 @@ namespace {
         if (val == 0xFFFF) return Qt::Checked;
         if (val == 0x0000) return Qt::Unchecked;
         return Qt::PartiallyChecked;
+    }
+
+    QString pulseButtonOnStyle()
+    {
+        const bool fusionStyle = qApp != nullptr
+            && qApp->style() != nullptr
+            && qApp->style()->objectName().compare("fusion", Qt::CaseInsensitive) == 0;
+
+        const QString normalBackground = fusionStyle
+            ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F6B85F, stop:1 #F0A43A)"
+            : "#F0A43A";
+        const QString hoverBackground = fusionStyle
+            ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F3AA4E, stop:1 #E2952E)"
+            : "#E2952E";
+        const QString pressedBackground = fusionStyle
+            ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #D58422, stop:1 #C8751D)"
+            : "#D58422";
+
+        return QString(R"(
+                    QToolButton {
+                        color: white;
+                        padding: 0px 12px 0px 2px;
+                        background-color: %1;
+                        border: 1px solid %2;
+                        border-radius: 4px;
+                    }
+                    QToolButton:hover {
+                        background-color: %3;
+                    }
+                    QToolButton:pressed {
+                        background-color: %4;
+                    }
+                    QToolButton::menu-button {
+                        width: 12px;
+                        border-left: 1px solid %2;
+                    }
+                    QToolButton::menu-arrow {
+                        width: 10px;
+                        height: 10px;
+                    }
+                )").arg(normalBackground, "#B96E16", hoverBackground, pressedBackground);
+    }
+
+    QString pulseButtonOffStyle()
+    {
+        return "padding: 0px 12px;";
     }
 }
 
@@ -93,6 +143,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     }
     updateSimulationButton();
 
+    setupPulseButton();
     updatePulseButton();
 
     switch(params.DisplayMode)
@@ -220,33 +271,48 @@ void DialogWriteHoldingRegister::accept()
 }
 
 ///
+/// \brief DialogWriteHoldingRegister::setupPulseButton
+///
+void DialogWriteHoldingRegister::setupPulseButton()
+{
+    connect(ui->actionPulseSettings, &QAction::triggered, this, [this](){
+        DialogPulseMode dlg(_writeParams.PusleParams, this);
+        if(dlg.exec() == QDialog::Accepted)
+            updatePulseButton();
+    });
+
+    auto menu = new QMenu();
+    menu->addAction(ui->actionPulseSettings);
+    ui->toolButtonPulse->setMenu(menu);
+
+    const auto currentText = ui->toolButtonPulse->text();
+    const auto currentStyleSheet = ui->toolButtonPulse->styleSheet();
+
+    ui->toolButtonPulse->setText(tr("Pulse: OFF"));
+    ui->toolButtonPulse->setStyleSheet(pulseButtonOffStyle());
+    const int offWidth = ui->toolButtonPulse->sizeHint().width();
+
+    ui->toolButtonPulse->setText(tr("Pulse: ON"));
+    ui->toolButtonPulse->setStyleSheet(pulseButtonOnStyle());
+    const int onWidth = ui->toolButtonPulse->sizeHint().width();
+
+    ui->toolButtonPulse->setMinimumWidth(qMax(offWidth, onWidth));
+    ui->toolButtonPulse->setText(currentText);
+    ui->toolButtonPulse->setStyleSheet(currentStyleSheet);
+}
+
+///
 /// \brief DialogWriteHoldingRegister::updatePulseButton
 ///
 void DialogWriteHoldingRegister::updatePulseButton()
 {
     if(_writeParams.PusleParams.Enabled) {
-        ui->pushButtonPulse->setText(tr("Pulse: ON"));
-
-        ButtonColors c = { "#F0A43A", "#E2952E", "#D58422", "#B96E16" };
-        ui->pushButtonPulse->setStyleSheet(QString(R"(
-                    QPushButton {
-                        color: white;
-                        padding: 4px 12px;
-                        background-color: %1;
-                        border: 1px solid %2;
-                        border-radius: 4px;
-                    }
-                    QPushButton:hover {
-                        background-color: %3;
-                    }
-                    QPushButton:pressed {
-                        background-color: %4;
-                    }
-                )").arg(c.base, c.border, c.hover, c.pressed));
+        ui->toolButtonPulse->setText(tr("Pulse: ON"));
+        ui->toolButtonPulse->setStyleSheet(pulseButtonOnStyle());
     }
     else {
-        ui->pushButtonPulse->setText(tr("Pulse: OFF"));
-        ui->pushButtonPulse->setStyleSheet("padding: 4px 12px;");
+        ui->toolButtonPulse->setText(tr("Pulse: OFF"));
+        ui->toolButtonPulse->setStyleSheet(pulseButtonOffStyle());
     }
 }
 
@@ -351,15 +417,12 @@ void DialogWriteHoldingRegister::on_lineEditNode_valueChanged(const QVariant& va
 }
 
 ///
-/// \brief DialogWriteHoldingRegister::on_pushButtonPulse_clicked
+/// \brief DialogWriteHoldingRegister::on_toolButtonPulse_clicked
 ///
-void DialogWriteHoldingRegister::on_pushButtonPulse_clicked()
+void DialogWriteHoldingRegister::on_toolButtonPulse_clicked()
 {
-    DialogPulseMode dlg(_writeParams.PusleParams, this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        updatePulseButton();
-    }
+    _writeParams.PusleParams.Enabled = !_writeParams.PusleParams.Enabled;
+    updatePulseButton();
 }
 
 ///

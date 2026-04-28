@@ -1,4 +1,6 @@
+#include <QApplication>
 #include <QMenu>
+#include <QStyle>
 #include <QtGlobal>
 #include "modbuslimits.h"
 #include "modbusclient.h"
@@ -17,6 +19,22 @@ namespace {
 ///
 QString pulseButtonOnStyle()
 {
+    const bool fusionStyle = qApp != nullptr
+        && qApp->style() != nullptr
+        && qApp->style()->objectName().compare("fusion", Qt::CaseInsensitive) == 0;
+
+    const QString normalBackground = fusionStyle
+        ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F6B85F, stop:1 #F0A43A)"
+        : "#F0A43A";
+    const QString hoverBackground = fusionStyle
+        ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F3AA4E, stop:1 #E2952E)"
+        : "#E2952E";
+    const QString pressedBackground = fusionStyle
+        ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #D58422, stop:1 #C8751D)"
+        : "#D58422";
+
+    const QString borderColor = "#B96E16";
+
     return QString(R"(
                     QToolButton {
                         color: white;
@@ -39,7 +57,7 @@ QString pulseButtonOnStyle()
                         width: 10px;
                         height: 10px;
                     }
-                )").arg("#F0A43A", "#B96E16", "#E2952E", "#D58422");
+                )").arg(normalBackground, borderColor, hoverBackground, pressedBackground);
 }
 
 ///

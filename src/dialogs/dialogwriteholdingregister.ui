@@ -120,7 +120,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonPulse">
+      <widget class="QToolButton" name="toolButtonPulse">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -128,12 +128,18 @@
         </size>
        </property>
        <property name="styleSheet">
-        <string notr="true">padding: 4px 12px;</string>
+         <string notr="true">padding: 0px 12px;</string>
        </property>
-       <property name="text">
-        <string>Pulse: OFF</string>
-       </property>
-      </widget>
+        <property name="text">
+         <string>Pulse: OFF</string>
+        </property>
+        <property name="popupMode">
+         <enum>QToolButton::MenuButtonPopup</enum>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextOnly</enum>
+        </property>
+       </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_5">
@@ -211,6 +217,14 @@
     </widget>
    </item>
   </layout>
+  <action name="actionPulseSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

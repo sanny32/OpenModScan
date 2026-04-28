@@ -869,6 +869,16 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     {
         _lastWriteSingleCoilAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
         _modbusClient.writeRegister(QModbusDataUnit::Coils, params, 0);
+        if(params.PusleParams.Enabled) {
+            auto restoreParams = params;
+            switch(params.PusleParams.Restore) {
+                case PulseParams::Zero:     restoreParams.Value = 0;     break;
+                case PulseParams::Previous: restoreParams.Value = value; break;
+            }
+            QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams]() {
+                _modbusClient.writeRegister(QModbusDataUnit::Coils, restoreParams, 0);
+            });
+        }
     }
 }
 
@@ -899,10 +909,12 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     const int count = registersCount(mode);
     const auto regs = _modbusClient.syncReadRegisters(QModbusDataUnit::HoldingRegisters, _lastWriteHoldingRegisterAddress, count, dd.DeviceId);
 
+    const QVariant value = makeValue(regs, mode, byteOrder);
+
     ModbusWriteParams params;
     params.DeviceId = dd.DeviceId;
     params.Address = _lastWriteHoldingRegisterAddress + (dd.ZeroBasedAddress ? 0 : 1);
-    params.Value = makeValue(regs, mode, byteOrder);
+    params.Value = value;
     params.DisplayMode = mode;
     params.AddrSpace = dd.AddrSpace;
     params.Order = byteOrder;
@@ -917,6 +929,16 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     {
         _lastWriteHoldingRegisterAddress = params.Address - (dd.ZeroBasedAddress ? 0 : 1);
         _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
+        if(params.PusleParams.Enabled) {
+            auto restoreParams = params;
+            switch(params.PusleParams.Restore) {
+                case PulseParams::Zero:     restoreParams.Value = 0;     break;
+                case PulseParams::Previous: restoreParams.Value = value; break;
+            }
+            QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams]() {
+                _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, restoreParams, 0);
+            });
+        }
     }
 }
 

@@ -169,17 +169,6 @@
     </message>
 </context>
 <context>
-    <name>ConnectionComboBox</name>
-    <message>
-        <source>Remote TCP/IP Server</source>
-        <translation type="vanished">遠端 TCP/IP 伺服器</translation>
-    </message>
-    <message>
-        <source>Direct Connection to %1</source>
-        <translation type="vanished">直接連繫到 %1</translation>
-    </message>
-</context>
-<context>
     <name>CsvExporter</name>
     <message>
         <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
@@ -265,14 +254,6 @@
         <translation>翻譯</translation>
     </message>
     <message>
-        <source>Info</source>
-        <translation type="vanished">資訊</translation>
-    </message>
-    <message>
-        <source>Libraries</source>
-        <translation type="vanished">庫</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogabout.cpp" line="45"/>
         <source>%1 build %2</source>
         <translation>%1 構建 %2</translation>
@@ -354,22 +335,6 @@
 %1</source>
         <translation>訪問用戶主頁
 %1</translation>
-    </message>
-    <message>
-        <source>Version: %1</source>
-        <translation type="vanished">版本 %1</translation>
-    </message>
-    <message>
-        <source>• Architecture: %1</source>
-        <translation type="vanished">• 架構： %1</translation>
-    </message>
-    <message>
-        <source>• Platform: %1 %2</source>
-        <translation type="vanished">• 平台： %1 %2</translation>
-    </message>
-    <message>
-        <source>• Qt %1 (build with version %2)</source>
-        <translation type="vanished">Qt %1 （構建版本 %2）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="282"/>
@@ -487,10 +452,6 @@
         <location filename="../dialogs/dialogautosimulation.ui" line="32"/>
         <source>Simulation Type:</source>
         <translation>模擬類型：</translation>
-    </message>
-    <message>
-        <source>Change Interval (secs):</source>
-        <translation type="vanished">更改間隔（秒）：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="74"/>
@@ -617,10 +578,6 @@
         <translation>埠:</translation>
     </message>
     <message>
-        <source>Modbus RTU over TCP/IP Gateway</source>
-        <translation type="vanished">Modbus RTU over TCP/IP 網關</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogconnectiondetails.ui" line="254"/>
         <source>Configuration</source>
         <translation>設定</translation>
@@ -739,10 +696,6 @@
         <translation>Modbus數據</translation>
     </message>
     <message>
-        <source>Slave Address:</source>
-        <translation type="vanished">從裝置地址：</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="391"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
@@ -770,10 +723,6 @@
 </context>
 <context>
     <name>DialogForceMultipleCoils</name>
-    <message>
-        <source>15: FORCE MULTIPLE COILS</source>
-        <translation type="vanished">15：強制多個線圈的狀態</translation>
-    </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <source>15: WRITE MULTIPLE COILS</source>
@@ -825,46 +774,6 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 結束位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>Slave Device: </source>
-        <translation type="vanished">從裝置： </translation>
-    </message>
-    <message>
-        <source>Device ID: </source>
-        <translation type="vanished">裝置地址： </translation>
-    </message>
-    <message>
-        <source>Address: </source>
-        <translation type="vanished">地址： </translation>
-    </message>
-    <message>
-        <source>Set Values to 0</source>
-        <translation type="vanished">將值設置為 0</translation>
-    </message>
-    <message>
-        <source>Set Values to 1</source>
-        <translation type="vanished">將值設置為 1</translation>
-    </message>
-    <message>
-        <source>Length: </source>
-        <translation type="vanished">長度： </translation>
-    </message>
-    <message>
-        <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">地址：&lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">長度：&lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Device ID: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">裝置地址： &lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Slave Device: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">從裝置：&lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="114"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
         <source>CSV files (*.csv)</source>
@@ -906,22 +815,6 @@
 <context>
     <name>DialogForceMultipleRegisters</name>
     <message>
-        <source>16: PRESET MULTIPLE REGISTERS</source>
-        <translation type="vanished">16：強制多個暫存器的值</translation>
-    </message>
-    <message>
-        <source>Set Values to</source>
-        <translation type="vanished">將值設為</translation>
-    </message>
-    <message>
-        <source>Slave Device: </source>
-        <translation type="vanished">從裝置： </translation>
-    </message>
-    <message>
-        <source>Length: </source>
-        <translation type="vanished">長度： </translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="81"/>
         <source>Import</source>
         <translation>進口</translation>
@@ -930,14 +823,6 @@
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="104"/>
         <source>Export</source>
         <translation>出口</translation>
-    </message>
-    <message>
-        <source>Set Random Values</source>
-        <translation type="vanished">設置隨機值</translation>
-    </message>
-    <message>
-        <source>Set Values to 0</source>
-        <translation type="vanished">將值設置為 0</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
@@ -980,26 +865,6 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 結束位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>Device ID: </source>
-        <translation type="vanished">裝置地址： </translation>
-    </message>
-    <message>
-        <source>Address: </source>
-        <translation type="vanished">地址： </translation>
-    </message>
-    <message>
-        <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">地址：&lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">長度：&lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Device ID: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">裝置地址： &lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="641"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="722"/>
         <source>CSV files (*.csv)</source>
@@ -1037,33 +902,13 @@
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>導入的資料大小（%1）與目前大小（%2）不符。</translation>
     </message>
-    <message>
-        <source>Address</source>
-        <translation type="obsolete">地址</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="obsolete">狀態</translation>
-    </message>
-    <message>
-        <source>Slave Device: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="vanished">從裝置：&lt;b&gt;%1&lt;/b&gt;</translation>
-    </message>
 </context>
 <context>
     <name>DialogMaskWriteRegiter</name>
     <message>
-        <source>Mask Write Register</source>
-        <translation type="vanished">遮罩寫暫存器</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="14"/>
         <source>22: Mask Write Register</source>
         <translation>22: 遮罩寫暫存器</translation>
-    </message>
-    <message>
-        <source>Node: </source>
-        <translation type="vanished">節點： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmaskwriteregiter.ui" line="23"/>
@@ -1085,14 +930,6 @@
         <source>OR Mask:</source>
         <translation>或遮罩:</translation>
     </message>
-    <message>
-        <source>AND Mask</source>
-        <translation type="vanished">與遮罩</translation>
-    </message>
-    <message>
-        <source>OR Mask</source>
-        <translation type="vanished">或遮罩</translation>
-    </message>
 </context>
 <context>
     <name>DialogModbusScanner</name>
@@ -1105,10 +942,6 @@
         <location filename="../dialogs/dialogmodbusscanner.ui" line="518"/>
         <source>Baud Rate</source>
         <translation>波特率</translation>
-    </message>
-    <message>
-        <source>Connection</source>
-        <translation type="vanished">通訊方式</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="702"/>
@@ -1271,10 +1104,6 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;掃描結果：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>PORT: Device ID (serial port settings)</source>
-        <translation type="vanished">埠：裝置地址（串口設置）</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogmodbusscanner.ui" line="441"/>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="257"/>
         <source>Port</source>
@@ -1326,17 +1155,9 @@
         <translation>開始</translation>
     </message>
     <message>
-        <source>Address: port (Device ID)</source>
-        <translation type="vanished">地址：埠（裝置地址）</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="256"/>
         <source>Port Settings</source>
         <translation>連接埠設定</translation>
-    </message>
-    <message>
-        <source>Clear previous scan results?</source>
-        <translation type="vanished">清除之前的掃描結果？</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusscanner.cpp" line="232"/>
@@ -1595,10 +1416,6 @@
         <translation>卡式</translation>
     </message>
     <message>
-        <source>Max Page Source</source>
-        <translation type="vanished">最大紙張來源</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
         <source>Custom Source</source>
         <translation>自定義紙張來源</translation>
@@ -1716,10 +1533,6 @@ single-point  write functions 05 and 06.)</source>
 <context>
     <name>DialogSetupPresetData</name>
     <message>
-        <source>Slave Device: </source>
-        <translation type="vanished">從裝置： </translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
         <source>Device ID: </source>
         <translation>裝置地址： </translation>
@@ -1748,17 +1561,9 @@ single-point  write functions 05 and 06.)</source>
 <context>
     <name>DialogUserMsg</name>
     <message>
-        <source>User Defined Command String</source>
-        <translation type="vanished">用戶定義的命令字符串</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogusermsg.ui" line="14"/>
         <source>User Defined Command</source>
         <translation>使用者定義訊息</translation>
-    </message>
-    <message>
-        <source>Slave Address: </source>
-        <translation type="vanished">從裝置地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogusermsg.ui" line="27"/>
@@ -1806,10 +1611,6 @@ single-point  write functions 05 and 06.)</source>
         <translation>請輸入以空格分隔的位元組值</translation>
     </message>
     <message>
-        <source>Enter bytes value  separated by spaces</source>
-        <translation type="vanished">輸入位元組值，值之間用空格分隔</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogusermsg.ui" line="217"/>
         <source>Response Buffer</source>
         <translation>回應緩衝區</translation>
@@ -1851,83 +1652,77 @@ single-point  write functions 05 and 06.)</source>
 <context>
     <name>DialogWriteCoilRegister</name>
     <message>
-        <source>Write Coil</source>
-        <translation type="vanished">寫入線圈</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>05: Write Single Coil</source>
         <translation>05: 寫入單線圈</translation>
     </message>
     <message>
-        <source>Node: </source>
-        <translation type="vanished">節點： </translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="23"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="20"/>
         <source>Device ID: </source>
         <translation>裝置地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="52"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="49"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <source>Value</source>
-        <translation type="vanished">狀態</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="84"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="81"/>
         <source>Value:</source>
         <translation>值：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="108"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="105"/>
         <source>Off</source>
         <translation>關</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="115"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="112"/>
         <source>On</source>
         <translation>開</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="93"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="131"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="144"/>
         <source>Auto Simulation: OFF</source>
         <translation>自動模擬：關閉</translation>
     </message>
     <message>
-        <source>Auto Simulation</source>
-        <translation type="vanished">自動模擬</translation>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="147"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="188"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="211"/>
+        <source>Pulse: OFF</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="26"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="198"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="74"/>
         <source>15: Write Single Coil</source>
         <translation>15: 寫入單線圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="87"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="99"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="138"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="150"/>
         <source>Auto Simulation: ON</source>
         <translation>自動模擬：開啟</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="192"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="207"/>
+        <source>Pulse: ON</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DialogWriteHoldingRegister</name>
     <message>
-        <source>Write Register</source>
-        <translation type="vanished">寫入暫存器</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>06: Write Holding Register</source>
         <translation>06: 寫入保持暫存器</translation>
-    </message>
-    <message>
-        <source>Node: </source>
-        <translation type="vanished">節點： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="23"/>
@@ -1951,18 +1746,9 @@ single-point  write functions 05 and 06.)</source>
         <translation>自動模擬：關閉</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="134"/>
-        <source>Pluse: OFF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="156"/>
         <source>Bit Pattern: </source>
         <translation>位模式: </translation>
-    </message>
-    <message>
-        <source>Auto Simulation</source>
-        <translation type="vanished">自動模擬</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="70"/>
@@ -1970,12 +1756,13 @@ single-point  write functions 05 and 06.)</source>
         <translation>16: 寫入保持暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="229"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="228"/>
         <source>Pulse: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="249"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="134"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="248"/>
         <source>Pulse: OFF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1994,37 +1781,6 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="121"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
-    </message>
-</context>
-<context>
-    <name>DialogWriteHoldingRegisterBits</name>
-    <message>
-        <source>Write Register</source>
-        <translation type="vanished">寫入暫存器</translation>
-    </message>
-    <message>
-        <source>06: Write Holding Register Bits</source>
-        <translation type="vanished">06: 寫入保持暫存器位</translation>
-    </message>
-    <message>
-        <source>Node: </source>
-        <translation type="vanished">節點： </translation>
-    </message>
-    <message>
-        <source>Device ID: </source>
-        <translation type="vanished">裝置地址： </translation>
-    </message>
-    <message>
-        <source>Address: </source>
-        <translation type="vanished">地址： </translation>
-    </message>
-    <message>
-        <source>Bit Pattern</source>
-        <translation type="vanished">位模式</translation>
-    </message>
-    <message>
-        <source>16: Write Holding Register Bits</source>
-        <translation type="vanished">16: 寫入保持暫存器位</translation>
     </message>
 </context>
 <context>
@@ -2270,10 +2026,6 @@ Valid Slave Responses: %2</source>
         <translation>幫助</translation>
     </message>
     <message>
-        <source>Toolbar</source>
-        <translation type="vanished">工具欄</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="247"/>
         <source>Display Bar</source>
         <translation>格式欄</translation>
@@ -2466,18 +2218,10 @@ Valid Slave Responses: %2</source>
         <translation>交換位元組（0xAB → 0xBA）</translation>
     </message>
     <message>
-        <source>32-bit Integer</source>
-        <translation type="vanished">32位整數</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="800"/>
         <location filename="../mainwindow.ui" line="803"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32位整數（MSRF）</translation>
-    </message>
-    <message>
-        <source>Swapped 32-bit Integer</source>
-        <translation type="vanished">32位整數（位元組交換）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="818"/>
@@ -2486,18 +2230,10 @@ Valid Slave Responses: %2</source>
         <translation>32位整數（LSRF）</translation>
     </message>
     <message>
-        <source>Unsigned 32-bit Integer</source>
-        <translation type="vanished">無符號32位整數</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="836"/>
         <location filename="../mainwindow.ui" line="839"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>無符號32位整數（MSRF）</translation>
-    </message>
-    <message>
-        <source>Swapped Unsigned 32-bit Integer</source>
-        <translation type="vanished">無符號32位整數（位元組交換）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="854"/>
@@ -2506,18 +2242,10 @@ Valid Slave Responses: %2</source>
         <translation>無符號32位整數（LSRF）</translation>
     </message>
     <message>
-        <source>64-bit Integer</source>
-        <translation type="vanished">64位整數</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="883"/>
         <location filename="../mainwindow.ui" line="886"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64位整數（MSRF）</translation>
-    </message>
-    <message>
-        <source>Swapped 64-bit Integer</source>
-        <translation type="vanished">64位整數（位元組交換）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="901"/>
@@ -2526,18 +2254,10 @@ Valid Slave Responses: %2</source>
         <translation>64位整數（LSRF）</translation>
     </message>
     <message>
-        <source>Unsigned 64-bit Integer</source>
-        <translation type="vanished">無符號64位整數</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="919"/>
         <location filename="../mainwindow.ui" line="922"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>無符號64位整數(MSRF)</translation>
-    </message>
-    <message>
-        <source>Swapped Unsigned 64-bit Integer</source>
-        <translation type="vanished">無符號64位整數（位元組交換）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="937"/>
@@ -2554,14 +2274,6 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="998"/>
         <source>Write Holding Register</source>
         <translation>寫入保持暫存器</translation>
-    </message>
-    <message>
-        <source>Write Holding Register Bits</source>
-        <translation type="vanished">寫入保持暫存器位</translation>
-    </message>
-    <message>
-        <source>06: Write Holding Register Bits</source>
-        <translation type="vanished">06：寫入保持暫存器位</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="983"/>
@@ -2602,22 +2314,6 @@ Valid Slave Responses: %2</source>
         <location filename="../mainwindow.ui" line="214"/>
         <source>Main Bar</source>
         <translation>主酒吧</translation>
-    </message>
-    <message>
-        <source>Force Coils</source>
-        <translation type="vanished">強制線圈狀態</translation>
-    </message>
-    <message>
-        <source>Preset Regs</source>
-        <translation type="vanished">預設暫存器</translation>
-    </message>
-    <message>
-        <source>Mask Write</source>
-        <translation type="vanished">遮罩寫入</translation>
-    </message>
-    <message>
-        <source>User Msg</source>
-        <translation type="vanished">用戶消息</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="651"/>
@@ -2702,22 +2398,6 @@ Valid Slave Responses: %2</source>
         <translation>16位整數</translation>
     </message>
     <message>
-        <source>Float</source>
-        <translation type="vanished">浮點數</translation>
-    </message>
-    <message>
-        <source>Swapped Float</source>
-        <translation type="vanished">浮點數（位元組交換）</translation>
-    </message>
-    <message>
-        <source>Double</source>
-        <translation type="vanished">雙精度浮點數</translation>
-    </message>
-    <message>
-        <source>Swapped Double</source>
-        <translation type="vanished">雙精度浮點數（位元組交換）</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="732"/>
         <source>Windows...</source>
         <translation>視窗...</translation>
@@ -2746,17 +2426,17 @@ Valid Slave Responses: %2</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1390"/>
+        <location filename="../mainwindow.cpp" line="1412"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1391"/>
+        <location filename="../mainwindow.cpp" line="1413"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1487"/>
+        <location filename="../mainwindow.cpp" line="1509"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕獲錯誤：
@@ -2827,18 +2507,6 @@ Valid Slave Responses: %2</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** 無效的 Modbus 回應 ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <source>&lt;b&gt;Checksum:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;校驗和：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Checksum:&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt; (Expected: %2)</source>
-        <translation type="vanished">&lt;b&gt;校驗和：&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt;（期望值 %2）</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Type:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;類型：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="278"/>
         <source>Request (Tx)</source>
         <translation>要求（Tx）</translation>
@@ -2849,77 +2517,9 @@ Valid Slave Responses: %2</source>
         <translation>回應（Rx)</translation>
     </message>
     <message>
-        <source>&lt;b&gt;Timestamp:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;時間戳記：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Transaction ID:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;交易 ID：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Protocol ID:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;協定 ID：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Length:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;長度：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Device ID:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;裝置地址：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Error Code:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;錯誤代碼：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Exception Code:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;異常代碼：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Function Code:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;功能碼：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="308"/>
         <source>(0-based)</source>
         <translation>（基地址為 0）</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Start Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;起始地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Output Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;輸出地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Register Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;暫存器地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;起始地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Read Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;讀起始地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Write Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;寫起始地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;FIFO Point Address:&lt;/b&gt; %1 %2</source>
-        <translation type="vanished">&lt;b&gt;先進先出點地址：&lt;/b&gt; %1 %2</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Byte Count:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;位元組計數：&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="278"/>
@@ -2935,22 +2535,6 @@ Valid Slave Responses: %2</source>
         <location filename="../controls/modbusmessagewidget.cpp" line="288"/>
         <source>Protocol ID</source>
         <translation>協定 ID</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Coil Status:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;線圈狀態：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Input Status:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;輸入狀態：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Register Value:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;暫存器值：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Input Registers:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;暫存器輸入：&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="292"/>
@@ -3217,90 +2801,6 @@ Valid Slave Responses: %2</source>
         <source>Copy Values</source>
         <translation>複製值</translation>
     </message>
-    <message>
-        <source>&lt;b&gt;Output Value:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;輸出值：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Output Data:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;輸出數據：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Sub-function:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;子功能：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Data:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;數據：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Status:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;狀態：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Event Count:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;事件計數：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Message Count:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;消息計數：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Events:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;事件：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Quantity of Outputs:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;輸出數量：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Quantity of Registers:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;暫存器數量：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Registers Value:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;暫存器值：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Request Data Length:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;要求數據長度：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Response Data Length:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;回應數據長度：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;And Mask:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;與遮罩：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Or Mask:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;或遮罩：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Quantity to Read:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;讀取數量：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Quantity to Write:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;寫入數量：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Write Byte Count:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;寫入位元組計數：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Write Registers Value:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;寫入暫存器值：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;FIFO Count:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;先進先出隊列計數：&lt;/b&gt; %1</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;FIFO Value Register:&lt;/b&gt; %1</source>
-        <translation type="vanished">&lt;b&gt;先進先出隊列值暫存器：&lt;/b&gt; %1</translation>
-    </message>
 </context>
 <context>
     <name>ModbusRtuTcpClient</name>
@@ -3316,13 +2816,6 @@ Valid Slave Responses: %2</source>
         <location filename="../modbustcpclient.cpp" line="45"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的TCP通訊連線設定無效。</translation>
-    </message>
-</context>
-<context>
-    <name>NumericLineEdit</name>
-    <message>
-        <source>Hex View</source>
-        <translation type="vanished">十六進制視圖</translation>
     </message>
 </context>
 <context>

@@ -13,24 +13,72 @@
 
 namespace {
 
+struct ButtonColors
+{
+    QString base;
+    QString hover;
+    QString pressed;
+    QString border;
+};
+
+bool isFusionStyle()
+{
+    return qApp != nullptr
+        && qApp->style() != nullptr
+        && qApp->style()->objectName().compare("fusion", Qt::CaseInsensitive) == 0;
+}
+
+QString buttonBackground(const QString& top, const QString& bottom)
+{
+    return QString("qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 %1, stop:1 %2)")
+        .arg(top, bottom);
+}
+
+QString coloredPushButtonStyle(const ButtonColors& colors)
+{
+    const QString normalBackground = isFusionStyle()
+        ? buttonBackground(colors.base, colors.hover)
+        : colors.base;
+    const QString hoverBackground = isFusionStyle()
+        ? buttonBackground(colors.hover, colors.pressed)
+        : colors.hover;
+    const QString pressedBackground = isFusionStyle()
+        ? buttonBackground(colors.pressed, colors.border)
+        : colors.pressed;
+
+    return QString(R"(
+                        QPushButton {
+                            color: white;
+                            padding: 4px 12px;
+                            background-color: %1;
+                            border: 1px solid %2;
+                            border-radius: 4px;
+                        }
+                        QPushButton:hover {
+                            background-color: %3;
+                        }
+                        QPushButton:pressed {
+                            background-color: %4;
+                        }
+                    )").arg(normalBackground, colors.border, hoverBackground, pressedBackground);
+}
+
 ///
 /// \brief pulseButtonOnStyle
 /// \return
 ///
 QString pulseButtonOnStyle()
 {
-    const bool fusionStyle = qApp != nullptr
-        && qApp->style() != nullptr
-        && qApp->style()->objectName().compare("fusion", Qt::CaseInsensitive) == 0;
+    const bool fusionStyle = isFusionStyle();
 
     const QString normalBackground = fusionStyle
-        ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F6B85F, stop:1 #F0A43A)"
+        ? buttonBackground("#F6B85F", "#F0A43A")
         : "#F0A43A";
     const QString hoverBackground = fusionStyle
-        ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #F3AA4E, stop:1 #E2952E)"
+        ? buttonBackground("#F3AA4E", "#E2952E")
         : "#E2952E";
     const QString pressedBackground = fusionStyle
-        ? "qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #D58422, stop:1 #C8751D)"
+        ? buttonBackground("#D58422", "#C8751D")
         : "#D58422";
 
     const QString borderColor = "#B96E16";
@@ -166,21 +214,8 @@ void DialogWriteCoilRegister::updateSimulationButton()
         default:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet(R"(
-                        QPushButton {
-                            color: white;
-                            padding: 4px 12px;
-                            background-color: #4CAF50;
-                            border: 1px solid #3e8e41;
-                            border-radius: 4px;
-                        }
-                        QPushButton:hover {
-                            background-color: #45a049;
-                        }
-                        QPushButton:pressed {
-                            background-color: #3e8e41;
-                        }
-                    )");
+            ui->pushButtonSimulation->setStyleSheet(coloredPushButtonStyle(
+                { "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" }));
         break;
     }
 }

@@ -1480,52 +1480,47 @@ single-point  write functions 05 and 06.)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="23"/>
-        <source>Enabled</source>
-        <translation type="unfinished">啟用</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="30"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="62"/>
         <source>Restore: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="38"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="70"/>
         <source>Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="43"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="75"/>
         <source>Zero</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="64"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="23"/>
         <source>Duration (msecs): </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="75"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="34"/>
         <source>100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="80"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="39"/>
         <source>250</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="85"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="44"/>
         <source>500</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="90"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="49"/>
         <source>1000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="95"/>
+        <location filename="../dialogs/dialogpulsemode.ui" line="54"/>
         <source>2000</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1846,7 +1841,7 @@ single-point  write functions 05 and 06.)</source>
         <translation>數據未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="482"/>
+        <location filename="../formmodsca.cpp" line="501"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1855,7 +1850,7 @@ Length: %3</source>
 長度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="486"/>
+        <location filename="../formmodsca.cpp" line="505"/>
         <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
@@ -1864,29 +1859,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="489"/>
+        <location filename="../formmodsca.cpp" line="508"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>輪詢次數：%1
 有效的從站回應：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="697"/>
+        <location filename="../formmodsca.cpp" line="716"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="870"/>
+        <location filename="../formmodsca.cpp" line="889"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="663"/>
+        <location filename="../formmodsca.cpp" line="682"/>
         <source>No Responses from Slave Device</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="824"/>
+        <location filename="../formmodsca.cpp" line="843"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>
@@ -2415,35 +2410,35 @@ Valid Slave Responses: %2</source>
         <translation>地址掃描</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="391"/>
-        <location filename="../mainwindow.cpp" line="466"/>
-        <location filename="../mainwindow.cpp" line="471"/>
-        <location filename="../mainwindow.cpp" line="579"/>
-        <location filename="../mainwindow.cpp" line="605"/>
+        <location filename="../mainwindow.cpp" line="392"/>
+        <location filename="../mainwindow.cpp" line="467"/>
+        <location filename="../mainwindow.cpp" line="472"/>
+        <location filename="../mainwindow.cpp" line="580"/>
+        <location filename="../mainwindow.cpp" line="606"/>
         <source>XML files (*.xml)</source>
         <translation>XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="392"/>
-        <location filename="../mainwindow.cpp" line="462"/>
-        <location filename="../mainwindow.cpp" line="472"/>
-        <location filename="../mainwindow.cpp" line="580"/>
-        <location filename="../mainwindow.cpp" line="606"/>
+        <location filename="../mainwindow.cpp" line="393"/>
+        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../mainwindow.cpp" line="581"/>
+        <location filename="../mainwindow.cpp" line="607"/>
         <source>All files (*)</source>
         <translation>所有檔案(*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1412"/>
+        <location filename="../mainwindow.cpp" line="1423"/>
         <source>%1 was not found</source>
         <translation>%1 找不到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1413"/>
+        <location filename="../mainwindow.cpp" line="1424"/>
         <source>Failed to open %1</source>
         <translation>開啟 %1 失敗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1509"/>
+        <location filename="../mainwindow.cpp" line="1520"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕獲錯誤：

@@ -1813,16 +1813,17 @@ single-point  write functions 05 and 06.)</source>
     </message>
     <message>
         <location filename="../formmodsca.cpp" line="80"/>
+        <location filename="../formmodsca.cpp" line="123"/>
         <source>Device polling paused...</source>
         <translation>Опрос устройства приостановлен...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="237"/>
+        <location filename="../formmodsca.cpp" line="239"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="503"/>
+        <location filename="../formmodsca.cpp" line="505"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1831,7 +1832,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="507"/>
+        <location filename="../formmodsca.cpp" line="509"/>
         <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
@@ -1840,29 +1841,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="510"/>
+        <location filename="../formmodsca.cpp" line="512"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="718"/>
+        <location filename="../formmodsca.cpp" line="720"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="891"/>
+        <location filename="../formmodsca.cpp" line="893"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="684"/>
+        <location filename="../formmodsca.cpp" line="686"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="845"/>
+        <location filename="../formmodsca.cpp" line="847"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>

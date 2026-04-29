@@ -14,41 +14,6 @@
 #include "ui_outputwidget.h"
 
 ///
-/// \brief SimulationRole
-///
-const int SimulationRole = Qt::UserRole + 1;
-
-///
-/// \brief CaptureRole
-///
-const int CaptureRole = Qt::UserRole + 2;
-
-///
-/// \brief DescriptionRole
-///
-const int DescriptionRole = Qt::UserRole + 3;
-
-///
-/// \brief AddressStringRole
-///
-const int AddressStringRole = Qt::UserRole + 4;
-
-///
-/// \brief AddressRole
-///
-const int AddressRole = Qt::UserRole + 5;
-
-///
-/// \brief ValueRole
-///
-const int ValueRole = Qt::UserRole + 6;
-
-///
-/// \brief ColorRole
-///
-const int ColorRole = Qt::UserRole + 7;
-
-///
 /// \brief htmlPad
 /// \param count
 /// \return
@@ -77,12 +42,14 @@ QString normalizeHtml(const QString& s)
 
 ///
 /// \brief emptyPixmap
-/// \param size
+/// \param physicalSize
+/// \param dpr
 /// \return
 ///
-static QPixmap emptyPixmap(const QSize& size)
+static QPixmap emptyPixmap(const QSize& physicalSize, qreal dpr = 1.0)
 {
-    QPixmap pm(size);
+    QPixmap pm(physicalSize);
+    pm.setDevicePixelRatio(dpr);
     pm.fill(Qt::transparent);
     return pm;
 }
@@ -97,7 +64,7 @@ OutputListModel::OutputListModel(OutputWidget* parent)
     ,_iconSimulation16Bit(QIcon(":/res/icon-simulation-16bit.svg").pixmap(10, 10))
     ,_iconSimulation32Bit(QIcon(":/res/icon-simulation-32bit.svg").pixmap(10, 10))
     ,_iconSimulation64Bit(QIcon(":/res/icon-simulation-64bit.svg").pixmap(10, 10))
-    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size()))
+    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size(), _iconSimulation16Bit.devicePixelRatio()))
 {
 }
 

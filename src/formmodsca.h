@@ -11,6 +11,7 @@
 #include "modbusclient.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
+#include "modbuswriteparams.h"
 #include "outputwidget.h"
 #include "modbussimulationparams.h"
 
@@ -63,6 +64,9 @@ public:
 
     QString codepage() const;
     void setCodepage(const QString& name);
+
+    PulseParams pulseParams() const;
+    void setPulseParams(const PulseParams& params);
 
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
@@ -157,6 +161,7 @@ private:
     ModbusClient& _modbusClient;
     DataSimulator* _dataSimulator;
     MainWindow* _parent;
+    PulseParams _pulseParams;
 };
 
 ///
@@ -189,6 +194,7 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out.setValue("Codepage", frm->codepage());
+    out << frm->pulseParams();
 
     return out;
 }
@@ -243,6 +249,10 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setCodepage(in.value("Codepage").toString());
 
+    PulseParams pulseParams;
+    in >> pulseParams;
+    frm->setPulseParams(pulseParams);
+
     return in;
 }
 
@@ -293,6 +303,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
     out << frm->descriptionMap();
     out << frm->colorMap();
     out << frm->codepage();
+    out << frm->pulseParams();
 
     return out;
 }
@@ -417,6 +428,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
         in >> codepage;
     }
 
+    PulseParams pulseParams;
+    if(ver >= QVersionNumber(1, 12))
+    {
+        in >> pulseParams;
+    }
+
     if(in.status() != QDataStream::Ok)
         return in;
 
@@ -436,6 +453,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
     frm->setCodepage(codepage);
+    frm->setPulseParams(pulseParams);
 
     if(ver >= QVersionNumber(1,10)) {
         for(auto&& k : simulationMap2.keys())
@@ -513,6 +531,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
 
     const auto dd = frm->displayDefinition();
     xml << dd;
+    xml << frm->pulseParams();
 
     {
         const auto simulationMap = frm->simulationMap();
@@ -708,6 +727,11 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
             else if (xml.name() == QLatin1String("DisplayDefinition")) {
                 xml >> dd;
                 frm->setDisplayDefinition(dd);
+            }
+            else if (xml.name() == QLatin1String("PulseParams")) {
+                PulseParams pulseParams;
+                xml >> pulseParams;
+                frm->setPulseParams(pulseParams);
             }
             else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
                 while (xml.readNextStartElement()) {

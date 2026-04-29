@@ -17,7 +17,7 @@
    <item>
     <widget class="QListWidget" name="listWidget">
      <property name="editTriggers">
-      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
     </widget>
    </item>
@@ -65,7 +65,7 @@
      <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -90,10 +90,10 @@
         </size>
        </property>
        <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
+        <enum>Qt::Vertical</enum>
        </property>
        <property name="standardButtons">
-        <set>QDialogButtonBox::StandardButton::Ok</set>
+        <set>QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>

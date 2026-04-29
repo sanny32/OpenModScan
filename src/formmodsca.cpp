@@ -10,7 +10,7 @@
 #include "formmodsca.h"
 #include "ui_formmodsca.h"
 
-QVersionNumber FormModSca::VERSION = QVersionNumber(1, 11);
+QVersionNumber FormModSca::VERSION = QVersionNumber(1, 12);
 
 ///
 /// \brief FormModSca::FormModSca
@@ -333,6 +333,25 @@ void FormModSca::setCodepage(const QString& name)
 {
     ui->outputWidget->setCodepage(name);
     emit codepageChanged(name);
+}
+
+///
+/// \brief FormModSca::pulseParams
+/// \return
+///
+PulseParams FormModSca::pulseParams() const
+{
+    return _pulseParams;
+}
+
+///
+/// \brief FormModSca::setPulseParams
+/// \param params
+///
+void FormModSca::setPulseParams(const PulseParams& params)
+{
+    _pulseParams = params;
+    _pulseParams.Enabled = false;
 }
 
 ///
@@ -958,6 +977,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
     const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
+    const auto pointType = dd.PointType;
 
     switch(dd.PointType)
     {
@@ -971,6 +991,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.AddrSpace = dd.AddrSpace;
             params.Order = byteOrder();
             params.Codepage = codepage();
+            params.PusleParams = pulseParams();
             params.ZeroBasedAddress = dd.ZeroBasedAddress;
             params.LeadingZeros = dd.LeadingZeros;
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
@@ -978,7 +999,20 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
             DialogWriteCoilRegister dlg(params, displayDefinition(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
-                _modbusClient.writeRegister(dd.PointType, params, _formId);
+            {
+                setPulseParams(params.PusleParams);
+                _modbusClient.writeRegister(pointType, params, _formId);
+                if(params.PusleParams.Enabled) {
+                    auto restoreParams = params;
+                    switch(params.PusleParams.Restore) {
+                        case PulseParams::Zero:     restoreParams.Value = 0;     break;
+                        case PulseParams::Previous: restoreParams.Value = value; break;
+                    }
+                    QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams, pointType]() {
+                        _modbusClient.writeRegister(pointType, restoreParams, _formId);
+                    });
+                }
+            }
         }
         break;
 
@@ -992,6 +1026,7 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.AddrSpace = dd.AddrSpace;
             params.Order = byteOrder();
             params.Codepage = codepage();
+            params.PusleParams = pulseParams();
             params.ZeroBasedAddress = dd.ZeroBasedAddress;
             params.LeadingZeros = dd.LeadingZeros;
             params.ForceModbus15And16Func = _modbusClient.isForcedModbus15And16Func();
@@ -999,7 +1034,20 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
             DialogWriteHoldingRegister dlg(params, displayDefinition(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
-                _modbusClient.writeRegister(dd.PointType, params, _formId);
+            {
+                setPulseParams(params.PusleParams);
+                _modbusClient.writeRegister(pointType, params, _formId);
+                if(params.PusleParams.Enabled) {
+                    auto restoreParams = params;
+                    switch(params.PusleParams.Restore) {
+                        case PulseParams::Zero:     restoreParams.Value = 0;     break;
+                        case PulseParams::Previous: restoreParams.Value = value; break;
+                    }
+                    QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams, pointType]() {
+                        _modbusClient.writeRegister(pointType, restoreParams, _formId);
+                    });
+                }
+            }
         }
         break;
 
@@ -1082,7 +1130,15 @@ void FormModSca::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbus
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     if(type == dd.PointType && startAddress >= pointAddr && startAddress <= pointAddr + dd.Length)
     {
-        const ModbusWriteParams params = { dd.DeviceId, startAddress, value, mode, dd.AddrSpace, byteOrder(), codepage(), true };
+        ModbusWriteParams params;
+        params.DeviceId = dd.DeviceId;
+        params.Address = startAddress;
+        params.Value = value;
+        params.DisplayMode = mode;
+        params.AddrSpace = dd.AddrSpace;
+        params.Order = byteOrder();
+        params.Codepage = codepage();
+        params.ZeroBasedAddress = true;
         _modbusClient.writeRegister(type, params, formId());
     }
 }

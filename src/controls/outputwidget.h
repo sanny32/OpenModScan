@@ -21,6 +21,41 @@ class OutputWidget;
 class OutputWidget;
 
 ///
+/// \brief SimulationRole
+///
+constexpr int SimulationRole = Qt::UserRole + 1;
+
+///
+/// \brief CaptureRole
+///
+constexpr int CaptureRole = Qt::UserRole + 2;
+
+///
+/// \brief DescriptionRole
+///
+constexpr int DescriptionRole = Qt::UserRole + 3;
+
+///
+/// \brief AddressStringRole
+///
+constexpr int AddressStringRole = Qt::UserRole + 4;
+
+///
+/// \brief AddressRole
+///
+constexpr int AddressRole = Qt::UserRole + 5;
+
+///
+/// \brief ValueRole
+///
+constexpr int ValueRole = Qt::UserRole + 6;
+
+///
+/// \brief ColorRole
+///
+constexpr int ColorRole = Qt::UserRole + 7;
+
+///
 /// \brief The ItemMapKey class
 ///
 struct ItemMapKey {

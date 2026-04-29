@@ -2459,14 +2459,14 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="148"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="194"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="180"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="226"/>
         <source>Copy Text</source>
         <translation>Копировать текст</translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="163"/>
         <location filename="../controls/modbuslogwidget.cpp" line="195"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="227"/>
         <source>Copy Bytes</source>
         <translation>Копировать байты</translation>
     </message>
@@ -2798,72 +2798,72 @@ Valid Slave Responses: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="560"/>
+        <location filename="../controls/outputwidget.cpp" line="569"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1172"/>
+        <location filename="../controls/outputwidget.cpp" line="1225"/>
         <source>Write Value to %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1179"/>
+        <location filename="../controls/outputwidget.cpp" line="1232"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1179"/>
+        <location filename="../controls/outputwidget.cpp" line="1232"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1182"/>
+        <location filename="../controls/outputwidget.cpp" line="1235"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1191"/>
+        <location filename="../controls/outputwidget.cpp" line="1244"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1202"/>
+        <location filename="../controls/outputwidget.cpp" line="1255"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1203"/>
+        <location filename="../controls/outputwidget.cpp" line="1256"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1204"/>
+        <location filename="../controls/outputwidget.cpp" line="1257"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1205"/>
+        <location filename="../controls/outputwidget.cpp" line="1258"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1206"/>
+        <location filename="../controls/outputwidget.cpp" line="1259"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1207"/>
+        <location filename="../controls/outputwidget.cpp" line="1260"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1208"/>
+        <location filename="../controls/outputwidget.cpp" line="1261"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1294"/>
+        <location filename="../controls/outputwidget.cpp" line="1347"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>

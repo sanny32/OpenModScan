@@ -13,6 +13,11 @@
 #include "modbusmessages.h"
 #include "ui_outputwidget.h"
 
+namespace {
+constexpr int TrafficUiFlushIntervalMs = 20;
+constexpr int TrafficUiFlushChunkSize = 300;
+}
+
 ///
 /// \brief htmlPad
 /// \param count
@@ -497,6 +502,10 @@ OutputWidget::OutputWidget(QWidget *parent) :
     _zoomHideTimer->setSingleShot(true);
     connect(_zoomHideTimer, &QTimer::timeout, _zoomLabel, &QLabel::hide);
 
+    _logViewFlushTimer = new QTimer(this);
+    _logViewFlushTimer->setInterval(TrafficUiFlushIntervalMs);
+    connect(_logViewFlushTimer, &QTimer::timeout, this, &OutputWidget::on_logViewFlushTimeout);
+
     ui->listView->viewport()->installEventFilter(this);
 }
 
@@ -835,6 +844,8 @@ void OutputWidget::setAutosctollLogView(bool on)
 ///
 void OutputWidget::clearLogView()
 {
+    _pendingLogViewUpdates.clear();
+    if(_logViewFlushTimer) _logViewFlushTimer->stop();
     ui->logView->clear();
     ui->modbusMsg->clear();
     hideModbusMessage();
@@ -906,7 +917,27 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 ///
 void OutputWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
 {
-    updateLogView(msg);
+    if(msg == nullptr)
+        return;
+
+    _pendingLogViewUpdates.enqueue(msg);
+    if(_logViewFlushTimer && !_logViewFlushTimer->isActive())
+        _logViewFlushTimer->start();
+}
+
+///
+/// \brief OutputWidget::updateTrafficBatch
+/// \param messages
+///
+void OutputWidget::updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    for(auto&& msg : messages) {
+        if(msg != nullptr)
+            _pendingLogViewUpdates.enqueue(msg);
+    }
+
+    if(_logViewFlushTimer && !_pendingLogViewUpdates.isEmpty() && !_logViewFlushTimer->isActive())
+        _logViewFlushTimer->start();
 }
 
 ///
@@ -1069,6 +1100,28 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
     ui->modbusMsg->setDataDisplayMode(mode);
 
     _listModel->update();
+}
+
+///
+/// \brief OutputWidget::on_logViewFlushTimeout
+///
+void OutputWidget::on_logViewFlushTimeout()
+{
+    if(_pendingLogViewUpdates.isEmpty()) {
+        _logViewFlushTimer->stop();
+        return;
+    }
+
+    const int batchSize = qMin(TrafficUiFlushChunkSize, _pendingLogViewUpdates.size());
+    QVector<QSharedPointer<const ModbusMessage>> batch;
+    batch.reserve(batchSize);
+    for(int i = 0; i < batchSize; ++i)
+        batch.push_back(_pendingLogViewUpdates.dequeue());
+
+    updateLogViewBatch(batch);
+
+    if(_pendingLogViewUpdates.isEmpty())
+        _logViewFlushTimer->stop();
 }
 
 ///
@@ -1338,14 +1391,27 @@ void OutputWidget::hideModbusMessage()
 ///
 void OutputWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
-    ui->logView->addItem(msg);
-    if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
+    updateLogViewBatch({ msg });
+}
+
+///
+/// \brief OutputWidget::updateLogViewBatch
+/// \param messages
+///
+void OutputWidget::updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    ui->logView->addItems(messages);
+    if(captureMode() == CaptureMode::TextCapture)
     {
-        const auto str = QString("%1: %2 %3 %4").arg(
-            (msg->isRequest()?  "Tx" : "Rx"),
-            msg->timestamp().toString(Qt::ISODateWithMs),
-            (msg->isRequest()?  "<<" : ">>"),
-            msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
-        captureString(str);
+        for(auto&& msg : messages) {
+            if(msg == nullptr) continue;
+
+            const auto str = QString("%1: %2 %3 %4").arg(
+                (msg->isRequest()?  "Tx" : "Rx"),
+                msg->timestamp().toString(Qt::ISODateWithMs),
+                (msg->isRequest()?  "<<" : ">>"),
+                msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
+            captureString(str);
+        }
     }
 }

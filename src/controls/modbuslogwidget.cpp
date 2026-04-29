@@ -87,15 +87,47 @@ void ModbusLogModel::append(QSharedPointer<const ModbusMessage> data)
 {
     if(data == nullptr) return;
 
-    while(rowCount() >= _rowLimit)
-    {
-        beginRemoveRows(QModelIndex(), 0, 0);
-        _items.removeFirst();
+    appendBatch({ data });
+}
+
+///
+/// \brief ModbusLogModel::appendBatch
+/// \param batch
+///
+void ModbusLogModel::appendBatch(const QVector<QSharedPointer<const ModbusMessage>>& batch)
+{
+    if(batch.isEmpty()) return;
+
+    QVector<QSharedPointer<const ModbusMessage>> items;
+    items.reserve(batch.size());
+    for(auto&& item : batch)
+        if(item != nullptr)
+            items.push_back(item);
+
+    if(items.isEmpty()) return;
+
+    int startIndex = 0;
+    if(items.size() > _rowLimit)
+        startIndex = items.size() - _rowLimit;
+
+    const int insertCount = items.size() - startIndex;
+    if(insertCount <= 0) return;
+
+    const int currentCount = rowCount();
+    int removeCount = qMax(0, currentCount + insertCount - _rowLimit);
+    removeCount = qMin(removeCount, currentCount);
+    if(removeCount > 0) {
+        beginRemoveRows(QModelIndex(), 0, removeCount - 1);
+        for(int i = 0; i < removeCount; ++i)
+            _items.removeFirst();
         endRemoveRows();
     }
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    _items.push_back(data);
+    const int firstRow = rowCount();
+    const int lastRow = firstRow + insertCount - 1;
+    beginInsertRows(QModelIndex(), firstRow, lastRow);
+    for(int i = startIndex; i < items.size(); ++i)
+        _items.push_back(items.at(i));
     endInsertRows();
 }
 
@@ -239,6 +271,17 @@ void ModbusLogWidget::addItem(QSharedPointer<const ModbusMessage> msg)
 {
     if(model()) {
         ((ModbusLogModel*)model())->append(msg);
+    }
+}
+
+///
+/// \brief ModbusLogWidget::addItems
+/// \param messages
+///
+void ModbusLogWidget::addItems(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    if(model()) {
+        ((ModbusLogModel*)model())->appendBatch(messages);
     }
 }
 

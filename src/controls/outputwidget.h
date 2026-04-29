@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QWidget>
 #include <QLabel>
+#include <QQueue>
 #include <QDateTime>
 #include <QListWidgetItem>
 #include <QModbusReply>
@@ -221,6 +222,7 @@ public:
     void paint(const QRect& rc, QPainter& painter);
 
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
+    void updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
     void updateData(const QModbusDataUnit& data);
 
     AddressColorMap2 colorMap() const;
@@ -247,6 +249,7 @@ protected:
 private slots:
     void on_listView_doubleClicked(const QModelIndex& index);
     void on_listView_customContextMenuRequested(const QPoint &pos);
+    void on_logViewFlushTimeout();
 
 private:
     void setUninitializedStatus();
@@ -255,12 +258,15 @@ private:
     void hideModbusMessage();
     void showZoomOverlay();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
+    void updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
     QModelIndex getValueIndex(const QModelIndex& index) const;
 
 private:
     Ui::OutputWidget *ui;
     QLabel* _zoomLabel = nullptr;
     QTimer* _zoomHideTimer = nullptr;
+    QTimer* _logViewFlushTimer = nullptr;
+    QQueue<QSharedPointer<const ModbusMessage>> _pendingLogViewUpdates;
 
 private:
     qreal _baseFontSize = 0.0;

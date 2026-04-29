@@ -1,7 +1,11 @@
 #ifndef MODBUSWRITEPARAMS_H
 #define MODBUSWRITEPARAMS_H
 
+#include <QDataStream>
+#include <QSettings>
 #include <QVariant>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 #include "enums.h"
 
 class ModbusClient;
@@ -21,6 +25,116 @@ struct PulseParams
 };
 
 Q_DECLARE_METATYPE(PulseParams::RestoreMode);
+DECLARE_ENUM_STRINGS(PulseParams::RestoreMode,
+                     {   PulseParams::Previous, "Previous" },
+                     {   PulseParams::Zero,     "Zero"     }
+)
+
+///
+/// \brief operator <<
+/// \param out
+/// \param params
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const PulseParams& params)
+{
+    out.beginGroup("PulseParams");
+    out.setValue("Duration", params.Duration);
+    out.setValue("Restore", (uint)params.Restore);
+    out.endGroup();
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param params
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, PulseParams& params)
+{
+    in.beginGroup("PulseParams");
+    params.Duration = in.value("Duration", params.Duration).toInt();
+    params.Restore = (PulseParams::RestoreMode)in.value("Restore", (uint)params.Restore).toUInt();
+    in.endGroup();
+
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param params
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const PulseParams& params)
+{
+    out << params.Duration;
+    out << (qint32)params.Restore;
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param params
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, PulseParams& params)
+{
+    qint32 restore;
+    in >> params.Duration;
+    in >> restore;
+    params.Restore = (PulseParams::RestoreMode)restore;
+
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param params
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const PulseParams& params)
+{
+    xml.writeStartElement("PulseParams");
+    xml.writeAttribute("Duration", QString::number(params.Duration));
+    xml.writeAttribute("Restore", enumToString<PulseParams::RestoreMode>(params.Restore));
+    xml.writeEndElement();
+
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param params
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, PulseParams& params)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("PulseParams")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("Duration")) {
+            bool ok;
+            const int duration = attributes.value("Duration").toInt(&ok);
+            if (ok && duration >= 0) params.Duration = duration;
+        }
+
+        if (attributes.hasAttribute("Restore")) {
+            params.Restore = enumFromString<PulseParams::RestoreMode>(
+                attributes.value("Restore").toString(), params.Restore);
+        }
+
+        xml.skipCurrentElement();
+    }
+
+    return xml;
+}
 
 ///
 /// \brief The ModbusWriteParams class

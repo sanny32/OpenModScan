@@ -14,11 +14,10 @@ DialogPulseMode::DialogPulseMode(PulseParams& params, QWidget *parent)
     ui->comboBoxRestore->setItemData(0, PulseParams::Previous);
     ui->comboBoxRestore->setItemData(1, PulseParams::Zero);
 
-    ui->checkBoxEnabled->setChecked(_params.Enabled);
+    ui->comboBoxDuration->setMinimum(100);
+    ui->comboBoxDuration->setMaximum(100000);
     ui->comboBoxDuration->setCurrentValue(_params.Duration);
     ui->comboBoxRestore->setCurrentIndex(_params.Restore == PulseParams::Previous ? 0 : 1);
-
-    on_checkBoxEnabled_toggled();
 }
 
 ///
@@ -30,21 +29,10 @@ DialogPulseMode::~DialogPulseMode()
 }
 
 ///
-/// \brief DialogPulseMode::on_checkBoxEnabled_toggled
-///
-void DialogPulseMode::on_checkBoxEnabled_toggled()
-{
-    const bool enabled = ui->checkBoxEnabled->isChecked();
-    ui->comboBoxDuration->setEnabled(enabled);
-    ui->comboBoxRestore->setEnabled(enabled);
-}
-
-///
 /// \brief DialogPulseMode::accept
 ///
 void DialogPulseMode::accept()
 {
-    _params.Enabled = ui->checkBoxEnabled->isChecked();
     _params.Duration = ui->comboBoxDuration->currentValue();
     _params.Restore = ui->comboBoxRestore->currentData().value<PulseParams::RestoreMode>();
 

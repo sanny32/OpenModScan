@@ -29,6 +29,7 @@ public:
 private slots:
     void on_lineEditPointAddress_valueChanged(const QVariant&);
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
+    void on_checkBoxLeadingZeros_toggled(bool checked);
     void on_checkBoxHexAddresses_toggled(bool checked);
 
 private:

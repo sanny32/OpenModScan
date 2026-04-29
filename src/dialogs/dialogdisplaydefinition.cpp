@@ -24,7 +24,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->checkBoxHexAddresses->setChecked(dd.HexAddress);
 
     ui->lineEditScanRate->setInputRange(20, 36000000);
-    ui->lineEditPointAddress->setLeadingZeroes(true);
+    ui->lineEditPointAddress->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress));
@@ -116,6 +116,15 @@ void DialogDisplayDefinition::on_comboBoxAddressBase_addressBaseChanged(AddressB
 }
 
 ///
+/// \brief DialogDisplayDefinition::on_checkBoxLeadingZeros_toggled
+/// \param checked
+///
+void DialogDisplayDefinition::on_checkBoxLeadingZeros_toggled(bool checked)
+{
+    ui->lineEditPointAddress->setLeadingZeroes(checked);
+}
+
+///
 /// \brief DialogDisplayDefinition::on_checkBoxHexAddresses_toggled
 /// \param checked
 ///
@@ -125,7 +134,7 @@ void DialogDisplayDefinition::on_checkBoxHexAddresses_toggled(bool checked)
     const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     const auto addrRange = ModbusLimits::addressRange(zeroBased);
 
-    ui->lineEditPointAddress->setLeadingZeroes(true);
+    ui->lineEditPointAddress->setLeadingZeroes(ui->checkBoxLeadingZeros->isChecked());
     ui->lineEditPointAddress->setInputMode(checked ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(addrRange);
     ui->lineEditPointAddress->setValue(qBound(addrRange.from(), addr, addrRange.to()));

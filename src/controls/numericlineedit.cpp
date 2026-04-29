@@ -123,6 +123,7 @@ bool NumericLineEdit::leadingZeroes() const
 void NumericLineEdit::setLeadingZeroes(bool on)
 {
     _leadingZeroes = on;
+    updateValue();
 }
 
 ///

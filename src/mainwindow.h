@@ -79,7 +79,6 @@ private slots:
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
     void on_actionSwapBytes_triggered();
-    void on_actionHexAddresses_triggered();
     void on_actionMsgParser_triggered();
     void on_actionAddressScan_triggered();
     void on_actionTextCapture_triggered();

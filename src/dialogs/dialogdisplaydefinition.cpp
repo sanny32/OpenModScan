@@ -21,8 +21,10 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->comboBoxColumnsDistance->setValidator(new QUIntValidator(1, 32, this));
     ui->comboBoxColumnsDistance->setEditText(QString::number(dd.DataViewColumnsDistance));
     ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
+    ui->checkBoxHexAddresses->setChecked(dd.HexAddress);
 
     ui->lineEditScanRate->setInputRange(20, 36000000);
+    ui->lineEditPointAddress->setLeadingZeroes(true);
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress));
@@ -69,6 +71,7 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.LogViewLimit = ui->lineEditLogLimit->value<int>();
     _displayDefinition.AutoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    _displayDefinition.HexAddress = ui->checkBoxHexAddresses->isChecked();
     _displayDefinition.DataViewColumnsDistance = ui->comboBoxColumnsDistance->currentText().toUInt();
     _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
 
@@ -105,7 +108,26 @@ void DialogDisplayDefinition::on_comboBoxAddressBase_addressBaseChanged(AddressB
 
     const int newAddr = ui->lineEditPointAddress->value<int>();
     const auto lenRange = ModbusLimits::lengthRange(newAddr, zeroBased);
+
     ui->lineEditLength->setInputRange(lenRange);
-    if(ui->lineEditLength->value<int>() > lenRange.to())
+    if(ui->lineEditLength->value<int>() > lenRange.to()) {
         ui->lineEditLength->setValue(lenRange.to());
+    }
+}
+
+///
+/// \brief DialogDisplayDefinition::on_checkBoxHexAddresses_toggled
+/// \param checked
+///
+void DialogDisplayDefinition::on_checkBoxHexAddresses_toggled(bool checked)
+{
+    const int addr = ui->lineEditPointAddress->value<int>();
+    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const auto addrRange = ModbusLimits::addressRange(zeroBased);
+
+    ui->lineEditPointAddress->setLeadingZeroes(true);
+    ui->lineEditPointAddress->setInputMode(checked ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditPointAddress->setInputRange(addrRange);
+    ui->lineEditPointAddress->setValue(qBound(addrRange.from(), addr, addrRange.to()));
+    ui->lineEditPointAddress->update();
 }

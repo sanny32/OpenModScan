@@ -316,8 +316,6 @@ void MainWindow::on_awake()
         const auto byteOrder = frm->byteOrder();
         ui->actionSwapBytes->setChecked(byteOrder == ByteOrder::Swapped);
 
-        ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
-
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
@@ -832,15 +830,6 @@ void MainWindow::on_actionSwapBytes_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionHexAddresses_triggered
-///
-void MainWindow::on_actionHexAddresses_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setDisplayHexAddresses(!frm->displayHexAddresses());
-}
-
-///
 /// \brief MainWindow::on_actionWriteSingleCoil_triggered
 ///
 void MainWindow::on_actionWriteSingleCoil_triggered()
@@ -848,14 +837,12 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
     DisplayDefinition dd;
     PulseParams pulseParams;
     ByteOrder byteOrder = ByteOrder::Direct;
-    bool hexAddresses = false;
 
     auto frm = currentMdiChild();
     if(frm)
     {
         dd = frm->displayDefinition();
         byteOrder = frm->byteOrder();
-        hexAddresses = frm->displayHexAddresses();
         pulseParams = frm->pulseParams();
     }
 
@@ -910,7 +897,6 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
     ByteOrder byteOrder = ByteOrder::Direct;
     DataDisplayMode mode = DataDisplayMode::UInt16;
     QString codepage;
-    bool hexAddresses = false;
 
     auto frm = currentMdiChild();
     if(frm)
@@ -921,7 +907,6 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
         }
         byteOrder = frm->byteOrder();
         codepage = frm->codepage();
-        hexAddresses = frm->displayHexAddresses();
         pulseParams = frm->pulseParams();
     }
 

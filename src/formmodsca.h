@@ -193,7 +193,6 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
     out << frm->dataDisplayMode();
     out << frm->byteOrder();
     out << frm->displayDefinition();
-    out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out.setValue("Codepage", frm->codepage());
     out << frm->pulseParams();
 
@@ -224,6 +223,9 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
 
     DisplayDefinition displayDefinition;
     in >> displayDefinition;
+    if(!in.contains("DisplayDefinition/HexAddress") && in.contains("DisplayHexAddresses")) {
+        displayDefinition.HexAddress = in.value("DisplayHexAddresses").toBool();
+    }
 
     bool isMaximized;
     isMaximized = in.value("ViewMaximized").toBool();
@@ -247,7 +249,6 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     frm->setDataDisplayMode(dataDisplayMode);
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
-    frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setCodepage(in.value("Codepage").toString());
 
     PulseParams pulseParams;

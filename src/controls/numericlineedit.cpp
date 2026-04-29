@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QResizeEvent>
 #include <QIntValidator>
+#include <QSignalBlocker>
 #include <QStyle>
 #include <QStyleOptionToolButton>
 #include <QToolButton>
@@ -185,9 +186,9 @@ void NumericLineEdit::setInputMode(InputMode mode)
     if(_hexView && !isHexViewApplicable())
     {
         _hexView = false;
-        _hexButton->blockSignals(true);
+
+        QSignalBlocker blocker(_hexButton);
         _hexButton->setChecked(false);
-        _hexButton->blockSignals(false);
     }
 
     updateButtons();

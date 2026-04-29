@@ -26,6 +26,7 @@ public:
 
 signals:
     void modbusClientChanged(QModbusClient* cli);
+    void dataPulsed(FormModSca* form, DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 protected:
     void changeEvent(QEvent* event) override;

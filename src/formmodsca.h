@@ -116,6 +116,7 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void byteOrderChanged(ByteOrder);
     void codepageChanged(const QString&);
+    void pulsed(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
     void captureError(const QString& error);

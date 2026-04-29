@@ -56,6 +56,11 @@ constexpr int ValueRole = Qt::UserRole + 6;
 constexpr int ColorRole = Qt::UserRole + 7;
 
 ///
+/// \brief PulseRole
+///
+constexpr int PulseRole = Qt::UserRole + 8;
+
+///
 /// \brief The ItemMapKey class
 ///
 struct ItemMapKey {
@@ -121,6 +126,7 @@ public:
 
 private:
     SimulationIconType simulationIcon(int row) const;
+    bool isPulsed(int row) const;
 
 private:
     struct ItemData
@@ -130,6 +136,7 @@ private:
         QString ValueStr;
         QString Description;
         bool Simulated = false;
+        int PulseCounter = 0;
         SimulationIconType SimulationIcon = SimulationIconNone;
         QColor BgColor;
         QColor FgColor;
@@ -141,6 +148,7 @@ private:
     const QPixmap _iconSimulation32Bit;
     const QPixmap _iconSimulation64Bit;
     const QPixmap _iconSimulationOff;
+    const QPixmap _iconPulse;
     int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };
@@ -222,6 +230,7 @@ public:
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     void setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+    void setPulsed(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 public slots:
     void clearLogView();

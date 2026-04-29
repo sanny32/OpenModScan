@@ -69,6 +69,8 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
         return _modbusClient.state() == ModbusDevice::ConnectedState;
     }, Qt::DirectConnection);
 
+    connect(this, &FormModSca::pulsed, ui->outputWidget, &OutputWidget::setPulsed);
+
     setPollState(PollState::Off);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
     connect(ui->statisticWidget, &StatisticWidget::pollStateChanged, this, [&](PollState state) {
@@ -1003,13 +1005,16 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 setPulseParams(params.PusleParams);
                 _modbusClient.writeRegister(pointType, params, _formId);
                 if(params.PusleParams.Enabled) {
+                    const quint16 pulseAddress = params.Address - (params.ZeroBasedAddress ? 0 : 1);
+                    emit pulsed(params.DisplayMode, params.DeviceId, pointType, pulseAddress, true);
                     auto restoreParams = params;
                     switch(params.PusleParams.Restore) {
                         case PulseParams::Zero:     restoreParams.Value = 0;     break;
                         case PulseParams::Previous: restoreParams.Value = value; break;
                     }
-                    QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams, pointType]() {
+                    QTimer::singleShot(params.PusleParams.Duration, this, [this, restoreParams, pointType, pulseAddress]() {
                         _modbusClient.writeRegister(pointType, restoreParams, _formId);
+                        emit pulsed(restoreParams.DisplayMode, restoreParams.DeviceId, pointType, pulseAddress, false);
                     });
                 }
             }
@@ -1038,13 +1043,16 @@ void FormModSca::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 setPulseParams(params.PusleParams);
                 _modbusClient.writeRegister(pointType, params, _formId);
                 if(params.PusleParams.Enabled) {
+                    const quint16 pulseAddress = params.Address - (params.ZeroBasedAddress ? 0 : 1);
+                    emit pulsed(params.DisplayMode, params.DeviceId, pointType, pulseAddress, true);
                     auto restoreParams = params;
                     switch(params.PusleParams.Restore) {
                         case PulseParams::Zero:     restoreParams.Value = 0;     break;
                         case PulseParams::Previous: restoreParams.Value = value; break;
                     }
-                    QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams, pointType]() {
+                    QTimer::singleShot(params.PusleParams.Duration, this, [this, restoreParams, pointType, pulseAddress]() {
                         _modbusClient.writeRegister(pointType, restoreParams, _formId);
+                        emit pulsed(restoreParams.DisplayMode, restoreParams.DeviceId, pointType, pulseAddress, false);
                     });
                 }
             }

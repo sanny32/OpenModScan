@@ -1,4 +1,5 @@
 #include <QtWidgets>
+#include <QPointer>
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
@@ -99,6 +100,11 @@ MainWindow::MainWindow(const QString& profile, QWidget *parent)
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
+    connect(this, &MainWindow::dataPulsed, this, [](FormModSca* form, DataDisplayMode mode,
+                                                quint8 deviceId, QModbusDataUnit::RegisterType type,
+                                                quint16 addr, bool on) {
+        if(form) emit form->pulsed(mode, deviceId, type, addr, on);
+    });
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_modbusClient, &ModbusClient::modbusError, this, &MainWindow::on_modbusError, Qt::QueuedConnection);
@@ -876,13 +882,19 @@ void MainWindow::on_actionWriteSingleCoil_triggered()
 
         _modbusClient.writeRegister(QModbusDataUnit::Coils, params, 0);
         if(params.PusleParams.Enabled) {
+            const quint16 pulseAddress = _lastWriteSingleCoilAddress;
+
+            QPointer<FormModSca> pulseForm = frm;
+            emit dataPulsed(pulseForm.data(), params.DisplayMode, params.DeviceId, QModbusDataUnit::Coils, pulseAddress, true);
+
             auto restoreParams = params;
             switch(params.PusleParams.Restore) {
                 case PulseParams::Zero:     restoreParams.Value = 0;     break;
                 case PulseParams::Previous: restoreParams.Value = value; break;
             }
-            QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams]() {
+            QTimer::singleShot(params.PusleParams.Duration, this, [this, pulseForm, restoreParams, pulseAddress]() {
                 _modbusClient.writeRegister(QModbusDataUnit::Coils, restoreParams, 0);
+                emit dataPulsed(pulseForm.data(), restoreParams.DisplayMode, restoreParams.DeviceId, QModbusDataUnit::Coils, pulseAddress, false);
             });
         }
     }
@@ -941,13 +953,19 @@ void MainWindow::on_actionWriteHoldingRegister_triggered()
 
         _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, params, 0);
         if(params.PusleParams.Enabled) {
+            const quint16 pulseAddress = _lastWriteHoldingRegisterAddress;
+
+            QPointer<FormModSca> pulseForm = frm;
+            emit dataPulsed(pulseForm.data(), params.DisplayMode, params.DeviceId, QModbusDataUnit::HoldingRegisters, pulseAddress, true);
+
             auto restoreParams = params;
             switch(params.PusleParams.Restore) {
                 case PulseParams::Zero:     restoreParams.Value = 0;     break;
                 case PulseParams::Previous: restoreParams.Value = value; break;
             }
-            QTimer::singleShot(params.PusleParams.Duration, [this, restoreParams]() {
+            QTimer::singleShot(params.PusleParams.Duration, this, [this, pulseForm, restoreParams, pulseAddress]() {
                 _modbusClient.writeRegister(QModbusDataUnit::HoldingRegisters, restoreParams, 0);
+                emit dataPulsed(pulseForm.data(), restoreParams.DisplayMode, restoreParams.DeviceId, QModbusDataUnit::HoldingRegisters, pulseAddress, false);
             });
         }
     }

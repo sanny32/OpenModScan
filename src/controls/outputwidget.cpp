@@ -65,6 +65,7 @@ OutputListModel::OutputListModel(OutputWidget* parent)
     ,_iconSimulation32Bit(QIcon(":/res/icon-simulation-32bit.svg").pixmap(10, 10))
     ,_iconSimulation64Bit(QIcon(":/res/icon-simulation-64bit.svg").pixmap(10, 10))
     ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size(), _iconSimulation16Bit.devicePixelRatio()))
+    ,_iconPulse(QIcon(":/res/icon-pulse.svg").pixmap(10, 10))
 {
 }
 
@@ -151,6 +152,9 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             if(itemData.ValueStr.isEmpty())
                 return _iconSimulationOff;
 
+            if(isPulsed(row))
+                return _iconPulse;
+
             switch(simulationIcon(row))
             {
                 case SimulationIcon16Bit:
@@ -186,9 +190,17 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
 
     switch (role)
     {
+        case PulseRole:
+            if(value.toBool())
+                ++_mapItems[index.row()].PulseCounter;
+            else
+                _mapItems[index.row()].PulseCounter = qMax(0, _mapItems[index.row()].PulseCounter - 1);
+            emit dataChanged(index, index, QVector<int>() << Qt::DecorationRole);
+        return true;
+
         case SimulationRole:
             _mapItems[index.row()].Simulated = value.toBool();
-            emit dataChanged(index, index, QVector<int>() << role);
+            emit dataChanged(index, index, QVector<int>() << Qt::DecorationRole);
         return true;
 
         case Qt::DecorationRole:
@@ -384,6 +396,26 @@ OutputListModel::SimulationIconType OutputListModel::simulationIcon(int row) con
     }
 
     return SimulationIconNone;
+}
+
+///
+/// \brief OutputListModel::isPulsed
+/// \param row
+/// \return
+///
+bool OutputListModel::isPulsed(int row) const
+{
+    const auto mode = _parentWidget->dataDisplayMode();
+    for(int i = 0; i < registersCount(mode); ++i)
+    {
+        if(row + i >= rowCount())
+            return false;
+
+        if(_mapItems[row + i].PulseCounter > 0)
+            return true;
+    }
+
+    return false;
 }
 
 ///
@@ -968,6 +1000,24 @@ void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDa
     }
     else {
         _listModel->setData(index, OutputListModel::SimulationIconNone, Qt::DecorationRole);
+    }
+}
+
+///
+/// \brief OutputWidget::setPulsed
+/// \param mode
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \param on
+///
+void OutputWidget::setPulsed(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+{
+    const int count = registersCount(mode);
+    for(int i = 0; i < count; ++i)
+    {
+        const auto index = _listModel->find(deviceId, type, addr + i);
+        _listModel->setData(index, on, PulseRole);
     }
 }
 

@@ -31,27 +31,27 @@
      </property>
      <item>
       <property name="text">
-       <string>100</string>
+       <string notr="true">100</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>250</string>
+       <string notr="true">250</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>500</string>
+       <string notr="true">500</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>1000</string>
+       <string notr="true">1000</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>2000</string>
+       <string notr="true">2000</string>
       </property>
      </item>
     </widget>

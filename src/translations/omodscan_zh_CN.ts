@@ -150,12 +150,12 @@
     <message>
         <location filename="../cmdlineparser.cpp" line="9"/>
         <source>Displays help on commandline options.</source>
-        <translation type="unfinished"></translation>
+        <translation>显示命令行选项的帮助信息。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="12"/>
         <source>Displays version information.</source>
-        <translation type="unfinished"></translation>
+        <translation>显示版本信息。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
@@ -704,7 +704,7 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="212"/>
         <source>Hex Addresses</source>
-        <translation type="unfinished">十六进制地址</translation>
+        <translation>十六进制地址</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="450"/>
@@ -1483,52 +1483,27 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogpulsemode.ui" line="14"/>
         <source>Pulse Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>脉冲模式</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpulsemode.ui" line="62"/>
         <source>Restore: </source>
-        <translation type="unfinished"></translation>
+        <translation>恢复： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpulsemode.ui" line="70"/>
         <source>Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>以前的</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpulsemode.ui" line="75"/>
         <source>Zero</source>
-        <translation type="unfinished"></translation>
+        <translation>零</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpulsemode.ui" line="23"/>
         <source>Duration (msecs): </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="34"/>
-        <source>100</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="39"/>
-        <source>250</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="44"/>
-        <source>500</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="49"/>
-        <source>1000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpulsemode.ui" line="54"/>
-        <source>2000</source>
-        <translation type="unfinished"></translation>
+        <translation>持续时间（毫秒）： </translation>
     </message>
 </context>
 <context>
@@ -1693,12 +1668,12 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="137"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="160"/>
         <source>Pulse: OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>脉冲：关闭</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="198"/>
         <source>Pulse Mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>脉冲模式...</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="32"/>
@@ -1715,7 +1690,7 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="141"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="156"/>
         <source>Pulse: ON</source>
-        <translation type="unfinished"></translation>
+        <translation>脉冲：开启</translation>
     </message>
 </context>
 <context>
@@ -1754,7 +1729,7 @@ single-point  write functions 05 and 06.)</source>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="222"/>
         <source>Pulse Mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>脉冲模式...</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="65"/>
@@ -1765,14 +1740,14 @@ single-point  write functions 05 and 06.)</source>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="245"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="260"/>
         <source>Pulse: ON</source>
-        <translation type="unfinished"></translation>
+        <translation>脉冲：开启</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="134"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="241"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="264"/>
         <source>Pulse: OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>脉冲：关闭</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="278"/>

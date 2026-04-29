@@ -119,6 +119,8 @@ void FormModSca::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        if(pollState() == PollState::Paused)
+            ui->outputWidget->setStatus(tr("Device polling paused..."));
     }
 
     QWidget::changeEvent(event);

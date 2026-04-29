@@ -225,14 +225,14 @@ void DialogWriteHoldingRegister::accept()
 ///
 void DialogWriteHoldingRegister::setupPulseButton()
 {
-    connect(ui->actionPulseSettings, &QAction::triggered, this, [this](){
+    connect(ui->actionPulseMode, &QAction::triggered, this, [this](){
         DialogPulseMode dlg(_writeParams.PusleParams, this);
         if(dlg.exec() == QDialog::Accepted)
             updatePulseButton();
     });
 
     auto menu = new QMenu();
-    menu->addAction(ui->actionPulseSettings);
+    menu->addAction(ui->actionPulseMode);
     ui->toolButtonPulse->setMenu(menu);
 
     const auto currentText = ui->toolButtonPulse->text();

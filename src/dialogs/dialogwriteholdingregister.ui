@@ -128,18 +128,18 @@
         </size>
        </property>
        <property name="styleSheet">
-         <string notr="true">padding: 0px 12px;</string>
+        <string notr="true">padding: 0px 12px;</string>
        </property>
-        <property name="text">
-         <string>Pulse: OFF</string>
-        </property>
-        <property name="popupMode">
-         <enum>QToolButton::MenuButtonPopup</enum>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextOnly</enum>
-        </property>
-       </widget>
+       <property name="text">
+        <string>Pulse: OFF</string>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::MenuButtonPopup</enum>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_5">
@@ -217,26 +217,16 @@
     </widget>
    </item>
   </layout>
-  <action name="actionPulseSettings">
+  <action name="actionPulseMode">
    <property name="text">
-    <string>Settings</string>
+    <string>Pulse Mode...</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>ColoredPushButton</class>
-   <extends>QPushButton</extends>
-   <header>coloredpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ColoredToolButton</class>
-   <extends>QToolButton</extends>
-   <header>coloredtoolbutton.h</header>
-  </customwidget>
   <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
@@ -253,6 +243,16 @@
    <extends>QGroupBox</extends>
    <header>checkablegroupbox.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ColoredPushButton</class>
+   <extends>QPushButton</extends>
+   <header>coloredpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColoredToolButton</class>
+   <extends>QToolButton</extends>
+   <header>coloredtoolbutton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

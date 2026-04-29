@@ -17,6 +17,8 @@ DialogPulseMode::DialogPulseMode(PulseParams& params, QWidget *parent)
     ui->checkBoxEnabled->setChecked(_params.Enabled);
     ui->comboBoxDuration->setCurrentValue(_params.Duration);
     ui->comboBoxRestore->setCurrentIndex(_params.Restore == PulseParams::Previous ? 0 : 1);
+
+    on_checkBoxEnabled_toggled();
 }
 
 ///
@@ -25,6 +27,16 @@ DialogPulseMode::DialogPulseMode(PulseParams& params, QWidget *parent)
 DialogPulseMode::~DialogPulseMode()
 {
     delete ui;
+}
+
+///
+/// \brief DialogPulseMode::on_checkBoxEnabled_toggled
+///
+void DialogPulseMode::on_checkBoxEnabled_toggled()
+{
+    const bool enabled = ui->checkBoxEnabled->isChecked();
+    ui->comboBoxDuration->setEnabled(enabled);
+    ui->comboBoxRestore->setEnabled(enabled);
 }
 
 ///

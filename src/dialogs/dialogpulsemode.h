@@ -21,6 +21,9 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_checkBoxEnabled_toggled();
+
 private:
     Ui::DialogPulseMode *ui;
 

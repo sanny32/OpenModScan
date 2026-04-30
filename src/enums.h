@@ -341,19 +341,6 @@ DECLARE_ENUM_STRINGS(PollState,
 )
 
 ///
-/// \brief QString
-///
-enum class SerializationFormat {
-    Binary = 0,
-    Xml
-};
-Q_DECLARE_METATYPE(SerializationFormat)
-DECLARE_ENUM_STRINGS(SerializationFormat,
-                     {   SerializationFormat::Binary,    "Binary"    },
-                     {   SerializationFormat::Xml,       "Xml"       },
-)
-
-///
 /// \brief boolToString
 /// \param value
 /// \return

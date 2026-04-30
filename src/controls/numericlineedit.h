@@ -13,6 +13,7 @@ class NumericLineEdit : public QLineEdit
     Q_PROPERTY(bool leadingZeroes READ leadingZeroes WRITE setLeadingZeroes)
     Q_PROPERTY(bool hexView READ hexView WRITE setHexView)
     Q_PROPERTY(bool hexButtonVisible READ hexButtonVisible WRITE setHexButtonVisible)
+    Q_PROPERTY(bool allowEmptyValue READ allowEmptyValue WRITE setAllowEmptyValue)
 
 public:
     enum InputMode
@@ -70,6 +71,12 @@ public:
     bool hexButtonVisible() const;
     void setHexButtonVisible(bool visible);
 
+    bool allowEmptyValue() const;
+    void setAllowEmptyValue(bool allow);
+
+    bool isEmpty() const;
+    void clearValue();
+
 signals:
     void valueChanged(const QVariant& newValue);
     void valueChanged(const QVariant& oldValue, const QVariant& newValue);
@@ -91,7 +98,7 @@ private slots:
 private:
     void updateValue();
     void internalSetValue(QVariant value);
-    void updateHexButton();
+    void updateButtons();
     bool isHexViewApplicable() const;
 
 private:
@@ -105,6 +112,7 @@ private:
     QToolButton* _hexButton;
     bool _hexView;
     bool _hexButtonVisible;
+    bool _allowEmptyValue;
 };
 
 #endif // NUMERICLINEEDIT_H

@@ -13,40 +13,10 @@
 #include "modbusmessages.h"
 #include "ui_outputwidget.h"
 
-///
-/// \brief SimulationRole
-///
-const int SimulationRole = Qt::UserRole + 1;
-
-///
-/// \brief CaptureRole
-///
-const int CaptureRole = Qt::UserRole + 2;
-
-///
-/// \brief DescriptionRole
-///
-const int DescriptionRole = Qt::UserRole + 3;
-
-///
-/// \brief AddressStringRole
-///
-const int AddressStringRole = Qt::UserRole + 4;
-
-///
-/// \brief AddressRole
-///
-const int AddressRole = Qt::UserRole + 5;
-
-///
-/// \brief ValueRole
-///
-const int ValueRole = Qt::UserRole + 6;
-
-///
-/// \brief ColorRole
-///
-const int ColorRole = Qt::UserRole + 7;
+namespace {
+constexpr int TrafficUiFlushIntervalMs = 20;
+constexpr int TrafficUiFlushChunkSize = 300;
+}
 
 ///
 /// \brief htmlPad
@@ -77,12 +47,14 @@ QString normalizeHtml(const QString& s)
 
 ///
 /// \brief emptyPixmap
-/// \param size
+/// \param physicalSize
+/// \param dpr
 /// \return
 ///
-static QPixmap emptyPixmap(const QSize& size)
+static QPixmap emptyPixmap(const QSize& physicalSize, qreal dpr = 1.0)
 {
-    QPixmap pm(size);
+    QPixmap pm(physicalSize);
+    pm.setDevicePixelRatio(dpr);
     pm.fill(Qt::transparent);
     return pm;
 }
@@ -97,7 +69,8 @@ OutputListModel::OutputListModel(OutputWidget* parent)
     ,_iconSimulation16Bit(QIcon(":/res/icon-simulation-16bit.svg").pixmap(10, 10))
     ,_iconSimulation32Bit(QIcon(":/res/icon-simulation-32bit.svg").pixmap(10, 10))
     ,_iconSimulation64Bit(QIcon(":/res/icon-simulation-64bit.svg").pixmap(10, 10))
-    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size()))
+    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size(), _iconSimulation16Bit.devicePixelRatio()))
+    ,_iconPulse(QIcon(":/res/icon-pulse.svg").pixmap(10, 10))
 {
 }
 
@@ -184,6 +157,9 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             if(itemData.ValueStr.isEmpty())
                 return _iconSimulationOff;
 
+            if(isPulsed(row))
+                return _iconPulse;
+
             switch(simulationIcon(row))
             {
                 case SimulationIcon16Bit:
@@ -219,9 +195,17 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
 
     switch (role)
     {
+        case PulseRole:
+            if(value.toBool())
+                ++_mapItems[index.row()].PulseCounter;
+            else
+                _mapItems[index.row()].PulseCounter = qMax(0, _mapItems[index.row()].PulseCounter - 1);
+            emit dataChanged(index, index, QVector<int>() << Qt::DecorationRole);
+        return true;
+
         case SimulationRole:
             _mapItems[index.row()].Simulated = value.toBool();
-            emit dataChanged(index, index, QVector<int>() << role);
+            emit dataChanged(index, index, QVector<int>() << Qt::DecorationRole);
         return true;
 
         case Qt::DecorationRole:
@@ -420,6 +404,26 @@ OutputListModel::SimulationIconType OutputListModel::simulationIcon(int row) con
 }
 
 ///
+/// \brief OutputListModel::isPulsed
+/// \param row
+/// \return
+///
+bool OutputListModel::isPulsed(int row) const
+{
+    const auto mode = _parentWidget->dataDisplayMode();
+    for(int i = 0; i < registersCount(mode); ++i)
+    {
+        if(row + i >= rowCount())
+            return false;
+
+        if(_mapItems[row + i].PulseCounter > 0)
+            return true;
+    }
+
+    return false;
+}
+
+///
 /// \brief OutputListModel::find
 /// \param deviceId
 /// \param type
@@ -497,6 +501,10 @@ OutputWidget::OutputWidget(QWidget *parent) :
     _zoomHideTimer = new QTimer(this);
     _zoomHideTimer->setSingleShot(true);
     connect(_zoomHideTimer, &QTimer::timeout, _zoomLabel, &QLabel::hide);
+
+    _logViewFlushTimer = new QTimer(this);
+    _logViewFlushTimer->setInterval(TrafficUiFlushIntervalMs);
+    connect(_logViewFlushTimer, &QTimer::timeout, this, &OutputWidget::on_logViewFlushTimeout);
 
     ui->listView->viewport()->installEventFilter(this);
 }
@@ -836,6 +844,8 @@ void OutputWidget::setAutosctollLogView(bool on)
 ///
 void OutputWidget::clearLogView()
 {
+    _pendingLogViewUpdates.clear();
+    if(_logViewFlushTimer) _logViewFlushTimer->stop();
     ui->logView->clear();
     ui->modbusMsg->clear();
     hideModbusMessage();
@@ -877,10 +887,7 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
     int maxWidth = 0;
     for(int i = 0; i < _listModel->rowCount(); ++i)
     {
-        QTextDocument doc;
-        doc.setHtml(_listModel->data(_listModel->index(i), Qt::DisplayRole).toString());
-        const auto text = doc.toPlainText().trimmed();
-
+        const auto text = _listModel->data(_listModel->index(i), Qt::DisplayRole).toString().trimmed();
         auto rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
         maxWidth = qMax(maxWidth, rcItem.width());
 
@@ -910,7 +917,27 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 ///
 void OutputWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
 {
-    updateLogView(msg);
+    if(msg == nullptr)
+        return;
+
+    _pendingLogViewUpdates.enqueue(msg);
+    if(_logViewFlushTimer && !_logViewFlushTimer->isActive())
+        _logViewFlushTimer->start();
+}
+
+///
+/// \brief OutputWidget::updateTrafficBatch
+/// \param messages
+///
+void OutputWidget::updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    for(auto&& msg : messages) {
+        if(msg != nullptr)
+            _pendingLogViewUpdates.enqueue(msg);
+    }
+
+    if(_logViewFlushTimer && !_pendingLogViewUpdates.isEmpty() && !_logViewFlushTimer->isActive())
+        _logViewFlushTimer->start();
 }
 
 ///
@@ -1008,6 +1035,24 @@ void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDa
 }
 
 ///
+/// \brief OutputWidget::setPulsed
+/// \param mode
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \param on
+///
+void OutputWidget::setPulsed(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+{
+    const int count = registersCount(mode);
+    for(int i = 0; i < count; ++i)
+    {
+        const auto index = _listModel->find(deviceId, type, addr + i);
+        _listModel->setData(index, on, PulseRole);
+    }
+}
+
+///
 /// \brief OutputWidget::displayMode
 /// \return
 ///
@@ -1055,6 +1100,28 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
     ui->modbusMsg->setDataDisplayMode(mode);
 
     _listModel->update();
+}
+
+///
+/// \brief OutputWidget::on_logViewFlushTimeout
+///
+void OutputWidget::on_logViewFlushTimeout()
+{
+    if(_pendingLogViewUpdates.isEmpty()) {
+        _logViewFlushTimer->stop();
+        return;
+    }
+
+    const int batchSize = qMin(TrafficUiFlushChunkSize, _pendingLogViewUpdates.size());
+    QVector<QSharedPointer<const ModbusMessage>> batch;
+    batch.reserve(batchSize);
+    for(int i = 0; i < batchSize; ++i)
+        batch.push_back(_pendingLogViewUpdates.dequeue());
+
+    updateLogViewBatch(batch);
+
+    if(_pendingLogViewUpdates.isEmpty())
+        _logViewFlushTimer->stop();
 }
 
 ///
@@ -1324,14 +1391,27 @@ void OutputWidget::hideModbusMessage()
 ///
 void OutputWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
-    ui->logView->addItem(msg);
-    if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
+    updateLogViewBatch({ msg });
+}
+
+///
+/// \brief OutputWidget::updateLogViewBatch
+/// \param messages
+///
+void OutputWidget::updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    ui->logView->addItems(messages);
+    if(captureMode() == CaptureMode::TextCapture)
     {
-        const auto str = QString("%1: %2 %3 %4").arg(
-            (msg->isRequest()?  "Tx" : "Rx"),
-            msg->timestamp().toString(Qt::ISODateWithMs),
-            (msg->isRequest()?  "<<" : ">>"),
-            msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
-        captureString(str);
+        for(auto&& msg : messages) {
+            if(msg == nullptr) continue;
+
+            const auto str = QString("%1: %2 %3 %4").arg(
+                (msg->isRequest()?  "Tx" : "Rx"),
+                msg->timestamp().toString(Qt::ISODateWithMs),
+                (msg->isRequest()?  "<<" : ">>"),
+                msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
+            captureString(str);
+        }
     }
 }

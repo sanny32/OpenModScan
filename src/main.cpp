@@ -141,6 +141,16 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
+    if(parser.isSet(CmdLineParser::_version)) {
+        showVersion();
+        return EXIT_SUCCESS;
+    }
+
+    if(parser.isSet(CmdLineParser::_help)) {
+        showHelp(parser.helpText());
+        return EXIT_SUCCESS;
+    }
+
     QString profile;
     if(parser.isSet(CmdLineParser::_profile)) {
         profile = parser.value(CmdLineParser::_profile);

@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QWidget>
 #include <QLabel>
+#include <QQueue>
 #include <QDateTime>
 #include <QListWidgetItem>
 #include <QModbusReply>
@@ -19,6 +20,46 @@ class OutputWidget;
 }
 
 class OutputWidget;
+
+///
+/// \brief SimulationRole
+///
+constexpr int SimulationRole = Qt::UserRole + 1;
+
+///
+/// \brief CaptureRole
+///
+constexpr int CaptureRole = Qt::UserRole + 2;
+
+///
+/// \brief DescriptionRole
+///
+constexpr int DescriptionRole = Qt::UserRole + 3;
+
+///
+/// \brief AddressStringRole
+///
+constexpr int AddressStringRole = Qt::UserRole + 4;
+
+///
+/// \brief AddressRole
+///
+constexpr int AddressRole = Qt::UserRole + 5;
+
+///
+/// \brief ValueRole
+///
+constexpr int ValueRole = Qt::UserRole + 6;
+
+///
+/// \brief ColorRole
+///
+constexpr int ColorRole = Qt::UserRole + 7;
+
+///
+/// \brief PulseRole
+///
+constexpr int PulseRole = Qt::UserRole + 8;
 
 ///
 /// \brief The ItemMapKey class
@@ -86,6 +127,7 @@ public:
 
 private:
     SimulationIconType simulationIcon(int row) const;
+    bool isPulsed(int row) const;
 
 private:
     struct ItemData
@@ -95,6 +137,7 @@ private:
         QString ValueStr;
         QString Description;
         bool Simulated = false;
+        int PulseCounter = 0;
         SimulationIconType SimulationIcon = SimulationIconNone;
         QColor BgColor;
         QColor FgColor;
@@ -106,6 +149,7 @@ private:
     const QPixmap _iconSimulation32Bit;
     const QPixmap _iconSimulation64Bit;
     const QPixmap _iconSimulationOff;
+    const QPixmap _iconPulse;
     int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };
@@ -178,6 +222,7 @@ public:
     void paint(const QRect& rc, QPainter& painter);
 
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
+    void updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
     void updateData(const QModbusDataUnit& data);
 
     AddressColorMap2 colorMap() const;
@@ -187,6 +232,7 @@ public:
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     void setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+    void setPulsed(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 public slots:
     void clearLogView();
@@ -203,6 +249,7 @@ protected:
 private slots:
     void on_listView_doubleClicked(const QModelIndex& index);
     void on_listView_customContextMenuRequested(const QPoint &pos);
+    void on_logViewFlushTimeout();
 
 private:
     void setUninitializedStatus();
@@ -211,12 +258,15 @@ private:
     void hideModbusMessage();
     void showZoomOverlay();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
+    void updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
     QModelIndex getValueIndex(const QModelIndex& index) const;
 
 private:
     Ui::OutputWidget *ui;
     QLabel* _zoomLabel = nullptr;
     QTimer* _zoomHideTimer = nullptr;
+    QTimer* _logViewFlushTimer = nullptr;
+    QQueue<QSharedPointer<const ModbusMessage>> _pendingLogViewUpdates;
 
 private:
     qreal _baseFontSize = 0.0;
@@ -234,34 +284,5 @@ private:
     AddressDescriptionMap2 _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };
-
-///
-/// \brief operator <<
-/// \param out
-/// \param key
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ItemMapKey& key)
-{
-    out << key.DeviceId;
-    out << key.Type;
-    out << key.Address;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ItemMapKey& key)
-{
-    in >> key.DeviceId;
-    in >> key.Type;
-    in >> key.Address;
-    return in;
-}
 
 #endif // OUTPUTWIDGET_H

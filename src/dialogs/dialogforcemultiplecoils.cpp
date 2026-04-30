@@ -28,10 +28,10 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, in
 
     const auto deviceIdStr = _hexViewDeviceId
         ? QString("0x%1").arg(QString::number(params.DeviceId, 16).toUpper(), 2, '0')
-        : QString("%1").arg(params.DeviceId, 3, 10, QLatin1Char('0'));
+        : QString::number(params.DeviceId);
     const auto lengthStr = _hexViewLength
         ? QString("0x%1").arg(QString::number(length, 16).toUpper(), 4, '0')
-        : QString("%1").arg(length, 3, 10, QLatin1Char('0'));
+        : QString::number(length);
 
     ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
         formatAddress(QModbusDataUnit::Coils, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress)));

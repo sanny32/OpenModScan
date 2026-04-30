@@ -28,12 +28,15 @@ public:
     void accept() override;
 
 private slots:
+    void on_toolButtonPulse_clicked();
     void on_pushButtonSimulation_clicked();
     void on_lineEditAddress_valueChanged(const QVariant& value);
     void on_lineEditNode_valueChanged(const QVariant& value);
 
 private:
+    void setupPulseButton();
     void updateSimulationButton();
+    void updatePulseButton();
     void updateValue();
 
 private:

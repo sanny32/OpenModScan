@@ -1,7 +1,13 @@
+#include <QMenu>
+#include <QSignalBlocker>
+#include <QtGlobal>
 #include "modbuslimits.h"
 #include "modbusclient.h"
 #include "waitcursor.h"
 #include "datasimulator.h"
+#include "coloredpushbutton.h"
+#include "coloredtoolbutton.h"
+#include "dialogpulsemode.h"
 #include "dialogcoilsimulation.h"
 #include "dialogwritecoilregister.h"
 #include "ui_dialogwritecoilregister.h"
@@ -26,18 +32,23 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, cons
         setWindowTitle(tr("15: Write Single Coil"));
     }
 
-    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditNode->setValue(params.DeviceId);
-    ui->lineEditNode->setHexButtonVisible(true);
-    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+    {
+        QSignalBlocker nodeBlocker(ui->lineEditNode);
+        QSignalBlocker addressBlocker(ui->lineEditAddress);
 
-    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditAddress->setValue(params.Address);
-    ui->lineEditAddress->setHexButtonVisible(true);
-    ui->lineEditAddress->setHexView(dd.HexViewAddress);
+        ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+        ui->lineEditNode->setValue(params.DeviceId);
+        ui->lineEditNode->setHexButtonVisible(true);
+        ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+
+        ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+        ui->lineEditAddress->setValue(params.Address);
+        ui->lineEditAddress->setHexButtonVisible(true);
+        ui->lineEditAddress->setHexView(dd.HexViewAddress);
+    }
 
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
@@ -48,6 +59,9 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, cons
         _simParams = _dataSimulator->simulationParams(params.DeviceId, QModbusDataUnit::Coils, simAddr);
     }
     updateSimulationButton();
+
+    setupPulseButton();
+    updatePulseButton();
 
     if(ui->radioButtonOff->isChecked())
         ui->radioButtonOn->setFocus();
@@ -85,34 +99,66 @@ void DialogWriteCoilRegister::updateSimulationButton()
         case SimulationMode::Disabled:
             ui->pushButtonSimulation->setEnabled(false);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         case SimulationMode::Off:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         default:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet(R"(
-                        QPushButton {
-                            color: white;
-                            padding: 4px 12px;
-                            background-color: #4CAF50;
-                            border: 1px solid #3e8e41;
-                            border-radius: 4px;
-                        }
-                        QPushButton:hover {
-                            background-color: #45a049;
-                        }
-                        QPushButton:pressed {
-                            background-color: #3e8e41;
-                        }
-                    )");
+            ui->pushButtonSimulation->setColors({ "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" });
         break;
+    }
+}
+
+///
+/// \brief DialogWriteCoilRegister::setupPulseButton
+///
+void DialogWriteCoilRegister::setupPulseButton()
+{
+    connect(ui->actionPulseMode, &QAction::triggered, this, [this](){
+        DialogPulseMode dlg(_writeParams.PusleParams, this);
+        if(dlg.exec() == QDialog::Accepted)
+            updatePulseButton();
+    });
+
+    auto menu = new QMenu();
+    menu->addAction(ui->actionPulseMode);
+    ui->toolButtonPulse->setMenu(menu);
+
+    const auto currentText = ui->toolButtonPulse->text();
+    const auto currentStyleSheet = ui->toolButtonPulse->styleSheet();
+
+    ui->toolButtonPulse->setText(tr("Pulse: OFF"));
+    ui->toolButtonPulse->clearColors();
+    const int offWidth = ui->toolButtonPulse->sizeHint().width();
+
+    ui->toolButtonPulse->setText(tr("Pulse: ON"));
+    ui->toolButtonPulse->setColors({ "#F0A43A", "#E2952E", "#D58422", "#B96E16" });
+    const int onWidth = ui->toolButtonPulse->sizeHint().width();
+
+    ui->toolButtonPulse->setMinimumWidth(qMax(offWidth, onWidth));
+    ui->toolButtonPulse->setText(currentText);
+    ui->toolButtonPulse->setStyleSheet(currentStyleSheet);
+}
+
+///
+/// \brief DialogWriteCoilRegister::updatePulseButton
+///
+void DialogWriteCoilRegister::updatePulseButton()
+{
+    if( _writeParams.PusleParams.Enabled) {
+        ui->toolButtonPulse->setText(tr("Pulse: ON"));
+        ui->toolButtonPulse->setColors({ "#F0A43A", "#E2952E", "#D58422", "#B96E16" });
+    }
+    else {
+        ui->toolButtonPulse->setText(tr("Pulse: OFF"));
+        ui->toolButtonPulse->clearColors();
     }
 }
 
@@ -162,6 +208,15 @@ void DialogWriteCoilRegister::on_lineEditNode_valueChanged(const QVariant& value
         updateSimulationButton();
     }
     updateValue();
+}
+
+///
+/// \brief DialogWriteCoilRegister::on_toolButtonPulse_clicked
+///
+void DialogWriteCoilRegister::on_toolButtonPulse_clicked()
+{
+    _writeParams.PusleParams.Enabled = !_writeParams.PusleParams.Enabled;
+    updatePulseButton();
 }
 
 ///

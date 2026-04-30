@@ -4,7 +4,6 @@
 #include <QHostAddress>
 #include <QSerialPort>
 #include <QModbusDevice>
-#include <QDataStream>
 #include <QXmlStreamReader>
 #include <QSettings>
 #include "enums.h"
@@ -28,35 +27,6 @@ struct TcpConnectionParams
     }
 };
 Q_DECLARE_METATYPE(TcpConnectionParams)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const TcpConnectionParams& params)
-{
-    out << params.IPAddress;
-    out << params.ServicePort;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, TcpConnectionParams& params)
-{
-    in >> params.IPAddress;
-    in >> params.ServicePort;
-
-    params.normalize();
-    return in;
-}
 
 ///
 /// \brief operator <<
@@ -183,47 +153,6 @@ DECLARE_ENUM_STRINGS(QSerialPort::FlowControl,
                      {   QSerialPort::HardwareControl,      "HARDWARE"  },
                      {   QSerialPort::SoftwareControl,      "SOFTWARE"  }
 )
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const SerialConnectionParams& params)
-{
-    out << params.PortName;
-    out << params.BaudRate;
-    out << params.WordLength;
-    out << params.Parity;
-    out << params.StopBits;
-    out << params.FlowControl;
-    out << params.SetDTR;
-    out << params.SetRTS;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, SerialConnectionParams& params)
-{
-    in >> params.PortName;
-    in >> params.BaudRate;
-    in >> params.WordLength;
-    in >> params.Parity;
-    in >> params.StopBits;
-    in >> params.FlowControl;
-    in >> params.SetDTR;
-    in >> params.SetRTS;
-
-    params.normalize();
-    return in;
-}
 
 ///
 /// \brief operator <<
@@ -375,41 +304,6 @@ Q_DECLARE_METATYPE(ModbusProtocolSelections)
 /// \param params
 /// \return
 ///
-inline QDataStream& operator <<(QDataStream& out, const ModbusProtocolSelections& params)
-{
-    out << params.Mode;
-    out << params.SlaveResponseTimeOut;
-    out << params.NumberOfRetries;
-    out << params.InterFrameDelay;
-    out << params.ForceModbus15And16Func;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ModbusProtocolSelections& params)
-{
-    in >> params.Mode;
-    in >> params.SlaveResponseTimeOut;
-    in >> params.NumberOfRetries;
-    in >> params.InterFrameDelay;
-    in >> params.ForceModbus15And16Func;
-
-    params.normalize();
-    return in;
-}
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
 inline QSettings& operator <<(QSettings& out, const ModbusProtocolSelections& params)
 {
     out.setValue("ModbusParams/Mode",                   (uint)params.Mode);
@@ -518,38 +412,6 @@ struct ConnectionDetails
     }
 };
 Q_DECLARE_METATYPE(ConnectionDetails)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ConnectionDetails& params)
-{
-    out << params.Type;
-    out << params.TcpParams;
-    out << params.SerialParams;
-    out << params.ModbusParams;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ConnectionDetails& params)
-{
-    in >> params.Type;
-    in >> params.TcpParams;
-    in >> params.SerialParams;
-    in >> params.ModbusParams;
-
-    return in;
-}
 
 ///
 /// \brief operator <<

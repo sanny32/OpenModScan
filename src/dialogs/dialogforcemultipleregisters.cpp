@@ -30,7 +30,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
     const auto deviceIdStr = _hexViewDeviceId
         ? QString("0x%1").arg(QString::number(params.DeviceId, 16).toUpper(), 2, '0')
-        : QString("%1").arg(params.DeviceId, 3, 10, QLatin1Char('0'));
+        : QString::number(params.DeviceId);
     const auto lengthStr = _hexViewLength
         ? QString("0x%1").arg(QString::number(length, 16).toUpper(), 4, '0')
         : QString::number(length);

@@ -122,8 +122,6 @@
      <addaction name="actionSwappedDbl"/>
      <addaction name="separator"/>
      <addaction name="actionSwapBytes"/>
-     <addaction name="separator"/>
-     <addaction name="actionHexAddresses"/>
     </widget>
     <widget class="QMenu" name="menuExtended">
      <property name="title">
@@ -588,14 +586,6 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+-</string>
-   </property>
-  </action>
-  <action name="actionHexAddresses">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Hex Addresses</string>
    </property>
   </action>
   <action name="actionForceCoils">

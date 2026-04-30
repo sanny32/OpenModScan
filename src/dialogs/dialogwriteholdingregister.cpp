@@ -1,9 +1,17 @@
 #include <float.h>
+#include <QMenu>
+#include <QSignalBlocker>
+#include <QtGlobal>
 #include "modbuslimits.h"
 #include "numericutils.h"
 #include "modbusclient.h"
 #include "waitcursor.h"
 #include "datasimulator.h"
+#include "checkablegroupbox.h"
+#include "bitpatterncontrol.h"
+#include "coloredpushbutton.h"
+#include "coloredtoolbutton.h"
+#include "dialogpulsemode.h"
 #include "dialogautosimulation.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
@@ -14,25 +22,15 @@ namespace {
         if (val == 0x0000) return Qt::Unchecked;
         return Qt::PartiallyChecked;
     }
-}
 
-///
-/// \brief The SimButtonColors class
-///
-struct SimButtonColors
-{
-    QString base;
-    QString hover;
-    QString pressed;
-    QString border;
-};
+}
 
 ///
 /// \brief simColors
 /// \param registersCount
 /// \return
 ///
-static SimButtonColors simColors(DataDisplayMode mode)
+static ColoredPushButton::Colors simColors(DataDisplayMode mode)
 {
     switch(registersCount(mode))
     {
@@ -67,18 +65,23 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         setWindowTitle(tr("16: Write Holding Register"));
     }
 
-    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditNode->setValue(params.DeviceId);
-    ui->lineEditNode->setHexButtonVisible(true);
-    ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+    {
+        QSignalBlocker nodeBlocker(ui->lineEditNode);
+        QSignalBlocker addressBlocker(ui->lineEditAddress);
 
-    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
-    ui->lineEditAddress->setValue(params.Address);
-    ui->lineEditAddress->setHexButtonVisible(true);
-    ui->lineEditAddress->setHexView(dd.HexViewAddress);
+        ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
+        ui->lineEditNode->setValue(params.DeviceId);
+        ui->lineEditNode->setHexButtonVisible(true);
+        ui->lineEditNode->setHexView(dd.HexViewDeviceId);
+
+        ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
+        ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+        ui->lineEditAddress->setValue(params.Address);
+        ui->lineEditAddress->setHexButtonVisible(true);
+        ui->lineEditAddress->setHexView(dd.HexViewAddress);
+    }
 
     if(_dataSimulator != nullptr)
     {
@@ -89,6 +92,9 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
         }
     }
     updateSimulationButton();
+
+    setupPulseButton();
+    updatePulseButton();
 
     switch(params.DisplayMode)
     {
@@ -215,6 +221,52 @@ void DialogWriteHoldingRegister::accept()
 }
 
 ///
+/// \brief DialogWriteHoldingRegister::setupPulseButton
+///
+void DialogWriteHoldingRegister::setupPulseButton()
+{
+    connect(ui->actionPulseMode, &QAction::triggered, this, [this](){
+        DialogPulseMode dlg(_writeParams.PusleParams, this);
+        if(dlg.exec() == QDialog::Accepted)
+            updatePulseButton();
+    });
+
+    auto menu = new QMenu();
+    menu->addAction(ui->actionPulseMode);
+    ui->toolButtonPulse->setMenu(menu);
+
+    const auto currentText = ui->toolButtonPulse->text();
+    const auto currentStyleSheet = ui->toolButtonPulse->styleSheet();
+
+    ui->toolButtonPulse->setText(tr("Pulse: OFF"));
+    ui->toolButtonPulse->clearColors();
+    const int offWidth = ui->toolButtonPulse->sizeHint().width();
+
+    ui->toolButtonPulse->setText(tr("Pulse: ON"));
+    ui->toolButtonPulse->setColors({ "#F0A43A", "#E2952E", "#D58422", "#B96E16" });
+    const int onWidth = ui->toolButtonPulse->sizeHint().width();
+
+    ui->toolButtonPulse->setMinimumWidth(qMax(offWidth, onWidth));
+    ui->toolButtonPulse->setText(currentText);
+    ui->toolButtonPulse->setStyleSheet(currentStyleSheet);
+}
+
+///
+/// \brief DialogWriteHoldingRegister::updatePulseButton
+///
+void DialogWriteHoldingRegister::updatePulseButton()
+{
+    if(_writeParams.PusleParams.Enabled) {
+        ui->toolButtonPulse->setText(tr("Pulse: ON"));
+        ui->toolButtonPulse->setColors({ "#F0A43A", "#E2952E", "#D58422", "#B96E16" });
+    }
+    else {
+        ui->toolButtonPulse->setText(tr("Pulse: OFF"));
+        ui->toolButtonPulse->clearColors();
+    }
+}
+
+///
 /// \brief DialogWriteHoldingRegister::updateSimulationButton
 ///
 void DialogWriteHoldingRegister::updateSimulationButton()
@@ -224,13 +276,13 @@ void DialogWriteHoldingRegister::updateSimulationButton()
         case SimulationMode::Disabled:
             ui->pushButtonSimulation->setEnabled(false);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         case SimulationMode::Off:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         default:
@@ -239,21 +291,7 @@ void DialogWriteHoldingRegister::updateSimulationButton()
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
 
             const auto c = simColors(_simParams.DataMode);
-            ui->pushButtonSimulation->setStyleSheet(QString(R"(
-                    QPushButton {
-                        color: white;
-                        padding: 4px 12px;
-                        background-color: %1;
-                        border: 1px solid %2;
-                        border-radius: 4px;
-                    }
-                    QPushButton:hover {
-                        background-color: %3;
-                    }
-                    QPushButton:pressed {
-                        background-color: %4;
-                    }
-                )").arg(c.base, c.border, c.hover, c.pressed));
+            ui->pushButtonSimulation->setColors(c);
         }
         break;
     }
@@ -312,6 +350,15 @@ void DialogWriteHoldingRegister::on_lineEditNode_valueChanged(const QVariant& va
         updateSimulationButton();
     }
     updateValue();
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_toolButtonPulse_clicked
+///
+void DialogWriteHoldingRegister::on_toolButtonPulse_clicked()
+{
+    _writeParams.PusleParams.Enabled = !_writeParams.PusleParams.Enabled;
+    updatePulseButton();
 }
 
 ///

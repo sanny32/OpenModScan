@@ -11,6 +11,7 @@
 #include "modbusclient.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
+#include "modbuswriteparams.h"
 #include "outputwidget.h"
 #include "modbussimulationparams.h"
 
@@ -26,9 +27,6 @@ class FormModSca;
 class FormModSca : public QWidget
 {
     Q_OBJECT
-
-    friend QDataStream& operator <<(QDataStream& out, const FormModSca* frm);
-    friend QDataStream& operator >>(QDataStream& in, FormModSca* frm);
 
 public:
     static QVersionNumber VERSION;
@@ -63,6 +61,9 @@ public:
 
     QString codepage() const;
     void setCodepage(const QString& name);
+
+    PulseParams pulseParams() const;
+    void setPulseParams(const PulseParams& params);
 
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
@@ -112,6 +113,7 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void byteOrderChanged(ByteOrder);
     void codepageChanged(const QString&);
+    void pulsed(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
     void captureError(const QString& error);
@@ -157,6 +159,7 @@ private:
     ModbusClient& _modbusClient;
     DataSimulator* _dataSimulator;
     MainWindow* _parent;
+    PulseParams _pulseParams;
 };
 
 ///
@@ -187,8 +190,8 @@ inline QSettings& operator <<(QSettings& out, const FormModSca* frm)
     out << frm->dataDisplayMode();
     out << frm->byteOrder();
     out << frm->displayDefinition();
-    out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out.setValue("Codepage", frm->codepage());
+    out << frm->pulseParams();
 
     return out;
 }
@@ -217,6 +220,9 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
 
     DisplayDefinition displayDefinition;
     in >> displayDefinition;
+    if(!in.contains("DisplayDefinition/HexAddress") && in.contains("DisplayHexAddresses")) {
+        displayDefinition.HexAddress = in.value("DisplayHexAddresses").toBool();
+    }
 
     bool isMaximized;
     isMaximized = in.value("ViewMaximized").toBool();
@@ -240,223 +246,11 @@ inline QSettings& operator >>(QSettings& in, FormModSca* frm)
     frm->setDataDisplayMode(dataDisplayMode);
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
-    frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setCodepage(in.value("Codepage").toString());
 
-    return in;
-}
-
-///
-/// \brief operator <<
-/// \param out
-/// \param frm
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const FormModSca* frm)
-{
-    if(!frm) return out;
-
-    out << frm->formId();
-
-    const auto wnd = frm->parentWidget();
-    out << wnd->isMaximized();
-    out << ((wnd->isMinimized() || wnd->isMaximized()) ?
-              wnd->sizeHint() : wnd->size());
-
-    out << frm->displayMode();
-    out << frm->dataDisplayMode();
-    out << frm->displayHexAddresses();
-
-    out << frm->backgroundColor();
-    out << frm->foregroundColor();
-    out << frm->statusColor();
-    out << frm->font();
-    out << frm->zoomPercent();
-
-    const auto dd = frm->displayDefinition();
-    out << dd.FormName;
-    out << dd.ScanRate;
-    out << dd.DeviceId;
-    out << dd.PointType;
-    out << dd.PointAddress;
-    out << dd.Length;
-    out << dd.LogViewLimit;
-    out << dd.ZeroBasedAddress;
-    out << dd.DataViewColumnsDistance;
-    out << dd.LeadingZeros;
-    out << dd.HexViewAddress;
-    out << dd.HexViewDeviceId;
-    out << dd.HexViewLength;
-
-    out << frm->byteOrder();
-    out << frm->simulationMap();
-    out << frm->descriptionMap();
-    out << frm->colorMap();
-    out << frm->codepage();
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param frm
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, FormModSca* frm)
-{
-    if(!frm) return in;
-    const auto ver = frm->property("Version").value<QVersionNumber>();
-    in.device()->setProperty("Form_Version", QVariant::fromValue(ver));
-
-    bool isMaximized;
-    in >> isMaximized;
-
-    QSize windowSize;
-    in >> windowSize;
-
-    DisplayMode displayMode;
-    in >> displayMode;
-
-    DataDisplayMode dataDisplayMode;
-    in >> dataDisplayMode;
-
-    bool hexAddresses;
-    in >> hexAddresses;
-
-    QColor bkgClr;
-    in >> bkgClr;
-
-    QColor fgClr;
-    in >> fgClr;
-
-    QColor stCrl;
-    in >> stCrl;
-
-    QFont font;
-    in >> font;
-
-    int zoomPercent = 100;
-    if(ver >= QVersionNumber(1, 9))
-    {
-        in >> zoomPercent;
-    }
-
-    DisplayDefinition dd;
-
-    if(ver >= QVersionNumber(1, 8))
-    {
-        in >> dd.FormName;
-    }
-
-    in >> dd.ScanRate;
-    in >> dd.DeviceId;
-    in >> dd.PointType;
-    in >> dd.PointAddress;
-    in >> dd.Length;
-    if(ver >= QVersionNumber(1, 4))
-    {
-        in >> dd.LogViewLimit;
-    }
-    if(ver >= QVersionNumber(1, 5))
-    {
-        in >> dd.ZeroBasedAddress;
-    }
-    if(ver >= QVersionNumber(1, 8)) {
-        in >> dd.DataViewColumnsDistance;
-        in >> dd.LeadingZeros;
-    }
-    if(ver >= QVersionNumber(1, 11)) {
-        in >> dd.HexViewAddress;
-        in >> dd.HexViewDeviceId;
-        in >> dd.HexViewLength;
-    }
-
-    ByteOrder byteOrder = ByteOrder::Direct;
-    ModbusSimulationMap simulationMap;
-    ModbusSimulationMap2 simulationMap2;
-    if(ver >= QVersionNumber(1, 1))
-    {
-        in >> byteOrder;
-
-        if(ver >= QVersionNumber(1, 10)) {
-            in >> simulationMap2;
-        }
-        else {
-            in >> simulationMap;
-        }
-    }
-
-    AddressDescriptionMap descriptionMap;
-    AddressDescriptionMap2 descriptionMap2;
-    if(ver >= QVersionNumber(1, 2))
-    {
-        if(ver >= QVersionNumber(1, 10)) {
-            in >> descriptionMap2;
-        }
-        else {
-            in >> descriptionMap;
-        }
-    }
-
-    AddressColorMap colorMap;
-    AddressColorMap2 colorMap2;
-    if(ver >= QVersionNumber(1, 9))
-    {
-        if(ver >= QVersionNumber(1, 10)) {
-            in >> colorMap2;
-        }
-        else {
-            in >> colorMap;
-        }
-    }
-
-    QString codepage;
-    if(ver >= QVersionNumber(1, 6))
-    {
-        in >> codepage;
-    }
-
-    if(in.status() != QDataStream::Ok)
-        return in;
-
-    auto wnd = frm->parentWidget();
-    wnd->resize(windowSize);
-    wnd->setWindowState(Qt::WindowActive);
-    if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
-
-    frm->setDisplayMode(displayMode);
-    frm->setDataDisplayMode(dataDisplayMode);
-    frm->setDisplayHexAddresses(hexAddresses);
-    frm->setBackgroundColor(bkgClr);
-    frm->setForegroundColor(fgClr);
-    frm->setStatusColor(stCrl);
-    frm->setFont(font);
-    frm->setZoomPercent(zoomPercent);
-    frm->setDisplayDefinition(dd);
-    frm->setByteOrder(byteOrder);
-    frm->setCodepage(codepage);
-
-    if(ver >= QVersionNumber(1,10)) {
-        for(auto&& k : simulationMap2.keys())
-            frm->startSimulation(k.Type, k.Address, simulationMap2[k]);
-
-        for(auto&& k : descriptionMap2.keys())
-            frm->setDescription(k.DeviceId, k.Type, k.Address, descriptionMap2[k]);
-
-        for(auto&& k : colorMap2.keys())
-            frm->setColor(k.DeviceId, k.Type, k.Address, colorMap2[k]);
-    }
-    else {
-        for(auto&& k : simulationMap.keys())
-            frm->startSimulation(k.first, k.second,  simulationMap[k]);
-
-        for(auto&& k : descriptionMap.keys())
-            frm->setDescription(dd.DeviceId, k.first, k.second, descriptionMap[k]);
-
-        for(auto&& k : colorMap.keys())
-            frm->setColor(dd.DeviceId, k.first, k.second, colorMap[k]);
-    }
+    PulseParams pulseParams;
+    in >> pulseParams;
+    frm->setPulseParams(pulseParams);
 
     return in;
 }
@@ -513,6 +307,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSca* frm)
 
     const auto dd = frm->displayDefinition();
     xml << dd;
+    xml << frm->pulseParams();
 
     {
         const auto simulationMap = frm->simulationMap();
@@ -708,6 +503,11 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSca* frm)
             else if (xml.name() == QLatin1String("DisplayDefinition")) {
                 xml >> dd;
                 frm->setDisplayDefinition(dd);
+            }
+            else if (xml.name() == QLatin1String("PulseParams")) {
+                PulseParams pulseParams;
+                xml >> pulseParams;
+                frm->setPulseParams(pulseParams);
             }
             else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
                 while (xml.readNextStartElement()) {

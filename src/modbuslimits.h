@@ -13,7 +13,7 @@ public:
         const int maxLen = qMin(lengthRange().to(), 65536 - offset);
         return { 1, qMax(1, maxLen) };
     }
-    static QRange<int> slaveRange()    { return { 1, 255   }; }
+    static QRange<int> slaveRange()    { return { 0, 255   }; }
 };
 
 #endif // MODBUSLIMITS_H

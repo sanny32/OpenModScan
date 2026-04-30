@@ -2,6 +2,7 @@
 #define MODBUSLOGWIDGET_H
 
 #include <QQueue>
+#include <QVector>
 #include <QListView>
 #include "modbusmessage.h"
 
@@ -23,6 +24,7 @@ public:
 
     void clear();
     void append(QSharedPointer<const ModbusMessage> data);
+    void appendBatch(const QVector<QSharedPointer<const ModbusMessage>>& batch);
     void update(){
         emit dataChanged(index(0), index(_items.size() - 1));
     }
@@ -54,6 +56,7 @@ public:
     QModelIndex index(int row);
 
     void addItem(QSharedPointer<const ModbusMessage> msg);
+    void addItems(const QVector<QSharedPointer<const ModbusMessage>>& messages);
     QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
 
     DataDisplayMode dataDisplayMode() const;

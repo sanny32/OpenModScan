@@ -26,6 +26,7 @@ public:
 
 signals:
     void modbusClientChanged(QModbusClient* cli);
+    void dataPulsed(FormModSca* form, DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -78,7 +79,6 @@ private slots:
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
     void on_actionSwapBytes_triggered();
-    void on_actionHexAddresses_triggered();
     void on_actionMsgParser_triggered();
     void on_actionAddressScan_triggered();
     void on_actionTextCapture_triggered();
@@ -139,14 +139,14 @@ private:
     FormModSca* firstMdiChild() const;
 
     FormModSca* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSca* frm, SerializationFormat format);
+    void saveMdiChild(FormModSca* frm);
     void closeMdiChild(FormModSca* frm);
 
-    void saveAs(FormModSca* frm, SerializationFormat format);
+    void saveAs(FormModSca* frm);
     void setViewMode(QMdiArea::ViewMode mode);
 
     void loadConfig(const QString& filename);
-    void saveConfig(const QString& filename, SerializationFormat format);
+    void saveConfig(const QString& filename);
 
     void loadProfile(const QString& filename);
     void saveProfile();

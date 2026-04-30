@@ -104,7 +104,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonSimulation">
+      <widget class="ColoredPushButton" name="pushButtonSimulation">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -116,6 +116,28 @@
        </property>
        <property name="text">
         <string>Auto Simulation: OFF</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="ColoredToolButton" name="toolButtonPulse">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">padding: 0px 12px;</string>
+       </property>
+       <property name="text">
+        <string>Pulse: OFF</string>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::MenuButtonPopup</enum>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonStyle::ToolButtonTextOnly</enum>
        </property>
       </widget>
      </item>
@@ -195,6 +217,14 @@
     </widget>
    </item>
   </layout>
+  <action name="actionPulseMode">
+   <property name="text">
+    <string>Pulse Mode...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -213,6 +243,16 @@
    <extends>QGroupBox</extends>
    <header>checkablegroupbox.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ColoredPushButton</class>
+   <extends>QPushButton</extends>
+   <header>coloredpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColoredToolButton</class>
+   <extends>QToolButton</extends>
+   <header>coloredtoolbutton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

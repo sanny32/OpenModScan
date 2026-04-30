@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.14.1
+    VERSION 1.15.0
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -107,6 +107,8 @@ set(SOURCES
     controls/bytelisttextedit.cpp
     controls/byteordercombobox.cpp
     controls/clickablelabel.cpp
+    controls/coloredpushbutton.cpp
+    controls/coloredtoolbutton.cpp
     controls/serialportcombobox.cpp
     controls/customlineedit.cpp
     controls/flowcontroltypecombobox.cpp
@@ -143,6 +145,7 @@ set(SOURCES
     dialogs/dialogmodbusscanner.cpp
     dialogs/dialogprintsettings.cpp
     dialogs/dialogprotocolselections.cpp
+    dialogs/dialogpulsemode.cpp
     dialogs/dialogsetuppresetdata.cpp
     dialogs/dialogusermsg.cpp
     dialogs/dialogwindowsmanager.cpp
@@ -188,6 +191,8 @@ set(HEADERS
     controls/bytelisttextedit.h
     controls/byteordercombobox.h
     controls/clickablelabel.h
+    controls/coloredpushbutton.h
+    controls/coloredtoolbutton.h
     controls/serialportcombobox.h
     controls/customlineedit.h
     controls/flowcontroltypecombobox.h
@@ -223,6 +228,7 @@ set(HEADERS
     dialogs/dialogmodbusscanner.h
     dialogs/dialogprintsettings.h
     dialogs/dialogprotocolselections.h
+    dialogs/dialogpulsemode.h
     dialogs/dialogsetuppresetdata.h
     dialogs/dialogusermsg.h
     dialogs/dialogwindowsmanager.h
@@ -310,6 +316,7 @@ set(UI_FILES
     dialogs/dialogmodbusscanner.ui
     dialogs/dialogprintsettings.ui
     dialogs/dialogprotocolselections.ui
+    dialogs/dialogpulsemode.ui
     dialogs/dialogsetuppresetdata.ui
     dialogs/dialogusermsg.ui
     dialogs/dialogwindowsmanager.ui
@@ -318,6 +325,30 @@ set(UI_FILES
     formmodsca.ui
     mainwindow.ui
 )
+
+set(UI_FILE_LIST "${CMAKE_CURRENT_BINARY_DIR}/ui_enum_files.txt")
+set(UI_FILES_ABSOLUTE)
+file(WRITE "${UI_FILE_LIST}" "")
+foreach(UI_FILE IN LISTS UI_FILES)
+    set(UI_FILE_ABSOLUTE "${CMAKE_CURRENT_SOURCE_DIR}/${UI_FILE}")
+    list(APPEND UI_FILES_ABSOLUTE "${UI_FILE_ABSOLUTE}")
+    file(APPEND "${UI_FILE_LIST}" "${UI_FILE_ABSOLUTE}\n")
+endforeach()
+
+add_custom_target(normalize_ui_enums ALL
+    COMMAND ${CMAKE_COMMAND}
+            "-DUI_FILE_LIST=${UI_FILE_LIST}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/NormalizeUiEnums.cmake"
+    DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/NormalizeUiEnums.cmake"
+        ${UI_FILES_ABSOLUTE}
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    COMMENT "Normalizing Qt Designer UI enum names for Qt5 compatibility..."
+    VERBATIM
+)
+
+add_dependencies(${PROJECT_NAME} normalize_ui_enums)
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY AUTOGEN_TARGET_DEPENDS normalize_ui_enums)
 
 set(TS_FILES
     translations/omodscan_ru.ts
@@ -332,7 +363,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::PrintS
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
-        SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
+        OPTIONS -no-obsolete
     )
     target_link_libraries(omodscan PRIVATE Qt::Core5Compat)
 elseif(Qt5_FOUND AND EXISTS ${Qt5_LUPDATE_EXECUTABLE})
@@ -340,6 +371,7 @@ elseif(Qt5_FOUND AND EXISTS ${Qt5_LUPDATE_EXECUTABLE})
         OUTPUT ${TS_FILES}
         COMMAND ${Qt5_LUPDATE_EXECUTABLE}
                 ${SOURCES} ${HEADERS} ${UI_FILES}
+                -no-obsolete
                 -ts ${TS_FILES}
         DEPENDS ${SOURCES} ${HEADERS} ${UI_FILES}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

@@ -270,9 +270,9 @@ function applyTranslations(lang) {
         const name = img.getAttribute('data-screenshot');
         img.onerror = function() {
             this.onerror = null;
-            this.src = `screenshot-${name}.en.png`;
+            this.src = `assets/screenshots/en/${name}.png`;
         };
-        img.src = `screenshot-${name}.${lang}.png`;
+        img.src = `assets/screenshots/${lang}/${name}.png`;
     });
 
     // Update subtitle with version if already fetched

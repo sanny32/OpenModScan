@@ -43,7 +43,6 @@ void DialogAutoStart::on_pushButtonBrowse_clicked()
 {
     QStringList filters;
     filters << tr("XML files (*.xml)");
-    filters << tr("All files (*)");
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _filepath.isEmpty() ? _savePath : _filepath, filters.join(";;"));
     if(filename.isEmpty()) return;

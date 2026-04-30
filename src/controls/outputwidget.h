@@ -285,33 +285,4 @@ private:
     QSharedPointer<OutputListModel> _listModel;
 };
 
-///
-/// \brief operator <<
-/// \param out
-/// \param key
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ItemMapKey& key)
-{
-    out << key.DeviceId;
-    out << key.Type;
-    out << key.Address;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ItemMapKey& key)
-{
-    in >> key.DeviceId;
-    in >> key.Type;
-    in >> key.Address;
-    return in;
-}
-
 #endif // OUTPUTWIDGET_H

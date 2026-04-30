@@ -139,14 +139,14 @@ private:
     FormModSca* firstMdiChild() const;
 
     FormModSca* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSca* frm, SerializationFormat format);
+    void saveMdiChild(FormModSca* frm);
     void closeMdiChild(FormModSca* frm);
 
-    void saveAs(FormModSca* frm, SerializationFormat format);
+    void saveAs(FormModSca* frm);
     void setViewMode(QMdiArea::ViewMode mode);
 
     void loadConfig(const QString& filename);
-    void saveConfig(const QString& filename, SerializationFormat format);
+    void saveConfig(const QString& filename);
 
     void loadProfile(const QString& filename);
     void saveProfile();

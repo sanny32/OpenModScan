@@ -77,33 +77,4 @@ private:
     QMap<ModbusSimulationMapKey, SimulationParams> _simulationMap;
 };
 
-///
-/// \brief operator <<
-/// \param out
-/// \param key
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ModbusSimulationMapKey& key)
-{
-    out << key.DeviceId;
-    out << key.Type;
-    out << key.Address;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ModbusSimulationMapKey& key)
-{
-    in >> key.DeviceId;
-    in >> key.Type;
-    in >> key.Address;
-    return in;
-}
-
 #endif // DATASIMULATOR_H

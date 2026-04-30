@@ -1,7 +1,6 @@
 #ifndef MODBUSWRITEPARAMS_H
 #define MODBUSWRITEPARAMS_H
 
-#include <QDataStream>
 #include <QSettings>
 #include <QVariant>
 #include <QXmlStreamReader>
@@ -58,36 +57,6 @@ inline QSettings& operator >>(QSettings& in, PulseParams& params)
     params.Duration = in.value("Duration", params.Duration).toInt();
     params.Restore = (PulseParams::RestoreMode)in.value("Restore", (uint)params.Restore).toUInt();
     in.endGroup();
-
-    return in;
-}
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const PulseParams& params)
-{
-    out << params.Duration;
-    out << (qint32)params.Restore;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, PulseParams& params)
-{
-    qint32 restore;
-    in >> params.Duration;
-    in >> restore;
-    params.Restore = (PulseParams::RestoreMode)restore;
 
     return in;
 }

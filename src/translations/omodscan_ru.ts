@@ -501,11 +501,6 @@
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
-    <message>
-        <location filename="../dialogs/dialogautostart.cpp" line="46"/>
-        <source>All files (*)</source>
-        <translation>Все файлы (*)</translation>
-    </message>
 </context>
 <context>
     <name>DialogCoilSimulation</name>
@@ -2388,34 +2383,24 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="396"/>
-        <location filename="../mainwindow.cpp" line="471"/>
-        <location filename="../mainwindow.cpp" line="476"/>
-        <location filename="../mainwindow.cpp" line="584"/>
-        <location filename="../mainwindow.cpp" line="610"/>
+        <location filename="../mainwindow.cpp" line="462"/>
+        <location filename="../mainwindow.cpp" line="560"/>
+        <location filename="../mainwindow.cpp" line="580"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="397"/>
-        <location filename="../mainwindow.cpp" line="467"/>
-        <location filename="../mainwindow.cpp" line="477"/>
-        <location filename="../mainwindow.cpp" line="585"/>
-        <location filename="../mainwindow.cpp" line="611"/>
-        <source>All files (*)</source>
-        <translation>Все файлы (*)</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="1426"/>
+        <location filename="../mainwindow.cpp" line="1395"/>
         <source>%1 was not found</source>
         <translation>%1 не найден</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1427"/>
+        <location filename="../mainwindow.cpp" line="1396"/>
         <source>Failed to open %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1523"/>
+        <location filename="../mainwindow.cpp" line="1492"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>Ошибка:

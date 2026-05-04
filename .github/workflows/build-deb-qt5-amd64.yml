@@ -243,7 +243,7 @@ jobs:
 
       - name: Create or update GitHub Release and upload DEB
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
           tag_name: ${{ github.ref_name }}

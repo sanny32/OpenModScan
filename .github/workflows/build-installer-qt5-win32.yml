@@ -38,7 +38,7 @@ env:
 jobs:
   build-omodscan:
     name: Build OpenModScan installer version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt5 on Windows x86
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
       - name: Checkout repository

@@ -2,6 +2,7 @@
 #define DIALOGMSGPARSER_H
 
 #include <QDialog>
+#include <QTimer>
 #include "enums.h"
 #include "modbusmessage.h"
 
@@ -31,6 +32,7 @@ private slots:
 
 private:
     Ui::DialogMsgParser *ui;
+    QTimer _updateTimer;
     QSharedPointer<const ModbusMessage> _mm;
 };
 

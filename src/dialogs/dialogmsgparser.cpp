@@ -1,5 +1,4 @@
 #include <QPushButton>
-#include <QAbstractEventDispatcher>
 #include "dialogmsgparser.h"
 #include "ui_dialogmsgparser.h"
 
@@ -24,8 +23,8 @@ DialogMsgParser::DialogMsgParser(DataDisplayMode mode, ModbusMessage::ProtocolTy
     ui->buttonRtu->setChecked(protocol == ModbusMessage::Rtu);
     ui->buttonTcp->setChecked(protocol == ModbusMessage::Tcp);
 
-    auto dispatcher = QAbstractEventDispatcher::instance();
-    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogMsgParser::on_awake);
+    connect(&_updateTimer, &QTimer::timeout, this, &DialogMsgParser::on_awake);
+    _updateTimer.start(100);
 }
 
 ///

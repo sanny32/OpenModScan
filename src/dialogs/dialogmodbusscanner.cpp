@@ -4,7 +4,6 @@
 #include <QSerialPortInfo>
 #include <QHostInfo>
 #include <QNetworkInterface>
-#include <QAbstractEventDispatcher>
 #include <QRegularExpressionValidator>
 #include "waitcursor.h"
 #include "modbuslimits.h"
@@ -147,8 +146,8 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
         ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
     });
 
-    auto dispatcher = QAbstractEventDispatcher::instance();
-    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
+    connect(&_updateTimer, &QTimer::timeout, this, &DialogModbusScanner::on_awake);
+    _updateTimer.start(100);
 
     on_comboBoxProtocols_modbusProtocolChanged(ui->comboBoxProtocols->currentModbusProtocol());
 }

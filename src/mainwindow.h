@@ -3,6 +3,7 @@
 
 #include <QMdiArea>
 #include <QMainWindow>
+#include <QTimer>
 #include <QTranslator>
 #include "ansimenu.h"
 #include "modbusclient.h"
@@ -173,6 +174,7 @@ private:
     DataSimulator* _dataSimulator;
     QString _savePath;
     QString _profile;
+    QTimer _updateTimer;
 
     // addressed with Base0
     quint32 _lastWriteSingleCoilAddress = 0;

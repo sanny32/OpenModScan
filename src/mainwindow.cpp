@@ -98,8 +98,8 @@ MainWindow::MainWindow(const QString& profile, QWidget *parent)
     _windowActionList = new WindowActionList(ui->menuWindow, ui->actionWindows);
     connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
 
-    auto dispatcher = QAbstractEventDispatcher::instance();
-    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
+    connect(&_updateTimer, &QTimer::timeout, this, &MainWindow::on_awake);
+    _updateTimer.start(100);
     connect(this, &MainWindow::dataPulsed, this, [](FormModSca* form, DataDisplayMode mode,
                                                 quint8 deviceId, QModbusDataUnit::RegisterType type,
                                                 quint16 addr, bool on) {

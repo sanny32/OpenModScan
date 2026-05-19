@@ -326,6 +326,7 @@ private:
     bool _finished = false;
     quint64 _scanTime = 0;
     QTimer _scanTimer;
+    QTimer _updateTimer;
     ModbusClient& _modbusClient;
 };
 

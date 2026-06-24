@@ -46,6 +46,7 @@ private slots:
     void on_comboBoxSubnetMask_activated(int index);
     void on_pushButtonScan_clicked();
     void on_pushButtonClear_clicked();
+    void on_pushButtonExport_clicked();
     void on_comboBoxProtocols_modbusProtocolChanged(ModbusProtocolsComboBox::ModbusProtocol mbp);
 
 private:
@@ -56,6 +57,7 @@ private:
     void clearProgress();
 
     QHostAddress subnetMask() const;
+    void exportCsv(const QString& filename) const;
 
     const ScanParams createSerialParams(TransmissionMode mode) const;
     const ScanParams createTcpParams(TransmissionMode mode) const;

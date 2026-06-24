@@ -1,5 +1,4 @@
 #include <QAction>
-#include <QAbstractEventDispatcher>
 #include "dialogwindowsmanager.h"
 #include "ui_dialogwindowsmanager.h"
 
@@ -35,13 +34,14 @@ DialogWindowsManager::DialogWindowsManager(const QList<QAction*>& actions, QActi
 
     }
 
-    connect(QAbstractEventDispatcher::instance(), &QAbstractEventDispatcher::awake, this, [this]
+    connect(&_updateTimer, &QTimer::timeout, this, [this]
     {
         const auto item = ui->listWidget->currentItem();
         ui->pushButtonActivate->setEnabled(item != nullptr);
         ui->pushButtonClose->setEnabled(item != nullptr);
         ui->pushButtonSave->setEnabled(item != nullptr && _saveAction != nullptr);
     });
+    _updateTimer.start(100);
 }
 
 ///

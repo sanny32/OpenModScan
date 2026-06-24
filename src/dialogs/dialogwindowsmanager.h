@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QMdiSubWindow>
 #include <QListWidgetItem>
+#include <QTimer>
 
 namespace Ui {
 class DialogWindowsManager;
@@ -31,6 +32,7 @@ private:
 
 private:
     Ui::DialogWindowsManager *ui;
+    QTimer _updateTimer;
 
 private:
     QAction* _saveAction;

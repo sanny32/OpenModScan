@@ -426,8 +426,8 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->info->setShowTimestamp(false);
     ui->logView->setFont(defaultMonospaceFont());
 
-    auto dispatcher = QAbstractEventDispatcher::instance();
-    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogAddressScan::on_awake);
+    connect(&_updateTimer, &QTimer::timeout, this, &DialogAddressScan::on_awake);
+    _updateTimer.start(100);
 
     connect(&_scanTimer, &QTimer::timeout, this, &DialogAddressScan::on_timeout);
     connect(&_modbusClient, &ModbusClient::modbusReply, this, &DialogAddressScan::on_modbusReply);

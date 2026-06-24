@@ -37,7 +37,7 @@ env:
 jobs:
   build-omodscan:
     name: Build OpenModScan installer version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt5 on Windows x64
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
       - name: Checkout repository
@@ -217,7 +217,7 @@ jobs:
 
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
           tag_name: ${{ github.ref_name }}

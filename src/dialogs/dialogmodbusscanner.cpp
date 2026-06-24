@@ -1,11 +1,13 @@
 #include <QDateTime>
+#include <QFile>
+#include <QFileDialog>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QSerialPortInfo>
 #include <QHostInfo>
 #include <QNetworkInterface>
-#include <QAbstractEventDispatcher>
 #include <QRegularExpressionValidator>
+#include <QTextStream>
 #include "waitcursor.h"
 #include "modbuslimits.h"
 #include "serialportutils.h"
@@ -56,6 +58,21 @@ static QHostAddress cidrToMask(int prefix)
     if(prefix <= 0) return QHostAddress(quint32(0));
     if(prefix >= 32) return QHostAddress(quint32(0xFFFFFFFF));
     return QHostAddress(quint32(0xFFFFFFFF << (32 - prefix)));
+}
+
+///
+/// \brief Protocol_toString
+/// \param cd
+/// \return
+///
+inline QString Protocol_toString(const ConnectionDetails& cd)
+{
+    if(cd.Type == ConnectionType::Serial)
+        return DialogModbusScanner::tr("Modbus RTU");
+
+    return cd.ModbusParams.Mode == TransmissionMode::RTU
+        ? DialogModbusScanner::tr("Modbus RTU/IP")
+        : DialogModbusScanner::tr("Modbus TCP/IP");
 }
 
 ///
@@ -147,8 +164,8 @@ DialogModbusScanner::DialogModbusScanner(bool hexAddress, QWidget *parent)
         ui->lineEditIPAddressTo->setValue((address | ~mask) - 1);
     });
 
-    auto dispatcher = QAbstractEventDispatcher::instance();
-    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &DialogModbusScanner::on_awake);
+    connect(&_updateTimer, &QTimer::timeout, this, &DialogModbusScanner::on_awake);
+    _updateTimer.start(100);
 
     on_comboBoxProtocols_modbusProtocolChanged(ui->comboBoxProtocols->currentModbusProtocol());
 }
@@ -203,6 +220,7 @@ void DialogModbusScanner::on_awake()
     ui->groupBoxSubnetMask->setEnabled(!inProgress);
     ui->groupBoxRequest->setEnabled(!inProgress);
     ui->pushButtonClear->setEnabled(!inProgress);
+    ui->pushButtonExport->setEnabled(!inProgress && ui->treeWidget->topLevelItemCount() > 0);
     ui->pushButtonScan->setEnabled((useSerial && ui->comboBoxSerial->count() > 0) || !useSerial);
     ui->pushButtonScan->setText(inProgress ? tr("Stop") : tr("Start"));
 }
@@ -232,6 +250,22 @@ void DialogModbusScanner::on_pushButtonClear_clicked()
         const auto result = QMessageBox::question(this, windowTitle(), tr("Clear scan results?"));
         if(result == QMessageBox::Yes) ui->treeWidget->clear();
     }
+}
+
+///
+/// \brief DialogModbusScanner::on_pushButtonExport_clicked
+///
+void DialogModbusScanner::on_pushButtonExport_clicked()
+{
+    auto filename = QFileDialog::getSaveFileName(this, QString(), windowTitle(), tr("CSV files (*.csv)"));
+    if(filename.isEmpty()) return;
+
+    if(!filename.endsWith(".csv", Qt::CaseInsensitive))
+    {
+        filename += ".csv";
+    }
+
+    exportCsv(filename);
 }
 
 ///
@@ -354,6 +388,80 @@ void DialogModbusScanner::on_comboBoxSubnetMask_activated(int index)
 QHostAddress DialogModbusScanner::subnetMask() const
 {
     return QHostAddress(ui->comboBoxSubnetMask->currentText().trimmed());
+}
+
+///
+/// \brief DialogModbusScanner::exportCsv
+/// \param filename
+///
+void DialogModbusScanner::exportCsv(const QString& filename) const
+{
+    QFile file(filename);
+    if(!file.open(QFile::WriteOnly))
+    {
+        QMessageBox::critical(const_cast<DialogModbusScanner*>(this), tr("Error"), file.errorString());
+        return;
+    }
+
+    QTextStream ts(&file);
+    ts.setGenerateByteOrderMark(true);
+
+    const char* delim = ";";
+    const auto firstItem = ui->treeWidget->topLevelItem(0)->child(0);
+    const auto firstCd = firstItem->data(0, Qt::UserRole).value<ConnectionDetails>();
+    const bool useSerial = firstCd.Type == ConnectionType::Serial;
+
+    if(useSerial)
+    {
+        ts << tr("Protocol") << delim
+           << tr("Device ID") << delim
+           << tr("Serial Port") << delim
+           << tr("Baud Rate") << delim
+           << tr("Data Bits") << delim
+           << tr("Parity") << delim
+           << tr("Stop Bits") << delim
+           << tr("Dubious") << "\n";
+    }
+    else
+    {
+        ts << tr("Protocol") << delim
+           << tr("Address") << delim
+           << tr("Port") << delim
+           << tr("Device ID") << "\n";
+    }
+
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); ++i)
+    {
+        const auto parentItem = ui->treeWidget->topLevelItem(i);
+        for(int j = 0; j < parentItem->childCount(); ++j)
+        {
+            const auto childItem = parentItem->child(j);
+            const auto cd = childItem->data(0, Qt::UserRole).value<ConnectionDetails>();
+            const auto deviceId = childItem->data(0, Qt::UserRole + 1).toInt();
+            const auto dubious = childItem->data(0, Qt::UserRole + 2).toBool();
+
+            ts << Protocol_toString(cd) << delim;
+            if(useSerial)
+            {
+                ts << deviceId << delim
+                   << cd.SerialParams.PortName << delim
+                   << cd.SerialParams.BaudRate << delim
+                   << cd.SerialParams.WordLength << delim
+                   << Parity_toString(cd.SerialParams.Parity) << delim
+                   << cd.SerialParams.StopBits << delim;
+            }
+            else
+            {
+                ts << cd.TcpParams.IPAddress << delim
+                   << cd.TcpParams.ServicePort << delim
+                   << deviceId;
+            }
+
+            if(useSerial)
+                ts << (dubious ? tr("Yes") : tr("No"));
+            ts << "\n";
+        }
+    }
 }
 
 ///

@@ -20,14 +20,14 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     ui->lineEditSlaveDevice->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditSlaveDevice->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveDevice->setValue(params.DeviceId);
-    ui->lineEditSlaveDevice->setHexButtonVisible(true);
+    ui->lineEditSlaveDevice->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditSlaveDevice->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.PointAddress);
-    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     switch(pointType)
@@ -47,7 +47,7 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     const int maxLen = qMin(typeMax, 65536 - offset);
     ui->lineEditNumberOfPoints->setInputRange(1, qMax(1, maxLen));
     ui->lineEditNumberOfPoints->setValue(params.Length);
-    ui->lineEditNumberOfPoints->setHexButtonVisible(true);
+    ui->lineEditNumberOfPoints->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditNumberOfPoints->setHexView(dd.HexViewLength);
 
     ui->buttonBox->setFocus();

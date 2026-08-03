@@ -50,7 +50,13 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
+# AI agents
+.skills
 .claude
+.codex_tmp
+.vscode
+AGENTS.md
+
 .directory
 *.bat
 *.qmake.stash
@@ -60,7 +66,5 @@ CMakeLists.txt.user*
 *.ts text eol=lf
 *.log
 src/res/license.txt
-/docs/PROJECT_SUMMARY.md
-/docs/README.md
-/docs/SITE_STRUCTURE.md
-/docs/DEPLOYMENT.md
+/docs/*.md
+

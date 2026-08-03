@@ -39,13 +39,13 @@ FormModSca::FormModSca(int id, ModbusClient& client, DataSimulator* simulator, M
 
     ui->lineEditAddress->blockSignals(true);
     ui->lineEditAddress->setLeadingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(_addrSpace, true));
     ui->lineEditAddress->setValue(1);
     ui->lineEditAddress->setHexButtonVisible(true);
     ui->lineEditAddress->blockSignals(false);
 
     ui->lineEditLength->blockSignals(true);
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(1, true));
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(1, true, _addrSpace));
     ui->lineEditLength->setValue(50);
     ui->lineEditLength->setHexButtonVisible(true);
     ui->lineEditLength->blockSignals(false);
@@ -193,6 +193,8 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.HexViewAddress  = ui->lineEditAddress->hexView();
     dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
     dd.HexViewLength   = ui->lineEditLength->hexView();
+    dd.ShowHexViewButtons = ui->lineEditAddress->hexButtonVisible();
+    dd.AddrSpace = _addrSpace;
 
     return dd;
 }
@@ -206,12 +208,14 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     if(!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
 
+    _addrSpace = dd.AddrSpace;
     _timer.setInterval(dd.ScanRate);
 
     ui->lineEditDeviceId->blockSignals(true);
     ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditDeviceId->blockSignals(false);
+    ui->lineEditDeviceId->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
 
     ui->comboBoxAddressBase->blockSignals(true);
@@ -220,16 +224,18 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
 
     ui->lineEditAddress->blockSignals(true);
     ui->lineEditAddress->setLeadingZeroes(dd.LeadingZeros);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditAddress->blockSignals(false);
+    ui->lineEditAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress));
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, dd.AddrSpace));
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLength->blockSignals(false);
+    ui->lineEditLength->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditLength->setHexView(dd.HexViewLength);
 
     ui->comboBoxModbusPointType->blockSignals(true);
@@ -289,7 +295,7 @@ void FormModSca::setDisplayHexAddresses(bool on)
     ui->outputWidget->setDisplayHexAddresses(on);
 
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(_addrSpace, ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
 }
 
 ///
@@ -677,7 +683,7 @@ void FormModSca::on_timeout()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to())
+    if(addr + dd.Length <= ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress).to())
     {
         if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
         {
@@ -688,7 +694,7 @@ void FormModSca::on_timeout()
             _noSlaveResponsesCounter++;
         }
 
-        _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
+        sendPollRequest();
     }
 }
 
@@ -713,8 +719,8 @@ void FormModSca::beginUpdate()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ?  0 : 1);
-    if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to()) {
-        _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
+    if(addr + dd.Length <= ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress).to()) {
+        sendPollRequest();
     }
     else
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
@@ -722,6 +728,24 @@ void FormModSca::beginUpdate()
     if(pollState() == PollState::Off) {
         setPollState(PollState::Running);
     }
+}
+
+///
+/// \brief FormModSca::sendPollRequest
+///
+/// Sends a read request for the current display definition unless the previous
+/// one is still pending. Without that check every scan tick enqueues one more
+/// request while the slave stays silent, so the transport queue keeps growing
+/// and is flushed as a burst once the slave answers again.
+///
+void FormModSca::sendPollRequest()
+{
+    if(!_pollReply.isNull())
+        return;
+
+    const auto dd = displayDefinition();
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    _pollReply = _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
 }
 
 ///
@@ -820,6 +844,9 @@ void FormModSca::on_modbusReply(const ModbusReply* const reply)
 {
     if(!reply) return;
 
+    if(_pollReply.data() == reply)
+        _pollReply.clear();
+
     const QModbusResponse response = reply->rawResult();
     const bool hasError = reply->error() != ModbusDevice::NoError;
 
@@ -900,7 +927,7 @@ void FormModSca::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const bool zeroBased = ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0;
     const int address = ui->lineEditAddress->value<int>();
-    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased);
+    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased, _addrSpace);
 
     ui->lineEditLength->setInputRange(lenRange);
     if(ui->lineEditLength->value<int>() > lenRange.to()) {

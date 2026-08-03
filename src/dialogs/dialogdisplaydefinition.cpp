@@ -22,27 +22,29 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->comboBoxColumnsDistance->setEditText(QString::number(dd.DataViewColumnsDistance));
     ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
     ui->checkBoxHexAddresses->setChecked(dd.HexAddress);
+    ui->checkBoxShowHexViewButtons->setChecked(dd.ShowHexViewButtons);
 
     ui->lineEditScanRate->setInputRange(20, 36000000);
     ui->lineEditPointAddress->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress));
+    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, dd.AddrSpace));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLogLimit->setInputRange(4, 1000);
     ui->checkBoxAutoscrollLog->setChecked(dd.AutoscrollLog);
 
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    ui->comboBoxAddressSpace->setCurrentAddressSpace(dd.AddrSpace);
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditScanRate->setValue(dd.ScanRate);
     ui->lineEditPointAddress->setValue(dd.PointAddress);
-    ui->lineEditPointAddress->setHexButtonVisible(true);
+    ui->lineEditPointAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditPointAddress->setHexView(dd.HexViewAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
-    ui->lineEditSlaveAddress->setHexButtonVisible(true);
+    ui->lineEditSlaveAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditSlaveAddress->setHexView(dd.HexViewDeviceId);
     ui->lineEditLength->setValue(dd.Length);
-    ui->lineEditLength->setHexButtonVisible(true);
+    ui->lineEditLength->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditLength->setHexView(dd.HexViewLength);
     ui->lineEditLogLimit->setValue(dd.LogViewLimit);
 
@@ -72,8 +74,13 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.AutoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     _displayDefinition.HexAddress = ui->checkBoxHexAddresses->isChecked();
+    _displayDefinition.AddrSpace = ui->comboBoxAddressSpace->currentAddressSpace();
     _displayDefinition.DataViewColumnsDistance = ui->comboBoxColumnsDistance->currentText().toUInt();
     _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
+    _displayDefinition.ShowHexViewButtons = ui->checkBoxShowHexViewButtons->isChecked();
+    _displayDefinition.HexViewAddress = ui->lineEditPointAddress->hexView();
+    _displayDefinition.HexViewDeviceId = ui->lineEditSlaveAddress->hexView();
+    _displayDefinition.HexViewLength = ui->lineEditLength->hexView();
 
     QFixedSizeDialog::accept();
 }
@@ -85,7 +92,7 @@ void DialogDisplayDefinition::on_lineEditPointAddress_valueChanged(const QVarian
 {
     const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     const int address = ui->lineEditPointAddress->value<int>();
-    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased);
+    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased, ui->comboBoxAddressSpace->currentAddressSpace());
 
     ui->lineEditLength->setInputRange(lenRange);
     if(ui->lineEditLength->value<int>() > lenRange.to()) {
@@ -102,16 +109,41 @@ void DialogDisplayDefinition::on_comboBoxAddressBase_addressBaseChanged(AddressB
 {
     const auto addr = ui->lineEditPointAddress->value<int>();
     const bool zeroBased = (base == AddressBase::Base0);
+    const auto space = ui->comboBoxAddressSpace->currentAddressSpace();
 
-    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(zeroBased));
+    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(space, zeroBased));
     ui->lineEditPointAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
 
     const int newAddr = ui->lineEditPointAddress->value<int>();
-    const auto lenRange = ModbusLimits::lengthRange(newAddr, zeroBased);
+    const auto lenRange = ModbusLimits::lengthRange(newAddr, zeroBased, space);
 
     ui->lineEditLength->setInputRange(lenRange);
     if(ui->lineEditLength->value<int>() > lenRange.to()) {
         ui->lineEditLength->setValue(lenRange.to());
+    }
+}
+
+///
+/// \brief DialogDisplayDefinition::on_comboBoxAddressSpace_addressSpaceChanged
+/// \param space
+///
+void DialogDisplayDefinition::on_comboBoxAddressSpace_addressSpaceChanged(AddressSpace space)
+{
+    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const auto addrRange = ModbusLimits::addressRange(space, zeroBased);
+    const auto addr = ui->lineEditPointAddress->value<int>();
+
+    ui->lineEditPointAddress->setInputRange(addrRange);
+    ui->lineEditPointAddress->setValue(qBound(addrRange.from(), addr, addrRange.to()));
+    ui->lineEditPointAddress->update();
+
+    const int newAddr = ui->lineEditPointAddress->value<int>();
+    const auto lenRange = ModbusLimits::lengthRange(newAddr, zeroBased, space);
+
+    ui->lineEditLength->setInputRange(lenRange);
+    if(ui->lineEditLength->value<int>() > lenRange.to()) {
+        ui->lineEditLength->setValue(lenRange.to());
+        ui->lineEditLength->update();
     }
 }
 
@@ -132,11 +164,31 @@ void DialogDisplayDefinition::on_checkBoxHexAddresses_toggled(bool checked)
 {
     const int addr = ui->lineEditPointAddress->value<int>();
     const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
-    const auto addrRange = ModbusLimits::addressRange(zeroBased);
+    const auto addrRange = ModbusLimits::addressRange(ui->comboBoxAddressSpace->currentAddressSpace(), zeroBased);
 
     ui->lineEditPointAddress->setLeadingZeroes(ui->checkBoxLeadingZeros->isChecked());
     ui->lineEditPointAddress->setInputMode(checked ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(addrRange);
     ui->lineEditPointAddress->setValue(qBound(addrRange.from(), addr, addrRange.to()));
     ui->lineEditPointAddress->update();
+}
+
+///
+/// \brief DialogDisplayDefinition::on_checkBoxShowHexViewButtons_toggled
+/// \param checked
+///
+void DialogDisplayDefinition::on_checkBoxShowHexViewButtons_toggled(bool checked)
+{
+    const QList<NumericLineEdit*> lineEdits = {
+        ui->lineEditPointAddress,
+        ui->lineEditSlaveAddress,
+        ui->lineEditLength
+    };
+
+    for(auto&& lineEdit : lineEdits)
+    {
+        // hex view is only reachable through the hex view buttons
+        if(!checked) lineEdit->setHexView(false);
+        lineEdit->setHexButtonVisible(checked);
+    }
 }

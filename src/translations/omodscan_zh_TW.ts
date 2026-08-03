@@ -1907,7 +1907,7 @@ Valid Slave Responses: %2</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="893"/>
+        <location filename="../formmodsca.cpp" line="914"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
@@ -1917,7 +1917,7 @@ Valid Slave Responses: %2</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="847"/>
+        <location filename="../formmodsca.cpp" line="868"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>
@@ -2475,29 +2475,29 @@ Valid Slave Responses: %2</source>
         <translation>無效的 Modbus 要求</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="590"/>
-        <location filename="../modbusclient.cpp" line="775"/>
+        <location filename="../modbusclient.cpp" line="591"/>
+        <location filename="../modbusclient.cpp" line="776"/>
         <source>Coil Write Failure</source>
         <translation>線圈寫入失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="594"/>
-        <location filename="../modbusclient.cpp" line="780"/>
+        <location filename="../modbusclient.cpp" line="595"/>
+        <location filename="../modbusclient.cpp" line="781"/>
         <source>Register Write Failure</source>
         <translation>暫存器寫入失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="632"/>
+        <location filename="../modbusclient.cpp" line="633"/>
         <source>Mask Write Register Failure</source>
         <translation>暫存器寫入遮罩失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="784"/>
+        <location filename="../modbusclient.cpp" line="785"/>
         <source>Mask Register Write Failure</source>
         <translation>遮罩暫存器寫入失敗</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="802"/>
+        <location filename="../modbusclient.cpp" line="803"/>
         <source>Connection error. %1</source>
         <translation>連繫錯誤：%1</translation>
     </message>

@@ -1908,7 +1908,7 @@ Valid Slave Responses: %2</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="893"/>
+        <location filename="../formmodsca.cpp" line="914"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
@@ -1918,7 +1918,7 @@ Valid Slave Responses: %2</source>
         <translation>设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="847"/>
+        <location filename="../formmodsca.cpp" line="868"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>
@@ -2476,29 +2476,29 @@ Valid Slave Responses: %2</source>
         <translation>无效的 Modbus 请求</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="590"/>
-        <location filename="../modbusclient.cpp" line="775"/>
+        <location filename="../modbusclient.cpp" line="591"/>
+        <location filename="../modbusclient.cpp" line="776"/>
         <source>Coil Write Failure</source>
         <translation>线圈写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="594"/>
-        <location filename="../modbusclient.cpp" line="780"/>
+        <location filename="../modbusclient.cpp" line="595"/>
+        <location filename="../modbusclient.cpp" line="781"/>
         <source>Register Write Failure</source>
         <translation>寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="632"/>
+        <location filename="../modbusclient.cpp" line="633"/>
         <source>Mask Write Register Failure</source>
         <translation>寄存器写入掩码失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="784"/>
+        <location filename="../modbusclient.cpp" line="785"/>
         <source>Mask Register Write Failure</source>
         <translation>掩码寄存器写入失败</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="802"/>
+        <location filename="../modbusclient.cpp" line="803"/>
         <source>Connection error. %1</source>
         <translation>连接错误：%1</translation>
     </message>

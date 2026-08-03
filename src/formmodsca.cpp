@@ -688,7 +688,7 @@ void FormModSca::on_timeout()
             _noSlaveResponsesCounter++;
         }
 
-        _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
+        sendPollRequest();
     }
 }
 
@@ -714,7 +714,7 @@ void FormModSca::beginUpdate()
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ?  0 : 1);
     if(addr + dd.Length <= ModbusLimits::addressRange(dd.ZeroBasedAddress).to()) {
-        _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
+        sendPollRequest();
     }
     else
         ui->outputWidget->setStatus(tr("No Scan: Invalid Data Length Specified"));
@@ -722,6 +722,24 @@ void FormModSca::beginUpdate()
     if(pollState() == PollState::Off) {
         setPollState(PollState::Running);
     }
+}
+
+///
+/// \brief FormModSca::sendPollRequest
+///
+/// Sends a read request for the current display definition unless the previous
+/// one is still pending. Without that check every scan tick enqueues one more
+/// request while the slave stays silent, so the transport queue keeps growing
+/// and is flushed as a burst once the slave answers again.
+///
+void FormModSca::sendPollRequest()
+{
+    if(!_pollReply.isNull())
+        return;
+
+    const auto dd = displayDefinition();
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    _pollReply = _modbusClient.sendReadRequest(dd.PointType, addr, dd.Length, dd.DeviceId, _formId);
 }
 
 ///
@@ -819,6 +837,9 @@ void FormModSca::on_modbusResponse(int requestGroupId, QSharedPointer<const Modb
 void FormModSca::on_modbusReply(const ModbusReply* const reply)
 {
     if(!reply) return;
+
+    if(_pollReply.data() == reply)
+        _pollReply.clear();
 
     const QModbusResponse response = reply->rawResult();
     const bool hasError = reply->error() != ModbusDevice::NoError;

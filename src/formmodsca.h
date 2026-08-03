@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QWidget>
 #include <QTimer>
+#include <QPointer>
 #include <QPrinter>
 #include <QVersionNumber>
 #include "enums.h"
@@ -145,6 +146,7 @@ private slots:
 private:
     ModbusMessage::ProtocolType protocol() const;
     void beginUpdate();
+    void sendPollRequest();
     bool isValidReply(const ModbusReply* const reply) const;
 
     void logModbusMessage(int requestGroupId, QSharedPointer<const ModbusMessage> msg);
@@ -155,6 +157,7 @@ private:
     uint _validSlaveResponses;
     uint _noSlaveResponsesCounter;
     QTimer _timer;
+    QPointer<ModbusReply> _pollReply;
     QString _filename;
     ModbusClient& _modbusClient;
     DataSimulator* _dataSimulator;

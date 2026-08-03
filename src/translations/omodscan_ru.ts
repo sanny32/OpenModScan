@@ -1908,7 +1908,7 @@ Valid Slave Responses: %2</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="893"/>
+        <location filename="../formmodsca.cpp" line="914"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
@@ -1918,7 +1918,7 @@ Valid Slave Responses: %2</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="847"/>
+        <location filename="../formmodsca.cpp" line="868"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -2475,29 +2475,29 @@ Valid Slave Responses: %2</source>
         <translation>Некорректный запрос Modbus</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="590"/>
-        <location filename="../modbusclient.cpp" line="775"/>
+        <location filename="../modbusclient.cpp" line="591"/>
+        <location filename="../modbusclient.cpp" line="776"/>
         <source>Coil Write Failure</source>
         <translation>Ошибка записи в Coil регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="594"/>
-        <location filename="../modbusclient.cpp" line="780"/>
+        <location filename="../modbusclient.cpp" line="595"/>
+        <location filename="../modbusclient.cpp" line="781"/>
         <source>Register Write Failure</source>
         <translation>Ошибка записи в регистр</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="632"/>
+        <location filename="../modbusclient.cpp" line="633"/>
         <source>Mask Write Register Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="784"/>
+        <location filename="../modbusclient.cpp" line="785"/>
         <source>Mask Register Write Failure</source>
         <translation>Ошибка записи в регистр по маске</translation>
     </message>
     <message>
-        <location filename="../modbusclient.cpp" line="802"/>
+        <location filename="../modbusclient.cpp" line="803"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>

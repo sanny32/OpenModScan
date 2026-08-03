@@ -961,7 +961,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string notr="true">中國人</string>
+    <string notr="true">中文(繁体)</string>
    </property>
   </action>
   <action name="actionWriteSingleCoil">

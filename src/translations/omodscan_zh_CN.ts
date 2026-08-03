@@ -681,33 +681,38 @@
         <translation>无符号值显示前导零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="222"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="219"/>
+        <source>Show hex view buttons</source>
+        <translation>显示十六进制视图按钮</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="229"/>
         <source>Log View</source>
         <translation>日志</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="237"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="244"/>
         <source>Log View Limit:</source>
         <translation>日志视图：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="271"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="278"/>
         <source>(rows)</source>
         <translation>（行）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="293"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="300"/>
         <source>Autoscroll Log View</source>
         <translatorcomment>自动滚动日志视图</translatorcomment>
         <translation>自动滚动日志视图</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="309"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="316"/>
         <source>Modbus Data</source>
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="398"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="405"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
@@ -717,27 +722,27 @@
         <translation>十六进制地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="473"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="480"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="369"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="376"/>
         <source>Point Address:</source>
         <translation>寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="324"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="331"/>
         <source>Device ID: </source>
         <translation>设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="421"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="428"/>
         <source>Address Space:</source>
         <translation>地址空间：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="444"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="451"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
@@ -1893,12 +1898,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>设备轮询已暂停...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="241"/>
+        <location filename="../formmodsca.cpp" line="245"/>
         <source>Data Uninitialized</source>
         <translation>数据未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="507"/>
+        <location filename="../formmodsca.cpp" line="511"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1907,7 +1912,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="511"/>
+        <location filename="../formmodsca.cpp" line="515"/>
         <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
@@ -1916,29 +1921,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="514"/>
+        <location filename="../formmodsca.cpp" line="518"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>轮询次数：%1
 有效的从站响应：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="722"/>
+        <location filename="../formmodsca.cpp" line="726"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="916"/>
+        <location filename="../formmodsca.cpp" line="920"/>
         <source>Device NOT CONNECTED!</source>
         <translation>设备未连接！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="688"/>
+        <location filename="../formmodsca.cpp" line="692"/>
         <source>No Responses from Slave Device</source>
         <translation>设备未响应</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="870"/>
+        <location filename="../formmodsca.cpp" line="874"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到无效的 MODBUS 请求响应</translation>
     </message>

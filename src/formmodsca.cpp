@@ -193,6 +193,7 @@ DisplayDefinition FormModSca::displayDefinition() const
     dd.HexViewAddress  = ui->lineEditAddress->hexView();
     dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
     dd.HexViewLength   = ui->lineEditLength->hexView();
+    dd.ShowHexViewButtons = ui->lineEditAddress->hexButtonVisible();
     dd.AddrSpace = _addrSpace;
 
     return dd;
@@ -214,6 +215,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditDeviceId->blockSignals(false);
+    ui->lineEditDeviceId->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
 
     ui->comboBoxAddressBase->blockSignals(true);
@@ -225,6 +227,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditAddress->blockSignals(false);
+    ui->lineEditAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     ui->lineEditLength->blockSignals(true);
@@ -232,6 +235,7 @@ void FormModSca::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, dd.AddrSpace));
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLength->blockSignals(false);
+    ui->lineEditLength->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditLength->setHexView(dd.HexViewLength);
 
     ui->comboBoxModbusPointType->blockSignals(true);

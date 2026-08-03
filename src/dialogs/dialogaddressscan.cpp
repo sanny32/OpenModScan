@@ -413,13 +413,13 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLength->setInputRange(2, ModbusLimits::addressSpaceSize(dd.AddrSpace) - 6);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
-    ui->lineEditStartAddress->setHexButtonVisible(true);
+    ui->lineEditStartAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditStartAddress->setHexView(dd.HexViewAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
-    ui->lineEditSlaveAddress->setHexButtonVisible(true);
+    ui->lineEditSlaveAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditSlaveAddress->setHexView(dd.HexViewDeviceId);
     ui->lineEditLength->setValue(999);
-    ui->lineEditLength->setHexButtonVisible(true);
+    ui->lineEditLength->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditLength->setHexView(dd.HexViewLength);
     ui->tabWidget->setCurrentIndex(0);
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);

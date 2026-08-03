@@ -22,6 +22,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->comboBoxColumnsDistance->setEditText(QString::number(dd.DataViewColumnsDistance));
     ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
     ui->checkBoxHexAddresses->setChecked(dd.HexAddress);
+    ui->checkBoxShowHexViewButtons->setChecked(dd.ShowHexViewButtons);
 
     ui->lineEditScanRate->setInputRange(20, 36000000);
     ui->lineEditPointAddress->setLeadingZeroes(dd.LeadingZeros);
@@ -37,13 +38,13 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
     ui->lineEditScanRate->setValue(dd.ScanRate);
     ui->lineEditPointAddress->setValue(dd.PointAddress);
-    ui->lineEditPointAddress->setHexButtonVisible(true);
+    ui->lineEditPointAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditPointAddress->setHexView(dd.HexViewAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
-    ui->lineEditSlaveAddress->setHexButtonVisible(true);
+    ui->lineEditSlaveAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditSlaveAddress->setHexView(dd.HexViewDeviceId);
     ui->lineEditLength->setValue(dd.Length);
-    ui->lineEditLength->setHexButtonVisible(true);
+    ui->lineEditLength->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditLength->setHexView(dd.HexViewLength);
     ui->lineEditLogLimit->setValue(dd.LogViewLimit);
 
@@ -76,6 +77,10 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.AddrSpace = ui->comboBoxAddressSpace->currentAddressSpace();
     _displayDefinition.DataViewColumnsDistance = ui->comboBoxColumnsDistance->currentText().toUInt();
     _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
+    _displayDefinition.ShowHexViewButtons = ui->checkBoxShowHexViewButtons->isChecked();
+    _displayDefinition.HexViewAddress = ui->lineEditPointAddress->hexView();
+    _displayDefinition.HexViewDeviceId = ui->lineEditSlaveAddress->hexView();
+    _displayDefinition.HexViewLength = ui->lineEditLength->hexView();
 
     QFixedSizeDialog::accept();
 }
@@ -166,4 +171,24 @@ void DialogDisplayDefinition::on_checkBoxHexAddresses_toggled(bool checked)
     ui->lineEditPointAddress->setInputRange(addrRange);
     ui->lineEditPointAddress->setValue(qBound(addrRange.from(), addr, addrRange.to()));
     ui->lineEditPointAddress->update();
+}
+
+///
+/// \brief DialogDisplayDefinition::on_checkBoxShowHexViewButtons_toggled
+/// \param checked
+///
+void DialogDisplayDefinition::on_checkBoxShowHexViewButtons_toggled(bool checked)
+{
+    const QList<NumericLineEdit*> lineEdits = {
+        ui->lineEditPointAddress,
+        ui->lineEditSlaveAddress,
+        ui->lineEditLength
+    };
+
+    for(auto&& lineEdit : lineEdits)
+    {
+        // hex view is only reachable through the hex view buttons
+        if(!checked) lineEdit->setHexView(false);
+        lineEdit->setHexButtonVisible(checked);
+    }
 }

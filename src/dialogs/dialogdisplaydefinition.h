@@ -32,6 +32,7 @@ private slots:
     void on_comboBoxAddressSpace_addressSpaceChanged(AddressSpace space);
     void on_checkBoxLeadingZeros_toggled(bool checked);
     void on_checkBoxHexAddresses_toggled(bool checked);
+    void on_checkBoxShowHexViewButtons_toggled(bool checked);
 
 private:
     DisplayDefinition _displayDefinition;

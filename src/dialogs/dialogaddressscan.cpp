@@ -380,6 +380,7 @@ bool LogViewProxyModel::filterAcceptsRow(int source_row, const QModelIndex &sour
 DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMode mode, ByteOrder order, ModbusClient& client, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogAddressScan)
+    ,_addrSpace(dd.AddrSpace)
     ,_modbusClient(client)
 {
     ui->setupUi(this);
@@ -408,17 +409,17 @@ DialogAddressScan::DialogAddressScan(const DisplayDefinition& dd, DataDisplayMod
     ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->lineEditStartAddress->setLeadingZeroes(true);
     ui->lineEditStartAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
+    ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditLength->setInputRange(2, 65530);
+    ui->lineEditLength->setInputRange(2, ModbusLimits::addressSpaceSize(dd.AddrSpace) - 6);
     ui->lineEditStartAddress->setValue(dd.PointAddress);
-    ui->lineEditStartAddress->setHexButtonVisible(true);
+    ui->lineEditStartAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditStartAddress->setHexView(dd.HexViewAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
-    ui->lineEditSlaveAddress->setHexButtonVisible(true);
+    ui->lineEditSlaveAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditSlaveAddress->setHexView(dd.HexViewDeviceId);
     ui->lineEditLength->setValue(999);
-    ui->lineEditLength->setHexButtonVisible(true);
+    ui->lineEditLength->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditLength->setHexView(dd.HexViewLength);
     ui->tabWidget->setCurrentIndex(0);
     ui->checkBoxHexView->setChecked(mode == DataDisplayMode::Hex);
@@ -558,7 +559,7 @@ void DialogAddressScan::on_comboBoxAddressBase_addressBaseChanged(AddressBase ba
 {
     const auto addr = ui->lineEditStartAddress->value<int>();
 
-    ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(base == AddressBase::Base0));
+    ui->lineEditStartAddress->setInputRange(ModbusLimits::addressRange(_addrSpace, base == AddressBase::Base0));
     ui->lineEditStartAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
 
     ((TableViewItemModel*)ui->tableView->model())->setAddressBase(base);
@@ -780,7 +781,7 @@ void DialogAddressScan::sendReadRequest()
     const auto addressBase = ui->comboBoxAddressBase->currentAddressBase();
     const auto address = (addressBase == AddressBase::Base0 ? pointAddress : pointAddress - 1) + _requestCount;
 
-    if(address > ModbusLimits::addressRange().to())
+    if(address > ModbusLimits::addressRange(_addrSpace).to())
     {
         stopScan();
     }

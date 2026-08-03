@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodscan
-    VERSION 1.15.0
+    VERSION 1.15.1
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -101,6 +101,7 @@ set(SOURCES
     datadelegate.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
+    controls/addressspacecombobox.cpp
     controls/bitpatterncontrol.cpp
     controls/checkablegroupbox.cpp
     controls/booleancombobox.cpp
@@ -185,6 +186,7 @@ set(HEADERS
     connectiondetails.h
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
+    controls/addressspacecombobox.h
     controls/bitpatterncontrol.h
     controls/checkablegroupbox.h
     controls/booleancombobox.h

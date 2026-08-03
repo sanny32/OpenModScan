@@ -158,30 +158,31 @@ void ModbusClient::sendRawRequest(const QModbusRequest& request, int server, int
 /// \param valueCount
 /// \param server
 /// \param requestGroupId
+/// \return pending reply or nullptr if no reply is to be awaited
 ///
-void ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestGroupId)
+ModbusReply* ModbusClient::sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestGroupId)
 {
     if(_modbusClient == nullptr || state() != ModbusDevice::ConnectedState)
     {
-        return;
+        return nullptr;
     }
 
     const QModbusDataUnit dataUnit(pointType, startAddress, valueCount);
     const auto request = createReadRequest(dataUnit);
-    if(!request.isValid()) return;
+    if(!request.isValid()) return nullptr;
 
-    if(auto reply = _modbusClient->sendReadRequest(dataUnit, server, requestGroupId))
+    auto reply = _modbusClient->sendReadRequest(dataUnit, server, requestGroupId);
+    if(!reply) return nullptr;
+
+    reply->setProperty("RequestData", QVariant::fromValue(dataUnit));
+    if (reply->isFinished())
     {
-        reply->setProperty("RequestData", QVariant::fromValue(dataUnit));
-        if (!reply->isFinished())
-        {
-            connect(reply, &ModbusReply::finished, this, &ModbusClient::on_readReply);
-        }
-        else
-        {
-            delete reply; // broadcast replies return immediately
-        }
+        delete reply; // broadcast replies return immediately
+        return nullptr;
     }
+
+    connect(reply, &ModbusReply::finished, this, &ModbusClient::on_readReply);
+    return reply;
 }
 
 ///

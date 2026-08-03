@@ -24,14 +24,14 @@ DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, co
     ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);
-    ui->lineEditNode->setHexButtonVisible(true);
+    ui->lineEditNode->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditNode->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
-    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexButtonVisible(dd.ShowHexViewButtons);
     ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     ui->controlAndMask->setValue(params.AndMask);

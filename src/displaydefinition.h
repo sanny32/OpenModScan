@@ -28,16 +28,27 @@ struct DisplayDefinition
     bool HexViewAddress  = false;
     bool HexViewDeviceId = false;
     bool HexViewLength   = false;
+    bool ShowHexViewButtons = true;
 
     void normalize()
     {
+        AddrSpace = qBound(AddressSpace::Addr6Digits, AddrSpace, AddressSpace::Addr5Digits);
         ScanRate = qBound(20U, ScanRate, 3600000U);
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
-        PointAddress = qMax<quint16>(ModbusLimits::addressRange(ZeroBasedAddress).from(), PointAddress);
+
+        const auto addrRange = ModbusLimits::addressRange(AddrSpace, ZeroBasedAddress);
+        PointAddress = qBound<int>(addrRange.from(), PointAddress, addrRange.to());
+
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
-        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
+
+        const auto lenRange = ModbusLimits::lengthRange(PointAddress, ZeroBasedAddress, AddrSpace);
+        Length = qBound<quint16>(lenRange.from(), Length, lenRange.to());
         LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
         DataViewColumnsDistance = qBound<quint16>(1, DataViewColumnsDistance, 32);
+
+        // hex view is only reachable through the hex view buttons
+        if(!ShowHexViewButtons)
+            HexViewAddress = HexViewDeviceId = HexViewLength = false;
     }
 };
 Q_DECLARE_METATYPE(DisplayDefinition)
@@ -59,6 +70,8 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/HexViewAddress",        dd.HexViewAddress);
     out.setValue("DisplayDefinition/HexViewDeviceId",       dd.HexViewDeviceId);
     out.setValue("DisplayDefinition/HexViewLength",         dd.HexViewLength);
+    out.setValue("DisplayDefinition/ShowHexViewButtons",    dd.ShowHexViewButtons);
+    out.setValue("DisplayDefinition/AddrSpace",             (uint)dd.AddrSpace);
 
     return out;
 }
@@ -86,6 +99,8 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.HexViewAddress  = in.value("DisplayDefinition/HexViewAddress",  false).toBool();
     dd.HexViewDeviceId = in.value("DisplayDefinition/HexViewDeviceId", false).toBool();
     dd.HexViewLength   = in.value("DisplayDefinition/HexViewLength",   false).toBool();
+    dd.ShowHexViewButtons = in.value("DisplayDefinition/ShowHexViewButtons", true).toBool();
+    dd.AddrSpace = (AddressSpace)in.value("DisplayDefinition/AddrSpace", (uint)AddressSpace::Addr6Digits).toUInt();
 
     dd.normalize();
     return in;
@@ -105,6 +120,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinit
     xml.writeAttribute("DeviceId", QString::number(dd.DeviceId));
     xml.writeAttribute("PointType", enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
     xml.writeAttribute("PointAddress", QString::number(dd.PointAddress));
+    xml.writeAttribute("AddrSpace", enumToString<AddressSpace>(dd.AddrSpace));
     xml.writeAttribute("Length", QString::number(dd.Length));
     xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
     xml.writeAttribute("ZeroBasedAddress", boolToString(dd.ZeroBasedAddress));
@@ -113,6 +129,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinit
     xml.writeAttribute("HexViewAddress",  boolToString(dd.HexViewAddress));
     xml.writeAttribute("HexViewDeviceId", boolToString(dd.HexViewDeviceId));
     xml.writeAttribute("HexViewLength",   boolToString(dd.HexViewLength));
+    xml.writeAttribute("ShowHexViewButtons", boolToString(dd.ShowHexViewButtons));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
     xml.writeEndElement();
@@ -154,6 +171,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& d
             if (ok) dd.PointAddress = pointAddress;
         }
 
+        if (attributes.hasAttribute("AddrSpace")) {
+            dd.AddrSpace = enumFromString<AddressSpace>(attributes.value("AddrSpace").toString());
+        }
+
         if (attributes.hasAttribute("Length")) {
             bool ok; const quint16 length = attributes.value("Length").toUShort(&ok);
             if (ok) dd.Length = length;
@@ -178,6 +199,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& d
             dd.HexViewDeviceId = stringToBool(attributes.value("HexViewDeviceId").toString());
         if (attributes.hasAttribute("HexViewLength"))
             dd.HexViewLength = stringToBool(attributes.value("HexViewLength").toString());
+        if (attributes.hasAttribute("ShowHexViewButtons"))
+            dd.ShowHexViewButtons = stringToBool(attributes.value("ShowHexViewButtons").toString());
 
         if (attributes.hasAttribute("AutoscrollLog")) {
             dd.AutoscrollLog = stringToBool(attributes.value("AutoscrollLog").toString());

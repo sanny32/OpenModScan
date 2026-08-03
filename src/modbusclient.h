@@ -42,7 +42,7 @@ public:
     void setNumberOfRetries(uint number);
 
     void sendRawRequest(const QModbusRequest& request, int server, int requestGroupId);
-    void sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestGroupId);
+    ModbusReply* sendReadRequest(QModbusDataUnit::RegisterType pointType, int startAddress, quint16 valueCount, int server, int requestGroupId);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, int requestGroupId);
     void maskWriteRegister(const ModbusMaskWriteParams& params, int requestGroupId);
 

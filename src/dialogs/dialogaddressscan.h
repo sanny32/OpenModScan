@@ -325,6 +325,7 @@ private:
     bool _scanning = false;
     bool _finished = false;
     quint64 _scanTime = 0;
+    AddressSpace _addrSpace = AddressSpace::Addr6Digits;
     QTimer _scanTimer;
     QTimer _updateTimer;
     ModbusClient& _modbusClient;

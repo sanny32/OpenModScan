@@ -163,6 +163,7 @@ private:
     DataSimulator* _dataSimulator;
     MainWindow* _parent;
     PulseParams _pulseParams;
+    AddressSpace _addrSpace = AddressSpace::Addr6Digits;
 };
 
 ///

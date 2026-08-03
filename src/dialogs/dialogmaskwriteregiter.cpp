@@ -29,7 +29,7 @@ DialogMaskWriteRegiter::DialogMaskWriteRegiter(ModbusMaskWriteParams& params, co
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
     ui->lineEditAddress->setHexButtonVisible(true);
     ui->lineEditAddress->setHexView(dd.HexViewAddress);

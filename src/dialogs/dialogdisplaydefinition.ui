@@ -416,13 +416,36 @@
        </widget>
       </item>
       <item row="4" column="0">
+       <widget class="QLabel" name="labelAddressSpace">
+        <property name="text">
+         <string>Address Space:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="AddressSpaceComboBox" name="comboBoxAddressSpace">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>26</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
        <widget class="QLabel" name="labelLength">
         <property name="text">
          <string>Length:</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="5" column="1">
        <widget class="NumericLineEdit" name="lineEditLength">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -491,11 +514,17 @@
    <extends>QComboBox</extends>
    <header>addressbasecombobox.h</header>
   </customwidget>
+  <customwidget>
+   <class>AddressSpaceComboBox</class>
+   <extends>QComboBox</extends>
+   <header>addressspacecombobox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lineEditScanRate</tabstop>
   <tabstop>lineEditSlaveAddress</tabstop>
   <tabstop>comboBoxPointType</tabstop>
+  <tabstop>comboBoxAddressSpace</tabstop>
   <tabstop>lineEditLength</tabstop>
  </tabstops>
  <resources/>

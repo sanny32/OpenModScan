@@ -325,7 +325,7 @@ void DialogModbusScanner::on_comboBoxFunction_functionCodeChanged(QModbusPdu::Fu
 void DialogModbusScanner::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 {
     const auto addr = ui->spinBoxAddress->value();
-    ui->spinBoxAddress->setMinimum(ModbusLimits::addressRange(base == AddressBase::Base0).from());
+    ui->spinBoxAddress->setMinimum(ModbusLimits::addressRange(AddressSpace::Addr6Digits, base == AddressBase::Base0).from());
     ui->spinBoxAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
 }
 

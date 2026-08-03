@@ -17,6 +17,21 @@
     </message>
 </context>
 <context>
+    <name>AddressSpaceComboBox</name>
+    <message>
+        <location filename="../controls/addressspacecombobox.cpp" line="11"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="30"/>
+        <source>5-digits</source>
+        <translation>5-цифровое</translation>
+    </message>
+    <message>
+        <location filename="../controls/addressspacecombobox.cpp" line="12"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="34"/>
+        <source>6-digits</source>
+        <translation>6-цифровое</translation>
+    </message>
+</context>
+<context>
     <name>AnsiMenu</name>
     <message>
         <location filename="../ansimenu.cpp" line="12"/>
@@ -171,37 +186,37 @@
 <context>
     <name>CsvExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Device ID</source>
         <translation>Узел</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Start Address</source>
         <translation>Начальный адрес</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Length</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Point Type</source>
         <translation>Тип регистров</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Registers on Query</source>
         <translation>Количество регистров в запросе</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Byte Order</source>
         <translation>Порядок байт</translation>
     </message>
@@ -381,7 +396,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="473"/>
         <source>Scan</source>
         <translation>Сканировать</translation>
     </message>
@@ -421,17 +436,17 @@
         <translation>Показывать только корректные ответы</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="473"/>
         <source>Stop</source>
         <translation>Стоп</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="665"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="666"/>
         <source>Pdf files (*.pdf);;CSV files (*.csv)</source>
         <translation>Pdf файлы (*.pdf);;CSV файлы (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="742"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="743"/>
         <source>No connection to MODBUS device!</source>
         <translation>Нет соединения с MODBUS устройством!</translation>
     </message>
@@ -701,7 +716,7 @@
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="450"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="473"/>
         <source>Point Type:</source>
         <translation>Тип регистров:</translation>
     </message>
@@ -717,6 +732,11 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="421"/>
+        <source>Address Space:</source>
+        <translation>Адресное пространство:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="444"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
@@ -1873,12 +1893,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>Опрос устройства приостановлен...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="239"/>
+        <location filename="../formmodsca.cpp" line="241"/>
         <source>Data Uninitialized</source>
         <translation>Данные не инициализированы</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="505"/>
+        <location filename="../formmodsca.cpp" line="507"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1887,7 +1907,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="509"/>
+        <location filename="../formmodsca.cpp" line="511"/>
         <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
@@ -1896,29 +1916,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="512"/>
+        <location filename="../formmodsca.cpp" line="514"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>Количество запросов: %1
 Корректных ответов устройства: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="720"/>
+        <location filename="../formmodsca.cpp" line="722"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>Нет опроса: указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="914"/>
+        <location filename="../formmodsca.cpp" line="916"/>
         <source>Device NOT CONNECTED!</source>
         <translation>Устройство НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="686"/>
+        <location filename="../formmodsca.cpp" line="688"/>
         <source>No Responses from Slave Device</source>
         <translation>Нет ответа от устройства</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="868"/>
+        <location filename="../formmodsca.cpp" line="870"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>Получен некорректный ответ на запрос MODBUS</translation>
     </message>
@@ -2935,26 +2955,26 @@ Valid Slave Responses: %2</source>
 <context>
     <name>PdfExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="992"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="993"/>
         <source>Error. Failed to write PDF file!</source>
         <translation>Ошибка. Не удалось записать PDF файл!</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1045"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1046"/>
         <source>Address Base: %1
 Start Address: %2</source>
         <translation>Адресация: %1
 Начальный адрес: %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1048"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1049"/>
         <source>Device ID: %1		Length: %2
 Point Type: [%3]</source>
         <translation>Узел: %1		Количество: %2
 Тип регистров: [%3]</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1051"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1052"/>
         <source>Registers on Query: %1
 Byte Order: %2</source>
         <translation>Количество регистров в запросе: %1

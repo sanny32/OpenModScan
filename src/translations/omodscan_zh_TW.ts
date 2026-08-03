@@ -17,6 +17,21 @@
     </message>
 </context>
 <context>
+    <name>AddressSpaceComboBox</name>
+    <message>
+        <location filename="../controls/addressspacecombobox.cpp" line="11"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="30"/>
+        <source>5-digits</source>
+        <translation>5位數字</translation>
+    </message>
+    <message>
+        <location filename="../controls/addressspacecombobox.cpp" line="12"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="34"/>
+        <source>6-digits</source>
+        <translation>6位數字</translation>
+    </message>
+</context>
+<context>
     <name>AnsiMenu</name>
     <message>
         <location filename="../ansimenu.cpp" line="12"/>
@@ -171,37 +186,37 @@
 <context>
     <name>CsvExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Device ID</source>
         <translation>裝置地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Length</source>
         <translation>長度</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Point Type</source>
         <translation>暫存器類型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Registers on Query</source>
         <translation>查詢中的暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Address Base</source>
         <translation>基地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1225"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1226"/>
         <source>Byte Order</source>
         <translation>位元組序</translation>
     </message>
@@ -381,7 +396,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogaddressscan.ui" line="275"/>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="473"/>
         <source>Scan</source>
         <translation>掃描</translation>
     </message>
@@ -421,17 +436,17 @@
         <translation>僅顯示有效回應</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="472"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="473"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="665"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="666"/>
         <source>Pdf files (*.pdf);;CSV files (*.csv)</source>
         <translation>Pdf 檔案 (*.pdf);;CSV 檔案 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="742"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="743"/>
         <source>No connection to MODBUS device!</source>
         <translation>沒有連繫到 MODBUS 裝置！</translation>
     </message>
@@ -701,7 +716,7 @@
         <translation>十六進制地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="450"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="473"/>
         <source>Point Type:</source>
         <translation>暫存器類型：</translation>
     </message>
@@ -717,6 +732,11 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="421"/>
+        <source>Address Space:</source>
+        <translation>地址空間：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="444"/>
         <source>Length:</source>
         <translation>長度：</translation>
     </message>
@@ -1872,12 +1892,12 @@ single-point  write functions 05 and 06.)</source>
         <translation>設備輪詢已暫停...</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="239"/>
+        <location filename="../formmodsca.cpp" line="241"/>
         <source>Data Uninitialized</source>
         <translation>數據未初始化</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="505"/>
+        <location filename="../formmodsca.cpp" line="507"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1886,7 +1906,7 @@ Length: %3</source>
 長度：%3</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="509"/>
+        <location filename="../formmodsca.cpp" line="511"/>
         <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
@@ -1895,29 +1915,29 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="512"/>
+        <location filename="../formmodsca.cpp" line="514"/>
         <source>Number of Polls: %1
 Valid Slave Responses: %2</source>
         <translation>輪詢次數：%1
 有效的從站回應：%2</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="720"/>
+        <location filename="../formmodsca.cpp" line="722"/>
         <source>No Scan: Invalid Data Length Specified</source>
         <translation>沒有掃描：指定的數據長度無效</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="914"/>
+        <location filename="../formmodsca.cpp" line="916"/>
         <source>Device NOT CONNECTED!</source>
         <translation>裝置未連繫！</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="686"/>
+        <location filename="../formmodsca.cpp" line="688"/>
         <source>No Responses from Slave Device</source>
         <translation>從裝置未回應</translation>
     </message>
     <message>
-        <location filename="../formmodsca.cpp" line="868"/>
+        <location filename="../formmodsca.cpp" line="870"/>
         <source>Received Invalid Response MODBUS Query</source>
         <translation>接收到無效的 MODBUS 要求回應</translation>
     </message>
@@ -2935,26 +2955,26 @@ Valid Slave Responses: %2</source>
 <context>
     <name>PdfExporter</name>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="992"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="993"/>
         <source>Error. Failed to write PDF file!</source>
         <translation>錯誤：儲存為PDF失敗！</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1045"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1046"/>
         <source>Address Base: %1
 Start Address: %2</source>
         <translation>基地址：%1
 起始地址：%2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1048"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1049"/>
         <source>Device ID: %1		Length: %2
 Point Type: [%3]</source>
         <translation>裝置地址%1		長度%2
 暫存器類型：[%3]</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogaddressscan.cpp" line="1051"/>
+        <location filename="../dialogs/dialogaddressscan.cpp" line="1052"/>
         <source>Registers on Query: %1
 Byte Order: %2</source>
         <translation>要求中的暫存器：%1

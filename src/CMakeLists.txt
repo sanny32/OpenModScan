@@ -101,6 +101,7 @@ set(SOURCES
     datadelegate.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
+    controls/addressspacecombobox.cpp
     controls/bitpatterncontrol.cpp
     controls/checkablegroupbox.cpp
     controls/booleancombobox.cpp
@@ -185,6 +186,7 @@ set(HEADERS
     connectiondetails.h
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
+    controls/addressspacecombobox.h
     controls/bitpatterncontrol.h
     controls/checkablegroupbox.h
     controls/booleancombobox.h

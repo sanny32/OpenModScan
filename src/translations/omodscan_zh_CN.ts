@@ -2854,7 +2854,7 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusRtuTcpClient</name>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="51"/>
+        <location filename="../modbusrtutcpclient.cpp" line="57"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的TCP通信连接设置无效。</translation>
     </message>
@@ -2862,7 +2862,7 @@ Valid Slave Responses: %2</source>
 <context>
     <name>ModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="45"/>
+        <location filename="../modbustcpclient.cpp" line="51"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的TCP通信连接设置无效。</translation>
     </message>
@@ -3015,27 +3015,27 @@ Byte Order: %2</source>
         <translation>收到无效响应。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="146"/>
-        <location filename="../modbusrtutcpclient.cpp" line="217"/>
+        <location filename="../modbustcpclient.cpp" line="152"/>
+        <location filename="../modbusrtutcpclient.cpp" line="223"/>
         <source>TCP socket error (%1).</source>
         <translation>TCP 套接字错误(%1)。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="272"/>
+        <location filename="../modbustcpclient.cpp" line="278"/>
         <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="445"/>
+        <location filename="../modbusrtutcpclient.cpp" line="451"/>
         <source>Request timeout.</source>
         <translation>请求超时。</translation>
     </message>
     <message>
-        <location filename="../modbustcpclient.cpp" line="299"/>
+        <location filename="../modbustcpclient.cpp" line="305"/>
         <location filename="../modbusrtuclient.cpp" line="207"/>
-        <location filename="../modbusrtutcpclient.cpp" line="89"/>
+        <location filename="../modbusrtutcpclient.cpp" line="95"/>
         <source>Reply aborted due to connection closure.</source>
         <translation>由于连接关闭，回复已中止。</translation>
     </message>
     <message>
-        <location filename="../modbusrtutcpclient.cpp" line="269"/>
+        <location filename="../modbusrtutcpclient.cpp" line="275"/>
         <source>Could not write request to socket.</source>
         <translation>无法将请求写入套接字。</translation>
     </message>
@@ -3091,7 +3091,7 @@ Byte Order: %2</source>
 <context>
     <name>QModbusTcpClient</name>
     <message>
-        <location filename="../modbustcpclient.cpp" line="224"/>
+        <location filename="../modbustcpclient.cpp" line="230"/>
         <source>Could not write request to socket.</source>
         <translation>无法将请求写入套接字。</translation>
     </message>

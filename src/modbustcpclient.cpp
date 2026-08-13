@@ -1,5 +1,6 @@
 #include <QUrl>
 #include <QHostAddress>
+#include <QNetworkProxy>
 #include <QModbusClient>
 #include <QModbusTcpClient>
 #include "modbustcpclient.h"
@@ -12,6 +13,11 @@ ModbusTcpClient::ModbusTcpClient(QObject *parent)
     : ModbusClientPrivate{parent}
 {
     _socket = new QTcpSocket(this);
+
+    // Modbus TCP is a local network protocol, so never route it through
+    // the system proxy (Qt applies it to any socket by default).
+    _socket->setProxy(QNetworkProxy::NoProxy);
+
     QObject::connect(_socket, &QAbstractSocket::connected, this, &ModbusTcpClient::on_connected);
     QObject::connect(_socket, &QAbstractSocket::disconnected, this, &ModbusTcpClient::on_disconnected);
     QObject::connect(_socket, &QAbstractSocket::errorOccurred, this, &ModbusTcpClient::on_errorOccurred);

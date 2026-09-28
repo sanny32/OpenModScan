@@ -3,6 +3,7 @@
 #include <QNetworkProxy>
 #include <QModbusClient>
 #include <QModbusTcpClient>
+#include "qmodbusadutcp.h"
 #include "modbustcpclient.h"
 
 ///
@@ -190,8 +191,8 @@ void ModbusTcpClient::on_readyRead()
             return;
         }
 
-        QModbusResponse responsePdu;
-        input >> responsePdu;
+        // Not QDataStream >> QModbusResponse: Qt resets PDUs with custom function codes to Invalid (#86).
+        const QModbusResponse responsePdu = QModbusAduTcp(_responseBuffer.left(tcpAduSize)).pdu();
         qCDebug(QT_MODBUS) << "(TCP client) Received PDU:" << responsePdu.functionCode()
                            << responsePdu.data().toHex();
 

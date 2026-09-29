@@ -619,10 +619,14 @@ void NumericLineEdit::updateValue()
 ///
 void NumericLineEdit::focusInEvent(QFocusEvent* e)
 {
-    internalSetValue(_value); // sets text without "0x" prefix first
-    // Reduce max length after text is updated to avoid truncation via setMaxLength
-    if(_inputMode == HexMode || _hexView)
+    QSignalBlocker blocker(this);
+
+    // Reduce max length before text is updated to avoid truncation via setMaxLength
+    if(_inputMode == HexMode || _hexView) {
         setMaxLength(_leadingZeroWidth);
+    }
+    internalSetValue(_value); // sets text without "0x" prefix first
+
     QLineEdit::focusInEvent(e);
 }
 

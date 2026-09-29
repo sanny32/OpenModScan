@@ -1,12 +1,13 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 
 project(omodscan
-    VERSION 1.16.0
+    VERSION 1.16.1
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
 option(USE_QT5 "Force Qt5 usage" OFF)
 option(USE_QT6 "Force Qt6 usage" OFF)
+option(BUILD_TESTING "Build unit tests" ON)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -387,6 +388,10 @@ endif()
 
 if(TARGET update_translations)
     add_dependencies(${PROJECT_NAME} update_translations)
+endif()
+
+if(BUILD_TESTING)
+    include(cmake/tests.cmake)
 endif()
 
 if(WIN32)

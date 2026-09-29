@@ -1,6 +1,7 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QTcpSocket>
+#include <QNetworkProxy>
 #include "modbustcpclient.h"
 #include "modbustcpscanner.h"
 
@@ -33,6 +34,10 @@ void ModbusTcpScanner::startScan()
     {
         QTcpSocket* socket = new QTcpSocket(this);
         auto processed = QSharedPointer<bool>::create(false);
+
+        // Probing the local network must not go through the system proxy,
+        // otherwise every address looks alive (we would connect to the proxy).
+        socket->setProxy(QNetworkProxy::NoProxy);
 
         auto processOnce = [this, socket, cd, processed]{
             if(!*processed) { *processed = true; processSocket(socket, cd); }

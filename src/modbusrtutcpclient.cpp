@@ -2,6 +2,7 @@
 #include <QtMath>
 #include <QDataStream>
 #include <QHostAddress>
+#include <QNetworkProxy>
 #include <QModbusClient>
 #include "qmodbusserialadu.h"
 #include "modbusrtutcpclient.h"
@@ -15,6 +16,11 @@ ModbusRtuTcpClient::ModbusRtuTcpClient(QObject *parent)
     : ModbusClientPrivate(parent)
 {
     _socket = new QTcpSocket(this);
+
+    // Modbus RTU over TCP is a local network protocol, so never route it through
+    // the system proxy (Qt applies it to any socket by default).
+    _socket->setProxy(QNetworkProxy::NoProxy);
+
     connect(&_responseTimer, &QObjectTimer::timeout, this, &ModbusRtuTcpClient::on_responseTimeout);
     connect(_socket, &QAbstractSocket::connected, this, &ModbusRtuTcpClient::on_connected);
     connect(_socket, &QAbstractSocket::disconnected, this, &ModbusRtuTcpClient::on_disconnected);

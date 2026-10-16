@@ -127,9 +127,9 @@ QString describe(const MbMap::Register& r)
 } // namespace
 
 ///
-/// \brief MbMap::isMapFile
-/// \param filename
-/// \return true for a .mbmap.json file
+/// \brief Tells a device map from other files by its name
+/// \param filename Name or path of a file
+/// \return true when the name ends in .mbmap.json, in any case
 ///
 bool MbMap::isMapFile(const QString& filename)
 {
@@ -137,10 +137,11 @@ bool MbMap::isMapFile(const QString& filename)
 }
 
 ///
-/// \brief MbMap::load
-/// \param filename
-/// \param error
-/// \return
+/// \brief Reads a map from a .mbmap.json file
+/// \param filename Path of the file
+/// \param error Set to the reason when the file cannot be read or is not a
+/// map Open ModScan can read, cleared otherwise; may be null
+/// \return The map; an empty map on error
 ///
 MbMap MbMap::load(const QString& filename, QString* error)
 {
@@ -153,10 +154,11 @@ MbMap MbMap::load(const QString& filename, QString* error)
 }
 
 ///
-/// \brief MbMap::parse
-/// \param data The file's content
-/// \param error Set when the file is not a map Open ModScan can read
-/// \return The map; registers with errors are left out
+/// \brief Reads a map from the content of a .mbmap.json file
+/// \param data The file's content, in UTF-8, with or without a byte order mark
+/// \param error Set to the reason when the content is not a map Open ModScan
+/// can read, cleared otherwise; may be null
+/// \return The map, without the registers that have errors; an empty map on error
 ///
 MbMap MbMap::parse(const QByteArray& data, QString* error)
 {
@@ -193,6 +195,12 @@ MbMap MbMap::parse(const QByteArray& data, QString* error)
         map.UnitId = static_cast<quint8>(n);
     if(root.contains("address_base") && toInteger(root.value("address_base"), n) && (n == 0 || n == 1))
         map.AddressBase = static_cast<int>(n);
+
+    // Largest read the device accepts; out of range values keep the default
+    if(root.contains("max_read_registers") && toInteger(root.value("max_read_registers"), n) && n >= 1 && n <= 125)
+        map.MaxReadRegisters = static_cast<int>(n);
+    if(root.contains("max_read_bits") && toInteger(root.value("max_read_bits"), n) && n >= 1 && n <= 2000)
+        map.MaxReadBits = static_cast<int>(n);
 
     const bool fileByteSwap = root.value("byte_order").toString() == QLatin1String("little");
     const bool fileWordSwap = root.value("word_order").toString() == QLatin1String("little");
@@ -244,6 +252,7 @@ MbMap MbMap::parse(const QByteArray& data, QString* error)
         if(obj.value("offset").isDouble()) r.Offset = obj.value("offset").toDouble();
 
         r.ByteSwapped = obj.contains("byte_order") ? obj.value("byte_order").toString() == QLatin1String("little") : fileByteSwap;
+        r.Readable = obj.value("access").toString() != QLatin1String("W");
         r.WordSwapped = obj.contains("word_order") ? obj.value("word_order").toString() == QLatin1String("little") : fileWordSwap;
 
         if(static_cast<int>(r.Address) + registerCount(r) > 65536)
@@ -257,8 +266,8 @@ MbMap MbMap::parse(const QByteArray& data, QString* error)
 }
 
 ///
-/// \brief MbMap::title
-/// \return "Vendor Model"
+/// \brief The map's name for window titles and dialogs
+/// \return The vendor and model, e.g. "Example Corp EM-100"
 ///
 QString MbMap::title() const
 {
@@ -266,11 +275,13 @@ QString MbMap::title() const
 }
 
 ///
-/// \brief MbMap::views
-/// \return The windows that show the map's registers. Registers of one
-/// area, display mode and byte order share a window while they are close
-/// together, fit Open ModScan's length limit and line up with the window's
-/// 2- or 4-register values.
+/// \brief Lays the readable registers out in Open ModScan windows
+/// \return One view per window, by area and then address. A window holds
+/// registers of one area, display mode and byte order that are close
+/// together and line up with its 2- or 4-register values. It is never
+/// longer than Open ModScan's limit or the map's max_read_registers /
+/// max_read_bits, and never covers an address that is only written.
+/// Registers longer than those limits on their own are left out.
 ///
 QList<MbMap::View> MbMap::views() const
 {
@@ -283,15 +294,36 @@ QList<MbMap::View> MbMap::views() const
         }
     };
 
+    // Addresses that are only written: no window may read them, since a
+    // device can refuse the whole request for one of them
+    QMap<QModbusDataUnit::RegisterType, QSet<int>> writeOnly;
+    for(auto&& r : Registers) {
+        if(!r.Readable)
+            for(int a = r.Address; a < r.Address + registerCount(r); a++)
+                writeOnly[r.Area].insert(a);
+    }
+    for(auto&& r : Registers) {
+        if(r.Readable)
+            for(int a = r.Address; a < r.Address + registerCount(r); a++)
+                writeOnly[r.Area].remove(a);
+    }
+
+    // Open ModScan's limit, and the device's for the area
+    auto maxLength = [this](QModbusDataUnit::RegisterType area) {
+        const bool bitArea = area == QModbusDataUnit::Coils || area == QModbusDataUnit::DiscreteInputs;
+        return qMin(ModbusLimits::lengthRange().to(), bitArea ? MaxReadBits : MaxReadRegisters);
+    };
+
     QMap<Key, QList<Register>> groups;
     for(auto&& r : Registers) {
+        if(!r.Readable || registerCount(r) > maxLength(r.Area))
+            continue;
         const auto mode = displayMode(r);
         const bool bitArea = r.Area == QModbusDataUnit::Coils || r.Area == QModbusDataUnit::DiscreteInputs;
         const auto order = (r.ByteSwapped && !bitArea) ? ByteOrder::Swapped : ByteOrder::Direct;
         groups[{ r.Area, mode, order }].append(r);
     }
 
-    const int maxLength = ModbusLimits::lengthRange().to();
     QList<View> views;
 
     for(auto it = groups.begin(); it != groups.end(); ++it)
@@ -302,6 +334,8 @@ QList<MbMap::View> MbMap::views() const
         });
 
         const int width = modeWidth(it.key().Mode);
+        const int limit = maxLength(it.key().Area);
+        const auto& blocked = writeOnly[it.key().Area];
         View view;
         int end = -1;
         QSet<QString> groupNames;
@@ -320,10 +354,13 @@ QList<MbMap::View> MbMap::views() const
         {
             const int start = r.Address;
             const int stop = start + registerCount(r);
-            const bool fits = end >= 0
+            bool fits = end >= 0
                     && start - end <= MaxGap
-                    && qMax(stop, end) - view.Address <= maxLength
+                    && qMax(stop, end) - view.Address <= limit
                     && (start - view.Address) % width == 0;
+            // The window would grow over an address that is only written
+            for(int a = end; fits && a < stop; a++)
+                fits = !blocked.contains(a);
 
             if(!fits) {
                 close();

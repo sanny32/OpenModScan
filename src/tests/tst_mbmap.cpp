@@ -1,4 +1,5 @@
 #include <QtTest>
+#include <tuple>
 #include "mbmap.h"
 
 ///
@@ -14,6 +15,8 @@ private slots:
     void groupsRegistersInWindows();
     void splitsFarAndMisalignedRegisters();
     void describesBitsAndScale();
+    void respectsTheDeviceReadLimits();
+    void keepsWriteOnlyRegistersOutOfReads();
 };
 
 namespace {
@@ -162,6 +165,85 @@ void TestMbMap::describesBitsAndScale()
     QCOMPARE(views[1].Mode, DataDisplayMode::Binary);
     QCOMPARE(views[1].Descriptions.value(512), QString("bit 3: Relay; bit 4: Alarm"));
     QCOMPARE(views[1].Descriptions.value(513), QString("bits 8-11: Code"));
+}
+
+///
+/// \brief max_read_registers and max_read_bits cap each window together with
+/// Open ModScan's own limit; a register longer than the cap is left out.
+///
+void TestMbMap::respectsTheDeviceReadLimits()
+{
+    const auto map = parse(R"({
+        "mbmap": 2, "vendor": "V", "model": "M",
+        "max_read_registers": 2, "max_read_bits": 3,
+        "registers": [
+            {"name": "A", "area": "holding", "address": 0, "type": "uint16"},
+            {"name": "B", "area": "holding", "address": 1, "type": "uint16"},
+            {"name": "C", "area": "holding", "address": 2, "type": "uint16"},
+            {"name": "D", "area": "holding", "address": 3, "type": "uint16"},
+            {"name": "Energy", "area": "input", "address": 0, "type": "float64"},
+            {"name": "Q1", "area": "coil", "address": 0, "type": "bool"},
+            {"name": "Q2", "area": "coil", "address": 1, "type": "bool"},
+            {"name": "Q3", "area": "coil", "address": 2, "type": "bool"},
+            {"name": "Q4", "area": "coil", "address": 3, "type": "bool"},
+            {"name": "Q5", "area": "coil", "address": 4, "type": "bool"}
+        ]
+    })");
+    QCOMPARE(map.MaxReadRegisters, 2);
+    QCOMPARE(map.MaxReadBits, 3);
+
+    QList<std::tuple<QModbusDataUnit::RegisterType, quint16, quint16>> blocks;
+    for(auto&& v : map.views())
+        blocks.append({ v.Area, v.Address, v.Length });
+
+    // The float64 needs 4 registers in one read: it cannot be read at all
+    QCOMPARE(blocks, (QList<std::tuple<QModbusDataUnit::RegisterType, quint16, quint16>>{
+        { QModbusDataUnit::Coils, 0, 3 },
+        { QModbusDataUnit::Coils, 3, 2 },
+        { QModbusDataUnit::HoldingRegisters, 0, 2 },
+        { QModbusDataUnit::HoldingRegisters, 2, 2 },
+    }));
+
+    // Out of range limits keep the defaults
+    const auto loose = parse(R"({"mbmap": 2, "vendor": "V", "model": "M",
+        "max_read_registers": 500, "max_read_bits": 0, "registers": []})");
+    QCOMPARE(loose.MaxReadRegisters, 125);
+    QCOMPARE(loose.MaxReadBits, 2000);
+}
+
+///
+/// \brief A write-only register is not read, and no window reads across its
+/// address; an address another register reads stays readable.
+///
+void TestMbMap::keepsWriteOnlyRegistersOutOfReads()
+{
+    const auto map = parse(R"({
+        "mbmap": 2, "vendor": "V", "model": "M",
+        "registers": [
+            {"name": "R0", "area": "holding", "address": 0, "type": "uint16"},
+            {"name": "Command", "area": "holding", "address": 1, "type": "uint16", "access": "W"},
+            {"name": "R2", "area": "holding", "address": 2, "type": "uint16", "access": "RW"},
+            {"name": "Run", "area": "holding", "address": 10, "type": "bool", "bit": 0, "access": "W"},
+            {"name": "Running", "area": "holding", "address": 10, "type": "bool", "bit": 1},
+            {"name": "Ready", "area": "holding", "address": 11, "type": "bool", "bit": 0}
+        ]
+    })");
+    QVERIFY(!map.Registers[1].Readable);
+    QVERIFY(map.Registers[2].Readable);
+
+    const auto views = map.views();
+    QCOMPARE(views.size(), 3);
+    QCOMPARE(views[0].Address, quint16(0));
+    QCOMPARE(views[0].Length, quint16(1));
+    QCOMPARE(views[1].Address, quint16(2));
+    QCOMPARE(views[1].Length, quint16(1));
+    for(auto&& v : views)
+        for(auto&& text : v.Descriptions)
+            QVERIFY(!text.contains("Command") && !text.contains("Run;") && text != "bit 0: Run");
+
+    // Address 10 is also read for "Running", so its window may cover it
+    QCOMPARE(views[2].Address, quint16(10));
+    QCOMPARE(views[2].Length, quint16(2));
 }
 
 QTEST_GUILESS_MAIN(TestMbMap)

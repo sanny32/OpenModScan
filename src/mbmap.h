@@ -11,8 +11,8 @@
 /// \brief A Modbus device map in the .mbmap format, version 2
 /// (https://github.com/nobrega8/mbmap-library/blob/main/SPEC.md).
 /// Only what Open ModScan can show is read: the registers' areas,
-/// addresses, types, byte and word order, and their names for the
-/// address descriptions.
+/// addresses, types, byte and word order and access, their names for the
+/// address descriptions, and the largest read the device accepts.
 ///
 struct MbMap
 {
@@ -35,6 +35,7 @@ struct MbMap
         double Offset = 0;
         bool ByteSwapped = false;
         bool WordSwapped = false;
+        bool Readable = true;   // false for "access": "W"
     };
 
     ///
@@ -57,14 +58,50 @@ struct MbMap
     QString MapDescription;
     quint8 UnitId = 1;
     int AddressBase = 0;
+    int MaxReadRegisters = 125; // largest read of registers the device accepts (FC03/04)
+    int MaxReadBits = 2000;     // largest read of coils or inputs the device accepts (FC01/02)
     QList<Register> Registers;
 
+    ///
+    /// \brief Reads a map from the content of a .mbmap.json file
+    /// \param data The file's content, in UTF-8, with or without a byte order mark
+    /// \param error Set to the reason when the content is not a map Open ModScan
+    /// can read, cleared otherwise; may be null
+    /// \return The map, without the registers that have errors; an empty map on error
+    ///
     static MbMap parse(const QByteArray& data, QString* error);
+
+    ///
+    /// \brief Reads a map from a .mbmap.json file
+    /// \param filename Path of the file
+    /// \param error Set to the reason when the file cannot be read or is not a
+    /// map Open ModScan can read, cleared otherwise; may be null
+    /// \return The map; an empty map on error
+    ///
     static MbMap load(const QString& filename, QString* error);
 
+    ///
+    /// \brief Tells a device map from other files by its name
+    /// \param filename Name or path of a file
+    /// \return true when the name ends in .mbmap.json, in any case
+    ///
     static bool isMapFile(const QString& filename);
 
+    ///
+    /// \brief Lays the readable registers out in Open ModScan windows
+    /// \return One view per window, by area and then address. A window holds
+    /// registers of one area, display mode and byte order that are close
+    /// together and line up with its 2- or 4-register values. It is never
+    /// longer than Open ModScan's limit or the map's max_read_registers /
+    /// max_read_bits, and never covers an address that is only written.
+    /// Registers longer than those limits on their own are left out.
+    ///
     QList<View> views() const;
+
+    ///
+    /// \brief The map's name for window titles and dialogs
+    /// \return The vendor and model, e.g. "Example Corp EM-100"
+    ///
     QString title() const;
 };
 

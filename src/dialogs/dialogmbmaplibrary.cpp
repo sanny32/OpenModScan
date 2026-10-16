@@ -1,4 +1,3 @@
-#include <QDialogButtonBox>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -6,15 +5,12 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QLabel>
-#include <QLineEdit>
 #include <QNetworkReply>
 #include <QPushButton>
 #include <QStandardPaths>
-#include <QTreeWidget>
-#include <QVBoxLayout>
 #include "mbmap.h"
 #include "dialogmbmaplibrary.h"
+#include "ui_dialogmbmaplibrary.h"
 
 namespace {
 
@@ -24,51 +20,20 @@ constexpr int PathRole = Qt::UserRole + 1;
 }
 
 ///
-/// \brief DialogMbmapLibrary::DialogMbmapLibrary
-/// \param parent
+/// \brief Opens the dialog and starts downloading the list of maps
+/// \param parent Parent widget
 ///
 DialogMbmapLibrary::DialogMbmapLibrary(QWidget* parent)
     : QDialog(parent)
-    ,_filter(new QLineEdit(this))
-    ,_list(new QTreeWidget(this))
-    ,_status(new QLabel(this))
+    , ui(new Ui::DialogMbmapLibrary)
 {
-    setWindowTitle(tr("Device Map Library"));
-    resize(720, 480);
+    ui->setupUi(this);
+    ui->treeWidget->header()->setSectionResizeMode(2, QHeaderView::Stretch);
+    ui->treeWidget->sortByColumn(0, Qt::AscendingOrder);
 
-    _filter->setPlaceholderText(tr("Filter by vendor, model or description"));
-    _filter->setClearButtonEnabled(true);
-
-    _list->setRootIsDecorated(false);
-    _list->setAlternatingRowColors(true);
-    _list->setSortingEnabled(true);
-    _list->setHeaderLabels({ tr("Vendor"), tr("Model"), tr("Description"), tr("Registers") });
-    _list->header()->setSectionResizeMode(2, QHeaderView::Stretch);
-    _list->sortByColumn(0, Qt::AscendingOrder);
-
-    auto source = new QLabel(tr("Maps from <a href=\"https://github.com/nobrega8/mbmap-library\">mbmap-library</a>. "
-                                "Opening one creates a window for each block of registers."), this);
-    source->setOpenExternalLinks(true);
-    source->setWordWrap(true);
-
-    auto buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
-    _openButton = buttons->addButton(tr("Open"), QDialogButtonBox::AcceptRole);
+    _openButton = ui->buttonBox->addButton(tr("Open"), QDialogButtonBox::AcceptRole);
     _openButton->setEnabled(false);
-
-    auto layout = new QVBoxLayout(this);
-    layout->addWidget(_filter);
-    layout->addWidget(_list);
-    layout->addWidget(source);
-    layout->addWidget(_status);
-    layout->addWidget(buttons);
-
-    connect(_filter, &QLineEdit::textChanged, this, &DialogMbmapLibrary::on_filterChanged);
-    connect(_list, &QTreeWidget::itemSelectionChanged, this, [this] {
-        _openButton->setEnabled(!_list->selectedItems().isEmpty());
-    });
-    connect(_list, &QTreeWidget::itemDoubleClicked, this, &DialogMbmapLibrary::on_open);
-    connect(buttons, &QDialogButtonBox::accepted, this, &DialogMbmapLibrary::on_open);
-    connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &DialogMbmapLibrary::on_open);
 
     setBusy(true, tr("Loading the list of maps..."));
     auto reply = _network.get(QNetworkRequest(QUrl(LibraryUrl + "index.json")));
@@ -76,19 +41,27 @@ DialogMbmapLibrary::DialogMbmapLibrary(QWidget* parent)
 }
 
 ///
-/// \brief DialogMbmapLibrary::setBusy
-/// \param busy
-/// \param status
+/// \brief Deletes the dialog's form
 ///
-void DialogMbmapLibrary::setBusy(bool busy, const QString& status)
+DialogMbmapLibrary::~DialogMbmapLibrary()
 {
-    _list->setEnabled(!busy);
-    _openButton->setEnabled(!busy && !_list->selectedItems().isEmpty());
-    _status->setText(status);
+    delete ui;
 }
 
 ///
-/// \brief DialogMbmapLibrary::on_indexFinished
+/// \brief Shows what the dialog is doing, and locks the list while it waits
+/// \param busy true while a download runs
+/// \param status Text for the status line
+///
+void DialogMbmapLibrary::setBusy(bool busy, const QString& status)
+{
+    ui->treeWidget->setEnabled(!busy);
+    _openButton->setEnabled(!busy && !ui->treeWidget->selectedItems().isEmpty());
+    ui->labelStatus->setText(status);
+}
+
+///
+/// \brief Fills the list from the library's index.json
 ///
 void DialogMbmapLibrary::on_indexFinished()
 {
@@ -101,37 +74,38 @@ void DialogMbmapLibrary::on_indexFinished()
     }
 
     const auto maps = QJsonDocument::fromJson(reply->readAll()).object().value("maps").toArray();
-    _list->setSortingEnabled(false);
+    ui->treeWidget->setSortingEnabled(false);
     for(auto&& value : maps)
     {
         const auto entry = value.toObject();
         const auto path = entry.value("path").toString();
         if(!MbMap::isMapFile(path)) continue;
 
-        auto item = new QTreeWidgetItem(_list);
+        auto item = new QTreeWidgetItem(ui->treeWidget);
         item->setText(0, entry.value("vendor").toString());
         item->setText(1, entry.value("model").toString());
         item->setText(2, entry.value("description").toString());
         item->setData(3, Qt::DisplayRole, entry.value("registers").toInt());
         item->setData(0, PathRole, path);
     }
-    _list->setSortingEnabled(true);
-    _list->resizeColumnToContents(0);
-    _list->resizeColumnToContents(1);
+    ui->treeWidget->setSortingEnabled(true);
+    ui->treeWidget->resizeColumnToContents(0);
+    ui->treeWidget->resizeColumnToContents(1);
 
-    setBusy(false, tr("%n map(s)", nullptr, _list->topLevelItemCount()));
+    setBusy(false, tr("%n map(s)", nullptr, ui->treeWidget->topLevelItemCount()));
 }
 
 ///
-/// \brief DialogMbmapLibrary::on_filterChanged
-/// \param text
+/// \brief Shows only the maps whose vendor, model or description contain
+/// every word of the text
+/// \param text The filter, matched without case
 ///
-void DialogMbmapLibrary::on_filterChanged(const QString& text)
+void DialogMbmapLibrary::on_lineEditFilter_textChanged(const QString& text)
 {
     const auto words = text.split(' ', Qt::SkipEmptyParts);
-    for(int i = 0; i < _list->topLevelItemCount(); i++)
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); i++)
     {
-        auto item = _list->topLevelItem(i);
+        auto item = ui->treeWidget->topLevelItem(i);
         const auto haystack = QString("%1 %2 %3").arg(item->text(0), item->text(1), item->text(2));
         bool match = true;
         for(auto&& w : words)
@@ -141,11 +115,31 @@ void DialogMbmapLibrary::on_filterChanged(const QString& text)
 }
 
 ///
-/// \brief DialogMbmapLibrary::on_open
+/// \brief Enables Open when a map is selected
+///
+void DialogMbmapLibrary::on_treeWidget_itemSelectionChanged()
+{
+    _openButton->setEnabled(!ui->treeWidget->selectedItems().isEmpty());
+}
+
+///
+/// \brief Opens the map that was double-clicked
+/// \param item The map's row
+/// \param column The column clicked
+///
+void DialogMbmapLibrary::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column)
+{
+    Q_UNUSED(item)
+    Q_UNUSED(column)
+    on_open();
+}
+
+///
+/// \brief Downloads the selected map
 ///
 void DialogMbmapLibrary::on_open()
 {
-    const auto selected = _list->selectedItems();
+    const auto selected = ui->treeWidget->selectedItems();
     if(selected.isEmpty()) return;
 
     const auto path = selected.first()->data(0, PathRole).toString();
@@ -157,7 +151,7 @@ void DialogMbmapLibrary::on_open()
 }
 
 ///
-/// \brief DialogMbmapLibrary::on_mapFinished
+/// \brief Checks and saves the downloaded map, then closes the dialog
 ///
 void DialogMbmapLibrary::on_mapFinished()
 {

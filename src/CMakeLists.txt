@@ -322,6 +322,8 @@ set(UI_FILES
     dialogs/dialogforcemultiplecoils.ui
     dialogs/dialogforcemultipleregisters.ui
     dialogs/dialogmaskwriteregiter.ui
+    dialogs/dialogmbmaplibrary.ui
+    dialogs/dialogmbmapviews.ui
     dialogs/dialogmodbusscanner.ui
     dialogs/dialogprintsettings.ui
     dialogs/dialogprotocolselections.ui

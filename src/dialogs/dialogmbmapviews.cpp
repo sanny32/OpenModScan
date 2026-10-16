@@ -1,12 +1,7 @@
-#include <QDialogButtonBox>
-#include <QHBoxLayout>
 #include <QHeaderView>
-#include <QLabel>
-#include <QLineEdit>
 #include <QPushButton>
-#include <QTreeWidget>
-#include <QVBoxLayout>
 #include "dialogmbmapviews.h"
+#include "ui_dialogmbmapviews.h"
 
 namespace {
 
@@ -27,38 +22,31 @@ QString areaName(QModbusDataUnit::RegisterType area)
 }
 
 ///
-/// \brief DialogMbmapViews::DialogMbmapViews
-/// \param map
-/// \param views
-/// \param preselected How many blocks are checked at first
-/// \param parent
+/// \brief Lists the blocks of a map, each with a check box
+/// \param map The map the blocks come from, for the title and the address base
+/// \param views The blocks, as MbMap::views() lays them out
+/// \param preselected How many blocks, from the first, are checked at first
+/// \param parent Parent widget
 ///
 DialogMbmapViews::DialogMbmapViews(const MbMap& map, const QList<MbMap::View>& views, int preselected, QWidget* parent)
     : QDialog(parent)
+    , ui(new Ui::DialogMbmapViews)
     ,_views(views)
-    ,_filter(new QLineEdit(this))
-    ,_list(new QTreeWidget(this))
 {
+    ui->setupUi(this);
     setWindowTitle(map.title());
-    resize(760, 520);
 
-    auto intro = new QLabel(tr("This map has %n block(s) of registers. Each block opens in its own window: "
-                               "choose the ones to open.", nullptr, views.size()), this);
-    intro->setWordWrap(true);
+    ui->labelIntro->setText(tr("This map has %n block(s) of registers. Each block opens in its own window: "
+                               "choose the ones to open.", nullptr, views.size()));
+    ui->treeWidget->header()->setSectionResizeMode(3, QHeaderView::Stretch);
 
-    _filter->setPlaceholderText(tr("Filter by register name"));
-    _filter->setClearButtonEnabled(true);
-
-    _list->setRootIsDecorated(false);
-    _list->setAlternatingRowColors(true);
-    _list->setHeaderLabels({ tr("Window"), tr("Area"), tr("Addresses"), tr("Registers") });
-    _list->header()->setSectionResizeMode(3, QHeaderView::Stretch);
-
+    // Filled before the signals matter: itemChanged updates the Open button
+    const QSignalBlocker blocker(ui->treeWidget);
     for(int i = 0; i < views.size(); i++)
     {
         const auto& v = views[i];
         const int first = v.Address + map.AddressBase;
-        auto item = new QTreeWidgetItem(_list);
+        auto item = new QTreeWidgetItem(ui->treeWidget);
         item->setText(0, v.Title);
         item->setText(1, areaName(v.Area));
         item->setText(2, v.Length > 1 ? QString("%1-%2").arg(first).arg(first + v.Length - 1) : QString::number(first));
@@ -67,47 +55,31 @@ DialogMbmapViews::DialogMbmapViews(const MbMap& map, const QList<MbMap::View>& v
         item->setData(0, IndexRole, i);
         item->setCheckState(0, i < preselected ? Qt::Checked : Qt::Unchecked);
     }
-    _list->resizeColumnToContents(0);
-    _list->resizeColumnToContents(1);
-    _list->resizeColumnToContents(2);
+    ui->treeWidget->resizeColumnToContents(0);
+    ui->treeWidget->resizeColumnToContents(1);
+    ui->treeWidget->resizeColumnToContents(2);
 
-    auto selectAll = new QPushButton(tr("Check shown"), this);
-    auto selectNone = new QPushButton(tr("Uncheck shown"), this);
-    connect(selectAll, &QPushButton::clicked, this, [this] { checkVisible(true); });
-    connect(selectNone, &QPushButton::clicked, this, [this] { checkVisible(false); });
-
-    auto buttons = new QDialogButtonBox(QDialogButtonBox::Cancel, this);
-    _openButton = buttons->addButton(tr("Open"), QDialogButtonBox::AcceptRole);
-
-    auto bottom = new QHBoxLayout;
-    bottom->addWidget(selectAll);
-    bottom->addWidget(selectNone);
-    bottom->addStretch();
-    bottom->addWidget(buttons);
-
-    auto layout = new QVBoxLayout(this);
-    layout->addWidget(intro);
-    layout->addWidget(_filter);
-    layout->addWidget(_list);
-    layout->addLayout(bottom);
-
-    connect(_filter, &QLineEdit::textChanged, this, &DialogMbmapViews::on_filterChanged);
-    connect(_list, &QTreeWidget::itemChanged, this, &DialogMbmapViews::updateOpenButton);
-    connect(buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
+    _openButton = ui->buttonBox->addButton(tr("Open"), QDialogButtonBox::AcceptRole);
     updateOpenButton();
 }
 
 ///
-/// \brief DialogMbmapViews::selectedViews
-/// \return
+/// \brief Deletes the dialog's form
+///
+DialogMbmapViews::~DialogMbmapViews()
+{
+    delete ui;
+}
+
+///
+/// \brief The blocks to open
+/// \return The checked blocks, in the order of the map
 ///
 QList<MbMap::View> DialogMbmapViews::selectedViews() const
 {
     QList<MbMap::View> selected;
-    for(int i = 0; i < _list->topLevelItemCount(); i++) {
-        const auto item = _list->topLevelItem(i);
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
+        const auto item = ui->treeWidget->topLevelItem(i);
         if(item->checkState(0) == Qt::Checked)
             selected.append(_views.at(item->data(0, IndexRole).toInt()));
     }
@@ -115,36 +87,65 @@ QList<MbMap::View> DialogMbmapViews::selectedViews() const
 }
 
 ///
-/// \brief DialogMbmapViews::on_filterChanged
-/// \param text
+/// \brief Shows only the blocks whose title or registers contain the text
+/// \param text The filter, matched without case
 ///
-void DialogMbmapViews::on_filterChanged(const QString& text)
+void DialogMbmapViews::on_lineEditFilter_textChanged(const QString& text)
 {
-    for(int i = 0; i < _list->topLevelItemCount(); i++) {
-        auto item = _list->topLevelItem(i);
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
+        auto item = ui->treeWidget->topLevelItem(i);
         item->setHidden(!item->text(0).contains(text, Qt::CaseInsensitive)
                         && !item->text(3).contains(text, Qt::CaseInsensitive));
     }
 }
 
 ///
-/// \brief DialogMbmapViews::checkVisible
-/// \param on
+/// \brief Keeps the Open button in step with the checked blocks
+/// \param item The block that changed
+/// \param column The column that changed
+///
+void DialogMbmapViews::on_treeWidget_itemChanged(QTreeWidgetItem* item, int column)
+{
+    Q_UNUSED(item)
+    Q_UNUSED(column)
+    updateOpenButton();
+}
+
+///
+/// \brief Checks every block the filter shows
+///
+void DialogMbmapViews::on_pushButtonCheckShown_clicked()
+{
+    checkVisible(true);
+}
+
+///
+/// \brief Unchecks every block the filter shows
+///
+void DialogMbmapViews::on_pushButtonUncheckShown_clicked()
+{
+    checkVisible(false);
+}
+
+///
+/// \brief Checks or unchecks the blocks the filter shows
+/// \param on true to check them, false to uncheck them
 ///
 void DialogMbmapViews::checkVisible(bool on)
 {
-    for(int i = 0; i < _list->topLevelItemCount(); i++) {
-        auto item = _list->topLevelItem(i);
+    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
+        auto item = ui->treeWidget->topLevelItem(i);
         if(!item->isHidden())
             item->setCheckState(0, on ? Qt::Checked : Qt::Unchecked);
     }
 }
 
 ///
-/// \brief DialogMbmapViews::updateOpenButton
+/// \brief Enables the Open button when a block is checked, and counts the windows
 ///
 void DialogMbmapViews::updateOpenButton()
 {
+    if(!_openButton) return;
     const int count = selectedViews().size();
     _openButton->setEnabled(count > 0);
     _openButton->setText(count > 1 ? tr("Open %1 Windows").arg(count) : tr("Open"));

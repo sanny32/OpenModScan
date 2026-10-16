@@ -4,11 +4,12 @@
 #include <QDialog>
 #include <QNetworkAccessManager>
 
-class QLabel;
-class QLineEdit;
 class QPushButton;
-class QTreeWidget;
 class QTreeWidgetItem;
+
+namespace Ui {
+class DialogMbmapLibrary;
+}
 
 ///
 /// \brief The DialogMbmapLibrary class lists the device maps of the
@@ -19,9 +20,18 @@ class DialogMbmapLibrary : public QDialog
     Q_OBJECT
 
 public:
+    ///
+    /// \brief Opens the dialog and starts downloading the list of maps
+    /// \param parent Parent widget
+    ///
     explicit DialogMbmapLibrary(QWidget* parent = nullptr);
+    ~DialogMbmapLibrary() override;
 
-    /// The downloaded map, once the dialog is accepted
+    ///
+    /// \brief The downloaded map
+    /// \return Path of the saved .mbmap.json file once the dialog is accepted,
+    /// empty before
+    ///
     QString filename() const {
         return _filename;
     }
@@ -29,18 +39,18 @@ public:
 private slots:
     void on_indexFinished();
     void on_mapFinished();
-    void on_filterChanged(const QString& text);
+    void on_lineEditFilter_textChanged(const QString& text);
+    void on_treeWidget_itemSelectionChanged();
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
     void on_open();
 
 private:
     void setBusy(bool busy, const QString& status);
 
 private:
+    Ui::DialogMbmapLibrary* ui;
     QNetworkAccessManager _network;
-    QLineEdit* _filter;
-    QTreeWidget* _list;
-    QLabel* _status;
-    QPushButton* _openButton;
+    QPushButton* _openButton = nullptr;
     QString _filename;
 };
 

@@ -136,6 +136,8 @@ set(SOURCES
     dialogs/dialogmsgparser.cpp
     dialogs/dialogabout.cpp
     dialogs/dialogaddressscan.cpp
+    dialogs/dialogmbmaplibrary.cpp
+    dialogs/dialogmbmapviews.cpp
     dialogs/dialogautosimulation.cpp
     dialogs/dialogautostart.cpp
     dialogs/dialogcoilsimulation.cpp
@@ -157,6 +159,7 @@ set(SOURCES
     htmldelegate.cpp
     main.cpp
     mainwindow.cpp
+    mbmap.cpp
     modbusclient.cpp
     modbusclientprivate.cpp
     modbustcpclient.cpp
@@ -220,6 +223,8 @@ set(HEADERS
     dialogs/dialogmsgparser.h
     dialogs/dialogabout.h
     dialogs/dialogaddressscan.h
+    dialogs/dialogmbmaplibrary.h
+    dialogs/dialogmbmapviews.h
     dialogs/dialogautosimulation.h
     dialogs/dialogautostart.h
     dialogs/dialogcoilsimulation.h
@@ -244,6 +249,7 @@ set(HEADERS
     formmodsca.h
     htmldelegate.h
     mainwindow.h
+    mbmap.h
     modbusclient.h
     modbusclientprivate.h
     modbustcpclient.h
@@ -316,6 +322,8 @@ set(UI_FILES
     dialogs/dialogforcemultiplecoils.ui
     dialogs/dialogforcemultipleregisters.ui
     dialogs/dialogmaskwriteregiter.ui
+    dialogs/dialogmbmaplibrary.ui
+    dialogs/dialogmbmapviews.ui
     dialogs/dialogmodbusscanner.ui
     dialogs/dialogprintsettings.ui
     dialogs/dialogprotocolselections.ui

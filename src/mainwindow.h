@@ -40,6 +40,7 @@ private slots:
     /* File menu slots */
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
+    void on_actionMbmapLibrary_triggered();
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
     void on_actionSave_triggered();
@@ -126,6 +127,7 @@ private slots:
 
     void updateMenuWindow();
     void openFile(const QString& filename);
+    void openMap(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);
     void setCodepage(const QString& name);
 

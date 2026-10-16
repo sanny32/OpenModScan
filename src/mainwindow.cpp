@@ -19,6 +19,9 @@
 #include "dialogmodbusscanner.h"
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
+#include "dialogmbmaplibrary.h"
+#include "dialogmbmapviews.h"
+#include "mbmap.h"
 #include "numericutils.h"
 #include "mainstatusbar.h"
 #include "mainwindow.h"
@@ -393,13 +396,25 @@ void MainWindow::on_actionNew_triggered()
 void MainWindow::on_actionOpen_triggered()
 {
     QStringList filters;
+    filters << tr("All supported files (*.xml *.mbmap.json)");
     filters << tr("XML files (*.xml)");
+    filters << tr("Device maps (*.mbmap.json)");
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
     if(filename.isEmpty()) return;
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     openFile(filename);
+}
+
+///
+/// \brief MainWindow::on_actionMbmapLibrary_triggered
+///
+void MainWindow::on_actionMbmapLibrary_triggered()
+{
+    DialogMbmapLibrary dlg(this);
+    if(dlg.exec() == QDialog::Accepted)
+        openFile(dlg.filename());
 }
 
 ///
@@ -1384,6 +1399,11 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
 ///
 void MainWindow::openFile(const QString& filename)
 {
+    if(MbMap::isMapFile(filename)) {
+        openMap(filename);
+        return;
+    }
+
     auto frm = loadMdiChild(filename);
     if(frm)
     {
@@ -1398,6 +1418,62 @@ void MainWindow::openFile(const QString& filename)
         _recentFileActionList->removeRecentFile(filename);
         QMessageBox::warning(this, windowTitle(), message);
     }
+}
+
+///
+/// \brief MainWindow::openMap
+/// \param filename A device map (.mbmap.json): one window opens for each
+/// block of registers, with the registers' names as address descriptions
+///
+void MainWindow::openMap(const QString& filename)
+{
+    QString error;
+    const auto map = MbMap::load(filename, &error);
+    if(!error.isEmpty()) {
+        if(!QFileInfo::exists(filename))
+            _recentFileActionList->removeRecentFile(filename);
+        QMessageBox::warning(this, windowTitle(), QString(tr("Failed to open %1\n%2")).arg(filename, error));
+        return;
+    }
+
+    const auto views = map.views();
+    if(views.isEmpty()) {
+        QMessageBox::warning(this, windowTitle(), QString(tr("%1 has no registers to show")).arg(map.title()));
+        return;
+    }
+
+    // Large maps have many blocks: the user picks which ones open
+    constexpr int MaxWindowsAtOnce = 8;
+    auto selected = views;
+    if(views.size() > MaxWindowsAtOnce) {
+        DialogMbmapViews dlg(map, views, MaxWindowsAtOnce, this);
+        if(dlg.exec() != QDialog::Accepted)
+            return;
+        selected = dlg.selectedViews();
+    }
+
+    for(auto&& view : selected)
+    {
+        auto frm = createMdiChild(++_windowCounter);
+
+        auto dd = frm->displayDefinition();
+        dd.FormName = view.Title;
+        dd.DeviceId = map.UnitId;
+        dd.PointType = view.Area;
+        dd.ZeroBasedAddress = map.AddressBase == 0;
+        dd.PointAddress = view.Address + map.AddressBase;
+        dd.Length = view.Length;
+        frm->setDisplayDefinition(dd);
+        frm->setDataDisplayMode(view.Mode);
+        frm->setByteOrder(view.Order);
+
+        for(auto it = view.Descriptions.constBegin(); it != view.Descriptions.constEnd(); ++it)
+            frm->setDescription(dd.DeviceId, dd.PointType, it.key(), it.value());
+
+        frm->show();
+    }
+
+    addRecentFile(filename);
 }
 
 ///

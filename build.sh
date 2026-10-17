@@ -46,6 +46,12 @@ case "$ID" in
         INSTALL_CMD="zypper install -y"
         SEARCH_CMD="zypper search"
         ;;
+    arch|endeavouros|manjaro|cachyos)
+        DISTRO="arch-based"
+        CHECK_CMD="pacman -Qq"
+        INSTALL_CMD="pacman -S --needed --noconfirm"
+        SEARCH_CMD="pacman -Ss"
+        ;;
     *)
         echo "Unsupported Linux distribution: $ID"
         exit 1
@@ -173,6 +179,9 @@ get_qt5_packages() {
         suse-based)
             echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
             ;;
+        arch-based)
+            echo "qt5-base qt5-tools qt5-serialport qt5-serialbus"
+            ;;
     esac
 }
 
@@ -202,6 +211,9 @@ get_qt6_packages() {
         suse-based)
             echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
             ;;
+        arch-based)
+            echo "qt6-base qt6-tools qt6-serialport qt6-serialbus qt6-5compat"
+            ;;
     esac
 }
 
@@ -225,6 +237,9 @@ get_packages() {
             ;;
         suse-based)
             general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
+            ;;
+        arch-based)
+            general_packages="base-devel cmake ninja pkgconf libxcb libcups"
             ;;
     esac
 

@@ -57,6 +57,7 @@ CMakeLists.txt.user*
 .vscode
 AGENTS.md
 
+.review
 .directory
 *.bat
 *.qmake.stash

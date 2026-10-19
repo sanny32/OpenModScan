@@ -116,6 +116,7 @@ The following minimum operating system versions are supported for OpenModScan:
 - <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
 - <img src="docs/icons/logo_astra.png" width="18" height="18" /> **Astra Linux 1.7**
 - <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+- <img src="docs/icons/logo_arch.svg" width="16" height="16" /> **Arch** (manual building only)
 
 # Install from [binary distributions](https://github.com/sanny32/OpenModScan/releases/latest)
 

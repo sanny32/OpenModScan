@@ -1460,8 +1460,9 @@ void MainWindow::openMap(const QString& filename)
         dd.FormName = view.Title;
         dd.DeviceId = map.UnitId;
         dd.PointType = view.Area;
-        dd.ZeroBasedAddress = map.AddressBase == 0;
-        dd.PointAddress = view.Address + map.AddressBase;
+        const auto placement = MbMap::placement(view, map.AddressBase);
+        dd.ZeroBasedAddress = placement.ZeroBased;
+        dd.PointAddress = placement.Address;
         dd.Length = view.Length;
         frm->setDisplayDefinition(dd);
         frm->setDataDisplayMode(view.Mode);

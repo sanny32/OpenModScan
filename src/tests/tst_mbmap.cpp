@@ -17,6 +17,10 @@ private slots:
     void describesBitsAndScale();
     void respectsTheDeviceReadLimits();
     void keepsWriteOnlyRegistersOutOfReads();
+    void ignoresByteOrderForBool();
+    void placesTheLastAddressWithBase1();
+    void keepsWriteOnlyBarriersOfRegistersItCannotShow();
+    void keepsDownloadedMapsInsideTheirFolder();
 };
 
 namespace {
@@ -244,6 +248,100 @@ void TestMbMap::keepsWriteOnlyRegistersOutOfReads()
     // Address 10 is also read for "Running", so its window may cover it
     QCOMPARE(views[2].Address, quint16(10));
     QCOMPARE(views[2].Length, quint16(2));
+}
+
+///
+/// \brief Byte order does not apply to bool: it keeps the direct order, so
+/// the bit the description names is the bit shown.
+///
+void TestMbMap::ignoresByteOrderForBool()
+{
+    const auto map = parse(R"({
+        "mbmap": 2, "vendor": "V", "model": "M", "byte_order": "little",
+        "registers": [
+            {"name": "Relay", "area": "holding", "address": 0, "type": "bool", "bit": 0},
+            {"name": "Count", "area": "holding", "address": 1, "type": "uint16"}
+        ]
+    })");
+    const auto views = map.views();
+    QCOMPARE(views.size(), 2);
+    for(auto&& v : views) {
+        if(v.Mode == DataDisplayMode::Binary)
+            QCOMPARE(v.Order, ByteOrder::Direct);
+        else
+            QCOMPARE(v.Order, ByteOrder::Swapped); // the other types still follow it
+    }
+}
+
+///
+/// \brief With address_base 1, the last wire address (65535) is address 65536,
+/// which a 16-bit start address cannot hold: the window counts from 0 there.
+///
+void TestMbMap::placesTheLastAddressWithBase1()
+{
+    const auto map = parse(R"({
+        "mbmap": 2, "vendor": "V", "model": "M", "address_base": 1,
+        "registers": [
+            {"name": "First", "area": "holding", "address": 1, "type": "uint16"},
+            {"name": "Last", "area": "holding", "address": 65536, "type": "uint16"}
+        ]
+    })");
+    const auto views = map.views();
+    QCOMPARE(views.size(), 2);
+
+    const auto first = MbMap::placement(views[0], map.AddressBase);
+    QVERIFY(!first.ZeroBased);
+    QCOMPARE(first.Address, quint16(1));
+
+    QCOMPARE(views[1].Address, quint16(65535));
+    const auto last = MbMap::placement(views[1], map.AddressBase);
+    QVERIFY(last.ZeroBased);
+    QCOMPARE(last.Address, quint16(65535));
+
+    MbMap::View zero;
+    zero.Address = 7;
+    const auto p = MbMap::placement(zero, 0);
+    QVERIFY(p.ZeroBased);
+    QCOMPARE(p.Address, quint16(7));
+}
+
+///
+/// \brief A write-only register that is not shown (here a string longer than
+/// a read) still keeps the windows from reading across its addresses.
+///
+void TestMbMap::keepsWriteOnlyBarriersOfRegistersItCannotShow()
+{
+    const auto map = parse(R"({
+        "mbmap": 2, "vendor": "V", "model": "M",
+        "registers": [
+            {"name": "R0", "area": "holding", "address": 0, "type": "uint16"},
+            {"name": "Blob", "area": "holding", "address": 1, "type": "string", "length": 126, "access": "W"},
+            {"name": "R2", "area": "holding", "address": 2, "type": "uint16"}
+        ]
+    })");
+    QCOMPARE(map.Registers.size(), 2);
+
+    const auto views = map.views();
+    QCOMPARE(views.size(), 2);
+    QCOMPARE(views[0].Address, quint16(0));
+    QCOMPARE(views[0].Length, quint16(1));
+    QCOMPARE(views[1].Address, quint16(2));
+    QCOMPARE(views[1].Length, quint16(1));
+}
+
+///
+/// \brief Paths of the library's index that leave the folder are refused.
+///
+void TestMbMap::keepsDownloadedMapsInsideTheirFolder()
+{
+    const QString dir = "/data/mbmap-library";
+    QCOMPARE(MbMap::cachedFilePath(dir, "acme/em-100.mbmap.json"), QString("/data/mbmap-library/acme/em-100.mbmap.json"));
+    QCOMPARE(MbMap::cachedFilePath(dir, "acme/../em-100.mbmap.json"), QString("/data/mbmap-library/em-100.mbmap.json"));
+
+    for(auto&& bad : { "../overwrite.mbmap.json", "acme/../../overwrite.mbmap.json",
+                       "/etc/overwrite.mbmap.json", "..\\overwrite.mbmap.json",
+                       "C:/overwrite.mbmap.json", "acme/em-100.json", "", ".mbmap.json/../.." })
+        QVERIFY2(MbMap::cachedFilePath(dir, bad).isEmpty(), bad);
 }
 
 QTEST_GUILESS_MAIN(TestMbMap)

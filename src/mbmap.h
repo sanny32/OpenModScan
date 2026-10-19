@@ -53,6 +53,28 @@ struct MbMap
         QMap<quint16, QString> Descriptions; // 0-based address -> text
     };
 
+    ///
+    /// \brief Where a window starts, as Open ModScan's display definition
+    /// takes it
+    ///
+    struct Placement
+    {
+        bool ZeroBased = true;  // addresses count from 0 rather than 1
+        quint16 Address = 0;    // first address in that numbering
+    };
+
+    ///
+    /// \brief Addresses of a write-only register that could not be kept as a
+    /// register (e.g. a string longer than a read can be), which no window may
+    /// read all the same
+    ///
+    struct WriteOnlyRange
+    {
+        QModbusDataUnit::RegisterType Area = QModbusDataUnit::Invalid;
+        quint16 Address = 0;    // as sent on the wire (0-based)
+        int Count = 1;
+    };
+
     QString Vendor;
     QString Model;
     QString MapDescription;
@@ -61,6 +83,7 @@ struct MbMap
     int MaxReadRegisters = 125; // largest read of registers the device accepts (FC03/04)
     int MaxReadBits = 2000;     // largest read of coils or inputs the device accepts (FC01/02)
     QList<Register> Registers;
+    QList<WriteOnlyRange> WriteOnlyRanges;
 
     ///
     /// \brief Reads a map from the content of a .mbmap.json file
@@ -88,6 +111,16 @@ struct MbMap
     static bool isMapFile(const QString& filename);
 
     ///
+    /// \brief Where a map of the library is kept inside a folder
+    /// \param directory The folder the maps are kept in
+    /// \param path The map's path in the library's index, e.g. "acme/em-100.mbmap.json"
+    /// \return The file's path in the folder; empty when the path is not a
+    /// relative path to a .mbmap.json file that stays inside the folder
+    /// (the index is not trusted: "../x.mbmap.json" is refused)
+    ///
+    static QString cachedFilePath(const QString& directory, const QString& path);
+
+    ///
     /// \brief Lays the readable registers out in Open ModScan windows
     /// \return One view per window, by area and then address. A window holds
     /// registers of one area, display mode and byte order that are close
@@ -97,6 +130,16 @@ struct MbMap
     /// Registers longer than those limits on their own are left out.
     ///
     QList<View> views() const;
+
+    ///
+    /// \brief Where a window of the map starts in the numbering of the map
+    /// \param view A view of this map
+    /// \param addressBase The map's address_base (0 or 1)
+    /// \return The map's numbering, which is 1-based when address_base is 1.
+    /// The last wire address (65535) is address 65536 then, which a
+    /// 16-bit start address cannot hold: the window counts from 0 instead.
+    ///
+    static Placement placement(const View& view, int addressBase);
 
     ///
     /// \brief The map's name for window titles and dialogs

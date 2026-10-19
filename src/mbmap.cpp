@@ -1,3 +1,4 @@
+#include <QDir>
 #include <QFile>
 #include <QObject>
 #include <QJsonArray>
@@ -234,16 +235,29 @@ MbMap MbMap::parse(const QByteArray& data, QString* error)
         if(address < 0 || address > 65535)
             continue;
         r.Address = static_cast<quint16>(address);
+        r.Readable = obj.value("access").toString() != QLatin1String("W");
+
+        // A write-only register that cannot be shown still keeps reads off
+        // its addresses
+        auto blockAddresses = [&](qint64 count) {
+            if(!r.Readable)
+                map.WriteOnlyRanges.append({ r.Area, r.Address, static_cast<int>(qBound<qint64>(1, count, 65536 - address)) });
+        };
 
         if(r.Type == QLatin1String("string")) {
-            if(!toInteger(obj.value("length"), n) || n < 1 || n > 125)
+            const bool hasLength = toInteger(obj.value("length"), n) && n >= 1;
+            if(!hasLength || n > 125) {
+                blockAddresses(hasLength ? n : 1);
                 continue;
+            }
             r.Length = static_cast<quint16>(n);
         }
         if(obj.contains("bit") && toInteger(obj.value("bit"), n) && n >= 0 && n <= 15)
             r.Bit = static_cast<int>(n);
-        if(!bitArea && r.Type == QLatin1String("bool") && r.Bit < 0)
+        if(!bitArea && r.Type == QLatin1String("bool") && r.Bit < 0) {
+            blockAddresses(1);
             continue;
+        }
         if(r.Type == QLatin1String("uint16") && r.Bit >= 0 && obj.contains("bits")
            && toInteger(obj.value("bits"), n) && n >= 1 && r.Bit + n <= 16)
             r.Bits = static_cast<int>(n);
@@ -252,11 +266,12 @@ MbMap MbMap::parse(const QByteArray& data, QString* error)
         if(obj.value("offset").isDouble()) r.Offset = obj.value("offset").toDouble();
 
         r.ByteSwapped = obj.contains("byte_order") ? obj.value("byte_order").toString() == QLatin1String("little") : fileByteSwap;
-        r.Readable = obj.value("access").toString() != QLatin1String("W");
         r.WordSwapped = obj.contains("word_order") ? obj.value("word_order").toString() == QLatin1String("little") : fileWordSwap;
 
-        if(static_cast<int>(r.Address) + registerCount(r) > 65536)
+        if(static_cast<int>(r.Address) + registerCount(r) > 65536) {
+            blockAddresses(registerCount(r));
             continue;
+        }
 
         map.Registers.append(r);
     }
@@ -297,6 +312,10 @@ QList<MbMap::View> MbMap::views() const
     // Addresses that are only written: no window may read them, since a
     // device can refuse the whole request for one of them
     QMap<QModbusDataUnit::RegisterType, QSet<int>> writeOnly;
+    for(auto&& range : WriteOnlyRanges) {
+        for(int a = range.Address; a < range.Address + range.Count; a++)
+            writeOnly[range.Area].insert(a);
+    }
     for(auto&& r : Registers) {
         if(!r.Readable)
             for(int a = r.Address; a < r.Address + registerCount(r); a++)
@@ -320,7 +339,9 @@ QList<MbMap::View> MbMap::views() const
             continue;
         const auto mode = displayMode(r);
         const bool bitArea = r.Area == QModbusDataUnit::Coils || r.Area == QModbusDataUnit::DiscreteInputs;
-        const auto order = (r.ByteSwapped && !bitArea) ? ByteOrder::Swapped : ByteOrder::Direct;
+        // Byte order does not apply to bool (SPEC.md), nor to coils and inputs
+        const bool isBool = r.Type == QLatin1String("bool");
+        const auto order = (r.ByteSwapped && !bitArea && !isBool) ? ByteOrder::Swapped : ByteOrder::Direct;
         groups[{ r.Area, mode, order }].append(r);
     }
 
@@ -388,4 +409,38 @@ QList<MbMap::View> MbMap::views() const
         return std::tie(a.Area, a.Address) < std::tie(b.Area, b.Address);
     });
     return views;
+}
+
+///
+/// \brief Where a window of the map starts in the numbering of the map
+/// \param view A view of this map
+/// \param addressBase The map's address_base (0 or 1)
+/// \return The map's numbering, which is 1-based when address_base is 1.
+/// The last wire address (65535) is address 65536 then, which a
+/// 16-bit start address cannot hold: the window counts from 0 instead.
+///
+MbMap::Placement MbMap::placement(const View& view, int addressBase)
+{
+    const int address = view.Address + addressBase;
+    if(address > 65535)
+        return { true, view.Address };
+    return { addressBase == 0, static_cast<quint16>(address) };
+}
+
+///
+/// \brief Where a map of the library is kept inside a folder
+/// \param directory The folder the maps are kept in
+/// \param path The map's path in the library's index, e.g. "acme/em-100.mbmap.json"
+/// \return The file's path in the folder; empty when the path is not a
+/// relative path to a .mbmap.json file that stays inside the folder
+/// (the index is not trusted: "../x.mbmap.json" is refused)
+///
+QString MbMap::cachedFilePath(const QString& directory, const QString& path)
+{
+    if(!isMapFile(path) || path.contains(QLatin1Char('\\')) || path.contains(QLatin1Char(':')) || QDir::isAbsolutePath(path))
+        return QString();
+
+    const QString root = QDir::cleanPath(QDir(directory).absolutePath());
+    const QString filename = QDir::cleanPath(root + QLatin1Char('/') + path);
+    return filename.startsWith(root + QLatin1Char('/')) ? filename : QString();
 }

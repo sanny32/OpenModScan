@@ -79,7 +79,7 @@ void DialogMbmapLibrary::on_indexFinished()
     {
         const auto entry = value.toObject();
         const auto path = entry.value("path").toString();
-        if(!MbMap::isMapFile(path)) continue;
+        if(MbMap::cachedFilePath(QStringLiteral("/mbmap-library"), path).isEmpty()) continue;
 
         auto item = new QTreeWidgetItem(ui->treeWidget);
         item->setText(0, entry.value("vendor").toString());
@@ -174,8 +174,12 @@ void DialogMbmapLibrary::on_mapFinished()
     // Kept next to the app's other data, so the map can be opened again
     // from the recent files
     const auto path = reply->property("path").toString();
-    const QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/mbmap-library");
-    const auto filename = dir.filePath(path);
+    const auto filename = MbMap::cachedFilePath(
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/mbmap-library", path);
+    if(filename.isEmpty()) {
+        setBusy(false, tr("The map has an invalid path in the library"));
+        return;
+    }
     QDir().mkpath(QFileInfo(filename).absolutePath());
 
     QFile file(filename);

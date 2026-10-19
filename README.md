@@ -52,6 +52,8 @@ Registers
 
   <img width="529" height="722" alt="image" src=".github/assets/omodscan-user-msg.png" />
 
+- Device maps: open a [`.mbmap.json`](https://github.com/nobrega8/mbmap-library/blob/main/SPEC.md) file (File > Open) or pick one from the [mbmap-library](https://github.com/nobrega8/mbmap-library) (File > Device Map Library...). Each block of registers opens in its own window, with the data type, byte and word order, device id and the register names as address descriptions
+
 
 # Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.

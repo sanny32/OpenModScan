@@ -58,6 +58,7 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionMbmapLibrary"/>
     <addaction name="actionClose"/>
     <addaction name="actionCloseAll"/>
     <addaction name="actionSave"/>
@@ -323,6 +324,14 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionMbmapLibrary">
+   <property name="text">
+    <string>Device Map Library...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a device map from the mbmap-library</string>
    </property>
   </action>
   <action name="actionClose">

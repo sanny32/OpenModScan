@@ -173,7 +173,7 @@
     </message>
     <message>
         <source>Open Modscan</source>
-        <translation></translation>
+        <translation>Open ModScan</translation>
     </message>
     <message>
         <source>Version: 1.0.0</source>
@@ -757,114 +757,114 @@
     <name>DialogMbmapLibrary</name>
     <message>
         <source>Device Map Library</source>
-        <translation type="unfinished"></translation>
+        <translation>Библиотека карт устройств</translation>
     </message>
     <message>
         <source>Filter by vendor, model or description</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтр по производителю, модели или описанию</translation>
     </message>
     <message>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>Производитель</translation>
     </message>
     <message>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <source>Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>Регистры</translation>
     </message>
     <message>
         <source>Maps from &lt;a href=&quot;https://github.com/nobrega8/mbmap-library&quot;&gt;mbmap-library&lt;/a&gt;. Opening one creates a window for each block of registers.</source>
-        <translation type="unfinished"></translation>
+        <translation>Карты из &lt;a href=&quot;https://github.com/nobrega8/mbmap-library&quot;&gt;mbmap-library&lt;/a&gt;. При открытии карты для каждого блока регистров создаётся отдельное окно.</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть</translation>
     </message>
     <message>
         <source>Loading the list of maps...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка списка карт...</translation>
     </message>
     <message>
         <source>The list of maps could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить список карт: %1</translation>
     </message>
     <message numerus="yes">
         <source>%n map(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n карта</numerusform>
+            <numerusform>%n карты</numerusform>
+            <numerusform>%n карт</numerusform>
         </translation>
     </message>
     <message>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка %1...</translation>
     </message>
     <message>
         <source>The map could not be downloaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить карту: %1</translation>
     </message>
     <message>
         <source>The map has an invalid path in the library</source>
-        <translation type="unfinished"></translation>
+        <translation>Карта имеет недопустимый путь в библиотеке</translation>
     </message>
     <message>
         <source>The map could not be saved: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось сохранить карту: %1</translation>
     </message>
 </context>
 <context>
     <name>DialogMbmapViews</name>
     <message>
         <source>Filter by register name</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтр по имени регистра</translation>
     </message>
     <message>
         <source>Window</source>
-        <translation type="unfinished">Окно</translation>
+        <translation>Окно</translation>
     </message>
     <message>
         <source>Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Область</translation>
     </message>
     <message>
         <source>Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <source>Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>Регистры</translation>
     </message>
     <message>
         <source>Check shown</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать показанные</translation>
     </message>
     <message>
         <source>Uncheck shown</source>
-        <translation type="unfinished"></translation>
+        <translation>Снять выбор с показанных</translation>
     </message>
     <message numerus="yes">
         <source>This map has %n block(s) of registers. Each block opens in its own window: choose the ones to open.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Карта содержит %n блок регистров. Каждый блок открывается в отдельном окне: выберите нужные блоки.</numerusform>
+            <numerusform>Карта содержит %n блока регистров. Каждый блок открывается в отдельном окне: выберите нужные блоки.</numerusform>
+            <numerusform>Карта содержит %n блоков регистров. Каждый блок открывается в отдельном окне: выберите нужные блоки.</numerusform>
         </translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть</translation>
     </message>
     <message>
         <source>Open %1 Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть окна: %1</translation>
     </message>
 </context>
 <context>
@@ -1304,7 +1304,7 @@
     </message>
     <message>
         <source>250</source>
-        <translation></translation>
+        <translation>250</translation>
     </message>
     <message>
         <source>(msecs)</source>
@@ -1320,7 +1320,7 @@
     </message>
     <message>
         <source>0</source>
-        <translation></translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>( μsecs)</source>
@@ -1707,7 +1707,7 @@ Valid Slave Responses: %2</source>
     <name>MainWindow</name>
     <message>
         <source>Open ModScan</source>
-        <translation></translation>
+        <translation>Open ModScan</translation>
     </message>
     <message>
         <source>File</source>
@@ -1775,11 +1775,11 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <source>Device Map Library...</source>
-        <translation type="unfinished"></translation>
+        <translation>Библиотека карт устройств...</translation>
     </message>
     <message>
         <source>Open a device map from the mbmap-library</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть карту устройства из mbmap-library</translation>
     </message>
     <message>
         <source>Close</source>
@@ -2055,7 +2055,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <source>All supported files (*.xml *.mbmap.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Все поддерживаемые файлы (*.xml *.mbmap.json)</translation>
     </message>
     <message>
         <source>XML files (*.xml)</source>
@@ -2063,7 +2063,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <source>Device maps (*.mbmap.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>Карты устройств (*.mbmap.json)</translation>
     </message>
     <message>
         <source>%1 was not found</source>
@@ -2076,11 +2076,12 @@ Valid Slave Responses: %2</source>
     <message>
         <source>Failed to open %1
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть %1
+%2</translation>
     </message>
     <message>
         <source>%1 has no registers to show</source>
-        <translation type="unfinished"></translation>
+        <translation>В %1 нет регистров для отображения</translation>
     </message>
     <message>
         <source>Capture Error:<byte value="xd"/>
@@ -2540,35 +2541,35 @@ Byte Order: %2</source>
     <name>QObject</name>
     <message>
         <source>Coils</source>
-        <translation type="unfinished"></translation>
+        <translation>Дискретные выходы</translation>
     </message>
     <message>
         <source>Discrete Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Дискретные входы</translation>
     </message>
     <message>
         <source>Input Registers</source>
-        <translation type="unfinished">Значения реистров</translation>
+        <translation>Входные регистры</translation>
     </message>
     <message>
         <source>Holding Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>Регистры хранения</translation>
     </message>
     <message>
         <source>Not a valid JSON file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Некорректный файл JSON: %1</translation>
     </message>
     <message>
         <source>Not a .mbmap file: the &quot;mbmap&quot; version is missing</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл не является картой .mbmap: отсутствует версия «mbmap»</translation>
     </message>
     <message>
         <source>Unsupported .mbmap version %1 (version 2 is supported)</source>
-        <translation type="unfinished"></translation>
+        <translation>Неподдерживаемая версия .mbmap: %1 (поддерживается версия 2)</translation>
     </message>
     <message>
         <source>The map has no &quot;vendor&quot;, &quot;model&quot; or &quot;registers&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>В карте отсутствует «vendor», «model» или «registers»</translation>
     </message>
 </context>
 <context>

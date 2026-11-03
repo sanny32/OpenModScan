@@ -109,6 +109,7 @@ private slots:
     /* Language menu slots */
     void on_actionEnglish_triggered();
     void on_actionRussian_triggered();
+    void on_actionItalian_triggered();
     void on_actionChineseCN_triggered();
     void on_actionChineseTW_triggered();
 

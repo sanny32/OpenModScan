@@ -172,6 +172,7 @@
      </property>
      <addaction name="actionEnglish"/>
      <addaction name="actionRussian"/>
+     <addaction name="actionItalian"/>
      <addaction name="actionChineseCN"/>
      <addaction name="actionChineseTW"/>
     </widget>
@@ -740,6 +741,14 @@
    </property>
    <property name="iconText">
     <string notr="true">English</string>
+   </property>
+  </action>
+  <action name="actionItalian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">Italiano</string>
    </property>
   </action>
   <action name="actionRussian">

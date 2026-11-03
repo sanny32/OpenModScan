@@ -1,4 +1,5 @@
 set(TS_FILES
+    translations/omodscan_it.ts
     translations/omodscan_ru.ts
     translations/omodscan_zh_CN.ts
     translations/omodscan_zh_TW.ts

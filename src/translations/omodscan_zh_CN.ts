@@ -758,110 +758,110 @@
     <name>DialogMbmapLibrary</name>
     <message>
         <source>Device Map Library</source>
-        <translation type="unfinished"></translation>
+        <translation>设备映射库</translation>
     </message>
     <message>
         <source>Filter by vendor, model or description</source>
-        <translation type="unfinished"></translation>
+        <translation>按制造商、型号或描述筛选</translation>
     </message>
     <message>
         <source>Vendor</source>
-        <translation type="unfinished"></translation>
+        <translation>制造商</translation>
     </message>
     <message>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>型号</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>描述</translation>
     </message>
     <message>
         <source>Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>寄存器</translation>
     </message>
     <message>
         <source>Maps from &lt;a href=&quot;https://github.com/nobrega8/mbmap-library&quot;&gt;mbmap-library&lt;/a&gt;. Opening one creates a window for each block of registers.</source>
-        <translation type="unfinished"></translation>
+        <translation>映射来自 &lt;a href=&quot;https://github.com/nobrega8/mbmap-library&quot;&gt;mbmap-library&lt;/a&gt;。打开映射时，会为每个寄存器块创建一个窗口。</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>打开</translation>
     </message>
     <message>
         <source>Loading the list of maps...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在加载映射列表...</translation>
     </message>
     <message>
         <source>The list of maps could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无法加载映射列表：%1</translation>
     </message>
     <message numerus="yes">
         <source>%n map(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n 个映射</numerusform>
         </translation>
     </message>
     <message>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在下载 %1...</translation>
     </message>
     <message>
         <source>The map could not be downloaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无法下载映射：%1</translation>
     </message>
     <message>
         <source>The map has an invalid path in the library</source>
-        <translation type="unfinished"></translation>
+        <translation>映射在库中的路径无效</translation>
     </message>
     <message>
         <source>The map could not be saved: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无法保存映射：%1</translation>
     </message>
 </context>
 <context>
     <name>DialogMbmapViews</name>
     <message>
         <source>Filter by register name</source>
-        <translation type="unfinished"></translation>
+        <translation>按寄存器名称筛选</translation>
     </message>
     <message>
         <source>Window</source>
-        <translation type="unfinished">窗口</translation>
+        <translation>窗口</translation>
     </message>
     <message>
         <source>Area</source>
-        <translation type="unfinished"></translation>
+        <translation>区域</translation>
     </message>
     <message>
         <source>Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>地址</translation>
     </message>
     <message>
         <source>Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>寄存器</translation>
     </message>
     <message>
         <source>Check shown</source>
-        <translation type="unfinished"></translation>
+        <translation>勾选显示项</translation>
     </message>
     <message>
         <source>Uncheck shown</source>
-        <translation type="unfinished"></translation>
+        <translation>取消勾选显示项</translation>
     </message>
     <message numerus="yes">
         <source>This map has %n block(s) of registers. Each block opens in its own window: choose the ones to open.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>此映射包含 %n 个寄存器块。每个块会在单独的窗口中打开：请选择要打开的块。</numerusform>
         </translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>打开</translation>
     </message>
     <message>
         <source>Open %1 Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>打开 %1 个窗口</translation>
     </message>
 </context>
 <context>
@@ -1301,7 +1301,7 @@
     </message>
     <message>
         <source>250</source>
-        <translation></translation>
+        <translation>250</translation>
     </message>
     <message>
         <source>(msecs)</source>
@@ -1317,7 +1317,7 @@
     </message>
     <message>
         <source>0</source>
-        <translation></translation>
+        <translation>0</translation>
     </message>
     <message>
         <source>( μsecs)</source>
@@ -1703,7 +1703,7 @@ Valid Slave Responses: %2</source>
     <name>MainWindow</name>
     <message>
         <source>Open ModScan</source>
-        <translation></translation>
+        <translation>Open ModScan</translation>
     </message>
     <message>
         <source>File</source>
@@ -1771,11 +1771,11 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <source>Device Map Library...</source>
-        <translation type="unfinished"></translation>
+        <translation>设备映射库...</translation>
     </message>
     <message>
         <source>Open a device map from the mbmap-library</source>
-        <translation type="unfinished"></translation>
+        <translation>从 mbmap-library 打开设备映射</translation>
     </message>
     <message>
         <source>Close</source>
@@ -2051,7 +2051,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <source>All supported files (*.xml *.mbmap.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>所有支持的文件 (*.xml *.mbmap.json)</translation>
     </message>
     <message>
         <source>XML files (*.xml)</source>
@@ -2059,7 +2059,7 @@ Valid Slave Responses: %2</source>
     </message>
     <message>
         <source>Device maps (*.mbmap.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>设备映射 (*.mbmap.json)</translation>
     </message>
     <message>
         <source>%1 was not found</source>
@@ -2072,11 +2072,12 @@ Valid Slave Responses: %2</source>
     <message>
         <source>Failed to open %1
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>无法打开 %1
+%2</translation>
     </message>
     <message>
         <source>%1 has no registers to show</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 没有可显示的寄存器</translation>
     </message>
     <message>
         <source>Capture Error:<byte value="xd"/>
@@ -2537,35 +2538,35 @@ Byte Order: %2</source>
     <name>QObject</name>
     <message>
         <source>Coils</source>
-        <translation type="unfinished"></translation>
+        <translation>线圈</translation>
     </message>
     <message>
         <source>Discrete Inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>离散输入</translation>
     </message>
     <message>
         <source>Input Registers</source>
-        <translation type="unfinished">寄存器输入</translation>
+        <translation>输入寄存器</translation>
     </message>
     <message>
         <source>Holding Registers</source>
-        <translation type="unfinished"></translation>
+        <translation>保持寄存器</translation>
     </message>
     <message>
         <source>Not a valid JSON file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无效的 JSON 文件：%1</translation>
     </message>
     <message>
         <source>Not a .mbmap file: the &quot;mbmap&quot; version is missing</source>
-        <translation type="unfinished"></translation>
+        <translation>不是 .mbmap 文件：缺少“mbmap”版本</translation>
     </message>
     <message>
         <source>Unsupported .mbmap version %1 (version 2 is supported)</source>
-        <translation type="unfinished"></translation>
+        <translation>不支持的 .mbmap 版本 %1（支持版本 2）</translation>
     </message>
     <message>
         <source>The map has no &quot;vendor&quot;, &quot;model&quot; or &quot;registers&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>映射缺少“vendor”、“model”或“registers”字段</translation>
     </message>
 </context>
 <context>

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="it_IT">
-<extra-po-header-project_id_version>Omod Scan - IT</extra-po-header-project_id_version>
-<extra-po-header-language_team>bovirus@gmail.com</extra-po-header-language_team>
-<extra-po-header-last_translator>bovirus - bovirus@gmail.com</extra-po-header-last_translator>
-<extra-po-header-po_revision_date>16.10.2024</extra-po-header-po_revision_date>
 <context>
     <name>AddressBaseComboBox</name>
     <message>
@@ -755,6 +751,118 @@
     <message>
         <source>OR Mask:</source>
         <translation>O maschera:</translation>
+    </message>
+</context>
+<context>
+    <name>DialogMbmapLibrary</name>
+    <message>
+        <source>Device Map Library</source>
+        <translation>Libreria delle mappe dei dispositivi</translation>
+    </message>
+    <message>
+        <source>Filter by vendor, model or description</source>
+        <translation>Filtra per produttore, modello o descrizione</translation>
+    </message>
+    <message>
+        <source>Vendor</source>
+        <translation>Produttore</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation>Modello</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>Descrizione</translation>
+    </message>
+    <message>
+        <source>Registers</source>
+        <translation>Registri</translation>
+    </message>
+    <message>
+        <source>Maps from &lt;a href=&quot;https://github.com/nobrega8/mbmap-library&quot;&gt;mbmap-library&lt;/a&gt;. Opening one creates a window for each block of registers.</source>
+        <translation>Mappe da &lt;a href=&quot;https://github.com/nobrega8/mbmap-library&quot;&gt;mbmap-library&lt;/a&gt;. Aprendo una mappa viene creata una finestra per ogni blocco di registri.</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Apri</translation>
+    </message>
+    <message>
+        <source>Loading the list of maps...</source>
+        <translation>Caricamento elenco mappe...</translation>
+    </message>
+    <message>
+        <source>The list of maps could not be loaded: %1</source>
+        <translation>Impossibile caricare l’elenco delle mappe: %1</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n map(s)</source>
+        <translation>
+            <numerusform>%n mappa</numerusform>
+            <numerusform>%n mappe</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Downloading %1...</source>
+        <translation>Download di %1...</translation>
+    </message>
+    <message>
+        <source>The map could not be downloaded: %1</source>
+        <translation>Impossibile scaricare la mappa: %1</translation>
+    </message>
+    <message>
+        <source>The map has an invalid path in the library</source>
+        <translation>Il percorso della mappa nella libreria non è valido</translation>
+    </message>
+    <message>
+        <source>The map could not be saved: %1</source>
+        <translation>Impossibile salvare la mappa: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DialogMbmapViews</name>
+    <message>
+        <source>Filter by register name</source>
+        <translation>Filtra per nome del registro</translation>
+    </message>
+    <message>
+        <source>Window</source>
+        <translation>Finestra</translation>
+    </message>
+    <message>
+        <source>Area</source>
+        <translation>Area</translation>
+    </message>
+    <message>
+        <source>Addresses</source>
+        <translation>Indirizzi</translation>
+    </message>
+    <message>
+        <source>Registers</source>
+        <translation>Registri</translation>
+    </message>
+    <message>
+        <source>Check shown</source>
+        <translation>Seleziona elementi visibili</translation>
+    </message>
+    <message>
+        <source>Uncheck shown</source>
+        <translation>Deseleziona elementi visibili</translation>
+    </message>
+    <message numerus="yes">
+        <source>This map has %n block(s) of registers. Each block opens in its own window: choose the ones to open.</source>
+        <translation>
+            <numerusform>Questa mappa contiene %n blocco di registri. Ogni blocco si apre in una finestra separata: scegli quali aprire.</numerusform>
+            <numerusform>Questa mappa contiene %n blocchi di registri. Ogni blocco si apre in una finestra separata: scegli quali aprire.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Apri</translation>
+    </message>
+    <message>
+        <source>Open %1 Windows</source>
+        <translation>Apri finestre: %1</translation>
     </message>
 </context>
 <context>
@@ -1953,6 +2061,32 @@ Risposte slave valide: %2</translation>
         <translation>Errore di acquisizione:<byte value="xd"/>
 %1</translation>
     </message>
+    <message>
+        <source>Device Map Library...</source>
+        <translation>Libreria delle mappe dei dispositivi...</translation>
+    </message>
+    <message>
+        <source>Open a device map from the mbmap-library</source>
+        <translation>Apri una mappa del dispositivo da mbmap-library</translation>
+    </message>
+    <message>
+        <source>All supported files (*.xml *.mbmap.json)</source>
+        <translation>Tutti i file supportati (*.xml *.mbmap.json)</translation>
+    </message>
+    <message>
+        <source>Device maps (*.mbmap.json)</source>
+        <translation>Mappe dei dispositivi (*.mbmap.json)</translation>
+    </message>
+    <message>
+        <source>Failed to open %1
+%2</source>
+        <translation>Impossibile aprire %1
+%2</translation>
+    </message>
+    <message>
+        <source>%1 has no registers to show</source>
+        <translation>%1 non contiene registri da visualizzare</translation>
+    </message>
 </context>
 <context>
     <name>ModbusClient</name>
@@ -2399,6 +2533,41 @@ Ordine byte: %2</translation>
     <message>
         <source>Could not write request to socket.</source>
         <translation>Impossibile scrivere la richiesta nel socket.</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Coils</source>
+        <translation>Bobine</translation>
+    </message>
+    <message>
+        <source>Discrete Inputs</source>
+        <translation>Ingressi discreti</translation>
+    </message>
+    <message>
+        <source>Input Registers</source>
+        <translation>Registri di ingresso</translation>
+    </message>
+    <message>
+        <source>Holding Registers</source>
+        <translation>Registri di mantenimento</translation>
+    </message>
+    <message>
+        <source>Not a valid JSON file: %1</source>
+        <translation>File JSON non valido: %1</translation>
+    </message>
+    <message>
+        <source>Not a .mbmap file: the &quot;mbmap&quot; version is missing</source>
+        <translation>Il file non è un file .mbmap: manca la versione &quot;mbmap&quot;</translation>
+    </message>
+    <message>
+        <source>Unsupported .mbmap version %1 (version 2 is supported)</source>
+        <translation>Versione .mbmap %1 non supportata (è supportata la versione 2)</translation>
+    </message>
+    <message>
+        <source>The map has no &quot;vendor&quot;, &quot;model&quot; or &quot;registers&quot;</source>
+        <translation>Nella mappa manca &quot;vendor&quot;, &quot;model&quot; o &quot;registers&quot;</translation>
     </message>
 </context>
 <context>

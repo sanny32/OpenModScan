@@ -275,6 +275,7 @@ void MainWindow::on_awake()
     ui->actionWriteBar->setChecked(ui->toolBarWrite->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
+    ui->actionItalian->setChecked(_lang == "it");
     ui->actionChineseCN->setChecked(_lang == "zh_CN");
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
@@ -1320,6 +1321,14 @@ void MainWindow::on_actionEnglish_triggered()
 void MainWindow::on_actionRussian_triggered()
 {
    setLanguage("ru");
+}
+
+///
+/// \brief MainWindow::on_actionItalian_triggered
+///
+void MainWindow::on_actionItalian_triggered()
+{
+    setLanguage("it");
 }
 
 ///

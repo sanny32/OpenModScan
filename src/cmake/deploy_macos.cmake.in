@@ -1,0 +1,22 @@
+set(INSTALLED_APP "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/@PROJECT_NAME@.app")
+if(NOT EXISTS "${INSTALLED_APP}")
+    message(FATAL_ERROR "Installed app bundle not found: ${INSTALLED_APP}")
+endif()
+
+file(GLOB QT_TRANSLATIONS "@QT_TRANSLATIONS_DIR@/qt*.qm")
+if(QT_TRANSLATIONS)
+    file(COPY ${QT_TRANSLATIONS} DESTINATION "${INSTALLED_APP}/Contents/Resources/translations")
+endif()
+
+# Keep the packaged application runnable by the headless CI smoke test.
+file(COPY "@QT_PLUGINS_DIR@/platforms/libqoffscreen.dylib"
+    DESTINATION "${INSTALLED_APP}/Contents/PlugIns/platforms")
+
+execute_process(
+    COMMAND "@MACDEPLOYQT_EXECUTABLE@" "${INSTALLED_APP}"
+        -always-overwrite -verbose=1 -codesign=-
+    RESULT_VARIABLE DEPLOY_RESULT
+)
+if(NOT DEPLOY_RESULT EQUAL 0)
+    message(FATAL_ERROR "macdeployqt failed with exit code ${DEPLOY_RESULT}")
+endif()

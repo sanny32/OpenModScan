@@ -1,0 +1,108 @@
+name: Build macOS DMG (Qt6, arm64)
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Checkout branch
+        required: false
+        default: dev
+      tag:
+        description: Checkout tag
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-omodscan:
+    name: Build OpenModScan DMG with Qt6 (arm64)
+    runs-on: macos-26
+    timeout-minutes: 45
+    env:
+      QT_VERSION: "6.9.3"
+      BUILD_DIR: build-macos-release
+      DMG_STAGING_DIR: dmg-root
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Extract project version
+        uses: ./.github/actions/extract-version
+        with:
+          package-prefix: qt6-omodscan
+          package-name-env: DMG_PACKAGE_NAME
+          dev-suffix-style: dash
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Qt
+        uses: ./.github/actions/install-qt
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          arch: clang_64
+          install-dir: ${{ runner.temp }}/Qt
+          qt-dir-name: macos
+          modules: qt5compat qtserialport qtserialbus
+          python-command: python3
+
+      - name: Configure
+        run: |
+          cmake -S src -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
+            -DUSE_QT6=ON -DBUILD_TESTING=OFF \
+            -DPRERELEASE_SUFFIX="$PRERELEASE_SUFFIX"
+
+      - name: Build
+        run: cmake --build "$BUILD_DIR" --parallel
+
+      - name: Stage app bundle and Qt runtime
+        run: |
+          cmake --install "$BUILD_DIR" --prefix "$PWD/$DMG_STAGING_DIR"
+          mv "$DMG_STAGING_DIR/omodscan.app" "$DMG_STAGING_DIR/Open ModScan $VERSION_MAJOR.app"
+          ln -s /Applications "$DMG_STAGING_DIR/Applications"
+
+      - name: Verify deployed app bundle
+        run: .github/macos/verify-bundle.sh "$DMG_STAGING_DIR/Open ModScan $VERSION_MAJOR.app" "$APP_VERSION" arm64
+
+      - name: Create DMG
+        run: |
+          DMG_NAME="${DMG_PACKAGE_NAME}_${APP_VERSION}_arm64.dmg"
+          echo "DMG_NAME=$DMG_NAME" >> "$GITHUB_ENV"
+          hdiutil create -volname "Open ModScan $APP_VERSION" \
+            -srcfolder "$DMG_STAGING_DIR" -ov -format UDZO "$DMG_NAME"
+          hdiutil verify "$DMG_NAME"
+
+      - name: Verify app from mounted DMG
+        run: |
+          mount_dir=$(mktemp -d)
+          hdiutil attach "$DMG_NAME" -readonly -nobrowse -mountpoint "$mount_dir"
+          trap 'hdiutil detach "$mount_dir" -force' EXIT
+          test -L "$mount_dir/Applications"
+          .github/macos/verify-bundle.sh "$mount_dir/Open ModScan $VERSION_MAJOR.app" "$APP_VERSION" arm64
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.DMG_NAME }}
+          path: ${{ env.DMG_NAME }}
+          if-no-files-found: error
+
+      - name: Create or update GitHub Release and upload DMG
+        uses: ./.github/actions/github-release
+        with:
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
+          app-version: ${{ env.APP_VERSION }}
+          files: ${{ env.DMG_NAME }}

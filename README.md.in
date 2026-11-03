@@ -131,6 +131,11 @@ Run the installer:
 - For 64-bit Windows: `qt5-omodscan@VERSION_MAJOR@-@PROJECT_VERSION@_x64.exe` or `qt6-omodscan@VERSION_MAJOR@-@PROJECT_VERSION@_x64.exe`
 
 
+## macOS (Apple Silicon, macOS 12 or later)
+Download `qt6-omodscan@VERSION_MAJOR@_@PROJECT_VERSION@_arm64.dmg`, open it, and drag `Open ModScan @VERSION_MAJOR@.app` to Applications.
+
+The bundle includes the Qt runtime. The application uses an ad-hoc signature; the DMG is not notarized with Apple.
+
 ## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian • <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu • <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint • <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin • <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
 ### Install
 Install the DEB package from the command line:

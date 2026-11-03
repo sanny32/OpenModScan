@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>@PROJECT_NAME@</string>
+    <key>CFBundleIconFile</key>
+    <string>omodscan.icns</string>
+    <key>CFBundleIdentifier</key>
+    <string>io.github.sanny32.omodscan@VERSION_MAJOR@</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>@PRODUCT_NAME@ @VERSION_MAJOR@</string>
+    <key>CFBundleDisplayName</key>
+    <string>@PRODUCT_NAME@ @VERSION_MAJOR@</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@</string>
+    <key>CFBundleVersion</key>
+    <string>@VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@</string>
+@MACOSX_MIN_VERSION_PLIST_ENTRY@
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>ru</string>
+        <string>zh_CN</string>
+        <string>zh_TW</string>
+    </array>
+</dict>
+</plist>

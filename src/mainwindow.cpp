@@ -150,7 +150,12 @@ void MainWindow::setLanguage(const QString& lang)
         _lang = lang;
         qApp->installTranslator(&_appTranslator);
 
-        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang)))
+#ifdef Q_OS_MACOS
+        const QString translationsDir = QDir(qApp->applicationDirPath()).filePath("../Resources/translations");
+#else
+        const QString translationsDir = QDir(qApp->applicationDirPath()).filePath("translations");
+#endif
+        if(_qtTranslator.load(QString("%1/qt_%2").arg(translationsDir, lang)))
             qApp->installTranslator(&_qtTranslator);
     }
 }
@@ -1824,10 +1829,13 @@ static bool canWriteFile(const QString& filePath)
 static QString getSettingsFilePath()
 {
     const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    // Saving inside a signed app bundle invalidates its signature.
+#ifndef Q_OS_MACOS
     const QString appFilePath = QDir(qApp->applicationDirPath()).filePath(filename);
 
     if (canWriteFile(appFilePath))
         return appFilePath;
+#endif
 
     return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(filename);
 }

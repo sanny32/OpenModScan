@@ -36,7 +36,7 @@ class PackageVersionTests(unittest.TestCase):
                                PRERELEASE_SUFFIX_STYLE='same', RELEASE_BRANCHES_ARE_DEV='true',
                                EVENT_TAG=tag, EVENT_BRANCH=selected_branch, REF_TYPE=ref_type,
                                REF_NAME=ref, GITHUB_REF_NAME=branch,
-                               GITHUB_ENV=str(env_file), GITHUB_OUTPUT=str(output_file))
+                               GITHUB_ENV=env_file.as_posix(), GITHUB_OUTPUT=output_file.as_posix())
                     subprocess.run(['bash', '-eu', '-c', script], cwd=ROOT, env=env,
                                    check=True, capture_output=True, text=True)
                     values = dict(line.split('=', 1) for line in env_file.read_text().splitlines())
@@ -56,8 +56,8 @@ class PackageVersionTests(unittest.TestCase):
             with self.subTest(source_ref=source_ref), tempfile.TemporaryDirectory() as directory:
                 script = Path(directory) / 'version.cmake'
                 script.write_text(f'''set(PROJECT_VERSION 2.0.0)
-set(PROJECT_SOURCE_DIR "{ROOT / 'src'}")
-include("{ROOT / 'src/cmake/project_version.cmake'}")
+set(PROJECT_SOURCE_DIR "{(ROOT / 'src').as_posix()}")
+include("{(ROOT / 'src/cmake/project_version.cmake').as_posix()}")
 set(PRERELEASE_SUFFIX "{suffix}")
 omodscan_apply_project_version_suffix()
 if(NOT PROJECT_VERSION STREQUAL "{expected}")

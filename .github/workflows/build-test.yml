@@ -1,0 +1,157 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/actions/**'
+      - '.github/workflows/build-test.yml'
+      - '!src/**/*.ts'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - '.github/actions/**'
+      - '.github/workflows/build-test.yml'
+      - '!src/**/*.ts'
+  workflow_dispatch:
+
+concurrency:
+  group: build-test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Build and Test (${{ matrix.os }}, Qt ${{ matrix.qt }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            qt: '5'
+            cmake_extra: '-DUSE_QT5=ON'
+          - os: ubuntu-22.04
+            qt: '6.9.3'
+            qt_host: linux
+            qt_arch: linux_gcc_64
+            qt_dir: gcc_64
+            cmake_extra: '-DUSE_QT6=ON'
+          - os: windows-2022
+            qt: '6.9.3'
+            qt_host: windows
+            qt_arch: win64_msvc2022_64
+            qt_dir: msvc2022_64
+            cmake_extra: '-DUSE_QT6=ON'
+          - os: macos-26
+            qt: '6.9.3'
+            qt_host: mac
+            qt_arch: clang_64
+            qt_dir: macos
+            cmake_extra: '-DUSE_QT6=ON -DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0'
+    env:
+      QT_QPA_PLATFORM: offscreen
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build socat libgl1-mesa-dev libxkbcommon-x11-0
+
+      - name: Install Qt5
+        if: matrix.qt == '5'
+        run: |
+          sudo apt-get install -y qtbase5-dev qttools5-dev qttools5-dev-tools libqt5serialbus5-dev libqt5serialport5-dev
+
+      - name: Install Ninja (Windows)
+        if: runner.os == 'Windows'
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: brew list --versions ninja >/dev/null || brew install ninja
+
+      - name: Set up MSVC environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt6
+        if: matrix.qt != '5'
+        uses: ./.github/actions/install-qt
+        with:
+          version: ${{ matrix.qt }}
+          host: ${{ matrix.qt_host }}
+          arch: ${{ matrix.qt_arch }}
+          install-dir: ${{ runner.temp }}/Qt
+          qt-dir-name: ${{ matrix.qt_dir }}
+          modules: qt5compat qtserialport qtserialbus
+          python-command: python
+
+      - name: Check package version handling
+        run: python -m unittest discover -s tests/ci -v
+
+      - name: Configure
+        run: |
+          cmake -S src -B build-tests -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
+            -DBUILD_TESTING=ON ${{ matrix.cmake_extra }}
+
+      - name: Build application and tests
+        run: cmake --build build-tests --config Release --parallel 3
+
+      - name: Run tests with serial PTYs (Linux)
+        if: runner.os == 'Linux'
+        env:
+          OMODSCAN_TEST_SERIAL_CLIENT: /tmp/omodscan-client
+          OMODSCAN_TEST_SERIAL_PEER: /tmp/omodscan-peer
+        run: |
+          socat pty,raw,echo=0,link="$OMODSCAN_TEST_SERIAL_CLIENT" pty,raw,echo=0,link="$OMODSCAN_TEST_SERIAL_PEER" &
+          serial_pair_pid=$!
+          trap 'kill "$serial_pair_pid"' EXIT
+          for attempt in {1..50}; do
+            if [ -e "$OMODSCAN_TEST_SERIAL_CLIENT" ] && [ -e "$OMODSCAN_TEST_SERIAL_PEER" ]; then
+              break
+            fi
+            sleep 0.1
+          done
+          test -e "$OMODSCAN_TEST_SERIAL_CLIENT"
+          test -e "$OMODSCAN_TEST_SERIAL_PEER"
+          ctest --test-dir build-tests --build-config Release --output-on-failure --no-tests=error
+
+      - name: Run tests
+        if: runner.os != 'Linux'
+        run: ctest --test-dir build-tests --build-config Release --output-on-failure --no-tests=error
+
+      - name: Check macOS app bundle
+        if: runner.os == 'macOS'
+        run: |
+          test -x build-tests/omodscan.app/Contents/MacOS/omodscan
+          test -f build-tests/omodscan.app/Contents/Resources/omodscan.icns
+          plutil -lint build-tests/omodscan.app/Contents/Info.plist
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results-${{ matrix.os }}-qt${{ matrix.qt }}
+          path: build-tests/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore

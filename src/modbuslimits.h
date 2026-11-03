@@ -20,6 +20,10 @@ public:
         const int maxLen = qMin(lengthRange().to(), addressSpaceSize(space) - offset);
         return { 1, qMax(1, maxLen) };
     }
+    static bool isReadable(int address, bool zeroBased, int length, AddressSpace space) {
+        const int offset = address - (zeroBased ? 0 : 1);
+        return offset >= 0 && length >= 1 && offset + length <= addressSpaceSize(space);
+    }
     static QRange<int> slaveRange()    { return { 0, 255   }; }
 };
 

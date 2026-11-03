@@ -65,8 +65,19 @@ endif()
 
 add_test(NAME tst_modbusrtutraffic COMMAND tst_modbusrtutraffic)
 
+add_executable(tst_mbmap
+    tests/tst_mbmap.cpp
+    mbmap.cpp
+    mbmap.h
+)
+
+target_include_directories(tst_mbmap PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(tst_mbmap PRIVATE Qt::Test Qt::SerialBus)
+
+add_test(NAME tst_mbmap COMMAND tst_mbmap)
+
 if(WIN32)
     # Qt DLLs are not deployed next to test executables; versioned target because Qt5's Qt::Core is an INTERFACE wrapper.
-    set_tests_properties(tst_modbustcpclient tst_modbusrtutraffic PROPERTIES
+    set_tests_properties(tst_modbustcpclient tst_modbusrtutraffic tst_mbmap PROPERTIES
         ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:$<TARGET_FILE_DIR:${QT_CORE_TARGET}>")
 endif()

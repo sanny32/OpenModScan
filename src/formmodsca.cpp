@@ -682,8 +682,7 @@ void FormModSca::on_timeout()
         return;
 
     const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    if(addr + dd.Length <= ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress).to())
+    if(ModbusLimits::isReadable(dd.PointAddress, dd.ZeroBasedAddress, dd.Length, dd.AddrSpace))
     {
         if(_validSlaveResponses == ui->statisticWidget->validSlaveResposes())
         {
@@ -718,8 +717,7 @@ void FormModSca::beginUpdate()
     }
 
     const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ?  0 : 1);
-    if(addr + dd.Length <= ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress).to()) {
+    if(ModbusLimits::isReadable(dd.PointAddress, dd.ZeroBasedAddress, dd.Length, dd.AddrSpace)) {
         sendPollRequest();
     }
     else

@@ -1,0 +1,60 @@
+name: Render Linux app metadata
+description: Rename Linux icons and render desktop and metainfo files.
+
+inputs:
+  root-dir:
+    description: Root directory containing usr/share metadata files.
+    required: true
+  app-install-prefix:
+    description: Application installation prefix.
+    required: true
+  version-major:
+    description: Application major version.
+    required: true
+  product-name:
+    description: Product display name.
+    required: true
+  app-version:
+    description: Application package version.
+    required: true
+  ref-name:
+    description: Git ref name for metainfo release URL.
+    required: true
+  ref-type:
+    description: Git ref type for metainfo release URL.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Rename app icon files
+      shell: bash
+      run: |
+        for size in 16x16 32x32 64x64 128x128; do
+          mv "${{ inputs.root-dir }}/usr/share/icons/hicolor/${size}/apps/omodscan.png" \
+             "${{ inputs.root-dir }}/usr/share/icons/hicolor/${size}/apps/omodscan${{ inputs.version-major }}.png"
+        done
+
+    - name: Create metainfo file
+      shell: bash
+      run: |
+        sed -e "s|@REF_NAME@|${{ inputs.ref-name }}|g" \
+            -e "s|@REF_TYPE@|${{ inputs.ref-type }}|g" \
+            -e "s|@COMPONENT_ID@|omodscan${{ inputs.version-major }}.desktop|g" \
+            -e "s|@APP_NAME@|${{ inputs.product-name }} ${{ inputs.version-major }}|g" \
+            -e "s|@APP_EXEC@|omodscan${{ inputs.version-major }}|g" \
+            -e "s|@APP_VERSION@|${{ inputs.app-version }}|g" \
+            -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
+            "${{ inputs.root-dir }}/usr/share/metainfo/omodscan.metainfo.xml.in" > "${{ inputs.root-dir }}/usr/share/metainfo/omodscan${{ inputs.version-major }}.metainfo.xml"
+        rm "${{ inputs.root-dir }}/usr/share/metainfo/omodscan.metainfo.xml.in"
+        cat -n "${{ inputs.root-dir }}/usr/share/metainfo/omodscan${{ inputs.version-major }}.metainfo.xml"
+
+    - name: Create desktop file
+      shell: bash
+      run: |
+        sed -e "s|@APP_NAME@|${{ inputs.product-name }} ${{ inputs.version-major }}|g" \
+            -e "s|@APP_EXEC@|omodscan${{ inputs.version-major }}|g" \
+            -e "s|@APP_ICON@|omodscan${{ inputs.version-major }}|g" \
+            "${{ inputs.root-dir }}/usr/share/applications/omodscan.desktop.in" > "${{ inputs.root-dir }}/usr/share/applications/omodscan${{ inputs.version-major }}.desktop"
+        rm "${{ inputs.root-dir }}/usr/share/applications/omodscan.desktop.in"
+        cat -n "${{ inputs.root-dir }}/usr/share/applications/omodscan${{ inputs.version-major }}.desktop"

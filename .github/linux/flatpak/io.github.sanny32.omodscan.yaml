@@ -49,7 +49,7 @@ modules:
     builddir: true
     buildsystem: simple
     build-commands:
-      - cmake -DCMAKE_BUILD_TYPE=Release -B ../build
+      - cmake -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release -B ../build
       - cmake --build ../build -- -j$(nproc)
 
     post-install:

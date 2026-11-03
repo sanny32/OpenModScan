@@ -39,22 +39,12 @@ jobs:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Determine ref_type and ref_name
-        run: |
-          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
-            REF_TYPE="tags"
-            if [ -n "${{ github.event.inputs.tag }}" ]; then
-              REF_NAME="${{ github.event.inputs.tag }}"
-            else
-              REF_NAME="${{ github.ref_name }}"
-            fi
-          else
-            REF_TYPE="heads"
-            REF_NAME="${{ github.ref_name }}"
-          fi
-          echo "REF_TYPE=$REF_TYPE" >> $GITHUB_ENV
-          echo "REF_NAME=$REF_NAME" >> $GITHUB_ENV
-          echo "Ref name is: $REF_NAME"
-          echo "Ref type is: $REF_TYPE"
+        uses: ./.github/actions/detect-ref
+
+      - name: Extract project version
+        uses: ./.github/actions/extract-version
+        with:
+          dev-suffix-style: tilde
 
       - name: Setup flatpak channel
         run: |
@@ -72,24 +62,11 @@ jobs:
             if [ "${{ env.REF_TYPE }}" = "tags" ]; then
               REF="tag"
             fi
-            
-            sed -i -e "s|branch: main|$REF: ${{ env.REF_NAME }}|g" \
+
+            sed -i -e "s|branch: dev|$REF: ${{ env.REF_NAME }}|g" \
                    -e "s|branch: stable|branch: ${{ env.FLATPAK_CHANNEL }}|g" \
+                   -e "s|-DBUILD_TESTING=OFF|-DBUILD_TESTING=OFF -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}|g" \
                    .github/linux/flatpak/io.github.sanny32.omodscan.yaml
-
-      - name: Extract version from CMakeLists.txt
-        run: |
-          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
-
-          if [ "${{ env.REF_NAME }}" = "dev" ] || { [ "${{ github.event.inputs.branch }}" = "dev" ] && [ -z "${{ github.event.inputs.tag }}" ]; }; then
-            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
-            APP_VERSION="${MAJOR_MINOR}~dev"
-          else
-            APP_VERSION="$FULL_VERSION"
-          fi
-
-          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-          echo "Extracted version: $APP_VERSION"
 
       - name: Prepare Flatpak
         run: |
@@ -100,6 +77,8 @@ jobs:
         run: |
           sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
               -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
+              -e "s|@APP_NAME@|${{ env.PRODUCT_NAME }} ${{ env.VERSION_MAJOR }}|g" \
+              -e "s|@APP_EXEC@|omodscan|g" \
               -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
               -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
@@ -109,7 +88,8 @@ jobs:
 
       - name: Create desktop file
         run: |
-          sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
+          sed -e "s|@APP_NAME@|${{ env.PRODUCT_NAME }} ${{ env.VERSION_MAJOR }}|g" \
+              -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
               -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
               .github/linux/usr/share/applications/omodscan.desktop.in > .github/linux/usr/share/applications/omodscan.desktop
           rm .github/linux/usr/share/applications/omodscan.desktop.in
@@ -131,14 +111,9 @@ jobs:
           path: |
             .github/linux/flatpak/io.github.sanny32.omodscan.flatpak
 
-      - name: Create or update GitHub Release and upload FLATPAK
-        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v3
+      - name: Create or update GitHub Release and upload Flatpak
+        uses: ./.github/actions/github-release
         with:
-          draft: true
-          tag_name: ${{ github.ref_name }}
-          name: Open ModScan ${{ env.APP_VERSION }}
-          files: |
-            .github/linux/flatpak/io.github.sanny32.omodscan.flatpak
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
+          app-version: ${{ env.APP_VERSION }}
+          files: .github/linux/flatpak/io.github.sanny32.omodscan.flatpak

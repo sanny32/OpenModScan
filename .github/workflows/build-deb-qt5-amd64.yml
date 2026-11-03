@@ -26,16 +26,15 @@ jobs:
 
     env:
       QT_VERSION: "5.15.2"
-      QT_HOST: "linux"
-      QT_TARGET: "desktop"
-      QT_ARCH: "gcc_64"
-      QT_INSTALL_DIR: "/opt/Qt"
-      CMAKE_COMPILER: "gcc_64"
-      CMAKE_GENERATOR: "Ninja"
-      BUILD_TYPE: "Release"
-      DEB_REVISION: "1"
-      DEB_ARCH: "amd64"
-      DEB_PACKAGE_NAME: "qt5-omodscan"
+      DEB_PACKAGE_PREFIX: "qt5-omodscan"
+      APP_INSTALL_PREFIX: "/opt/OpenModScan"
+
+    outputs:
+      package-file: ${{ steps.package.outputs.file }}
+      artifact-name: ${{ steps.package.outputs.artifact }}
+      package-name: ${{ steps.package.outputs.package-name }}
+      app-root: ${{ steps.package.outputs.app-root }}
+      launcher: ${{ steps.package.outputs.launcher }}
 
     steps:
       - name: Checkout repository
@@ -44,50 +43,39 @@ jobs:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Determine ref_type and ref_name
+        uses: ./.github/actions/detect-ref
+
+      - name: Extract info from CMakeLists.txt
+        uses: ./.github/actions/extract-version
+        with:
+          package-prefix: ${{ env.DEB_PACKAGE_PREFIX }}
+          package-name-env: DEB_PACKAGE_NAME
+          dev-suffix-style: tilde
+
+      - name: Export package info
+        id: package
         run: |
-          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
-            REF_TYPE="tags"
-            if [ -n "${{ github.event.inputs.tag }}" ]; then
-              REF_NAME="${{ github.event.inputs.tag }}"
-            else
-              REF_NAME="${{ github.ref_name }}"
-            fi
-          else
-            REF_TYPE="heads"
-            REF_NAME="${{ github.ref_name }}"
-          fi
-          echo "REF_TYPE=$REF_TYPE" >> $GITHUB_ENV
-          echo "REF_NAME=$REF_NAME" >> $GITHUB_ENV
-          echo "Ref name is: $REF_NAME"
-          echo "Ref type is: $REF_TYPE"
-
-      - name: Extract version from CMakeLists.txt
-        id: extract_version
-        run: |
-          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
-
-          if [ "${{ env.REF_NAME }}" = "dev" ] || { [ "${{ github.event.inputs.branch }}" = "dev" ] && [ -z "${{ github.event.inputs.tag }}" ]; }; then
-            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
-            APP_VERSION="${MAJOR_MINOR}~dev"
-          else
-            APP_VERSION="$FULL_VERSION"
-          fi
-
-          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-          echo "Extracted version: $APP_VERSION"
+          {
+            echo "file=${DEB_PACKAGE_NAME}_${APP_VERSION}-1_amd64.deb"
+            echo "artifact=${DEB_PACKAGE_NAME}_${APP_VERSION}-1_amd64"
+            echo "package-name=${DEB_PACKAGE_NAME}"
+            echo "app-root=${APP_INSTALL_PREFIX}${VERSION_MAJOR}"
+            echo "launcher=/usr/bin/omodscan${VERSION_MAJOR}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            git build-essential ninja-build cmake python3-pip patchelf rsync \
+            git build-essential ninja-build python3-pip patchelf rsync \
             dh-make debhelper debhelper-compat lintian fakeroot \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
             libfontconfig1 libfreetype6 libx11-6 libxext6 libxrender1 \
             zlib1g-dev libpng-dev libjpeg-dev libdbus-1-3 \
+            libssl1.1 \
             libwayland-cursor0 libwayland-egl1-mesa \
             libgtk-3-0 libgdk-pixbuf2.0-0 libpangocairo-1.0-0 libpango-1.0-0 libatk1.0-0 libcairo2 libcairo-gobject2 \
             libcups2 \
@@ -97,82 +85,75 @@ jobs:
       - name: Upgrade pip
         run: python3 -m pip install --upgrade pip
 
-      - name: Install aqtinstall
-        run: python3 -m pip install aqtinstall
+      - name: Install Qt
+        id: qt
+        uses: ./.github/actions/install-qt
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: linux
+          arch: gcc_64
+          install-dir: /opt/Qt
+          qt-dir-name: gcc_64
+          python-command: python3
 
-      - name: Download Qt
-        run: |
-          mkdir -p ${{ env.QT_INSTALL_DIR }}
-          aqt install-qt \
-            ${{ env.QT_HOST }} \
-            ${{ env.QT_TARGET }} \
-            ${{ env.QT_VERSION }} \
-            ${{ env.QT_ARCH }} \
-            -O ${{ env.QT_INSTALL_DIR }}
-
-      - name: Add Qt to PATH
-        run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
-
-      - name: Install cmake 3.26
+      - name: Install CMake
         run: |
           apt-get remove -y cmake
           apt-get install -y wget
-          wget https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.sh
-          sh cmake-3.26.5-linux-x86_64.sh --skip-license --prefix=/usr/local
+          wget "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh"
+          sh "cmake-${CMAKE_VERSION}-linux-x86_64.sh" --skip-license --prefix=/usr/local
           cmake --version
 
       - name: Set BUILD_DIR
-        run: echo "BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+        run: echo "BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}-Release" >> $GITHUB_ENV
 
       - name: Configure project
         run: |
-            cmake src -B ${{ env.BUILD_DIR }} \
-            -G "${{ env.CMAKE_GENERATOR }}" \
-            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
+          cmake src -B ${{ env.BUILD_DIR }} \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
+            -DBUILD_TESTING=OFF \
+            -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
       - name: Build
-        run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
+        run: cmake --build ${{ env.BUILD_DIR }} --config Release --parallel
 
       - name: Set BUILD_DEB_DIR
-        run: echo "BUILD_DEB_DIR=build-deb-package-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
+        run: echo "BUILD_DEB_DIR=build-deb-package-Qt_${{ env.QT_VERSION }}" >> $GITHUB_ENV
 
       - name: Set DEB_SRC_DIR
-        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
+        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}-${{ env.APP_VERSION }}-1_amd64" >> $GITHUB_ENV
 
       - name: Create DEB build directories
         run: |
           mkdir -p ${{ env.DEB_SRC_DIR }}/debian
           mkdir -p ${{ env.DEB_SRC_DIR }}/usr
-          
+
       - name: Copy files to DEB_SRC_DIR
         run: |
           cp -r .github/linux/deb/* ${{ env.DEB_SRC_DIR }}/debian
           cp -r .github/linux/usr/* ${{ env.DEB_SRC_DIR }}/usr
-         
+
       - name: Install cqtdeployer from sources
-        run: |
-          git clone https://github.com/QuasarApp/CQtDeployer.git
-          cd CQtDeployer
-          git checkout v1.6.2365
-          git submodule update --init --recursive
-          cmake -B build -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
-            -DBUILD_SHARED_LIBS=OFF \
-            -DCQT_DEPLOYER_TESTS=OFF \
-            -DCMAKE_INSTALL_PREFIX=/usr/local \
-            -DCMAKE_INSTALL_RPATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
-            -Wno-dev
-          cmake --build build --parallel
-          cmake --install build
+        uses: ./.github/actions/install-cqtdeployer
+        with:
+          qt-prefix-path: ${{ steps.qt.outputs.qt-root-dir }}
+          apply-qt5-patch: "true"
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodscan \
-            -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModScan \
-            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
+            -targetDir ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
+            -libDir "$QT_ROOT_DIR/lib" \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
-            -extraLibs icudata,icui18n,icuuc,libxcb-util
+            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor
+
+      - name: Copy OpenSSL 1 libraries
+        run: |
+          cp /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
+             /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 \
+             ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/
 
       - name: Create Debian control file
         run: |
@@ -186,7 +167,7 @@ jobs:
         run: |
           sed -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
-              -e "s|@DEB_REVISION@|${{ env.DEB_REVISION }}|g" \
+              -e "s|@DEB_REVISION@|1|g" \
               -e "s|@RELEASE_DATE@|$(date -R)|g" \
               ${{ env.DEB_SRC_DIR }}/debian/changelog.in > ${{ env.DEB_SRC_DIR }}/debian/changelog
           rm ${{ env.DEB_SRC_DIR }}/debian/changelog.in
@@ -202,33 +183,34 @@ jobs:
 
       - name: Create Debian rules file
         run: |
-          sed -e "s|@QT_LIB_PATH@|${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib|g" \
+          sed -e "s|@QT_LIB_PATH@|$QT_ROOT_DIR/lib|g" \
+              -e "s|@APP_LIB_PATH@|${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib|g" \
               -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
               ${{ env.DEB_SRC_DIR }}/debian/rules.in > ${{ env.DEB_SRC_DIR }}/debian/rules
           rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
           cat -n ${{ env.DEB_SRC_DIR }}/debian/rules
 
-      - name: Create metainfo file
+      - name: Create Debian postinst file
         run: |
-          sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
-              -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
-              -e "s|@COMPONENT_ID@|omodscan.desktop|g" \
-              -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
-              -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
-              ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
-          rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml.in
-          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodscan.metainfo.xml
+          sed -e "s|@APP_INSTALL_PREFIX@|${{ env.APP_INSTALL_PREFIX }}|g" \
+              -e "s|@VERSION_MAJOR@|${{ env.VERSION_MAJOR }}|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/postinst.in > ${{ env.DEB_SRC_DIR }}/debian/postinst
+          rm ${{ env.DEB_SRC_DIR }}/debian/postinst.in
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/postinst
 
-      - name: Create desktop file
-        run: |
-          sed -e "s|@APP_EXEC@|omodscan|g" \
-              -e "s|@APP_ICON@|omodscan|g" \
-              ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop
-          rm ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop.in
-          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodscan.desktop
+      - name: Create Linux app metadata
+        uses: ./.github/actions/linux-app-metadata
+        with:
+          root-dir: ${{ env.DEB_SRC_DIR }}
+          app-install-prefix: ${{ env.APP_INSTALL_PREFIX }}
+          version-major: ${{ env.VERSION_MAJOR }}
+          product-name: ${{ env.PRODUCT_NAME }}
+          app-version: ${{ env.APP_VERSION }}
+          ref-name: ${{ env.REF_NAME }}
+          ref-type: ${{ env.REF_TYPE }}
 
       - name: Patch binary file
-        run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModScan/bin/omodscan"
+        run: patchelf --set-rpath "${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib" "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/bin/omodscan"
 
       - name: Build DEB package
         working-directory: ${{ env.DEB_SRC_DIR }}
@@ -238,17 +220,45 @@ jobs:
         uses: actions/upload-artifact@v7
         if: success()
         with:
-          name: ${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
-          path: ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+          name: ${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-1_amd64
+          path: ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-1_amd64.deb
 
       - name: Create or update GitHub Release and upload DEB
-        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v3
+        uses: ./.github/actions/github-release
         with:
-          draft: true
-          tag_name: ${{ github.ref_name }}
-          name: Open ModScan ${{ env.APP_VERSION }}
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
+          app-version: ${{ env.APP_VERSION }}
           files: |
-            ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-1_amd64.deb
+
+  verify-omodscan:
+    name: Verify deb package installation
+    runs-on: ubuntu-latest
+    needs: build-omodscan
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Download DEB package
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build-omodscan.outputs.artifact-name }}
+
+      - name: Verify the package installs
+        uses: ./.github/actions/verify-linux-package
+        with:
+          package: ${{ needs.build-omodscan.outputs.package-file }}
+          package-name: ${{ needs.build-omodscan.outputs.package-name }}
+          app-root: ${{ needs.build-omodscan.outputs.app-root }}
+          launcher: ${{ needs.build-omodscan.outputs.launcher }}
+          package-manager: deb
+          images: >-
+            debian:12
+            ubuntu:22.04
+            ubuntu:24.04
+            registry.astralinux.ru/astra/ubi17:latest
+            registry.astralinux.ru/astra/ubi18:latest

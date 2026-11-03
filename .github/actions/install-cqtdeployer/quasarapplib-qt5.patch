@@ -1,0 +1,42 @@
+diff --git a/locales.cpp b/locales.cpp
+index 3385c64..2393d36 100644
+--- a/locales.cpp
++++ b/locales.cpp
+@@ -9,6 +9,7 @@
+ #include "locales.h"
+ 
+ #include <QCoreApplication>
++#include <QDebug>
+ #include <QTranslator>
+ #include <QLocale>
+ #include <QLibraryInfo>
+diff --git a/params.cpp b/params.cpp
+index a0a50fe..84d5a39 100644
+--- a/params.cpp
++++ b/params.cpp
+@@ -12,7 +12,9 @@
+ #include <QDateTime>
+ #include <QCoreApplication>
+ #include "qaglobalutils.h"
++#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+ #include <QtLogging>
++#endif
+ 
+ #ifdef Q_OS_DARWIN
+ #include <mach-o/dyld.h>
+diff --git a/qalogger.cpp b/qalogger.cpp
+index 619bcd2..beb47b0 100644
+--- a/qalogger.cpp
++++ b/qalogger.cpp
+@@ -10,9 +10,11 @@
+ #include <iostream>
+ 
+ #include <QCoreApplication>
++#include <QDate>
+ #include <QDir>
+ #include <QFile>
+ #include <QStandardPaths>
++#include <QTextStream>
+ 
+ namespace QuasarAppUtils {
+ 

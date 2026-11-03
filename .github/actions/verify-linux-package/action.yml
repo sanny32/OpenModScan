@@ -1,0 +1,117 @@
+name: Verify Linux package
+description: Install a Linux package in container images and check its runtime links.
+
+inputs:
+  package:
+    description: Package file name in the workflow workspace.
+    required: true
+  package-name:
+    description: Name of the installed package, used to remove it.
+    required: true
+  app-root:
+    description: Application install directory, e.g. /opt/OpenModScan2.
+    required: true
+  launcher:
+    description: Launcher symlink the package creates, e.g. /usr/bin/omodscan2.
+    required: true
+  images:
+    description: Whitespace-separated Docker image list.
+    required: true
+  package-manager:
+    description: "Package family to install: deb or rpm."
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Verify package
+      shell: bash
+      env:
+        PKG: ${{ inputs.package }}
+        PKG_NAME: ${{ inputs.package-name }}
+        APP_ROOT: ${{ inputs.app-root }}
+        LAUNCHER: ${{ inputs.launcher }}
+        IMAGES: ${{ inputs.images }}
+        PACKAGE_MANAGER: ${{ inputs.package-manager }}
+      run: |
+        case "$PACKAGE_MANAGER" in
+          deb|rpm) ;;
+          *)
+            echo "::error::Unsupported package-manager: $PACKAGE_MANAGER"
+            exit 1
+            ;;
+        esac
+
+        status=0
+        for image in $IMAGES; do
+          echo "::group::$image"
+          if ! docker run --rm -e PKG -e PKG_NAME -e APP_ROOT -e LAUNCHER -e PACKAGE_MANAGER \
+              -v "$PWD:/pkg" -w /pkg "$image" bash -eux -c '
+            install_package() {
+              if [ "$PACKAGE_MANAGER" = deb ]; then
+                export DEBIAN_FRONTEND=noninteractive
+                apt-get update
+                apt-get install -y "./$PKG"
+                return
+              fi
+
+              if command -v dnf > /dev/null; then
+                dnf -y install "./$PKG"
+              elif command -v zypper > /dev/null; then
+                zypper --non-interactive --no-gpg-checks install "./$PKG"
+              else
+                # ALT installs rpm packages through apt-get.
+                apt-get update
+                apt-get install -y "./$PKG"
+              fi
+            }
+
+            remove_package() {
+              if [ "$PACKAGE_MANAGER" = deb ]; then
+                apt-get remove -y "$PKG_NAME"
+                return
+              fi
+
+              if command -v dnf > /dev/null; then
+                dnf -y remove "$PKG_NAME"
+              elif command -v zypper > /dev/null; then
+                zypper --non-interactive remove "$PKG_NAME"
+              else
+                apt-get remove -y "$PKG_NAME"
+              fi
+            }
+
+            install_package
+
+            # ALT ships ldd separately, in glibc-utils.
+            if [ "$(. /etc/os-release && echo "$ID")" = altlinux ]; then
+              apt-get install -y glibc-utils
+            fi
+
+            test -L "$LAUNCHER"
+            test -x "$APP_ROOT/bin/omodscan"
+
+            if ldd -r "$APP_ROOT/bin/omodscan" | grep -E "not found|undefined symbol"; then
+              echo "The installed binary has unresolved libraries or symbols"
+              exit 1
+            fi
+
+            # cqtdeployer excludes OpenSSL, the workflow bundles it by hand.
+            if ! ls "$APP_ROOT"/lib/libssl.so.* "$APP_ROOT"/lib/libcrypto.so.* > /dev/null; then
+              echo "OpenSSL libraries are missing from the bundle"
+              exit 1
+            fi
+
+            remove_package
+
+            if [ -e "$LAUNCHER" ] || [ -L "$LAUNCHER" ]; then
+              echo "The launcher symlink survives package removal"
+              exit 1
+            fi
+          '; then
+            echo "::error::The package does not install on $image"
+            status=1
+          fi
+          echo "::endgroup::"
+        done
+        exit "$status"

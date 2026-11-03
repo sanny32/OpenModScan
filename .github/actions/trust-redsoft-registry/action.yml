@@ -1,0 +1,13 @@
+name: Trust RED SOFT registry
+description: Let the Docker daemon pull images from registry.red-soft.ru.
+
+runs:
+  using: composite
+  steps:
+    # The registry serves the 2022 Sub CA but is signed by the 2024 one; its token request ignores docker certs.d.
+    - name: Install registry CA certificates
+      shell: bash
+      run: |
+        sudo install -m 644 "$GITHUB_ACTION_PATH/ca.crt" /usr/local/share/ca-certificates/russian-trusted-ca.crt
+        sudo update-ca-certificates
+        sudo systemctl restart docker

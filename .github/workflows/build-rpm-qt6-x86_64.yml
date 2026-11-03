@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - "*"
-
   workflow_dispatch:
     inputs:
       branch:
@@ -27,17 +26,15 @@ jobs:
 
     env:
       QT_VERSION: "6.9.3"
-      QT_HOST: "linux"
-      QT_TARGET: "desktop"
-      QT_ARCH: "linux_gcc_64"
-      QT_INSTALL_DIR: "/opt/Qt"
-      QT_QPA_PLATFORM: "xcb"
-      CMAKE_COMPILER: "gcc_64"
-      CMAKE_GENERATOR: "Ninja"
-      BUILD_TYPE: "Release"
-      RPM_REVISION: "1"
-      RPM_ARCH: "x86_64"
-      RPM_PACKAGE_NAME: "qt6-omodscan"
+      RPM_PACKAGE_PREFIX: "qt6-omodscan"
+      APP_INSTALL_PREFIX: "/opt/OpenModScan"
+
+    outputs:
+      package-file: ${{ steps.package.outputs.file }}
+      artifact-name: ${{ steps.package.outputs.artifact }}
+      package-name: ${{ steps.package.outputs.package-name }}
+      app-root: ${{ steps.package.outputs.app-root }}
+      launcher: ${{ steps.package.outputs.launcher }}
 
     steps:
       - name: Checkout repository
@@ -46,43 +43,32 @@ jobs:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Determine ref_type and ref_name
-        run: |
-          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
-            REF_TYPE="tags"
-            if [ -n "${{ github.event.inputs.tag }}" ]; then
-              REF_NAME="${{ github.event.inputs.tag }}"
-            else
-              REF_NAME="${{ github.ref_name }}"
-            fi
-          else
-            REF_TYPE="heads"
-            REF_NAME="${{ github.ref_name }}"
-          fi
-          echo "REF_TYPE=$REF_TYPE" >> $GITHUB_ENV
-          echo "REF_NAME=$REF_NAME" >> $GITHUB_ENV
-          echo "Ref name is: $REF_NAME"
-          echo "Ref type is: $REF_TYPE"
+        uses: ./.github/actions/detect-ref
 
-      - name: Extract version from CMakeLists.txt
-        id: extract_version
-        run: |
-          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+      - name: Extract info from CMakeLists.txt
+        uses: ./.github/actions/extract-version
+        with:
+          package-prefix: ${{ env.RPM_PACKAGE_PREFIX }}
+          package-name-env: RPM_PACKAGE_NAME
+          dev-suffix-style: tilde
 
-          if [ "${{ env.REF_NAME }}" = "dev" ] || { [ "${{ github.event.inputs.branch }}" = "dev" ] && [ -z "${{ github.event.inputs.tag }}" ]; }; then
-            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
-            APP_VERSION="${MAJOR_MINOR}~dev"
-          else
-            APP_VERSION="$FULL_VERSION"
-          fi
-          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-          echo "Extracted version: $APP_VERSION"
+      - name: Export package info
+        id: package
+        run: |
+          {
+            echo "file=${RPM_PACKAGE_NAME}-${APP_VERSION}-1.x86_64.rpm"
+            echo "artifact=${RPM_PACKAGE_NAME}-${APP_VERSION}-1.x86_64"
+            echo "package-name=${RPM_PACKAGE_NAME}"
+            echo "app-root=${APP_INSTALL_PREFIX}${VERSION_MAJOR}"
+            echo "launcher=/usr/bin/omodscan${VERSION_MAJOR}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            git build-essential ninja-build cmake patchelf rsync \
+            git build-essential ninja-build patchelf rsync wget \
             rpm gnupg2 \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
@@ -96,70 +82,46 @@ jobs:
             libpq5 libmysqlclient21
 
       - name: Install Python 3.12 from sources
-        run: |
-          apt-get install -y wget libssl-dev \
-            libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev \
-            libffi-dev libbz2-dev liblzma-dev libgdbm-dev libnss3-dev \
-            libncurses-dev libgdbm-compat-dev xz-utils
+        uses: ./.github/actions/install-python-from-source
+        with:
+          version: "3.12.2"
 
-          wget https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz
-          tar xvf Python-3.12.2.tgz
-          cd Python-3.12.2
+      - name: Install Qt
+        id: qt
+        uses: ./.github/actions/install-qt
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: linux
+          arch: linux_gcc_64
+          install-dir: /opt/Qt
+          qt-dir-name: gcc_64
+          modules: qt5compat qtpdf qtserialport qtserialbus
+          python-command: python3
 
-          ./configure
-          make -j$(nproc)
-          make altinstall
-
-      - name: Set Python 3.12 as default
-        run: |
-          update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 2
-          update-alternatives --set python3 /usr/local/bin/python3.12
-
-      - name: Upgrade pip
-        run: |
-          python3 -m ensurepip --upgrade
-          python3 -m pip install --upgrade pip
-
-      - name: Install aqtinstall
-        run: |
-          python3 -m pip install aqtinstall
-
-      - name: Download Qt
-        run: |
-          mkdir -p ${{ env.QT_INSTALL_DIR }}
-          aqt install-qt \
-            ${{ env.QT_HOST }} \
-            ${{ env.QT_TARGET }} \
-            ${{ env.QT_VERSION }} \
-            ${{ env.QT_ARCH }} \
-            -m qt5compat qtpdf qtserialport qtserialbus \
-            -O ${{ env.QT_INSTALL_DIR }}
-
-      - name: Add Qt to PATH
-        run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
-
-      - name: Install cmake 3.26
+      - name: Install CMake
         run: |
           apt-get remove -y cmake
-          wget https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.sh
-          sh cmake-3.26.5-linux-x86_64.sh --skip-license --prefix=/usr/local
+          wget "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh"
+          sh "cmake-${CMAKE_VERSION}-linux-x86_64.sh" --skip-license --prefix=/usr/local
           cmake --version
 
       - name: Set BUILD_DIR
-        run: echo "BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+        run: echo "BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}-Release" >> $GITHUB_ENV
 
       - name: Configure project
         run: |
-            cmake src -B ${{ env.BUILD_DIR }} \
-            -G "${{ env.CMAKE_GENERATOR }}" \
-            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
+          cmake src -B ${{ env.BUILD_DIR }} \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$QT_ROOT_DIR" \
+            -DBUILD_TESTING=OFF \
+            -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
       - name: Build
-        run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
+        run: cmake --build ${{ env.BUILD_DIR }} --config Release --parallel
 
       - name: Set BUILD_RPM_DIR
-        run: echo "BUILD_RPM_DIR=build-rpm-package-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
+        run: echo "BUILD_RPM_DIR=build-rpm-package-Qt_${{ env.QT_VERSION }}" >> $GITHUB_ENV
 
       - name: Create RPM build directories
         run: |
@@ -168,67 +130,58 @@ jobs:
           mkdir -p ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan
           mkdir -p ${{ env.BUILD_RPM_DIR }}/SPECS
           mkdir -p ${{ env.BUILD_RPM_DIR }}/SRPMS
-          
+
       - name: Copy files to BUILD_RPM_DIR
         run: |
           rsync -a .github/linux/rpm/* ${{ env.BUILD_RPM_DIR }}/SPECS
           rsync -a .github/linux/usr/* ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr
-         
+
       - name: Install cqtdeployer from sources
-        run: |
-          git clone https://github.com/QuasarApp/CQtDeployer.git
-          cd CQtDeployer
-          git checkout v1.6.2365
-          wget -qO- https://github.com/QuasarApp/CQtDeployer/pull/846.patch | git apply
-          git submodule update --init --recursive
-          cmake -B build -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
-            -DBUILD_SHARED_LIBS=OFF \
-            -DCQT_DEPLOYER_TESTS=OFF \
-            -DCMAKE_INSTALL_PREFIX=/usr/local \
-            -DCMAKE_INSTALL_RPATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
-            -Wno-dev
-          cmake --build build --parallel
-          cmake --install build
+        uses: ./.github/actions/install-cqtdeployer
+        with:
+          qt-prefix-path: ${{ steps.qt.outputs.qt-root-dir }}
+
+      - name: Resolve latest OpenSSL 3.5 LTS version
+        uses: ./.github/actions/build-openssl3-runtime
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodscan \
-            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/opt/OpenModScan \
-            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
-            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
-            -extraLibs icudata,icui18n,icuuc \
-            -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
+            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
+            -libDir "$QT_ROOT_DIR/lib" \
+            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
+            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor \
+            -customScript 'export QT_QPA_PLATFORM=xcb'
+
+      - name: Copy OpenSSL 3 libraries
+        run: |
+          cp /usr/local/lib64/libssl.so.3 \
+             /usr/local/lib64/libcrypto.so.3 \
+             "${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/"
 
       - name: Create RPM spec file
         run: |
           sed -e "s|@PACKAGE_NAME@|${{ env.RPM_PACKAGE_NAME }}|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
+              -e "s|@APP_INSTALL_PREFIX@|${{ env.APP_INSTALL_PREFIX }}|g" \
+              -e "s|@VERSION_MAJOR@|${{ env.VERSION_MAJOR }}|g" \
               ${{ env.BUILD_RPM_DIR }}/SPECS/omodscan.spec.in > ${{ env.BUILD_RPM_DIR }}/SPECS/omodscan.spec
           rm ${{ env.BUILD_RPM_DIR }}/SPECS/omodscan.spec.in
           cat -n ${{ env.BUILD_RPM_DIR }}/SPECS/omodscan.spec
 
-      - name: Create metainfo file
-        run: |
-          sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
-              -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
-              -e "s|@COMPONENT_ID@|omodscan.desktop|g" \
-              -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
-              -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
-              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml
-          rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml.in
-          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/metainfo/omodscan.metainfo.xml
-
-      - name: Create desktop file
-        run: |
-          sed -e "s|@APP_EXEC@|omodscan|g" \
-              -e "s|@APP_ICON@|omodscan|g" \
-              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop
-          rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop.in
-          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/usr/share/applications/omodscan.desktop
+      - name: Create Linux app metadata
+        uses: ./.github/actions/linux-app-metadata
+        with:
+          root-dir: ${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan
+          app-install-prefix: ${{ env.APP_INSTALL_PREFIX }}
+          version-major: ${{ env.VERSION_MAJOR }}
+          product-name: ${{ env.PRODUCT_NAME }}
+          app-version: ${{ env.APP_VERSION }}
+          ref-name: ${{ env.REF_NAME }}
+          ref-type: ${{ env.REF_TYPE }}
 
       - name: Patch binary file
-        run: patchelf --set-rpath /opt/OpenModScan/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan/opt/OpenModScan/bin/omodscan"
+        run: patchelf --set-rpath "${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodscan${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/bin/omodscan"
 
       - name: Import GPG keys
         env:
@@ -242,24 +195,24 @@ jobs:
       - name: Sign RPM package
         working-directory: ${{ env.BUILD_RPM_DIR }}
         run: |
-          RPM_FILE="${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm" 
+          RPM_FILE="${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-1.x86_64.rpm"
           SAFE_RPM_FILE=$(echo "$RPM_FILE" | sed 's/~/−/g')
-          
-          if [ "$RPM_FILE" != "$SAFE_RPM_FILE" ]; then
-            mv "RPMS/${RPM_ARCH}/$RPM_FILE" "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE"
-          fi
-          rpmsign --addsign --define "_gpg_name 0A845C8CBD8C44185F602120EF63A914DDB8502F" "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE"
 
           if [ "$RPM_FILE" != "$SAFE_RPM_FILE" ]; then
-            mv "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE" "RPMS/${RPM_ARCH}/$RPM_FILE"
+            mv "RPMS/x86_64/$RPM_FILE" "RPMS/x86_64/$SAFE_RPM_FILE"
+          fi
+          rpmsign --addsign --define "_gpg_name 841A6E73CED20603737BDCBA457ECBB2757E57F1" "RPMS/x86_64/$SAFE_RPM_FILE"
+
+          if [ "$RPM_FILE" != "$SAFE_RPM_FILE" ]; then
+            mv "RPMS/x86_64/$SAFE_RPM_FILE" "RPMS/x86_64/$RPM_FILE"
           fi
 
       - name: Upload RPM package
         uses: actions/upload-artifact@v7
         if: success()
         with:
-          name: ${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}
-          path: ${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm
+          name: ${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-1.x86_64
+          path: ${{ env.BUILD_RPM_DIR }}/RPMS/x86_64/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-1.x86_64.rpm
 
       - name: Save public GPG key to file
         env:
@@ -274,14 +227,46 @@ jobs:
           path: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
 
       - name: Create or update GitHub Release and upload RPM
-        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v3
+        uses: ./.github/actions/github-release
         with:
-          draft: true
-          tag_name: ${{ github.ref_name }}
-          name: Open ModScan ${{ env.APP_VERSION }}
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
+          app-version: ${{ env.APP_VERSION }}
           files: |
-            ${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm
+            ${{ env.BUILD_RPM_DIR }}/RPMS/x86_64/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-1.x86_64.rpm
             ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  verify-omodscan:
+    name: Verify rpm package installation
+    runs-on: ubuntu-latest
+    needs: build-omodscan
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Download RPM package
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build-omodscan.outputs.artifact-name }}
+
+      - name: Trust RED SOFT registry
+        uses: ./.github/actions/trust-redsoft-registry
+
+      - name: Verify the package installs
+        uses: ./.github/actions/verify-linux-package
+        with:
+          package: ${{ needs.build-omodscan.outputs.package-file }}
+          package-name: ${{ needs.build-omodscan.outputs.package-name }}
+          app-root: ${{ needs.build-omodscan.outputs.app-root }}
+          launcher: ${{ needs.build-omodscan.outputs.launcher }}
+          package-manager: rpm
+          images: >-
+            fedora:43
+            fedora:44
+            rockylinux/rockylinux:10.1
+            registry.red-soft.ru/redos8c/ubi:latest
+            opensuse/leap:15.6
+            alt:p11

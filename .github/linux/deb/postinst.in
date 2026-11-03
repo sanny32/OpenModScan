@@ -7,13 +7,14 @@ if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then
 fi
 
 if [ ! -f /etc/udev/rules.d/99-omodsim.rules ]; then
+    mkdir -p /etc/udev/rules.d
     printf  "KERNEL==\"ttyS[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
     printf  "KERNEL==\"ttyUSB[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
 fi
 
-udevadm trigger
+udevadm trigger || true
 
-setcap 'cap_net_bind_service=+ep' /opt/OpenModScan/bin/omodscan || true
-ln -sf /opt/OpenModScan/omodscan.sh /usr/bin/omodscan
+setcap 'cap_net_bind_service=+ep' @APP_INSTALL_PREFIX@@VERSION_MAJOR@/bin/omodscan || true
+ln -sf @APP_INSTALL_PREFIX@@VERSION_MAJOR@/omodscan.sh /usr/bin/omodscan@VERSION_MAJOR@
 
-xdg-desktop-menu forceupdate
+xdg-desktop-menu forceupdate || true

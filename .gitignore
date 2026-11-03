@@ -70,3 +70,6 @@ AGENTS.md
 src/res/license.txt
 /docs/*.md
 
+!/.github/workflows/build-*.yml
+!/.github/actions/build-*/
+!/.github/actions/build-*/action.yml

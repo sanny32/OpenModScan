@@ -3,7 +3,7 @@ name: Build OpenModScan Installer (Windows x86, Qt5)
 on:
   push:
     tags:
-      - "*"    
+      - "*"
   workflow_dispatch:
     inputs:
       branch:
@@ -23,22 +23,17 @@ permissions:
 
 env:
   QT_VERSION: 5.15.2
-  QT_ARCH: win32_msvc2019
-  CMAKE_COMPILER: msvc2019
-  CMAKE_GENERATOR: "Visual Studio 17 2022"
-  CMAKE_ARCH: Win32
-  ARCH: x86
-  BUILD_TYPE: Release
+  EXE_PACKAGE_PREFIX: qt5-omodscan
 
   # SingPath variables
   PROJECT_SLUG: OpenModScan
-  ORGANIZATION_ID: 2bd9d721-94a7-4c7d-aab8-b81dd84670a5
+  ORGANIZATION_ID: 6aeb3196-43e9-4b2c-83db-d1d90af47bc4
   ARTIFACT_CONF_SLUG: exe-zip
 
 jobs:
   build-omodscan:
     name: Build OpenModScan installer version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt5 on Windows x86
-    runs-on: windows-2022
+    runs-on:  windows-2022
 
     steps:
       - name: Checkout repository
@@ -47,38 +42,36 @@ jobs:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Extract version from CMakeLists.txt
-        run: |
-          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" src\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
-        shell: cmd
-
-      - name: Convert version for dev branch
-        if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' }}
-        run: |
-          for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
-            echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
-          )
-        shell: cmd
+        uses: ./.github/actions/extract-version
+        with:
+          package-prefix: ${{ env.EXE_PACKAGE_PREFIX }}
+          package-name-env: EXE_PACKAGE_NAME
+          dev-suffix-style: dash
 
       - name: Select signing policy
         run: |
           set SIGNING_POLICY_SLUG=none
-          if "${{ github.event_name }}"=="push" (
-            if "${{ github.ref_type }}"=="tag" (
-              for /f %%i in ('echo "${{ github.ref_name }}" ^| find /i "test"') do set TAG_HAS_TEST=1
-              if not defined TAG_HAS_TEST (
-                set SIGNING_POLICY_SLUG=release-signing
-              )
-            )
-          )
-          if "${{ github.event_name }}"=="workflow_dispatch" (
-            if "${{ github.event.inputs.signing }}"=="true" (
-              if not "${{ github.event.inputs.tag }}"=="" (
-                echo "%{{ github.event.inputs.tag }}%" | find /i "test" >nul
-                if errorlevel 1 (
+          if "${{ env.ORGANIZATION_ID }}"=="" (
+            echo WARNING: ORGANIZATION_ID is not set or empty, skipping signing steps.
+          ) else (
+            if "${{ github.event_name }}"=="push" (
+              if "${{ github.ref_type }}"=="tag" (
+                for /f %%i in ('echo "${{ github.ref_name }}" ^| find /i "test"') do set TAG_HAS_TEST=1
+                if not defined TAG_HAS_TEST (
                   set SIGNING_POLICY_SLUG=release-signing
                 )
-              ) else (
-                set SIGNING_POLICY_SLUG=test-signing
+              )
+            )
+            if "${{ github.event_name }}"=="workflow_dispatch" (
+              if "${{ github.event.inputs.signing }}"=="true" (
+                if not "${{ github.event.inputs.tag }}"=="" (
+                  echo "${{ github.event.inputs.tag }}" | find /i "test" >nul
+                  if errorlevel 1 (
+                    set SIGNING_POLICY_SLUG=release-signing
+                  )
+                ) else (
+                  set SIGNING_POLICY_SLUG=test-signing
+                )
               )
             )
           )
@@ -91,22 +84,28 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install aqtinstall
+      - name: Install CMake
         run: |
-          python -m pip install aqtinstall
+          python -m pip install cmake==%CMAKE_VERSION%
+          cmake --version
+        shell: cmd
 
       - name: Install Qt
-        run: |
-          python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt
-        shell: cmd
+        uses: ./.github/actions/install-qt
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          arch: win32_msvc2019
+          install-dir: C:/Qt
+          qt-dir-name: msvc2019
 
       - name: Set BUILD_DIR
         run: |
-          echo BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}>>%GITHUB_ENV%
+          echo BUILD_DIR=build-omodscan-Qt_${{ env.QT_VERSION }}-Release>>%GITHUB_ENV%
         shell: cmd
 
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.3.2
+        uses: microsoft/setup-msbuild@v3
         with:
           vs-version: '16.11'
 
@@ -119,12 +118,12 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+          cmake src -B ${{ env.BUILD_DIR }} -G "Visual Studio 17 2022" -A Win32 -T v142 -DCMAKE_PREFIX_PATH="%QT_ROOT_DIR%" -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }} -DBUILD_TESTING=OFF
         shell: cmd
 
       - name: Build
         run: |
-          cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
+          cmake --build ${{ env.BUILD_DIR }} --config Release --parallel
         shell: cmd
 
       - name: Upload Executable
@@ -132,11 +131,11 @@ jobs:
         uses: actions/upload-artifact@v7
         if: success()
         with:
-          name: omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
-          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
+          name: omodscan-${{ env.APP_VERSION }}_x86.exe
+          path: ${{ env.BUILD_DIR }}\Release\omodscan.exe
 
       - name: Signing Executable
-        uses: signpath/github-action-submit-signing-request@v1
+        uses: signpath/github-action-submit-signing-request@v2
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
@@ -145,7 +144,7 @@ jobs:
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
           github-artifact-id: '${{steps.upload-exe.outputs.artifact-id}}'
-          output-artifact-directory: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
+          output-artifact-directory: ${{ env.BUILD_DIR }}\Release
           wait-for-completion: true
           wait-for-completion-timeout-in-seconds: 3600
 
@@ -153,20 +152,35 @@ jobs:
         uses: actions/upload-artifact@v7
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
-          name: omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}-signed.exe
-          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe
+          name: omodscan-${{ env.APP_VERSION }}_x86-signed.exe
+          path: ${{ env.BUILD_DIR }}\Release\omodscan.exe
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
           call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.29
-          "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
-            "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodscan.exe" ^
+          "%QT_ROOT_DIR%\bin\windeployqt.exe" ^
+            "%CD%\${{ env.BUILD_DIR }}\Release\omodscan.exe" ^
             --release ^
             --no-angle ^
             --no-quick ^
             --no-opengl-sw ^
             --no-system-d3d-compiler ^
-            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins"
+            --plugindir "%CD%\${{ env.BUILD_DIR }}\Release\plugins"
+        shell: cmd
+
+      - name: Remove qml folder
+        run: |
+          IF EXIST "%CD%\${{ env.BUILD_DIR }}\Release\qml" (
+            dir /a /b "%CD%\${{ env.BUILD_DIR }}\Release\qml" | findstr . >nul
+            IF ERRORLEVEL 1 (
+              rmdir "%CD%\${{ env.BUILD_DIR }}\Release\qml"
+            ) ELSE (
+              echo "qml folder is not empty - keeping it"
+            )
+          ) ELSE (
+            echo "No qml folder found - nothing to remove"
+          )
+          exit /b 0
         shell: cmd
 
       - name: Install NSIS
@@ -178,12 +192,13 @@ jobs:
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ env.APP_VERSION }}" ^
+           /DVERSION_NUMERIC="${{ env.BASE_VERSION }}" ^
            /DMIN_WINDOWS_VERSION=7 ^
-           /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
+           /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\Release" ^
            /DICON_FILE="%CD%\src\res\omodscan.ico" ^
            /DWELCOMEFINISHPAGE_BITMAP="%CD%\.github\win32\nsis3-omodscan.bmp" ^
            /DLICENSE_FILE="%CD%\src\res\license.txt" ^
-           /DOUTPUT_FILE="%CD%\qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe" ^
+           /DOUTPUT_FILE="%CD%\${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_x86.exe" ^
            %CD%\.github\win32\installer-win32.nsi
         shell: cmd
 
@@ -192,11 +207,11 @@ jobs:
         uses: actions/upload-artifact@v7
         if: success()
         with:
-          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}
-          path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
+          name: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_x86
+          path: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_x86.exe
 
       - name: Signing Installer
-        uses: signpath/github-action-submit-signing-request@v1
+        uses: signpath/github-action-submit-signing-request@v2
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
@@ -213,17 +228,13 @@ jobs:
         uses: actions/upload-artifact@v7
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
-          name: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}-signed
-          path: qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
+          name: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_x86-signed
+          path: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_x86.exe
 
       - name: Create or update GitHub Release and upload EXE
-        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v3
+        uses: ./.github/actions/github-release
         with:
-          draft: true
-          tag_name: ${{ github.ref_name }}
-          name: Open ModScan ${{ env.APP_VERSION }}
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
+          app-version: ${{ env.APP_VERSION }}
           files: |
-            qt5-omodscan-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_x86.exe

@@ -69,12 +69,16 @@ echo -e "Extracted version: $APP_VERSION\n"
 cd .github/linux/flatpak || exit 1
 
 # Create desktop file
-sed -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
+sed -e "s|@APP_NAME@|Open ModScan 2|g" \
+    -e "s|@APP_EXEC@|/app/bin/omodscan|g" \
     -e "s|@APP_ICON@|io.github.sanny32.omodscan|g" \
     ../usr/share/applications/omodscan.desktop.in > ../usr/share/applications/omodscan.desktop
     
 # Create metainfo file
-sed -e "s|@REF_NAME@|$REF_NAME|g" \
+sed -e "s|@APP_NAME@|Open ModScan 2|g" \
+    -e "s|@APP_EXEC@|omodscan|g" \
+    -e "s|@REF_TYPE@|heads|g" \
+    -e "s|@REF_NAME@|$REF_NAME|g" \
     -e "s|@COMPONENT_ID@|io.github.sanny32.omodscan|g" \
     -e "s|@APP_VERSION@|$APP_VERSION|g" \
     -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
@@ -89,7 +93,7 @@ fi
 
 # Build project
 echo -e "\033[32mBuilding flatpak project...\033[0m"
-sed -i -e "s|branch: main|branch: ${REF_NAME}|" \
+sed -i -e "s|branch: dev|branch: ${REF_NAME}|" \
        -e "s|branch: stable|branch: ${FLATPAK_CHANNEL}|" \
        io.github.sanny32.omodscan.yaml
 $FB_APP --repo=repo --force-clean --verbose build io.github.sanny32.omodscan.yaml

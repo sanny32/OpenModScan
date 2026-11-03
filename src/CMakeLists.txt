@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 project(omodscan
-    VERSION 1.16.2
+    VERSION 2.0.0
     DESCRIPTION "An Open Source Modbus Master (Client) Utility"
     LANGUAGES CXX)
 
@@ -17,14 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PRODUCT_NAME "Open ModScan")
 set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}")
 
-# Split version to major, minor, patch
-string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
-list(GET VERSION_LIST 0 VERSION_MAJOR)
-list(GET VERSION_LIST 1 VERSION_MINOR)
-list(GET VERSION_LIST 2 VERSION_PATCH)
-
-# Define current year
-string(TIMESTAMP CURRENT_YEAR "%Y")
+include(cmake/project_version.cmake)
 
 # Generate license.txt
 configure_file(
@@ -59,27 +52,7 @@ endif()
 # Define target
 add_executable(${PROJECT_NAME})
 
-if(DEFINED ENV{GITHUB_REF})
-    string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})
-    if(MATCH_RESULT AND CMAKE_MATCH_1)
-        set(GIT_BRANCH ${CMAKE_MATCH_1})
-    endif()
-else()
-    find_package(Git QUIET)
-    if(GIT_FOUND)
-        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
-            OUTPUT_VARIABLE GIT_BRANCH
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            ERROR_QUIET)
-    else()
-        message(STATUS "Git not found - branch detection is not possible")
-    endif()
-endif()
-
-if(${GIT_BRANCH} MATCHES dev)
-    set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
-endif()
+omodscan_apply_project_version_suffix()
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")

@@ -1,0 +1,28 @@
+name: Upload GitHub release assets
+description: Create or update a draft GitHub release and upload assets.
+
+inputs:
+  app-version:
+    description: Release display version.
+    required: true
+  prerelease:
+    description: Whether the release is a prerelease.
+    required: true
+  files:
+    description: Files to upload to the release.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Create or update GitHub Release
+      if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+      uses: softprops/action-gh-release@v3
+      with:
+        draft: true
+        prerelease: ${{ inputs.prerelease }}
+        tag_name: ${{ github.ref_name }}
+        name: Open ModScan ${{ inputs.app-version }}
+        files: ${{ inputs.files }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}

@@ -1,0 +1,82 @@
+name: Verify AppImage
+description: Extract an AppImage in container images and check its runtime links.
+
+inputs:
+  package:
+    description: AppImage file name in the workflow workspace.
+    required: true
+  desktop-file:
+    description: Desktop file name at the AppDir root, e.g. omodscan2.desktop.
+    required: true
+  images:
+    description: Whitespace-separated Docker image list.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Verify AppImage
+      shell: bash
+      env:
+        PKG: ${{ inputs.package }}
+        DESKTOP_FILE: ${{ inputs.desktop-file }}
+        IMAGES: ${{ inputs.images }}
+      run: |
+        chmod +x "$PKG"
+
+        status=0
+        for image in $IMAGES; do
+          echo "::group::$image"
+          if ! docker run --rm -e PKG -e DESKTOP_FILE \
+              -v "$PWD:/pkg:ro" -w /tmp "$image" bash -eux -c '
+            install_desktop_runtime() {
+              distribution=$(. /etc/os-release && echo "$ID")
+              case "$distribution" in
+                debian|ubuntu)
+                  export DEBIAN_FRONTEND=noninteractive
+                  apt-get update
+                  glib_package=libglib2.0-0
+                  if apt-cache show libglib2.0-0t64 > /dev/null 2>&1; then
+                    glib_package=libglib2.0-0t64
+                  fi
+                  apt-get install -y --no-install-recommends \
+                    libdbus-1-3 libegl1 libfontconfig1 libfreetype6 \
+                    libgl1 "$glib_package" libglx0 libgssapi-krb5-2 \
+                    libopengl0 libx11-6 libxkbcommon0
+                  ;;
+                altlinux)
+                  apt-get update
+                  apt-get install -y glibc-utils
+                  ;;
+              esac
+            }
+
+            # CQtDeployer leaves base-system ABI libraries on the desktop host.
+            install_desktop_runtime
+
+            # The AppImage runtime needs FUSE, extraction does not.
+            "/pkg/$PKG" --appimage-extract > /dev/null
+
+            test -x squashfs-root/AppRun
+            test -x squashfs-root/usr/bin/omodscan
+            test -f "squashfs-root/$DESKTOP_FILE"
+            test -f squashfs-root/.DirIcon
+
+            if LD_LIBRARY_PATH="$(readlink -f squashfs-root/usr/lib)" \
+                ldd -r squashfs-root/usr/bin/omodscan | grep -E "not found|undefined symbol"; then
+              echo "The bundled binary has unresolved libraries or symbols"
+              exit 1
+            fi
+
+            # cqtdeployer excludes OpenSSL, the workflow bundles it by hand.
+            if ! ls squashfs-root/usr/lib/libssl.so.* squashfs-root/usr/lib/libcrypto.so.* > /dev/null; then
+              echo "OpenSSL libraries are missing from the bundle"
+              exit 1
+            fi
+          '; then
+            echo "::error::The AppImage does not run on $image"
+            status=1
+          fi
+          echo "::endgroup::"
+        done
+        exit "$status"

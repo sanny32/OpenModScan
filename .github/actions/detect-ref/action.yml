@@ -1,0 +1,24 @@
+name: Detect Git ref
+description: Set REF_TYPE and REF_NAME for release metadata.
+
+runs:
+  using: composite
+  steps:
+    - name: Determine ref_type and ref_name
+      shell: bash
+      run: |
+        if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
+          REF_TYPE="tags"
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            REF_NAME="${{ github.event.inputs.tag }}"
+          else
+            REF_NAME="${{ github.ref_name }}"
+          fi
+        else
+          REF_TYPE="heads"
+          REF_NAME="${{ github.event.inputs.branch || github.ref_name }}"
+        fi
+        echo "REF_TYPE=$REF_TYPE" >> "$GITHUB_ENV"
+        echo "REF_NAME=$REF_NAME" >> "$GITHUB_ENV"
+        echo "Ref name is: $REF_NAME"
+        echo "Ref type is: $REF_TYPE"

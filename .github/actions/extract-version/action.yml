@@ -1,0 +1,173 @@
+name: Extract project version
+description: Extract OpenModScan version metadata from src/CMakeLists.txt.
+
+inputs:
+  package-prefix:
+    description: Prefix used to compose the package name from the major version.
+    required: false
+    default: ""
+  package-name-env:
+    description: Environment variable name that receives the composed package name.
+    required: false
+    default: ""
+  dev-suffix-style:
+    description: Version suffix style for development builds. Use tilde or dash.
+    required: true
+  prerelease-suffix-style:
+    description: Version suffix style for prerelease builds. Use same, tilde, or dash.
+    required: false
+    default: same
+  release-branches-are-dev:
+    description: Treat release/* branches as development builds.
+    required: false
+    default: "true"
+
+outputs:
+  app-version:
+    value: ${{ steps.extract.outputs.app-version }}
+  app-major-version:
+    value: ${{ steps.extract.outputs.app-major-version }}
+  cmake-version:
+    value: ${{ steps.extract.outputs.cmake-version }}
+  product-name:
+    value: ${{ steps.extract.outputs.product-name }}
+  prerelease-suffix:
+    value: ${{ steps.extract.outputs.prerelease-suffix }}
+  prerelease-enabled:
+    value: ${{ steps.extract.outputs.prerelease-enabled }}
+  package-name:
+    value: ${{ steps.extract.outputs.package-name }}
+
+runs:
+  using: composite
+  steps:
+    - name: Extract version from CMakeLists.txt
+      id: extract
+      shell: bash
+      env:
+        PACKAGE_PREFIX: ${{ inputs.package-prefix }}
+        PACKAGE_NAME_ENV: ${{ inputs.package-name-env }}
+        DEV_SUFFIX_STYLE: ${{ inputs.dev-suffix-style }}
+        PRERELEASE_SUFFIX_STYLE: ${{ inputs.prerelease-suffix-style }}
+        RELEASE_BRANCHES_ARE_DEV: ${{ inputs.release-branches-are-dev }}
+        EVENT_TAG: ${{ github.event.inputs.tag }}
+        EVENT_BRANCH: ${{ github.event.inputs.branch }}
+        REF_TYPE: ${{ github.ref_type }}
+        REF_NAME: ${{ github.ref_name }}
+      run: |
+        cmake_version=$(sed -nE 's/.*cmake_minimum_required[[:space:]]*\([[:space:]]*VERSION[[:space:]]+([0-9]+(\.[0-9]+){1,3}).*/\1/p' src/CMakeLists.txt | head -n 1)
+        if [ -z "$cmake_version" ]; then
+          echo "Failed to detect minimum CMake version" >&2
+          exit 1
+        fi
+
+        full_version=$(sed -nE 's/^[[:space:]]*VERSION[[:space:]]+([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' src/CMakeLists.txt | head -n 1)
+        if [ -z "$full_version" ]; then
+          echo "Failed to detect project version" >&2
+          exit 1
+        fi
+
+        product_name=$(sed -nE 's/.*set\(PRODUCT_NAME[[:space:]]+"([^"]+)".*/\1/p' src/CMakeLists.txt | head -n 1)
+        IFS=. read -r major_version minor_version patch_version <<< "$full_version"
+
+        package_name=""
+        if [ -n "$PACKAGE_PREFIX" ]; then
+          package_name="${PACKAGE_PREFIX}${major_version}"
+        fi
+
+        prerelease_enabled=false
+        prerelease_suffix=""
+        tag_name="$EVENT_TAG"
+        if [ -z "$tag_name" ] && [ "$REF_TYPE" = tag ]; then
+          tag_name="$REF_NAME"
+        fi
+        if [[ "$tag_name" =~ (beta[0-9]+|b[0-9]+|rc[0-9]+)$ ]]; then
+          prerelease_enabled=true
+          prerelease_suffix="${BASH_REMATCH[1]}"
+        fi
+
+        is_dev_build=false
+        branch_name="${EVENT_BRANCH:-$REF_NAME}"
+        if [ -z "$tag_name" ]; then
+          if [ "$branch_name" = dev ]; then
+            is_dev_build=true
+          elif [ "$RELEASE_BRANCHES_ARE_DEV" = true ] && [[ "$branch_name" == release/* ]]; then
+            is_dev_build=true
+          fi
+        fi
+
+        case "$DEV_SUFFIX_STYLE" in
+          tilde) dev_separator='~' ;;
+          dash) dev_separator='-' ;;
+          *)
+            echo "Unsupported dev-suffix-style: $DEV_SUFFIX_STYLE" >&2
+            exit 1
+            ;;
+        esac
+
+        prerelease_suffix_style="$PRERELEASE_SUFFIX_STYLE"
+        if [ "$prerelease_suffix_style" = same ]; then
+          prerelease_suffix_style="$DEV_SUFFIX_STYLE"
+        fi
+        case "$prerelease_suffix_style" in
+          tilde) prerelease_separator='~' ;;
+          dash) prerelease_separator='-' ;;
+          *)
+            echo "Unsupported prerelease-suffix-style: $prerelease_suffix_style" >&2
+            exit 1
+            ;;
+        esac
+
+        # Name dev snapshots after the commit, e.g. 2.4~dev.g1a2b3c4.
+        # Container jobs check out without git, fall back to the workflow sha.
+        if git rev-parse --short HEAD > /dev/null 2>&1; then
+          sha=$(git rev-parse --short HEAD)
+        else
+          sha=${GITHUB_SHA::7}
+        fi
+
+        if [ "$is_dev_build" = true ]; then
+          app_version="${major_version}.${minor_version}${dev_separator}dev.g${sha}"
+        else
+          app_version="$full_version"
+          if [ "$prerelease_enabled" = true ]; then
+            app_version="${app_version}${prerelease_separator}${prerelease_suffix}"
+          fi
+        fi
+
+        source_ref="refs/heads/$branch_name"
+        if [ -n "$tag_name" ]; then
+          source_ref="refs/tags/$tag_name"
+        fi
+
+        {
+          echo "OMODSCAN_SOURCE_REF=$source_ref"
+          echo "APP_VERSION=$app_version"
+          echo "BASE_VERSION=$full_version"
+          echo "APP_MAJOR_VERSION=$major_version"
+          echo "VERSION_MAJOR=$major_version"
+          echo "CMAKE_VERSION=$cmake_version"
+          echo "PRODUCT_NAME=$product_name"
+          echo "PRERELEASE_SUFFIX=$prerelease_suffix"
+          echo "PRERELEASE_ENABLED=$prerelease_enabled"
+          if [ -n "$PACKAGE_NAME_ENV" ]; then
+            echo "${PACKAGE_NAME_ENV}=$package_name"
+          fi
+        } >> "$GITHUB_ENV"
+
+        {
+          echo "app-version=$app_version"
+          echo "app-major-version=$major_version"
+          echo "cmake-version=$cmake_version"
+          echo "product-name=$product_name"
+          echo "prerelease-suffix=$prerelease_suffix"
+          echo "prerelease-enabled=$prerelease_enabled"
+          echo "package-name=$package_name"
+        } >> "$GITHUB_OUTPUT"
+
+        echo "Extracted version: $app_version"
+        echo "Required CMake version: $cmake_version"
+        echo "Extracted product name: $product_name"
+        if [ -n "$package_name" ]; then
+          echo "Package name: $package_name"
+        fi

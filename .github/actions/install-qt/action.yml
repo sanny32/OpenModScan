@@ -1,0 +1,82 @@
+name: Install Qt with aqtinstall
+description: Install Qt modules with aqtinstall and configure the Qt environment.
+
+inputs:
+  version:
+    description: Qt version to install.
+    required: true
+  host:
+    description: Qt host platform accepted by aqtinstall.
+    required: true
+  target:
+    description: Qt target accepted by aqtinstall.
+    required: false
+    default: desktop
+  arch:
+    description: Qt architecture accepted by aqtinstall.
+    required: true
+  install-dir:
+    description: Directory where Qt is installed.
+    required: true
+  qt-dir-name:
+    description: Installed Qt kit directory below the version directory.
+    required: true
+  modules:
+    description: Space-separated list of additional Qt modules.
+    required: false
+    default: ""
+  python-command:
+    description: Python executable used to run pip and aqtinstall.
+    required: false
+    default: python
+
+outputs:
+  qt-root-dir:
+    description: Path to the installed Qt kit.
+    value: ${{ steps.prepare.outputs.qt-root-dir }}
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare Qt installation
+      id: prepare
+      shell: bash
+      env:
+        AQT_INSTALL_DIR: ${{ inputs.install-dir }}
+        AQT_VERSION: ${{ inputs.version }}
+        QT_DIR_NAME: ${{ inputs.qt-dir-name }}
+      run: |
+        qt_root_dir="${AQT_INSTALL_DIR%/}/${AQT_VERSION}/${QT_DIR_NAME}"
+        echo "qt-root-dir=$qt_root_dir" >> "$GITHUB_OUTPUT"
+
+    - name: Install Qt
+      shell: bash
+      env:
+        AQT_ARCH: ${{ inputs.arch }}
+        AQT_HOST: ${{ inputs.host }}
+        AQT_INSTALL_DIR: ${{ inputs.install-dir }}
+        AQT_MODULES: ${{ inputs.modules }}
+        AQT_PYTHON: ${{ inputs.python-command }}
+        AQT_TARGET: ${{ inputs.target }}
+        AQT_VERSION: ${{ inputs.version }}
+        QT_DIR_NAME: ${{ inputs.qt-dir-name }}
+      run: |
+        "$AQT_PYTHON" -m pip install aqtinstall
+
+        args=(install-qt "$AQT_HOST" "$AQT_TARGET" "$AQT_VERSION" "$AQT_ARCH")
+        if [ -n "$AQT_MODULES" ]; then
+          read -r -a modules <<< "$AQT_MODULES"
+          args+=(-m "${modules[@]}")
+        fi
+        args+=(-O "$AQT_INSTALL_DIR")
+
+        "$AQT_PYTHON" -m aqt "${args[@]}"
+
+    - name: Configure Qt environment
+      shell: bash
+      env:
+        QT_ROOT_DIR: ${{ steps.prepare.outputs.qt-root-dir }}
+      run: |
+        test -d "$QT_ROOT_DIR/bin"
+        echo "QT_ROOT_DIR=$QT_ROOT_DIR" >> "$GITHUB_ENV"
+        echo "$QT_ROOT_DIR/bin" >> "$GITHUB_PATH"

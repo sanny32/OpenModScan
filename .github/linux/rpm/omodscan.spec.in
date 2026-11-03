@@ -28,25 +28,26 @@ if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then
     rm -f /etc/udev/rules.d/99-omodscan.rules
 fi
 if [ ! -f /etc/udev/rules.d/99-omodsim.rules ]; then
+    mkdir -p /etc/udev/rules.d
     printf  "KERNEL==\"ttyS[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
     printf  "KERNEL==\"ttyUSB[0-9]*\", GROUP=\"dialout\", MODE=\"0666\"\n"  >> /etc/udev/rules.d/99-omodscan.rules
 fi
-udevadm trigger
+udevadm trigger || true
 
-ln -sf /opt/OpenModScan/omodscan.sh /usr/bin/omodscan
+ln -sf @APP_INSTALL_PREFIX@@VERSION_MAJOR@/omodscan.sh /usr/bin/omodscan@VERSION_MAJOR@
 xdg-desktop-menu forceupdate || true
 
 %postun
 if [ -f /etc/udev/rules.d/99-omodscan.rules ]; then
     rm -f /etc/udev/rules.d/99-omodscan.rules
-    udevadm trigger
+    udevadm trigger || true
 fi
 
 xdg-desktop-menu forceupdate || true
-rm -f /usr/bin/omodscan
+rm -f /usr/bin/omodscan@VERSION_MAJOR@
 
 %files
-/opt/OpenModScan
+@APP_INSTALL_PREFIX@@VERSION_MAJOR@
 /usr/share/applications
 /usr/share/applications/*
 /usr/share/icons
@@ -54,4 +55,4 @@ rm -f /usr/bin/omodscan
 /usr/share/metainfo
 /usr/share/metainfo/*
 
-%caps(cap_net_bind_service=+ep) /opt/OpenModScan/bin/omodscan
+%caps(cap_net_bind_service=+ep) @APP_INSTALL_PREFIX@@VERSION_MAJOR@/bin/omodscan

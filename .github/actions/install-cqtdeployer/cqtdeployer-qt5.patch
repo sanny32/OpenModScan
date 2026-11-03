@@ -1,0 +1,21 @@
+diff --git a/src/Deploy/src/metafilemanager.cpp b/src/Deploy/src/metafilemanager.cpp
+index 8c8f2d7..a22f806 100644
+--- a/src/Deploy/src/metafilemanager.cpp
++++ b/src/Deploy/src/metafilemanager.cpp
+@@ -9,6 +9,7 @@
+ #include "metafilemanager.h"
+ 
+ #include <quasarapp.h>
++#include <QDebug>
+ #include <QDir>
+ #include <configparser.h>
+ #include "filemanager.h"
+@@ -246,7 +247,7 @@ void MetaFileManager::createRunMetaFiles(const QHash<QString, DeployCore::QtModu
+ 
+         if (i.value().fEnableRunScript() && !createRunScript(i.key())) {
+ 
+-            qFatal() << "Failed to create a run script: " << i.key().toUtf8().constData();
++            qFatal("Failed to create a run script: %s", i.key().toUtf8().constData());
+         }
+ 
+         if (!createQConf(i.key())) {

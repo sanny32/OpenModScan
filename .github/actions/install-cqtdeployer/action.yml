@@ -1,0 +1,53 @@
+name: Install CQtDeployer
+description: Build and install CQtDeployer from sources.
+
+inputs:
+  qt-prefix-path:
+    description: Qt installation prefix path for CMake.
+    required: true
+  apply-qt5-patch:
+    description: >-
+      Apply the Qt5 compatibility patches. Required for Qt5 builds, upstream
+      builds this version with Qt6 only.
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Install cqtdeployer from sources
+      shell: bash
+      env:
+        APPLY_QT5_PATCH: ${{ inputs.apply-qt5-patch }}
+        CQTDEPLOYER_INSTALL_DIR: ${{ runner.temp }}/cqtdeployer/v1.6.2441.67ee1ef
+        QT5_PATCH_APP: ${{ github.action_path }}/cqtdeployer-qt5.patch
+        QT5_PATCH_LIB: ${{ github.action_path }}/quasarapplib-qt5.patch
+        QT_PREFIX_PATH: ${{ inputs.qt-prefix-path }}
+      run: |
+        source_dir=$(mktemp -d)
+        git clone https://github.com/QuasarApp/CQtDeployer.git "$source_dir"
+        cd "$source_dir"
+        git checkout v1.6.2441.67ee1ef
+        git submodule update --init --recursive
+        if [ "$APPLY_QT5_PATCH" = "true" ]; then
+          # git apply cannot reach files inside a submodule, patch it separately.
+          git apply "$QT5_PATCH_APP"
+          git -C submodules/QuasarAppLib apply "$QT5_PATCH_LIB"
+        fi
+        cmake -B build -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_PREFIX_PATH="$QT_PREFIX_PATH" \
+          -DBUILD_SHARED_LIBS=OFF \
+          -DCQT_DEPLOYER_TESTS=OFF \
+          -DCMAKE_INSTALL_PREFIX="$CQTDEPLOYER_INSTALL_DIR" \
+          -DCMAKE_INSTALL_RPATH="$QT_PREFIX_PATH/lib" \
+          -Wno-dev
+        cmake --build build --parallel
+        cmake --install build
+
+    - name: Add CQtDeployer to PATH
+      shell: bash
+      env:
+        CQTDEPLOYER_INSTALL_DIR: ${{ runner.temp }}/cqtdeployer/v1.6.2441.67ee1ef
+      run: |
+        test -x "$CQTDEPLOYER_INSTALL_DIR/bin/CQtDeployer"
+        echo "$CQTDEPLOYER_INSTALL_DIR/bin" >> "$GITHUB_PATH"

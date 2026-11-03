@@ -1,0 +1,58 @@
+name: Install Python from source
+description: Build Python from source, set it as the default python3, and upgrade pip.
+
+inputs:
+  version:
+    description: Python version to build and install.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare Python installation
+      id: prepare
+      shell: bash
+      env:
+        PYTHON_VERSION: ${{ inputs.version }}
+      run: |
+        python_minor_version=${PYTHON_VERSION%.*}
+        install_dir="${RUNNER_TEMP}/python/${PYTHON_VERSION}"
+        echo "install-dir=$install_dir" >> "$GITHUB_OUTPUT"
+        echo "python-path=$install_dir/bin/python$python_minor_version" >> "$GITHUB_OUTPUT"
+
+    - name: Install Python dependencies
+      shell: bash
+      run: |
+        apt-get install -y wget libssl-dev \
+          libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev \
+          libffi-dev libbz2-dev liblzma-dev libgdbm-dev libnss3-dev \
+          libncurses-dev libgdbm-compat-dev xz-utils
+
+    - name: Build and install Python ${{ inputs.version }}
+      shell: bash
+      env:
+        PYTHON_INSTALL_DIR: ${{ steps.prepare.outputs.install-dir }}
+        PYTHON_VERSION: ${{ inputs.version }}
+      run: |
+        source_dir=$(mktemp -d)
+        wget -qO "$source_dir/Python-$PYTHON_VERSION.tgz" \
+          "https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz"
+        tar xf "$source_dir/Python-$PYTHON_VERSION.tgz" -C "$source_dir"
+        cd "$source_dir/Python-$PYTHON_VERSION"
+
+        ./configure --prefix="$PYTHON_INSTALL_DIR"
+        make -j$(nproc)
+        make altinstall
+
+    - name: Configure Python ${{ inputs.version }}
+      shell: bash
+      env:
+        PYTHON_PATH: ${{ steps.prepare.outputs.python-path }}
+      run: |
+        test -x "$PYTHON_PATH"
+        update-alternatives --install /usr/bin/python3 python3 "$PYTHON_PATH" 2
+        update-alternatives --set python3 "$PYTHON_PATH"
+
+        python3 -m ensurepip --upgrade
+        python3 -m pip install --upgrade pip
+        python3 --version

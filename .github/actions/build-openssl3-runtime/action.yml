@@ -1,0 +1,59 @@
+name: Build OpenSSL 3 runtime
+description: Resolve and build the latest OpenSSL 3.5 runtime libraries.
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve latest OpenSSL 3.5 LTS version
+      id: resolve
+      shell: bash
+      run: |
+        OPENSSL_VERSION=$(python3 - <<'PY'
+        import json
+        import re
+        import urllib.request
+
+        req = urllib.request.Request(
+            "https://api.github.com/repos/openssl/openssl/releases?per_page=100",
+            headers={"User-Agent": "omodscan-ci"},
+        )
+        with urllib.request.urlopen(req) as response:
+            releases = json.load(response)
+
+        versions = []
+        for release in releases:
+            if release.get("draft") or release.get("prerelease"):
+                continue
+            tag = release.get("tag_name", "")
+            match = re.fullmatch(r"openssl-(3\.5\.\d+)", tag)
+            if match:
+                versions.append(tuple(int(part) for part in match.group(1).split(".")))
+
+        if not versions:
+            raise SystemExit("No OpenSSL 3.5.x releases found")
+
+        latest = max(versions)
+        print(f"{latest[0]}.{latest[1]}.{latest[2]}")
+        PY
+        )
+
+        echo "OPENSSL_VERSION=$OPENSSL_VERSION" >> "$GITHUB_ENV"
+        echo "version=$OPENSSL_VERSION" >> "$GITHUB_OUTPUT"
+        echo "Resolved OpenSSL version: $OPENSSL_VERSION"
+
+    - name: Build and install OpenSSL 3 runtime libraries
+      shell: bash
+      run: |
+        wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz
+        tar xvf openssl-${OPENSSL_VERSION}.tar.gz
+        cd openssl-${OPENSSL_VERSION}
+        ./config \
+          shared zlib no-apps no-docs no-tests
+        make -j$(nproc) build_libs
+        make install_runtime_libs
+
+    - name: Verify OpenSSL runtime libraries
+      shell: bash
+      run: |
+        test -f /usr/local/lib64/libssl.so.3
+        test -f /usr/local/lib64/libcrypto.so.3

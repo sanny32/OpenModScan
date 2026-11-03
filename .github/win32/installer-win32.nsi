@@ -10,7 +10,13 @@
 #--------------------------------
 # Custom defines
   !define MUI_ICON ${ICON_FILE}
-  !define NAME "Open ModScan"
+  !ifndef VERSION_NUMERIC
+    !error "VERSION_NUMERIC must contain the numeric project version"
+  !endif
+  !searchparse ${VERSION_NUMERIC} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH
+  !define VERSIONBUILD "0"
+
+  !define NAME "Open ModScan ${VERSIONMAJOR}"
   !define PUBLISHER "Alexandr Ananev"
   !define APPFILE "omodscan.exe"
   !define ICOFILE "omodscan.exe"
@@ -36,14 +42,7 @@ Function LaunchWithProfile
   Sleep 300
 FunctionEnd
 
-  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
-  !ifndef VERSIONBUILD
-    !define VERSIONBUILD "0"
-  !endif
-  !ifndef VERSIONPATCH
-    !define VERSIONPATCH "0"
-    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
-  !endif
+
   !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
 
 #--------------------------------

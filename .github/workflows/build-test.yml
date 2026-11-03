@@ -51,6 +51,8 @@ jobs:
             qt_host: windows
             qt_arch: win64_msvc2019_64
             qt_dir: msvc2019_64
+            msvc_version: '2022'
+            msvc_toolset: '14.29'
             cmake_extra: '-DUSE_QT5=ON'
           - os: windows-latest
             qt: '6.9.3'
@@ -97,6 +99,9 @@ jobs:
       - name: Set up MSVC environment
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+          vsversion: ${{ matrix.msvc_version }}
+          toolset: ${{ matrix.msvc_toolset }}
 
       - name: Install Qt
         uses: ./.github/actions/install-qt

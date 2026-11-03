@@ -14,7 +14,7 @@
    <string>MODBUS Address Scan</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources.qrc">
+   <iconset resource="../../app/resources.qrc">
     <normaloff>:/res/omodscan.png</normaloff>:/res/omodscan.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -625,7 +625,7 @@
   <tabstop>logView</tabstop>
  </tabstops>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../app/resources.qrc"/>
  </resources>
  <connections>
   <connection>

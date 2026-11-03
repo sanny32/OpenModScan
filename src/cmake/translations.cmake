@@ -1,3 +1,14 @@
+set(TRANSLATION_SOURCES)
+foreach(SOURCE_TARGET IN ITEMS omodscan_core omodscan_ui ${PROJECT_NAME})
+    get_target_property(TARGET_SOURCES ${SOURCE_TARGET} SOURCES)
+    get_target_property(TARGET_SOURCE_DIR ${SOURCE_TARGET} SOURCE_DIR)
+    foreach(SOURCE IN LISTS TARGET_SOURCES)
+        if(SOURCE MATCHES "\\.(cpp|h|ui)$")
+            list(APPEND TRANSLATION_SOURCES "${TARGET_SOURCE_DIR}/${SOURCE}")
+        endif()
+    endforeach()
+endforeach()
+
 set(TS_FILES
     translations/omodscan_it.ts
     translations/omodscan_ru.ts
@@ -9,6 +20,7 @@ target_sources(${PROJECT_NAME} PRIVATE ${TS_FILES})
 
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
+        SOURCES ${TRANSLATION_SOURCES}
         TS_FILES ${TS_FILES}
         OPTIONS -no-obsolete -locations none
     )
@@ -24,10 +36,10 @@ if(Qt6_FOUND)
 elseif(Qt5_FOUND)
     add_custom_target(update_translations
         COMMAND ${Qt5_LUPDATE_EXECUTABLE}
-                ${SOURCES} ${HEADERS} ${UI_FILES}
+                ${TRANSLATION_SOURCES}
                 -no-obsolete -locations none
                 -ts ${TS_FILES}
-        DEPENDS ${SOURCES} ${HEADERS} ${UI_FILES}
+        DEPENDS ${TRANSLATION_SOURCES}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMENT "Updating translation files..."
         VERBATIM

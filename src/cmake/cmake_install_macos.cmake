@@ -14,7 +14,7 @@ get_filename_component(QT_TRANSLATIONS_DIR "${QT_BINARY_DIR}/../translations" AB
 
 install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
 configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/deploy_macos.cmake.in"
+    "${PROJECT_SOURCE_DIR}/cmake/deploy_macos.cmake.in"
     "${PROJECT_BINARY_DIR}/deploy_macos.cmake"
     @ONLY
 )

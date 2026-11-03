@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="pixmap">
-        <pixmap resource="../resources.qrc">:/res/iconAbout.png</pixmap>
+        <pixmap resource="../../app/resources.qrc">:/res/iconAbout.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -356,7 +356,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../app/resources.qrc"/>
  </resources>
  <connections>
   <connection>

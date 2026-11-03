@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogForceMultipleRegisters</class>
- <widget class="QDialog" name="DialogForceMultipleRegisters">
+ <class>DialogForceMultipleCoils</class>
+ <widget class="QDialog" name="DialogForceMultipleCoils">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
-    <height>420</height>
+    <width>535</width>
+    <height>310</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>855</width>
-    <height>320</height>
+    <width>535</width>
+    <height>310</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>16: WRITE MULTIPLE REGISTERS</string>
+   <string>15: WRITE MULTIPLE COILS</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <property name="spacing">
         <number>10</number>
        </property>
@@ -81,7 +81,7 @@
         <string>Import</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources.qrc">
+        <iconset resource="../../app/resources.qrc">
          <normaloff>:/res/icon-import.svg</normaloff>:/res/icon-import.svg</iconset>
        </property>
       </widget>
@@ -104,7 +104,7 @@
         <string>Export</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources.qrc">
+        <iconset resource="../../app/resources.qrc">
          <normaloff>:/res/icon-export.svg</normaloff>:/res/icon-export.svg</iconset>
        </property>
       </widget>
@@ -113,21 +113,41 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QPushButton" name="pushButton0">
         <property name="minimumSize">
          <size>
           <width>100</width>
-          <height>26</height>
+          <height>0</height>
          </size>
         </property>
         <property name="text">
          <string>Reset</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources.qrc">
+         <iconset resource="../../app/resources.qrc">
           <normaloff>:/res/icon-reset.svg</normaloff>:/res/icon-reset.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton1">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Set</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
        </widget>
       </item>
@@ -143,171 +163,10 @@
          <string>Random</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources.qrc">
+         <iconset resource="../../app/resources.qrc">
           <normaloff>:/res/icon-random.svg</normaloff>:/res/icon-random.svg</iconset>
         </property>
        </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonValue">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>26</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Constant Value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../resources.qrc">
-          <normaloff>:/res/icon-constant.svg</normaloff>:/res/icon-constant.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="NumericLineEdit" name="lineEditValue">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>26</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>150</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="pushButtonSub1">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string notr="true">-1</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButtonAdd1">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string notr="true">+1</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButtonAdd2">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string notr="true">+2</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButtonAdd3">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string notr="true">+3</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButtonAdd4">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="text">
-           <string notr="true">+4</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </item>
       <item>
        <spacer name="horizontalSpacer_2">
@@ -334,7 +193,7 @@
       <enum>QAbstractScrollArea::AdjustToContents</enum>
      </property>
      <property name="editTriggers">
-      <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+      <set>QAbstractItemView::NoEditTriggers</set>
      </property>
      <property name="showDropIndicator" stdset="0">
       <bool>false</bool>
@@ -349,7 +208,7 @@
       <bool>false</bool>
      </property>
      <property name="cornerButtonEnabled">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>false</bool>
@@ -379,21 +238,14 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>NumericLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>numericlineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
-  <include location="../resources.qrc"/>
+  <include location="../../app/resources.qrc"/>
  </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogForceMultipleRegisters</receiver>
+   <receiver>DialogForceMultipleCoils</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -409,7 +261,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogForceMultipleRegisters</receiver>
+   <receiver>DialogForceMultipleCoils</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

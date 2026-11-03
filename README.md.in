@@ -58,6 +58,26 @@ Registers
 # Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
+## Project structure
+
+```text
+src/
+  app/            Application entry point, resources, translations and platform metadata
+  core/           Data simulation, device maps, persistence types and shared utilities
+    modbus/       Clients, scanners, protocol types and messages
+  ui/             Main window, document views and UI helpers
+    dialogs/      Dialog classes and Qt Designer forms
+    widgets/      Reusable controls and widgets
+  tests/          Qt Test suites linked to omodscan_core
+  cmake/          Shared build, translation and packaging helpers
+```
+
+CMake builds `omodscan_core` and `omodscan_ui` as static libraries and links
+`omodscan` to the UI library. The dependency direction is `app → ui → core`;
+`core` has no dependency on Qt Widgets. Configure from `src` as before;
+application bundles and test executables remain in the build directory root.
+See [the test guide](src/tests/README.md) for running the regression suites.
+
 ## Microsoft Windows Building
 
 The minimum supported version of Microsoft Windows for building OpenModScan from sources is Windows 10.

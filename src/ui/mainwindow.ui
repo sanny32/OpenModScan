@@ -14,7 +14,7 @@
    <string>Open ModScan</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resources.qrc">
+   <iconset resource="../app/resources.qrc">
     <normaloff>:/res/omodscan.png</normaloff>:/res/omodscan.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -305,7 +305,7 @@
   </widget>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionNew.png</normaloff>:/res/actionNew.png</iconset>
    </property>
    <property name="text">
@@ -317,7 +317,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionOpen.png</normaloff>:/res/actionOpen.png</iconset>
    </property>
    <property name="text">
@@ -342,7 +342,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionSaveAs.png</normaloff>:/res/actionSaveAs.png</iconset>
    </property>
    <property name="text">
@@ -359,7 +359,7 @@
   </action>
   <action name="actionPrint">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionPrint.png</normaloff>:/res/actionPrint.png</iconset>
    </property>
    <property name="text">
@@ -394,7 +394,7 @@
   </action>
   <action name="actionDisconnect">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionDisconnect.png</normaloff>:/res/actionDisconnect.png</iconset>
    </property>
    <property name="text">
@@ -426,7 +426,7 @@
   </action>
   <action name="actionQuickConnect">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionConnect.png</normaloff>:/res/actionConnect.png</iconset>
    </property>
    <property name="text">
@@ -435,7 +435,7 @@
   </action>
   <action name="actionDataDefinition">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionDefineData.png</normaloff>:/res/actionDefineData.png</iconset>
    </property>
    <property name="text">
@@ -447,7 +447,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionShowData.png</normaloff>:/res/actionShowData.png</iconset>
    </property>
    <property name="text">
@@ -459,7 +459,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
    </property>
    <property name="text">
@@ -471,7 +471,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
    </property>
    <property name="text">
@@ -486,7 +486,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
    </property>
    <property name="text">
@@ -501,7 +501,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
    </property>
    <property name="text">
@@ -516,7 +516,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
    </property>
    <property name="text">
@@ -531,7 +531,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
    </property>
    <property name="text">
@@ -549,7 +549,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
    </property>
    <property name="text">
@@ -567,7 +567,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
    </property>
    <property name="text">
@@ -585,7 +585,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
    </property>
    <property name="text">
@@ -600,7 +600,7 @@
   </action>
   <action name="actionForceCoils">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionForceCoils.png</normaloff>:/res/actionForceCoils.png</iconset>
    </property>
    <property name="text">
@@ -612,7 +612,7 @@
   </action>
   <action name="actionPresetRegs">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionPresetRegs.png</normaloff>:/res/actionPresetRegs.png</iconset>
    </property>
    <property name="text">
@@ -624,7 +624,7 @@
   </action>
   <action name="actionMaskWrite">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionMaskWrite.png</normaloff>:/res/actionMaskWrite.png</iconset>
    </property>
    <property name="text">
@@ -636,7 +636,7 @@
   </action>
   <action name="actionUserMsg">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionUserMsg.png</normaloff>:/res/actionUserMsg.png</iconset>
    </property>
    <property name="text">
@@ -717,7 +717,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionAbout.png</normaloff>:/res/actionAbout.png</iconset>
    </property>
    <property name="text">
@@ -775,7 +775,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionByteOrder.png</normaloff>:/res/actionByteOrder.png</iconset>
    </property>
    <property name="text">
@@ -801,7 +801,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
    </property>
    <property name="text">
@@ -819,7 +819,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
    </property>
    <property name="text">
@@ -837,7 +837,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
    </property>
    <property name="text">
@@ -855,7 +855,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
    </property>
    <property name="text">
@@ -884,7 +884,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
    </property>
    <property name="text">
@@ -902,7 +902,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
    </property>
    <property name="text">
@@ -920,7 +920,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
    </property>
    <property name="text">
@@ -938,7 +938,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
    </property>
    <property name="text">
@@ -967,7 +967,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
    </property>
    <property name="text">
@@ -984,7 +984,7 @@
   </action>
   <action name="actionWriteSingleCoil">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionWriteSingleCoil.png</normaloff>:/res/actionWriteSingleCoil.png</iconset>
    </property>
    <property name="text">
@@ -999,7 +999,7 @@
   </action>
   <action name="actionWriteHoldingRegister">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset resource="../app/resources.qrc">
      <normaloff>:/res/actionWriteHoldingRegister.png</normaloff>:/res/actionWriteHoldingRegister.png</iconset>
    </property>
    <property name="text">
@@ -1038,7 +1038,7 @@
   </action>
  </widget>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../app/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

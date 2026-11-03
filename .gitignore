@@ -68,7 +68,7 @@ AGENTS.md
 *.qtds
 *.ts text eol=lf
 *.log
-src/res/license.txt
+src/app/res/license.txt
 /docs/*.md
 
 !/.github/workflows/build-*.yml

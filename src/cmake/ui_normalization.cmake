@@ -11,9 +11,9 @@ function(omodscan_configure_ui_enum_normalization target_name)
     add_custom_target(normalize_ui_enums ALL
         COMMAND ${CMAKE_COMMAND}
                 "-DUI_FILE_LIST=${UI_FILE_LIST}"
-                -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/normalize_ui_enums.cmake"
+                -P "${PROJECT_SOURCE_DIR}/cmake/normalize_ui_enums.cmake"
         DEPENDS
-            "${CMAKE_CURRENT_SOURCE_DIR}/cmake/normalize_ui_enums.cmake"
+            "${PROJECT_SOURCE_DIR}/cmake/normalize_ui_enums.cmake"
             ${UI_FILES_ABSOLUTE}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         COMMENT "Normalizing Qt Designer UI enum names for Qt5 compatibility..."

@@ -1,7 +1,7 @@
 function(omodscan_generate_files)
     configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt.in
-        ${CMAKE_CURRENT_SOURCE_DIR}/res/license.txt
+        ${PROJECT_SOURCE_DIR}/app/res/license.txt.in
+        ${PROJECT_SOURCE_DIR}/app/res/license.txt
         @ONLY
     )
 

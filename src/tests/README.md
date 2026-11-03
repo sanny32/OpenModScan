@@ -3,6 +3,7 @@
 The suite uses Qt Test and CTest, supports Qt 5.15 and Qt 6, and does not
 require a Modbus device. Qt Test is required when `BUILD_TESTING=ON` (the
 default); use `-DBUILD_TESTING=OFF` for an application-only build.
+All suites link to `omodscan_core`, the same library used by the application.
 
 From the repository root:
 

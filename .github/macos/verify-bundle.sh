@@ -10,7 +10,9 @@ icon=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIconFile' "$plist")
 binary="$bundle/Contents/MacOS/$executable"
 
 test -x "$binary"
-test -f "$bundle/Contents/Resources/$icon"
+test -f "$bundle/Contents/Resources/$icon.icns"
+test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIconName' "$plist")" = "$icon"
+test -f "$bundle/Contents/Resources/Assets.car"
 test -d "$bundle/Contents/Frameworks/QtCore.framework"
 test -f "$bundle/Contents/PlugIns/platforms/libqcocoa.dylib"
 test -f "$bundle/Contents/PlugIns/platforms/libqoffscreen.dylib"

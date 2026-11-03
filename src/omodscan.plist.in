@@ -5,7 +5,8 @@
     <key>CFBundleExecutable</key>
     <string>@PROJECT_NAME@</string>
     <key>CFBundleIconFile</key>
-    <string>omodscan.icns</string>
+    <string>@MACOSX_BUNDLE_ICON_FILE@</string>
+@MACOSX_ASSET_ICON_PLIST_ENTRY@
     <key>CFBundleIdentifier</key>
     <string>io.github.sanny32.omodscan@VERSION_MAJOR@</string>
     <key>CFBundleInfoDictionaryVersion</key>

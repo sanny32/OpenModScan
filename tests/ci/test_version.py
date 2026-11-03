@@ -1,18 +1,58 @@
 import os
 from pathlib import Path
+import shutil
 import subprocess
+import sys
 import tempfile
 import textwrap
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def bash_executable():
+    if sys.platform != 'win32':
+        return 'bash'
+
+    # A bare bash.exe can resolve to the Windows WSL launcher. Use the
+    # shell shipped with Git for Windows, which CI already installs.
+    git = shutil.which('git')
+    if git:
+        git_root = Path(git).resolve().parent.parent
+        for relative_path in ('bin/bash.exe', 'usr/bin/bash.exe'):
+            bash = git_root / relative_path
+            if bash.is_file():
+                return str(bash)
+    raise RuntimeError('Git Bash was not found. Install Git for Windows; WSL is not required.')
+
+
+class BashSelectionTests(unittest.TestCase):
+    def test_windows_uses_git_bash(self):
+        with tempfile.TemporaryDirectory() as directory:
+            git_root = Path(directory) / 'Git'
+            (git_root / 'bin').mkdir(parents=True)
+            bash = git_root / 'bin/bash.exe'
+            bash.touch()
+            with patch.object(sys, 'platform', 'win32'), patch.object(
+                shutil, 'which', return_value=str(git_root / 'cmd/git.exe')
+            ):
+                self.assertEqual(bash_executable(), str(bash.resolve()))
+
+    def test_windows_does_not_fall_back_to_wsl(self):
+        with patch.object(sys, 'platform', 'win32'), patch.object(
+            shutil, 'which', return_value=None
+        ):
+            with self.assertRaisesRegex(RuntimeError, 'Git Bash was not found'):
+                bash_executable()
 
 
 class PackageVersionTests(unittest.TestCase):
     def test_release_and_snapshot_versions(self):
         action = ROOT / '.github/actions/extract-version/action.yml'
         script = textwrap.dedent(action.read_text().split('      run: |\n', 1)[1])
+        bash = bash_executable()
         sha = subprocess.check_output(
             ['git', 'rev-parse', '--short', 'HEAD'], cwd=ROOT, text=True
         ).strip()
@@ -41,7 +81,7 @@ class PackageVersionTests(unittest.TestCase):
                     # pass the script unchanged, including its embedded quotes.
                     # Binary input also prevents Windows CRLF translation.
                     result = subprocess.run(
-                        ['bash', '-eu', '-s'], input=script.encode('utf-8'),
+                        [bash, '-eu', '-s'], input=script.encode('utf-8'),
                         cwd=ROOT, env=env, capture_output=True,
                     )
                     self.assertEqual(

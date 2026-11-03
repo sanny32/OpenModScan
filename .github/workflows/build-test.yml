@@ -35,7 +35,10 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            qt: '5'
+            qt: '5.15.2'
+            qt_host: linux
+            qt_arch: gcc_64
+            qt_dir: gcc_64
             cmake_extra: '-DUSE_QT5=ON'
           - os: ubuntu-22.04
             qt: '6.9.3'
@@ -43,13 +46,19 @@ jobs:
             qt_arch: linux_gcc_64
             qt_dir: gcc_64
             cmake_extra: '-DUSE_QT6=ON'
-          - os: windows-2022
+          - os: windows-latest
+            qt: '5.15.2'
+            qt_host: windows
+            qt_arch: win64_msvc2019_64
+            qt_dir: msvc2019_64
+            cmake_extra: '-DUSE_QT5=ON'
+          - os: windows-latest
             qt: '6.9.3'
             qt_host: windows
             qt_arch: win64_msvc2022_64
             qt_dir: msvc2022_64
             cmake_extra: '-DUSE_QT6=ON'
-          - os: macos-26
+          - os: macos-latest
             qt: '6.9.3'
             qt_host: mac
             qt_arch: clang_64
@@ -77,11 +86,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ninja-build socat libgl1-mesa-dev libxkbcommon-x11-0
 
-      - name: Install Qt5
-        if: matrix.qt == '5'
-        run: |
-          sudo apt-get install -y qtbase5-dev qttools5-dev qttools5-dev-tools libqt5serialbus5-dev libqt5serialport5-dev
-
       - name: Install Ninja (Windows)
         if: runner.os == 'Windows'
         uses: seanmiddleditch/gha-setup-ninja@v5
@@ -94,8 +98,7 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Install Qt6
-        if: matrix.qt != '5'
+      - name: Install Qt
         uses: ./.github/actions/install-qt
         with:
           version: ${{ matrix.qt }}
@@ -103,7 +106,7 @@ jobs:
           arch: ${{ matrix.qt_arch }}
           install-dir: ${{ runner.temp }}/Qt
           qt-dir-name: ${{ matrix.qt_dir }}
-          modules: qt5compat qtserialport qtserialbus
+          modules: ${{ startsWith(matrix.qt, '6.') && 'qt5compat qtserialport qtserialbus' || '' }}
           python-command: python
 
       - name: Check package version handling

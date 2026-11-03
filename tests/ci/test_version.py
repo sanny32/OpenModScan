@@ -37,8 +37,19 @@ class PackageVersionTests(unittest.TestCase):
                                EVENT_TAG=tag, EVENT_BRANCH=selected_branch, REF_TYPE=ref_type,
                                REF_NAME=ref, GITHUB_REF_NAME=branch,
                                GITHUB_ENV=env_file.as_posix(), GITHUB_OUTPUT=output_file.as_posix())
-                    subprocess.run(['bash', '-eu', '-c', script], cwd=ROOT, env=env,
-                                   check=True, capture_output=True, text=True)
+                    # Keep shell quoting out of the Windows command line and
+                    # pass the script unchanged, including its embedded quotes.
+                    # Binary input also prevents Windows CRLF translation.
+                    result = subprocess.run(
+                        ['bash', '-eu', '-s'], input=script.encode('utf-8'),
+                        cwd=ROOT, env=env, capture_output=True,
+                    )
+                    self.assertEqual(
+                        result.returncode, 0,
+                        'Version extraction failed:\n'
+                        + result.stdout.decode('utf-8', errors='replace')
+                        + '\n' + result.stderr.decode('utf-8', errors='replace'),
+                    )
                     values = dict(line.split('=', 1) for line in env_file.read_text().splitlines())
                     self.assertEqual(values['APP_VERSION'], version)
                     self.assertEqual(values['BASE_VERSION'], '2.0.0')

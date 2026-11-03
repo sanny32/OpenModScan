@@ -81,7 +81,7 @@ function(omodscan_configure_tests)
 
     add_executable(tst_core tests/tst_core.cpp modbusdataunit.cpp)
     target_include_directories(tst_core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages)
-    target_link_libraries(tst_core PRIVATE Qt::Test Qt::SerialBus Qt::SerialPort)
+    target_link_libraries(tst_core PRIVATE Qt::Test Qt::Network Qt::SerialBus Qt::SerialPort)
     if(APPLE)
         find_library(IOKIT_FRAMEWORK IOKit REQUIRED)
         find_library(COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)

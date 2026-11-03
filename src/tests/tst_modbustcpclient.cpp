@@ -399,7 +399,9 @@ void TestModbusTcpClient::scanner()
     QFETCH(int, foundCount);
     _server->setResponse(response);
     ScanParams params;
-    params.Timeout = 50;
+    // Allow for event-loop scheduling delays on shared CI runners. Timeout
+    // behavior is covered separately by timeout(); this test checks discovery.
+    params.Timeout = 250;
     params.DeviceIds = {17, 18};
     params.Request = QModbusRequest(QModbusPdu::ReadHoldingRegisters, quint16(0), quint16(1));
     ConnectionDetails connection;
@@ -414,6 +416,7 @@ void TestModbusTcpClient::scanner()
     QVERIFY(scanner.inProgress());
     QTRY_COMPARE_WITH_TIMEOUT(finished.count(), 1, 3000);
     QVERIFY(!scanner.inProgress());
+    QCOMPARE(_server->requestCount, 2);
     QCOMPARE(found.count(), foundCount);
     for (int i = 0; i < found.count(); ++i) {
         QCOMPARE(found.at(i).at(1).toInt(), 17 + i);

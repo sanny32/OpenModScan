@@ -55,6 +55,62 @@ const translations = {
         'footer.license.text': 'Licensed under MIT License',
         'footer.license.free': 'Free to use, modify and distribute'
     },
+    it: {
+        'nav.features': 'Funzionalità',
+        'nav.screenshots': 'Schermate',
+        'nav.download': 'Scarica',
+        'hero.title': 'Uno strumento Modbus gratuito e potente',
+        'hero.subtitle': 'Modbus Master (client) professionale con supporto per i protocolli Modbus-TCP e Modbus-RTU',
+        'hero.btn.download': 'Scarica',
+        'hero.btn.github': 'Visualizza su GitHub',
+        'features.title': 'Funzionalità',
+        'feature1.title': 'Funzioni Modbus',
+        'feature1.desc': 'Supporto per tutte le funzioni Modbus standard: lettura e scrittura di coil e registri di mantenimento, lettura di ingressi discreti e registri di ingresso',
+        'feature2.title': 'Scanner di dispositivi',
+        'feature2.desc': 'Scanner di dispositivi Modbus integrato con supporto per i protocolli RTU, TCP e RTU su TCP',
+        'feature3.title': 'Registrazione dei messaggi',
+        'feature3.desc': 'Registrazione completa di tutte le comunicazioni Modbus con funzionalità di analisi dei messaggi',
+        'feature4.title': 'Messaggi personalizzati',
+        'feature4.desc': 'Invio di messaggi Modbus personalizzati per test avanzati e debug',
+        'feature5.title': 'Protocolli Modbus',
+        'feature5.desc': 'Supporto completo per i protocolli Modbus-TCP (Ethernet) e Modbus-RTU (porta seriale)',
+        'feature6.title': 'Multipiattaforma',
+        'feature6.desc': 'Disponibile per Windows e Linux con prestazioni native su entrambe le piattaforme',
+        'screenshots.title': 'Schermate',
+        'download.title': 'Scarica OpenModScan',
+        'download.subtitle': 'Ottieni la versione più recente per la tua piattaforma',
+        'download.subtitle.version': 'Ottieni la versione più recente ({version}) per la tua piattaforma',
+        'card.windows.title': 'Programma di installazione per Windows',
+        'card.sysreq.title': 'Requisiti di sistema',
+        'card.deb.title': 'Pacchetti DEB per Linux',
+        'card.rpm.title': 'Pacchetti RPM per Linux',
+        'card.flatpak.title': 'Pacchetti Flatpak',
+        'btn.download.win': 'Scarica il programma di installazione per Windows',
+        'btn.download.deb': 'Scarica il pacchetto DEB',
+        'btn.download.rpm': 'Scarica il pacchetto RPM',
+        'btn.download.pubkey': 'Scarica la chiave pubblica RPM',
+        'btn.download.flatpak': 'Scarica il pacchetto Flatpak',
+        'subtab.install': 'Installazione',
+        'subtab.remove': 'Disinstallazione',
+        'sysreq.win7': 'Windows 7 o successivo per i pacchetti Qt5',
+        'sysreq.win10': 'Windows 10 o successivo per i pacchetti Qt6',
+        'sysreq.arch': 'Processore a 32 bit (x86) o 64 bit (x64)',
+        'install.qt6': 'Pacchetto Qt6',
+        'install.qt5': 'Pacchetto Qt5',
+        'suse.import': 'Importa la chiave pubblica e installa',
+        'altlinux.root': 'Esegui come utente root',
+        'flatpak.tip': 'Per le connessioni tramite porta seriale, aggiungi l’utente al gruppo <code>dialout</code>, quindi accedi nuovamente o riavvia il sistema',
+        'build.title': 'Compilazione dal codice sorgente',
+        'build.desc': 'OpenModScan è open source e può essere compilato dal codice sorgente. Visita il <a href="https://github.com/sanny32/OpenModScan#building">repository GitHub</a> per le istruzioni di compilazione.',
+        'footer.brand.desc': 'Strumento Modbus Master gratuito e open source',
+        'footer.links': 'Collegamenti',
+        'footer.github': 'Repository GitHub',
+        'footer.releases': 'Versioni',
+        'footer.issues': 'Segnala un problema',
+        'footer.license': 'Licenza',
+        'footer.license.text': 'Distribuito con licenza MIT',
+        'footer.license.free': 'Libero da usare, modificare e distribuire'
+    },
     ru: {
         'nav.features': 'Возможности',
         'nav.screenshots': 'Скриншоты',
@@ -227,6 +283,7 @@ const translations = {
 
 const langMeta = {
     en:    { flag: 'https://flagcdn.com/w20/us.png', name: 'English' },
+    it:    { flag: 'https://flagcdn.com/w20/it.png', name: 'Italiano' },
     ru:    { flag: 'https://flagcdn.com/w20/ru.png', name: 'Русский' },
     zh_CN: { flag: 'https://flagcdn.com/w20/cn.png', name: '简体中文' },
     zh_TW: { flag: 'https://flagcdn.com/w20/tw.png', name: '繁體中文' }
@@ -237,6 +294,7 @@ function detectBrowserLang() {
     if (lang.startsWith('zh-TW') || lang.startsWith('zh-HK') || lang.startsWith('zh-MO')) return 'zh_TW';
     if (lang.startsWith('zh')) return 'zh_CN';
     if (lang.startsWith('ru')) return 'ru';
+    if (lang.startsWith('it')) return 'it';
     return 'en';
 }
 

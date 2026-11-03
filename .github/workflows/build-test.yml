@@ -46,12 +46,12 @@ jobs:
             qt_arch: linux_gcc_64
             qt_dir: gcc_64
             cmake_extra: '-DUSE_QT6=ON'
+          # Qt5 needs the v142 toolset; use the runner's installed Visual Studio.
           - os: windows-latest
             qt: '5.15.2'
             qt_host: windows
             qt_arch: win64_msvc2019_64
             qt_dir: msvc2019_64
-            msvc_version: '2022'
             msvc_toolset: '14.29'
             cmake_extra: '-DUSE_QT5=ON'
           - os: windows-latest
@@ -100,7 +100,6 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
         with:
-          vsversion: ${{ matrix.msvc_version }}
           toolset: ${{ matrix.msvc_toolset }}
 
       - name: Install Qt

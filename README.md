@@ -101,6 +101,18 @@ cd OpenModScan
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `./build.sh -qt5` or  `./build.sh -qt6`
 
+## Updating translations
+
+Normal builds compile the committed `.ts` catalogs into `.qm` resources in the build directory without modifying the catalogs. Generated `.qm` files are not committed.
+
+After adding or changing interface text, update the catalogs explicitly:
+
+```bash
+cmake --build <build-directory> --target update_translations
+```
+
+Edit the `.ts` files in Qt Linguist and commit the changed source text and translations. Source locations are omitted, so moving code or changing line numbers does not change the catalogs.
+
 # About supported operating systems
 
 The following minimum operating system versions are supported for OpenModScan:

@@ -21,7 +21,6 @@
         <file>res/iconLandscape.png</file>
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
-        <file>translations/omodscan_ru.qm</file>
         <file>res/actionInt32.png</file>
         <file>res/actionSwappedInt32.png</file>
         <file>res/actionSwappedUInt32.png</file>
@@ -48,8 +47,6 @@
         <file>res/applications-internet.svg</file>
         <file>res/emblem-github.svg</file>
         <file>res/emblem-mail.svg</file>
-        <file>translations/omodscan_zh_CN.qm</file>
-        <file>translations/omodscan_zh_TW.qm</file>
         <file>res/icon-simulation-16bit.svg</file>
         <file>res/icon-simulation-32bit.svg</file>
         <file>res/icon-simulation-64bit.svg</file>

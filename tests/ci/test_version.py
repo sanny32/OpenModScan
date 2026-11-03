@@ -20,25 +20,36 @@ def bash_executable():
     # shell shipped with Git for Windows, which CI already installs.
     git = shutil.which('git')
     if git:
-        git_root = Path(git).resolve().parent.parent
-        for relative_path in ('bin/bash.exe', 'usr/bin/bash.exe'):
-            bash = git_root / relative_path
-            if bash.is_file():
-                return str(bash)
-    raise RuntimeError('Git Bash was not found. Install Git for Windows; WSL is not required.')
+        # Git can be exposed through cmd/, bin/, or mingw64/bin/ (mingw32
+        # on 32-bit installs). Check each possible installation root.
+        for git_root in list(Path(git).resolve().parents)[:3]:
+            for relative_path in ('bin/bash.exe', 'usr/bin/bash.exe'):
+                bash = git_root / relative_path
+                if bash.is_file():
+                    return str(bash)
+    raise RuntimeError(
+        f'Git Bash was not found alongside git ({git!r}). '
+        'Install Git for Windows; WSL is not required.'
+    )
 
 
 class BashSelectionTests(unittest.TestCase):
     def test_windows_uses_git_bash(self):
-        with tempfile.TemporaryDirectory() as directory:
-            git_root = Path(directory) / 'Git'
-            (git_root / 'bin').mkdir(parents=True)
-            bash = git_root / 'bin/bash.exe'
-            bash.touch()
-            with patch.object(sys, 'platform', 'win32'), patch.object(
-                shutil, 'which', return_value=str(git_root / 'cmd/git.exe')
-            ):
-                self.assertEqual(bash_executable(), str(bash.resolve()))
+        for git_path in ('cmd/git.exe', 'bin/git.exe',
+                         'mingw64/bin/git.exe', 'mingw32/bin/git.exe'):
+            for bash_path in ('bin/bash.exe', 'usr/bin/bash.exe'):
+                with self.subTest(git=git_path, bash=bash_path), tempfile.TemporaryDirectory() as directory:
+                    git_root = Path(directory) / 'Git'
+                    git = git_root / git_path
+                    git.parent.mkdir(parents=True)
+                    git.touch()
+                    bash = git_root / bash_path
+                    bash.parent.mkdir(parents=True, exist_ok=True)
+                    bash.touch()
+                    with patch.object(sys, 'platform', 'win32'), patch.object(
+                        shutil, 'which', return_value=str(git)
+                    ):
+                        self.assertEqual(bash_executable(), str(bash.resolve()))
 
     def test_windows_does_not_fall_back_to_wsl(self):
         with patch.object(sys, 'platform', 'win32'), patch.object(

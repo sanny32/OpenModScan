@@ -1,4 +1,8 @@
 function(omodscan_configure_target_macos target_name)
+    find_library(IOKIT_FRAMEWORK IOKit REQUIRED)
+    find_library(COREFOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+    target_link_libraries(${target_name} PRIVATE ${IOKIT_FRAMEWORK} ${COREFOUNDATION_FRAMEWORK})
+
     set(APP_ICON "${CMAKE_CURRENT_SOURCE_DIR}/res/omodscan.icns")
     set_source_files_properties("${APP_ICON}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     target_sources(${target_name} PRIVATE "${APP_ICON}")

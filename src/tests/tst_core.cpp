@@ -7,6 +7,12 @@
 #include "qmodbusadurtu.h"
 #include "qmodbusadutcp.h"
 
+#ifdef Q_OS_MACOS
+#include "serialportutils.h"
+#include <util.h>
+#include <unistd.h>
+#endif
+
 class TestCore : public QObject
 {
     Q_OBJECT
@@ -20,7 +26,84 @@ private slots:
     void displaySettings_data();
     void displaySettings();
     void normalizesInvalidSettings();
+#ifdef Q_OS_MACOS
+    void serialPseudoTerminal();
+    void serialBluetoothPorts();
+    void serialHardwarePorts();
+    void serialUnknownPort();
+#endif
 };
+
+#ifdef Q_OS_MACOS
+void TestCore::serialPseudoTerminal()
+{
+    int master = -1;
+    int slave = -1;
+    char name[1024] = {};
+    QVERIFY(openpty(&master, &slave, name, nullptr, nullptr) == 0);
+    QFile masterFile;
+    QFile slaveFile;
+    const bool masterOpened = masterFile.open(master, QIODevice::ReadWrite, QFileDevice::AutoCloseHandle);
+    const bool slaveOpened = slaveFile.open(slave, QIODevice::ReadWrite, QFileDevice::AutoCloseHandle);
+    if (!masterOpened)
+        close(master);
+    if (!slaveOpened)
+        close(slave);
+    QVERIFY(masterOpened && slaveOpened);
+
+    const QString path = QString::fromLocal8Bit(name);
+    QVERIFY(isVirtualPort(path));
+    QVERIFY(isVirtualPort(QFileInfo(path).fileName()));
+    QTemporaryDir directory;
+    QVERIFY(directory.isValid());
+    const QString alias = directory.filePath("serial-port");
+    QVERIFY(QFile::link(path, alias));
+    QVERIFY(isVirtualPort(alias));
+}
+
+void TestCore::serialBluetoothPorts()
+{
+    bool found = false;
+    const QStringList filtered = getAvailableSerialPorts(true);
+    for (const auto& port : QSerialPortInfo::availablePorts()) {
+        if (!port.portName().contains("Bluetooth-Incoming-Port", Qt::CaseInsensitive))
+            continue;
+        found = true;
+        QVERIFY(isVirtualPort(port.portName()));
+        QVERIFY(isVirtualPort(port.systemLocation()));
+        QString dialin = port.systemLocation();
+        dialin.replace("/dev/cu.", "/dev/tty.");
+        QVERIFY(isVirtualPort(dialin));
+        QVERIFY(!filtered.contains(port.portName()));
+    }
+    if (!found)
+        QSKIP("No Bluetooth serial port is currently published by macOS");
+}
+
+void TestCore::serialHardwarePorts()
+{
+    bool found = false;
+    const QStringList filtered = getAvailableSerialPorts(true);
+    for (const auto& port : QSerialPortInfo::availablePorts()) {
+        // USB serial adapters and the built-in Apple Silicon UARTs.
+        if (!port.hasVendorIdentifier() && port.portName() != "cu.debug-console" &&
+            port.portName() != "cu.wlan-debug" && port.portName() != "cu.bluetooth-debug")
+            continue;
+        found = true;
+        QVERIFY2(!isVirtualPort(port.portName()), qPrintable(port.portName()));
+        QVERIFY(!isVirtualPort(port.systemLocation()));
+        QVERIFY(filtered.contains(port.portName()));
+    }
+    if (!found)
+        QSKIP("No hardware serial ports are connected");
+}
+
+void TestCore::serialUnknownPort()
+{
+    QVERIFY(!isVirtualPort(QString()));
+    QVERIFY(!isVirtualPort("cu.openmodscan-nonexistent-port"));
+}
+#endif
 
 void TestCore::numericValues_data()
 {

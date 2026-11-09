@@ -15,6 +15,11 @@ endif()
 
 enable_testing()
 
+add_executable(tst_windowgeometry tests/tst_windowgeometry.cpp windowgeometry.h)
+target_include_directories(tst_windowgeometry PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(tst_windowgeometry PRIVATE Qt::Test)
+add_test(NAME tst_windowgeometry COMMAND tst_windowgeometry)
+
 add_executable(tst_modbustcpclient
     tests/tst_modbustcpclient.cpp
     modbusclientprivate.cpp
@@ -67,6 +72,6 @@ add_test(NAME tst_modbusrtutraffic COMMAND tst_modbusrtutraffic)
 
 if(WIN32)
     # Qt DLLs are not deployed next to test executables; versioned target because Qt5's Qt::Core is an INTERFACE wrapper.
-    set_tests_properties(tst_modbustcpclient tst_modbusrtutraffic PROPERTIES
+    set_tests_properties(tst_modbustcpclient tst_modbusrtutraffic tst_windowgeometry PROPERTIES
         ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:$<TARGET_FILE_DIR:${QT_CORE_TARGET}>")
 endif()

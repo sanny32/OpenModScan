@@ -282,6 +282,7 @@ set(HEADERS
     modbustcpscanner.h
     modbuswriteparams.h
     numericutils.h
+    windowgeometry.h
     qadjustedsizedialog.h
     qfixedsizedialog.h
     qhexvalidator.h

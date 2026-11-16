@@ -330,12 +330,6 @@ void ModbusRtuTcpClient::on_readyRead()
         int aduSize = 2 + pduSizeWithoutFcode + 2;
         if (tmpAdu.rawSize() < aduSize) {
             qCDebug(QT_MODBUS) << "(RTU over TCP client) Incomplete ADU received, ignoring";
-
-            if (!_queue.isEmpty() && !_queue.first().reply.isNull()) {
-                const auto msg = ModbusMessage::create(tmpAdu.rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
-                emit modbusResponse(_queue.first().reply->requestGroupId(), msg);
-            }
-
             return;
         }
 

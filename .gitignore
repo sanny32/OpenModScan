@@ -55,6 +55,7 @@ CMakeLists.txt.user*
 .claude
 .codex_tmp
 .vscode
+.review
 AGENTS.md
 
 .directory

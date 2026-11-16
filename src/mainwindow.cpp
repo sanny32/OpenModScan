@@ -20,6 +20,7 @@
 #include "dialogwindowsmanager.h"
 #include "dialogabout.h"
 #include "numericutils.h"
+#include "windowgeometry.h"
 #include "mainstatusbar.h"
 #include "mainwindow.h"
 #include "waitcursor.h"
@@ -1770,8 +1771,16 @@ void MainWindow::loadProfile(const QString& filename)
 
     QSettings m(_profile, QSettings::IniFormat, this);
 
-    const auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
-    setGeometry(geometry);
+    auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
+    if (!geometry.isValid())
+        geometry = this->geometry();
+
+    QList<QRect> screens;
+    for (const auto screen : QGuiApplication::screens())
+        screens.append(screen->availableGeometry());
+    const auto primaryScreen = QGuiApplication::primaryScreen();
+    setGeometry(visibleWindowGeometry(geometry, screens,
+                                     primaryScreen ? primaryScreen->availableGeometry() : QRect()));
 
     const bool isMaximized = m.value("WindowMaximized").toBool();
     if(isMaximized) {

@@ -15,6 +15,11 @@ endif()
 
 enable_testing()
 
+add_executable(tst_windowgeometry tests/tst_windowgeometry.cpp windowgeometry.h)
+target_include_directories(tst_windowgeometry PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(tst_windowgeometry PRIVATE Qt::Test)
+add_test(NAME tst_windowgeometry COMMAND tst_windowgeometry)
+
 add_executable(tst_modbustcpclient
     tests/tst_modbustcpclient.cpp
     modbusclientprivate.cpp
@@ -39,8 +44,34 @@ endif()
 
 add_test(NAME tst_modbustcpclient COMMAND tst_modbustcpclient)
 
+add_executable(tst_modbusrtutraffic
+    tests/tst_modbusrtutraffic.cpp
+    modbusclientprivate.cpp
+    modbusclientprivate.h
+    modbusdevice.h
+    modbusmessages/modbusmessage.cpp
+    modbusreply.cpp
+    modbusreply.h
+    modbusrtuclient.cpp
+    modbusrtuclient.h
+    modbusrtutcpclient.cpp
+    modbusrtutcpclient.h
+    qobjecttimer.h
+)
+
+target_include_directories(tst_modbusrtutraffic PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
+)
+target_link_libraries(tst_modbusrtutraffic PRIVATE Qt::Test Qt::Network Qt::SerialBus Qt::SerialPort)
+if(Qt6_FOUND)
+    target_link_libraries(tst_modbusrtutraffic PRIVATE Qt::Core5Compat)
+endif()
+
+add_test(NAME tst_modbusrtutraffic COMMAND tst_modbusrtutraffic)
+
 if(WIN32)
     # Qt DLLs are not deployed next to test executables; versioned target because Qt5's Qt::Core is an INTERFACE wrapper.
-    set_tests_properties(tst_modbustcpclient PROPERTIES
+    set_tests_properties(tst_modbustcpclient tst_modbusrtutraffic tst_windowgeometry PROPERTIES
         ENVIRONMENT_MODIFICATION "PATH=path_list_prepend:$<TARGET_FILE_DIR:${QT_CORE_TARGET}>")
 endif()

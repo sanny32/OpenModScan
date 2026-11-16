@@ -2467,25 +2467,25 @@ Valid Slave Responses: %2</source>
         <translation>Сканирование адресов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="396"/>
-        <location filename="../mainwindow.cpp" line="462"/>
-        <location filename="../mainwindow.cpp" line="560"/>
-        <location filename="../mainwindow.cpp" line="580"/>
+        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="561"/>
+        <location filename="../mainwindow.cpp" line="581"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1395"/>
+        <location filename="../mainwindow.cpp" line="1396"/>
         <source>%1 was not found</source>
         <translation>%1 не найден</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1396"/>
+        <location filename="../mainwindow.cpp" line="1397"/>
         <source>Failed to open %1</source>
         <translation>Ошибка открытия файла %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1492"/>
+        <location filename="../mainwindow.cpp" line="1493"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>Ошибка:
@@ -3021,8 +3021,8 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="279"/>
-        <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="451"/>
+        <location filename="../modbusrtuclient.cpp" line="422"/>
+        <location filename="../modbusrtutcpclient.cpp" line="445"/>
         <source>Request timeout.</source>
         <translation>Таймаут запроса.</translation>
     </message>
@@ -3042,47 +3042,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="477"/>
+        <location filename="../modbusrtuclient.cpp" line="471"/>
         <source>Referenced serial device does not exist.</source>
         <translation>Указанное последовательное устройство не существует.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="481"/>
+        <location filename="../modbusrtuclient.cpp" line="475"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>Невозможно открыть последовательное устройство из-за ограничения доступа.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="486"/>
+        <location filename="../modbusrtuclient.cpp" line="480"/>
         <source>Cannot open serial device.</source>
         <translation>Невозможно открыть последовательное устройство.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="490"/>
+        <location filename="../modbusrtuclient.cpp" line="484"/>
         <source>Write error.</source>
         <translation>Ошибка записи.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="493"/>
+        <location filename="../modbusrtuclient.cpp" line="487"/>
         <source>Read error.</source>
         <translation>Ошибка чтения.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="496"/>
+        <location filename="../modbusrtuclient.cpp" line="490"/>
         <source>Resource error.</source>
         <translation>Ошибка ресурса.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="499"/>
+        <location filename="../modbusrtuclient.cpp" line="493"/>
         <source>Device operation is not supported error.</source>
         <translation>Ошибка «Работа устройства не поддерживается».</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="503"/>
+        <location filename="../modbusrtuclient.cpp" line="497"/>
         <source>Timeout error.</source>
         <translation>Ошибка тайм-аута.</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="506"/>
+        <location filename="../modbusrtuclient.cpp" line="500"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>

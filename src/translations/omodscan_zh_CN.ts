@@ -2467,25 +2467,25 @@ Valid Slave Responses: %2</source>
         <translation>地址扫描</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="396"/>
-        <location filename="../mainwindow.cpp" line="462"/>
-        <location filename="../mainwindow.cpp" line="560"/>
-        <location filename="../mainwindow.cpp" line="580"/>
+        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="561"/>
+        <location filename="../mainwindow.cpp" line="581"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1395"/>
+        <location filename="../mainwindow.cpp" line="1396"/>
         <source>%1 was not found</source>
         <translation>%1 未找到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1396"/>
+        <location filename="../mainwindow.cpp" line="1397"/>
         <source>Failed to open %1</source>
         <translation>打开 %1 失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1492"/>
+        <location filename="../mainwindow.cpp" line="1493"/>
         <source>Capture Error:<byte value="xd"/>
  %1</source>
         <translation>捕获错误：
@@ -3022,8 +3022,8 @@ Byte Order: %2</source>
     </message>
     <message>
         <location filename="../modbustcpclient.cpp" line="279"/>
-        <location filename="../modbusrtuclient.cpp" line="428"/>
-        <location filename="../modbusrtutcpclient.cpp" line="451"/>
+        <location filename="../modbusrtuclient.cpp" line="422"/>
+        <location filename="../modbusrtutcpclient.cpp" line="445"/>
         <source>Request timeout.</source>
         <translation>请求超时。</translation>
     </message>
@@ -3043,47 +3043,47 @@ Byte Order: %2</source>
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="477"/>
+        <location filename="../modbusrtuclient.cpp" line="471"/>
         <source>Referenced serial device does not exist.</source>
         <translation>引用的串行设备不存在。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="481"/>
+        <location filename="../modbusrtuclient.cpp" line="475"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由于权限问题，无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="486"/>
+        <location filename="../modbusrtuclient.cpp" line="480"/>
         <source>Cannot open serial device.</source>
         <translation>无法打开串口设备。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="490"/>
+        <location filename="../modbusrtuclient.cpp" line="484"/>
         <source>Write error.</source>
         <translation>写入错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="493"/>
+        <location filename="../modbusrtuclient.cpp" line="487"/>
         <source>Read error.</source>
         <translation>读取错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="496"/>
+        <location filename="../modbusrtuclient.cpp" line="490"/>
         <source>Resource error.</source>
         <translation>资源错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="499"/>
+        <location filename="../modbusrtuclient.cpp" line="493"/>
         <source>Device operation is not supported error.</source>
         <translation>设备操作不受支持的错误信息。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="503"/>
+        <location filename="../modbusrtuclient.cpp" line="497"/>
         <source>Timeout error.</source>
         <translation>超时错误。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuclient.cpp" line="506"/>
+        <location filename="../modbusrtuclient.cpp" line="500"/>
         <source>Unknown error.</source>
         <translation>未知错误。</translation>
     </message>

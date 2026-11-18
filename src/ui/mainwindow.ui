@@ -306,7 +306,7 @@
   <action name="actionNew">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionNew.png</normaloff>:/res/actionNew.png</iconset>
+     <normaloff>:/res/icons/actionNew.svg</normaloff>:/res/icons/actionNew.svg</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -318,7 +318,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionOpen.png</normaloff>:/res/actionOpen.png</iconset>
+     <normaloff>:/res/icons/actionOpen.svg</normaloff>:/res/icons/actionOpen.svg</iconset>
    </property>
    <property name="text">
     <string>Open...</string>
@@ -343,7 +343,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionSaveAs.png</normaloff>:/res/actionSaveAs.png</iconset>
+     <normaloff>:/res/icons/actionSaveAs.svg</normaloff>:/res/icons/actionSaveAs.svg</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -360,7 +360,7 @@
   <action name="actionPrint">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionPrint.png</normaloff>:/res/actionPrint.png</iconset>
+     <normaloff>:/res/icons/actionPrint.svg</normaloff>:/res/icons/actionPrint.svg</iconset>
    </property>
    <property name="text">
     <string>Print...</string>
@@ -395,7 +395,7 @@
   <action name="actionDisconnect">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionDisconnect.png</normaloff>:/res/actionDisconnect.png</iconset>
+     <normaloff>:/res/icons/actionDisconnect.svg</normaloff>:/res/icons/actionDisconnect.svg</iconset>
    </property>
    <property name="text">
     <string>Disconnect</string>
@@ -427,7 +427,7 @@
   <action name="actionQuickConnect">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionConnect.png</normaloff>:/res/actionConnect.png</iconset>
+     <normaloff>:/res/icons/actionConnect.svg</normaloff>:/res/icons/actionConnect.svg</iconset>
    </property>
    <property name="text">
     <string>Quick Connect</string>
@@ -436,7 +436,7 @@
   <action name="actionDataDefinition">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionDefineData.png</normaloff>:/res/actionDefineData.png</iconset>
+     <normaloff>:/res/icons/actionDefineData.svg</normaloff>:/res/icons/actionDefineData.svg</iconset>
    </property>
    <property name="text">
     <string>Data Definition</string>
@@ -448,7 +448,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionShowData.png</normaloff>:/res/actionShowData.png</iconset>
+     <normaloff>:/res/icons/actionShowData.svg</normaloff>:/res/icons/actionShowData.svg</iconset>
    </property>
    <property name="text">
     <string>Show Data</string>
@@ -460,7 +460,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
+     <normaloff>:/res/icons/actionShowTraffic.svg</normaloff>:/res/icons/actionShowTraffic.svg</iconset>
    </property>
    <property name="text">
     <string>Show Traffic</string>
@@ -472,7 +472,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
+     <normaloff>:/res/icons/actionBinary.svg</normaloff>:/res/icons/actionBinary.svg</iconset>
    </property>
    <property name="text">
     <string>Binary</string>
@@ -487,7 +487,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
+     <normaloff>:/res/icons/actionHex.svg</normaloff>:/res/icons/actionHex.svg</iconset>
    </property>
    <property name="text">
     <string>Hex</string>
@@ -502,7 +502,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
+     <normaloff>:/res/icons/actionUInt16.svg</normaloff>:/res/icons/actionUInt16.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 16-bit Intger</string>
@@ -517,7 +517,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
+     <normaloff>:/res/icons/actionInt16.svg</normaloff>:/res/icons/actionInt16.svg</iconset>
    </property>
    <property name="text">
     <string>16-bit Integer</string>
@@ -532,7 +532,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
+     <normaloff>:/res/icons/actionFloatingPt.svg</normaloff>:/res/icons/actionFloatingPt.svg</iconset>
    </property>
    <property name="text">
     <string>Float (MSRF)</string>
@@ -550,7 +550,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
+     <normaloff>:/res/icons/actionSwappedFP.svg</normaloff>:/res/icons/actionSwappedFP.svg</iconset>
    </property>
    <property name="text">
     <string>Float (LSRF)</string>
@@ -568,7 +568,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
+     <normaloff>:/res/icons/actionDblFloat.svg</normaloff>:/res/icons/actionDblFloat.svg</iconset>
    </property>
    <property name="text">
     <string>Double (MSRF)</string>
@@ -586,7 +586,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
+     <normaloff>:/res/icons/actionSwappedDbl.svg</normaloff>:/res/icons/actionSwappedDbl.svg</iconset>
    </property>
    <property name="text">
     <string>Double (LSRF)</string>
@@ -601,7 +601,7 @@
   <action name="actionForceCoils">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionForceCoils.png</normaloff>:/res/actionForceCoils.png</iconset>
+     <normaloff>:/res/icons/actionForceCoils.svg</normaloff>:/res/icons/actionForceCoils.svg</iconset>
    </property>
    <property name="text">
     <string>Write Multiple Coils</string>
@@ -613,7 +613,7 @@
   <action name="actionPresetRegs">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionPresetRegs.png</normaloff>:/res/actionPresetRegs.png</iconset>
+     <normaloff>:/res/icons/actionPresetRegs.svg</normaloff>:/res/icons/actionPresetRegs.svg</iconset>
    </property>
    <property name="text">
     <string>Write Multiple Registers</string>
@@ -625,7 +625,7 @@
   <action name="actionMaskWrite">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionMaskWrite.png</normaloff>:/res/actionMaskWrite.png</iconset>
+     <normaloff>:/res/icons/actionMaskWrite.svg</normaloff>:/res/icons/actionMaskWrite.svg</iconset>
    </property>
    <property name="text">
     <string>Mask Write Register</string>
@@ -637,7 +637,7 @@
   <action name="actionUserMsg">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionUserMsg.png</normaloff>:/res/actionUserMsg.png</iconset>
+     <normaloff>:/res/icons/actionUserMsg.svg</normaloff>:/res/icons/actionUserMsg.svg</iconset>
    </property>
    <property name="text">
     <string>User Defined Message</string>
@@ -718,7 +718,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionAbout.png</normaloff>:/res/actionAbout.png</iconset>
+     <normaloff>:/res/icons/actionAbout.svg</normaloff>:/res/icons/actionAbout.svg</iconset>
    </property>
    <property name="text">
     <string>About Open ModScan...</string>
@@ -776,7 +776,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionByteOrder.png</normaloff>:/res/actionByteOrder.png</iconset>
+     <normaloff>:/res/icons/actionByteOrder.svg</normaloff>:/res/icons/actionByteOrder.svg</iconset>
    </property>
    <property name="text">
     <string>Swap Bytes (0xAB → 0xBA)</string>
@@ -802,7 +802,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
+     <normaloff>:/res/icons/actionInt32.svg</normaloff>:/res/icons/actionInt32.svg</iconset>
    </property>
    <property name="text">
     <string>32-bit Integer (MSRF)</string>
@@ -820,7 +820,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
+     <normaloff>:/res/icons/actionSwappedInt32.svg</normaloff>:/res/icons/actionSwappedInt32.svg</iconset>
    </property>
    <property name="text">
     <string>32-bit Integer (LSRF)</string>
@@ -838,7 +838,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
+     <normaloff>:/res/icons/actionUInt32.svg</normaloff>:/res/icons/actionUInt32.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 32-bit Integer (MSRF)</string>
@@ -856,7 +856,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
+     <normaloff>:/res/icons/actionSwappedUInt32.svg</normaloff>:/res/icons/actionSwappedUInt32.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 32-bit Integer (LSRF)</string>
@@ -885,7 +885,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
+     <normaloff>:/res/icons/actionInt64.svg</normaloff>:/res/icons/actionInt64.svg</iconset>
    </property>
    <property name="text">
     <string>64-bit Integer (MSRF)</string>
@@ -903,7 +903,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
+     <normaloff>:/res/icons/actionSwappedInt64.svg</normaloff>:/res/icons/actionSwappedInt64.svg</iconset>
    </property>
    <property name="text">
     <string>64-bit Integer (LSRF)</string>
@@ -921,7 +921,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
+     <normaloff>:/res/icons/actionUInt64.svg</normaloff>:/res/icons/actionUInt64.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 64-bit Integer (MSRF)</string>
@@ -939,7 +939,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
+     <normaloff>:/res/icons/actionSwappedUInt64.svg</normaloff>:/res/icons/actionSwappedUInt64.svg</iconset>
    </property>
    <property name="text">
     <string>Unsigned 64-bit Integer (LSRF)</string>
@@ -968,7 +968,7 @@
    </property>
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
+     <normaloff>:/res/icons/actionAnsi.svg</normaloff>:/res/icons/actionAnsi.svg</iconset>
    </property>
    <property name="text">
     <string>ANSI</string>
@@ -985,7 +985,7 @@
   <action name="actionWriteSingleCoil">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionWriteSingleCoil.png</normaloff>:/res/actionWriteSingleCoil.png</iconset>
+     <normaloff>:/res/icons/actionWriteSingleCoil.svg</normaloff>:/res/icons/actionWriteSingleCoil.svg</iconset>
    </property>
    <property name="text">
     <string>Write Single Coil</string>
@@ -1000,7 +1000,7 @@
   <action name="actionWriteHoldingRegister">
    <property name="icon">
     <iconset resource="../app/resources.qrc">
-     <normaloff>:/res/actionWriteHoldingRegister.png</normaloff>:/res/actionWriteHoldingRegister.png</iconset>
+     <normaloff>:/res/icons/actionWriteHoldingRegister.svg</normaloff>:/res/icons/actionWriteHoldingRegister.svg</iconset>
    </property>
    <property name="text">
     <string>Write Holding Register</string>

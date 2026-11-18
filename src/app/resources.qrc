@@ -1,49 +1,49 @@
 <RCC>
     <qresource prefix="/">
         <file>res/omodscan.ico</file>
-        <file>res/actionAbout.png</file>
-        <file>res/actionBinary.png</file>
-        <file>res/actionConnect.png</file>
-        <file>res/actionDblFloat.png</file>
-        <file>res/actionDefineData.png</file>
-        <file>res/actionDisconnect.png</file>
-        <file>res/actionFloatingPt.png</file>
-        <file>res/actionHex.png</file>
-        <file>res/actionInt16.png</file>
-        <file>res/actionPrint.png</file>
-        <file>res/actionShowData.png</file>
-        <file>res/actionShowTraffic.png</file>
-        <file>res/actionSwappedDbl.png</file>
-        <file>res/actionSwappedFP.png</file>
-        <file>res/actionUInt16.png</file>
+        <file>res/icons/actionAbout.svg</file>
+        <file>res/icons/actionBinary.svg</file>
+        <file>res/icons/actionConnect.svg</file>
+        <file>res/icons/actionDblFloat.svg</file>
+        <file>res/icons/actionDefineData.svg</file>
+        <file>res/icons/actionDisconnect.svg</file>
+        <file>res/icons/actionFloatingPt.svg</file>
+        <file>res/icons/actionHex.svg</file>
+        <file>res/icons/actionInt16.svg</file>
+        <file>res/icons/actionPrint.svg</file>
+        <file>res/icons/actionShowData.svg</file>
+        <file>res/icons/actionShowTraffic.svg</file>
+        <file>res/icons/actionSwappedDbl.svg</file>
+        <file>res/icons/actionSwappedFP.svg</file>
+        <file>res/icons/actionUInt16.svg</file>
         <file>res/omodscan.png</file>
         <file>res/iconAbout.png</file>
         <file>res/iconLandscape.png</file>
         <file>res/iconPortrait.png</file>
         <file>res/license.txt</file>
-        <file>res/actionInt32.png</file>
-        <file>res/actionSwappedInt32.png</file>
-        <file>res/actionSwappedUInt32.png</file>
-        <file>res/actionUInt32.png</file>
+        <file>res/icons/actionInt32.svg</file>
+        <file>res/icons/actionSwappedInt32.svg</file>
+        <file>res/icons/actionSwappedUInt32.svg</file>
+        <file>res/icons/actionUInt32.svg</file>
         <file>res/icon-start.svg</file>
         <file>res/icon-stop.svg</file>
         <file>res/icon-clear.svg</file>
-        <file>res/actionInt64.png</file>
-        <file>res/actionUInt64.png</file>
-        <file>res/actionSwappedInt64.png</file>
-        <file>res/actionSwappedUInt64.png</file>
-        <file>res/actionAnsi.png</file>
-        <file>res/actionByteOrder.png</file>
-        <file>res/actionNew.png</file>
-        <file>res/actionOpen.png</file>
-        <file>res/actionSaveAs.png</file>
-        <file>res/serialPortFilter.png</file>
-        <file>res/actionForceCoils.png</file>
-        <file>res/actionPresetRegs.png</file>
-        <file>res/actionMaskWrite.png</file>
-        <file>res/actionUserMsg.png</file>
-        <file>res/actionWriteHoldingRegister.png</file>
-        <file>res/actionWriteSingleCoil.png</file>
+        <file>res/icons/actionInt64.svg</file>
+        <file>res/icons/actionUInt64.svg</file>
+        <file>res/icons/actionSwappedInt64.svg</file>
+        <file>res/icons/actionSwappedUInt64.svg</file>
+        <file>res/icons/actionAnsi.svg</file>
+        <file>res/icons/actionByteOrder.svg</file>
+        <file>res/icons/actionNew.svg</file>
+        <file>res/icons/actionOpen.svg</file>
+        <file>res/icons/actionSaveAs.svg</file>
+        <file>res/icons/serialPortFilter.svg</file>
+        <file>res/icons/actionForceCoils.svg</file>
+        <file>res/icons/actionPresetRegs.svg</file>
+        <file>res/icons/actionMaskWrite.svg</file>
+        <file>res/icons/actionUserMsg.svg</file>
+        <file>res/icons/actionWriteHoldingRegister.svg</file>
+        <file>res/icons/actionWriteSingleCoil.svg</file>
         <file>res/applications-internet.svg</file>
         <file>res/emblem-github.svg</file>
         <file>res/emblem-mail.svg</file>
